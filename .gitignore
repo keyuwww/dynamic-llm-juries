@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+.DS_Store
+.ipynb_checkpoints/
+# raw API caches (keep summaries); remove this line to commit them
+**/jev_bff_results/predictions*.jsonl
