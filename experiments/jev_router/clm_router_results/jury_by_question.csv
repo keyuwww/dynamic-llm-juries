@@ -1,0 +1,6 @@
+qid,jury_size,jury_members,majority_correct,any_correct
+1bb784ce,1,phi-4,1,1
+9be15d66,3,"phi-4,llama-3.3-70b,yi1.5-34b-16k",0,0
+b525b226,3,"phi-4,gpt-4o,yi1.5-34b-16k",1,1
+c11c400e,3,"phi-4,llama-3.3-70b,qwen2.5-7b",0,0
+c67c5f87,3,"phi-4,gpt-4o,qwen2.5-7b",0,0

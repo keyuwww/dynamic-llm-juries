@@ -1,0 +1,23 @@
+{
+  "backend_model": [
+    "clm-raw"
+  ],
+  "noref": {
+    "n": 80,
+    "acc": 0.4875,
+    "kappa": -1.0831444142684455e-16,
+    "auroc": 0.4277673545966229,
+    "fpr": 0.0,
+    "fnr": 1.0,
+    "pred_correct_rate": 0.0
+  },
+  "ref": {
+    "n": 79,
+    "acc": 0.4810126582278481,
+    "kappa": 0.0,
+    "auroc": 0.14826700898587933,
+    "fpr": 0.0,
+    "fnr": 1.0,
+    "pred_correct_rate": 0.0
+  }
+}

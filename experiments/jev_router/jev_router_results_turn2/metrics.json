@@ -1,0 +1,27 @@
+{
+  "backend_model": [
+    "jev-1.13.0"
+  ],
+  "n_questions": 31,
+  "auroc": 0.7126255380200861,
+  "auroc_choice_prob": 0.6483022477283596,
+  "auroc_prior": 0.7411764705882353,
+  "brier": 0.26364475,
+  "brier_prior": 0.1975181218375432,
+  "route_random": 0.5462365591397849,
+  "route_best_single": 0.7741935483870968,
+  "route_noul": 0.7741935483870968,
+  "route_choice": 0.7741935483870968,
+  "route_oracle": 0.7741935483870968,
+  "gap_closed_noul": null,
+  "gap_closed_choice": null,
+  "none_auroc": 0.652972972972973,
+  "jury_threshold": 0.6,
+  "jury_cap": 3,
+  "jury_coverage": 0.9032258064516129,
+  "jury_avg_size": 2.2857142857142856,
+  "jury_majority_acc": 0.6071428571428571,
+  "jury_any_acc": 0.7857142857142857,
+  "jury_cov_best_single": 0.7857142857142857,
+  "jury_cov_oracle": 0.7857142857142857
+}

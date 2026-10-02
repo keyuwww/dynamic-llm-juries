@@ -5,5 +5,10 @@ __pycache__/
 .env.*
 .DS_Store
 .ipynb_checkpoints/
+wheels/
+wheels_modal/
 # raw API caches (keep summaries); remove this line to commit them
-**/jev_bff_results/predictions*.jsonl
+**/*_results*/*.jsonl
+wheels_tinker/
+experiments/tinker_pool/data_cache/
+experiments/tinker_pool/mock_*_results/

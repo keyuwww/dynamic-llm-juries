@@ -1,0 +1,27 @@
+{
+  "backend_model": [
+    "clm-latest"
+  ],
+  "n_questions": 5,
+  "auroc": 0.17708333333333334,
+  "auroc_choice_prob": 0.65625,
+  "auroc_prior": 0.6822916666666666,
+  "brier": 0.49616786766058113,
+  "brier_prior": 0.21166666666666667,
+  "route_random": 0.45,
+  "route_best_single": 0.6,
+  "route_noul": 0.4,
+  "route_choice": 0.6,
+  "route_oracle": 0.6,
+  "gap_closed_noul": null,
+  "gap_closed_choice": null,
+  "none_auroc": 1.0,
+  "jury_threshold": 0.6,
+  "jury_cap": 3,
+  "jury_coverage": 1.0,
+  "jury_avg_size": 2.6,
+  "jury_majority_acc": 0.4,
+  "jury_any_acc": 0.4,
+  "jury_cov_best_single": 0.6,
+  "jury_cov_oracle": 0.6
+}

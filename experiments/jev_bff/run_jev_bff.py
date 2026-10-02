@@ -14,11 +14,12 @@ Outputs (in --out, default ./jev_bff_results):
   items.csv          flat table for further analysis
 
 Usage:
-  pip install typesafe-sdk datasets pandas scikit-learn
-  export TYPESAFE_API_KEY=...        # your key from console.typesafe.ai (never commit it)
-  python run_jev_bff.py --limit 40   # pilot run (~40 items x 2 conditions)
-  python run_jev_bff.py              # full run
-  python run_jev_bff.py --mock       # offline dry run with a fake Jev (tests the pipeline)
+  uv sync
+  export TYPESAFE_API_KEY=...           # your key from console.typesafe.ai (never commit it)
+  uv run python run_jev_bff.py --limit 40   # pilot run (~40 items x 2 conditions)
+  uv run python run_jev_bff.py              # full run
+  uv run python run_jev_bff.py --mock       # offline dry run with a fake Jev (tests the pipeline)
+  uv run python run_jev_bff.py --backend clm --limit 40   # same test with CLM-8B (needs a running CLM server)
 """
 import argparse, json, os, random, statistics, sys, time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -95,21 +96,25 @@ def build_items(v, b, consensus="unanimous"):
 
 
 # ----------------------------------------------------------------------------- judge
-class JevJudge:
-    def __init__(self, model="jev-latest"):
-        from typesafe_sdk import TypeSafeClient, RetryPolicy
-        self.client = TypeSafeClient(model=model, retry=RetryPolicy(max_retries=4, backoff_initial=0.5, backoff_max=8.0, timeout=60.0))
-        self.Noul = __import__("typesafe_sdk").Noul
+class SystemOneJudge:
+    """Jev or CLM as a yes/no correctness judge (same question for both, see experiments/common/backends.py)."""
+    def __init__(self, backend="jev", model=None, clm_url=None):
+        sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "common"))
+        from backends import Backend, get_noul
+        self.b, self.get_noul = Backend(backend, model, clm_url), get_noul
 
     def __call__(self, item, cond):
         state = {"conversation": item["conv"]}
         if cond == "ref":
             state["reference_answer_for_final_question"] = item["ref"]
-        q = {"is_correct": self.Noul(instructions=INSTR_REF if cond == "ref" else INSTR, criteria=CRITERIA)}
+        q = {"is_correct": self.b.Noul(instructions=INSTR_REF if cond == "ref" else INSTR, criteria=CRITERIA)}
         t0 = time.time()
-        res = self.client.system_one(state=state, questions=q)
-        return dict(p=float(res.nouls["is_correct"].noul), latency=time.time() - t0,
-                    in_tok=res.usage.input_tokens, jev_model=res.model)
+        res, meta = self.b.ask(state, q)
+        return dict(p=self.get_noul(res, "is_correct"), latency=time.time() - t0,
+                    in_tok=meta["in_tok"], jev_model=meta["backend_model"])
+
+
+JevJudge = SystemOneJudge  # backwards-compatible name
 
 
 class MockJudge:
@@ -173,7 +178,7 @@ def summarize(preds, items, out, dropped):
     meta = pd.DataFrame(items).drop(columns=["conv", "ref"])
     df = df.merge(meta, on="id")
     df.to_csv(out / "items.csv", index=False)
-    L = ["# Jev on BFF-Bench: results", "",
+    L = ["# System One judge on BFF-Bench: results", "",
          f"Items with consensus human labels: {len(items)} (dropped for no consensus: {dropped['no_consensus']}, "
          f"missing reference: {dropped['no_ref']}). Jev model: {', '.join(sorted(df['jev_model'].unique()))}.", "",
          "Verdict = yes if Jev's probability ≥ 0.5. κ = Cohen's kappa vs consensus human label.", "",
@@ -211,6 +216,8 @@ def summarize(preds, items, out, dropped):
     L += ["## Cost & latency", "",
           f"- Calls: {len(df)}; input tokens: {int(tok):,}; est. cost: ${tok / 1e6 * PRICE_PER_M_INPUT:.4f} (list price ${PRICE_PER_M_INPUT}/1M input, output free)",
           f"- Latency p50 {statistics.median(lat):.3f}s, p95 {sorted(lat)[int(0.95 * (len(lat) - 1))]:.3f}s (includes network)", ""]
+    metrics = {c: {k: (None if v != v else v) for k, v in block(df[df.cond == c]).items()} for c in sorted(df.cond.unique())}
+    (out / "metrics.json").write_text(json.dumps(dict(backend_model=sorted(df["jev_model"].unique().tolist()), **metrics), indent=2))
     (out / "summary.md").write_text("\n".join(L))
     print("\n".join(L))
 
@@ -218,18 +225,20 @@ def summarize(preds, items, out, dropped):
 # ----------------------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out", default="jev_bff_results")
+    ap.add_argument("--backend", choices=["jev", "clm", "laya", "jeff"], default="jev", help="System One model to test")
+    ap.add_argument("--clm-url", default=None, help="CLM server URL (default $CLM_URL or http://127.0.0.1:8700)")
+    ap.add_argument("--out", default=None, help="default: experiments/jev_bff/<backend>_bff_results")
     ap.add_argument("--limit", type=int, default=None, help="random subset of items (pilot)")
     ap.add_argument("--conditions", default="noref,ref")
     ap.add_argument("--workers", type=int, default=8)
-    ap.add_argument("--model", default="jev-latest")
+    ap.add_argument("--model", default=None, help="Jev model/version, e.g. jev-1.13.0 (default jev-latest)")
     ap.add_argument("--consensus", choices=["unanimous", "majority"], default="unanimous")
     ap.add_argument("--verdicts-path"); ap.add_argument("--bff-path")
     ap.add_argument("--mock", action="store_true")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args()
 
-    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    out = Path(a.out or Path(__file__).resolve().parent / f"{a.backend}_bff_results"); out.mkdir(parents=True, exist_ok=True)
     v, b = load_data(a.verdicts_path, a.bff_path)
     items, dropped = build_items(v, b, a.consensus)
     if a.limit:
@@ -237,9 +246,7 @@ def main():
         items = items[: a.limit]
     print(f"{len(items)} items; conditions={a.conditions}", file=sys.stderr)
 
-    if not a.mock and not os.environ.get("TYPESAFE_API_KEY"):
-        sys.exit("Set TYPESAFE_API_KEY first (export TYPESAFE_API_KEY=...), or use --mock.")
-    judge = MockJudge(a.seed) if a.mock else JevJudge(a.model)
+    judge = MockJudge(a.seed) if a.mock else SystemOneJudge(a.backend, a.model, a.clm_url)
 
     cache_f = out / ("predictions_mock.jsonl" if a.mock else "predictions.jsonl")
     done = {}

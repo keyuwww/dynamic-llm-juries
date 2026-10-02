@@ -1,0 +1,6 @@
+qid,n_models,noul_pick_model,noul_pick_correct,choice_pick_model,choice_pick_correct,random_expected,oracle,fixed_best_hit
+c11c400e,5,phi-4,0,yi1.5-34b-16k,0,0.0,0,0
+9be15d66,4,phi-4,0,yi1.5-34b-16k,0,0.0,0,0
+c67c5f87,4,phi-4,0,gemma-2-2b,1,0.25,1,1
+1bb784ce,2,phi-4,1,gemma-2-2b,1,1.0,1,1
+b525b226,5,phi-4,1,yi1.5-34b-16k,1,1.0,1,1

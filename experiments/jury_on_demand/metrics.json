@@ -1,0 +1,65 @@
+{
+  "n": 456,
+  "results": [
+    {
+      "K": 1,
+      "strategy": "top-1 reliability-weighted",
+      "accuracy": 0.9166666666666666,
+      "kappa": 0.8337650377021815
+    },
+    {
+      "K": 2,
+      "strategy": "top-2 reliability-weighted",
+      "accuracy": 0.9035087719298246,
+      "kappa": 0.8077166350411132
+    },
+    {
+      "K": 3,
+      "strategy": "top-3 reliability-weighted",
+      "accuracy": 0.8925438596491229,
+      "kappa": 0.7868589743589745
+    },
+    {
+      "K": 4,
+      "strategy": "top-4 reliability-weighted",
+      "accuracy": 0.8793859649122807,
+      "kappa": 0.7617419060647515
+    },
+    {
+      "K": 4,
+      "strategy": "unweighted majority (all 4)",
+      "accuracy": 0.7675438596491229,
+      "kappa": 0.5529659841296266
+    },
+    {
+      "K": 1,
+      "strategy": "single judge: jev_noref",
+      "accuracy": 0.7609649122807017,
+      "kappa": 0.5054918815663801
+    },
+    {
+      "K": 1,
+      "strategy": "single judge: jev_ref",
+      "accuracy": 0.9276315789473685,
+      "kappa": 0.8555632342778163
+    },
+    {
+      "K": 1,
+      "strategy": "single judge: clm_noref",
+      "accuracy": 0.4407894736842105,
+      "kappa": 0.0
+    },
+    {
+      "K": 1,
+      "strategy": "single judge: clm_ref",
+      "accuracy": 0.43859649122807015,
+      "kappa": -0.011910334425547456
+    }
+  ],
+  "reliability_auroc": {
+    "jev_noref": 0.7230785500885705,
+    "jev_ref": 0.8825847123719465,
+    "clm_noref": 0.8203882548044094,
+    "clm_ref": 0.7847265625
+  }
+}

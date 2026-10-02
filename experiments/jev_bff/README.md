@@ -10,10 +10,10 @@ This asks TypeSafe Jev whether each model response in BFF-Bench is correct, and 
 From the repo root:
 
 ```bash
-pip install -r requirements.txt
+uv sync
 export TYPESAFE_API_KEY=...                                   # from console.typesafe.ai
-python experiments/jev_bff/run_jev_bff.py --limit 40 --out experiments/jev_bff/jev_bff_results   # pilot
-python experiments/jev_bff/run_jev_bff.py --out experiments/jev_bff/jev_bff_results              # full run
+uv run python experiments/jev_bff/run_jev_bff.py --limit 40 --out experiments/jev_bff/jev_bff_results   # pilot
+uv run python experiments/jev_bff/run_jev_bff.py --out experiments/jev_bff/jev_bff_results              # full run
 ```
 
 Add `--mock` to check the whole pipeline with a fake judge, without a key. Reruns resume from the cache.
