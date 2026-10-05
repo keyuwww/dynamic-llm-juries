@@ -237,3 +237,14 @@ def parse_verdict(text):
     if not m:
         return None
     return 1 if m[-1].upper() == "CORRECT" else 0
+
+
+PAIRWISE_RE = re.compile(r"VERDICT:\s*\**\s*([AB])\b", re.I)
+
+
+def parse_pairwise_verdict(text):
+    """1 = A is better, 0 = B is better, None = unparseable. Uses the LAST verdict line."""
+    m = PAIRWISE_RE.findall(text or "")
+    if not m:
+        return None
+    return 1 if m[-1].upper() == "A" else 0

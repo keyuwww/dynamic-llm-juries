@@ -1,0 +1,459 @@
+<title>Jury Routing Results</title>
+<style>
+  :root{
+    --bg:#faf8f4;
+    --surface:#ffffff;
+    --surface-sunken:#f1efe9;
+    --ink:#1c1a16;
+    --ink-soft:#5c574d;
+    --line:#e4e0d6;
+    --accent:#0f8f78;
+    --accent-ink:#0a5c4d;
+    --http:#3461c1;
+    --tinker:#c1631f;
+    --oracle:#8a8478;
+    --good-bg:#eaf4f0;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17160f;
+      --surface:#1f1d16;
+      --surface-sunken:#262319;
+      --ink:#f1efe6;
+      --ink-soft:#b3aea0;
+      --line:#38352a;
+      --accent:#1f9a80;
+      --accent-ink:#5fd2b8;
+      --http:#5c7fd6;
+      --tinker:#c97d3f;
+      --oracle:#948e7e;
+      --good-bg:#1b2b26;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17160f;
+    --surface:#1f1d16;
+    --surface-sunken:#262319;
+    --ink:#f1efe6;
+    --ink-soft:#b3aea0;
+    --line:#38352a;
+    --accent:#1f9a80;
+    --accent-ink:#5fd2b8;
+    --http:#5c7fd6;
+    --tinker:#c97d3f;
+    --oracle:#948e7e;
+    --good-bg:#1b2b26;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    padding-inline:16px;
+    padding-block:32px;
+    line-height:1.45;
+  }
+  .wrap{max-width:860px;margin:0 auto;}
+
+  header{margin-bottom:36px;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-size:clamp(28px,5vw,40px);
+    font-weight:600;
+    margin:0 0 10px;
+    text-wrap:balance;
+  }
+  .lede{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:640px;
+  }
+  .lede code{font-family:var(--font-mono);font-size:13px;background:var(--surface-sunken);padding:1px 5px;border-radius:4px;}
+
+  section{margin-bottom:40px;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:6px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:10px;
+  }
+  .section-num{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  h2{
+    font-family:var(--font-display);
+    font-size:21px;
+    font-weight:600;
+    margin:0;
+  }
+  .section-note{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin:10px 0 18px;
+    max-width:620px;
+  }
+  .finding{
+    background:var(--good-bg);
+    border-left:3px solid var(--accent);
+    padding:10px 14px;
+    font-size:13.5px;
+    border-radius:0 6px 6px 0;
+    margin:14px 0;
+  }
+  .finding b{color:var(--accent-ink);}
+
+  .bench-block{margin-bottom:22px;}
+  .bench-title{
+    font-family:var(--font-mono);
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .bar-row{
+    display:grid;
+    grid-template-columns:168px 1fr 58px;
+    align-items:center;
+    gap:10px;
+    padding:4px 0;
+  }
+  .bar-label{
+    font-size:12.5px;
+    color:var(--ink);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .bar-track{
+    background:var(--surface-sunken);
+    border-radius:4px;
+    height:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .bar-fill{
+    position:absolute;left:0;top:0;bottom:0;
+    border-radius:4px;
+  }
+  .bar-fill.dashed{
+    background:repeating-linear-gradient(135deg,var(--oracle),var(--oracle) 4px,transparent 4px,transparent 8px);
+    opacity:.8;
+  }
+  .bar-val{
+    font-family:var(--font-mono);
+    font-size:12px;
+    text-align:right;
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+  @media (max-width:520px){
+    .bar-row{grid-template-columns:120px 1fr 46px;gap:6px;}
+    .bar-label{font-size:11.5px;}
+  }
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink-soft);margin:10px 0 20px;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .swatch{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);}
+  th{
+    font-family:var(--font-mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  td.num,th.num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;}
+  .table-wrap table{min-width:480px;}
+  tr:last-child td{border-bottom:none;}
+  .hl{color:var(--accent-ink);font-weight:600;}
+  .dim{color:var(--ink-soft);}
+
+  footer{
+    margin-top:48px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  footer a{color:var(--accent-ink);}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Dynamic LLM Juries &mdash; Team 10 &times; Kensho</div>
+    <h1>Jury Routing Results</h1>
+    <p class="lede">Five follow-up experiments on the existing judge pool (Jev, Laya, jeff, and 8 Tinker-hosted
+    open-weight models), run on data already collected &mdash; no new API calls, no model fine-tuning.
+    Baseline judge-vs-judge comparison lives on the <code>Judge Agreement with Humans</code> dashboard;
+    this page covers what came after it.</p>
+  </header>
+
+  <section id="certifier">
+    <div class="section-head"><span class="section-num">01</span><h2>Per-item certifier</h2></div>
+    <p class="section-note">A 13-parameter logistic regression &mdash; not a fine-tuned model &mdash; predicts,
+    per item, which judge is most likely to agree with the human label, from token count, the judge's own
+    confidence, and judge identity. Trained out-of-fold (5-fold CV, grouped by item) on data already collected.</p>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--accent)"></i>Certifier (best K)</span>
+      <span><i class="swatch" style="background:var(--ink-soft)"></i>Best single judge</span>
+      <span><i class="swatch" style="background:var(--ink-soft);opacity:.5"></i>Unweighted majority (11)</span>
+      <span><i class="swatch bar-fill dashed" style="width:14px;height:10px;position:static;display:inline-block;"></i>Oracle (any of 11 correct)</span>
+    </div>
+    <div id="certifier-charts"></div>
+    <div class="finding">On <b>BFF-noref</b>, the certifier reaches &kappa;=0.745 (top-3) vs. 0.705 for the best
+    single judge &mdash; a real gain from routing alone. On <b>BFF-ref</b> the task is near ceiling
+    (oracle=1.0), so the gain shrinks to 0.881 vs. 0.858. On <b>Safety</b> it's roughly a wash (0.640 vs. 0.637).
+    Note: this 11-judge mixed pool is separate from the baseline dashboard's oracle, which is restricted to the
+    8-model Tinker pool only &mdash; the two oracle numbers aren't comparable.</div>
+  </section>
+
+  <section id="diversity">
+    <div class="section-head"><span class="section-num">02</span><h2>Error diversity</h2></div>
+    <p class="section-note">Do Jev/Laya/jeff fail on different items than the 8 Tinker models, or the same
+    ones? Phi coefficient (correctness correlation) between judge pairs &mdash; lower means more independent
+    errors, which is exactly what makes an ensemble worth building.</p>
+    <div id="diversity-charts"></div>
+    <div class="finding">Cross-family correlation (HTTP backends vs. Tinker pool) is consistently
+    <b>lower</b> than intra-Tinker correlation across all three benchmarks &mdash; Jev/Laya/jeff really do make
+    different mistakes. On Safety, they collectively catch 256 items the Tinker-8 majority gets wrong.</div>
+  </section>
+
+  <section id="transfer">
+    <div class="section-head"><span class="section-num">03</span><h2>Cross-benchmark transfer</h2></div>
+    <p class="section-note">The same reliability model, fit on one benchmark's full data, applied as-is to
+    another's &mdash; does "which judge to trust" generalize across tasks, or is it task-specific?</p>
+    <div class="table-wrap">
+      <table id="transfer-table"></table>
+    </div>
+    <div class="finding">Transfer mostly holds (within ~0.05&ndash;0.1 &kappa; of in-domain), except
+    <b>BFF-ref&rarr;BFF-noref</b> and <b>Safety&rarr;BFF-noref</b>, which drop further &mdash; noref looks
+    like the hardest, most distinct condition to predict reliability for.</div>
+  </section>
+
+  <section id="calibration">
+    <div class="section-head"><span class="section-num">04</span><h2>Calibration</h2></div>
+    <p class="section-note">Is each judge's confidence score (its raw p) actually meaningful, or just a
+    binary verdict with noise on top? Brier score against the human label, lower is better.</p>
+    <div id="calibration-charts"></div>
+    <div class="finding"><b>Jev</b> is the best-calibrated judge on BFF-ref (Brier 0.060) and competitive
+    elsewhere; <b>Laya</b> is the worst-calibrated judge on every single benchmark.</div>
+  </section>
+
+  <section id="cascade">
+    <div class="section-head"><span class="section-num">05</span><h2>Frozen-threshold cascade</h2></div>
+    <p class="section-note">Reproducing <a href="https://arxiv.org/abs/2609.26550" target="_blank" rel="noopener">arXiv:2609.26550</a>
+    ("JEV-as-a-Judge"): freeze a confidence threshold on a held-out tuning split, then apply it on a disjoint
+    test split &mdash; accept the fast judge's verdict when confident, escalate to gpt-oss-120b when not.</p>
+    <div class="table-wrap">
+      <table id="cascade-table"></table>
+    </div>
+    <div class="finding">All three cascades land within ~1&ndash;3% of the comparator's accuracy &mdash; but
+    <b>coverage</b> tells the real story: Jev's frozen threshold trusts itself on 43&ndash;97% of items and only
+    escalates the hard ones, while Laya and jeff escalate almost everything (&le;4% coverage on two of three
+    benchmarks). Only Jev's confidence is calibrated enough to make the cascade actually save cost.</div>
+  </section>
+
+  <footer>
+    Built from already-collected judge output &mdash; <code>experiments/certifier/</code> and
+    <code>experiments/trust_or_escalate/run_frozen_cascade.py</code> in the project repo. No new API calls,
+    no fine-tuning.
+  </footer>
+</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+(function(){
+  "use strict";
+
+  function fmt(v, d){ return (v==null || isNaN(v)) ? "&ndash;" : v.toFixed(d==null?3:d); }
+
+  function renderBarGroup(container, title, rows, maxVal){
+    maxVal = maxVal || 1;
+    var block = document.createElement("div");
+    block.className = "bench-block";
+    var h = document.createElement("div");
+    h.className = "bench-title";
+    h.textContent = title;
+    block.appendChild(h);
+    rows.forEach(function(r){
+      var row = document.createElement("div");
+      row.className = "bar-row";
+      var label = document.createElement("div");
+      label.className = "bar-label";
+      label.textContent = r.label;
+      label.title = r.label;
+      var track = document.createElement("div");
+      track.className = "bar-track";
+      var fill = document.createElement("div");
+      fill.className = "bar-fill" + (r.dashed ? " dashed" : "");
+      var pct = Math.max(0, Math.min(100, (r.value / maxVal) * 100));
+      fill.style.width = pct + "%";
+      if (!r.dashed) fill.style.background = r.color;
+      track.appendChild(fill);
+      var val = document.createElement("div");
+      val.className = "bar-val";
+      val.textContent = fmt(r.value, 3);
+      row.appendChild(label); row.appendChild(track); row.appendChild(val);
+      block.appendChild(row);
+    });
+    container.appendChild(block);
+  }
+
+  // ---- 01 Certifier ----
+  var certData = {
+    "BFF noref": [
+      {label:"Oracle (11 judges)", value:1.000, dashed:true},
+      {label:"Certifier top-3", value:0.745, color:"var(--accent)"},
+      {label:"Best single: gpt-oss-120b", value:0.705, color:"var(--ink-soft)"},
+      {label:"Unweighted majority", value:0.641, color:"var(--ink-soft)", faded:true}
+    ],
+    "BFF ref": [
+      {label:"Oracle (11 judges)", value:1.000, dashed:true},
+      {label:"Certifier top-3", value:0.881, color:"var(--accent)"},
+      {label:"Best single: deepseek-v3.1", value:0.858, color:"var(--ink-soft)"},
+      {label:"Unweighted majority", value:0.873, color:"var(--ink-soft)", faded:true}
+    ],
+    "Safety": [
+      {label:"Oracle (11 judges)", value:0.958, dashed:true},
+      {label:"Certifier top-4", value:0.640, color:"var(--accent)"},
+      {label:"Best single: gpt-oss-20b", value:0.637, color:"var(--ink-soft)"},
+      {label:"Unweighted majority", value:0.571, color:"var(--ink-soft)", faded:true}
+    ]
+  };
+  var certEl = document.getElementById("certifier-charts");
+  Object.keys(certData).forEach(function(k){ renderBarGroup(certEl, k, certData[k], 1.0); });
+
+  // ---- 02 Diversity ----
+  var divData = {
+    "BFF noref (n=459)": [
+      {label:"Intra-Tinker-pool", value:0.357, color:"var(--tinker)"},
+      {label:"Cross-family (HTTP vs Tinker)", value:0.187, color:"var(--accent)"},
+      {label:"Intra-HTTP (Jev/Laya/jeff)", value:-0.083, color:"var(--http)"}
+    ],
+    "BFF ref (n=456)": [
+      {label:"Intra-Tinker-pool", value:0.432, color:"var(--tinker)"},
+      {label:"Cross-family (HTTP vs Tinker)", value:0.211, color:"var(--accent)"},
+      {label:"Intra-HTTP (Jev/Laya/jeff)", value:-0.120, color:"var(--http)"}
+    ],
+    "Safety (n=1800)": [
+      {label:"Intra-Tinker-pool", value:0.456, color:"var(--tinker)"},
+      {label:"Cross-family (HTTP vs Tinker)", value:0.256, color:"var(--accent)"},
+      {label:"Intra-HTTP (Jev/Laya/jeff)", value:0.106, color:"var(--http)"}
+    ]
+  };
+  var divEl = document.getElementById("diversity-charts");
+  Object.keys(divData).forEach(function(k){
+    // shift negative values into a 0..1 visual scale for the bar track (min -0.15 .. max 0.5)
+    var rows = divData[k].map(function(r){ return {label:r.label, value:r.value, color:r.color}; });
+    renderBarGroup(divEl, k, rows.map(function(r){
+      return {label:r.label, value: r.value + 0.15, color:r.color};
+    }), 0.65);
+  });
+  // fix displayed value text back to real phi (re-render values only)
+  divEl.querySelectorAll(".bench-block").forEach(function(block, bi){
+    var rows = divData[Object.keys(divData)[bi]];
+    var vals = block.querySelectorAll(".bar-val");
+    vals.forEach(function(v, i){ v.textContent = fmt(rows[i].value, 3); });
+  });
+
+  // ---- 03 Transfer ----
+  var transferRows = [
+    ["BFF noref","BFF ref",0.868,0.881],
+    ["BFF noref","Safety",0.583,0.639],
+    ["BFF ref","BFF noref",0.629,0.745],
+    ["BFF ref","Safety",0.516,0.639],
+    ["Safety","BFF noref",0.605,0.745],
+    ["Safety","BFF ref",0.816,0.881]
+  ];
+  var tt = document.getElementById("transfer-table");
+  tt.innerHTML = "<thead><tr><th>Trained on</th><th>Evaluated on</th>" +
+    "<th class='num'>&kappa; transferred</th><th class='num'>&kappa; in-domain</th><th class='num'>Gap</th></tr></thead>";
+  var tbody = document.createElement("tbody");
+  transferRows.forEach(function(r){
+    var tr = document.createElement("tr");
+    var gap = r[3]-r[2];
+    tr.innerHTML = "<td>"+r[0]+"</td><td>"+r[1]+"</td><td class='num'>"+fmt(r[2])+"</td>"+
+      "<td class='num dim'>"+fmt(r[3])+"</td><td class='num" + (gap>0.08?" hl":"") + "'>-"+fmt(gap)+"</td>";
+    tbody.appendChild(tr);
+  });
+  tt.appendChild(tbody);
+
+  // ---- 04 Calibration (Brier score) ----
+  var calibData = {
+    "BFF noref": [
+      {label:"jev", value:0.165, color:"var(--http)"},
+      {label:"gpt-oss-120b", value:0.146, color:"var(--tinker)"},
+      {label:"jeff", value:0.220, color:"var(--http)"},
+      {label:"laya", value:0.231, color:"var(--http)"}
+    ],
+    "BFF ref": [
+      {label:"jev", value:0.060, color:"var(--http)"},
+      {label:"deepseek-v3.1", value:0.070, color:"var(--tinker)"},
+      {label:"jeff", value:0.206, color:"var(--http)"},
+      {label:"laya", value:0.231, color:"var(--http)"}
+    ],
+    "Safety": [
+      {label:"jev", value:0.138, color:"var(--http)"},
+      {label:"gpt-oss-20b", value:0.153, color:"var(--tinker)"},
+      {label:"jeff", value:0.233, color:"var(--http)"},
+      {label:"laya", value:0.291, color:"var(--http)"}
+    ]
+  };
+  var calEl = document.getElementById("calibration-charts");
+  Object.keys(calibData).forEach(function(k){ renderBarGroup(calEl, k + " — Brier score (lower is better)", calibData[k], 0.35); });
+
+  // ---- 05 Cascade ----
+  var cascadeRows = [
+    ["BFF noref","jev",0.750,0.430,0.882,0.891,99.0],
+    ["BFF noref","laya",0.600,0.039,0.878,0.891,98.5],
+    ["BFF noref","jeff",0.750,0.039,0.883,0.891,99.0],
+    ["BFF ref","jev",0.100,0.974,0.939,0.934,100.5],
+    ["BFF ref","laya",0.650,0.018,0.934,0.934,100.0],
+    ["BFF ref","jeff",0.800,0.219,0.925,0.934,99.1],
+    ["Safety","jev",0.050,0.960,0.793,0.772,102.7],
+    ["Safety","laya",0.950,0.007,0.771,0.772,99.9],
+    ["Safety","jeff",0.950,0.003,0.772,0.772,100.0]
+  ];
+  var ct = document.getElementById("cascade-table");
+  ct.innerHTML = "<thead><tr><th>Benchmark</th><th>Fast judge</th><th class='num'>Frozen &tau;</th>" +
+    "<th class='num'>Coverage</th><th class='num'>Cascade acc.</th><th class='num'>Comparator acc.</th>" +
+    "<th class='num'>% retained</th></tr></thead>";
+  var cbody = document.createElement("tbody");
+  cascadeRows.forEach(function(r){
+    var tr = document.createElement("tr");
+    var covPct = (r[3]*100).toFixed(1) + "%";
+    var covClass = r[3] > 0.3 ? " hl" : " dim";
+    tr.innerHTML = "<td>"+r[0]+"</td><td>"+r[1]+"</td><td class='num'>"+r[2].toFixed(2)+"</td>"+
+      "<td class='num"+covClass+"'>"+covPct+"</td><td class='num'>"+fmt(r[4])+"</td>"+
+      "<td class='num dim'>"+fmt(r[5])+"</td><td class='num'>"+r[6].toFixed(1)+"%</td>";
+    cbody.appendChild(tr);
+  });
+  ct.appendChild(cbody);
+
+})();
+</script>

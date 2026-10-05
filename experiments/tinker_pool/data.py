@@ -144,28 +144,87 @@ def _fuzzy_match(prediction, reference):
     return False
 
 
-# ----------------------------------------------------------------------------- RewardBench 2 (Safety)
-def load_rb2_safety(rb2_path=None):
-    """allenai/reward-bench-2, Safety subset only (450 rows, CoCoNot prompts, human-annotated per the
-    paper's Table 2 -- the only RewardBench 2 domain that's genuinely human-labeled rather than
-    LLM-judged or purely algorithmic; see docs/findings_zeroshot_juries.md for why that distinction
-    matters here). Flattened to one item per (prompt, response): human=1 for each 'chosen' response,
-    human=0 for each 'rejected' response -- same shape as the BFF-Bench VERDICTS items.
-    Returns: list of dict(id, prompt, response, human)."""
+# ----------------------------------------------------------------------------- RewardBench 2 (all domains)
+RB2_DOMAINS = ["Safety", "Factuality", "Focus", "Math", "Precise IF", "Ties"]
+RB2_HUMAN_LABELED = {"Safety"}  # per the paper's own Table 2 -- the rest are LLM-judged/algorithmic gold,
+                                 # not human annotation. See docs/findings_zeroshot_juries.md.
+
+
+def _load_rb2_raw(rb2_path=None):
     if rb2_path:
         df = _read_table(rb2_path)
-        rows = df.to_dict(orient="records")
-    else:
-        from datasets import load_dataset
-        rows = load_dataset("allenai/reward-bench-2", split="test").to_pandas().to_dict(orient="records")
+        return df.to_dict(orient="records")
+    from datasets import load_dataset
+    return load_dataset("allenai/reward-bench-2", split="test").to_pandas().to_dict(orient="records")
+
+
+def load_rb2_domain(domain, rb2_path=None):
+    """allenai/reward-bench-2, one domain at a time. Only 'Safety' is human-annotated (per the paper's
+    Table 2); the rest (Factuality, Focus, Math, Precise IF, Ties) use LLM-judged or algorithmic gold
+    labels -- treat those as capability/algorithmic-agreement checks, not human-preference ones.
+    Flattened to one item per (prompt, response): human=1 for each 'chosen' response, human=0 for each
+    'rejected' response -- same shape as the BFF-Bench VERDICTS items.
+    Returns: list of dict(id, prompt, response, human, domain)."""
+    assert domain in RB2_DOMAINS, f"unknown RB2 domain {domain!r}, choose from {RB2_DOMAINS}"
+    rows = _load_rb2_raw(rb2_path)
+    tag = domain.lower().replace(" ", "")
     out = []
     for r in rows:
-        if r["subset"] != "Safety":
+        if r["subset"] != domain:
             continue
         for i, resp in enumerate(_to_list(r["chosen"])):
-            out.append(dict(id=f"rb2safety-{r['id']}-chosen{i}", prompt=str(r["prompt"]), response=str(resp), human=1))
+            out.append(dict(id=f"rb2{tag}-{r['id']}-chosen{i}", prompt=str(r["prompt"]), response=str(resp),
+                             human=1, domain=domain))
         for i, resp in enumerate(_to_list(r["rejected"])):
-            out.append(dict(id=f"rb2safety-{r['id']}-rejected{i}", prompt=str(r["prompt"]), response=str(resp), human=0))
+            out.append(dict(id=f"rb2{tag}-{r['id']}-rejected{i}", prompt=str(r["prompt"]), response=str(resp),
+                             human=0, domain=domain))
+    return out
+
+
+def load_rb2_safety(rb2_path=None):
+    """Backwards-compatible alias: RewardBench 2, Safety domain only."""
+    return load_rb2_domain("Safety", rb2_path)
+
+
+def load_rb2_all(rb2_path=None):
+    """All six RewardBench 2 domains, flattened together. Each item carries its own 'domain' field so
+    results can be broken out per domain; only 'domain' == 'Safety' items are human-annotated."""
+    rows = _load_rb2_raw(rb2_path)
+    out = []
+    for domain in RB2_DOMAINS:
+        tag = domain.lower().replace(" ", "")
+        for r in rows:
+            if r["subset"] != domain:
+                continue
+            for i, resp in enumerate(_to_list(r["chosen"])):
+                out.append(dict(id=f"rb2{tag}-{r['id']}-chosen{i}", prompt=str(r["prompt"]), response=str(resp),
+                                 human=1, domain=domain))
+            for i, resp in enumerate(_to_list(r["rejected"])):
+                out.append(dict(id=f"rb2{tag}-{r['id']}-rejected{i}", prompt=str(r["prompt"]), response=str(resp),
+                                 human=0, domain=domain))
+    return out
+
+
+# ----------------------------------------------------------------------------- JudgeBench
+def load_judgebench():
+    """ScalerLab/JudgeBench (arXiv:2410.12784): pairwise response comparisons with FULLY ALGORITHMIC
+    gold labels (MMLU-Pro / LiveBench / LiveCodeBench verifiers) -- not human-labeled, not LLM-judged.
+    Treat as a capability/algorithmic-agreement benchmark only, same caveat as BBEH Mini and RB2's
+    non-Safety domains. Two splits ('claude' and 'gpt', named for which model generated response_B),
+    both loaded and tagged.
+    Returns: list of dict(id, question, response_a, response_b, gold, source, split), where gold=1
+    means response_A is better ('A>B'), gold=0 means response_B is better ('B>A')."""
+    from datasets import load_dataset
+    out = []
+    for split in ("claude", "gpt"):
+        ds = load_dataset("ScalerLab/JudgeBench", split=split)
+        for r in ds:
+            label = str(r["label"]).strip()
+            if label not in ("A>B", "B>A"):
+                continue
+            out.append(dict(id=f"judgebench-{split}-{r['pair_id']}", question=str(r["question"]),
+                             response_a=str(r["response_A"]), response_b=str(r["response_B"]),
+                             gold=1 if label == "A>B" else 0, source=str(r.get("source", "")), split=split))
     return out
 
 

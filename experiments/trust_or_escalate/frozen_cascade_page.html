@@ -1,0 +1,247 @@
+<title>Frozen Cascade</title>
+<style>
+  :root{
+    --bg:#faf8f4;
+    --surface:#ffffff;
+    --surface-sunken:#f1efe9;
+    --ink:#1c1a16;
+    --ink-soft:#5c574d;
+    --line:#e4e0d6;
+    --accent:#0f8f78;
+    --accent-ink:#0a5c4d;
+    --jev:#2a78d6;
+    --laya:#008300;
+    --jeff:#4a3aa7;
+    --good-bg:#eaf4f0;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319;
+      --ink:#f1efe6; --ink-soft:#b3aea0; --line:#38352a;
+      --accent:#1f9a80; --accent-ink:#5fd2b8;
+      --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+      --good-bg:#1b2b26;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319;
+    --ink:#f1efe6; --ink-soft:#b3aea0; --line:#38352a;
+    --accent:#1f9a80; --accent-ink:#5fd2b8;
+    --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+    --good-bg:#1b2b26;
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--font-body);
+    padding-inline:16px; padding-block:32px; line-height:1.5;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent-ink); margin-bottom:10px;
+  }
+  h1{
+    font-family:var(--font-display); font-size:clamp(28px,5vw,42px); font-weight:600;
+    margin:0 0 12px; text-wrap:balance;
+  }
+  .lede{color:var(--ink-soft); font-size:15.5px; max-width:680px; margin:0 0 6px;}
+  .lede code{font-family:var(--font-mono); font-size:13px; background:var(--surface-sunken); padding:1px 5px; border-radius:4px;}
+  .source{font-size:12.5px; color:var(--ink-soft); margin:14px 0 36px;}
+  .source a{color:var(--accent-ink);}
+
+  .method{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:18px 20px; margin-bottom:40px; font-size:14px;
+  }
+  .method h2{font-family:var(--font-display); font-size:17px; margin:0 0 10px;}
+  .method ol{margin:0; padding-left:20px;}
+  .method li{margin-bottom:6px;}
+  .method .caveat{
+    margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);
+    color:var(--ink-soft); font-size:13px;
+  }
+
+  section.bench{margin-bottom:44px;}
+  .bench-head{
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px;
+    border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:18px;
+  }
+  .bench-head h2{font-family:var(--font-display); font-size:22px; margin:0;}
+  .bench-head .n{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft);}
+
+  .panels{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:640px){ .panels{grid-template-columns:1fr;} }
+  .panel{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px;}
+  .panel h3{
+    font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.03em;
+    color:var(--ink-soft); margin:0 0 4px; font-weight:600;
+  }
+  .panel .panel-sub{font-size:12px; color:var(--ink-soft); margin:0 0 16px;}
+
+  .bar-row{display:grid; grid-template-columns:52px 1fr 56px; align-items:center; gap:10px; padding:7px 0;}
+  .bar-name{font-size:13px; font-weight:600;}
+  .bar-track{background:var(--surface-sunken); border-radius:5px; height:20px; position:relative; overflow:hidden;}
+  .bar-fill{position:absolute; left:0; top:0; bottom:0; border-radius:5px; transition:width .3s;}
+  .bar-val{font-family:var(--font-mono); font-size:12.5px; text-align:right; color:var(--ink-soft); font-variant-numeric:tabular-nums;}
+  .tau-badge{
+    font-family:var(--font-mono); font-size:10.5px; color:var(--ink-soft);
+    margin-top:2px;
+  }
+
+  .takeaway{
+    background:var(--good-bg); border-left:3px solid var(--accent); border-radius:0 8px 8px 0;
+    padding:12px 16px; font-size:13.5px; margin-top:16px;
+  }
+  .takeaway b{color:var(--accent-ink);}
+
+  .legend{display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:var(--ink-soft); margin:18px 0 0;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .swatch{width:11px; height:11px; border-radius:3px; display:inline-block;}
+
+  footer{margin-top:48px; padding-top:18px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-soft);}
+  footer a{color:var(--accent-ink);}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Dynamic LLM Juries &mdash; Team 10 &times; Kensho</div>
+  <h1>Frozen Cascade</h1>
+  <p class="lede">A cheap judge (Jev, Laya, or jeff) is trusted when it's confident; when it isn't, the item
+  is escalated to a stronger reasoning judge (<code>gpt-oss-120b</code>). The confidence threshold is tuned
+  on one half of the data and frozen before touching the other half &mdash; so these numbers are not the
+  best point a sweep could find after the fact.</p>
+  <p class="source">Reproducing <a href="https://arxiv.org/abs/2609.26550" target="_blank" rel="noopener">arXiv:2609.26550, &ldquo;JEV-as-a-Judge: Accept When Confident, Escalate When Unsure.&rdquo;</a>
+  Built on judge output already collected &mdash; no new API calls for this analysis.</p>
+
+  <div class="method">
+    <h2>How the frozen threshold works</h2>
+    <ol>
+      <li>Split items in half: a <b>tune</b> set and a <b>test</b> set.</li>
+      <li>On tune only, sweep &tau; and keep whichever value maximizes cascade agreement with the human label.</li>
+      <li>Freeze that &tau;. Apply it, unchanged, to test: if confidence &ge; &tau;, use the cheap judge's own
+      verdict; otherwise discard it and use gpt-oss-120b's verdict instead.</li>
+      <li>Report cascade accuracy on test, as a share of gpt-oss-120b's own standalone accuracy on the same
+      test items.</li>
+    </ol>
+    <div class="caveat">gpt-oss-120b is the strongest model available in this project's judge pool, but it's
+    smaller than the frontier comparator the original paper used &mdash; so "100% retained" here is relative to
+    a lower ceiling than the paper's own claim.</div>
+  </div>
+
+  <div id="benches"></div>
+
+  <footer>
+    Source: <code>experiments/trust_or_escalate/run_frozen_cascade.py</code> &middot;
+    <code>experiments/trust_or_escalate/frozen_cascade_results.csv</code>
+  </footer>
+</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+(function(){
+  "use strict";
+  var JUDGE_COLOR = { jev: "var(--jev)", laya: "var(--laya)", jeff: "var(--jeff)" };
+  var JUDGE_LABEL = { jev: "Jev", laya: "Laya", jeff: "jeff" };
+
+  var DATA = [
+    { bench: "BFF‑Bench, no reference", n: 230, rows: [
+      { judge: "jev",  tau: 0.75, coverage: 0.430, retained: 99.0 },
+      { judge: "laya", tau: 0.60, coverage: 0.039, retained: 98.5 },
+      { judge: "jeff", tau: 0.75, coverage: 0.039, retained: 99.0 },
+    ], takeaway: "Jev covers 43% of items on its own; Laya and jeff cover under 4% — their cascades barely differ from always escalating." },
+    { bench: "BFF‑Bench, with reference", n: 228, rows: [
+      { judge: "jev",  tau: 0.10, coverage: 0.974, retained: 100.5 },
+      { judge: "laya", tau: 0.65, coverage: 0.018, retained: 100.0 },
+      { judge: "jeff", tau: 0.80, coverage: 0.219, retained: 99.1 },
+    ], takeaway: "With the reference answer shown, Jev is confident on 97% of items — almost never needs the expensive judge at all." },
+    { bench: "RewardBench 2, Safety", n: 900, rows: [
+      { judge: "jev",  tau: 0.05, coverage: 0.960, retained: 102.7 },
+      { judge: "laya", tau: 0.95, coverage: 0.007, retained: 99.9 },
+      { judge: "jeff", tau: 0.95, coverage: 0.003, retained: 100.0 },
+    ], takeaway: "Jev's cascade actually edges past gpt-oss-120b's own accuracy while covering 96% of items itself." },
+  ];
+
+  function fmtPct(v, d){ return (v*100).toFixed(d==null?1:d) + "%"; }
+
+  function bar(label, value, maxValue, color, valText){
+    var row = document.createElement("div");
+    row.className = "bar-row";
+    var name = document.createElement("div");
+    name.className = "bar-name";
+    name.textContent = label;
+    name.style.color = color;
+    var track = document.createElement("div");
+    track.className = "bar-track";
+    var fill = document.createElement("div");
+    fill.className = "bar-fill";
+    var pct = Math.max(0, Math.min(100, (value / maxValue) * 100));
+    fill.style.width = pct + "%";
+    fill.style.background = color;
+    track.appendChild(fill);
+    var val = document.createElement("div");
+    val.className = "bar-val";
+    val.textContent = valText;
+    row.appendChild(name); row.appendChild(track); row.appendChild(val);
+    return row;
+  }
+
+  var root = document.getElementById("benches");
+  DATA.forEach(function(b){
+    var section = document.createElement("section");
+    section.className = "bench";
+
+    var head = document.createElement("div");
+    head.className = "bench-head";
+    head.innerHTML = "<h2>" + b.bench + "</h2><span class='n'>n=" + b.n + " (held-out test split)</span>";
+    section.appendChild(head);
+
+    var panels = document.createElement("div");
+    panels.className = "panels";
+
+    var p1 = document.createElement("div");
+    p1.className = "panel";
+    p1.innerHTML = "<h3>Coverage</h3><p class='panel-sub'>Share of items the cheap judge handled alone — never escalated to gpt-oss-120b</p>";
+    b.rows.forEach(function(r){
+      p1.appendChild(bar(JUDGE_LABEL[r.judge], r.coverage, 1.0, JUDGE_COLOR[r.judge], fmtPct(r.coverage)));
+      var tau = document.createElement("div");
+      tau.className = "tau-badge";
+      tau.style.marginLeft = "62px";
+      tau.textContent = "frozen τ = " + r.tau.toFixed(2);
+      p1.appendChild(tau);
+    });
+    panels.appendChild(p1);
+
+    var p2 = document.createElement("div");
+    p2.className = "panel";
+    p2.innerHTML = "<h3>Accuracy retained</h3><p class='panel-sub'>Cascade accuracy ÷ gpt-oss-120b's own accuracy, on the same test items</p>";
+    var maxRetained = Math.max(105, Math.max.apply(null, b.rows.map(function(r){ return r.retained; })) + 3);
+    b.rows.forEach(function(r){
+      p2.appendChild(bar(JUDGE_LABEL[r.judge], r.retained, maxRetained, JUDGE_COLOR[r.judge], r.retained.toFixed(1) + "%"));
+    });
+    panels.appendChild(p2);
+
+    section.appendChild(panels);
+
+    var take = document.createElement("div");
+    take.className = "takeaway";
+    take.innerHTML = b.takeaway;
+    section.appendChild(take);
+
+    root.appendChild(section);
+  });
+
+  var legend = document.createElement("div");
+  legend.className = "legend";
+  ["jev","laya","jeff"].forEach(function(j){
+    legend.innerHTML += "<span><i class='swatch' style='background:" + JUDGE_COLOR[j] + "'></i>" + JUDGE_LABEL[j] + "</span>";
+  });
+  root.parentNode.insertBefore(legend, root);
+})();
+</script>

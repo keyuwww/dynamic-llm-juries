@@ -1,0 +1,301 @@
+<title>Benchmarks by Judge</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#fcfcfb; --surface-sunken:#f1efe9;
+    --ink:#1c1a16; --ink-soft:#52514e; --ink-muted:#898781; --line:#e4e0d6; --grid:#e1e0d9;
+    --baseline:#c3c2b7; --accent-ink:#0a5c4d;
+    --jev:#2a78d6; --laya:#008300; --jeff:#4a3aa7;
+    --caveat-bg:#fdf3e2; --caveat-border:#e8c97a;
+    --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0d0d0d; --surface:#1a1a19; --surface-sunken:#232320;
+      --ink:#ffffff; --ink-soft:#c3c2b7; --ink-muted:#898781; --line:#2c2c2a; --grid:#2c2c2a;
+      --baseline:#383835; --accent-ink:#5fd2b8;
+      --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+      --caveat-bg:#2b2414; --caveat-border:#6b551f;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0d0d0d; --surface:#1a1a19; --surface-sunken:#232320;
+    --ink:#ffffff; --ink-soft:#c3c2b7; --ink-muted:#898781; --line:#2c2c2a; --grid:#2c2c2a;
+    --baseline:#383835; --accent-ink:#5fd2b8;
+    --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+    --caveat-bg:#2b2414; --caveat-border:#6b551f;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); padding-inline:16px; padding-block:24px;}
+  .wrap{max-width:940px; margin:0 auto;}
+  h1{font-size:21px; margin:4px 0 4px;}
+  .lede{color:var(--ink-soft); font-size:13px; margin:0 0 20px; max-width:680px;}
+  .lede code{font-family:var(--font-mono); font-size:12px; background:var(--surface-sunken); padding:1px 5px; border-radius:4px;}
+
+  .tabs{display:flex; gap:4px; flex-wrap:wrap; border-bottom:1px solid var(--line); margin-bottom:18px; padding-bottom:0;}
+  .tab{
+    font-family:var(--font-body); font-size:13px; font-weight:600; color:var(--ink-soft);
+    background:none; border:none; padding:9px 14px; cursor:pointer; border-bottom:2px solid transparent;
+    border-radius:6px 6px 0 0;
+  }
+  .tab:hover{background:var(--surface-sunken);}
+  .tab.active{color:var(--accent-ink); border-bottom-color:var(--accent-ink);}
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:16px 16px 8px; margin-bottom:18px;}
+  .card h2{font-size:14px; margin:0 0 2px;}
+  .card .note{font-size:12px; color:var(--ink-muted); margin:0 0 12px;}
+  .caveat{
+    font-size:12px; color:var(--ink); margin:0 0 14px;
+    background:var(--caveat-bg); border:1px solid var(--caveat-border); border-radius:6px; padding:8px 10px;
+  }
+  .bench-note{font-size:12.5px; color:var(--ink-soft); margin:0 0 16px; max-width:700px;}
+
+  svg text{font-family:inherit;}
+  .bar-label{font-size:11px; fill:var(--ink); font-variant-numeric:tabular-nums;}
+  .cat-label{font-size:10px; fill:var(--ink-soft);}
+  .axis-line{stroke:var(--baseline); stroke-width:1;}
+  .grid-line{stroke:var(--grid); stroke-width:1;}
+
+  .domain-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:680px){ .domain-grid{grid-template-columns:1fr;} }
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th,td{text-align:left; padding:6px 8px; border-bottom:1px solid var(--line);}
+  th{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; color:var(--ink-muted); font-weight:600;}
+  td.num,th.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr:last-child td{border-bottom:none;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px; margin-bottom:16px;}
+  .table-wrap table{min-width:420px;}
+
+  footer{margin-top:28px; font-size:11.5px; color:var(--ink-muted);}
+</style>
+
+<div class="wrap">
+  <h1>Benchmarks by Judge</h1>
+  <p class="lede">Jev, Laya, jeff, and 8 Tinker-hosted open models, across five benchmark groups.
+  Bars show Cohen's <b>&kappa;</b> against the benchmark's gold label, except BBEH (accuracy; auto-graded,
+  no judging done yet). <b>Only BFF-Bench and RewardBench2's Safety domain are human-labeled</b> &mdash;
+  everything else uses LLM-judged or algorithmic gold, flagged per tab.</p>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <footer>Source: <code>experiments/tinker_pool/*_results/</code>, <code>experiments/*_results/</code> in the project repo.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const JUDGE_COLOR = { Jev: "var(--jev)", Laya: "var(--laya)", jeff: "var(--jeff)" };
+
+function verticalBarChart(container, rows, opts) {
+  opts = opts || {};
+  const sorted = [...rows].sort((a, b) => b.value - a.value);
+  const w = opts.w || 800, barW = Math.min(50, Math.floor((w - 60) / sorted.length) - 8), gap = 8;
+  const plotH = opts.plotH || 190, topPad = 20, bottomPad = 66, leftPad = 34;
+  const h = topPad + plotH + bottomPad;
+  const maxV = opts.max || Math.max(...sorted.map(r => Math.abs(r.value)), 0.1) * 1.08;
+  const minV = Math.min(0, ...sorted.map(r => r.value));
+  const range = maxV - minV;
+  const yFor = v => topPad + plotH - ((v - minV) / range) * plotH;
+  const zeroY = yFor(0);
+  const plotW = sorted.length * (barW + gap) + gap;
+  let svg = `<svg viewBox="0 0 ${Math.max(plotW + leftPad, w)} ${h}" width="100%" style="max-width:${Math.max(plotW + leftPad, w)}px">`;
+  for (const t of [0, 0.25, 0.5, 0.75, 1.0]) {
+    if (t < minV || t > maxV) continue;
+    const y = yFor(t);
+    svg += `<line class="grid-line" x1="${leftPad}" y1="${y}" x2="${plotW + leftPad}" y2="${y}" />`;
+    svg += `<text class="cat-label" x="${leftPad - 6}" y="${y}" text-anchor="end" dy="3">${t.toFixed(2)}</text>`;
+  }
+  svg += `<line class="axis-line" x1="${leftPad}" y1="${zeroY}" x2="${plotW + leftPad}" y2="${zeroY}" />`;
+  let x = leftPad + gap;
+  for (const r of sorted) {
+    const y0 = Math.min(zeroY, yFor(r.value));
+    const barH = Math.abs(yFor(r.value) - zeroY);
+    const color = r.oracle ? "var(--ink-soft)" : (JUDGE_COLOR[r.label] || "var(--ink-muted)");
+    const opacity = r.oracle ? 0.9 : (JUDGE_COLOR[r.label] ? 1 : 0.8);
+    const dash = r.oracle ? ` stroke="var(--baseline)" stroke-width="1" stroke-dasharray="3,3"` : "";
+    svg += `<rect x="${x}" y="${y0}" width="${barW}" height="${Math.max(barH, 1)}" rx="3" fill="${color}" opacity="${opacity}"${dash} />`;
+    const labelY = r.value >= 0 ? y0 - 6 : y0 + barH + 14;
+    svg += `<text class="bar-label" x="${x + barW / 2}" y="${labelY}" text-anchor="middle">${r.value.toFixed(3)}</text>`;
+    svg += `<text class="cat-label" x="${x + barW / 2}" y="${topPad + plotH + 14}" text-anchor="end" transform="rotate(-40 ${x + barW / 2} ${topPad + plotH + 14})">${r.label}</text>`;
+    x += barW + gap;
+  }
+  svg += `</svg>`;
+  container.innerHTML = svg;
+}
+
+const T = (acc, kappa) => ({ acc, kappa });
+
+// ---------------- BFF-Bench ----------------
+const BFF_NOREF = [
+  ["Oracle", null, true], ["Jev", 0.505], ["gpt-oss-120b", 0.705], ["deepseek-v3.1", 0.603],
+  ["gpt-oss-20b", 0.653], ["qwen3.6-35b-a3b", 0.537], ["qwen3.5-4b", 0.481], ["qwen3.5-9b", 0.473],
+  ["nemotron3-super-120b", 0.459], ["nemotron3-nano-30b", 0.325], ["jeff", 0.314], ["Laya", 0.095],
+];
+const BFF_REF = [
+  ["Oracle", null, true], ["Jev", 0.856], ["deepseek-v3.1", 0.858], ["nemotron3-super-120b", 0.855],
+  ["gpt-oss-120b", 0.842], ["qwen3.5-4b", 0.817], ["qwen3.5-9b", 0.782], ["gpt-oss-20b", 0.756],
+  ["qwen3.6-35b-a3b", 0.753], ["nemotron3-nano-30b", 0.587], ["jeff", 0.397], ["Laya", 0.115],
+];
+const BFF_NOREF_ORACLE = 0.947, BFF_REF_ORACLE = 0.969;
+
+// ---------------- Safety ----------------
+const SAFETY = [
+  ["Oracle", null, true], ["Jev", 0.591], ["gpt-oss-20b", 0.637], ["qwen3.5-9b", 0.547],
+  ["gpt-oss-120b", 0.533], ["nemotron3-nano-30b", 0.532], ["nemotron3-super-120b", 0.480],
+  ["deepseek-v3.1", 0.466], ["qwen3.5-4b", 0.464], ["qwen3.6-35b-a3b", 0.459], ["jeff", 0.195], ["Laya", 0.053],
+];
+const SAFETY_ORACLE = 0.909;
+
+// ---------------- RewardBench 2 (non-Safety domains) ----------------
+const RB2_OVERALL = [
+  ["Oracle", null, true], ["gpt-oss-120b", 0.683], ["Jev", 0.625], ["nemotron3-super-120b", 0.655],
+  ["deepseek-v3.1", 0.623], ["gpt-oss-20b", 0.646], ["qwen3.6-35b-a3b", 0.631], ["qwen3.5-9b", 0.605],
+  ["qwen3.5-4b", 0.544], ["nemotron3-nano-30b", 0.418], ["jeff", 0.225], ["Laya", 0.078],
+];
+const RB2_ORACLE = 0.978;
+const RB2_DOMAINS = {
+  "Factuality": [["qwen3.5-4b",0.420],["gpt-oss-20b",0.475],["nemotron3-nano-30b",0.408],["qwen3.5-9b",0.469],
+    ["qwen3.6-35b-a3b",0.489],["nemotron3-super-120b",0.606],["gpt-oss-120b",0.587],["deepseek-v3.1",0.582],
+    ["Jev",0.584],["Laya",-0.005],["jeff",0.010]],
+  "Focus": [["qwen3.5-4b",0.589],["gpt-oss-20b",0.563],["nemotron3-nano-30b",0.256],["qwen3.5-9b",0.612],
+    ["qwen3.6-35b-a3b",0.523],["nemotron3-super-120b",0.647],["gpt-oss-120b",0.573],["deepseek-v3.1",0.697],
+    ["Jev",0.622],["Laya",0.064],["jeff",0.150]],
+  "Math": [["qwen3.5-4b",0.442],["gpt-oss-20b",0.699],["nemotron3-nano-30b",0.284],["qwen3.5-9b",0.507],
+    ["qwen3.6-35b-a3b",0.653],["nemotron3-super-120b",0.476],["gpt-oss-120b",0.737],["deepseek-v3.1",0.409],
+    ["Jev",0.435],["Laya",0.059],["jeff",0.203]],
+  "Precise IF": [["qwen3.5-4b",0.060],["gpt-oss-20b",0.317],["nemotron3-nano-30b",0.032],["qwen3.5-9b",0.222],
+    ["qwen3.6-35b-a3b",0.311],["nemotron3-super-120b",0.213],["gpt-oss-120b",0.362],["deepseek-v3.1",0.138],
+    ["Jev",0.193],["Laya",0.006],["jeff",0.010]],
+  "Ties": [["qwen3.5-4b",0.800],["gpt-oss-20b",0.965],["nemotron3-nano-30b",0.852],["qwen3.5-9b",0.877],
+    ["qwen3.6-35b-a3b",0.936],["nemotron3-super-120b",0.965],["gpt-oss-120b",0.968],["deepseek-v3.1",0.901],
+    ["Jev",0.920],["Laya",0.257],["jeff",0.467]],
+};
+
+// ---------------- JudgeBench ----------------
+const JUDGEBENCH = [
+  ["Oracle", null, true], ["qwen3.6-35b-a3b", 0.789], ["gpt-oss-120b", 0.687], ["Jev", 0.501],
+  ["qwen3.5-9b", 0.639], ["qwen3.5-4b", 0.582], ["gpt-oss-20b", 0.526], ["nemotron3-super-120b", 0.499],
+  ["deepseek-v3.1", 0.491], ["nemotron3-nano-30b", 0.160], ["jeff", 0.159], ["Laya", 0.057],
+];
+const JUDGEBENCH_ORACLE = 0.990;
+
+// ---------------- BBEH (accuracy, not kappa; Phase 1 only) ----------------
+const BBEH = [
+  ["Oracle", null, true], ["deepseek-v3.1", 0.439], ["gpt-oss-120b", 0.407], ["nemotron3-super-120b", 0.276],
+  ["qwen3.5-9b", 0.272], ["qwen3.6-35b-a3b", 0.257], ["gpt-oss-20b", 0.252], ["qwen3.5-4b", 0.233],
+  ["nemotron3-nano-30b", 0.207],
+];
+const BBEH_ORACLE = 0.654;
+
+function rows(list, oracleVal) {
+  return list.map(([label, value, isOracle]) => ({ label, value: isOracle ? oracleVal : value, oracle: !!isOracle }));
+}
+
+const TABS = [
+  { id: "bff", label: "BFF-Bench", render: renderBFF },
+  { id: "safety", label: "Safety", render: renderSafety },
+  { id: "rb2", label: "RewardBench 2", render: renderRB2 },
+  { id: "judgebench", label: "JudgeBench", render: renderJudgeBench },
+  { id: "bbeh", label: "BBEH Mini", render: renderBBEH },
+];
+
+function renderBFF(panel) {
+  panel.innerHTML = `
+    <p class="bench-note">Finance Q&amp;A correctness, human-labeled (kensho/VERDICTS). Oracle restricted
+    to the 8-model Tinker pool.</p>
+    <div class="card"><h2>No reference answer shown (n=459)</h2>
+      <p class="note">The judge has to independently know whether the financial reasoning is correct.</p>
+      <div id="c-bff-noref"></div></div>
+    <div class="card"><h2>Expert reference answer shown (n=456)</h2>
+      <p class="note">The judge is handed the answer key and just has to compare.</p>
+      <div id="c-bff-ref"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-bff-noref"), rows(BFF_NOREF, BFF_NOREF_ORACLE));
+  verticalBarChart(panel.querySelector("#c-bff-ref"), rows(BFF_REF, BFF_REF_ORACLE));
+}
+
+function renderSafety(panel) {
+  panel.innerHTML = `
+    <p class="bench-note">RewardBench 2, Safety domain (n=1800) &mdash; the one RB2 domain that is
+    genuinely human-annotated (CoCoNot prompts). Oracle restricted to the 8-model Tinker pool.</p>
+    <div class="card"><h2>Appropriate-response judging</h2>
+      <p class="note">Did the assistant correctly refuse harmful requests and correctly comply with legitimate ones?</p>
+      <div id="c-safety"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-safety"), rows(SAFETY, SAFETY_ORACLE));
+}
+
+function renderRB2(panel) {
+  panel.innerHTML = `
+    <p class="caveat">These 5 domains (Factuality, Focus, Math, Precise IF, Ties) are <b>not human-annotated</b>
+    &mdash; RewardBench 2's own paper (Table 2) confirms only Safety is. Read as capability/algorithmic-agreement,
+    not human-preference agreement. Oracle includes all 11 judges here (not the 8-model-only restriction used
+    for BFF/Safety).</p>
+    <div class="card"><h2>Overall, all 5 domains combined (n=7177)</h2>
+      <div id="c-rb2-overall"></div></div>
+    <div class="card"><h2>By domain</h2>
+      <p class="note">Cohen's &kappa; per domain, per judge &mdash; Precise IF is hard for everyone; Ties is easy for everyone.</p>
+      <div class="domain-grid" id="c-rb2-domains"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-rb2-overall"), rows(RB2_OVERALL, RB2_ORACLE), { w: 760 });
+  const grid = panel.querySelector("#c-rb2-domains");
+  for (const [domain, list] of Object.entries(RB2_DOMAINS)) {
+    const box = document.createElement("div");
+    box.innerHTML = `<div style="font-size:12px;font-weight:600;margin-bottom:6px;">${domain}</div><div></div>`;
+    grid.appendChild(box);
+    verticalBarChart(box.querySelector("div:last-child"), rows(list), { w: 360, plotH: 140 });
+  }
+}
+
+function renderJudgeBench(panel) {
+  panel.innerHTML = `
+    <p class="caveat">Fully algorithmic gold labels (MMLU-Pro / LiveBench / LiveCodeBench verifiers) &mdash;
+    not human-annotated, not LLM-judged. Pairwise: which of two responses is better. Oracle includes all
+    11 judges.</p>
+    <div class="card"><h2>Pairwise comparison accuracy (n=620)</h2>
+      <p class="note">620 pairs across two splits (gpt, claude), named for which model generated response B.</p>
+      <div id="c-judgebench"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-judgebench"), rows(JUDGEBENCH, JUDGEBENCH_ORACLE), { w: 760 });
+}
+
+function renderBBEH(panel) {
+  panel.innerHTML = `
+    <p class="caveat">Different metric from every other tab: this is <b>answer accuracy</b>, not Cohen's
+    &kappa;, against BBEH's own deterministic auto-grader &mdash; not human-annotated. This is Phase 1 only
+    (every Tinker model answering the question itself); judging (Phase 2, with Jev/Laya/jeff included)
+    hasn't run yet, so there are no HTTP-judge bars here.</p>
+    <div class="card"><h2>Hard multi-step reasoning, answer accuracy (n=460)</h2>
+      <p class="note">24&ndash;56% of completions were truncated at the 16k-token budget even on this hard
+      benchmark, so some "incorrect" reflects running out of budget, not failed reasoning.</p>
+      <div id="c-bbeh"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-bbeh"), rows(BBEH, BBEH_ORACLE), { w: 760 });
+}
+
+const tabsEl = document.getElementById("tabs");
+const panelsEl = document.getElementById("panels");
+TABS.forEach((t, i) => {
+  const btn = document.createElement("button");
+  btn.className = "tab" + (i === 0 ? " active" : "");
+  btn.textContent = t.label;
+  btn.onclick = () => selectTab(t.id);
+  btn.id = "tabbtn-" + t.id;
+  tabsEl.appendChild(btn);
+  const panel = document.createElement("div");
+  panel.className = "panel" + (i === 0 ? " active" : "");
+  panel.id = "panel-" + t.id;
+  panelsEl.appendChild(panel);
+  t.render(panel);
+});
+
+function selectTab(id) {
+  TABS.forEach(t => {
+    document.getElementById("tabbtn-" + t.id).classList.toggle("active", t.id === id);
+    document.getElementById("panel-" + t.id).classList.toggle("active", t.id === id);
+  });
+}
+})();
+</script>

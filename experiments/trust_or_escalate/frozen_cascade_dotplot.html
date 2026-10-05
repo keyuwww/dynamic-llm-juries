@@ -1,0 +1,224 @@
+<title>Cascade Coverage</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#ffffff; --surface-sunken:#f1efe9;
+    --ink:#1c1a16; --ink-soft:#5c574d; --line:#e4e0d6; --grid:#e9e5dc;
+    --accent-ink:#0a5c4d;
+    --jev:#2a78d6; --laya:#008300; --jeff:#4a3aa7;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319;
+      --ink:#f1efe6; --ink-soft:#b3aea0; --line:#38352a; --grid:#2d2a20;
+      --accent-ink:#5fd2b8;
+      --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319;
+    --ink:#f1efe6; --ink-soft:#b3aea0; --line:#38352a; --grid:#2d2a20;
+    --accent-ink:#5fd2b8;
+    --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); padding-inline:16px; padding-block:32px;}
+  .wrap{max-width:760px; margin:0 auto;}
+  .eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:8px;}
+  h1{font-family:var(--font-display); font-size:clamp(24px,4.5vw,32px); font-weight:600; margin:0 0 8px; text-wrap:balance;}
+  .lede{color:var(--ink-soft); font-size:14.5px; max-width:620px; margin:0 0 28px;}
+  figure{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 20px 8px;}
+  figcaption{font-size:12.5px; color:var(--ink-soft); margin-top:10px; padding-top:12px; border-top:1px solid var(--line);}
+  svg text{font-family:var(--font-body); fill:var(--ink);}
+  .axis-label{font-size:11px; fill:var(--ink-soft);}
+  .grid-line{stroke:var(--grid); stroke-width:1;}
+  .ref-line{stroke:var(--ink-soft); stroke-width:1; stroke-dasharray:3,3; opacity:.6;}
+  .row-line{stroke:var(--line); stroke-width:1;}
+  .judge-label{font-size:13px; font-weight:600;}
+  .bench-label{font-size:10.5px; fill:var(--ink-soft);}
+  .val-label{font-family:var(--font-mono); font-size:10.5px; fill:var(--ink-soft);}
+  .leader{stroke:var(--ink-soft); stroke-width:1; opacity:.55;}
+  .legend{display:flex; gap:20px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft); margin:16px 2px 0;}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend i{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .legend i.sq{border-radius:2px;}
+  .legend i.tri{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid var(--ink-soft);background:none;border-radius:0;}
+
+  .data-table{margin-top:28px;}
+  .data-table h2{font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); margin:0 0 10px; font-weight:600;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{text-align:left; padding:7px 10px; border-bottom:1px solid var(--line);}
+  th{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); font-weight:600;}
+  td.num,th.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr:last-child td{border-bottom:none;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px;}
+  .table-wrap table{min-width:420px;}
+  .dot{width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:7px; vertical-align:middle;}
+
+  footer{margin-top:28px; font-size:12px; color:var(--ink-soft);}
+  footer a{color:var(--accent-ink);}
+</style>
+
+<div class="wrap">
+  <div class="eyebrow">Dynamic LLM Juries</div>
+  <h1>Which judge's cascade actually saves cost?</h1>
+  <p class="lede">Every point sits near the 100% line &mdash; accuracy barely moves no matter how much
+  the cheap judge is trusted. The x-axis is what actually separates them: Jev's points are spread out
+  across real coverage (43&ndash;97%), while Laya's and jeff's cluster near zero &mdash; their cascades
+  "work" only because they escalate almost everything.</p>
+
+  <figure>
+    <div id="chart"></div>
+    <figcaption>x = coverage (share of items the cheap judge handled alone, held-out test split)
+    &middot; y = cascade accuracy as % of gpt-oss-120b's own standalone accuracy, same test items
+    &middot; color = judge, shape = benchmark. Frozen-threshold cascade, reproducing arXiv:2609.26550's method.</figcaption>
+  </figure>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="data-table">
+    <h2>Exact values</h2>
+    <div class="table-wrap">
+      <table id="values-table"></table>
+    </div>
+  </div>
+
+  <footer>Source: <code>experiments/trust_or_escalate/frozen_cascade_results.csv</code></footer>
+</div>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>
+(function(){
+  "use strict";
+  var JUDGES = ["jev","laya","jeff"];
+  var JUDGE_LABEL = { jev:"Jev", laya:"Laya", jeff:"jeff" };
+  var JUDGE_COLOR = { jev:"var(--jev)", laya:"var(--laya)", jeff:"var(--jeff)" };
+  var BENCH_SHAPE = { noref:"circle", ref:"square", safety:"triangle" };
+  var BENCH_LABEL = { noref:"BFF noref", ref:"BFF ref", safety:"Safety" };
+
+  var DATA = {
+    jev:  { noref:{cov:0.430, ret:99.0}, ref:{cov:0.974, ret:100.5}, safety:{cov:0.960, ret:102.7} },
+    laya: { noref:{cov:0.039, ret:98.5}, ref:{cov:0.018, ret:100.0}, safety:{cov:0.007, ret:99.9} },
+    jeff: { noref:{cov:0.039, ret:99.0}, ref:{cov:0.219, ret:99.1}, safety:{cov:0.003, ret:100.0} },
+  };
+
+  // Flatten to points; both axes are real continuous metrics now.
+  var POINTS = [];
+  JUDGES.forEach(function(j){
+    Object.keys(DATA[j]).forEach(function(bk){
+      var d = DATA[j][bk];
+      POINTS.push({ judge:j, bench:bk, cov:d.cov, ret:d.ret });
+    });
+  });
+
+  var W = 680, H = 460;
+  var leftPad = 56, rightPad = 24, topPad = 20, bottomPad = 46;
+  var plotW = W - leftPad - rightPad, plotH = H - topPad - bottomPad;
+  var yMin = 97, yMax = 104;
+
+  function x(cov){ return leftPad + cov * plotW; }
+  function y(ret){ return topPad + plotH - ((ret - yMin) / (yMax - yMin)) * plotH; }
+
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + W + 'px">';
+
+  // y gridlines + labels (accuracy retained, %)
+  [97, 98, 99, 100, 101, 102, 103, 104].forEach(function(t){
+    var gy = y(t);
+    svg += '<line class="grid-line" x1="' + leftPad + '" y1="' + gy + '" x2="' + (leftPad+plotW) + '" y2="' + gy + '" />';
+    svg += '<text class="axis-label" x="' + (leftPad - 8) + '" y="' + gy + '" dy="3.5" text-anchor="end">' + t + '%</text>';
+  });
+  // x gridlines + labels (coverage, %)
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(function(t){
+    var gx = x(t);
+    svg += '<line class="grid-line" x1="' + gx + '" y1="' + topPad + '" x2="' + gx + '" y2="' + (topPad+plotH) + '" />';
+    svg += '<text class="axis-label" x="' + gx + '" y="' + (topPad+plotH+18) + '" text-anchor="middle">' + Math.round(t*100) + '%</text>';
+  });
+  // emphasized reference line: full parity with the comparator
+  var y100 = y(100);
+  svg += '<line class="ref-line" x1="' + leftPad + '" y1="' + y100 + '" x2="' + (leftPad+plotW) + '" y2="' + y100 + '" />';
+  svg += '<text class="val-label" x="' + (leftPad+plotW) + '" y="' + (y100-5) + '" text-anchor="end">= gpt-oss-120b alone</text>';
+
+  svg += '<text class="axis-label" x="' + (leftPad + plotW/2) + '" y="' + (H-6) + '" text-anchor="middle">Coverage (share of items the cheap judge handled alone)</text>';
+  svg += '<text class="axis-label" x="-' + (topPad + plotH/2) + '" y="16" text-anchor="middle" transform="rotate(-90)">% of comparator accuracy retained</text>';
+
+  // Several points (Laya/jeff near x=0) sit within a few px of each other at this scale -- no
+  // label offset close to the marker avoids collision. Instead, fan leader lines ("sticks") out
+  // into open space, manually placed so the label text itself never overlaps another label.
+  var LABEL_POS = {
+    "jev|noref":   { lx: 366, ly: 276, anchor: "start" },
+    "jev|ref":     { lx: 560, ly: 190, anchor: "end"   },
+    "jev|safety":  { lx: 560, ly: 68,  anchor: "end"   },
+    "jeff|safety": { lx: 150, ly: 60,  anchor: "start" },
+    "laya|ref":    { lx: 150, ly: 118, anchor: "start" },
+    "jeff|noref":  { lx: 150, ly: 200, anchor: "start" },
+    "jeff|ref":    { lx: 240, ly: 258, anchor: "start" },
+    "laya|safety": { lx: 150, ly: 282, anchor: "start" },
+    "laya|noref":  { lx: 150, ly: 366, anchor: "start" },
+  };
+
+  // leaders first (so markers draw on top of the lines, not the other way round)
+  POINTS.forEach(function(p){
+    var cx = x(p.cov), cy = y(p.ret);
+    var L = LABEL_POS[p.judge + "|" + p.bench];
+    var tx = L.anchor === "end" ? L.lx + 4 : L.lx - 4;
+    svg += '<line class="leader" x1="' + cx + '" y1="' + cy + '" x2="' + tx + '" y2="' + L.ly + '" />';
+  });
+
+  POINTS.forEach(function(p){
+    var cx = x(p.cov), cy = y(p.ret);
+    var color = JUDGE_COLOR[p.judge];
+    var shape = BENCH_SHAPE[p.bench];
+    if (shape === "circle") {
+      svg += '<circle cx="' + cx + '" cy="' + cy + '" r="7" fill="' + color + '" stroke="var(--surface)" stroke-width="1.5" />';
+    } else if (shape === "square") {
+      svg += '<rect x="' + (cx-6.5) + '" y="' + (cy-6.5) + '" width="13" height="13" rx="2.5" fill="' + color + '" stroke="var(--surface)" stroke-width="1.5" />';
+    } else {
+      svg += '<polygon points="' + cx + ',' + (cy-8) + ' ' + (cx-7.5) + ',' + (cy+6.5) + ' ' + (cx+7.5) + ',' + (cy+6.5) + '" fill="' + color + '" stroke="var(--surface)" stroke-width="1.5" />';
+    }
+  });
+
+  POINTS.forEach(function(p){
+    var L = LABEL_POS[p.judge + "|" + p.bench];
+    svg += '<text class="val-label" x="' + L.lx + '" y="' + L.ly + '" dy="3.5" text-anchor="' + L.anchor + '" style="fill:' + JUDGE_COLOR[p.judge] + '">'
+         + JUDGE_LABEL[p.judge] + ' · ' + BENCH_LABEL[p.bench] + '</text>';
+  });
+
+  svg += '</svg>';
+  document.getElementById("chart").innerHTML = svg;
+
+  // Data table: the exact numbers the chart can't label without colliding.
+  var tbl = document.getElementById("values-table");
+  tbl.innerHTML = "<thead><tr><th></th><th>Judge</th><th>Benchmark</th><th class='num'>Coverage</th><th class='num'>% retained</th></tr></thead>";
+  var tbody = document.createElement("tbody");
+  POINTS.slice().sort(function(a,b){
+    return JUDGES.indexOf(a.judge) - JUDGES.indexOf(b.judge) || a.cov - b.cov;
+  }).forEach(function(p){
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td><i class='dot' style='background:" + JUDGE_COLOR[p.judge] + "'></i></td>" +
+      "<td style='color:" + JUDGE_COLOR[p.judge] + ";font-weight:600'>" + JUDGE_LABEL[p.judge] + "</td>" +
+      "<td>" + BENCH_LABEL[p.bench] + "</td>" +
+      "<td class='num'>" + (p.cov*100).toFixed(1) + "%</td>" +
+      "<td class='num'>" + p.ret.toFixed(1) + "%</td>";
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+
+  var legend = document.getElementById("legend");
+  var shapeSvg = {
+    circle: '<svg width="12" height="12"><circle cx="6" cy="6" r="5.5" fill="currentColor"/></svg>',
+    square: '<svg width="12" height="12"><rect x="1" y="1" width="10" height="10" rx="2" fill="currentColor"/></svg>',
+    triangle: '<svg width="12" height="12"><polygon points="6,0.5 0.5,11 11.5,11" fill="currentColor"/></svg>'
+  };
+  JUDGES.forEach(function(j){
+    legend.innerHTML += '<span><i style="background:' + JUDGE_COLOR[j] + ';border-radius:50%;width:10px;height:10px;display:inline-block;"></i>' + JUDGE_LABEL[j] + '</span>';
+  });
+  Object.keys(BENCH_LABEL).forEach(function(bk){
+    legend.innerHTML += '<span style="color:var(--ink-soft)">' + shapeSvg[BENCH_SHAPE[bk]] + BENCH_LABEL[bk] + '</span>';
+  });
+})();
+</script>

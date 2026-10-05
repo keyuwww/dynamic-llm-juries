@@ -13,6 +13,8 @@
   --fam-jev:        #2a78d6;
   --fam-laya:       #008300;
   --fam-jeff:       #4a3aa7;
+  --caveat-bg:      #fdf3e2;
+  --caveat-border:  #e8c97a;
 }
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) .viz-root {
@@ -28,6 +30,8 @@
     --fam-jev:        #3987e5;
     --fam-laya:       #008300;
     --fam-jeff:       #9085e9;
+    --caveat-bg:      #2b2414;
+    --caveat-border:  #6b551f;
   }
 }
 :root[data-theme="dark"] .viz-root {
@@ -43,6 +47,8 @@
   --fam-jev:        #3987e5;
   --fam-laya:       #008300;
   --fam-jeff:       #9085e9;
+  --caveat-bg:      #2b2414;
+  --caveat-border:  #6b551f;
 }
 * { box-sizing: border-box; }
 body { background: var(--page); }
@@ -64,6 +70,14 @@ h1 { font-size: 20px; margin: 4px 0 2px; }
 }
 .card h2 { font-size: 14px; margin: 0 0 2px; color: var(--text-primary); }
 .card .note { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; }
+.card .caveat {
+  font-size: 12px; color: var(--text-primary); margin: 0 0 12px;
+  background: var(--caveat-bg); border: 1px solid var(--caveat-border);
+  border-radius: 6px; padding: 8px 10px;
+}
+.section-divider { margin: 28px 0 16px; padding-top: 4px; border-top: 1px solid var(--border); }
+.section-divider h2 { font-size: 15px; margin: 0 0 4px; }
+.section-divider p { font-size: 12.5px; color: var(--text-secondary); margin: 0; }
 svg text { font-family: inherit; }
 .bar-label { font-size: 11px; fill: var(--text-primary); font-variant-numeric: tabular-nums; }
 .cat-label { font-size: 10px; fill: var(--text-secondary); }
@@ -93,6 +107,23 @@ svg text { font-family: inherit; }
     <h2>Appropriate-response judging (RewardBench 2 Safety, n=1800)</h2>
     <p class="note">Human-annotated: did the assistant correctly refuse harmful requests and correctly comply with legitimate ones (not over-refuse)?</p>
     <div id="chart-safety"></div>
+  </div>
+
+  <div class="section-divider">
+    <h2>BBEH Mini &mdash; a different metric, not judge-agreement</h2>
+    <p>The chart below is <b>answer accuracy</b>, not Cohen's &kappa;, and the gold label is BBEH's own
+    deterministic auto-grader (string-matching the final answer), not a human annotator. It's Phase 1
+    only (every Tinker-pool model answering the question itself) &mdash; judging (Phase 2, Jev/Laya/jeff
+    included) hasn't run yet. Shown here as a capability baseline, not to be read next to the &kappa; charts above.</p>
+  </div>
+
+  <div class="card">
+    <h2>Hard multi-step reasoning &mdash; answer accuracy (BBEH Mini, n=460)</h2>
+    <p class="caveat">Different metric (accuracy, not &kappa;) and different gold source (auto-grader, not
+    human) from the charts above &mdash; don't compare bar heights across sections. 24&ndash;56% of
+    completions were truncated at the 16k-token budget even on this hard-reasoning benchmark, so a real
+    share of "incorrect" here reflects running out of budget, not necessarily failed reasoning.</p>
+    <div id="chart-bbeh"></div>
   </div>
 </div>
 
@@ -201,5 +232,17 @@ verticalBarChart('chart-safety', [
   { label: 'qwen3.6-35b-a3b', value: 0.459 },
   { label: 'jeff', value: 0.195 },
   { label: 'Laya', value: 0.053 },
+]);
+
+verticalBarChart('chart-bbeh', [
+  { label: 'Oracle', value: 0.654, oracle: true },
+  { label: 'deepseek-v3.1', value: 0.439 },
+  { label: 'gpt-oss-120b', value: 0.407 },
+  { label: 'nemotron3-super-120b', value: 0.276 },
+  { label: 'qwen3.5-9b', value: 0.272 },
+  { label: 'qwen3.6-35b-a3b', value: 0.257 },
+  { label: 'gpt-oss-20b', value: 0.252 },
+  { label: 'qwen3.5-4b', value: 0.233 },
+  { label: 'nemotron3-nano-30b', value: 0.207 },
 ]);
 </script>
