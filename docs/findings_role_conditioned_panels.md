@@ -27,6 +27,36 @@ Data: BFF-Bench judgments (459 items, 80 questions, no reference answer; 456 ite
 
 Panel (majority vote) minus top-3: -1.9 points [-3.1, -0.8] on BFF without reference, -1.6 [-2.7, -0.8] with reference, +0.4 [-0.7, +1.5] on RewardBench-2. In practice it ends up at roughly the best single judge.
 
+## Per-judge results
+
+Each judge's own accuracy against the human label (all items, not split-based), and Tinker list price per call.
+
+| Judge | $/call | BFF, no reference | BFF, reference given | RewardBench-2 Safety |
+|---|---|---|---|---|
+| gpt-oss-120b | 0.00072 | **0.854** | 0.921 | 0.779 |
+| gpt-oss-20b | 0.00044 | 0.826 | 0.879 | **0.847** |
+| deepseek-v3.1 | 0.00261 | 0.806 | **0.930** | 0.729 |
+| qwen3.6-35b-a3b | 0.00125 | 0.765 | 0.875 | 0.726 |
+| qwen3.5-4b | 0.00073 | 0.745 | 0.908 | 0.732 |
+| nemotron3-super-120b | 0.00095 | 0.741 | 0.928 | 0.741 |
+| qwen3.5-9b | 0.00144 | 0.739 | 0.890 | 0.786 |
+| nemotron3-nano-30b | 0.00029 | 0.667 | 0.792 | 0.786 |
+
+Role each judge got from the panel method (majority-vote version): share of the 20 splits it was kept in the global panel ("kept"), made a slice specialist ("spec"), or dropped as redundant ("dropped").
+
+| Judge | BFF, no reference (kept / spec / dropped) | BFF, reference given | RewardBench-2 Safety |
+|---|---|---|---|
+| gpt-oss-120b | 95% / 0% / 5% | 45% / 0% / 55% | 5% / 0% / 95% |
+| gpt-oss-20b | 75% / 0% / 25% | 10% / 5% / 85% | 100% / 0% / 0% |
+| deepseek-v3.1 | 45% / 10% / 45% | 80% / 0% / 20% | 5% / 0% / 95% |
+| qwen3.6-35b-a3b | 20% / 10% / 70% | 15% / 0% / 85% | 0% / 15% / 85% |
+| qwen3.5-4b | 10% / 20% / 70% | 25% / 0% / 75% | 0% / 0% / 100% |
+| nemotron3-super-120b | 10% / 5% / 85% | 40% / 0% / 60% | 0% / 10% / 90% |
+| qwen3.5-9b | 0% / 30% / 70% | 15% / 0% / 85% | 20% / 5% / 75% |
+| nemotron3-nano-30b | 5% / 10% / 85% | 10% / 0% / 90% | 30% / 0% / 70% |
+
+The judges that are kept most often are the ones that are most accurate on their own (gpt-oss-120b and gpt-oss-20b on BFF without a reference, deepseek-v3.1 with one, gpt-oss-20b on RewardBench-2). Only these are stable in the sense of being kept in at least 80% of splits (gpt-oss-120b 95%, deepseek-v3.1 80%, gpt-oss-20b 100% on RewardBench-2). The best panel found by brute force on BFF without a reference is gpt-oss-120b + gpt-oss-20b + deepseek-v3.1, which is also the static top-3. Logistic-regression weights on the 8 verdicts (BFF, no reference) rank the judges the same way: gpt-oss-120b 1.59, gpt-oss-20b 1.43, deepseek-v3.1 0.94, qwen3.6-35b-a3b 0.65, nemotron3-nano-30b 0.37, and about 0 for qwen3.5-4b, nemotron3-super-120b and qwen3.5-9b.
+
 ## Why
 
 **The eta-hat gain on RewardBench-2 is calibration, not panel construction.** RewardBench-2 judges say "correct" on 46% of items while 25% of gold labels are correct, so a plain majority is badly miscalibrated (when 7 of 8 judges say correct, gold is correct only 47% of the time). Anything that learns a threshold fixes this: eta-hat stackers 0.890-0.896, logistic regression on the 8 verdicts 0.893, a single tuned vote-count threshold 0.896, with no panel selection at all. On BFF the verdict rate (55%) matches the gold rate (56%), and tuning does nothing.
