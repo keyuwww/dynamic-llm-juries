@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic LLM Juries</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#fcfcfb; --ink:#1c1a16; --ink-soft:#52514e; --line:#e4e0d6; --accent:#0a5c4d;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink-soft:#c3c2b7; --line:#2c2c2a; --accent:#5fd2b8; color-scheme: dark; }
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+       max-width:720px; margin:0 auto; padding:40px 20px;}
+  h1{font-size:24px; margin:0 0 6px;}
+  p.lede{color:var(--ink-soft); font-size:14px; margin:0 0 28px;}
+  .card{display:block; background:var(--surface); border:1px solid var(--line); border-radius:10px;
+        padding:16px 18px; margin-bottom:12px; text-decoration:none; color:inherit;}
+  .card:hover{border-color:var(--accent);}
+  .card h2{font-size:15px; margin:0 0 4px; color:var(--accent);}
+  .card p{font-size:13px; color:var(--ink-soft); margin:0;}
+  footer{margin-top:32px; font-size:12px; color:var(--ink-soft);}
+  footer a{color:var(--accent);}
+</style>
+</head>
+<body>
+  <h1>Dynamic LLM Juries</h1>
+  <p class="lede">Team 10 &times; Kensho &mdash; dashboards from the judge-pool comparison across
+  BFF-Bench, RewardBench2, JudgeBench, and BBEH Mini.</p>
+
+  <a class="card" href="experiments/tabbed_dashboard.html">
+    <h2>Benchmarks by Judge</h2>
+    <p>All 11 judges across five benchmark groups, one tab per benchmark, with per-domain breakdowns.</p>
+  </a>
+
+  <a class="card" href="experiments/dashboard.html">
+    <h2>Judge Agreement with Humans</h2>
+    <p>Cohen's &kappa; against human labels on BFF-Bench and RewardBench2 Safety, plus BBEH Mini capability baseline.</p>
+  </a>
+
+  <a class="card" href="experiments/certifier_dashboard.html">
+    <h2>Jury Routing Results</h2>
+    <p>Certifier (per-item judge router), error diversity, cross-benchmark transfer, and calibration.</p>
+  </a>
+
+  <a class="card" href="experiments/trust_or_escalate/frozen_cascade_page.html">
+    <h2>Frozen Cascade</h2>
+    <p>Reproducing arXiv:2609.26550's accept/escalate cascade for Jev, Laya, and jeff.</p>
+  </a>
+
+  <a class="card" href="experiments/trust_or_escalate/frozen_cascade_dotplot.html">
+    <h2>Cascade Coverage</h2>
+    <p>Single-figure summary: coverage vs. retained accuracy for the frozen cascade.</p>
+  </a>
+
+  <footer>Source: <a href="https://github.com/keyuwww/dynamic-llm-juries">github.com/keyuwww/dynamic-llm-juries</a></footer>
+</body>
+</html>

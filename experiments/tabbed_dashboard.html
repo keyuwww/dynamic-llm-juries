@@ -61,8 +61,7 @@
   .axis-line{stroke:var(--baseline); stroke-width:1;}
   .grid-line{stroke:var(--grid); stroke-width:1;}
 
-  .domain-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
-  @media (max-width:680px){ .domain-grid{grid-template-columns:1fr;} }
+  .domain-grid{display:grid; grid-template-columns:1fr; gap:18px;}
 
   table{width:100%; border-collapse:collapse; font-size:12.5px;}
   th,td{text-align:left; padding:6px 8px; border-bottom:1px solid var(--line);}
@@ -247,7 +246,7 @@ function renderRB2(panel) {
     const box = document.createElement("div");
     box.innerHTML = `<div style="font-size:12px;font-weight:600;margin-bottom:6px;">${domain}</div><div></div>`;
     grid.appendChild(box);
-    verticalBarChart(box.querySelector("div:last-child"), rows(list), { w: 360, plotH: 140 });
+    verticalBarChart(box.querySelector("div:last-child"), rows(list), { w: 760, plotH: 160 });
   }
 }
 
