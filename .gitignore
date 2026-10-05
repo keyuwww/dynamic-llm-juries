@@ -12,3 +12,7 @@ wheels_modal/
 wheels_tinker/
 experiments/tinker_pool/data_cache/
 experiments/tinker_pool/mock_*_results/
+
+# role_conditioned_panels
+experiments/role_conditioned_panels/data_cache/
+experiments/role_conditioned_panels/results/

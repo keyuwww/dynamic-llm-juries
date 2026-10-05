@@ -69,6 +69,7 @@ experiments/
   jev_router/               Exp 2: judge as a router/certifier among 6 candidate models (path A) + dynamic jury
   trust_or_escalate/        B6 reproduction: cheap->strong cascade, reused from Exp 1's noref/ref pairs
   jury_on_demand/           B5 lite reproduction: reliability-weighted top-K jury voting
+  role_conditioned_panels/  judge-panel construction, brute-force/logistic-regression/slice controls (see docs/findings_role_conditioned_panels.md)
   common/backends.py        shared Jev/CLM client wrapper so experiments run with --backend jev|clm
   clm_modal.py              deploy CLM-8B (vLLM + clm-serve) on a Modal GPU and run the experiments against it
   compare_backends.py       merges {jev,clm}_*_results/metrics.json into one comparison table
