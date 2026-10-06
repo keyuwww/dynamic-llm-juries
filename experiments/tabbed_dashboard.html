@@ -185,13 +185,21 @@ const JUDGEBENCH = [
 ];
 const JUDGEBENCH_ORACLE = 0.990;
 
-// ---------------- BBEH (accuracy, not kappa; Phase 1 only) ----------------
-const BBEH = [
+// ---------------- BBEH: Phase 1 (answer accuracy) ----------------
+const BBEH_CAPABILITY = [
   ["Oracle", null, true], ["deepseek-v3.1", 0.439], ["gpt-oss-120b", 0.407], ["nemotron3-super-120b", 0.276],
   ["qwen3.5-9b", 0.272], ["qwen3.6-35b-a3b", 0.257], ["gpt-oss-20b", 0.252], ["qwen3.5-4b", 0.233],
   ["nemotron3-nano-30b", 0.207],
 ];
-const BBEH_ORACLE = 0.654;
+const BBEH_CAPABILITY_ORACLE = 0.654;
+
+// ---------------- BBEH: Phase 2 (judging, kappa vs. auto-grader gold) ----------------
+const BBEH_JUDGING = [
+  ["Oracle", null, true], ["gpt-oss-120b", 0.393], ["qwen3.6-35b-a3b", 0.288], ["gpt-oss-20b", 0.252],
+  ["deepseek-v3.1", 0.221], ["Jev", 0.196], ["qwen3.5-9b", 0.171], ["qwen3.5-4b", 0.143],
+  ["nemotron3-super-120b", 0.104], ["jeff", 0.105], ["Laya", 0.009], ["nemotron3-nano-30b", 0.001],
+];
+const BBEH_JUDGING_ORACLE = 0.954;
 
 function rows(list, oracleVal) {
   return list.map(([label, value, isOracle]) => ({ label, value: isOracle ? oracleVal : value, oracle: !!isOracle }));
@@ -263,15 +271,22 @@ function renderJudgeBench(panel) {
 
 function renderBBEH(panel) {
   panel.innerHTML = `
-    <p class="caveat">Different metric from every other tab: this is <b>answer accuracy</b>, not Cohen's
-    &kappa;, against BBEH's own deterministic auto-grader &mdash; not human-annotated. This is Phase 1 only
-    (every Tinker model answering the question itself); judging (Phase 2, with Jev/Laya/jeff included)
-    hasn't run yet, so there are no HTTP-judge bars here.</p>
-    <div class="card"><h2>Hard multi-step reasoning, answer accuracy (n=460)</h2>
-      <p class="note">24&ndash;56% of completions were truncated at the 16k-token budget even on this hard
-      benchmark, so some "incorrect" reflects running out of budget, not failed reasoning.</p>
-      <div id="c-bbeh"></div></div>`;
-  verticalBarChart(panel.querySelector("#c-bbeh"), rows(BBEH, BBEH_ORACLE), { w: 760 });
+    <p class="caveat">Gold is BBEH's own deterministic auto-grader throughout this tab &mdash; not
+    human-annotated. Candidates for judging are the 8 Tinker models' own Phase-1 answers, balanced
+    correct/incorrect; Laya and jeff's inputs were truncated to the last 3000 characters (where
+    "The answer is: ..." lives) after both rejected the full-length reasoning traces outright.</p>
+    <div class="card"><h2>Judging: Cohen's &kappa; vs. the auto-grader (n=920 judge items)</h2>
+      <p class="note">Candidates = the 8 Tinker models' own answers; gpt-oss-120b is the best single judge,
+      but the oracle&minus;best gap (23.7%) is the largest of any benchmark here.</p>
+      <div id="c-bbeh-judging"></div></div>
+    <div class="card"><h2>Answer accuracy, Phase 1 capability baseline (n=460 questions)</h2>
+      <p class="note">Not a judging result &mdash; this is just how well each Tinker model solves BBEH itself.
+      24&ndash;56% of completions were truncated at the 16k-token answer budget even on this hard benchmark,
+      so some "incorrect" reflects running out of budget, not failed reasoning. No Jev/Laya/jeff bars here:
+      they don't answer questions in this project's setup, only judge.</p>
+      <div id="c-bbeh-capability"></div></div>`;
+  verticalBarChart(panel.querySelector("#c-bbeh-judging"), rows(BBEH_JUDGING, BBEH_JUDGING_ORACLE), { w: 760 });
+  verticalBarChart(panel.querySelector("#c-bbeh-capability"), rows(BBEH_CAPABILITY, BBEH_CAPABILITY_ORACLE), { w: 760 });
 }
 
 const tabsEl = document.getElementById("tabs");
