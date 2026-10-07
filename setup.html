@@ -1,0 +1,191 @@
+<title>Study Design</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#fcfcfb; --surface-sunken:#f1efe9;
+    --ink:#1c1a16; --ink-soft:#52514e; --ink-muted:#898781; --line:#e4e0d6;
+    --accent-ink:#0a5c4d; --accent-bg:#eaf4f0;
+    --jev:#2a78d6; --laya:#008300; --jeff:#4a3aa7;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0d0d0d; --surface:#1a1a19; --surface-sunken:#232320;
+      --ink:#ffffff; --ink-soft:#c3c2b7; --ink-muted:#898781; --line:#2c2c2a;
+      --accent-ink:#5fd2b8; --accent-bg:#17251f;
+      --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0d0d0d; --surface:#1a1a19; --surface-sunken:#232320;
+    --ink:#ffffff; --ink-soft:#c3c2b7; --ink-muted:#898781; --line:#2c2c2a;
+    --accent-ink:#5fd2b8; --accent-bg:#17251f;
+    --jev:#3987e5; --laya:#00a300; --jeff:#9085e9;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); padding-inline:20px; padding-block:32px;}
+  .wrap{max-width:900px; margin:0 auto;}
+  .eyebrow{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:10px;}
+  h1{font-family:var(--font-display); font-weight:600; font-size:clamp(26px,4.5vw,36px); margin:0 0 12px; text-wrap:balance;}
+  p.lede{color:var(--ink-soft); font-size:15px; max-width:680px; margin:0 0 36px;}
+
+  section{margin-bottom:40px;}
+  .section-head{display:flex; align-items:baseline; gap:10px; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:16px;}
+  .section-num{font-family:var(--font-mono); font-size:12px; color:var(--ink-muted);}
+  h2{font-family:var(--font-display); font-weight:600; font-size:21px; margin:0;}
+  .section-note{font-size:13.5px; color:var(--ink-soft); margin:0 0 18px; max-width:680px;}
+
+  .group-label{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-muted); margin:22px 0 8px;}
+  .group-label:first-child{margin-top:0;}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px;}
+  th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-muted); font-weight:600;}
+  td.num,th.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr:last-child td{border-bottom:none;}
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:8px; margin-bottom:8px;}
+  .table-wrap table{min-width:560px;}
+  .logo{width:15px; height:15px; vertical-align:-3px; margin-right:7px; fill:var(--ink-muted);}
+  .judge-name{font-weight:600;}
+  .judge-name.jev{color:var(--jev);} .judge-name.laya{color:var(--laya);} .judge-name.jeff{color:var(--jeff);}
+
+  .bench-card{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin-bottom:12px;}
+  .bench-card .top{display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:4px;}
+  .bench-card h3{font-family:var(--font-display); font-weight:600; font-size:16px; margin:0;}
+  .bench-card .n{font-family:var(--font-mono); font-size:12px; color:var(--ink-muted);}
+  .bench-card p{font-size:13.5px; color:var(--ink-soft); margin:4px 0 8px; max-width:660px;}
+  .pill{
+    display:inline-block; font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.03em; padding:2px 8px; border-radius:10px; font-weight:600;
+  }
+  .pill.human{background:var(--accent-bg); color:var(--accent-ink);}
+  .pill.algo{background:var(--surface-sunken); color:var(--ink-muted); border:1px solid var(--line);}
+
+  footer{margin-top:40px; font-size:12px; color:var(--ink-muted);}
+  footer a{color:var(--accent-ink);}
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="wrap">
+  <div class="eyebrow">Dynamic LLM Juries &mdash; Team 10 &times; Kensho</div>
+  <h1>Study Design</h1>
+  <p class="lede">The 11 judges and 5 benchmark groups behind every chart on this site: who's being
+  compared, and what each benchmark's gold label actually is.</p>
+
+  <section>
+    <div class="section-head"><span class="section-num">01</span><h2>The judge pool</h2></div>
+    <p class="section-note">Three decision-only HTTP backends, plus 8 open-weight models served through
+    Tinker. "Tier" is cost tier, not quality &mdash; small/mid/strong tracks Tinker's list pricing.</p>
+
+    <div class="group-label">HTTP backends (decision-only, no generated reasoning)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Judge</th><th>Backend</th><th>What it is</th><th>Wire protocol</th></tr></thead>
+        <tbody>
+          <tr><td class="judge-name jev">Jev</td><td>jev-1.13.0 (TypeSafe)</td>
+            <td>Specialized judge model trained to output a calibrated probability for a bounded
+            question &mdash; no chain-of-thought (arXiv:2609.26550).</td><td>System One (Noul/Choice)</td></tr>
+          <tr><td class="judge-name laya">Laya</td><td>laya-rl-agent</td>
+            <td>RL-trained decision agent, served via Modal GPU.</td><td>System One (Noul/Choice)</td></tr>
+          <tr><td class="judge-name jeff">jeff</td><td>jeff-qwen3.5-0.8b</td>
+            <td>Qwen3.5-0.8B fine-tuned for decision-only judging, served via Modal GPU.</td><td>System One (Noul/Choice)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="group-label">Tinker-hosted open-weight models (generate a rationale, then a verdict)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Key</th><th>Model</th><th class="num">Params</th><th class="num">Active</th><th>Tier</th><th class="num">$/1M in</th><th class="num">$/1M out</th></tr></thead>
+        <tbody id="pool-table"></tbody>
+      </table>
+    </div>
+    <p class="section-note" style="margin-top:8px;">Prices are Tinker list prices, prefill/sample, as of
+    Oct 2026. "Active" is active parameters per token for the sparse (MoE) models.</p>
+  </section>
+
+  <section>
+    <div class="section-head"><span class="section-num">02</span><h2>The benchmarks</h2></div>
+    <p class="section-note">Only two of six benchmark conditions are genuinely human-labeled. The rest use
+    LLM-judged or fully algorithmic gold &mdash; read those as judge-capability checks, not human-preference
+    agreement. (See <a href="experiments/tabbed_dashboard.html">Benchmarks by Judge</a> for the numbers.)</p>
+
+    <div class="bench-card">
+      <div class="top"><h3>BFF-Bench</h3><span class="n">n=459 (noref) / 456 (ref)</span></div>
+      <span class="pill human">Human-labeled</span>
+      <p>Finance/accounting Q&amp;A. Judges decide whether an assistant's final response is
+      correct, with (ref) or without (noref) an expert reference answer shown. Gold: kensho/VERDICTS
+      consensus labels.</p>
+    </div>
+
+    <div class="bench-card">
+      <div class="top"><h3>RewardBench 2 &mdash; Safety</h3><span class="n">n=1,800 responses (450 prompts)</span></div>
+      <span class="pill human">Human-labeled</span>
+      <p>CoCoNot prompts: did the assistant correctly refuse harmful requests and correctly comply with
+      legitimate ones (not over-refuse)? The only RewardBench 2 domain confirmed human-annotated in the
+      paper's own Table 2.</p>
+    </div>
+
+    <div class="bench-card">
+      <div class="top"><h3>RewardBench 2 &mdash; 5 other domains</h3><span class="n">n=7,177 responses</span></div>
+      <span class="pill algo">LLM-judged / algorithmic</span>
+      <p>Factuality, Focus, Math, Precise IF, Ties. Gold labels come from the benchmark's own construction
+      process, not human annotation.</p>
+    </div>
+
+    <div class="bench-card">
+      <div class="top"><h3>JudgeBench</h3><span class="n">n=620 pairs</span></div>
+      <span class="pill algo">Fully algorithmic</span>
+      <p>Pairwise response comparison (arXiv:2410.12784). Gold comes from MMLU-Pro, LiveBench, and
+      LiveCodeBench verifiers &mdash; deterministic checkers, not a human or an LLM judge.</p>
+    </div>
+
+    <div class="bench-card">
+      <div class="top"><h3>BBEH Mini</h3><span class="n">n=460 questions &middot; 920 judge items</span></div>
+      <span class="pill algo">Fully algorithmic</span>
+      <p>23 hard multi-step reasoning task types (Google DeepMind). Judge items are the 8 Tinker models'
+      own answers to each other's questions, balanced correct/incorrect, graded against BBEH's official
+      deterministic answer-matcher.</p>
+    </div>
+  </section>
+
+  <footer>Source: <a href="https://github.com/keyuwww/dynamic-llm-juries">github.com/keyuwww/dynamic-llm-juries</a> &middot; <code>experiments/tinker_pool/common.py</code> (model pool), <code>experiments/tinker_pool/data.py</code> (loaders)</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const ICON_DEFS = `<svg width="0" height="0" style="position:absolute">
+  <symbol id="icon-qwen" viewBox="0 0 24 24"><path d="M23.919 14.545 20.817 9.17l1.47-2.544a.56.56 0 0 0 0-.566l-1.633-2.83a.57.57 0 0 0-.49-.283h-6.207L12.487.402a.57.57 0 0 0-.49-.284H8.732a.56.56 0 0 0-.49.284L5.139 5.775h-2.94a.56.56 0 0 0-.49.284L.077 8.887a.56.56 0 0 0 0 .567L3.18 14.83l-1.47 2.545a.56.56 0 0 0 0 .566l1.634 2.83a.57.57 0 0 0 .49.283h6.205l1.47 2.545a.57.57 0 0 0 .49.284h3.266a.57.57 0 0 0 .49-.284l3.104-5.375h2.94a.57.57 0 0 0 .49-.283l1.634-2.828a.55.55 0 0 0-.004-.568M8.733.686l1.634 2.828-1.634 2.828H21.8L20.164 9.17H7.425L5.63 6.06Zm1.306 19.801-6.205-.002 1.634-2.83h3.265L2.201 6.344h3.267q3.182 5.517 6.367 11.032zm10.124-5.66L18.53 12l-6.532 11.315-1.634-2.83c2.129-3.673 4.25-7.351 6.373-11.028h3.592l3.102 5.374z"/></symbol>
+  <symbol id="icon-gptoss" viewBox="0 0 24 24"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></symbol>
+  <symbol id="icon-nemotron" viewBox="0 0 24 24"><path d="M8.948 8.798v-1.43a6.7 6.7 0 0 1 .424-.018c3.922-.124 6.493 3.374 6.493 3.374s-2.774 3.851-5.75 3.851c-.398 0-.787-.062-1.158-.185v-4.346c1.528.185 1.837.857 2.747 2.385l2.04-1.714s-1.492-1.952-4-1.952a6.016 6.016 0 0 0-.796.035m0-4.735v2.138l.424-.027c5.45-.185 9.01 4.47 9.01 4.47s-4.08 4.964-8.33 4.964c-.37 0-.733-.035-1.095-.097v1.325c.3.035.61.062.91.062 3.957 0 6.82-2.023 9.593-4.408.459.371 2.34 1.263 2.73 1.652-2.633 2.208-8.772 3.984-12.253 3.984-.335 0-.653-.018-.971-.053v1.864H24V4.063zm0 10.326v1.131c-3.657-.654-4.673-4.46-4.673-4.46s1.758-1.944 4.673-2.262v1.237H8.94c-1.528-.186-2.73 1.245-2.73 1.245s.68 2.412 2.739 3.11M2.456 10.9s2.164-3.197 6.5-3.533V6.201C4.153 6.59 0 10.653 0 10.653s2.35 6.802 8.948 7.42v-1.237c-4.84-.6-6.492-5.936-6.492-5.936z"/></symbol>
+  <symbol id="icon-deepseek" viewBox="0 0 24 24"><path d="M23.748 4.651c-.254-.124-.364.113-.512.233-.051.04-.094.09-.137.137-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.155-.708-.311-.955-.65-.172-.24-.219-.509-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.094.172.187.129.323-.082.28-.18.553-.266.833-.055.179-.137.218-.328.14a5.5 5.5 0 0 1-1.737-1.179c-.857-.828-1.631-1.743-2.597-2.46a12 12 0 0 0-.689-.47c-.985-.957.13-1.743.387-1.836.27-.098.094-.433-.778-.428-.872.003-1.67.295-2.687.685a3 3 0 0 1-.465.136 9.6 9.6 0 0 0-2.883-.101c-1.885.21-3.39 1.1-4.497 2.622C.082 8.776-.231 10.854.152 13.02c.403 2.284 1.568 4.175 3.36 5.653 1.857 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.132-.284 4.994-1.86.47.234.962.328 1.78.398.629.058 1.235-.031 1.705-.129.735-.155.684-.836.418-.961-2.155-1.004-1.682-.595-2.112-.926 1.095-1.295 2.768-3.598 3.284-6.733.05-.346.115-.834.108-1.114-.004-.171.035-.238.23-.257a4.2 4.2 0 0 0 1.545-.475c1.397-.763 1.96-2.016 2.093-3.517.02-.23-.004-.467-.247-.588M11.58 18.168c-2.088-1.642-3.101-2.183-3.52-2.16-.39.024-.32.472-.234.763.09.288.207.487.371.74.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.168-1.361-.801-2.5-1.86-3.301-3.306-.775-1.393-1.225-2.888-1.299-4.482-.02-.385.094-.522.477-.592a4.7 4.7 0 0 1 1.53-.038c2.131.311 3.946 1.264 5.467 2.774.868.86 1.525 1.887 2.202 2.89.72 1.066 1.494 2.082 2.48 2.915.348.291.626.513.892.677-.802.09-2.14.109-3.055-.615zm1.001-6.44a.306.306 0 0 1 .415-.287.3.3 0 0 1 .113.074.3.3 0 0 1 .086.214c0 .17-.136.307-.308.307a.303.303 0 0 1-.306-.307m3.11 1.596c-.2.081-.4.151-.591.16a1.25 1.25 0 0 1-.798-.254c-.274-.23-.47-.358-.551-.758a1.7 1.7 0 0 1 .015-.588c.07-.327-.007-.537-.238-.727-.188-.156-.426-.199-.689-.199a.6.6 0 0 1-.254-.078.253.253 0 0 1-.114-.358 1 1 0 0 1 .192-.21c.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.392.451.462.576.685.915.176.264.336.536.446.848.066.194-.02.353-.25.45"/></symbol>
+</svg>`;
+document.body.insertAdjacentHTML("afterbegin", ICON_DEFS);
+
+const POOL = [
+  { key:"qwen3.5-4b", model:"Qwen/Qwen3.5-4B", params:"4B", active:"4B", tier:"small", icon:"qwen", pin:0.33, pout:1.005 },
+  { key:"gpt-oss-20b", model:"openai/gpt-oss-20b", params:"21B", active:"3.6B", tier:"small", icon:"gptoss", pin:0.18, pout:0.45 },
+  { key:"nemotron3-nano-30b", model:"nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", params:"30B", active:"3.5B", tier:"small", icon:"nemotron", pin:0.195, pout:0.495 },
+  { key:"qwen3.5-9b", model:"Qwen/Qwen3.5-9B", params:"9B", active:"9B", tier:"mid", icon:"qwen", pin:0.66, pout:1.995 },
+  { key:"qwen3.6-35b-a3b", model:"Qwen/Qwen3.6-35B-A3B", params:"35B", active:"3B", tier:"mid", icon:"qwen", pin:0.54, pout:1.335 },
+  { key:"nemotron3-super-120b", model:"nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16", params:"120B", active:"12B", tier:"mid", icon:"nemotron", pin:0.57, pout:1.44 },
+  { key:"gpt-oss-120b", model:"openai/gpt-oss-120b", params:"117B", active:"5B", tier:"strong", icon:"gptoss", pin:0.33, pout:0.84 },
+  { key:"deepseek-v3.1", model:"deepseek-ai/DeepSeek-V3.1", params:"671B", active:"37B", tier:"strong", icon:"deepseek", pin:1.695, pout:4.215 },
+];
+
+const tbody = document.getElementById("pool-table");
+POOL.forEach(m => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td><svg class="logo"><use href="#icon-${m.icon}"/></svg><b>${m.key}</b></td>` +
+    `<td>${m.model}</td><td class="num">${m.params}</td><td class="num">${m.active}</td>` +
+    `<td>${m.tier}</td><td class="num">$${m.pin.toFixed(3)}</td><td class="num">$${m.pout.toFixed(3)}</td>`;
+  tbody.appendChild(tr);
+});
+})();
+</script>
