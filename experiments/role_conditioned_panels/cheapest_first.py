@@ -9,11 +9,13 @@ from splits import make_3way_splits
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--bff", required=True); ap.add_argument("--rb2", required=True)
-ap.add_argument("--verdicts-path"); ap.add_argument("--rb2-path")
+ap.add_argument("--verdicts-path"); ap.add_argument("--rb2-path"); ap.add_argument("--exclude", nargs="*", default=[])
 a = ap.parse_args(); pd.set_option("display.width", 200)
 rows = []
 for label, path, bench, cond in [("BFF none", a.bff, "bff", "none"), ("BFF human", a.bff, "bff", "human"), ("RB2 safety", a.rb2, "rb2safety", "none")]:
     d = load_judgments(path, bench, condition=cond, verdicts_path=a.verdicts_path, rb2_path=a.rb2_path)
+    if a.exclude:
+        d = drop_judges(d, a.exclude)
     sp = make_3way_splits(d.groups, 0, 20)
     cheapest = min(d.cost, key=d.cost.get)
     for rule, runner in (("eta", run_all_repeats), ("majority", run_all_repeats_mv)):
