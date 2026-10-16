@@ -1,7 +1,7 @@
 """Role construction, adapted from Appendix A.2 of Stopping and Routing LLM Judge Panels."""
 
 
-def construct_panel(judges, gain_fn, slice_gain_fn, cost, slices, tau_P=0.005, tau_f=0.005, lam=0.0):
+def construct_panel(judges, gain_fn, slice_gain_fn, cost, slices, tau_P=0.005, tau_f=0.005, lam=0.0, first=None):
     """
     gain_fn(j, S)           -> g(j|S), using the construction-fit/validation split
     slice_gain_fn(j, S, f)  -> A_f(j|S) for slice name f
@@ -13,6 +13,8 @@ def construct_panel(judges, gain_fn, slice_gain_fn, cost, slices, tau_P=0.005, t
     """
     S, specialists, copies = [], {f: [] for f in slices}, []
     unassigned = list(judges)
+    if first is not None:             # forced first judge (e.g. the cheapest), greedy growth afterwards
+        S.append(first); unassigned.remove(first)
 
     while unassigned:
         # 1. try to grow the global panel

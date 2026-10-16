@@ -65,12 +65,12 @@ def serve(S, specialists, eta_tables, item_features, Z, cost_vec, test_idx, spec
     return verdict, paid
 
 
-def construct_for_split(Z, Yw, names, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam):
+def construct_for_split(Z, Yw, names, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam, first=None):
     col = {j: k for k, j in enumerate(names)}
     cost = {j: cost_vec[col[j]] for j in names}
     gain_fn = lambda j, S: conditional_gain(col[j], [col[s] for s in S], Z, Yw, fit, val)
     slice_gain_fn = lambda j, S, f: slice_gain(col[j], [col[s] for s in S], f, Z, Yw, fit, val, masks[f])
-    return construct_panel(names, gain_fn, slice_gain_fn, cost, keep, tau_P, tau_f, lam)
+    return construct_panel(names, gain_fn, slice_gain_fn, cost, keep, tau_P, tau_f, lam, first)
 
 
 def _metrics(v, y, c):
@@ -78,7 +78,7 @@ def _metrics(v, y, c):
 
 
 def run_all_repeats(data, splits, tau_P=0.005, tau_f=0.005, lam=0.0, serving_fit="all",
-                    shuffle_labels=False, shuffle_seed=123, verbose=True, mask_fn=None):
+                    shuffle_labels=False, shuffle_seed=123, verbose=True, mask_fn=None, first_judge=None):
     """mask_fn(data, fit_idx) -> {slice: bool mask over all rows} overrides the hand-crafted slices.
     Returns dict(results: per repeat x strategy DataFrame, roles, slice_log, pooled).
     pooled[strategy] = list of (test item indices, correct-indicator) over repeats, for the question bootstrap."""
@@ -103,7 +103,7 @@ def run_all_repeats(data, splits, tau_P=0.005, tau_f=0.005, lam=0.0, serving_fit
             slice_log.append(dict(repeat=r, slice=f, prevalence_fit=float(m[fit].mean()), n_fit=int(m[fit].sum()),
                                   n_val=int(m[val].sum()), kept=f in keep, reason=dropped.get(f, "")))
 
-        S, spec, copies = construct_for_split(Z, Yw, names, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam)
+        S, spec, copies = construct_for_split(Z, Yw, names, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam, first_judge)
         for j in S:
             roles.append(dict(repeat=r, judge=j, role="Complement"))
         for f, js in spec.items():

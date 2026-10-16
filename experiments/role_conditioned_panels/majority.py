@@ -40,13 +40,15 @@ def mv_acc(Z, Y, rows, cols, fit_acc, prior_pred):
     return float((mv_verdict(Z[rows], cols, _tie_col(cols, fit_acc)) == Y[rows]).mean())
 
 
-def construct_panel_mv(names, Z, Y, cost_vec, masks, slices, fit, val, tau_P=0.005, tau_f=0.005, lam=0.0, step="pair"):
+def construct_panel_mv(names, Z, Y, cost_vec, masks, slices, fit, val, tau_P=0.005, tau_f=0.005, lam=0.0, step="pair", first=None):
     col = {j: k for k, j in enumerate(names)}
     fit_acc = (Z[fit] == Y[fit][:, None]).mean(0)
     prior_pred = int(Y[fit].mean() >= 0.5)
     acc = lambda cols, rows=val: mv_acc(Z, Y, rows, list(cols), fit_acc, prior_pred)
     S, specialists, copies = [], {f: [] for f in slices}, []
     unassigned = list(names)
+    if first is not None:
+        S.append(first); unassigned.remove(first)
 
     while unassigned:
         base = acc([col[s] for s in S])
@@ -93,7 +95,7 @@ def serve_mv(S, specialists, masks, Z, cost_vec, test, col, sel_acc, prior_pred)
 
 
 def run_all_repeats_mv(data, splits, tau_P=0.005, tau_f=0.005, lam=0.0, step="pair", shuffle_labels=False,
-                       shuffle_seed=123, verbose=True, mask_fn=None, **_ignored):
+                       shuffle_seed=123, verbose=True, mask_fn=None, first_judge=None, **_ignored):
     Z, Y, names = data.Z, data.Y, data.judge_names
     cost_vec = np.array([data.cost[j] for j in names]); col = {j: k for k, j in enumerate(names)}
     rng = np.random.default_rng(shuffle_seed)
@@ -111,7 +113,7 @@ def run_all_repeats_mv(data, splits, tau_P=0.005, tau_f=0.005, lam=0.0, step="pa
         for f, m in masks.items():
             slice_log.append(dict(repeat=r, slice=f, prevalence_fit=float(m[fit].mean()), n_fit=int(m[fit].sum()),
                                   n_val=int(m[val].sum()), kept=f in keep, reason=dropped.get(f, "")))
-        S, spec, copies = construct_panel_mv(names, Z, Yw, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam, step)
+        S, spec, copies = construct_panel_mv(names, Z, Yw, cost_vec, masks, keep, fit, val, tau_P, tau_f, lam, step, first_judge)
         roles += [dict(repeat=r, judge=j, role="Complement") for j in S]
         for f, js in spec.items():
             roles += [dict(repeat=r, judge=j, role=f"Specialist:{f}") for j in js]
