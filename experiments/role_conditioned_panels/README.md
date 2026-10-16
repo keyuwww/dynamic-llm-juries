@@ -15,6 +15,7 @@ Role-conditioned judge-panel construction on the 8-judge Tinker pool (BFF-Bench,
 | `cost_ci.py`, `subsample.py`, `calibration.py` | cost/accuracy intervals, subsampling test, verdict-rate vs gold-rate check |
 | `cheapest_first.py` | forces the cheapest judge in as the first panel member, then greedy growth (`--exclude` drops judges from the pool) |
 | `cascade.py` | cheap-first cascade simulated from saved verdicts |
+| `cascade_sweep.py` | cascade variants + fresh-seed robustness check |
 | `make_chart.py`, `plot_chart.py` | accuracy comparison figure |
 
 `data_cache/` and `results/` are git-ignored; no raw judgment files are committed.
@@ -62,3 +63,41 @@ One of six cells reaches parity with top-3, within noise; panels grow from about
 | RewardBench-2 | cascade, 3 cheap judges | 0.843 | 0.0019 | 34% | +0.6 [-0.5, +1.6] | 87% |
 
 With the reference answer, the 3-judge cascade is within noise of top-3 at 47% of its cost, and about the same cost as the best single judge with +1.1 points higher accuracy [-0.3, +2.6]. Without a reference it is within noise of the best single judge (+0.6 [-1.3, +2.4]) but costs 2.6x as much ($0.0018 vs $0.0007), because gpt-oss-120b is already one of the cheapest judges. Two cheap judges are too few.
+
+### Cascade variants and fresh-seed check
+
+`python cascade_sweep.py --bff <bff_judgments.jsonl> --rb2 <rb2_judgments.jsonl>`. Variant = (k cheap judges, m votes needed to accept); otherwise escalate to the best judge. Accuracy difference vs static top-3 majority in points: seed 0 with 95% CI, then three fresh random split seeds, then the 4-seed mean. Picking the cheap judges by accuracy per dollar instead of by price gives identical results.
+
+BFF, reference given:
+
+| Variant (k, m) | Cost vs top-3 | Escalated | Seed 0 | Seeds 1-3 | Mean |
+|---|---|---|---|---|---|
+| 2, 2 | 29% | 24% | -1.6 [-3.2, -0.1] | -1.2, -1.1, -1.3 | -1.3 |
+| 3, 3 | 47% | 27% | -0.4 [-1.3, +0.5] | -0.6, -0.4, -0.4 | -0.5 |
+| 4, 4 | 65% | 29% | -0.5 [-1.5, +0.5] | -1.0, -0.4, -0.3 | -0.6 |
+| 4, 3 | 55% | 6% | +0.1 [-0.9, +1.2] | -0.0, -0.2, +0.1 | 0.0 |
+| 5, 5 | 91% | 31% | -0.8 [-1.5, -0.1] | -1.4, -0.6, -0.8 | -0.9 |
+| 5, 4 | 79% | 8% | +0.1 [-0.8, +1.1] | -0.3, +0.2, +0.2 | 0.0 |
+
+BFF, no reference:
+
+| Variant (k, m) | Cost vs top-3 | Escalated | Seed 0 | Seeds 1-3 | Mean |
+|---|---|---|---|---|---|
+| 2, 2 | 26% | 34% | -3.1 [-5.4, -1.0] | -3.6, -2.5, -3.7 | -3.2 |
+| 3, 3 | 47% | 45% | -1.3 [-3.2, +0.4] | -2.2, -1.7, -2.3 | -1.9 |
+| 4, 4 | 74% | 51% | -1.1 [-3.0, +0.7] | -1.7, -1.3, -1.7 | -1.4 |
+| 4, 3 | 67% | 16% | -5.0 [-8.0, -2.0] | -5.2, -5.4, -5.8 | -5.3 |
+| 5, 5 | 108% | 56% | -0.9 [-2.9, +1.1] | -1.5, -1.0, -1.4 | -1.2 |
+| 5, 4 | 102% | 27% | -2.5 [-4.4, -0.9] | -2.9, -3.0, -3.4 | -3.0 |
+
+- With the reference answer the 3-judge cascade is stable: -0.4 to -0.6 points vs top-3 on every seed (within noise) at 47% of the cost.
+- Without the reference it is consistently about 2 points below top-3. Seed 0 looked closest; the 4-seed mean is -1.9. Not parity.
+- Accepting on 3 of 4 votes matches top-3 with the reference (4-seed mean 0.0, 55% of the cost, 6% escalated) but is -5.3 without a reference and -2.4 on RewardBench-2. It was the best of about six variants tried, so treat it as unreliable.
+- RewardBench-2: the best single judge is already the most accurate and the cheapest; no cascade variant beats it.
+
+## Status against the suggestions
+
+- Exclude the strongest judge: done (7- and 6-judge pools, and cheapest first on the 7-judge pool). Same null result.
+- Force the weakest/cheapest judge first, then greedy: done (nemotron3-nano-30b, all three settings, both rules). Does not help. On RewardBench-2 nemotron3-nano-30b is the cheapest judge but not the weakest by accuracy; weakest-by-accuracy first was not run.
+- Other benchmarks: RewardBench-2 Safety done. JudgeBench and BBEH need new judge runs.
+- Check the implementation against the paper (joint verdict patterns): not done. The code follows the project spec, not the paper's text.
