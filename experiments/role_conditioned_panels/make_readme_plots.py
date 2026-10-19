@@ -22,7 +22,7 @@ for ax, (title, rows) in zip(axs, pts.items()):
         ax.scatter(cost, acc, marker="s" if base else "o", color="C3" if base else "C0", s=60 if base else 35)
         ax.annotate(name, (cost, acc), fontsize=8, xytext=(4, 4), textcoords="offset points")
     ax.set_title(title); ax.set_xlabel("cost per item ($)"); ax.set_ylabel("accuracy")
-fig.suptitle("Cheap-first cascade: accuracy vs cost (cascade k,m = k cheap judges, accept if m agree; squares = baselines)")
+fig.suptitle("Plot 2: cheap-first cascade, accuracy vs cost (cascade k,m = k cheap judges, accept if m agree; squares = baselines)")
 fig.tight_layout(); fig.savefig(os.path.join(out, "cascade_cost_accuracy.png"), dpi=130); plt.close(fig)
 
 # ---- 2. accuracy difference vs static top-3, with 95% CI  (label, diff, lo, hi) in points
@@ -40,7 +40,7 @@ for ax, (title, rs) in zip(axs, rows.items()):
         ax.errorbar(d, i, xerr=[[d - lo], [hi - d]], fmt="o", color="C0" if hi >= 0 else "C3", capsize=3)
     ax.axvline(0, color="k", lw=0.8); ax.set_yticks(range(len(rs))); ax.set_yticklabels([r[0] for r in rs]); ax.invert_yaxis()
     ax.set_title(title); ax.set_xlabel("accuracy minus static top-3 (points), 95% CI")
-fig.suptitle("Nothing beats static top-3 (red = CI entirely below 0, blue = CI includes 0)")
+fig.suptitle("Plot 1: accuracy vs static top-3 (red = CI entirely below 0, blue = CI includes 0)")
 fig.tight_layout(); fig.savefig(os.path.join(out, "difference_vs_top3.png"), dpi=130); plt.close(fig)
 
 # ---- 3. cascade across 4 split seeds (accuracy difference vs top-3, points)
@@ -51,7 +51,7 @@ fig, ax = plt.subplots(figsize=(7, 4.5))
 for name, ys in series.items():
     ax.plot(seeds, ys, marker="o", label=name, ls="-" if name.startswith("3,3") else "--")
 ax.axhline(0, color="k", lw=0.8); ax.set_xticks(seeds); ax.set_xlabel("split seed"); ax.set_ylabel("accuracy minus static top-3 (points)")
-ax.set_title("Cascade (k,m) on four different splits of the same questions"); ax.legend(fontsize=8)
+ax.set_title("Plot 4: cascade (k,m) on four different splits of the same questions"); ax.legend(fontsize=8)
 fig.tight_layout(); fig.savefig(os.path.join(out, "cascade_seeds.png"), dpi=130); plt.close(fig)
 
 # ---- 4. calibration: how often judges say "correct" vs how often the label is correct
@@ -61,6 +61,6 @@ fig, ax = plt.subplots(figsize=(7, 4.5)); x = range(3)
 ax.bar([i - 0.2 for i in x], gold, 0.4, label="gold labels that are 'correct'")
 ax.bar([i + 0.2 for i in x], said, 0.4, label="judge verdicts that say 'correct' (mean of 8 judges)")
 ax.set_xticks(list(x)); ax.set_xticklabels(labels); ax.set_ylabel("share"); ax.set_ylim(0, 0.7)
-ax.set_title("How often judges say 'correct' vs how often the label is correct"); ax.legend(fontsize=8)
+ax.set_title("Plot 3: how often judges say 'correct' vs how often the label is correct", fontsize=10); ax.legend(fontsize=8)
 fig.tight_layout(); fig.savefig(os.path.join(out, "calibration.png"), dpi=130); plt.close(fig)
 print("saved", sorted(os.listdir(out)))
