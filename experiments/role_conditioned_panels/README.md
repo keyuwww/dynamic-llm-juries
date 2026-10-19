@@ -8,14 +8,6 @@ Role-conditioned judge-panel construction on the 8-judge Tinker pool (BFF-Bench,
 - The cheap-first cascade (3 cheap judges answer, escalate to the best judge if they disagree) is the only thing that comes close to top-3 at lower cost, and only when judges are given the reference answer.
 - On RewardBench-2 the apparent gain of the eta-hat rule is a calibration effect (judges say "correct" far more often than the labels do), not panel construction.
 
-**Plot 1: accuracy difference vs static top-3 for every method (dots = estimate, bars = 95% CI).**
-
-![Plot 1: accuracy difference vs static top-3](figures/difference_vs_top3.png)
-
-**Plot 2: cascade accuracy vs cost per item (squares = baselines, dots = cascade variants).**
-
-![Plot 2: cascade accuracy vs cost](figures/cascade_cost_accuracy.png)
-
 | File | What it does |
 |---|---|
 | `data.py` | loads judgments into verdicts `Z`, gold `Y`, question groups; joins prompt/response text from Hugging Face |
@@ -50,9 +42,13 @@ Suggested in discussion: force the cheapest judge (nemotron3-nano-30b, $0.00029/
 
 Panels get larger and cost more (BFF, no reference, majority: $0.0048 vs $0.0032 per item). The RewardBench-2 eta-hat gain is the calibration effect described in the findings doc, not panel construction (see the figure: on RewardBench-2 judges say "correct" on 46% of items but only 25% of labels are correct). Excluding the strongest judge and trying other benchmarks were done earlier (see the findings doc).
 
-**Plot 3: how often judges say "correct" vs how often the label is correct.**
+**Plot 1: the table above plus the cascade, as accuracy difference vs static top-3 (dot = estimate, bar = 95% CI; left of the black line = worse than top-3).** Look at the "cheapest first" rows.
 
-![Plot 3: judge 'correct' rate vs gold 'correct' rate](figures/calibration.png)
+![Plot 1: accuracy difference vs static top-3](figures/difference_vs_top3.png)
+
+**Plot 2: how often judges say "correct" vs how often the label is correct.** This is the calibration effect behind the RewardBench-2 rows.
+
+![Plot 2: judge 'correct' rate vs gold 'correct' rate](figures/calibration.png)
 
 ### Cheapest first without gpt-oss-120b
 
@@ -81,7 +77,11 @@ One of six cells reaches parity with top-3, within noise; panels grow from about
 | | cascade, 3 cheap judges | 0.921 | 0.0020 | 27% | -0.4 [-1.3, +0.5] | 47% |
 | RewardBench-2 | cascade, 3 cheap judges | 0.843 | 0.0019 | 34% | +0.6 [-0.5, +1.6] | 87% |
 
-With the reference answer, the 3-judge cascade is within noise of top-3 at 47% of its cost, and about the same cost as the best single judge with +1.1 points higher accuracy [-0.3, +2.6]. Without a reference it is within noise of the best single judge (+0.6 [-1.3, +2.4]) but costs 2.6x as much ($0.0018 vs $0.0007), because gpt-oss-120b is already one of the cheapest judges. Two cheap judges are too few. See Plot 2 at the top.
+With the reference answer, the 3-judge cascade is within noise of top-3 at 47% of its cost, and about the same cost as the best single judge with +1.1 points higher accuracy [-0.3, +2.6]. Without a reference it is within noise of the best single judge (+0.6 [-1.3, +2.4]) but costs 2.6x as much ($0.0018 vs $0.0007), because gpt-oss-120b is already one of the cheapest judges. Two cheap judges are too few.
+
+**Plot 3: cascade accuracy vs cost per item (squares = baselines, dots = cascade variants; up and left is better).**
+
+![Plot 3: cascade accuracy vs cost](figures/cascade_cost_accuracy.png)
 
 ### Cascade variants and fresh-seed check
 
