@@ -1,0 +1,797 @@
+{
+  "model": "Qwen/Qwen3.5-9B",
+  "flip": "std_to_correct",
+  "window": 1,
+  "results": [
+    {
+      "id": "0c08b6ce-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "8a22e1cc-t1",
+      "layers": [
+        26
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "e40d5cc0-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "f02fcd12-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "01a5f0c5-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "04c76dcb-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "b2fae943-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "c952b646-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "374670a7-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "31c3401c-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "0c899216-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "73514fa5-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "c7a6e684-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "d9a0e2f6-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "08d8cfea-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "bb436f17-t2",
+      "layers": [
+        9
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "eef37509-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "0673b266-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "4a2a7977-t1",
+      "layers": [],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "4fdeb331-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "6144bdde-t1",
+      "layers": [
+        29
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "6f68dc55-t2",
+      "layers": [
+        9
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "b1d99363-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "e9015bd9-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "c329862d-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "830605f2-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "63bfae31-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "4e810d28-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "5749d391-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "fa5a1ff0-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "30d09bef-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "60b98a53-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "8846e694-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "eb08f8d3-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "3477bdf6-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "5ab66b8c-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "4233b420-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "5331ed7f-t2",
+      "layers": [
+        15
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "a32a2a36-t1",
+      "layers": [
+        24
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "2941ff6e-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "7faa462e-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "06ca656f-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "c64a6018-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "cff19e59-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "d981e6be-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "395c579b-t1",
+      "layers": [
+        9
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "0335f307-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "15e1b16a-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "17bc99b1-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "39c8054c-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "91b23663-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "a087c43d-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "63960d4c-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "0231ffef-t2",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "fac5218c-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "e4f089d3-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "10af34fc-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "325161ad-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "bd643a22-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "0d793c0f-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "8f3fe195-t1",
+      "layers": [
+        28
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "5e55c465-t1",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "CORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": true
+    },
+    {
+      "id": "ac9a8a02-t2",
+      "layers": [
+        6
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "02da7cbd-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "d440777b-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "de3a539c-t2",
+      "layers": [
+        10
+      ],
+      "pred_standard": "INCORRECT",
+      "pred_rules": "CORRECT",
+      "pred_worse_with_better_patch": "INCORRECT",
+      "pred_better_with_worse_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    }
+  ]
+}

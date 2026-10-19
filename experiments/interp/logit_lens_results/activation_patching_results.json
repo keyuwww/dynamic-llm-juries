@@ -1,0 +1,55 @@
+{
+  "model": "openai/gpt-oss-20b",
+  "results": [
+    {
+      "id": "6075f017-t1",
+      "layer": 17,
+      "pred_standard": "CORRECT",
+      "pred_rules": "INCORRECT",
+      "pred_rules_with_standard_patch": "CORRECT",
+      "pred_standard_with_rules_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    },
+    {
+      "id": "5e46bafc-t1",
+      "layer": 23,
+      "pred_standard": "CORRECT",
+      "pred_rules": "INCORRECT",
+      "pred_rules_with_standard_patch": "CORRECT",
+      "pred_standard_with_rules_patch": "INCORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": true
+    },
+    {
+      "id": "3d0497aa-t2",
+      "layer": 21,
+      "pred_standard": "CORRECT",
+      "pred_rules": "INCORRECT",
+      "pred_rules_with_standard_patch": "INCORRECT",
+      "pred_standard_with_rules_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "eacbb6d5-t2",
+      "layer": 21,
+      "pred_standard": "CORRECT",
+      "pred_rules": "INCORRECT",
+      "pred_rules_with_standard_patch": "INCORRECT",
+      "pred_standard_with_rules_patch": "CORRECT",
+      "suppression_recovered": false,
+      "induction_flipped": false
+    },
+    {
+      "id": "0c899216-t2",
+      "layer": 22,
+      "pred_standard": "CORRECT",
+      "pred_rules": "INCORRECT",
+      "pred_rules_with_standard_patch": "CORRECT",
+      "pred_standard_with_rules_patch": "CORRECT",
+      "suppression_recovered": true,
+      "induction_flipped": false
+    }
+  ]
+}
