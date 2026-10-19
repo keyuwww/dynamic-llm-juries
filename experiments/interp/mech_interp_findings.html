@@ -108,9 +108,12 @@ confirm this behaviorally using the benchmark's actual human-annotator rubric (n
 gpt-oss&#8209;20b's &kappa; drops 0.667&rarr;0.617, and removing a single rule &mdash; <i>the
 solution steps must match the reference, not just the final answer</i> &mdash; fully restores it
 (0.666). gpt-oss&#8209;120b is unaffected. We then probe this mechanistically using logit lens and
-causal activation patching, on the real Appendix A.4 rubric itself. gpt-oss&#8209;20b's own
-forced-choice signal is too small to patch (1 of 459 items flip), but four other judges show large,
-clean flip sets under the same real rubric &mdash; and a strikingly wide range of mechanisms:
+causal activation patching, on the real Appendix A.4 rubric itself. The probe needs a forced,
+reasoning-free answer to read internal layers; under that stripped-down setup gpt-oss&#8209;20b's own
+effect nearly disappears (1 of 459 items flip vs. &sect;2's full-reasoning &kappa; drop), showing the
+effect depends on reasoning this method can't capture. Four other judges, however, show large,
+clean flip sets under the same real rubric and the same forced-choice setup &mdash; and a strikingly
+wide range of mechanisms:
 nemotron3-nano-30b has a near-total, almost fully reversible causal pivot at a single 3-layer window
 (99% suppression, 95% induction) &mdash; the strongest result in this study, on the rubric that
 actually produces the behavioral effect. Qwen3.5-4B shows the opposite: a huge, clean one-sided
@@ -264,9 +267,11 @@ Figure 6 in the source paper.</p>
 <h2>4. Scope of these findings</h2>
 <div class="scope">
 <b>What is still not shown:</b> a mechanism for gpt-oss&#8209;20b's own real-rubric effect
-specifically &mdash; the model that motivated this whole investigation. Its forced-choice flip set
-under the real rubric is too small to patch (1 of 459 items), even though four other judges show
-large, usable flip sets under that same real rubric. gpt-oss&#8209;20b's one strict rule (steps must
+specifically &mdash; the model that motivated this whole investigation. &sect;2's &kappa; drop
+(0.667&rarr;0.617) is real and comes from the full reasoning pipeline, but strip the reasoning out
+for the forced-choice probe this method needs and the flip set collapses to 1 of 459 items &mdash;
+too small to patch, even though four other judges show large, usable flip sets under that same real
+rubric and the same forced-choice setup. gpt-oss&#8209;20b's one strict rule (steps must
 match) plausibly requires step-by-step reasoning to evaluate in this specific model, which a single
 forward pass cannot perform; the other four judges apparently don't need that reasoning step to
 shift their forced-choice token, which is itself a real, unexplained difference between judges worth
@@ -519,10 +524,14 @@ to reason first, then be read at the final token. Not yet done.
 
   // ---------------- Real-rubric (Appendix A.4) tab ----------------
   document.getElementById('tab-real').innerHTML =
-    '<p>gpt-oss-20b, the model behind &sect;2’s headline behavioral result, shows almost no' +
-    ' forced-choice signal under the real rubric (1 of 459 items flip) &mdash; the effect there' +
-    ' needs reasoning a single forward pass can’t perform, so there is no curve to show for it.' +
-    ' Four other judges, however, show large, clean, usable flip sets under the real rubric itself:</p>' +
+    '<p>gpt-oss-20b is the one gap here. &sect;2’s &kappa; drop (0.667&rarr;0.617) comes from the' +
+    ' full judging pipeline, where the model reasons through each rule before answering. Strip the' +
+    ' reasoning out &mdash; force an immediate CORRECT/INCORRECT with no explanation, the setup this' +
+    ' probe needs to read internal layers &mdash; and the effect nearly disappears (1 of 459 items' +
+    ' flip). That gap is itself informative: it means gpt-oss-20b’s real-rubric effect depends on' +
+    ' the reasoning process, which a single forward pass can’t capture, so there’s no usable' +
+    ' flip set to build a curve from. Four other judges, however, show large, clean, usable flip sets' +
+    ' under the same real rubric and the same forced-choice setup:</p>' +
     '<figure><div class="controls"><select id="model-select-real">' +
     '<option value="real_nemotron_30b_stricter">nemotron3-nano-30b &middot; gets stricter (n=180 flips)</option>' +
     '<option value="real_qwen36_35b_stricter">Qwen3.6-35B-A3B &middot; gets stricter (n=143 flips)</option>' +
