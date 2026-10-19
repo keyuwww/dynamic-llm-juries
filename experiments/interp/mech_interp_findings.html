@@ -392,8 +392,9 @@ to reason first, then be read at the final token. Not yet done.
     real_qwen_9b_lenient: 'Qwen3.5-9B, the 184 items that flip INCORRECT&rarr;CORRECT under the real rubric (zero the other way). Its critical layer here (&asymp;26/32) is notably later/deeper than under our rubric (&asymp;20/32) &mdash; the two rubrics shift the model’s mind at different depths.'
   };
 
+  var DEFAULT_CHART_IDS = {chart:'decision-chart', tip:'tip1', cap:'fig1-cap', klChart:'kl-chart', tip2:'tip2'};
   function drawDecisionChart(key, ids){
-    ids = ids || {chart:'decision-chart', tip:'tip1', cap:'fig1-cap'};
+    ids = ids || DEFAULT_CHART_IDS;
     var d = chartData[key];
     var n = d.std_mean.length;
     var yFn = function(v){ return padT + (1 - v) * plotH; };
@@ -425,7 +426,7 @@ to reason first, then be read at the final token. Not yet done.
   }
 
   function drawKLChart(key, ids){
-    ids = ids || {klChart:'kl-chart', tip2:'tip2'};
+    ids = ids || DEFAULT_CHART_IDS;
     var d = chartData[key];
     var n = d.kl_mean.length;
     var maxKL = Math.max.apply(null, d.kl_mean);
