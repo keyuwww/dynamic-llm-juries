@@ -264,19 +264,63 @@ Figure 6 in the source paper.</p>
 </figure>
 </div>
 
-<h2>4. Scope of these findings</h2>
+<h2>4. Why the method works for some judges and not others</h2>
+<p>Every number in &sect;3 comes from a forced-choice probe: no reasoning allowed, an immediate
+CORRECT/INCORRECT read off the logits. That's necessary to read internal layers, but it's also a
+big handicap relative to how these judges normally operate. Measuring each model's accuracy with
+reasoning (the full pipeline, &sect;2's setup) against its accuracy without it (the forced-choice
+setup) shows how much each judge actually depends on reasoning to get BFF-Bench right at all:</p>
+
+<figure>
+  <div class="fig-panel">
+    <div id="dumbbell-reasoning"></div>
+  </div>
+  <figcaption><b>Figure C.</b> Accuracy with reasoning (navy) vs. without it (gray), sorted by gap
+  size. The gpt-oss family depends on reasoning the most (+0.35, +0.28) &mdash; and is exactly where
+  the real-rubric forced-choice probe found almost nothing to work with. nemotron3-nano-30b and
+  Qwen3.5-4B depend on it least (+0.10, +0.07) &mdash; and gave the method its two clearest results in
+  either direction (nemotron's near-total causal pivot, Qwen3.5-4B's clean-flip-but-zero-causal-effect
+  null). This isn't proof, but it's a plausible, measurable reason gpt-oss&#8209;20b specifically
+  resists this method: a model that leans on reasoning the most is the one most likely to hide its
+  rubric sensitivity from a probe that removes reasoning entirely.</figcaption>
+</figure>
+
+<h3 style="font-size:16px; font-style:normal;">Why the researcher-written rubric, not just the real one</h3>
+<p>If the real rubric is what matters, why run &sect;3's exploratory tab on a different rubric at
+all? Because the real rubric's only strict rule (steps must match) needs the reasoning Figure C shows
+some judges can't spare in a forced-choice setting &mdash; it produces a clean signal for 4 of 5
+judges tested, but goes silent for gpt-oss&#8209;20b specifically. The researcher-written rubric
+stacks several bluntly-worded, independent failure conditions ("no partial credit," exact units, no
+unsupported assumptions) instead of one rule requiring comparison. That bluntness is a double-edged
+property: it reliably produces a forced-choice flip set in every model tested, including
+gpt-oss&#8209;20b (its only usable flip set anywhere on this page), because blunt wording can bias an
+immediate token read directly, without the model needing to actually reason. That makes it a more
+sensitive probing instrument, not a more faithful one &mdash; the mechanism it reveals in
+gpt-oss&#8209;20b may be a real but narrower phenomenon (surface-level prompt sensitivity) rather
+than the real rubric's actual, reasoning-dependent effect. It is useful for exactly one thing the real
+rubric can't do: showing that gpt-oss&#8209;20b <i>can</i> have a late, switch-like internal
+computation at all, under some prompt.</p>
+
+<h3 style="font-size:16px; font-style:normal;">Why these models</h3>
+<table>
+<tr><th>Model</th><th>Reason tested</th></tr>
+<tr><td>gpt-oss-20b</td><td>The model behind the original finding &mdash; the motivating case.</td></tr>
+<tr><td>gpt-oss-120b</td><td>Same family, larger scale &mdash; tests whether the effect is a gpt-oss property or a 20B-checkpoint property (it's the latter).</td></tr>
+<tr><td>Qwen3.5-9B</td><td>First comparison model: &kappa; improves under rubrics (opposite direction from gpt-oss-20b), a clean behavioral contrast.</td></tr>
+<tr><td>Qwen3.5-4B</td><td>Same family as Qwen3.5-9B, smaller scale &mdash; a second within-family scaling contrast.</td></tr>
+<tr><td>nemotron3-nano-30b</td><td>Different architecture family entirely; also shows a real-rubric &kappa; decline like gpt-oss-20b, making it the closest behavioral analogue to test mechanistically.</td></tr>
+<tr><td>Qwen3.6-35B-A3B</td><td>Largest behavioral improvement under the real rubric (&kappa; +0.118) of any judge &mdash; a third Qwen-family data point at a third scale.</td></tr>
+</table>
+<p class="note">Not tested mechanistically: nemotron3-super-120b, deepseek-v3.1 (time budget; both are candidates for a follow-up pass).</p>
+
 <div class="scope">
 <b>What is still not shown:</b> a mechanism for gpt-oss&#8209;20b's own real-rubric effect
 specifically &mdash; the model that motivated this whole investigation. &sect;2's &kappa; drop
 (0.667&rarr;0.617) is real and comes from the full reasoning pipeline, but strip the reasoning out
 for the forced-choice probe this method needs and the flip set collapses to 1 of 459 items &mdash;
 too small to patch, even though four other judges show large, usable flip sets under that same real
-rubric and the same forced-choice setup. gpt-oss&#8209;20b's one strict rule (steps must
-match) plausibly requires step-by-step reasoning to evaluate in this specific model, which a single
-forward pass cannot perform; the other four judges apparently don't need that reasoning step to
-shift their forced-choice token, which is itself a real, unexplained difference between judges worth
-investigating further. Reproducing gpt-oss&#8209;20b's real-rubric mechanism likely needs the model
-to reason first, then be read at the final token. Not yet done.
+rubric and the same forced-choice setup. Reproducing gpt-oss&#8209;20b's real-rubric mechanism likely
+needs the model to reason first, then be read at the final token. Not yet done.
 </div>
 
 <footer>
@@ -316,7 +360,7 @@ to reason first, then be read at the final token. Not yet done.
   document.getElementById('kappa-table').innerHTML = html;
 
   // ---------------- dumbbell charts (behavioral result) ----------------
-  function drawDumbbell(targetId, condA, condB, rows, xDomain){
+  function drawDumbbell(targetId, condA, condB, rows, xDomain, xLabel){
     var DW = 640, rowH = 34, topPad = 10, botPad = 26, leftPad = 150, rightPad = 50;
     var plotW2 = DW - leftPad - rightPad;
     var DH = topPad + botPad + rows.length * rowH;
@@ -329,7 +373,7 @@ to reason first, then be read at the final token. Not yet done.
       svg += '<line class="gridline" x1="'+gx+'" y1="'+topPad+'" x2="'+gx+'" y2="'+(DH-botPad)+'" />';
       svg += '<text class="axis-label" x="'+gx+'" y="'+(DH-botPad+14)+'" text-anchor="middle">'+t.toFixed(2)+'</text>';
     }
-    svg += '<text class="axis-label" x="'+(leftPad+plotW2/2)+'" y="'+(DH-4)+'" text-anchor="middle">κ</text>';
+    svg += '<text class="axis-label" x="'+(leftPad+plotW2/2)+'" y="'+(DH-4)+'" text-anchor="middle">'+(xLabel||'κ')+'</text>';
     rows.forEach(function(r, i){
       var y = topPad + i*rowH + rowH/2;
       var ax = xs(r.a), bx = xs(r.b);
@@ -357,6 +401,19 @@ to reason first, then be read at the final token. Not yet done.
   drawDumbbell('dumbbell-ablation', 'rules2', 'rules2_norule2',
     ['gpt-oss-20b','gpt-oss-120b','deepseek-v3.1'].map(function(m){ return {judge:m, a:byModel[m].rules2, b:byModel[m].rules2_norule2}; }),
     [0.4, 0.72]);
+
+  // ---------------- Figure C: reasoning dependency (accuracy with vs without reasoning) ----------------
+  var reasoningAcc = [
+    {judge:'gpt-oss-120b', noReason:0.490, full:0.842},
+    {judge:'gpt-oss-20b', noReason:0.560, full:0.841},
+    {judge:'Qwen3.5-9B', noReason:0.601, full:0.785},
+    {judge:'Qwen3.6-35B-A3B', noReason:0.647, full:0.765},
+    {judge:'nemotron3-nano-30b', noReason:0.573, full:0.675},
+    {judge:'Qwen3.5-4B', noReason:0.678, full:0.750}
+  ];
+  drawDumbbell('dumbbell-reasoning', 'noReason', 'full',
+    reasoningAcc.map(function(r){ return {judge:r.judge, a:r.noReason, b:r.full}; }),
+    [0.4, 0.9], 'accuracy');
 
   // ---------------- shared chart geometry ----------------
   var W = 680, H = 300, padL = 40, padR = 14, padT = 14, padB = 32;
