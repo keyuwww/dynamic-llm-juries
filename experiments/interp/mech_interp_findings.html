@@ -78,6 +78,11 @@
               letter-spacing:.06em; margin-bottom:6px; opacity:.7;}
   .scope{background:var(--bad-bg); border-left:3px solid var(--orange); padding:14px 18px; margin:20px 0;
          font-size:13.5px; border-radius:0 4px 4px 0;}
+  .rubric-box{background:var(--good-bg); border-left:3px solid var(--teal); padding:14px 20px; margin:14px 0;
+              border-radius:0 4px 4px 0; font-size:13.5px;}
+  .rubric-box ol{margin:8px 0 0; padding-left:20px;}
+  .rubric-box li{margin-bottom:9px;}
+  .rubric-box .src{font-size:12px; color:var(--ink-soft); margin-top:10px; font-style:italic;}
   footer{margin-top:40px; padding-top:16px; border-top:1px solid var(--line); font-size:12px;
          color:var(--ink-soft); font-family:var(--font-mono);}
   footer a{color:var(--ink-soft);}
@@ -121,6 +126,19 @@ the rubric that actually produced BFF-Bench's human labels &mdash; Appendix A.4 
 <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">&ldquo;No Free
 Labels&rdquo;</a>. Both are reported below, attributed correctly &mdash; &sect;3's main tab uses the
 real rubric throughout; the exploratory tab uses ours.</p>
+
+<div class="rubric-box">
+<b>Verbatim: Appendix A.4, &ldquo;Annotator Guidelines,&rdquo; No Free Labels</b>
+<ol>
+<li>If the model's final answer or recommendation disagrees with the reference, it should be marked &ldquo;Incorrect&rdquo;.</li>
+<li>If the model agrees with the reference but its intermediate steps disagree, it should also be marked &ldquo;Incorrect&rdquo;.</li>
+<li>If the model agrees with the reference, all of the intermediate steps agree, and it provides the additional information that is not obviously wrong based on the reference, it should be marked &ldquo;Correct&rdquo;.</li>
+<li>If the model agrees with the reference, all of the intermediate steps agree, but the answer is slightly off due to rounding or performing approximate calculations, it should be marked as &ldquo;Correct&rdquo;.</li>
+<li>If the model agrees with the reference, all of the intermediate steps agree, but it is lacking some amount of information given within the reference, you should make a judgment call as to whether the missing information is crucial to the answer. If you are unsure, lean towards &ldquo;Correct&rdquo; or mark it &ldquo;Unsure&rdquo;.</li>
+</ol>
+<p class="src">Source: <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">arXiv:2503.05061v4, Appendix&nbsp;A.4</a> &mdash; written for human annotators labeling BFF-Bench, reused here verbatim as the LLM judge's grading instructions (<code>rules2</code> in the code, behind every result in &sect;2 and the main tab of &sect;3).</p>
+</div>
+
 <table>
 <tr><th>Rule</th><th><span class="pill mine">Ours</span></th><th><span class="pill real">Appendix&nbsp;A.4</span></th></tr>
 <tr><td>Final answer</td><td>Match within ~1% tolerance</td><td>Must match the reference</td></tr>
