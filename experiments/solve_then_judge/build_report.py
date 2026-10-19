@@ -184,9 +184,8 @@ def main():
 <header>
   <div class="eyebrow">AC 297r · Dynamic LLM Juries · BFF-Bench</div>
   <h1>Should a judge answer the question before grading it?</h1>
-  <p class="meta">8 LLM judges · 808 human-labelled BFF responses · {'4' if peer else '3'} reference conditions</p>
+  <p class="meta">Benchmark tested: BFF-Bench (80 two-turn finance conversations, 808 responses with a 2-of-3 human label) · 8 LLM judges · {'4' if peer else '3'} reference conditions</p>
 </header>
-<ol class="concl">{concl}</ol>
 <section class="fig" aria-labelledby="f1">
   <h2 id="f1">The expert reference lifts every judge; the judge's own answer does not</h2>
   <p class="take">Agreement with the human label for each judge, by what it grades against. Open circle = no reference.</p>

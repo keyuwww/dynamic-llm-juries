@@ -55,9 +55,8 @@ section.fig{display:grid;gap:10px}
 <header>
   <div class="eyebrow">AC 297r · Dynamic LLM Juries · BFF-Bench</div>
   <h1>Should a judge answer the question before grading it?</h1>
-  <p class="meta">8 LLM judges · 808 human-labelled BFF responses · 3 reference conditions</p>
+  <p class="meta">Benchmark tested: BFF-Bench (80 two-turn finance conversations, 808 responses with a 2-of-3 human label) · 8 LLM judges · 3 reference conditions</p>
 </header>
-<ol class="concl"><li><b>Grading against your own answer doesn't help on average (-0.2 points over 8 judges).</b><span>It helps three thinking-off judges (Nemotron-Super +4.6, Qwen3.5-9B +2.9, DeepSeek +2.5) and hurts gpt-oss-20b (−5.3) and Nemotron-Nano (−3.3).</span></li><li><b>When a judge's own answer is wrong, the reasoning judges follow it: -8.6 and -16.3 points.</b><span>gpt-oss-120b and gpt-oss-20b gain little when their answer is right. Some thinking-off judges still gain when theirs is wrong, so writing an answer first may just make them read more carefully.</span></li><li><b>A correct reference is what matters: the expert answer lifts every judge, by +8.2 points on average.</b><span>Nemotron-Super goes from 71.3% to 87.5%, past gpt-oss-120b without a reference (80.2%).</span></li></ol>
 <section class="fig" aria-labelledby="f1">
   <h2 id="f1">The expert reference lifts every judge; the judge's own answer does not</h2>
   <p class="take">Agreement with the human label for each judge, by what it grades against. Open circle = no reference.</p>
