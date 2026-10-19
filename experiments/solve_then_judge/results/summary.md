@@ -65,20 +65,38 @@ Reference correct = gpt-oss-120b's answer graded correct by DeepSeek-V3.1 with t
 | Judge | none | self | peer | human | Δ peer − none | 95% CI | Δ peer − self |
 |---|---|---|---|---|---|---|---|
 | gpt-oss-120b | 80.2 | 79.0 | 79.0 | 87.1 | -1.3 | [-4.1, +1.6] | +0.0 |
-| gpt-oss-20b | 92.3 | 72.5 | 88.5 | 78.5 | -3.8 | [-15.5, +7.7] | +0.0 |
+| gpt-oss-20b | 77.7 | 72.5 | 71.3 | 78.5 | -6.4 | [-10.3, -2.9] | -1.1 |
+| deepseek-v3.1 | 75.5 | 78.0 | 77.6 | 85.6 | +2.1 | [-1.0, +5.1] | -0.4 |
+| qwen3.6-35b-a3b | 73.6 | 72.5 | 73.2 | 79.1 | -0.4 | [-3.0, +2.3] | +0.8 |
+| qwen3.5-9b | 70.5 | 73.3 | 76.0 | 81.9 | +5.5 | [+1.8, +8.9] | +2.6 |
+| qwen3.5-4b | 71.0 | 70.5 | 75.3 | 81.0 | +4.4 | [+1.0, +7.9] | +4.9 |
+| nemotron3-super-120b | 71.3 | 76.0 | 81.1 | 87.5 | +9.8 | [+6.3, +13.0] | +5.1 |
+| nemotron3-nano-30b | 67.6 | 64.3 | 70.0 | 72.3 | +2.4 | [-2.0, +6.6] | +5.6 |
 
-Mean Δ peer − none: -2.5; mean Δ peer − self: +0.0 points.
+Mean Δ peer − none: +2.0; mean Δ peer − self: +2.2 points.
 
 ### Split by whether the reference was correct (grader: deepseek-v3.1; 625 responses with a correct reference, 174 with a wrong one)
 
 | Judge | ref correct: none | peer | Δ | ref wrong: none | peer | Δ |
 |---|---|---|---|---|---|---|
 | gpt-oss-120b | 82.1 | 82.9 | +0.8 | 73.6 | 64.9 | -8.6 |
-| gpt-oss-20b | 92.3 | 88.5 | -3.8 | nan | nan | +nan |
+| gpt-oss-20b | 79.5 | 77.8 | -1.8 | 71.3 | 48.3 | -23.0 |
+| deepseek-v3.1 | 77.3 | 79.8 | +2.6 | 69.0 | 69.5 | +0.6 |
+| qwen3.6-35b-a3b | 72.2 | 73.0 | +0.8 | 78.7 | 74.1 | -4.6 |
+| qwen3.5-9b | 70.9 | 77.1 | +6.2 | 69.0 | 71.8 | +2.9 |
+| qwen3.5-4b | 73.8 | 77.0 | +3.2 | 60.9 | 69.5 | +8.6 |
+| nemotron3-super-120b | 74.9 | 85.8 | +10.9 | 58.6 | 64.4 | +5.7 |
+| nemotron3-nano-30b | 68.5 | 71.5 | +3.0 | 64.4 | 64.4 | +0.0 |
 
 ### Split by whether the reference was correct (grader: gpt-oss-120b; 510 responses with a correct reference, 249 with a wrong one)
 
 | Judge | ref correct: none | peer | Δ | ref wrong: none | peer | Δ |
 |---|---|---|---|---|---|---|
 | gpt-oss-120b | 85.5 | 86.7 | +1.2 | 71.5 | 65.5 | -6.0 |
-| gpt-oss-20b | 95.7 | 91.3 | -4.3 | 66.7 | 66.7 | +0.0 |
+| gpt-oss-20b | 81.0 | 80.4 | -0.6 | 71.1 | 55.8 | -15.3 |
+| deepseek-v3.1 | 78.6 | 82.9 | +4.3 | 69.1 | 68.7 | -0.4 |
+| qwen3.6-35b-a3b | 74.3 | 75.3 | +1.0 | 71.9 | 68.3 | -3.6 |
+| qwen3.5-9b | 72.9 | 79.4 | +6.5 | 65.5 | 70.7 | +5.2 |
+| qwen3.5-4b | 75.1 | 79.2 | +4.1 | 64.7 | 67.5 | +2.8 |
+| nemotron3-super-120b | 76.9 | 89.2 | +12.4 | 61.4 | 67.9 | +6.4 |
+| nemotron3-nano-30b | 67.6 | 73.7 | +6.1 | 67.5 | 64.3 | -3.2 |

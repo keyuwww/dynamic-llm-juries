@@ -164,7 +164,7 @@ def main():
         + peer_line +
         f"<li><b>A correct reference is what matters: the expert answer lifts every judge, by {100*mean_hum:+.1f} points on average.</b>"
         "<span>Nemotron-Super goes from 71.3% to 87.5%, past gpt-oss-120b without a reference (80.2%).</span></li>")
-    peer_fig = ('<section class="fig" aria-labelledby="f3"><h2 id="f3">A borrowed answer helps when it is right and hurts more when it is wrong</h2>'
+    peer_fig = ('<section class="fig" aria-labelledby="f3"><h2 id="f3">gpt-oss-120b\'s answer lifts the thinking-off judges; when it is wrong, it drags the gpt-oss judges down</h2>'
                 '<p class="take">Every judge grades against gpt-oss-120b\'s answer. Bars split responses by whether that answer was right '
                 '(graded by DeepSeek-V3.1 with the expert reference).</p>'
                 '<div class="chart"><svg id="g3" viewBox="0 0 900 450" role="img" aria-label="Change in agreement when grading against gpt-oss-120b\'s answer, '
