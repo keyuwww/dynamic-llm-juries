@@ -226,13 +226,15 @@ def sec_labels(a):
 
 
 def phi_table(es):
+    """Lower triangle only: each judge pair appears once (the matrix is symmetric, the diagonal is 1)."""
     js = es["judges"]
-    h = ['<div class="scroll"><table class="hm"><tr><th></th>' + "".join(f'<th>{e(jl(j))}</th>' for j in js) + '</tr>']
-    for i, j in enumerate(js):
-        h.append(f'<tr><th class="rowh">{e(jl(j))}</th>')
-        for k in range(len(js)):
-            v = es["phi"][i][k]
-            h.append(f'<td style="{heat(v, 0, 0.8) if i != k else "background:var(--surface-2);color:var(--ink-3)"}">{"–" if i == k or v is None else f"{v:.2f}"}</td>')
+    h = ['<div class="scroll"><table class="hm"><tr><th></th>' + "".join(f'<th>{e(jl(j))}</th>' for j in js[:-1]) + '</tr>']
+    for i in range(1, len(js)):
+        h.append(f'<tr><th class="rowh">{e(jl(js[i]))}</th>')
+        for k in range(len(js) - 1):
+            v = es["phi"][i][k] if k < i else None
+            h.append(f'<td style="{heat(v, 0, 0.8)}">{"" if k >= i else "–" if v is None else f"{v:.2f}"}</td>'
+                     if k < i else '<td></td>')
         h.append('</tr>')
     h.append('</table></div>')
     return "".join(h)
