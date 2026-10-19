@@ -5,6 +5,10 @@ Phase 2 (JUDGE): every pool model grades candidate responses; verdicts are score
   --bench bff   Candidates = the 1,200 expert-labelled VERDICTS responses (same items as Exp 1).
                 Conditions (No Free Labels): none | self (the judge's OWN Phase 1 answer as reference)
                 | human (expert reference).
+  --bench mtb   Candidates = the (C)MT-Bench half of VERDICTS (40 turns x 6 models); references from
+                kensho/CMTBench. Conditions: none | human.
+  --bench bffpair  Pairs from kensho/VERDICTSPairwise (BFF half, 442 pairs), each judged in both presentation orders;
+                verdict A/B = which answer is better; gold = the human's pick. Conditions: none | human (expert reference).
   --bench bbeh  Candidates = other pool models' Phase 1 BBEH answers (gold = official auto-grader).
                 Conditions: none | self. Up to --per-item candidates per question, balanced correct /
                 incorrect where possible (as in No Free Labels' pairwise construction).
@@ -23,7 +27,7 @@ Outputs in experiments/tinker_pool/<bench>_results/:
   uv run python experiments/tinker_pool/run_judges.py --bench bff                     # 459 items x 3 conds
   uv run python experiments/tinker_pool/run_judges.py --bench bbeh --per-item 2
 """
-import argparse, asyncio, random, sys
+import argparse, asyncio, random, re, sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -31,7 +35,8 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from common import (JsonlCache, POOL_BY_KEY, auroc, call_cost, fmt, kappa, make_chats, parse_verdict,  # noqa: E402
                     run_jobs, select_models)
-from data import BBEH_SUFFIX, bff_key_to_uid, load_bbeh_mini, load_bff, load_rb2_safety, load_verdicts_items  # noqa: E402
+from data import (BBEH_SUFFIX, bff_key_to_uid, load_bbeh_mini, load_bff, load_pairwise_items, load_rb2_safety,  # noqa: E402
+                  load_verdicts_items)
 
 BFF_JUDGE = """You are grading an AI assistant's answer in a finance/accounting conversation.
 
@@ -39,6 +44,30 @@ BFF_JUDGE = """You are grading an AI assistant's answer in a finance/accounting 
 {reference}
 Is the assistant's FINAL response a correct answer to the user's final question? The key facts, calculations, numbers and conclusions must be correct; minor wording or formatting issues do not matter, but a wrong number, wrong method or wrong conclusion makes it incorrect.
 Reason briefly, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT"."""
+
+# (C)MT-Bench half of VERDICTS: same grading rule, without the finance framing
+MTB_JUDGE = BFF_JUDGE.replace("in a finance/accounting conversation", "in a conversation")
+
+# Pairwise BFF (kensho/VERDICTSPairwise): which of two answers is better. VERDICT: A means the FIRST shown is better.
+PAIR_JUDGE = """You are comparing two AI assistants' answers in a finance/accounting conversation.
+Each assistant had its own conversation with the same user; compare only their FINAL responses to the user's final question.
+
+[CONVERSATION WITH ASSISTANT A]
+{conv_a}
+
+[CONVERSATION WITH ASSISTANT B]
+{conv_b}
+{reference}
+Which assistant's FINAL response is the better answer to the user's final question? Correctness comes first: the key facts, calculations, numbers and conclusions must be right; a wrong number, wrong method or wrong conclusion is worse than any style issue. Do not let the order of the answers or their length influence you.
+Reason briefly, then end with exactly one line: "VERDICT: A" or "VERDICT: B"."""
+PAIR_RE = re.compile(r"VERDICT:\s*\**\s*(A|B)\b", re.I)
+
+
+def parse_pair(text):
+    """1 = A (first shown) is better, 0 = B, None = unparseable. Uses the LAST verdict line."""
+    m = PAIR_RE.findall(text or "")
+    return None if not m else int(m[-1].upper() == "A")
+
 
 BBEH_JUDGE = """You are grading an AI assistant's answer to a reasoning question.
 
@@ -73,7 +102,8 @@ def render_conv(conv):
 
 # ----------------------------------------------------------------------------- build judge items
 def bff_items(a):
-    items, dropped = load_verdicts_items(a.verdicts_path, a.bff_path, a.consensus)
+    """VERDICTS items for --bench bff or mtb (the human-labelled half of VERDICTS for that benchmark)."""
+    items, dropped = load_verdicts_items(a.verdicts_path, a.bff_path, a.consensus, a.bench)
     to_uid = bff_key_to_uid(load_bff(a.bff_path))
     for it in items:
         it["uid"] = to_uid.get(it["qid"], it["qid"])
@@ -117,12 +147,14 @@ def safety_items(a):
 def build_prompt(bench, it, cond, self_answer):
     if cond == "none":
         ref = ""
-    elif cond == "self":
+    elif cond in ("self", "peer"):  # peer: another model's Phase 1 answer (--peer-model), same unlabeled block
         ref = REF_BLOCK.format(note="", ref=self_answer)
     else:
         ref = REF_BLOCK.format(note=" (written by an expert)", ref=it["ref"])
-    if bench == "bff":
-        return BFF_JUDGE.format(conversation=render_conv(it["conv"]), reference=ref)
+    if bench == "bffpair":
+        return PAIR_JUDGE.format(conv_a=render_conv(it["conv_a"]), conv_b=render_conv(it["conv_b"]), reference=ref)
+    if bench in ("bff", "mtb"):
+        return (BFF_JUDGE if bench == "bff" else MTB_JUDGE).format(conversation=render_conv(it["conv"]), reference=ref)
     if bench == "safety":
         return SAFETY_JUDGE.format(prompt=it["prompt"], response=it["response"])
     return BBEH_JUDGE.format(question=it["question"].replace(BBEH_SUFFIX, ""), answer=it["answer"], reference=ref)
@@ -208,31 +240,42 @@ def summarize(bench, cache, items, solved, models, conds, out):
 # ----------------------------------------------------------------------------- main
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--bench", choices=["bff", "bbeh", "safety"], required=True)
+    ap.add_argument("--bench", choices=["bff", "mtb", "bffpair", "bbeh", "safety"], required=True)
     ap.add_argument("--models", default="all")
     ap.add_argument("--conditions", default=None,
                      help="default: none,self,human (bff); none,self (bbeh); none (safety -- no self/reference concept)")
     ap.add_argument("--samples", type=int, default=1, help="votes per judgment (No Free Labels used 5)")
     ap.add_argument("--temperature", type=float, default=0.7)
     ap.add_argument("--max-tokens", type=int, default=1024)
+    ap.add_argument("--run-name", default="", help="suffix for the output folder, e.g. _max4096 -> bff_results_max4096/ "
+                    "(keeps an earlier run's cache and summary intact)")
+    ap.add_argument("--retry-unparsed", action="store_true",
+                    help="re-run cached judgments that have no parseable verdict (e.g. cut off at --max-tokens); "
+                         "the new result replaces the old one")
     ap.add_argument("--limit", type=int, default=None, help="random subset of judge items (pilot)")
     ap.add_argument("--per-item", type=int, default=2, help="bbeh: candidates judged per question")
     ap.add_argument("--consensus", choices=["unanimous", "majority"], default="unanimous")
+    ap.add_argument("--peer-model", default="gpt-oss-120b",
+                    help="condition 'peer': every judge grades against this model's Phase 1 answer")
     ap.add_argument("--concurrency", type=int, default=32)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--mock", action="store_true")
     ap.add_argument("--bff-path"), ap.add_argument("--verdicts-path"), ap.add_argument("--bbeh-path")
     ap.add_argument("--rb2-path")
     a = ap.parse_args()
-    default_conds = {"bff": "none,self,human", "bbeh": "none,self", "safety": "none"}[a.bench]
+    default_conds = {"bff": "none,self,human", "mtb": "none,human", "bffpair": "none,human", "bbeh": "none,self", "safety": "none"}[a.bench]
     conds = (a.conditions or default_conds).split(",")
 
-    out = HERE / (f"mock_{a.bench}_results" if a.mock else f"{a.bench}_results")
+    out = HERE / (f"mock_{a.bench}_results" if a.mock else f"{a.bench}_results{a.run_name}")
     sfx = "_mock" if a.mock else ""
     answers = JsonlCache(out / f"answers{sfx}.jsonl")
-    if "self" in conds and not answers.rows:
+    if ("self" in conds or "peer" in conds) and not answers.rows:
         sys.exit("Condition 'self' needs Phase 1 answers: run run_answers.py first (or drop 'self').")
-    items = safety_items(a) if a.bench == "safety" else (bff_items(a) if a.bench == "bff" else bbeh_items(a, answers))
+    if a.bench == "bffpair":
+        items = load_pairwise_items(a.bff_path)
+        print(f"Pairwise BFF judge items: {len(items)} ({len(items) // 2} pairs x 2 presentation orders)", flush=True)
+    else:
+        items = safety_items(a) if a.bench == "safety" else (bff_items(a) if a.bench in ("bff", "mtb") else bbeh_items(a, answers))
     if a.limit:
         random.Random(a.seed).shuffle(items)
         items = items[: a.limit]
@@ -255,9 +298,12 @@ def main():
     async def judge(chat, it, cond):
         m = chat.spec["key"]
         k = f"{m}|{it['id']}|{cond}"
-        if k in cache:
+        if k in cache and not (a.retry_unparsed and cache.get(k)["n_parsed"] == 0):
             return
-        self_answer = own.get((m, it["uid"], it["turn"]))
+        self_answer = own.get((a.peer_model if cond == "peer" else m, it["uid"], it["turn"]))
+        if cond == "peer" and self_answer is None:
+            skipped["peer (no peer answer)"] += 1
+            return
         if cond == "self" and self_answer is None:
             skipped["self (no own answer)"] += 1
             return
@@ -267,7 +313,7 @@ def main():
         prompt = build_prompt(a.bench, it, cond, self_answer)
         r = await chat.chat([{"role": "user", "content": prompt}], max_tokens=a.max_tokens,
                             temperature=a.temperature, n=a.samples)
-        votes = [parse_verdict(o["text"]) for o in r["outputs"]]
+        votes = [(parse_pair if a.bench == "bffpair" else parse_verdict)(o["text"]) for o in r["outputs"]]
         parsed = [v for v in votes if v is not None]
         cache.put(dict(cache_key=k, judge=m, item_id=it["id"], condition=cond, examinee=it["examinee"],
                        gold=it["gold"], votes=votes, n_parsed=len(parsed),

@@ -57,3 +57,28 @@ Solved = the judge's own answer was graded correct (both graders agree; DeepSeek
 | qwen3.5-4b | +3.3 | -5.5 |
 | nemotron3-super-120b | +6.4 | +2.3 |
 | nemotron3-nano-30b | -3.9 | -2.3 |
+
+## 5. Peer arm: every judge grades against gpt-oss-120b's answer
+
+Reference correct = gpt-oss-120b's answer graded correct by DeepSeek-V3.1 with the expert reference. gpt-oss-120b's own peer verdicts are its self verdicts (same prompt).
+
+| Judge | none | self | peer | human | Δ peer − none | 95% CI | Δ peer − self |
+|---|---|---|---|---|---|---|---|
+| gpt-oss-120b | 80.2 | 79.0 | 79.0 | 87.1 | -1.3 | [-4.1, +1.6] | +0.0 |
+| gpt-oss-20b | 92.3 | 72.5 | 88.5 | 78.5 | -3.8 | [-15.5, +7.7] | +0.0 |
+
+Mean Δ peer − none: -2.5; mean Δ peer − self: +0.0 points.
+
+### Split by whether the reference was correct (grader: deepseek-v3.1; 625 responses with a correct reference, 174 with a wrong one)
+
+| Judge | ref correct: none | peer | Δ | ref wrong: none | peer | Δ |
+|---|---|---|---|---|---|---|
+| gpt-oss-120b | 82.1 | 82.9 | +0.8 | 73.6 | 64.9 | -8.6 |
+| gpt-oss-20b | 92.3 | 88.5 | -3.8 | nan | nan | +nan |
+
+### Split by whether the reference was correct (grader: gpt-oss-120b; 510 responses with a correct reference, 249 with a wrong one)
+
+| Judge | ref correct: none | peer | Δ | ref wrong: none | peer | Δ |
+|---|---|---|---|---|---|---|
+| gpt-oss-120b | 85.5 | 86.7 | +1.2 | 71.5 | 65.5 | -6.0 |
+| gpt-oss-20b | 95.7 | 91.3 | -4.3 | 66.7 | 66.7 | +0.0 |

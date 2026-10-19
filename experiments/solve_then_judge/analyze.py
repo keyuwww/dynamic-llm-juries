@@ -73,6 +73,58 @@ def solved_labels():
     return w.rename(columns={"model": "judge", "item": "uid"})[["judge", "uid", "turn", "solved"]]
 
 
+def peer_section(d, G, L):
+    """Peer arm: every judge grades against gpt-oss-120b's answer. Split by whether that answer was correct
+    (DeepSeek-V3.1 + expert reference; gpt-oss-120b's own grade as a robustness check)."""
+    if "peer" not in set(d.cond):
+        return None
+    g = pd.DataFrame([json.loads(l) for l in open(TP / "bff_results/grades.jsonl")])
+    g = g[g.model == "gpt-oss-120b"]
+    ref = {}
+    for grader in ("deepseek-v3.1", "gpt-oss-120b"):
+        s = g[g.grader == grader]
+        ref[grader] = {(str(r.item), int(r.turn)): r.correct for r in s.itertuples()}
+    out = {}
+    L += ["", "## 5. Peer arm: every judge grades against gpt-oss-120b's answer", "",
+          "Reference correct = gpt-oss-120b's answer graded correct by DeepSeek-V3.1 with the expert reference. "
+          "gpt-oss-120b's own peer verdicts are its self verdicts (same prompt).", "",
+          "| Judge | none | self | peer | human | Δ peer − none | 95% CI | Δ peer − self |",
+          "|---|---|---|---|---|---|---|---|"]
+    for j in JUDGES:
+        w = d[d.judge == j].pivot_table(index="key", columns="cond", values="agree")
+        if not {"none", "peer"} <= set(w.columns):
+            continue
+        p = w[["none", "peer"]].dropna()
+        diff = (p["peer"] - p["none"]).values
+        ci = boot(diff, p.index.str.split("-t").str[0])
+        wp = w.loc[p.index]  # every arm on the same responses as the peer arm
+        sp = (wp["peer"] - wp["self"]).dropna().mean() if "self" in wp else np.nan
+        out[j] = dict(n=len(p), none=float(p["none"].mean()), peer=float(p["peer"].mean()), diff=float(diff.mean()), ci=ci,
+                      self=float(wp["self"].dropna().mean()) if "self" in wp else None,
+                      human=float(wp["human"].dropna().mean()) if "human" in wp else None, peer_minus_self=float(sp))
+        o = out[j]
+        L.append(f"| {j} | {100*o['none']:.1f} | {100*o['self']:.1f} | {100*o['peer']:.1f} | {100*o['human']:.1f} | "
+                 f"{100*o['diff']:+.1f} | [{100*ci[0]:+.1f}, {100*ci[1]:+.1f}] | {100*sp:+.1f} |")
+    L.append(f"\nMean Δ peer − none: {100*np.mean([o['diff'] for o in out.values()]):+.1f}; "
+             f"mean Δ peer − self: {100*np.nanmean([o['peer_minus_self'] for o in out.values()]):+.1f} points.")
+    info = d.drop_duplicates("key").set_index("key")
+    for grader in ("deepseek-v3.1", "gpt-oss-120b"):
+        rc = pd.Series({k: ref[grader].get((str(r.uid), int(r.turn))) for k, r in info.iterrows()})
+        n_ok, n_bad = int((rc == 1).sum()), int((rc == 0).sum())
+        L += ["", f"### Split by whether the reference was correct (grader: {grader}; "
+                  f"{n_ok} responses with a correct reference, {n_bad} with a wrong one)", "",
+              "| Judge | ref correct: none | peer | Δ | ref wrong: none | peer | Δ |", "|---|---|---|---|---|---|---|"]
+        for j in out:
+            w = d[d.judge == j].pivot_table(index="key", columns="cond", values="agree")[["none", "peer"]].dropna()
+            r_ = rc.reindex(w.index)
+            a, b = w[r_ == 1], w[r_ == 0]
+            out[j][f"by_ref_{grader}"] = dict(ok_none=float(a["none"].mean()), ok_peer=float(a["peer"].mean()),
+                                               bad_none=float(b["none"].mean()), bad_peer=float(b["peer"].mean()))
+            L.append(f"| {j} | {100*a['none'].mean():.1f} | {100*a['peer'].mean():.1f} | {100*(a['peer']-a['none']).mean():+.1f} | "
+                     f"{100*b['none'].mean():.1f} | {100*b['peer'].mean():.1f} | {100*(b['peer']-b['none']).mean():+.1f} |")
+    return out
+
+
 def main():
     G = gold_labels()
     rows = []
@@ -81,6 +133,9 @@ def main():
         rows.append(dict(key=f"{r['item_id']}|{r['examinee']}", judge=r["judge"], cond=r["condition"],
                          verdict=int((r.get("vote_share") or 0) > 0.5), parsed=int(r.get("n_parsed", 0) > 0)))
     J = pd.DataFrame(rows).drop_duplicates(["key", "judge", "cond"], keep="last")
+    # gpt-oss-120b's peer prompt is identical to its self prompt (the peer answer is its own), so reuse self
+    ps = J[(J.judge == "gpt-oss-120b") & (J.cond == "self")].assign(cond="peer")
+    J = pd.concat([J[~((J.judge == "gpt-oss-120b") & (J.cond == "peer"))], ps], ignore_index=True)
     d = J.merge(G, on="key")
     d["agree"] = (d.verdict == d.gold).astype(int)
     S = solved_labels()
@@ -145,9 +200,10 @@ def main():
         w = d[d.judge == j].pivot_table(index="key", columns="cond", values="agree")[["none", "self"]].dropna()
         un = d.drop_duplicates("key").set_index("key").unanimous.loc[w.index]
         L.append(f"| {j} | {100*(w['self']-w['none'])[un].mean():+.1f} | {100*(w['self']-w['none'])[~un].mean():+.1f} |")
+    peer = peer_section(d, G, L)
     (HERE / "results").mkdir(exist_ok=True)
     (HERE / "results/summary.md").write_text("\n".join(L) + "\n")
-    (HERE / "results/metrics.json").write_text(json.dumps(dict(headline=out, split=split, flips=flips), indent=1))
+    (HERE / "results/metrics.json").write_text(json.dumps(dict(headline=out, split=split, flips=flips, peer=peer), indent=1))
     print("\n".join(L))
 
 
