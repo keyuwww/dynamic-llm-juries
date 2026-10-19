@@ -116,6 +116,8 @@ def main():
     ap.add_argument("--models", default="all")
     ap.add_argument("--second-grader", default=None, help="pool key, e.g. gpt-oss-120b or deepseek-v3.1")
     ap.add_argument("--jev-model", default="jev-1.13.0", help="pin the version used in Exp 1")
+    ap.add_argument("--skip-jev", action="store_true",
+                    help="no Jev key: grade only with the Tinker grader(s) from --second-grader (comma-separated)")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--concurrency", type=int, default=32)
     ap.add_argument("--mock", action="store_true")
@@ -130,9 +132,13 @@ def main():
     models = [m["key"] for m in select_models(a.models)]
     jobs = build_jobs(answers, load_bff(a.bff_path), set(models))
     print(f"{len(jobs)} answers to grade", flush=True)
-    grade_with_jev(jobs, cache, a.workers, a.mock, a.jev_model)
-    if a.second_grader:
-        asyncio.run(grade_with_tinker(jobs, cache, a.second_grader, a.mock, a.concurrency))
+    if not a.skip_jev:
+        grade_with_jev(jobs, cache, a.workers, a.mock, a.jev_model)
+    for g in (a.second_grader or "").split(","):
+        if g:
+            asyncio.run(grade_with_tinker(jobs, cache, g, a.mock, a.concurrency))
+    if a.skip_jev:
+        return
 
     # ---- summary
     present = sorted({r["model"] for r in answers.rows.values()} & set(models))
