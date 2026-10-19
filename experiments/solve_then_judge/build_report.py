@@ -203,6 +203,7 @@ def main():
   <li>Don't ask the judge to answer first by default. Give it a reference only when that reference is likely right.</li>
   <li>The disagreement trigger already flags items where judges are unsure; those are the ones worth a strong model's answer or an expert check.</li>
 </ul></div>
+<p class="note">Prior result: No Free Labels ran the same no-reference / own-answer / expert-reference comparison with five 2024 judges (GPT-4o, Llama 3.3 70B, Phi-4, Yi 1.5 34B, Qwen 2.5 7B), pooled over BFF-Bench and (C)MT-Bench with 5 votes per verdict. There, the own answer raised κ for four of five judges (e.g. GPT-4o 0.47 → 0.52) and the expert reference raised it most (GPT-4o 0.68). Here the own answer helps the thinking-off judges but not the always-reasoning gpt-oss judges, which already solve the question while grading.</p>
 <p class="note">10/19 runs: one sample per judge at temperature 0.7, max 4,096 tokens, 2-of-3 human labels. Own answers come from the same model with thinking off where that can be switched off. Right / wrong labels for those answers are LLM grades against the expert reference (the two graders agree on 82%). Code: experiments/solve_then_judge on branch wip/cross-benchmark-analysis in keyuwww/dynamic-llm-juries.</p>
 </div>
 <div id="tip" role="status" aria-live="polite"></div>
