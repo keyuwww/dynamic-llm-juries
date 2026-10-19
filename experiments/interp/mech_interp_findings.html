@@ -102,31 +102,25 @@ following the method of Wang et al. 2025, <a href="https://arxiv.org/abs/2508.02
 rel="noopener">&ldquo;When Truth Is Overridden: Internal Origins of Sycophancy&rdquo;</a>.</p>
 
 <div class="abstract">
-<b>Summary.</b> A teammate observed that grading BFF-Bench with a detailed expert rubric raises
-agreement with human labels for most judges, but lowers it for gpt-oss&#8209;20b specifically. We
-confirm this behaviorally using the benchmark's actual human-annotator rubric (not one we wrote):
-gpt-oss&#8209;20b's &kappa; drops 0.667&rarr;0.617, and removing a single rule &mdash; <i>the
-solution steps must match the reference, not just the final answer</i> &mdash; fully restores it
-(0.666). gpt-oss&#8209;120b is unaffected. Probing this mechanistically with logit lens and causal
-activation patching requires a forced, reasoning-free answer to read internal layers, and under that
-setup gpt-oss&#8209;20b's own real-rubric effect nearly disappears (1 of 459 items flip vs. the full
-&kappa; drop above) &mdash; the effect depends on reasoning this method can't capture. So the main
-results below use a researcher-written rubric instead: broader and stricter than the real one, but
-the only lens that produces a usable forced-choice signal in every model tested, including
-gpt-oss&#8209;20b. Under it, gpt-oss&#8209;20b shows a late, near switch-like computation (critical
-layer &asymp;22/24, 81% causal suppression). A secondary tab keeps the real-rubric results, which are
-strong for 4 of the other 5 judges &mdash; including the single strongest causal effect in this whole
-study: nemotron3-nano-30b's near-total, 99%/95% reversible pivot, on the rubric that actually produces
-the behavioral effect.
+<b>Summary.</b> A detailed rubric raises most judges' agreement with human labels, but lowers
+gpt-oss&#8209;20b's specifically. Confirmed with BFF-Bench's real human-annotator rubric: <b>&kappa;
+drops 0.667&rarr;0.617</b>; removing one rule &mdash; steps must match the reference, not just the
+answer &mdash; <b>fully restores it (0.666)</b>. gpt-oss&#8209;120b is unaffected.<br><br>
+Explaining this mechanistically needs a reasoning-free forced-choice probe to read internal layers
+&mdash; and under that setup gpt-oss&#8209;20b's effect nearly vanishes (<b>1 of 459 items flip</b>).
+So the main results use a broader, stricter researcher-written rubric instead: the only one that
+works in every model, including gpt-oss&#8209;20b, which shows a <b>late, switch-like computation
+(layer &asymp;22/24, 81% causal suppression)</b>. A secondary tab keeps the real-rubric results
+&mdash; strong for 4 of 5 other judges, including the study's strongest effect:
+<b>nemotron3-nano-30b's 99%/95% reversible pivot</b>.
 </div>
 
 <h2>1. Two rubrics</h2>
-<p>A rubric was first constructed from scratch to probe this effect. It later turned out to differ
-from the rubric that actually produced BFF-Bench's human labels &mdash; Appendix A.4 of Setlur et
-al., <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">&ldquo;No Free
-Labels&rdquo;</a>, shown verbatim below. &sect;2's behavioral confirmation uses the real rubric,
-since that's what actually happened to BFF-Bench's human labels. &sect;4's main mechanistic results
-use the researcher-written rubric instead &mdash; &sect;3 explains why.</p>
+<p>A rubric was built from scratch to probe this effect, then turned out to differ from the real one
+behind BFF-Bench's labels &mdash; Appendix A.4 of Setlur et al., <a
+href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">&ldquo;No Free
+Labels&rdquo;</a>, shown below. <b>&sect;2 uses the real rubric; &sect;4's main results use ours
+instead</b> (&sect;3 explains why).</p>
 
 <div class="rubric-box">
 <b>Verbatim: Appendix A.4, &ldquo;Annotator Guidelines,&rdquo; No Free Labels</b>
@@ -137,7 +131,7 @@ use the researcher-written rubric instead &mdash; &sect;3 explains why.</p>
 <li>If the model agrees with the reference, all of the intermediate steps agree, but the answer is slightly off due to rounding or performing approximate calculations, it should be marked as &ldquo;Correct&rdquo;.</li>
 <li>If the model agrees with the reference, all of the intermediate steps agree, but it is lacking some amount of information given within the reference, you should make a judgment call as to whether the missing information is crucial to the answer. If you are unsure, lean towards &ldquo;Correct&rdquo; or mark it &ldquo;Unsure&rdquo;.</li>
 </ol>
-<p class="src">Source: <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">arXiv:2503.05061v4, Appendix&nbsp;A.4</a> &mdash; written for human annotators labeling BFF-Bench, reused here verbatim as the LLM judge's grading instructions (<code>rules2</code> in the code, behind every result in &sect;2 and the secondary tab of &sect;4).</p>
+<p class="src">Source: <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">arXiv:2503.05061v4, Appendix&nbsp;A.4</a> &mdash; written for human annotators, reused here verbatim as the LLM judge's grading instructions.</p>
 </div>
 
 <table>
@@ -149,31 +143,28 @@ use the researcher-written rubric instead &mdash; &sect;3 explains why.</p>
 <tr><td>Extra info</td><td><i>not specified</i></td><td><b>CORRECT</b> if not obviously wrong</td></tr>
 <tr><td>Missing info</td><td>Counts against completeness</td><td>Judgment call; lean <b>CORRECT</b></td></tr>
 </table>
-<p class="note">Ours is strict on six compounding axes; Appendix A.4 is strict on exactly one
-(process must match) and explicitly lenient everywhere else.</p>
+<p class="note">Ours stacks <b>six</b> strict conditions; Appendix A.4 is strict on exactly
+<b>one</b> (process must match) and lenient everywhere else.</p>
 
 <h2>2. Behavioral result</h2>
-<p>Cohen's &kappa; against human labels, all 8 Tinker-pool judges, BFF-Bench, before and after
-grading with the real Appendix A.4 rubric:</p>
+<p>Cohen's &kappa;, all 8 Tinker-pool judges, before/after grading with the real rubric:</p>
 
 <figure>
   <div class="fig-panel">
     <div id="dumbbell-main"></div>
   </div>
-  <figcaption><b>Figure 1.</b> Agreement with human labels (Cohen's &kappa;), no rubric
-  (gray) vs. the real Appendix A.4 rubric (navy), sorted by effect size. gpt-oss&#8209;20b is the
-  only judge that moves backward by a meaningful margin; six of eight judges hold steady or
-  improve.</figcaption>
+  <figcaption><b>Figure 1.</b> No rubric (gray) vs. real rubric (navy), sorted by effect size.
+  <b>gpt-oss&#8209;20b</b> is the only judge that moves backward meaningfully; six of eight hold
+  steady or improve.</figcaption>
 </figure>
 
 <figure>
   <div class="fig-panel">
     <div id="dumbbell-ablation"></div>
   </div>
-  <figcaption><b>Figure 2.</b> The paper's own ablation &mdash; real rubric (gray) vs. the same
-  rubric with Rule 2 (steps must match) removed (navy). Removing that one rule fully restores
-  gpt-oss&#8209;20b and leaves gpt-oss&#8209;120b essentially unchanged; deepseek-v3.1 moves the
-  opposite way, a side finding the original rubric doesn't address.</figcaption>
+  <figcaption><b>Figure 2.</b> The paper's own ablation: real rubric (gray) vs. the same rubric minus
+  Rule 2 (steps must match, navy). Removing it <b>fully restores gpt-oss&#8209;20b</b>; gpt-oss&#8209;120b
+  is unchanged; deepseek-v3.1 moves the opposite way (unexplained).</figcaption>
 </figure>
 
 <details>
@@ -184,63 +175,47 @@ grading with the real Appendix A.4 rubric:</p>
 <div class="takeaway">
   <b>Takeaway 1</b>
   gpt-oss&#8209;20b is the only judge fully restored by removing one rule; gpt-oss&#8209;120b shows
-  no effect at all &mdash; this is a 20B-checkpoint property, not a gpt-oss-family one.
+  no effect &mdash; a <b>20B-checkpoint property, not a gpt-oss-family one</b>.
 </div>
 
 <h2>3. Why the main results use our rubric</h2>
-<p>Every interp number needs a forced-choice probe: no reasoning allowed, an immediate
-CORRECT/INCORRECT read off the logits, so internal layers can be compared between two conditions.
-That's necessary, but it's also a big handicap relative to how these judges normally operate.
-Measuring each model's accuracy with reasoning (the full pipeline, &sect;2's setup) against its
-accuracy without it shows how much each judge actually depends on reasoning to get BFF-Bench right
-at all:</p>
+<p>Every interp number needs a forced-choice probe: no reasoning, an immediate CORRECT/INCORRECT
+read off the logits. That's a big handicap vs. how judges normally work. Accuracy with reasoning vs.
+without it shows how much each one depends on it:</p>
 
 <figure>
   <div class="fig-panel">
     <div id="dumbbell-reasoning"></div>
   </div>
-  <figcaption><b>Figure C.</b> Accuracy with reasoning (navy) vs. without it (gray), sorted by gap
-  size. The gpt-oss family depends on reasoning the most (+0.35, +0.28) &mdash; and is exactly where
-  the real-rubric forced-choice probe found almost nothing to work with. nemotron3-nano-30b and
-  Qwen3.5-4B depend on it least (+0.10, +0.07) &mdash; and gave the method its two clearest results in
-  either direction (nemotron's near-total causal pivot, Qwen3.5-4B's clean-flip-but-zero-causal-effect
-  null). This isn't proof, but it's a plausible, measurable reason gpt-oss&#8209;20b specifically
-  resists the real-rubric probe: a model that leans on reasoning the most is the one most likely to
-  hide its rubric sensitivity from a method that removes reasoning entirely.</figcaption>
+  <figcaption><b>Figure C.</b> Accuracy with reasoning (navy) vs. without it (gray), sorted by gap.
+  The <b>gpt-oss family depends on reasoning most (+0.35, +0.28)</b> &mdash; exactly where the
+  real-rubric probe found nothing. <b>nemotron3-nano-30b and Qwen3.5-4B depend on it least (+0.10,
+  +0.07)</b> &mdash; and gave the clearest results. A plausible reason gpt-oss&#8209;20b resists this
+  method: it leans on reasoning the probe doesn't allow.</figcaption>
 </figure>
 
-<p>The real rubric's only strict rule (steps must match) needs the reasoning Figure C shows some
-judges can't spare in a forced-choice setting: it produces a clean signal for 4 of 5 judges tested,
-but goes silent for gpt-oss&#8209;20b specifically &mdash; the model that started this whole
-investigation. The researcher-written rubric stacks several bluntly-worded, independent failure
-conditions ("no partial credit," exact units, no unsupported assumptions) instead of one rule
-requiring comparison. That bluntness is a double-edged property: it reliably produces a forced-choice
-flip set in every model tested, including gpt-oss&#8209;20b (its only usable flip set anywhere in
-this investigation), because blunt wording can bias an immediate token read directly, without the
-model needing to actually reason. That makes it a more sensitive probing instrument, not a more
-faithful one &mdash; the mechanism it reveals in gpt-oss&#8209;20b may be a real but narrower
-phenomenon (surface-level prompt sensitivity) rather than the real rubric's actual, reasoning-dependent
-effect. It's used as the main lens below for exactly that reason: it's the only rubric that works
-consistently across every model tested, including the one that matters most.</p>
+<p>The real rubric's one strict rule needs reasoning to evaluate &mdash; clean signal for 4 of 5
+judges, silent for gpt-oss&#8209;20b. Our rubric stacks several bluntly-worded conditions instead of
+one rule requiring comparison, so it can bias an immediate token read directly, without reasoning.
+<b>That makes it more sensitive, not more faithful</b> &mdash; but it's the only rubric producing a
+flip set in every model, including gpt-oss&#8209;20b, so it's the main lens below.</p>
 
 <h3 style="font-size:16px; font-style:normal;">Why these models</h3>
 <table>
 <tr><th>Model</th><th>Reason tested</th></tr>
-<tr><td>gpt-oss-20b</td><td>The model behind the original finding &mdash; the motivating case.</td></tr>
-<tr><td>gpt-oss-120b</td><td>Same family, larger scale &mdash; tests whether the effect is a gpt-oss property or a 20B-checkpoint property (it's the latter).</td></tr>
-<tr><td>Qwen3.5-9B</td><td>First comparison model: &kappa; improves under rubrics (opposite direction from gpt-oss-20b), a clean behavioral contrast.</td></tr>
-<tr><td>Qwen3.5-4B</td><td>Same family as Qwen3.5-9B, smaller scale &mdash; a second within-family scaling contrast.</td></tr>
-<tr><td>nemotron3-nano-30b</td><td>Different architecture family entirely; also shows a real-rubric &kappa; decline like gpt-oss-20b, making it the closest behavioral analogue to test mechanistically.</td></tr>
-<tr><td>Qwen3.6-35B-A3B</td><td>Largest behavioral improvement under the real rubric (&kappa; +0.118) of any judge &mdash; a third Qwen-family data point at a third scale.</td></tr>
+<tr><td>gpt-oss-20b</td><td>The motivating case.</td></tr>
+<tr><td>gpt-oss-120b</td><td>Same family, larger scale &mdash; is the effect gpt-oss-wide or 20B-specific? (latter)</td></tr>
+<tr><td>Qwen3.5-9B</td><td>&kappa; improves under rubrics &mdash; opposite direction, clean contrast.</td></tr>
+<tr><td>Qwen3.5-4B</td><td>Same family as 9B, smaller scale.</td></tr>
+<tr><td>nemotron3-nano-30b</td><td>Different architecture; also declines under the real rubric &mdash; closest behavioral analogue.</td></tr>
+<tr><td>Qwen3.6-35B-A3B</td><td>Largest &kappa; improvement of any judge (+0.118) &mdash; third Qwen scale point.</td></tr>
 </table>
-<p class="note">Not tested mechanistically: nemotron3-super-120b, deepseek-v3.1 (time budget; both are candidates for a follow-up pass).</p>
+<p class="note">Not tested: nemotron3-super-120b, deepseek-v3.1 (time budget).</p>
 
 <h2>4. Mechanistic results</h2>
-<p>Two rubrics were probed mechanistically. The researcher-written rubric is the main tab below,
-since (per &sect;3) it's the one rubric that works consistently across every model tested, including
-gpt-oss&#8209;20b. The real Appendix A.4 rubric is kept as a secondary tab: it only produces a usable
-forced-choice signal for 4 of 5 judges (not gpt-oss&#8209;20b), but where it does, the results are
-strong &mdash; including the single strongest causal effect in this entire study.</p>
+<p><b>Our rubric is the main tab</b> (per &sect;3, it works for every model). The real Appendix A.4
+rubric is secondary &mdash; works for 4 of 5 judges, not gpt-oss&#8209;20b, but includes this study's
+strongest causal effect where it does.</p>
 <div class="tabs">
   <button class="tab-btn active" data-tab="ours">Our rubric</button>
   <button class="tab-btn" data-tab="real">Appendix A.4 rubric (secondary)</button>
@@ -251,15 +226,11 @@ strong &mdash; including the single strongest causal effect in this entire study
 <div id="tab-ours" class="tab-panel">
 <h3 style="font-size:16px; font-style:normal; margin-top:4px;">Layer-wise decision tracking</h3>
 <p>At every layer, the hidden state is read through the model's own final norm and unembedding (the
-logit lens) to see which verdict the model would commit to if it stopped there. The source paper's
-Decision Score (Eq.&nbsp;1) is defined for the 4-way multiple-choice case; with only two candidates
-(CORRECT / INCORRECT) it degenerates, since the min and max in its formula <i>are</i> the two
-candidate logits themselves &mdash; the score saturates to &asymp;0 or &asymp;1 for almost any
-nonzero gap, rather than varying smoothly. We instead track the two-way softmax share,
-P(CORRECT) = p<sub>CORRECT</sub> / (p<sub>CORRECT</sub> + p<sub>INCORRECT</sub>), the same quantity
-already used internally for the KL divergence below. We also restrict every curve to the items
-whose final verdict actually flips between prompts &mdash; averaging in the hundreds of items that
-never flip would wash out exactly the signal this figure exists to show.</p>
+logit lens) to see which verdict the model would commit to if it stopped there. We track
+<b>P(CORRECT) = p<sub>CORRECT</sub> / (p<sub>CORRECT</sub> + p<sub>INCORRECT</sub>)</b>, a clean 0-1
+probability (the same quantity used internally for the KL divergence below), restricted to items
+whose verdict actually flips between prompts &mdash; averaging in items that never flip would wash
+out the signal.</p>
 
 <figure>
   <div class="controls">
@@ -293,44 +264,36 @@ never flip would wash out exactly the signal this figure exists to show.</p>
 
 <div class="takeaway">
   <b>Takeaway 2</b>
-  gpt-oss-20b has almost no flips in the lenient direction (24 stricter vs. essentially none
-  lenient) &mdash; a one-sided effect. gpt-oss-120b flips nearly equally often in both directions
-  (96 vs. 95) &mdash; the prompt perturbs it more at the token level, but the two directions largely
-  cancel out, which is consistent with its small net behavioral change in &sect;2.
+  <b>gpt-oss-20b is one-sided</b> (24 stricter, ~0 lenient). <b>gpt-oss-120b flips both ways almost
+  equally</b> (96 vs. 95) &mdash; more perturbed at the token level, but the directions cancel out,
+  matching its small net &kappa; change in &sect;2.
 </div>
 
 <h3 style="font-size:16px; font-style:normal;">Causal activation patching</h3>
-<p>Correlation at the critical layer is not causation. For every flip item, we swap the hidden state
-at its own critical layer (a 3-layer window centered on it, 1 layer for the smaller Qwen patch)
-between the two conditions and re-run the model, following the suppression/induction design of
-Figure 6 in the source paper.</p>
+<p>Correlation is not causation. For every flip item, we swap the hidden state at its critical layer
+(3-layer window, 1 layer for the smaller Qwen patch) between conditions and re-run the model.</p>
 
 <figure>
   <div class="fig-panel">
     <div id="patch-chart"></div>
   </div>
-  <figcaption><b>Figure 5.</b> Causal effects of activation patching, our rubric throughout.
-  <b>Suppression</b> (top row): patch the better condition's activation into the worse run &mdash;
-  teal bar is the share of items where the correct verdict comes back. <b>Induction</b> (bottom row):
-  the reverse &mdash; orange bar is the share of items where patching in the worse condition's
-  activation breaks an otherwise-correct run. gpt-oss-20b's asymmetry (recovers almost every time,
-  rarely breaks) reads as a late, near one-way gate. gpt-oss-120b and nemotron3-nano-30b's
-  stricter-direction flips are strongly causal in <i>both</i> directions &mdash; a powerful but
-  reversible pivot, not a one-way gate. The lenient-direction flips (gpt-oss-120b, both Qwen sizes)
-  are weaker and roughly symmetric &mdash; a softer, more distributed shift. Several distinct causal
-  signatures across five models, not one mechanism at different strengths.</figcaption>
+  <figcaption><b>Figure 5.</b> Our rubric throughout. <b>Suppression</b> (top): patch the better
+  condition into the worse run, teal = share recovering the correct verdict. <b>Induction</b>
+  (bottom): the reverse, orange = share broken. <b>gpt-oss-20b</b>: one-way gate (recovers almost
+  always, rarely breaks). <b>gpt-oss-120b &amp; nemotron3-nano-30b, stricter direction</b>: strongly
+  causal <i>both</i> ways &mdash; a reversible pivot, not a gate. Lenient-direction flips (gpt-oss-120b,
+  both Qwen) are weaker and symmetric &mdash; a softer, distributed shift. Several distinct
+  signatures, not one mechanism at different strengths.</figcaption>
 </figure>
 </div>
 
 <h2>5. Scope of these findings</h2>
 <div class="scope">
-<b>What is still not shown:</b> a mechanism for gpt-oss&#8209;20b's own real-rubric effect
-specifically &mdash; the model that motivated this whole investigation. &sect;2's &kappa; drop
-(0.667&rarr;0.617) is real and comes from the full reasoning pipeline, but strip the reasoning out
-for the forced-choice probe this method needs and the flip set collapses to 1 of 459 items &mdash;
-too small to patch, even though four other judges show large, usable flip sets under that same real
-rubric and the same forced-choice setup. Reproducing gpt-oss&#8209;20b's real-rubric mechanism likely
-needs the model to reason first, then be read at the final token. Not yet done.
+<b>Not yet shown:</b> a mechanism for <b>gpt-oss&#8209;20b's own real-rubric effect</b> &mdash; the
+model that started this investigation. Its &kappa; drop (0.667&rarr;0.617) is real, but comes from the
+full reasoning pipeline; strip reasoning out for the forced-choice probe and the flip set collapses
+to <b>1 of 459 items</b>, too few to patch, even though four other judges work fine under the same
+setup. Fixing this likely needs the model to reason first, then be read at the final token.
 </div>
 
 <footer>
@@ -459,16 +422,16 @@ needs the model to reason first, then be read at the final token. Not yet done.
 
   // ---------------- Figure 3: decision score ----------------
   var CAPS = {
-    gpt_oss_20b_stricter: 'gpt-oss-20b, the 24 items that flip CORRECT&rarr;INCORRECT under the rubric. Both curves favor CORRECT through the middle layers; the rubric curve then drops below the 0.5 boundary very late, just before the critical layer, while the standard curve stays above it &mdash; a late reversal.',
-    gpt_oss_120b_stricter: 'gpt-oss-120b, the 96 items that flip CORRECT&rarr;INCORRECT under the rubric. The reversal happens earlier and more gradually than gpt-oss-20b’s &mdash; consistent with the strongly bidirectional (not one-way) causal effect found at this layer in Figure 5.',
-    gpt_oss_120b_lenient: 'gpt-oss-120b, the 95 items that flip INCORRECT&rarr;CORRECT under the rubric &mdash; the opposite direction, happening in roughly equal numbers in the same model.',
-    qwen_9b_lenient: 'Qwen3.5-9B, the 75 items that flip INCORRECT&rarr;CORRECT under the rubric. The shift toward CORRECT happens earlier in the network (critical layer ≈20/32, mid-depth) than gpt-oss-20b’s ≈22/24 (near the very end).',
-    nemotron_30b_stricter: 'nemotron3-nano-30b, the 178 items that flip CORRECT&rarr;INCORRECT under the rubric &mdash; the largest flip set found, and the strongest causal effect in Figure 5 (94%/78%). Critical layer ≈44/52 (also very late, like gpt-oss-20b).',
-    qwen_4b_lenient: 'Qwen3.5-4B, the 62 items that flip INCORRECT&rarr;CORRECT under the rubric (zero flip the other way). Despite this clean one-sided behavioral shift, the causal patch at its own critical layer is weak (17%/19% in Figure 5) &mdash; the mechanism here looks more distributed than its forced-choice curve alone would suggest.',
-    real_nemotron_30b_stricter: 'nemotron3-nano-30b, the 180 items that flip CORRECT&rarr;INCORRECT under the <b>real</b> Appendix A.4 rubric &mdash; nearly identical to its researcher-rubric flip set, and the strongest causal effect found anywhere in this study (99%/95% in Figure 5).',
-    real_qwen_4b_lenient: 'Qwen3.5-4B, the 76 items that flip INCORRECT&rarr;CORRECT under the real rubric (zero the other way) &mdash; an even cleaner one-sided shift than under our own rubric.',
-    real_qwen36_35b_stricter: 'Qwen3.6-35B-A3B, the 143 items that flip CORRECT&rarr;INCORRECT under the real rubric (behaviorally this judge’s κ actually improves under the real rubric overall &mdash; these flips mostly correct genuine errors rather than introduce new ones). Critical layer ≈32/40 (≈80% depth, late like nemotron’s).',
-    real_qwen_9b_lenient: 'Qwen3.5-9B, the 184 items that flip INCORRECT&rarr;CORRECT under the real rubric (zero the other way). Its critical layer here (&asymp;26/32) is notably later/deeper than under our rubric (&asymp;20/32) &mdash; the two rubrics shift the model’s mind at different depths.'
+    gpt_oss_20b_stricter: '<b>gpt-oss-20b</b>, 24 flips (CORRECT&rarr;INCORRECT). Both curves favor CORRECT until a <b>late</b> reversal, just before the critical layer.',
+    gpt_oss_120b_stricter: '<b>gpt-oss-120b</b>, 96 flips (CORRECT&rarr;INCORRECT). Reversal is earlier and more gradual than gpt-oss-20b’s &mdash; matches its bidirectional causal effect (Figure 5).',
+    gpt_oss_120b_lenient: '<b>gpt-oss-120b</b>, 95 flips (INCORRECT&rarr;CORRECT) &mdash; the opposite direction, in roughly equal numbers.',
+    qwen_9b_lenient: '<b>Qwen3.5-9B</b>, 75 flips (INCORRECT&rarr;CORRECT). Shift happens <b>earlier</b> (&asymp;20/32) than gpt-oss-20b’s (&asymp;22/24).',
+    nemotron_30b_stricter: '<b>nemotron3-nano-30b</b>, 178 flips &mdash; the largest set, and strongest causal effect (94%/78%, Figure 5). Critical layer &asymp;44/52, also late.',
+    qwen_4b_lenient: '<b>Qwen3.5-4B</b>, 62 flips, zero reverse. Despite the clean shift, causal effect at its critical layer is <b>weak</b> (17%/19%) &mdash; likely distributed, not localized.',
+    real_nemotron_30b_stricter: '<b>nemotron3-nano-30b</b>, 180 flips under the <b>real</b> rubric &mdash; nearly identical to its researcher-rubric set, and the <b>strongest causal effect in this study</b> (99%/95%).',
+    real_qwen_4b_lenient: '<b>Qwen3.5-4B</b>, 76 flips under the real rubric, zero reverse &mdash; even cleaner than under our rubric.',
+    real_qwen36_35b_stricter: '<b>Qwen3.6-35B-A3B</b>, 143 flips under the real rubric (its &kappa; actually improves overall &mdash; these flips mostly correct real errors). Critical layer &asymp;32/40, late like nemotron’s.',
+    real_qwen_9b_lenient: '<b>Qwen3.5-9B</b>, 184 flips under the real rubric, zero reverse. Critical layer here (&asymp;26/32) is <b>deeper</b> than under our rubric (&asymp;20/32).'
   };
 
   var DEFAULT_CHART_IDS = {chart:'decision-chart', tip:'tip1', cap:'fig1-cap', klChart:'kl-chart', tip2:'tip2'};
@@ -591,14 +554,9 @@ needs the model to reason first, then be read at the final token. Not yet done.
 
   // ---------------- Real-rubric (Appendix A.4) tab ----------------
   document.getElementById('tab-real').innerHTML =
-    '<p>gpt-oss-20b is the one gap here. &sect;2’s &kappa; drop (0.667&rarr;0.617) comes from the' +
-    ' full judging pipeline, where the model reasons through each rule before answering. Strip the' +
-    ' reasoning out &mdash; force an immediate CORRECT/INCORRECT with no explanation, the setup this' +
-    ' probe needs to read internal layers &mdash; and the effect nearly disappears (1 of 459 items' +
-    ' flip). That gap is itself informative: it means gpt-oss-20b’s real-rubric effect depends on' +
-    ' the reasoning process, which a single forward pass can’t capture, so there’s no usable' +
-    ' flip set to build a curve from. Four other judges, however, show large, clean, usable flip sets' +
-    ' under the same real rubric and the same forced-choice setup:</p>' +
+    '<p><b>gpt-oss-20b is the one gap here</b> (see &sect;5) &mdash; its forced-choice flip set is' +
+    ' just 1 of 459 items, too few to curve or patch. Four other judges, however, show large, clean,' +
+    ' usable flip sets under this same real rubric:</p>' +
     '<figure><div class="controls"><select id="model-select-real">' +
     '<option value="real_nemotron_30b_stricter">nemotron3-nano-30b &middot; gets stricter (n=180 flips)</option>' +
     '<option value="real_qwen36_35b_stricter">Qwen3.6-35B-A3B &middot; gets stricter (n=143 flips)</option>' +
@@ -612,16 +570,12 @@ needs the model to reason first, then be read at the final token. Not yet done.
     ' Appendix A.4 rubric.</figcaption></figure>' +
     '<h3 style="font-size:16px; font-style:normal;">Causal activation patching</h3>' +
     '<div class="fig-panel"><div id="patch-chart-real"></div></div>' +
-    '<p class="note">Suppression (top row) / induction (bottom row), real Appendix A.4 rubric. nemotron3-nano-30b’s' +
-    ' effect (99%/95%) is the strongest causal result in this entire study, on the actual rubric behind the' +
-    ' behavioral finding &mdash; both directions almost fully reversible at a single 3-layer window.' +
-    ' Qwen3.6-35B-A3B and Qwen3.5-9B both sit in between (52%/45% and 52%/49%, moderate and symmetric)' +
-    ' &mdash; two different model families landing at nearly the same partial, distributed effect size.' +
-    ' Qwen3.5-4B is the opposite extreme' +
-    ' from nemotron: a huge, completely one-sided behavioral flip (76 items) with a <b>zero</b> causal' +
-    ' effect at its own critical layer in either direction &mdash; the cleanest possible demonstration' +
-    ' that a clean forced-choice curve does not guarantee a localized mechanism. Whatever drives this' +
-    ' model is spread across the network, not concentrated at one layer.</p>';
+    '<p class="note">Suppression (top) / induction (bottom), real rubric. <b>nemotron3-nano-30b</b>' +
+    ' (99%/95%) is the strongest causal result in this whole study, on the rubric that actually' +
+    ' produces the behavioral effect. <b>Qwen3.6-35B-A3B and Qwen3.5-9B</b> sit in between (52%/45%,' +
+    ' 52%/49%) &mdash; two families landing on the same partial, distributed effect. <b>Qwen3.5-4B</b>' +
+    ' is the opposite extreme: a huge one-sided flip (76 items) with <b>zero</b> causal effect at its' +
+    ' critical layer &mdash; a clean forced-choice curve doesn’t guarantee a localized mechanism.</p>';
 
   drawDecisionChart('real_nemotron_30b_stricter', {chart:'decision-chart-real', tip:'tip1-real', cap:'fig1-cap-real',
                      klChart:'kl-chart-real', tip2:'tip2-real'});
