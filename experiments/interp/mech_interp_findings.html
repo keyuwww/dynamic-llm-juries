@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mechanistic Interpretability: Why Rubrics Hurt gpt-oss-20b</title>
+<style>
+  :root{
+    --bg:#faf8f4; --surface:#ffffff; --surface-sunken:#f1efe9; --ink:#1c1a16; --ink-soft:#5c574d;
+    --line:#e4e0d6; --accent:#0f8f78; --accent-ink:#0a5c4d; --warm:#c1631f; --cool:#3461c1;
+    --good-bg:#eaf4f0; --bad-bg:#faeceb; --bad:#b4442e;
+    --font-display:'Spectral',Georgia,'Times New Roman',serif;
+    --font-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319; --ink:#f1efe6; --ink-soft:#b3aea0;
+      --line:#38352a; --accent:#1f9a80; --accent-ink:#5fd2b8; --warm:#c97d3f; --cool:#5c7fd6;
+      --good-bg:#1b2b26; --bad-bg:#2b1e1a; --bad:#d9705a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#17160f; --surface:#1f1d16; --surface-sunken:#262319; --ink:#f1efe6; --ink-soft:#b3aea0;
+    --line:#38352a; --accent:#1f9a80; --accent-ink:#5fd2b8; --warm:#c97d3f; --cool:#5c7fd6;
+    --good-bg:#1b2b26; --bad-bg:#2b1e1a; --bad:#d9705a;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-body); padding-inline:16px;
+       padding-block:32px; max-width:860px; margin:0 auto; font-size:14px; line-height:1.55;}
+  h1{font-family:var(--font-display); font-weight:600; font-size:25px; margin:0 0 6px;}
+  h2{font-family:var(--font-display); font-weight:600; font-size:17px; margin:34px 0 10px; color:var(--accent-ink);}
+  h3{font-family:var(--font-body); font-weight:600; font-size:13px; margin:0 0 8px; color:var(--ink-soft);
+     text-transform:uppercase; letter-spacing:.04em;}
+  p.lede{color:var(--ink-soft); font-size:14px; margin:0 0 22px;}
+  a{color:var(--accent-ink);}
+  .back{font-family:var(--font-mono); font-size:12px;}
+  .tldr{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent);
+        border-radius:10px; padding:16px 18px; margin-bottom:8px;}
+  .tldr ul{margin:8px 0 0; padding-left:18px;}
+  .tldr li{margin-bottom:6px;}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:16px 18px;
+        margin-bottom:14px;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th,td{padding:7px 10px; border-bottom:1px solid var(--line); text-align:left;}
+  th{font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.03em;
+     color:var(--ink-soft); font-weight:500;}
+  td.num{text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  tr.highlight td{background:var(--good-bg);}
+  .pill{display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px; font-family:var(--font-mono);}
+  .pill.mine{background:var(--bad-bg); color:var(--bad);}
+  .pill.real{background:var(--good-bg); color:var(--accent-ink);}
+  .controls{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
+  select{font-family:var(--font-body); font-size:13px; padding:6px 10px; border-radius:7px;
+         border:1px solid var(--line); background:var(--surface-sunken); color:var(--ink);}
+  .chart-wrap{background:var(--surface-sunken); border-radius:8px; padding:10px 6px 4px;}
+  svg text{font-family:var(--font-mono); font-size:10px; fill:var(--ink-soft);}
+  .grid-line{stroke:var(--line); stroke-width:1;}
+  .legend{display:flex; gap:18px; font-size:12px; margin:8px 2px 0; flex-wrap:wrap;}
+  .legend .swatch{display:inline-block; width:14px; height:3px; margin-right:6px; vertical-align:middle; border-radius:2px;}
+  .note{font-size:12.5px; color:var(--ink-soft); margin-top:8px;}
+  .caveat{background:var(--bad-bg); border-left:3px solid var(--bad); border-radius:8px; padding:12px 16px;
+          font-size:13px; margin-bottom:14px;}
+  .barrow{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .barlabel{width:200px; font-size:12.5px; flex-shrink:0;}
+  .bartrack{flex:1; background:var(--surface-sunken); border-radius:6px; height:20px; position:relative; overflow:hidden;}
+  .barfill{height:100%; border-radius:6px 0 0 6px;}
+  .barval{width:52px; text-align:right; font-family:var(--font-mono); font-size:12px; flex-shrink:0;}
+  footer{margin-top:30px; font-size:12px; color:var(--ink-soft); font-family:var(--font-mono);}
+  .tooltip{position:absolute; background:var(--ink); color:var(--bg); font-family:var(--font-mono);
+           font-size:11px; padding:4px 8px; border-radius:5px; pointer-events:none; opacity:0; transition:opacity .1s;
+           white-space:nowrap; z-index:10;}
+  .rel{position:relative;}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+
+<p class="back"><a href="../../index.html">&larr; Dynamic LLM Juries</a></p>
+<h1>Why does a detailed rubric hurt gpt-oss-20b?</h1>
+<p class="lede">Behavioral replication + a first mechanistic look (logit lens &amp; causal activation
+patching) at a judge-specific rubric-sensitivity effect on BFF-Bench, following the method of
+<a href="https://arxiv.org/abs/2508.02087" target="_blank" rel="noopener">Wang et al. 2025, "When
+Truth Is Overridden"</a>.</p>
+
+<div class="tldr">
+  <h3>TL;DR</h3>
+  <ul>
+    <li><b>Confirmed behaviorally, with the real rubric.</b> Grading BFF-Bench with the benchmark's
+    own <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">published
+    human-annotator guidelines</a> (not a rubric we wrote) drops gpt-oss-20b's agreement with humans
+    (&kappa; 0.667&rarr;0.617) while most other judges are unaffected or improve. Removing just the
+    one rule that requires solution <i>steps</i> to match the reference &mdash; not only the final
+    answer &mdash; fully restores gpt-oss-20b (&kappa; 0.666).</li>
+    <li><b>gpt-oss-120b does not show this effect</b> (0.677&rarr;0.680) &mdash; it's specific to the
+    20B checkpoint, not the gpt-oss family.</li>
+    <li><b>A mechanistic cause was found &mdash; but for a different, stricter rubric we wrote
+    ourselves</b> to probe the phenomenon, not the real one. Under that rubric, gpt-oss-20b's verdict
+    flip is caused by a late, highly localized, almost switch-like internal computation (layer ~22
+    of 24): patching just three layers there recovers the correct verdict 81% of the time.</li>
+    <li><b>That mechanism does not explain the real rubric's effect.</b> Probed the same way (a single
+    forced-choice token, no reasoning), the real rubric barely moves gpt-oss-20b's verdict at all.
+    The real effect most likely depends on step-by-step reasoning that a single forward pass can't
+    perform &mdash; an open question, not yet answered mechanistically.</li>
+  </ul>
+</div>
+
+<h2>Two rubrics, not one</h2>
+<p>Early in this investigation, a rubric was constructed from scratch to probe the phenomenon. It
+turned out to differ substantially from the rubric actually used to create BFF-Bench's underlying
+human labels (Appendix A.4 of <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank"
+rel="noopener">Setlur et al., "No Free Labels"</a>). Both are shown below so results can be
+attributed to the correct one.</p>
+<div class="card">
+<table>
+<tr><th>Rule</th><th><span class="pill mine">Researcher-written</span></th><th><span class="pill real">Paper's Appendix A.4</span></th></tr>
+<tr><td>Final answer</td><td>Must match within ~1% numeric tolerance</td><td>Must match the reference</td></tr>
+<tr><td>Method / steps</td><td>Must be the "standard" method for the question type</td><td>Must match the reference's steps &mdash; this is the <b>only</b> rule that distinguishes the two rubrics behaviorally</td></tr>
+<tr><td>Completeness</td><td>Every part of a multi-part question must be answered &rarr; else incorrect</td><td><i>not mentioned</i></td></tr>
+<tr><td>Assumptions</td><td>No unsupported assumptions allowed</td><td><i>not mentioned</i></td></tr>
+<tr><td>Units / sign</td><td>Must be exactly correct</td><td><i>not mentioned</i></td></tr>
+<tr><td>Rounding slips</td><td>Explicitly <b>INCORRECT</b> even with right method ("no partial credit")</td><td>Explicitly <b>CORRECT</b> &mdash; rounding/approximation is protected</td></tr>
+<tr><td>Extra info</td><td><i>not mentioned</i></td><td>Explicitly <b>CORRECT</b> if not obviously wrong</td></tr>
+<tr><td>Missing info</td><td>Counted against completeness &rarr; incorrect</td><td>Judgment call; lean <b>CORRECT</b> (or "Unsure") if unclear</td></tr>
+</table>
+<p class="note">The real rubric is strict on exactly one axis (does the solution process match the
+reference?) and explicitly lenient everywhere else. The researcher-written rubric compounds six
+independent strictness conditions, several of which directly contradict the real rubric's leniency
+clauses. They share one real idea &mdash; process matters, not just the final number &mdash; but are
+not interchangeable, which is why the mechanistic results below only hold for one of them.</p>
+</div>
+
+<h2>Behavioral result: Cohen's &kappa; vs. human labels, BFF-Bench</h2>
+<div class="card">
+<div id="kappa-table"></div>
+<p class="note">Judges run: all 8 Tinker-pool models. <code>rules2</code> = the real Appendix A.4
+rubric (paraphrased); <code>rules2_norule2</code> = that rubric with the step-matching rule removed
+&mdash; the paper's own ablation. gpt-oss-20b is the standout degrader under the real rubric, and the
+only model fully restored by removing just that one rule.</p>
+</div>
+
+<h2>Inside the model: per-layer verdict (logit lens)</h2>
+<p>At every layer, the hidden state is read out through the model's own final norm + unembedding
+(the "logit lens") to see what the model would answer <i>if it had to decide right then</i>. The gap
+between the standard-prompt curve and the rubric-prompt curve shows where, internally, the rubric
+starts changing the model's mind.</p>
+<div class="card">
+  <div class="controls">
+    <select id="model-select">
+      <option value="gpt_oss_20b_rules">gpt-oss-20b &middot; researcher rubric (effect found)</option>
+      <option value="gpt_oss_20b_rules2">gpt-oss-20b &middot; real Appendix A.4 rubric (no effect)</option>
+      <option value="qwen_9b_rules">Qwen3.5-9B &middot; researcher rubric (comparison model, rules help)</option>
+    </select>
+  </div>
+  <div class="chart-wrap rel">
+    <div id="layer-chart"></div>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--ink-soft)"></span>Standard prompt</span>
+    <span><span class="swatch" style="background:var(--warm)"></span>Rubric prompt</span>
+    <span><span class="swatch" style="background:var(--bad); height:12px; width:1px; border-left:2px dashed var(--bad);"></span>Mean critical layer (peak divergence, excl. final layer)</span>
+  </div>
+  <p class="note" id="layer-note"></p>
+</div>
+
+<h2>Causal test: does patching the layer actually flip the verdict?</h2>
+<p>Correlation isn't causation &mdash; so for each item where the rubric flipped the verdict, the
+hidden state at its own critical layer(s) was swapped between the two prompt conditions and the
+model was re-run, to see if the verdict follows the activation.</p>
+<div class="card">
+  <div id="patch-bars"></div>
+  <p class="note"><b>Suppression</b>: patch the "better" condition's activation into the "worse" run
+  &mdash; does the correct verdict come back? <b>Induction</b>: the reverse &mdash; does patching the
+  "worse" activation into a correct run break it? gpt-oss-20b's asymmetry (recovers almost every time,
+  rarely breaks) looks like a late, near-binary gate. Qwen's roughly symmetric, window-insensitive
+  pattern looks like a softer, more distributed shift &mdash; a genuinely different mechanism, not
+  just a weaker version of the same one. Both results are for the <b>researcher-written rubric only</b>
+  (window = number of consecutive layers patched jointly, centered on each item's own critical layer).</p>
+</div>
+
+<h2>Honest scope of these findings</h2>
+<div class="caveat">
+  <b>What this page does <i>not</i> show:</b> a confirmed mechanism for the real, published rubric's
+  effect on gpt-oss-20b. The logit-lens/patching pipeline used a single forced-choice token with no
+  reasoning allowed; under that setup the real rubric produces almost no verdict change (1 flip out
+  of 459 items) &mdash; not enough to patch. The mechanistic findings above (late critical layer, 81%
+  causal suppression) are solid for the researcher-written rubric, which is behaviorally a different,
+  broader intervention. Reproducing this mechanism for the real rubric likely requires letting the
+  model reason before reading its final-token activations &mdash; not yet done.
+</div>
+
+<footer>
+  Team 10 &times; Kensho &mdash; AC297r. Data: BFF-Bench / kensho/VERDICTS (No Free Labels, arXiv:2503.05061).
+  Mech-interp method: Wang et al. 2025 (arXiv:2508.02087). <a href="../../index.html">All dashboards &rarr;</a>
+</footer>
+
+<script id="kappa-data" type="application/json">[{"model": "qwen3.5-4b", "none": 0.487, "rules": 0.56, "rules2": 0.451, "rules2_norule2": 0.474}, {"model": "gpt-oss-20b", "none": 0.667, "rules": 0.637, "rules2": 0.617, "rules2_norule2": 0.666}, {"model": "nemotron3-nano-30b", "none": 0.348, "rules": 0.386, "rules2": 0.309, "rules2_norule2": 0.351}, {"model": "qwen3.5-9b", "none": 0.56, "rules": 0.633, "rules2": 0.604, "rules2_norule2": 0.59}, {"model": "qwen3.6-35b-a3b", "none": 0.532, "rules": 0.633, "rules2": 0.65, "rules2_norule2": 0.621}, {"model": "nemotron3-super-120b", "none": 0.487, "rules": 0.519, "rules2": 0.532, "rules2_norule2": 0.516}, {"model": "gpt-oss-120b", "none": 0.677, "rules": 0.654, "rules2": 0.68, "rules2_norule2": 0.664}, {"model": "deepseek-v3.1", "none": 0.589, "rules": 0.673, "rules2": 0.586, "rules2_norule2": 0.461}]</script>
+<script id="chart-data" type="application/json">{"gpt_oss_20b_rules": {"n_layers": 24, "n_items": 459, "std_mean": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9956], "rules_mean": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9325], "mean_critical": 21.87}, "gpt_oss_20b_rules2": {"n_layers": 24, "n_items": 459, "std_mean": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9978], "rules_mean": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], "mean_critical": 19.75}, "qwen_9b_rules": {"n_layers": 32, "n_items": 459, "std_mean": [1.0, 1.0, 1.0, 1.0, 0.7821, 0.0806, 0.0392, 0.0, 0.8889, 0.9041, 0.0044, 0.0, 0.0153, 0.854, 0.281, 0.0153, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0022, 0.0, 0.0, 0.0, 0.0022, 0.0, 0.0, 0.0109, 0.1176], "rules_mean": [1.0, 1.0, 1.0, 1.0, 1.0, 0.0153, 0.0, 0.0, 0.9978, 1.0, 0.1264, 0.0, 0.0109, 1.0, 0.6013, 0.0305, 0.0, 0.0, 0.0109, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0022, 0.0022, 0.0, 0.0, 0.1699], "mean_critical": 15.12}}</script>
+<script>
+(function(){
+  var kappaTable = JSON.parse(document.getElementById('kappa-data').textContent);
+  var chartData = JSON.parse(document.getElementById('chart-data').textContent);
+
+  // ---------------- kappa table ----------------
+  var conds = ['none','rules','rules2','rules2_norule2'];
+  var labels = {none:'No rubric', rules:'Researcher rubric', rules2:'Real rubric (A.4)', rules2_norule2:'Real, Rule 2 removed'};
+  var html = '<table><tr><th>Judge</th>' + conds.map(function(c){return '<th class="num">'+labels[c]+'</th>';}).join('') + '</tr>';
+  kappaTable.forEach(function(row){
+    var hi = row.model === 'gpt-oss-20b';
+    html += '<tr' + (hi ? ' class="highlight"' : '') + '><td>' + row.model + '</td>' +
+      conds.map(function(c){ return '<td class="num">' + (row[c]==null ? '&ndash;' : row[c].toFixed(3)) + '</td>'; }).join('') + '</tr>';
+  });
+  html += '</table>';
+  document.getElementById('kappa-table').innerHTML = html;
+
+  // ---------------- layer-wise logit lens chart ----------------
+  var W = 760, H = 260, padL = 42, padR = 16, padT = 14, padB = 30;
+  var plotW = W - padL - padR, plotH = H - padT - padB;
+
+  function drawChart(key){
+    var d = chartData[key];
+    var n = d.std_mean.length;
+    function x(i){ return padL + (i/(n-1)) * plotW; }
+    function y(v){ return padT + (1 - v) * plotH; }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="max-width:' + W + 'px" id="svg-el">';
+    // gridlines
+    [0,0.25,0.5,0.75,1].forEach(function(t){
+      var gy = y(t);
+      svg += '<line class="grid-line" x1="'+padL+'" y1="'+gy+'" x2="'+(padL+plotW)+'" y2="'+gy+'" />';
+      svg += '<text x="'+(padL-8)+'" y="'+gy+'" dy="3.5" text-anchor="end">'+t.toFixed(2)+'</text>';
+    });
+    var tickEvery = n > 28 ? 4 : 2;
+    for(var i=0;i<n;i+=tickEvery){
+      svg += '<text x="'+x(i)+'" y="'+(padT+plotH+16)+'" text-anchor="middle">'+i+'</text>';
+    }
+    svg += '<text x="'+(padL+plotW/2)+'" y="'+(H-2)+'" text-anchor="middle">layer</text>';
+    svg += '<text x="12" y="'+(padT+plotH/2)+'" text-anchor="middle" transform="rotate(-90,12,'+(padT+plotH/2)+')">decision score</text>';
+
+    function path(arr, color){
+      var d2 = arr.map(function(v,i){ return (i===0?'M':'L') + x(i).toFixed(1) + ',' + y(v).toFixed(1); }).join(' ');
+      return '<path d="'+d2+'" fill="none" stroke="'+color+'" stroke-width="2" />';
+    }
+    svg += path(d.std_mean, 'var(--ink-soft)');
+    svg += path(d.rules_mean, 'var(--warm)');
+    // critical layer marker
+    var cl = d.mean_critical;
+    var cx = x(cl);
+    svg += '<line x1="'+cx+'" y1="'+padT+'" x2="'+cx+'" y2="'+(padT+plotH)+'" stroke="var(--bad)" stroke-width="1.5" stroke-dasharray="4,3" />';
+    svg += '<text x="'+cx+'" y="'+(padT-2)+'" text-anchor="middle" style="fill:var(--bad)">critical &asymp; '+cl.toFixed(1)+'</text>';
+    // hover dots (invisible wide hit areas)
+    for(var i=0;i<n;i++){
+      svg += '<circle cx="'+x(i)+'" cy="'+y(d.std_mean[i])+'" r="8" fill="transparent" class="hitdot" data-i="'+i+'" data-series="std" />';
+      svg += '<circle cx="'+x(i)+'" cy="'+y(d.rules_mean[i])+'" r="8" fill="transparent" class="hitdot" data-i="'+i+'" data-series="rules" />';
+    }
+    svg += '</svg>';
+    document.getElementById('layer-chart').innerHTML = svg;
+
+    var note = {
+      gpt_oss_20b_rules: 'n=459 items. Mean critical layer 21.9/24 (&asymp;91% depth) &mdash; the rubric\'s effect appears almost at the very last layer.',
+      gpt_oss_20b_rules2: 'n=459 items. Curves nearly overlap &mdash; the real rubric barely shifts the forced-choice decision at any layer (1/459 items flip verdict).',
+      qwen_9b_rules: 'n=459 items. Mean critical layer 15.1/32 (&asymp;47% depth) &mdash; mid-network, much earlier than gpt-oss-20b\'s.'
+    }[key];
+    document.getElementById('layer-note').innerHTML = note;
+
+    var tip = document.getElementById('tooltip');
+    var wrap = document.querySelector('.chart-wrap');
+    document.querySelectorAll('.hitdot').forEach(function(dot){
+      dot.addEventListener('mousemove', function(e){
+        var i = +dot.getAttribute('data-i');
+        var s = dot.getAttribute('data-series');
+        var val = s === 'std' ? d.std_mean[i] : d.rules_mean[i];
+        tip.textContent = 'layer ' + i + ' · ' + (s==='std'?'standard':'rubric') + ' = ' + val.toFixed(3);
+        var r = wrap.getBoundingClientRect();
+        tip.style.left = (e.clientX - r.left + 12) + 'px';
+        tip.style.top = (e.clientY - r.top - 10) + 'px';
+        tip.style.opacity = 1;
+      });
+      dot.addEventListener('mouseleave', function(){ tip.style.opacity = 0; });
+    });
+  }
+  drawChart('gpt_oss_20b_rules');
+  document.getElementById('model-select').addEventListener('change', function(e){ drawChart(e.target.value); });
+
+  // ---------------- patching bars ----------------
+  var patchRows = [
+    {label:'gpt-oss-20b · suppression (window=1, n=5)', val:3/5, color:'var(--accent)'},
+    {label:'gpt-oss-20b · induction (window=1, n=5)', val:1/5, color:'var(--bad)'},
+    {label:'gpt-oss-20b · suppression (window=3, n=21)', val:17/21, color:'var(--accent)'},
+    {label:'gpt-oss-20b · induction (window=3, n=21)', val:1/21, color:'var(--bad)'},
+    {label:'Qwen3.5-9B · suppression (window=1, n=71)', val:30/71, color:'var(--accent)'},
+    {label:'Qwen3.5-9B · induction (window=1, n=71)', val:26/71, color:'var(--bad)'},
+    {label:'Qwen3.5-9B · suppression (window=3, n=71)', val:28/71, color:'var(--accent)'},
+    {label:'Qwen3.5-9B · induction (window=3, n=71)', val:26/71, color:'var(--bad)'}
+  ];
+  var ph = '';
+  patchRows.forEach(function(r){
+    var pct = Math.round(r.val*100);
+    ph += '<div class="barrow"><div class="barlabel">'+r.label+'</div>' +
+      '<div class="bartrack"><div class="barfill" style="width:'+pct+'%;background:'+r.color+'"></div></div>' +
+      '<div class="barval">'+pct+'%</div></div>';
+  });
+  document.getElementById('patch-bars').innerHTML = ph;
+})();
+</script>
+</body>
+</html>
