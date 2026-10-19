@@ -107,29 +107,26 @@ agreement with human labels for most judges, but lowers it for gpt-oss&#8209;20b
 confirm this behaviorally using the benchmark's actual human-annotator rubric (not one we wrote):
 gpt-oss&#8209;20b's &kappa; drops 0.667&rarr;0.617, and removing a single rule &mdash; <i>the
 solution steps must match the reference, not just the final answer</i> &mdash; fully restores it
-(0.666). gpt-oss&#8209;120b is unaffected. We then probe this mechanistically using logit lens and
-causal activation patching, on the real Appendix A.4 rubric itself. The probe needs a forced,
-reasoning-free answer to read internal layers; under that stripped-down setup gpt-oss&#8209;20b's own
-effect nearly disappears (1 of 459 items flip vs. &sect;2's full-reasoning &kappa; drop), showing the
-effect depends on reasoning this method can't capture. Four other judges, however, show large,
-clean flip sets under the same real rubric and the same forced-choice setup &mdash; and a strikingly
-wide range of mechanisms:
-nemotron3-nano-30b has a near-total, almost fully reversible causal pivot at a single 3-layer window
-(99% suppression, 95% induction) &mdash; the strongest result in this study, on the rubric that
-actually produces the behavioral effect. Qwen3.5-4B shows the opposite: a huge, clean one-sided
-behavioral flip (76 items) with <b>zero</b> causal effect at its own critical layer. Two more judges
-(Qwen3.6-35B-A3B, Qwen3.5-9B) land in between, each a moderate, distributed effect (&asymp;50%). A
-secondary, exploratory tab keeps the original researcher-written-rubric results that first found this
-method's signal.
+(0.666). gpt-oss&#8209;120b is unaffected. Probing this mechanistically with logit lens and causal
+activation patching requires a forced, reasoning-free answer to read internal layers, and under that
+setup gpt-oss&#8209;20b's own real-rubric effect nearly disappears (1 of 459 items flip vs. the full
+&kappa; drop above) &mdash; the effect depends on reasoning this method can't capture. So the main
+results below use a researcher-written rubric instead: broader and stricter than the real one, but
+the only lens that produces a usable forced-choice signal in every model tested, including
+gpt-oss&#8209;20b. Under it, gpt-oss&#8209;20b shows a late, near switch-like computation (critical
+layer &asymp;22/24, 81% causal suppression). A secondary tab keeps the real-rubric results, which are
+strong for 4 of the other 5 judges &mdash; including the single strongest causal effect in this whole
+study: nemotron3-nano-30b's near-total, 99%/95% reversible pivot, on the rubric that actually produces
+the behavioral effect.
 </div>
 
-<h2>1. The rubric</h2>
-<p>A rubric was first constructed from scratch to probe this effect, but it turned out to differ
-from the rubric that actually produced BFF-Bench's human labels. Everything on this page uses the
-real one &mdash; Appendix A.4 of Setlur et al., <a href="https://arxiv.org/html/2503.05061v4#A1"
-target="_blank" rel="noopener">&ldquo;No Free Labels&rdquo;</a> &mdash; shown verbatim below. (The
-researcher-written rubric is kept as a secondary, exploratory tab in &sect;3, since it's a
-different, broader intervention.)</p>
+<h2>1. Two rubrics</h2>
+<p>A rubric was first constructed from scratch to probe this effect. It later turned out to differ
+from the rubric that actually produced BFF-Bench's human labels &mdash; Appendix A.4 of Setlur et
+al., <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">&ldquo;No Free
+Labels&rdquo;</a>, shown verbatim below. &sect;2's behavioral confirmation uses the real rubric,
+since that's what actually happened to BFF-Bench's human labels. &sect;4's main mechanistic results
+use the researcher-written rubric instead &mdash; &sect;3 explains why.</p>
 
 <div class="rubric-box">
 <b>Verbatim: Appendix A.4, &ldquo;Annotator Guidelines,&rdquo; No Free Labels</b>
@@ -140,8 +137,20 @@ different, broader intervention.)</p>
 <li>If the model agrees with the reference, all of the intermediate steps agree, but the answer is slightly off due to rounding or performing approximate calculations, it should be marked as &ldquo;Correct&rdquo;.</li>
 <li>If the model agrees with the reference, all of the intermediate steps agree, but it is lacking some amount of information given within the reference, you should make a judgment call as to whether the missing information is crucial to the answer. If you are unsure, lean towards &ldquo;Correct&rdquo; or mark it &ldquo;Unsure&rdquo;.</li>
 </ol>
-<p class="src">Source: <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">arXiv:2503.05061v4, Appendix&nbsp;A.4</a> &mdash; written for human annotators labeling BFF-Bench, reused here verbatim as the LLM judge's grading instructions (<code>rules2</code> in the code, behind every result in &sect;2 and the main tab of &sect;3).</p>
+<p class="src">Source: <a href="https://arxiv.org/html/2503.05061v4#A1" target="_blank" rel="noopener">arXiv:2503.05061v4, Appendix&nbsp;A.4</a> &mdash; written for human annotators labeling BFF-Bench, reused here verbatim as the LLM judge's grading instructions (<code>rules2</code> in the code, behind every result in &sect;2 and the secondary tab of &sect;4).</p>
 </div>
+
+<table>
+<tr><th>Rule</th><th><span class="pill mine">Ours</span></th><th><span class="pill real">Appendix&nbsp;A.4</span></th></tr>
+<tr><td>Final answer</td><td>Match within ~1% tolerance</td><td>Must match the reference</td></tr>
+<tr><td>Method / steps</td><td>Must be the standard method</td><td>Must match the reference's steps &mdash; <i>the only rule shared in spirit</i></td></tr>
+<tr><td>Completeness</td><td>Every part answered, else incorrect</td><td><i>not specified</i></td></tr>
+<tr><td>Rounding</td><td>Still <b>INCORRECT</b> ("no partial credit")</td><td>Still <b>CORRECT</b> &mdash; protected</td></tr>
+<tr><td>Extra info</td><td><i>not specified</i></td><td><b>CORRECT</b> if not obviously wrong</td></tr>
+<tr><td>Missing info</td><td>Counts against completeness</td><td>Judgment call; lean <b>CORRECT</b></td></tr>
+</table>
+<p class="note">Ours is strict on six compounding axes; Appendix A.4 is strict on exactly one
+(process must match) and explicitly lenient everywhere else.</p>
 
 <h2>2. Behavioral result</h2>
 <p>Cohen's &kappa; against human labels, all 8 Tinker-pool judges, BFF-Bench, before and after
@@ -178,19 +187,68 @@ grading with the real Appendix A.4 rubric:</p>
   no effect at all &mdash; this is a 20B-checkpoint property, not a gpt-oss-family one.
 </div>
 
-<h2>3. Mechanistic results</h2>
-<p>Two rubrics were probed mechanistically: the real Appendix A.4 rubric (the one actually behind
-&sect;2's behavioral result) and the researcher-written rubric used to first explore this method.
-The Appendix A.4 tab is the main result; the other is kept as a secondary, exploratory tab since it
-answers a different, broader question than the one &sect;2 actually demonstrates.</p>
+<h2>3. Why the main results use our rubric</h2>
+<p>Every interp number needs a forced-choice probe: no reasoning allowed, an immediate
+CORRECT/INCORRECT read off the logits, so internal layers can be compared between two conditions.
+That's necessary, but it's also a big handicap relative to how these judges normally operate.
+Measuring each model's accuracy with reasoning (the full pipeline, &sect;2's setup) against its
+accuracy without it shows how much each judge actually depends on reasoning to get BFF-Bench right
+at all:</p>
+
+<figure>
+  <div class="fig-panel">
+    <div id="dumbbell-reasoning"></div>
+  </div>
+  <figcaption><b>Figure C.</b> Accuracy with reasoning (navy) vs. without it (gray), sorted by gap
+  size. The gpt-oss family depends on reasoning the most (+0.35, +0.28) &mdash; and is exactly where
+  the real-rubric forced-choice probe found almost nothing to work with. nemotron3-nano-30b and
+  Qwen3.5-4B depend on it least (+0.10, +0.07) &mdash; and gave the method its two clearest results in
+  either direction (nemotron's near-total causal pivot, Qwen3.5-4B's clean-flip-but-zero-causal-effect
+  null). This isn't proof, but it's a plausible, measurable reason gpt-oss&#8209;20b specifically
+  resists the real-rubric probe: a model that leans on reasoning the most is the one most likely to
+  hide its rubric sensitivity from a method that removes reasoning entirely.</figcaption>
+</figure>
+
+<p>The real rubric's only strict rule (steps must match) needs the reasoning Figure C shows some
+judges can't spare in a forced-choice setting: it produces a clean signal for 4 of 5 judges tested,
+but goes silent for gpt-oss&#8209;20b specifically &mdash; the model that started this whole
+investigation. The researcher-written rubric stacks several bluntly-worded, independent failure
+conditions ("no partial credit," exact units, no unsupported assumptions) instead of one rule
+requiring comparison. That bluntness is a double-edged property: it reliably produces a forced-choice
+flip set in every model tested, including gpt-oss&#8209;20b (its only usable flip set anywhere in
+this investigation), because blunt wording can bias an immediate token read directly, without the
+model needing to actually reason. That makes it a more sensitive probing instrument, not a more
+faithful one &mdash; the mechanism it reveals in gpt-oss&#8209;20b may be a real but narrower
+phenomenon (surface-level prompt sensitivity) rather than the real rubric's actual, reasoning-dependent
+effect. It's used as the main lens below for exactly that reason: it's the only rubric that works
+consistently across every model tested, including the one that matters most.</p>
+
+<h3 style="font-size:16px; font-style:normal;">Why these models</h3>
+<table>
+<tr><th>Model</th><th>Reason tested</th></tr>
+<tr><td>gpt-oss-20b</td><td>The model behind the original finding &mdash; the motivating case.</td></tr>
+<tr><td>gpt-oss-120b</td><td>Same family, larger scale &mdash; tests whether the effect is a gpt-oss property or a 20B-checkpoint property (it's the latter).</td></tr>
+<tr><td>Qwen3.5-9B</td><td>First comparison model: &kappa; improves under rubrics (opposite direction from gpt-oss-20b), a clean behavioral contrast.</td></tr>
+<tr><td>Qwen3.5-4B</td><td>Same family as Qwen3.5-9B, smaller scale &mdash; a second within-family scaling contrast.</td></tr>
+<tr><td>nemotron3-nano-30b</td><td>Different architecture family entirely; also shows a real-rubric &kappa; decline like gpt-oss-20b, making it the closest behavioral analogue to test mechanistically.</td></tr>
+<tr><td>Qwen3.6-35B-A3B</td><td>Largest behavioral improvement under the real rubric (&kappa; +0.118) of any judge &mdash; a third Qwen-family data point at a third scale.</td></tr>
+</table>
+<p class="note">Not tested mechanistically: nemotron3-super-120b, deepseek-v3.1 (time budget; both are candidates for a follow-up pass).</p>
+
+<h2>4. Mechanistic results</h2>
+<p>Two rubrics were probed mechanistically. The researcher-written rubric is the main tab below,
+since (per &sect;3) it's the one rubric that works consistently across every model tested, including
+gpt-oss&#8209;20b. The real Appendix A.4 rubric is kept as a secondary tab: it only produces a usable
+forced-choice signal for 4 of 5 judges (not gpt-oss&#8209;20b), but where it does, the results are
+strong &mdash; including the single strongest causal effect in this entire study.</p>
 <div class="tabs">
-  <button class="tab-btn active" data-tab="real">Appendix A.4 rubric</button>
-  <button class="tab-btn" data-tab="ours">Our rubric (exploratory)</button>
+  <button class="tab-btn active" data-tab="ours">Our rubric</button>
+  <button class="tab-btn" data-tab="real">Appendix A.4 rubric (secondary)</button>
 </div>
 
-<div id="tab-real" class="tab-panel"></div>
+<div id="tab-real" class="tab-panel" hidden></div>
 
-<div id="tab-ours" class="tab-panel" hidden>
+<div id="tab-ours" class="tab-panel">
 <h3 style="font-size:16px; font-style:normal; margin-top:4px;">Layer-wise decision tracking</h3>
 <p>At every layer, the hidden state is read through the model's own final norm and unembedding (the
 logit lens) to see which verdict the model would commit to if it stopped there. The source paper's
@@ -264,55 +322,7 @@ Figure 6 in the source paper.</p>
 </figure>
 </div>
 
-<h2>4. Why the method works for some judges and not others</h2>
-<p>Every number in &sect;3 comes from a forced-choice probe: no reasoning allowed, an immediate
-CORRECT/INCORRECT read off the logits. That's necessary to read internal layers, but it's also a
-big handicap relative to how these judges normally operate. Measuring each model's accuracy with
-reasoning (the full pipeline, &sect;2's setup) against its accuracy without it (the forced-choice
-setup) shows how much each judge actually depends on reasoning to get BFF-Bench right at all:</p>
-
-<figure>
-  <div class="fig-panel">
-    <div id="dumbbell-reasoning"></div>
-  </div>
-  <figcaption><b>Figure C.</b> Accuracy with reasoning (navy) vs. without it (gray), sorted by gap
-  size. The gpt-oss family depends on reasoning the most (+0.35, +0.28) &mdash; and is exactly where
-  the real-rubric forced-choice probe found almost nothing to work with. nemotron3-nano-30b and
-  Qwen3.5-4B depend on it least (+0.10, +0.07) &mdash; and gave the method its two clearest results in
-  either direction (nemotron's near-total causal pivot, Qwen3.5-4B's clean-flip-but-zero-causal-effect
-  null). This isn't proof, but it's a plausible, measurable reason gpt-oss&#8209;20b specifically
-  resists this method: a model that leans on reasoning the most is the one most likely to hide its
-  rubric sensitivity from a probe that removes reasoning entirely.</figcaption>
-</figure>
-
-<h3 style="font-size:16px; font-style:normal;">Why the researcher-written rubric, not just the real one</h3>
-<p>If the real rubric is what matters, why run &sect;3's exploratory tab on a different rubric at
-all? Because the real rubric's only strict rule (steps must match) needs the reasoning Figure C shows
-some judges can't spare in a forced-choice setting &mdash; it produces a clean signal for 4 of 5
-judges tested, but goes silent for gpt-oss&#8209;20b specifically. The researcher-written rubric
-stacks several bluntly-worded, independent failure conditions ("no partial credit," exact units, no
-unsupported assumptions) instead of one rule requiring comparison. That bluntness is a double-edged
-property: it reliably produces a forced-choice flip set in every model tested, including
-gpt-oss&#8209;20b (its only usable flip set anywhere on this page), because blunt wording can bias an
-immediate token read directly, without the model needing to actually reason. That makes it a more
-sensitive probing instrument, not a more faithful one &mdash; the mechanism it reveals in
-gpt-oss&#8209;20b may be a real but narrower phenomenon (surface-level prompt sensitivity) rather
-than the real rubric's actual, reasoning-dependent effect. It is useful for exactly one thing the real
-rubric can't do: showing that gpt-oss&#8209;20b <i>can</i> have a late, switch-like internal
-computation at all, under some prompt.</p>
-
-<h3 style="font-size:16px; font-style:normal;">Why these models</h3>
-<table>
-<tr><th>Model</th><th>Reason tested</th></tr>
-<tr><td>gpt-oss-20b</td><td>The model behind the original finding &mdash; the motivating case.</td></tr>
-<tr><td>gpt-oss-120b</td><td>Same family, larger scale &mdash; tests whether the effect is a gpt-oss property or a 20B-checkpoint property (it's the latter).</td></tr>
-<tr><td>Qwen3.5-9B</td><td>First comparison model: &kappa; improves under rubrics (opposite direction from gpt-oss-20b), a clean behavioral contrast.</td></tr>
-<tr><td>Qwen3.5-4B</td><td>Same family as Qwen3.5-9B, smaller scale &mdash; a second within-family scaling contrast.</td></tr>
-<tr><td>nemotron3-nano-30b</td><td>Different architecture family entirely; also shows a real-rubric &kappa; decline like gpt-oss-20b, making it the closest behavioral analogue to test mechanistically.</td></tr>
-<tr><td>Qwen3.6-35B-A3B</td><td>Largest behavioral improvement under the real rubric (&kappa; +0.118) of any judge &mdash; a third Qwen-family data point at a third scale.</td></tr>
-</table>
-<p class="note">Not tested mechanistically: nemotron3-super-120b, deepseek-v3.1 (time budget; both are candidates for a follow-up pass).</p>
-
+<h2>5. Scope of these findings</h2>
 <div class="scope">
 <b>What is still not shown:</b> a mechanism for gpt-oss&#8209;20b's own real-rubric effect
 specifically &mdash; the model that motivated this whole investigation. &sect;2's &kappa; drop
