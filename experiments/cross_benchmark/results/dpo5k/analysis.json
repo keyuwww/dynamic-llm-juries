@@ -1,0 +1,1038 @@
+{
+ "bench": "dpo5k",
+ "fmt": "pair",
+ "n_items": 30,
+ "n_items_all": 30,
+ "n_groups": 15,
+ "base_rate": 0.5,
+ "categories": {
+  "instruction_following": 2,
+  "multi_turn_coherence": 2,
+  "verbosity_calibration": 2,
+  "completeness": 2,
+  "code_review": 2,
+  "consistency": 2,
+  "format_compliance": 2,
+  "citation_quality": 2,
+  "mathematical_reasoning": 2,
+  "factual_accuracy": 2,
+  "bias_detection": 2,
+  "tone_appropriateness": 2,
+  "safety_calibration": 2,
+  "refusal_calibration": 2,
+  "comparative_evaluation": 2
+ },
+ "judges": [
+  {
+   "judge": "deepseek-v3.1",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.0014472920000000002,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "gpt-oss-120b",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.00035911399999999995,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "nemotron3-super-120b",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.000465404,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "qwen3.5-9b",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.0006566695000000002,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "qwen3.6-35b-a3b",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.0005054399999999999,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "gpt-oss-20b",
+   "n": 30,
+   "acc": 0.9666666666666667,
+   "kappa": 0.9333333333333333,
+   "parse": 1.0,
+   "positive": 0.5333333333333333,
+   "cost": 0.00025128,
+   "tinker": true,
+   "consistent": 0.9333333333333333,
+   "first_pick": 0.5333333333333333
+  },
+  {
+   "judge": "qwen3.5-4b",
+   "n": 30,
+   "acc": 0.9666666666666667,
+   "kappa": 0.9333333333333333,
+   "parse": 1.0,
+   "positive": 0.4666666666666667,
+   "cost": 0.0002971815,
+   "tinker": true,
+   "consistent": 0.9333333333333333,
+   "first_pick": 0.4666666666666667
+  },
+  {
+   "judge": "nemotron3-nano-30b",
+   "n": 30,
+   "acc": 0.8,
+   "kappa": 0.6000000000000001,
+   "parse": 1.0,
+   "positive": 0.5666666666666667,
+   "cost": 0.0001565395,
+   "tinker": true,
+   "consistent": 0.6,
+   "first_pick": 0.5666666666666667
+  }
+ ],
+ "human_condition": null,
+ "labels": null,
+ "errors": {
+  "judges": [
+   "gpt-oss-120b",
+   "gpt-oss-20b",
+   "deepseek-v3.1",
+   "qwen3.6-35b-a3b",
+   "qwen3.5-9b",
+   "qwen3.5-4b",
+   "nemotron3-super-120b",
+   "nemotron3-nano-30b"
+  ],
+  "phi": [
+   [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    null,
+    1.0,
+    null,
+    null,
+    null,
+    -0.03448275862068966,
+    null,
+    -0.09284766908852597
+   ],
+   [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    null,
+    -0.03448275862068966,
+    null,
+    null,
+    null,
+    1.0,
+    null,
+    -0.09284766908852597
+   ],
+   [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+   ],
+   [
+    null,
+    -0.09284766908852597,
+    null,
+    null,
+    null,
+    -0.09284766908852597,
+    null,
+    1.0
+   ]
+  ],
+  "phi_mean": -0.07339269893258053,
+  "phi_min": -0.09284766908852597,
+  "phi_max": -0.03448275862068966,
+  "n": 30,
+  "all_right_obs": 0.7333333333333333,
+  "all_right_ind": 0.7385,
+  "many_wrong_obs": 0.0,
+  "many_wrong_ind": 0.0,
+  "hist": {
+   "0": 22,
+   "1": 8
+  },
+  "best": "gpt-oss-120b",
+  "best_errors": 0,
+  "fp": 0,
+  "fn": 0,
+  "fpr": 0.0,
+  "fnr": 0.0,
+  "by_category": [
+   {
+    "category": "bias_detection",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "citation_quality",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "code_review",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "comparative_evaluation",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "completeness",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "consistency",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "factual_accuracy",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "format_compliance",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "instruction_following",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "mathematical_reasoning",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "multi_turn_coherence",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "refusal_calibration",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "safety_calibration",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "tone_appropriateness",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   },
+   {
+    "category": "verbosity_calibration",
+    "n": 2,
+    "errors": 0,
+    "rate": 0.0
+   }
+  ],
+  "by_examinee": [
+   {
+    "examinee": "synthetic",
+    "n": 30,
+    "rate": 0.0
+   }
+  ],
+  "others_wrong": {},
+  "q_with_2plus": 0,
+  "errors_in_2plus": 0,
+  "n_questions": 15
+ },
+ "error_examples": [],
+ "aspects": {
+  "tests": [
+   {
+    "aspect": "knowledge",
+    "levels": [
+     0,
+     1,
+     2
+    ],
+    "items_per_level": {
+     "0": 1,
+     "1": 6,
+     "2": 8
+    },
+    "cells": {
+     "gpt-oss-120b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "gpt-oss-20b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 0.9375
+      }
+     },
+     "deepseek-v3.1": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.6-35b-a3b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-9b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-4b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 0.9375
+      }
+     },
+     "nemotron3-super-120b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-nano-30b": {
+      "0": {
+       "n": 2,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 12,
+       "acc": 0.9166666666666666
+      },
+      "2": {
+       "n": 16,
+       "acc": 0.6875
+      }
+     }
+    },
+    "stat": 1.3776041666666665,
+    "p": 0.3248375812093953,
+    "q": 0.9007996001999001
+   },
+   {
+    "aspect": "reasoning",
+    "levels": [
+     1,
+     2
+    ],
+    "items_per_level": {
+     "1": 5,
+     "2": 10
+    },
+    "cells": {
+     "gpt-oss-120b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 1.0
+      }
+     },
+     "gpt-oss-20b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 0.95
+      }
+     },
+     "deepseek-v3.1": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 1.0
+      }
+     },
+     "qwen3.6-35b-a3b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-9b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-4b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 0.95
+      }
+     },
+     "nemotron3-super-120b": {
+      "1": {
+       "n": 10,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 20,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-nano-30b": {
+      "1": {
+       "n": 10,
+       "acc": 0.9
+      },
+      "2": {
+       "n": 20,
+       "acc": 0.75
+      }
+     }
+    },
+    "stat": 1.13125,
+    "p": 0.5977011494252874,
+    "q": 0.9007996001999001
+   },
+   {
+    "aspect": "constraints",
+    "levels": [
+     1,
+     2
+    ],
+    "items_per_level": {
+     "1": 14,
+     "2": 1
+    },
+    "cells": {
+     "gpt-oss-120b": {
+      "1": {
+       "n": 28,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "gpt-oss-20b": {
+      "1": {
+       "n": 28,
+       "acc": 0.9642857142857143
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "deepseek-v3.1": {
+      "1": {
+       "n": 28,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "qwen3.6-35b-a3b": {
+      "1": {
+       "n": 28,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-9b": {
+      "1": {
+       "n": 28,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-4b": {
+      "1": {
+       "n": 28,
+       "acc": 0.9642857142857143
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-super-120b": {
+      "1": {
+       "n": 28,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-nano-30b": {
+      "1": {
+       "n": 28,
+       "acc": 0.7857142857142857
+      },
+      "2": {
+       "n": 2,
+       "acc": 1.0
+      }
+     }
+    },
+    "stat": 1.0714285714285714,
+    "p": 1.0,
+    "q": 1.0
+   },
+   {
+    "aspect": "open_endedness",
+    "levels": [
+     0,
+     1,
+     2
+    ],
+    "items_per_level": {
+     "0": 3,
+     "1": 4,
+     "2": 8
+    },
+    "cells": {
+     "gpt-oss-120b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "gpt-oss-20b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 0.9375
+      }
+     },
+     "deepseek-v3.1": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.6-35b-a3b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-9b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-4b": {
+      "0": {
+       "n": 6,
+       "acc": 0.8333333333333334
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-super-120b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 8,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 16,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-nano-30b": {
+      "0": {
+       "n": 6,
+       "acc": 0.6666666666666666
+      },
+      "1": {
+       "n": 8,
+       "acc": 0.75
+      },
+      "2": {
+       "n": 16,
+       "acc": 0.875
+      }
+     }
+    },
+    "stat": 1.3255208333333335,
+    "p": 0.4572713643178411,
+    "q": 0.9007996001999001
+   },
+   {
+    "aspect": "context_load",
+    "levels": [
+     0,
+     1,
+     2
+    ],
+    "items_per_level": {
+     "0": 3,
+     "1": 10,
+     "2": 2
+    },
+    "cells": {
+     "gpt-oss-120b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "gpt-oss-20b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 0.75
+      }
+     },
+     "deepseek-v3.1": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "qwen3.6-35b-a3b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-9b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "qwen3.5-4b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 0.95
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-super-120b": {
+      "0": {
+       "n": 6,
+       "acc": 1.0
+      },
+      "1": {
+       "n": 20,
+       "acc": 1.0
+      },
+      "2": {
+       "n": 4,
+       "acc": 1.0
+      }
+     },
+     "nemotron3-nano-30b": {
+      "0": {
+       "n": 6,
+       "acc": 0.8333333333333334
+      },
+      "1": {
+       "n": 20,
+       "acc": 0.8
+      },
+      "2": {
+       "n": 4,
+       "acc": 0.75
+      }
+     }
+    },
+    "stat": 1.2145833333333331,
+    "p": 0.7206396801599201,
+    "q": 0.9007996001999001
+   }
+  ],
+  "distribution": {
+   "knowledge": {
+    "0": 1,
+    "1": 6,
+    "2": 8
+   },
+   "reasoning": {
+    "1": 5,
+    "2": 10
+   },
+   "constraints": {
+    "1": 14,
+    "2": 1
+   },
+   "open_endedness": {
+    "0": 3,
+    "1": 4,
+    "2": 8
+   },
+   "context_load": {
+    "0": 3,
+    "1": 10,
+    "2": 2
+   },
+   "risk": {
+    "0": 15
+   }
+  }
+ },
+ "candidates": null,
+ "length": {
+  "kind": "pair",
+  "rows": [
+   {
+    "judge": "deepseek-v3.1",
+    "n": 30,
+    "pick_longer": 1.0,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 1.0,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "gpt-oss-120b",
+    "n": 30,
+    "pick_longer": 1.0,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 1.0,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "nemotron3-super-120b",
+    "n": 30,
+    "pick_longer": 1.0,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 1.0,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "qwen3.5-9b",
+    "n": 30,
+    "pick_longer": 1.0,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 1.0,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "qwen3.6-35b-a3b",
+    "n": 30,
+    "pick_longer": 1.0,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 1.0,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "gpt-oss-20b",
+    "n": 30,
+    "pick_longer": 0.9666666666666667,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 0.9666666666666667,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "qwen3.5-4b",
+    "n": 30,
+    "pick_longer": 0.9666666666666667,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 0.9666666666666667,
+    "acc_when_shorter_better": null
+   },
+   {
+    "judge": "nemotron3-nano-30b",
+    "n": 30,
+    "pick_longer": 0.8,
+    "human_longer": 1.0,
+    "acc_when_longer_better": 0.8,
+    "acc_when_shorter_better": null
+   }
+  ]
+ },
+ "juries": null,
+ "cost": 0.12416761500000001,
+ "pool": [
+  "gpt-oss-120b",
+  "gpt-oss-20b",
+  "deepseek-v3.1",
+  "qwen3.6-35b-a3b",
+  "qwen3.5-9b",
+  "qwen3.5-4b",
+  "nemotron3-super-120b",
+  "nemotron3-nano-30b"
+ ],
+ "dropped_judges": {}
+}
