@@ -2,6 +2,16 @@
 
 Role-conditioned judge-panel construction on the 8-judge Tinker pool (BFF-Bench, RewardBench-2 Safety), plus the control experiments. Results and discussion: `docs/findings_role_conditioned_panels.md`.
 
+## Summary
+
+- No panel-building method beats a static top-3 majority vote on BFF-Bench (with or without the reference answer); the panel ends up at about the best single judge. Starting from the cheapest judge, or removing the strongest judge, does not change this.
+- The cheap-first cascade (3 cheap judges answer, escalate to the best judge if they disagree) is the only thing that comes close to top-3 at lower cost, and only when judges are given the reference answer.
+- On RewardBench-2 the apparent gain of the eta-hat rule is a calibration effect (judges say "correct" far more often than the labels do), not panel construction.
+
+![Accuracy difference vs static top-3](figures/difference_vs_top3.png)
+
+![Cascade accuracy vs cost](figures/cascade_cost_accuracy.png)
+
 | File | What it does |
 |---|---|
 | `data.py` | loads judgments into verdicts `Z`, gold `Y`, question groups; joins prompt/response text from Hugging Face |
@@ -17,8 +27,9 @@ Role-conditioned judge-panel construction on the 8-judge Tinker pool (BFF-Bench,
 | `cascade.py` | cheap-first cascade simulated from saved verdicts |
 | `cascade_sweep.py` | cascade variants + fresh-seed robustness check |
 | `make_chart.py`, `plot_chart.py` | accuracy comparison figure |
+| `make_readme_plots.py` | regenerates the figures in `figures/` from the numbers in the tables below |
 
-`data_cache/` and `results/` are git-ignored; no raw judgment files are committed.
+`data_cache/` and `results/` are git-ignored; no raw judgment files are committed. `figures/` holds the plots shown below.
 
 ## Cheapest judge first
 
@@ -33,7 +44,9 @@ Suggested in discussion: force the cheapest judge (nemotron3-nano-30b, $0.00029/
 | RewardBench-2 | eta-hat | +5.2 | +5.1 | 3.4 -> 3.5 |
 | RewardBench-2 | majority | +0.4 [-0.7, +1.5] | -0.3 [-0.9, +0.2] | 1.6 -> 3.0 |
 
-Panels get larger and cost more (BFF, no reference, majority: $0.0048 vs $0.0032 per item). The RewardBench-2 eta-hat gain is the calibration effect described in the findings doc, not panel construction. Excluding the strongest judge and trying other benchmarks were done earlier (see the findings doc).
+Panels get larger and cost more (BFF, no reference, majority: $0.0048 vs $0.0032 per item). The RewardBench-2 eta-hat gain is the calibration effect described in the findings doc, not panel construction (see the figure: on RewardBench-2 judges say "correct" on 46% of items but only 25% of labels are correct). Excluding the strongest judge and trying other benchmarks were done earlier (see the findings doc).
+
+![Judge 'correct' rate vs gold 'correct' rate](figures/calibration.png)
 
 ### Cheapest first without gpt-oss-120b
 
@@ -63,6 +76,8 @@ One of six cells reaches parity with top-3, within noise; panels grow from about
 | RewardBench-2 | cascade, 3 cheap judges | 0.843 | 0.0019 | 34% | +0.6 [-0.5, +1.6] | 87% |
 
 With the reference answer, the 3-judge cascade is within noise of top-3 at 47% of its cost, and about the same cost as the best single judge with +1.1 points higher accuracy [-0.3, +2.6]. Without a reference it is within noise of the best single judge (+0.6 [-1.3, +2.4]) but costs 2.6x as much ($0.0018 vs $0.0007), because gpt-oss-120b is already one of the cheapest judges. Two cheap judges are too few.
+
+![Cascade accuracy vs cost](figures/cascade_cost_accuracy.png)
 
 ### Cascade variants and fresh-seed check
 
@@ -94,6 +109,8 @@ BFF, no reference:
 - Without the reference it is consistently about 2 points below top-3. Seed 0 looked closest; the 4-seed mean is -1.9. Not parity.
 - Accepting on 3 of 4 votes matches top-3 with the reference (4-seed mean 0.0, 55% of the cost, 6% escalated) but is -5.3 without a reference and -2.4 on RewardBench-2. It was the best of about six variants tried, so treat it as unreliable.
 - RewardBench-2: the best single judge is already the most accurate and the cheapest; no cascade variant beats it.
+
+![Cascade variants across split seeds](figures/cascade_seeds.png)
 
 ## Status against the suggestions
 
