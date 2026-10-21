@@ -107,7 +107,8 @@ class TinkerChat:
         prompt = self.renderer.build_generation_prompt(messages)
         params = types.SamplingParams(max_tokens=max_tokens, temperature=temperature, stop=self.stop, seed=seed)
         t0 = time.time()
-        res = await self.client.sample_async(prompt=prompt, num_samples=n, sampling_params=params)
+        # 10-minute cap per request: a hung Tinker request otherwise stalls the whole run (seen 10/16)
+        res = await asyncio.wait_for(self.client.sample_async(prompt=prompt, num_samples=n, sampling_params=params), 600)
         n_in = prompt.length() if callable(prompt.length) else prompt.length
         outs = []
         for seq in res.sequences:

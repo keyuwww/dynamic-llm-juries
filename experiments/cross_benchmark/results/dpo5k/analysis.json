@@ -6,21 +6,21 @@
  "n_groups": 15,
  "base_rate": 0.5,
  "categories": {
-  "instruction_following": 2,
-  "multi_turn_coherence": 2,
-  "verbosity_calibration": 2,
-  "completeness": 2,
+  "factual_accuracy": 2,
   "code_review": 2,
+  "verbosity_calibration": 2,
+  "comparative_evaluation": 2,
+  "safety_calibration": 2,
+  "instruction_following": 2,
+  "completeness": 2,
   "consistency": 2,
-  "format_compliance": 2,
   "citation_quality": 2,
   "mathematical_reasoning": 2,
-  "factual_accuracy": 2,
+  "multi_turn_coherence": 2,
   "bias_detection": 2,
   "tone_appropriateness": 2,
-  "safety_calibration": 2,
-  "refusal_calibration": 2,
-  "comparative_evaluation": 2
+  "format_compliance": 2,
+  "refusal_calibration": 2
  },
  "judges": [
   {
@@ -30,19 +30,7 @@
    "kappa": 1.0,
    "parse": 1.0,
    "positive": 0.5,
-   "cost": 0.0014472920000000002,
-   "tinker": true,
-   "consistent": 1.0,
-   "first_pick": 0.5
-  },
-  {
-   "judge": "gpt-oss-120b",
-   "n": 30,
-   "acc": 1.0,
-   "kappa": 1.0,
-   "parse": 1.0,
-   "positive": 0.5,
-   "cost": 0.00035911399999999995,
+   "cost": 0.0015065830000000001,
    "tinker": true,
    "consistent": 1.0,
    "first_pick": 0.5
@@ -54,7 +42,19 @@
    "kappa": 1.0,
    "parse": 1.0,
    "positive": 0.5,
-   "cost": 0.000465404,
+   "cost": 0.000452876,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "qwen3.5-4b",
+   "n": 30,
+   "acc": 1.0,
+   "kappa": 1.0,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.00030863850000000003,
    "tinker": true,
    "consistent": 1.0,
    "first_pick": 0.5
@@ -66,7 +66,7 @@
    "kappa": 1.0,
    "parse": 1.0,
    "positive": 0.5,
-   "cost": 0.0006566695000000002,
+   "cost": 0.0006378500000000001,
    "tinker": true,
    "consistent": 1.0,
    "first_pick": 0.5
@@ -78,7 +78,19 @@
    "kappa": 1.0,
    "parse": 1.0,
    "positive": 0.5,
-   "cost": 0.0005054399999999999,
+   "cost": 0.0005118035,
+   "tinker": true,
+   "consistent": 1.0,
+   "first_pick": 0.5
+  },
+  {
+   "judge": "gpt-oss-120b",
+   "n": 30,
+   "acc": 0.9333333333333333,
+   "kappa": 0.8666666666666667,
+   "parse": 1.0,
+   "positive": 0.5,
+   "cost": 0.000349286,
    "tinker": true,
    "consistent": 1.0,
    "first_pick": 0.5
@@ -86,38 +98,26 @@
   {
    "judge": "gpt-oss-20b",
    "n": 30,
-   "acc": 0.9666666666666667,
-   "kappa": 0.9333333333333333,
-   "parse": 1.0,
-   "positive": 0.5333333333333333,
-   "cost": 0.00025128,
+   "acc": 0.9333333333333333,
+   "kappa": 0.8666666666666667,
+   "parse": 0.9333333333333333,
+   "positive": 0.5,
+   "cost": 0.0002697,
    "tinker": true,
-   "consistent": 0.9333333333333333,
-   "first_pick": 0.5333333333333333
-  },
-  {
-   "judge": "qwen3.5-4b",
-   "n": 30,
-   "acc": 0.9666666666666667,
-   "kappa": 0.9333333333333333,
-   "parse": 1.0,
-   "positive": 0.4666666666666667,
-   "cost": 0.0002971815,
-   "tinker": true,
-   "consistent": 0.9333333333333333,
-   "first_pick": 0.4666666666666667
+   "consistent": 0.8666666666666667,
+   "first_pick": 0.5
   },
   {
    "judge": "nemotron3-nano-30b",
    "n": 30,
-   "acc": 0.8,
-   "kappa": 0.6000000000000001,
+   "acc": 0.8666666666666667,
+   "kappa": 0.7333333333333334,
    "parse": 1.0,
-   "positive": 0.5666666666666667,
-   "cost": 0.0001565395,
+   "positive": 0.43333333333333335,
+   "cost": 0.0001635025,
    "tinker": true,
-   "consistent": 0.6,
-   "first_pick": 0.5666666666666667
+   "consistent": 0.7333333333333333,
+   "first_pick": 0.43333333333333335
   }
  ],
  "human_condition": null,
@@ -135,24 +135,24 @@
   ],
   "phi": [
    [
+    1.0,
+    0.4642857142857144,
     null,
     null,
     null,
     null,
     null,
-    null,
-    null,
-    null
+    -0.10482848367219186
    ],
    [
-    null,
+    0.4642857142857144,
     1.0,
     null,
     null,
     null,
-    -0.03448275862068966,
     null,
-    -0.09284766908852597
+    null,
+    -0.10482848367219187
    ],
    [
     null,
@@ -186,13 +186,13 @@
    ],
    [
     null,
-    -0.03448275862068966,
     null,
     null,
     null,
-    1.0,
     null,
-    -0.09284766908852597
+    null,
+    null,
+    null
    ],
    [
     null,
@@ -205,29 +205,30 @@
     null
    ],
    [
+    -0.10482848367219186,
+    -0.10482848367219187,
     null,
-    -0.09284766908852597,
     null,
     null,
     null,
-    -0.09284766908852597,
     null,
     1.0
    ]
   ],
-  "phi_mean": -0.07339269893258053,
-  "phi_min": -0.09284766908852597,
-  "phi_max": -0.03448275862068966,
+  "phi_mean": 0.08487624898044356,
+  "phi_min": -0.10482848367219187,
+  "phi_max": 0.4642857142857144,
   "n": 30,
-  "all_right_obs": 0.7333333333333333,
-  "all_right_ind": 0.7385,
+  "all_right_obs": 0.7666666666666667,
+  "all_right_ind": 0.7381666666666666,
   "many_wrong_obs": 0.0,
   "many_wrong_ind": 0.0,
   "hist": {
-   "0": 22,
-   "1": 8
+   "0": 23,
+   "1": 6,
+   "2": 1
   },
-  "best": "gpt-oss-120b",
+  "best": "deepseek-v3.1",
   "best_errors": 0,
   "fp": 0,
   "fn": 0,
@@ -364,7 +365,7 @@
       },
       "2": {
        "n": 16,
-       "acc": 1.0
+       "acc": 0.875
       }
      },
      "gpt-oss-20b": {
@@ -378,7 +379,7 @@
       },
       "2": {
        "n": 16,
-       "acc": 0.9375
+       "acc": 0.875
       }
      },
      "deepseek-v3.1": {
@@ -434,7 +435,7 @@
       },
       "2": {
        "n": 16,
-       "acc": 0.9375
+       "acc": 1.0
       }
      },
      "nemotron3-super-120b": {
@@ -458,17 +459,17 @@
       },
       "1": {
        "n": 12,
-       "acc": 0.9166666666666666
+       "acc": 0.8333333333333334
       },
       "2": {
        "n": 16,
-       "acc": 0.6875
+       "acc": 0.875
       }
      }
     },
-    "stat": 1.3776041666666665,
-    "p": 0.3248375812093953,
-    "q": 0.9007996001999001
+    "stat": 0.7604166666666665,
+    "p": 0.7721139430284858,
+    "q": 0.9651424287856072
    },
    {
     "aspect": "reasoning",
@@ -488,7 +489,7 @@
       },
       "2": {
        "n": 20,
-       "acc": 1.0
+       "acc": 0.9
       }
      },
      "gpt-oss-20b": {
@@ -498,7 +499,7 @@
       },
       "2": {
        "n": 20,
-       "acc": 0.95
+       "acc": 0.9
       }
      },
      "deepseek-v3.1": {
@@ -538,7 +539,7 @@
       },
       "2": {
        "n": 20,
-       "acc": 0.95
+       "acc": 1.0
       }
      },
      "nemotron3-super-120b": {
@@ -554,17 +555,17 @@
      "nemotron3-nano-30b": {
       "1": {
        "n": 10,
-       "acc": 0.9
+       "acc": 0.8
       },
       "2": {
        "n": 20,
-       "acc": 0.75
+       "acc": 0.9
       }
      }
     },
-    "stat": 1.13125,
-    "p": 0.5977011494252874,
-    "q": 0.9007996001999001
+    "stat": 0.7250000000000001,
+    "p": 0.6446776611694153,
+    "q": 0.9651424287856072
    },
    {
     "aspect": "constraints",
@@ -580,7 +581,7 @@
      "gpt-oss-120b": {
       "1": {
        "n": 28,
-       "acc": 1.0
+       "acc": 0.9285714285714286
       },
       "2": {
        "n": 2,
@@ -590,7 +591,7 @@
      "gpt-oss-20b": {
       "1": {
        "n": 28,
-       "acc": 0.9642857142857143
+       "acc": 0.9285714285714286
       },
       "2": {
        "n": 2,
@@ -630,7 +631,7 @@
      "qwen3.5-4b": {
       "1": {
        "n": 28,
-       "acc": 0.9642857142857143
+       "acc": 1.0
       },
       "2": {
        "n": 2,
@@ -650,7 +651,7 @@
      "nemotron3-nano-30b": {
       "1": {
        "n": 28,
-       "acc": 0.7857142857142857
+       "acc": 0.8571428571428571
       },
       "2": {
        "n": 2,
@@ -658,7 +659,7 @@
       }
      }
     },
-    "stat": 1.0714285714285714,
+    "stat": 0.5714285714285714,
     "p": 1.0,
     "q": 1.0
    },
@@ -686,7 +687,7 @@
       },
       "2": {
        "n": 16,
-       "acc": 1.0
+       "acc": 0.875
       }
      },
      "gpt-oss-20b": {
@@ -700,7 +701,7 @@
       },
       "2": {
        "n": 16,
-       "acc": 0.9375
+       "acc": 0.875
       }
      },
      "deepseek-v3.1": {
@@ -748,7 +749,7 @@
      "qwen3.5-4b": {
       "0": {
        "n": 6,
-       "acc": 0.8333333333333334
+       "acc": 1.0
       },
       "1": {
        "n": 8,
@@ -776,7 +777,7 @@
      "nemotron3-nano-30b": {
       "0": {
        "n": 6,
-       "acc": 0.6666666666666666
+       "acc": 0.8333333333333334
       },
       "1": {
        "n": 8,
@@ -784,13 +785,13 @@
       },
       "2": {
        "n": 16,
-       "acc": 0.875
+       "acc": 0.9375
       }
      }
     },
-    "stat": 1.3255208333333335,
-    "p": 0.4572713643178411,
-    "q": 0.9007996001999001
+    "stat": 0.9505208333333334,
+    "p": 0.6126936531734133,
+    "q": 0.9651424287856072
    },
    {
     "aspect": "context_load",
@@ -808,7 +809,7 @@
      "gpt-oss-120b": {
       "0": {
        "n": 6,
-       "acc": 1.0
+       "acc": 0.6666666666666666
       },
       "1": {
        "n": 20,
@@ -822,7 +823,7 @@
      "gpt-oss-20b": {
       "0": {
        "n": 6,
-       "acc": 1.0
+       "acc": 0.8333333333333334
       },
       "1": {
        "n": 20,
@@ -882,7 +883,7 @@
       },
       "1": {
        "n": 20,
-       "acc": 0.95
+       "acc": 1.0
       },
       "2": {
        "n": 4,
@@ -910,17 +911,17 @@
       },
       "1": {
        "n": 20,
-       "acc": 0.8
+       "acc": 0.85
       },
       "2": {
        "n": 4,
-       "acc": 0.75
+       "acc": 1.0
       }
      }
     },
-    "stat": 1.2145833333333331,
-    "p": 0.7206396801599201,
-    "q": 0.9007996001999001
+    "stat": 1.2791666666666666,
+    "p": 0.2653673163418291,
+    "q": 0.9651424287856072
    }
   ],
   "distribution": {
@@ -965,7 +966,7 @@
     "acc_when_shorter_better": null
    },
    {
-    "judge": "gpt-oss-120b",
+    "judge": "nemotron3-super-120b",
     "n": 30,
     "pick_longer": 1.0,
     "human_longer": 1.0,
@@ -973,7 +974,7 @@
     "acc_when_shorter_better": null
    },
    {
-    "judge": "nemotron3-super-120b",
+    "judge": "qwen3.5-4b",
     "n": 30,
     "pick_longer": 1.0,
     "human_longer": 1.0,
@@ -997,33 +998,33 @@
     "acc_when_shorter_better": null
    },
    {
-    "judge": "gpt-oss-20b",
+    "judge": "gpt-oss-120b",
     "n": 30,
-    "pick_longer": 0.9666666666666667,
+    "pick_longer": 0.9333333333333333,
     "human_longer": 1.0,
-    "acc_when_longer_better": 0.9666666666666667,
+    "acc_when_longer_better": 0.9333333333333333,
     "acc_when_shorter_better": null
    },
    {
-    "judge": "qwen3.5-4b",
+    "judge": "gpt-oss-20b",
     "n": 30,
-    "pick_longer": 0.9666666666666667,
+    "pick_longer": 0.9333333333333333,
     "human_longer": 1.0,
-    "acc_when_longer_better": 0.9666666666666667,
+    "acc_when_longer_better": 0.9333333333333333,
     "acc_when_shorter_better": null
    },
    {
     "judge": "nemotron3-nano-30b",
     "n": 30,
-    "pick_longer": 0.8,
+    "pick_longer": 0.8666666666666667,
     "human_longer": 1.0,
-    "acc_when_longer_better": 0.8,
+    "acc_when_longer_better": 0.8666666666666667,
     "acc_when_shorter_better": null
    }
   ]
  },
  "juries": null,
- "cost": 0.12416761500000001,
+ "cost": 0.12600718500000002,
  "pool": [
   "gpt-oss-120b",
   "gpt-oss-20b",
