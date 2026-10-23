@@ -2,7 +2,7 @@
 
 Judges: gpt-oss-120b, Qwen3.6-35B-A3B, DeepSeek-V3.1 on Tinker; 5 samples per verdict at T = 0.7; "confident" =
 all 5 samples give the same verdict. Raw outputs: `results/raw/` (see README). Tinker cost so far: $1.28 variant
-generation + $4.77 injected judging + $18.63 real judging = **$24.68**.
+generation + $4.77 injected judging + $18.63 real judging + $0.13 coding = **$24.81**.
 
 ## 1. Injected numeric errors are caught; confident misses are rare
 
@@ -55,17 +55,18 @@ Same 459 unanimous items, with the expert reference.
 
 - Real wrong answers confidently accepted by all three judges: 8 → 0 (most of the 8 are now caught by 2–3
   judges).
-- With the reference, the main remaining confident error is the opposite one: **rejecting correct answers**
-  (5–12% of correct answers rejected with all 5 samples). This matches the earlier finding that judges hold a
-  stricter standard than the experts (rounding, a point the reference makes that the answer leaves out).
+- With the reference, the main remaining confident disagreement is the opposite one: **rejecting answers the
+  experts called correct** (5–12% rejected with all 5 samples). Section 5 shows most of these answers do contain a
+  real error.
 
 ## What this means for the plan
 
 1. "Numeric error injection" is not where confident judge errors live for strong reasoning judges. The confident
    misses are method/premise errors the judge shares with the answer models, which a reference fixes (the
    No Free Labels mechanism).
-2. The open confident-error problem with a reference is **over-strict rejection of correct answers**. That is the
-   next target: code those cases and test whether a probe or a second judge can flag them.
+2. With a reference, the confident rejections of "correct" answers turned out to be mostly real flaws the expert
+   label missed (section 5), so the reference-plus-strong-judge setup has very few confident errors left that are
+   the judge's fault. The next useful step is a human check of the 33 disputed answers.
 3. The local probe (section 4) finds only a small "knows but doesn't say" gap, and only without the reference.
 
 ## 4. Local probe: Qwen3.5-4B, verdict forced without reasoning
@@ -93,3 +94,38 @@ the best layer is chosen on the same folds, so probe numbers are slightly optimi
   number that is still correct).
 - So for injected numeric errors, missed errors are mostly not present-but-unused: when the verdict misses, the
   hidden state mostly misses too.
+
+## 5. The "over-strict" rejections are mostly real flaws the expert label missed
+
+Cases: correct answers (all experts said correct) that a judge rejects with all 5 samples even with the
+reference: 61 (judge × answer) on 33 answers; 11 answers rejected by all three judges; 35 of the 61 on gemma-2-2b
+answers. Script `overstrict.py`, full tables in `overstrict_summary.md`, coder Nemotron-3 Super 120B (not one of the
+three judges; $0.13).
+
+**Blind check.** The coder sees only the question, the reference and the answer (not the judge's reasoning), and
+says whether the conclusion matches the reference and whether there is a substantive error anywhere. Control =
+33 correct answers all three judges accepted.
+
+| Group | Answers | Conclusion fully matches reference | Substantive error found |
+|---|---|---|---|
+| Rejected by ≥ 1 judge | 33 | 6 | 25 (76%) |
+| Rejected by all 3 judges | 11 | 0 | 11 (100%) |
+| Accepted by all 3 (control) | 33 | 24 | 2 (6%) |
+
+Hand-checked 4 (10/23), all with a real error: a put's intrinsic value given as $20 when the stock is above the
+strike; the Pecking Order Theory credited to "Myron S. Miller and Ferris J.文明 (Fama), 1987"; "a negative tax
+liability means he owes the government money"; maintenance margin computed on the purchase value instead of the
+current value. A coder that sees the judge's reasoning agrees with the judge in all 61 cases, so only the blind
+numbers should be used.
+
+What this means:
+1. **Most of the remaining confident "errors" with the reference are label problems, not judge problems.** The
+   expert "correct" label often accepts an answer whose conclusion is roughly right while a step, definition or
+   fact is wrong; the judges grade the whole answer. Judge accuracy against BFF's unanimous labels is therefore
+   understated, and the 11 answers all three judges reject are likely mislabelled.
+2. **Cheap flags would not (and should not) overturn these rejections.** 66% of rejections of "correct" answers
+   are unanimous across the 5 samples. A second judge agrees with gpt-oss-120b's and DeepSeek's rejections 86–94%
+   of the time. Only Qwen3.6's rejections are often idiosyncratic: another judge accepts 43% of them (13 of 30)
+   at a 9% escalation rate.
+3. The coder is an LLM too; a human check of the 33 answers (about 1 hour) should confirm before we report any
+   label-error rate.
