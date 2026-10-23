@@ -21,6 +21,7 @@ Role-conditioned judge-panel construction on the 8-judge Tinker pool (BFF-Bench,
 | `cheapest_first.py` | forces the cheapest judge in as the first panel member, then greedy growth (`--exclude` drops judges from the pool) |
 | `cascade.py` | cheap-first cascade simulated from saved verdicts |
 | `cascade_sweep.py` | cascade variants + fresh-seed robustness check |
+| `embed_mpnet.py`, `embedllm.py` | EmbedLLM replication: all-mpnet-base-v2 question embeddings, the matrix-factorization model, kNN baseline and router evaluation |
 | `make_chart.py`, `plot_chart.py` | accuracy comparison figure |
 | `make_readme_plots.py` | regenerates the figures in `figures/` from the numbers in the tables below |
 
@@ -113,9 +114,36 @@ BFF, no reference:
 
 ![Plot 3: cascade variants across split seeds](figures/cascade_seeds.png)
 
+## EmbedLLM replication (arXiv 2410.02223)
+
+EmbedLLM learns a vector for each model from its history of right and wrong answers, embeds each question with a sentence transformer, and predicts whether a model will answer a question correctly. Here the 8 judges are the "models" and the judged items are the "questions": the target is whether the judge's verdict matches the human label. `python embed_mpnet.py --bff <bff_judgments.jsonl> --rb2 <rb2_judgments.jsonl>` computes the question embeddings, then `python embedllm.py --bff ... --rb2 ... --variant q`.
+
+**Matches the authors' released code** (`mf.py`, `knn.py`, read directly): trainable per-model embedding, frozen question embeddings (all-mpnet-base-v2, prompt text only) projected by a linear layer, Gaussian noise (alpha = 0.05) added to the question embedding in training only, elementwise product into a 2-output linear classifier, cross-entropy loss, Adam with lr 1e-4 and weight decay 1e-5, batch 2048, no shuffling. The router picks the model with the highest logit difference per question (the released router code leaves the training noise on; both are reported in the output). The kNN baseline is one Euclidean majority-vote classifier per model.
+
+**Differs from the paper because of our data:** 8 judges and about 460 items (80 questions) instead of 112 models and 36,054 questions; splits are 80/10/10 like the paper but by question, over 20 random repeats; with so little data the literal setting (embedding dimension 232, 50 epochs) is only about 100 gradient steps and predicts each judge's majority label, so we also report the same recipe with the embedding dimension and number of epochs chosen on the validation split. The paper's benchmark-accuracy prediction, training-size table and probing experiments are not in yet.
+
+Prompt-only text, mean over 20 splits (routing difference vs best single judge and vs static top-3, 95% CI in points):
+
+| Setting | Predict judge right: constant / kNN / EmbedLLM (accuracy) | AUROC kNN / EmbedLLM | Router: EmbedLLM / best single / top-3 | EmbedLLM router vs best single, vs top-3 |
+|---|---|---|---|---|
+| BFF, no reference | 0.765 / 0.757 / 0.761 | 0.59 / 0.58 | 0.831 / 0.856 / 0.869 | -2.6 [-5.6, +0.4], -4.0 [-6.6, -1.4] |
+| BFF, reference given | 0.885 / 0.877 / 0.879 | 0.63 / 0.59 | 0.916 / 0.905 / 0.929 | +1.1 [-0.6, +2.9], -1.2 [-2.8, 0.0] |
+| RewardBench-2 | 0.764 / 0.762 / 0.764 | 0.70 / 0.69 | 0.821 / 0.849 / 0.839 | -2.8 [-4.5, -1.1], -1.8 [-3.4, -0.2] |
+
+**Plot 4: how well EmbedLLM and kNN predict whether a judge is right, on questions they have not seen.** Accuracy is no better than the constant baseline; AUROC is above chance (0.5) but modest.
+
+![Plot 4: EmbedLLM correctness prediction](figures/embedllm_correctness.png)
+
+**Plot 5: routing accuracy of the EmbedLLM router against the baselines.** It beats the paper's weighted-random baseline in all three settings, and is about the same as the best single judge at best.
+
+![Plot 5: EmbedLLM routing vs baselines](figures/embedllm_routing.png)
+
+The prompt+response variant (the response being judged is embedded too) gives results within about a point of these.
+
 ## Status against the suggestions
 
 - Exclude the strongest judge: done (7- and 6-judge pools, and cheapest first on the 7-judge pool). Same null result.
 - Force the weakest/cheapest judge first, then greedy: done (nemotron3-nano-30b, all three settings, both rules). Does not help. On RewardBench-2 nemotron3-nano-30b is the cheapest judge but not the weakest by accuracy; weakest-by-accuracy first was not run.
 - Other benchmarks: RewardBench-2 Safety done. JudgeBench and BBEH need new judge runs.
 - Check the implementation against the paper (joint verdict patterns): not done. The code follows the project spec, not the paper's text.
+- EmbedLLM replication: correctness prediction and routing are done (above); the paper's probing and training-size experiments are not in yet.
