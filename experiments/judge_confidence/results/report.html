@@ -1,0 +1,258 @@
+<title>When Judges Are Confidently Wrong</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Newsreader:opsz,wght@6..72,500&display=swap">
+<style>
+/* Layout: one reading column (~70ch) with wide figure blocks; findings first, method and caveats after. */
+:root{
+  --paper:#fbfcfd; --ink:#16212c; --muted:#5d6b78; --rule:#d9e0e6; --panel:#f1f4f7;
+  --accent:#1f5f8b;
+  --j1:#1f5f8b; --j2:#c07a12; --j3:#7a4fa3;
+  --ok:#2e7d5b; --err:#b4472f; --okband:rgba(46,125,91,.07); --errband:rgba(180,71,47,.06);
+  --font-display:"Newsreader", Georgia, "Times New Roman", serif;
+  --font-body:"IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-data:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0f151b; --ink:#e3e9ee; --muted:#93a1ad; --rule:#26313b; --panel:#17202835;
+  --accent:#6fb0dc; --j1:#6fb0dc; --j2:#e2a443; --j3:#b994dd;
+  --ok:#5cc297; --err:#ec8a6f; --okband:rgba(92,194,151,.08); --errband:rgba(236,138,111,.07); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0f151b; --ink:#e3e9ee; --muted:#93a1ad; --rule:#26313b; --panel:#17202835;
+  --accent:#6fb0dc; --j1:#6fb0dc; --j2:#e2a443; --j3:#b994dd;
+  --ok:#5cc297; --err:#ec8a6f; --okband:rgba(92,194,151,.08); --errband:rgba(236,138,111,.07); color-scheme:dark }
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--font-body)}
+.wrap{max-width:960px;margin:0 auto;padding-block:40px 64px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:grid;gap:40px}
+.col{max-width:70ch}
+h1,h2{font-family:var(--font-display);font-weight:500;text-wrap:balance;letter-spacing:-.01em;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1}
+h2{font-size:1.6rem;line-height:1.2}
+h3{font-size:1rem;margin:0 0 4px}
+p{margin:0}
+.stack{display:grid;gap:14px}
+.eyebrow{font:500 .75rem/1 var(--font-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.15rem;color:var(--ink)}
+.muted{color:var(--muted);fill:var(--muted)}
+.meta{font:.8rem/1.5 var(--font-data);color:var(--muted)}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.key{border-top:2px solid var(--ink);padding-top:10px;display:grid;gap:4px;min-width:0}
+.key b{font:500 1.9rem/1 var(--font-display);font-variant-numeric:tabular-nums}
+.key span{font-size:.9rem;color:var(--muted)}
+figure{margin:0;display:grid;gap:10px}
+.chart{overflow-x:auto}
+.chart svg{width:100%;min-width:560px;height:auto;display:block}
+figcaption{font-size:.9rem;color:var(--muted);max-width:75ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.85rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:2px;display:inline-block}
+.sw.j1{background:var(--j1)} .sw.j2{background:var(--j2)} .sw.j3{background:var(--j3)}
+.sw.b-inj{background:var(--muted)} .sw.b-real{background:var(--err)} .sw.b-ref{background:var(--ok)}
+.sw.b-agree{background:var(--accent)} .sw.b-mixed{background:var(--rule);outline:1px solid var(--muted)}
+.sw.p-target{background:var(--muted)} .sw.p-verdict{background:var(--accent)} .sw.p-end{background:var(--j2)}
+.sw.vl{background:none;border-top:2px dashed var(--ink);height:0;border-radius:0}
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .lbl{font-size:12.5px} svg .strong{font-weight:600}
+svg .tick{font:11px var(--font-data);fill:var(--muted)}
+svg .val{font:11.5px var(--font-data);fill:var(--ink)}
+svg .tag{font:600 10.5px var(--font-data);letter-spacing:.06em;text-transform:uppercase}
+svg .tag.ok{fill:var(--ok)} svg .tag.err{fill:var(--err)}
+svg .grid{stroke:var(--rule);stroke-width:1}
+svg .band-ok{fill:var(--okband)} svg .band-err{fill:var(--errband)}
+svg .rng{stroke:var(--muted);stroke-width:1.5;opacity:.5}
+svg .j1{fill:var(--j1)} svg .j2{fill:var(--j2)} svg .j3{fill:var(--j3)}
+svg .b-inj{fill:var(--muted)} svg .b-real{fill:var(--err)} svg .b-ref{fill:var(--ok)} svg .b-ctrl{fill:var(--ok)}
+svg .b-agree{fill:var(--accent)} svg .b-mixed{fill:var(--rule);stroke:var(--muted);stroke-width:1}
+svg .p-target,svg .p-verdict,svg .p-end{fill:none;stroke-width:2}
+svg .p-target{stroke:var(--muted);stroke-dasharray:4 3} svg .p-verdict{stroke:var(--accent)} svg .p-end{stroke:var(--j2)}
+svg .p-target-dot{fill:var(--muted)} svg .p-verdict-dot{fill:var(--accent)} svg .p-end-dot{fill:var(--j2)}
+svg .verdict-line{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 4}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:6px;min-width:0}
+.card .meta{font-size:.75rem}
+.card q{font-style:italic}
+table{border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums;width:100%}
+th,td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+td.n{text-align:right;font-family:var(--font-data)}
+.tablewrap{overflow-x:auto}
+ul,ol{margin:0;padding-left:1.2em;display:grid;gap:6px}
+code{font:.85em var(--font-data);background:var(--panel);padding:1px 4px;border-radius:3px}
+section{display:grid;gap:18px}
+hr{border:0;border-top:1px solid var(--rule);margin:0}
+</style>
+<main class="wrap">
+
+<header class="stack col">
+  <p class="eyebrow">AC 297r · Dynamic LLM Juries · BFF-Bench · pilot, 10/23</p>
+  <h1>When judges are confidently wrong</h1>
+  <p class="lede">We planted one numeric error at a time into finance answers that experts had approved, and compared
+  how three strong LLM judges handled those errors with how they handled the real mistakes in BFF-Bench. The judges
+  catch planted numbers. They confidently miss real method errors, which the expert reference mostly fixes. And when
+  they confidently reject an answer the experts approved, the answer usually does contain an error.</p>
+  <p class="meta">Judges: gpt-oss-120b, Qwen3.6-35B-A3B, DeepSeek-V3.1 (Tinker) · 5 samples per verdict at T = 0.7 ·
+  "confident" = all 5 samples agree · local probe: Qwen3.5-4B · Tinker cost $24.81</p>
+</header>
+
+<div class="keys">
+  <div class="key"><b>1%–5%</b><span>of planted numeric errors accepted with all 5 samples</span></div>
+  <div class="key"><b>8%–19%</b><span>of real BFF errors accepted with all 5 samples, no reference</span></div>
+  <div class="key"><b>1%–4%</b><span>of real errors accepted with all 5 samples once the judge has the expert reference</span></div>
+  <div class="key"><b>11/11</b><span>expert-approved answers rejected by every judge in which a blind check finds a real error</span></div>
+</div>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">1 · Planted errors</p>
+    <h2>Strong judges catch a single wrong number, even when it is carried through</h2>
+    <p>DeepSeek-V3.1 edited each approved answer in one controlled way, and a script checked that only the intended
+    numbers changed (109 error texts and
+    62 harmless edits passed). A "consistent" error changes one
+    intermediate number and recomputes everything after it, so the answer agrees with itself and the judge has to
+    redo the arithmetic to notice. The Validation Gap paper found small models catch only 3–45% of those. Our
+    reasoning judges catch 81–100%.</p>
+  </div>
+  <figure>
+    <div class="chart"><svg viewBox="0 0 898 316" role="img" aria-labelledby="c1t"><title id="c1t">Share of samples saying INCORRECT for each kind of edited answer, per judge, without and with the reference</title><text class="lbl strong" x="238" y="16">No reference</text><line class="grid" x1="238" x2="238" y1="36" y2="290"/><text class="tick" x="238" y="306" text-anchor="middle">0%</text><line class="grid" x1="313.0" x2="313.0" y1="36" y2="290"/><text class="tick" x="313.0" y="306" text-anchor="middle">25%</text><line class="grid" x1="388.0" x2="388.0" y1="36" y2="290"/><text class="tick" x="388.0" y="306" text-anchor="middle">50%</text><line class="grid" x1="463.0" x2="463.0" y1="36" y2="290"/><text class="tick" x="463.0" y="306" text-anchor="middle">75%</text><line class="grid" x1="538" x2="538" y1="36" y2="290"/><text class="tick" x="538" y="306" text-anchor="middle">100%</text><rect class="band-ok" x="238" y="36" width="300" height="90"/><rect class="band-err" x="238" y="126" width="300" height="150"/><text class="tag ok" x="532" y="49" text-anchor="end">still correct</text><text class="tag err" x="244" y="139">contains an error</text><line class="rng" x1="275.2413793103448" x2="312.48275862068965" y1="51" y2="51"/><circle class="j1" cx="281.4" cy="51" r="5.5"><title>gpt-oss-120b: 14% of samples say INCORRECT</title></circle><circle class="j2" cx="312.5" cy="51" r="5.5"><title>Qwen3.6-35B: 25% of samples say INCORRECT</title></circle><circle class="j3" cx="275.2" cy="51" r="5.5"><title>DeepSeek-V3.1: 12% of samples say INCORRECT</title></circle><line class="rng" x1="277.6" x2="312.4" y1="81" y2="81"/><circle class="j1" cx="277.6" cy="81" r="5.5"><title>gpt-oss-120b: 13% of samples say INCORRECT</title></circle><circle class="j2" cx="312.4" cy="81" r="5.5"><title>Qwen3.6-35B: 25% of samples say INCORRECT</title></circle><circle class="j3" cx="278.8" cy="81" r="5.5"><title>DeepSeek-V3.1: 14% of samples say INCORRECT</title></circle><line class="rng" x1="278.0" x2="328.0" y1="111" y2="111"/><circle class="j1" cx="278.0" cy="111" r="5.5"><title>gpt-oss-120b: 13% of samples say INCORRECT</title></circle><circle class="j2" cx="328.0" cy="111" r="5.5"><title>Qwen3.6-35B: 30% of samples say INCORRECT</title></circle><circle class="j3" cx="283.0" cy="111" r="5.5"><title>DeepSeek-V3.1: 15% of samples say INCORRECT</title></circle><line class="rng" x1="456.0" x2="529.9463087248323" y1="141" y2="141"/><circle class="j1" cx="526.0" cy="141" r="5.5"><title>gpt-oss-120b: 96% of samples say INCORRECT</title></circle><circle class="j2" cx="529.9" cy="141" r="5.5"><title>Qwen3.6-35B: 97% of samples say INCORRECT</title></circle><circle class="j3" cx="456.0" cy="141" r="5.5"><title>DeepSeek-V3.1: 73% of samples say INCORRECT</title></circle><line class="rng" x1="506.0" x2="534.0" y1="171" y2="171"/><circle class="j1" cx="506.0" cy="171" r="5.5"><title>gpt-oss-120b: 89% of samples say INCORRECT</title></circle><circle class="j2" cx="534.0" cy="171" r="5.5"><title>Qwen3.6-35B: 99% of samples say INCORRECT</title></circle><circle class="j3" cx="526.0" cy="171" r="5.5"><title>DeepSeek-V3.1: 96% of samples say INCORRECT</title></circle><line class="rng" x1="523.7142857142858" x2="538.0" y1="201" y2="201"/><circle class="j1" cx="523.7" cy="201" r="5.5"><title>gpt-oss-120b: 95% of samples say INCORRECT</title></circle><circle class="j2" cx="526.6" cy="201" r="5.5"><title>Qwen3.6-35B: 96% of samples say INCORRECT</title></circle><circle class="j3" cx="538.0" cy="201" r="5.5"><title>DeepSeek-V3.1: 100% of samples say INCORRECT</title></circle><line class="rng" x1="495.14285714285717" x2="509.42857142857144" y1="231" y2="231"/><circle class="j1" cx="500.9" cy="231" r="5.5"><title>gpt-oss-120b: 88% of samples say INCORRECT</title></circle><circle class="j2" cx="495.1" cy="231" r="5.5"><title>Qwen3.6-35B: 86% of samples say INCORRECT</title></circle><circle class="j3" cx="509.4" cy="231" r="5.5"><title>DeepSeek-V3.1: 90% of samples say INCORRECT</title></circle><line class="rng" x1="491.6363636363636" x2="529.8181818181818" y1="261" y2="261"/><circle class="j1" cx="491.6" cy="261" r="5.5"><title>gpt-oss-120b: 85% of samples say INCORRECT</title></circle><circle class="j2" cx="529.8" cy="261" r="5.5"><title>Qwen3.6-35B: 97% of samples say INCORRECT</title></circle><circle class="j3" cx="516.2" cy="261" r="5.5"><title>DeepSeek-V3.1: 93% of samples say INCORRECT</title></circle><text class="lbl strong" x="578" y="16">With expert reference</text><line class="grid" x1="578" x2="578" y1="36" y2="290"/><text class="tick" x="578" y="306" text-anchor="middle">0%</text><line class="grid" x1="653.0" x2="653.0" y1="36" y2="290"/><text class="tick" x="653.0" y="306" text-anchor="middle">25%</text><line class="grid" x1="728.0" x2="728.0" y1="36" y2="290"/><text class="tick" x="728.0" y="306" text-anchor="middle">50%</text><line class="grid" x1="803.0" x2="803.0" y1="36" y2="290"/><text class="tick" x="803.0" y="306" text-anchor="middle">75%</text><line class="grid" x1="878" x2="878" y1="36" y2="290"/><text class="tick" x="878" y="306" text-anchor="middle">100%</text><rect class="band-ok" x="578" y="36" width="300" height="90"/><rect class="band-err" x="578" y="126" width="300" height="150"/><text class="tag ok" x="872" y="49" text-anchor="end">still correct</text><text class="tag err" x="584" y="139">contains an error</text><line class="rng" x1="597.6551724137931" x2="623.5172413793103" y1="51" y2="51"/><circle class="j1" cx="602.8" cy="51" r="5.5"><title>gpt-oss-120b: 8% of samples say INCORRECT</title></circle><circle class="j2" cx="623.5" cy="51" r="5.5"><title>Qwen3.6-35B: 15% of samples say INCORRECT</title></circle><circle class="j3" cx="597.7" cy="51" r="5.5"><title>DeepSeek-V3.1: 7% of samples say INCORRECT</title></circle><line class="rng" x1="599.6" x2="630.8" y1="81" y2="81"/><circle class="j1" cx="612.8" cy="81" r="5.5"><title>gpt-oss-120b: 12% of samples say INCORRECT</title></circle><circle class="j2" cx="630.8" cy="81" r="5.5"><title>Qwen3.6-35B: 18% of samples say INCORRECT</title></circle><circle class="j3" cx="599.6" cy="81" r="5.5"><title>DeepSeek-V3.1: 7% of samples say INCORRECT</title></circle><line class="rng" x1="588.0" x2="633.0" y1="111" y2="111"/><circle class="j1" cx="593.0" cy="111" r="5.5"><title>gpt-oss-120b: 5% of samples say INCORRECT</title></circle><circle class="j2" cx="633.0" cy="111" r="5.5"><title>Qwen3.6-35B: 18% of samples say INCORRECT</title></circle><circle class="j3" cx="588.0" cy="111" r="5.5"><title>DeepSeek-V3.1: 3% of samples say INCORRECT</title></circle><line class="rng" x1="834.0" x2="878.0" y1="141" y2="141"/><circle class="j1" cx="878.0" cy="141" r="5.5"><title>gpt-oss-120b: 100% of samples say INCORRECT</title></circle><circle class="j2" cx="870.0" cy="141" r="5.5"><title>Qwen3.6-35B: 97% of samples say INCORRECT</title></circle><circle class="j3" cx="834.0" cy="141" r="5.5"><title>DeepSeek-V3.1: 85% of samples say INCORRECT</title></circle><line class="rng" x1="830.0" x2="858.0" y1="171" y2="171"/><circle class="j1" cx="854.0" cy="171" r="5.5"><title>gpt-oss-120b: 92% of samples say INCORRECT</title></circle><circle class="j2" cx="858.0" cy="171" r="5.5"><title>Qwen3.6-35B: 93% of samples say INCORRECT</title></circle><circle class="j3" cx="830.0" cy="171" r="5.5"><title>DeepSeek-V3.1: 84% of samples say INCORRECT</title></circle><line class="rng" x1="858.0" x2="878.0" y1="201" y2="201"/><circle class="j1" cx="869.4" cy="201" r="5.5"><title>gpt-oss-120b: 97% of samples say INCORRECT</title></circle><circle class="j2" cx="878.0" cy="201" r="5.5"><title>Qwen3.6-35B: 100% of samples say INCORRECT</title></circle><circle class="j3" cx="858.0" cy="201" r="5.5"><title>DeepSeek-V3.1: 93% of samples say INCORRECT</title></circle><line class="rng" x1="820.8571428571429" x2="852.2857142857142" y1="231" y2="231"/><circle class="j1" cx="832.3" cy="231" r="5.5"><title>gpt-oss-120b: 85% of samples say INCORRECT</title></circle><circle class="j2" cx="852.3" cy="231" r="5.5"><title>Qwen3.6-35B: 91% of samples say INCORRECT</title></circle><circle class="j3" cx="820.9" cy="231" r="5.5"><title>DeepSeek-V3.1: 81% of samples say INCORRECT</title></circle><line class="rng" x1="820.7272727272727" x2="858.909090909091" y1="261" y2="261"/><circle class="j1" cx="842.5" cy="261" r="5.5"><title>gpt-oss-120b: 88% of samples say INCORRECT</title></circle><circle class="j2" cx="858.9" cy="261" r="5.5"><title>Qwen3.6-35B: 94% of samples say INCORRECT</title></circle><circle class="j3" cx="820.7" cy="261" r="5.5"><title>DeepSeek-V3.1: 81% of samples say INCORRECT</title></circle><text class="lbl" x="226" y="55" text-anchor="end">Unchanged answer <tspan class="muted">n=58</tspan></text><text class="lbl" x="226" y="85" text-anchor="end">Paraphrased sentence <tspan class="muted">n=50</tspan></text><text class="lbl" x="226" y="115" text-anchor="end">Harmless rounding <tspan class="muted">n=12</tspan></text><text class="lbl" x="226" y="145" text-anchor="end">Final result contradicts working <tspan class="muted">n=30</tspan></text><text class="lbl" x="226" y="175" text-anchor="end">Consistent error, ×10 <tspan class="muted">n=15</tspan></text><text class="lbl" x="226" y="205" text-anchor="end">Consistent error, ~10% <tspan class="muted">n=21</tspan></text><text class="lbl" x="226" y="235" text-anchor="end">Consistent error, leading digit <tspan class="muted">n=21</tspan></text><text class="lbl" x="226" y="265" text-anchor="end">Consistent error, ~1% <tspan class="muted">n=22</tspan></text></svg></div>
+    <div class="legend"><span><i class="sw j1"></i>gpt-oss-120b</span><span><i class="sw j2"></i>Qwen3.6-35B</span><span><i class="sw j3"></i>DeepSeek-V3.1</span></div>
+    <figcaption>Share of the 5 samples that say INCORRECT. In the top three rows the answer is still correct, so any
+    INCORRECT is a false alarm. Size and digit place barely matter; the leading-digit change is the hardest
+    (81–91%). The reference mostly cuts false alarms, not misses.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">2 · Real errors</p>
+    <h2>Real mistakes are confidently missed 4–9 times more often, until the reference arrives</h2>
+    <p>We judged all 960 real BFF answers the same way. Against the 203 answers all experts marked
+    wrong, the judges accept many more with full confidence than they did for planted errors. In 8
+    of them all three judges were fully confident and wrong. Each of those answers has correct arithmetic built on the
+    wrong method or premise. One example is the IFRS impairment question, where three different answer models gave
+    the same $116,550 and every judge agreed. With the expert reference, none of the 203 fool all three
+    judges.</p>
+  </div>
+  <figure>
+    <div class="chart"><svg viewBox="0 0 580 227" role="img" aria-labelledby="c2t"><title id="c2t">Share of wrong answers accepted with all 5 samples, per judge</title><line class="grid" x1="130.0" x2="130.0" y1="10" y2="205"/><text class="tick" x="130.0" y="221" text-anchor="middle">0%</text><line class="grid" x1="206.0" x2="206.0" y1="10" y2="205"/><text class="tick" x="206.0" y="221" text-anchor="middle">5%</text><line class="grid" x1="282.0" x2="282.0" y1="10" y2="205"/><text class="tick" x="282.0" y="221" text-anchor="middle">10%</text><line class="grid" x1="358.0" x2="358.0" y1="10" y2="205"/><text class="tick" x="358.0" y="221" text-anchor="middle">15%</text><line class="grid" x1="434.0" x2="434.0" y1="10" y2="205"/><text class="tick" x="434.0" y="221" text-anchor="middle">20%</text><line class="grid" x1="510.0" x2="510.0" y1="10" y2="205"/><text class="tick" x="510.0" y="221" text-anchor="middle">25%</text><text class="lbl strong" x="120" y="40.5" text-anchor="end">gpt-oss-120b</text><rect class="b-inj" x="130" y="14" width="27.9" height="12" rx="1"><title>Injected errors, no reference: 1.8%</title></rect><text class="val" x="163.9" y="24">2%</text><rect class="b-real" x="130" y="29" width="134.8" height="12" rx="1"><title>Real errors, no reference: 8.9%</title></rect><text class="val" x="270.8" y="39">9%</text><rect class="b-ref" x="130" y="44" width="30.2" height="12" rx="1"><title>Real errors, with reference: 2.0%</title></rect><text class="val" x="166.2" y="54">2%</text><text class="lbl strong" x="120" y="103.5" text-anchor="end">Qwen3.6-35B</text><rect class="b-inj" x="130" y="77" width="13.9" height="12" rx="1"><title>Injected errors, no reference: 0.9%</title></rect><text class="val" x="149.9" y="87">1%</text><rect class="b-real" x="130" y="92" width="127.3" height="12" rx="1"><title>Real errors, no reference: 8.4%</title></rect><text class="val" x="263.3" y="102">8%</text><rect class="b-ref" x="130" y="107" width="60.5" height="12" rx="1"><title>Real errors, with reference: 4.0%</title></rect><text class="val" x="196.5" y="117">4%</text><text class="lbl strong" x="120" y="166.5" text-anchor="end">DeepSeek-V3.1</text><rect class="b-inj" x="130" y="140" width="69.7" height="12" rx="1"><title>Injected errors, no reference: 4.6%</title></rect><text class="val" x="205.7" y="150">5%</text><rect class="b-real" x="130" y="155" width="284.5" height="12" rx="1"><title>Real errors, no reference: 18.7%</title></rect><text class="val" x="420.5" y="165">19%</text><rect class="b-ref" x="130" y="170" width="15.1" height="12" rx="1"><title>Real errors, with reference: 1.0%</title></rect><text class="val" x="151.1" y="180">1%</text></svg></div>
+    <div class="legend"><span><i class="sw b-inj"></i>Planted errors, no reference</span><span><i class="sw b-real"></i>Real errors, no reference</span><span><i class="sw b-ref"></i>Real errors, with reference</span></div>
+    <figcaption>Share of wrong answers that a judge accepted with all 5 samples. Planted: 109
+    error texts per judge. Real: 203 answers all experts marked incorrect.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">3 · Confidence as a signal</p>
+    <h2>Five samples are a usable confidence signal; the verdict-word probability is not</h2>
+    <p>When all five samples agree, the verdict is right 84%–90%
+    of the time. When they split, it is right only 53%–63%. The probability on the verdict word adds nothing on top. After the judge has reasoned, that probability is
+    almost always near 0 or 1. Confidence also does not track human doubt: judges give a unanimous verdict on about
+    78% of the answers the experts split on, about as often as on clear ones.</p>
+  </div>
+  <figure>
+    <div class="chart"><svg viewBox="0 0 600 176" role="img" aria-labelledby="c3t"><title id="c3t">Accuracy on real BFF answers when the 5 samples agree vs when they are mixed</title><line class="grid" x1="130" x2="130" y1="6" y2="156"/><text class="tick" x="130" y="171" text-anchor="middle">0%</text><line class="grid" x1="225.0" x2="225.0" y1="6" y2="156"/><text class="tick" x="225.0" y="171" text-anchor="middle">25%</text><line class="grid" x1="320.0" x2="320.0" y1="6" y2="156"/><text class="tick" x="320.0" y="171" text-anchor="middle">50%</text><line class="grid" x1="415.0" x2="415.0" y1="6" y2="156"/><text class="tick" x="415.0" y="171" text-anchor="middle">75%</text><line class="grid" x1="510" x2="510" y1="6" y2="156"/><text class="tick" x="510" y="171" text-anchor="middle">100%</text><text class="lbl strong" x="120" y="30" text-anchor="end">gpt-oss-120b</text><rect class="b-agree" x="130" y="10" width="342.9" height="13" rx="1"><title>all 5 agree: 90% accurate (n=400)</title></rect><text class="val" x="478.9" y="21">90% <tspan class="muted">n=400</tspan></text><rect class="b-mixed" x="130" y="26" width="219.0" height="13" rx="1"><title>samples mixed: 58% accurate (n=59)</title></rect><text class="val" x="355.0" y="37">58% <tspan class="muted">n=59</tspan></text><text class="lbl strong" x="120" y="78" text-anchor="end">Qwen3.6-35B</text><rect class="b-agree" x="130" y="58" width="322.0" height="13" rx="1"><title>all 5 agree: 85% accurate (n=380)</title></rect><text class="val" x="458.0" y="69">85% <tspan class="muted">n=380</tspan></text><rect class="b-mixed" x="130" y="74" width="202.0" height="13" rx="1"><title>samples mixed: 53% accurate (n=79)</title></rect><text class="val" x="338.0" y="85">53% <tspan class="muted">n=79</tspan></text><text class="lbl strong" x="120" y="126" text-anchor="end">DeepSeek-V3.1</text><rect class="b-agree" x="130" y="106" width="317.3" height="13" rx="1"><title>all 5 agree: 84% accurate (n=388)</title></rect><text class="val" x="453.3" y="117">84% <tspan class="muted">n=388</tspan></text><rect class="b-mixed" x="130" y="122" width="240.8" height="13" rx="1"><title>samples mixed: 63% accurate (n=71)</title></rect><text class="val" x="376.8" y="133">63% <tspan class="muted">n=71</tspan></text></svg></div>
+    <div class="legend"><span><i class="sw b-agree"></i>All 5 samples agree</span><span><i class="sw b-mixed"></i>Samples mixed</span></div>
+    <figcaption>Accuracy against the unanimous expert label on real BFF answers, no reference.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">4 · Inside a small judge</p>
+    <h2>The hidden state knows little more than the verdict says</h2>
+    <p>We ran Qwen3.5-4B locally, forced it to answer without reasoning, and trained linear probes on its hidden
+    states to tell planted-error texts from correct ones. At the verdict position, the probe beats the verdict by
+    +0.04 AUROC without the reference and by
+    +0.00 with it. So when this judge misses a
+    planted error, the error is mostly missing from its hidden state too, not present but unused. That matches
+    <em>Opening LLM Judges</em>, which found no internal advantage on objective-correctness tasks.</p>
+  </div>
+  <figure>
+    <div class="chart"><svg viewBox="0 0 706 258" role="img" aria-labelledby="c4t"><title id="c4t">Probe AUROC by layer at three positions, compared with the judge verdict</title><text class="lbl strong" x="44" y="14">No reference</text><line class="grid" x1="44" x2="344" y1="218.0" y2="218.0"/><text class="tick" x="38" y="222.0" text-anchor="end">0.4</text><line class="grid" x1="44" x2="344" y1="186.3" y2="186.3"/><text class="tick" x="38" y="190.3" text-anchor="end">0.5</text><line class="grid" x1="44" x2="344" y1="154.7" y2="154.7"/><text class="tick" x="38" y="158.7" text-anchor="end">0.6</text><line class="grid" x1="44" x2="344" y1="123.0" y2="123.0"/><text class="tick" x="38" y="127.0" text-anchor="end">0.7</text><line class="grid" x1="44" x2="344" y1="91.3" y2="91.3"/><text class="tick" x="38" y="95.3" text-anchor="end">0.8</text><line class="grid" x1="44" x2="344" y1="59.7" y2="59.7"/><text class="tick" x="38" y="63.7" text-anchor="end">0.9</text><line class="grid" x1="44" x2="344" y1="28.0" y2="28.0"/><text class="tick" x="38" y="32.0" text-anchor="end">1.0</text><text class="tick" x="44.0" y="234" text-anchor="middle">0</text><text class="tick" x="119.0" y="234" text-anchor="middle">8</text><text class="tick" x="194.0" y="234" text-anchor="middle">16</text><text class="tick" x="269.0" y="234" text-anchor="middle">24</text><text class="tick" x="344.0" y="234" text-anchor="middle">32</text><text class="tick" x="194.0" y="250" text-anchor="middle">layer</text><line class="verdict-line" x1="44" x2="344" y1="61.4" y2="61.4"/><text class="val" x="48" y="55.4">verdict alone 0.89</text><polyline class="p-target" points="44.0,123.0 53.4,98.2 62.8,84.3 72.1,73.4 81.5,72.2 90.9,68.2 100.2,62.7 109.6,52.7 119.0,56.8 128.4,51.3 137.8,49.3 147.1,45.1 156.5,46.5 165.9,44.2 175.2,41.8 184.6,37.9 194.0,38.8 203.4,37.5 212.8,37.3 222.1,36.8 231.5,37.0 240.9,37.9 250.2,37.6 259.6,37.3 269.0,36.6 278.4,37.4 287.8,38.0 297.1,39.7 306.5,37.1 315.9,37.4 325.2,37.1 334.6,35.9 344.0,35.7"/><circle class="p-target-dot" cx="344.0" cy="35.7" r="3.5"><title>best layer 32: AUROC 0.976</title></circle><polyline class="p-verdict" points="44.0,203.3 53.4,190.3 62.8,184.3 72.1,175.6 81.5,160.7 90.9,147.9 100.2,147.4 109.6,148.6 119.0,145.8 128.4,145.9 137.8,140.4 147.1,140.6 156.5,136.1 165.9,131.5 175.2,110.0 184.6,98.2 194.0,54.9 203.4,52.3 212.8,51.7 222.1,51.0 231.5,49.1 240.9,49.3 250.2,49.5 259.6,49.7 269.0,49.4 278.4,49.5 287.8,49.8 297.1,50.3 306.5,50.2 315.9,50.2 325.2,50.7 334.6,51.3 344.0,49.5"/><circle class="p-verdict-dot" cx="231.5" cy="49.1" r="3.5"><title>best layer 20: AUROC 0.933</title></circle><polyline class="p-end" points="44.0,195.1 53.4,170.5 62.8,150.4 72.1,138.1 81.5,132.6 90.9,130.2 100.2,127.9 109.6,124.4 119.0,121.0 128.4,119.7 137.8,116.4 147.1,113.2 156.5,114.2 165.9,107.9 175.2,102.0 184.6,89.5 194.0,84.5 203.4,67.3 212.8,62.4 222.1,65.2 231.5,67.7 240.9,69.8 250.2,71.8 259.6,74.4 269.0,76.4 278.4,75.6 287.8,76.3 297.1,78.6 306.5,79.6 315.9,80.0 325.2,82.7 334.6,83.7 344.0,96.1"/><circle class="p-end-dot" cx="212.8" cy="62.4" r="3.5"><title>best layer 18: AUROC 0.891</title></circle><text class="lbl strong" x="390" y="14">With expert reference</text><line class="grid" x1="390" x2="690" y1="218.0" y2="218.0"/><line class="grid" x1="390" x2="690" y1="186.3" y2="186.3"/><line class="grid" x1="390" x2="690" y1="154.7" y2="154.7"/><line class="grid" x1="390" x2="690" y1="123.0" y2="123.0"/><line class="grid" x1="390" x2="690" y1="91.3" y2="91.3"/><line class="grid" x1="390" x2="690" y1="59.7" y2="59.7"/><line class="grid" x1="390" x2="690" y1="28.0" y2="28.0"/><text class="tick" x="390.0" y="234" text-anchor="middle">0</text><text class="tick" x="465.0" y="234" text-anchor="middle">8</text><text class="tick" x="540.0" y="234" text-anchor="middle">16</text><text class="tick" x="615.0" y="234" text-anchor="middle">24</text><text class="tick" x="690.0" y="234" text-anchor="middle">32</text><text class="tick" x="540.0" y="250" text-anchor="middle">layer</text><line class="verdict-line" x1="390" x2="690" y1="46.3" y2="46.3"/><text class="val" x="394" y="40.3">verdict alone 0.94</text><polyline class="p-target" points="390.0,123.0 399.4,98.2 408.8,84.3 418.1,73.4 427.5,72.1 436.9,68.2 446.2,62.7 455.6,52.7 465.0,56.8 474.4,51.3 483.8,49.4 493.1,45.1 502.5,46.5 511.9,44.2 521.2,41.8 530.6,37.9 540.0,38.7 549.4,37.5 558.8,37.2 568.1,36.9 577.5,37.0 586.9,37.9 596.2,37.5 605.6,37.3 615.0,36.5 624.4,37.4 633.8,37.9 643.1,39.7 652.5,37.1 661.9,37.3 671.2,37.0 680.6,35.9 690.0,35.7"/><circle class="p-target-dot" cx="690.0" cy="35.7" r="3.5"><title>best layer 32: AUROC 0.976</title></circle><polyline class="p-verdict" points="390.0,203.3 399.4,191.6 408.8,185.3 418.1,177.6 427.5,164.4 436.9,149.8 446.2,148.1 455.6,150.6 465.0,147.1 474.4,148.6 483.8,143.0 493.1,143.0 502.5,140.6 511.9,136.0 521.2,100.0 530.6,83.0 540.0,50.2 549.4,47.0 558.8,49.4 568.1,48.3 577.5,46.3 586.9,45.9 596.2,46.0 605.6,46.9 615.0,46.8 624.4,46.8 633.8,47.3 643.1,47.1 652.5,47.7 661.9,47.9 671.2,47.6 680.6,49.2 690.0,47.8"/><circle class="p-verdict-dot" cx="586.9" cy="45.9" r="3.5"><title>best layer 21: AUROC 0.943</title></circle><polyline class="p-end" points="390.0,195.1 399.4,170.5 408.8,150.5 418.1,138.0 427.5,132.4 436.9,130.2 446.2,127.6 455.6,124.4 465.0,121.0 474.4,119.9 483.8,116.5 493.1,113.2 502.5,114.1 511.9,108.0 521.2,101.6 530.6,89.5 540.0,84.6 549.4,67.2 558.8,62.3 568.1,65.1 577.5,67.5 586.9,69.9 596.2,71.9 605.6,74.1 615.0,76.3 624.4,75.9 633.8,76.4 643.1,78.9 652.5,79.9 661.9,80.1 671.2,83.1 680.6,83.7 690.0,96.4"/><circle class="p-end-dot" cx="558.8" cy="62.3" r="3.5"><title>best layer 18: AUROC 0.892</title></circle></svg></div>
+    <div class="legend"><span><i class="sw p-verdict"></i>Probe at the verdict</span><span><i class="sw p-end"></i>Probe at the end of the answer</span><span><i class="sw p-target"></i>Probe at the edited number</span><span><i class="sw vl"></i>Verdict alone</span></div>
+    <figcaption>AUROC for "this text contains a planted error" by layer, 5-fold cross-validated by answer
+    (229 texts per panel; the best layer is picked on the same folds, so peaks are slightly optimistic). The
+    edited-number probe is high from layer 0 and also flags harmless rounding edits, so it partly detects "this number
+    was changed", not "this is wrong".</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">5 · Over-strict judges?</p>
+    <h2>Most confident rejections of approved answers point at real flaws</h2>
+    <p>With the reference, the judges' remaining confident disagreement goes the other way. In 61 cases a
+    judge rejected, with all five samples, one of 33 answers that every expert had marked correct.
+    11 of those answers were rejected by all three judges, and 35 of the 61 cases
+    are gemma-2-2b answers. A coder that saw the judge's reasoning agreed with the judge every time, so we ran it
+    blind. It saw only the question, the reference and the answer, and we compared against answers all judges had
+    accepted.</p>
+  </div>
+  <figure>
+    <div class="chart"><svg viewBox="0 0 620 120" role="img" aria-labelledby="c5t"><title id="c5t">Share of expert-approved answers in which a blind coder found a substantive error</title><line class="grid" x1="210" x2="210" y1="4" y2="100"/><text class="tick" x="210" y="115" text-anchor="middle">0%</text><line class="grid" x1="292.5" x2="292.5" y1="4" y2="100"/><text class="tick" x="292.5" y="115" text-anchor="middle">25%</text><line class="grid" x1="375.0" x2="375.0" y1="4" y2="100"/><text class="tick" x="375.0" y="115" text-anchor="middle">50%</text><line class="grid" x1="457.5" x2="457.5" y1="4" y2="100"/><text class="tick" x="457.5" y="115" text-anchor="middle">75%</text><line class="grid" x1="540" x2="540" y1="4" y2="100"/><text class="tick" x="540" y="115" text-anchor="middle">100%</text><text class="lbl" x="200" y="23" text-anchor="end">Rejected by all 3 judges</text><rect class="b-real" x="210" y="10" width="330.0" height="20" rx="1"><title>11 of 11</title></rect><text class="val" x="546.0" y="23">100% <tspan class="muted">11/11</tspan></text><text class="lbl" x="200" y="53" text-anchor="end">Rejected by at least 1 judge</text><rect class="b-real" x="210" y="40" width="250.0" height="20" rx="1"><title>25 of 33</title></rect><text class="val" x="466.0" y="53">76% <tspan class="muted">25/33</tspan></text><text class="lbl" x="200" y="83" text-anchor="end">Accepted by all 3 (control)</text><rect class="b-ctrl" x="210" y="70" width="20.0" height="20" rx="1"><title>2 of 33</title></rect><text class="val" x="236.0" y="83">6% <tspan class="muted">2/33</tspan></text></svg></div>
+    <figcaption>Share of expert-approved answers in which a blind coder (Nemotron-3 Super 120B, not one of the three
+    judges) found a substantive error: a wrong number, formula, definition, fact or reasoning step, ignoring style and
+    minor rounding.</figcaption>
+  </figure>
+  <div class="cards">
+    <div class="card"><p class="meta">5749d391-t2 · qwen2.5-7b · options</p><p>Says the $100-strike put is worth
+    <q>$20 ($120 − $100)</q> with the stock at $120. A put above its strike is worth $0.</p></div>
+    <div class="card"><p class="meta">3449e3bf-t1 · qwen2.5-7b · capital structure</p><p>Credits the Pecking Order
+    Theory to <q>Myron S. Miller and Ferris J.文明 (Fama) in 1987</q>. It is Myers and Majluf.</p></div>
+    <div class="card"><p class="meta">00098cc2-t1 · gemma-2-2b · tax</p><p>Right conclusion, but states that
+    <q>a negative tax liability means he owes the government money</q>.</p></div>
+    <div class="card"><p class="meta">02c3d722-t1 · llama-3.3-70b · margin</p><p>Fixes the maintenance margin at
+    30% of the purchase price, not of the current market value.</p></div>
+  </div>
+  <p class="col">The expert "correct" label often accepts an answer whose conclusion is roughly right while a step,
+  definition or fact is wrong; the judges grade the whole answer. A second judge or a split vote would rarely
+  overturn these rejections, and should not. The one exception is Qwen3.6, where another judge accepts 43% of its
+  rejections at a 9% escalation rate. The four cards were checked by hand; the other answers still need a human
+  check before we quote a label-error rate.</p>
+</section>
+
+<hr>
+
+<section class="col">
+  <h2>What this means</h2>
+  <ol>
+    <li>Planted numeric slips are not where strong reasoning judges fail. Their confident failures without a
+    reference are method and premise errors they share with the answer models.</li>
+    <li>A reference fixes most of those. With a reference, the remaining confident disagreements are mostly cases
+    where the expert label is too lenient, so judge accuracy against BFF's unanimous labels is understated.</li>
+    <li>For a router: escalate when the five samples split, and always supply a reference when one exists. Neither
+    the verdict-word probability nor a small judge's hidden state adds much on objective numeric checks.</li>
+  </ol>
+</section>
+
+<section class="col">
+  <h2>Limits</h2>
+  <ul>
+    <li>Pilot sizes: 15–30 planted errors per type and one answer set (BFF-Bench).</li>
+    <li>The coder is an LLM. The 33 disputed answers need a human check (about 1 hour).</li>
+    <li>The local probe uses a 4B model answering without reasoning, so it shows the mechanism and does not
+    describe gpt-oss-120b.</li>
+    <li>Planted errors were written by DeepSeek-V3.1, which is also one of the judges; its detection rates are not
+    higher than the others'.</li>
+  </ul>
+</section>
+
+<section class="col">
+  <h2>Data and code</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Step</th><th>Script</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td>Planted-error variants and checks</td><td><code>inject.py</code></td><td class="n">$1.28</td></tr>
+      <tr><td>Judging original and edited answers</td><td><code>judge.py</code></td><td class="n">$4.77</td></tr>
+      <tr><td>Judging all 960 real answers (+ reference for 459)</td><td><code>judge_real.py</code></td><td class="n">$18.63</td></tr>
+      <tr><td>Coding the over-strict cases (two passes)</td><td><code>overstrict.py</code></td><td class="n">$0.13</td></tr>
+      <tr><td>Local hidden-state probes</td><td><code>probe_local.py</code></td><td class="n">$0.00</td></tr>
+    </tbody>
+  </table></div>
+  <p class="meta">All in <code>experiments/judge_confidence/</code> on branch <code>wip/cross-benchmark-analysis</code>.
+  Raw outputs (every sample, prompt, verdict-token log-probs and activation) are in <code>results/raw/</code> on
+  the laptop and are not in git. This page is rebuilt by <code>build_report.py</code>.</p>
+</section>
+
+</main>

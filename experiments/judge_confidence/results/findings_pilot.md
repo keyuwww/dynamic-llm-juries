@@ -24,7 +24,7 @@ generation + $4.77 injected judging + $18.63 real judging + $0.13 coding = **$24
 Contrast with the Validation Gap paper (consistent errors caught 3–45% by ≤70B models without reasoning): our
 reasoning judges recompute and catch them.
 
-## 2. Real errors are confidently missed 3–8× more often
+## 2. Real errors are confidently missed 4–9× more often
 
 All 960 real BFF answers, no reference. Gold = unanimous expert label (256 correct, 203 incorrect).
 
