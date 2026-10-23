@@ -1,0 +1,874 @@
+[
+ {
+  "bench": "bffpair",
+  "target": "gpt-oss-120b",
+  "judges": [
+   "deepseek-v3.1",
+   "gpt-oss-120b",
+   "gpt-oss-20b",
+   "nemotron3-nano-30b",
+   "nemotron3-super-120b",
+   "qwen3.5-4b",
+   "qwen3.5-9b",
+   "qwen3.6-35b-a3b"
+  ],
+  "K": 1,
+  "B0": {
+   "parse": 0.9872737556561086,
+   "conf_parse": 0.9874151583710408,
+   "verdict_changed_vs_stored": 0.16154737757171833,
+   "stated_spread": {
+    "mean": 93.98,
+    "std": 7.5,
+    "min": 52.5,
+    "max": 100.0
+   }
+  },
+  "B_a": [
+   {
+    "judge": "deepseek-v3.1",
+    "flip_rate": 0.16515837104072398,
+    "auroc_stated": 0.7072799495118239,
+    "auroc_token": 0.7189553402383339,
+    "auroc_vote": NaN,
+    "stated_if_flip": 87.97945205479452,
+    "stated_if_cons": 94.46612466124661
+   },
+   {
+    "judge": "gpt-oss-120b",
+    "flip_rate": 0.042986425339366516,
+    "auroc_stated": 0.8627597362199826,
+    "auroc_token": 0.6404753017295011,
+    "auroc_vote": NaN,
+    "stated_if_flip": 74.6842105263158,
+    "stated_if_cons": 89.56990521327015
+   },
+   {
+    "judge": "gpt-oss-20b",
+    "flip_rate": 0.10633484162895927,
+    "auroc_stated": 0.751360086183679,
+    "auroc_token": 0.5231349313223809,
+    "auroc_vote": NaN,
+    "stated_if_flip": 84.87234042553192,
+    "stated_if_cons": 92.75255102040816
+   },
+   {
+    "judge": "nemotron3-nano-30b",
+    "flip_rate": 0.4796380090497738,
+    "auroc_stated": 0.5797169811320755,
+    "auroc_token": 0.5623974569319115,
+    "auroc_vote": NaN,
+    "stated_if_flip": 93.97405660377359,
+    "stated_if_cons": 95.12391304347825
+   },
+   {
+    "judge": "nemotron3-super-120b",
+    "flip_rate": 0.2171945701357466,
+    "auroc_stated": 0.6591100674373795,
+    "auroc_token": 0.63436295761079,
+    "auroc_vote": NaN,
+    "stated_if_flip": 87.55208333333333,
+    "stated_if_cons": 93.16811594202899
+   },
+   {
+    "judge": "qwen3.5-4b",
+    "flip_rate": 0.1832579185520362,
+    "auroc_stated": 0.7148524332273178,
+    "auroc_token": 0.6863992339523272,
+    "auroc_vote": NaN,
+    "stated_if_flip": 95.74074074074075,
+    "stated_if_cons": 98.0625
+   },
+   {
+    "judge": "qwen3.5-9b",
+    "flip_rate": 0.18778280542986425,
+    "auroc_stated": 0.7049535188106185,
+    "auroc_token": 0.7092995939188509,
+    "auroc_vote": NaN,
+    "stated_if_flip": 91.9578313253012,
+    "stated_if_cons": 97.03501400560224
+   },
+   {
+    "judge": "qwen3.6-35b-a3b",
+    "flip_rate": 0.09728506787330317,
+    "auroc_stated": 0.7301393017427289,
+    "auroc_token": 0.7640030308328962,
+    "auroc_vote": NaN,
+    "stated_if_flip": 93.8953488372093,
+    "stated_if_cons": 97.78894472361809
+   }
+  ],
+  "B_b": {
+   "n": 349,
+   "errors": 40,
+   "stated": [
+    0.7393203883495145,
+    0.6297098281097626,
+    0.843051265319115
+   ],
+   "token": [
+    0.588794498381877,
+    0.5194995227632152,
+    0.6635594977957737
+   ],
+   "calibration": [
+    {
+     "stated": "0-80",
+     "pairs": 35,
+     "error_rate": 0.22857142857142856
+    },
+    {
+     "stated": "80-90",
+     "pairs": 66,
+     "error_rate": 0.25757575757575757
+    },
+    {
+     "stated": "90-95",
+     "pairs": 68,
+     "error_rate": 0.11764705882352941
+    },
+    {
+     "stated": "95-100",
+     "pairs": 180,
+     "error_rate": 0.03888888888888889
+    }
+   ]
+  },
+  "B_c": {
+   "by": "stated",
+   "rows": [
+    {
+     "confidence": "low",
+     "pairs": 117,
+     "errors": 28,
+     "error_rate": 0.23931623931623933,
+     "auroc_others_flips": 0.5591894060995185,
+     "auroc_pooled": 0.5585874799357945
+    },
+    {
+     "confidence": "mid",
+     "pairs": 116,
+     "errors": 10,
+     "error_rate": 0.08620689655172414,
+     "auroc_others_flips": 0.4877358490566038,
+     "auroc_pooled": 0.4721698113207547
+    },
+    {
+     "confidence": "high",
+     "pairs": 116,
+     "errors": 2,
+     "error_rate": 0.017241379310344827,
+     "auroc_others_flips": 0.5745614035087719,
+     "auroc_pooled": 0.5964912280701754
+    }
+   ]
+  },
+  "B_d": {
+   "others": [
+    0.6349514563106796,
+    0.5153749488124488,
+    0.7346956763330982
+   ],
+   "catch18_others": 0.25,
+   "measures": {
+    "stated": {
+     "own": [
+      0.7393203883495145,
+      0.6250094600387314,
+      0.8438261155947527
+     ],
+     "combined": [
+      0.7268203883495146,
+      0.6428367542950877,
+      0.8099661061547714
+     ],
+     "corr": 0.4054052473070617,
+     "catch18_own": 0.425,
+     "catch18_combined": 0.4
+    },
+    "token": {
+     "own": [
+      0.588794498381877,
+      0.5202149391235604,
+      0.6628606054610209
+     ],
+     "combined": [
+      0.656957928802589,
+      0.5805148486051228,
+      0.7369854159394407
+     ],
+     "corr": 0.20414197643192686,
+     "catch18_own": 0.225,
+     "catch18_combined": 0.275
+    }
+   }
+  },
+  "B_e": {
+   "checkers": [
+    "deepseek-v3.1",
+    "gpt-oss-20b",
+    "nemotron3-nano-30b",
+    "nemotron3-super-120b",
+    "qwen3.5-4b",
+    "qwen3.5-9b",
+    "qwen3.6-35b-a3b"
+   ],
+   "others_low_stated": 0.7423543689320389,
+   "others_flips": 0.6180825242718446
+  }
+ },
+ {
+  "bench": "judgebench",
+  "target": "qwen3.6-35b-a3b",
+  "judges": [
+   "deepseek-v3.1",
+   "gpt-oss-120b",
+   "gpt-oss-20b",
+   "nemotron3-nano-30b",
+   "nemotron3-super-120b",
+   "qwen3.5-4b",
+   "qwen3.5-9b",
+   "qwen3.6-35b-a3b"
+  ],
+  "K": 1,
+  "B0": {
+   "parse": 0.9264285714285714,
+   "conf_parse": 0.9257142857142857,
+   "verdict_changed_vs_stored": 0.19806763285024154,
+   "stated_spread": {
+    "mean": 91.56,
+    "std": 9.34,
+    "min": 50.0,
+    "max": 100.0
+   }
+  },
+  "B_a": [
+   {
+    "judge": "deepseek-v3.1",
+    "flip_rate": 0.20857142857142857,
+    "auroc_stated": 0.6900499480737847,
+    "auroc_token": 0.5969042084961179,
+    "auroc_vote": NaN,
+    "stated_if_flip": 84.76027397260275,
+    "stated_if_cons": 91.63357400722022
+   },
+   {
+    "judge": "gpt-oss-120b",
+    "flip_rate": 0.08857142857142856,
+    "auroc_stated": 0.8332996258469006,
+    "auroc_token": 0.6329760339771463,
+    "auroc_vote": NaN,
+    "stated_if_flip": 73.38709677419355,
+    "stated_if_cons": 87.04501607717042
+   },
+   {
+    "judge": "gpt-oss-20b",
+    "flip_rate": 0.10571428571428572,
+    "auroc_stated": 0.647439772040411,
+    "auroc_token": 0.4463345134271652,
+    "auroc_vote": NaN,
+    "stated_if_flip": 85.82432432432432,
+    "stated_if_cons": 91.5410447761194
+   },
+   {
+    "judge": "nemotron3-nano-30b",
+    "flip_rate": 0.5285714285714286,
+    "auroc_stated": 0.6478624078624079,
+    "auroc_token": 0.5236527436527436,
+    "auroc_vote": NaN,
+    "stated_if_flip": 88.20270270270271,
+    "stated_if_cons": 92.06969696969696
+   },
+   {
+    "judge": "nemotron3-super-120b",
+    "flip_rate": 0.23714285714285716,
+    "auroc_stated": 0.7083389738730201,
+    "auroc_token": 0.6698253688912955,
+    "auroc_vote": NaN,
+    "stated_if_flip": 82.21686746987952,
+    "stated_if_cons": 90.77325581395348
+   },
+   {
+    "judge": "qwen3.5-4b",
+    "flip_rate": 0.1,
+    "auroc_stated": 0.7440362811791383,
+    "auroc_token": 0.6845351473922903,
+    "auroc_vote": NaN,
+    "stated_if_flip": 89.28571428571429,
+    "stated_if_cons": 95.83050847457628
+   },
+   {
+    "judge": "qwen3.5-9b",
+    "flip_rate": 0.08571428571428572,
+    "auroc_stated": 0.7144791666666667,
+    "auroc_token": 0.5780208333333333,
+    "auroc_vote": NaN,
+    "stated_if_flip": 91.33333333333333,
+    "stated_if_cons": 95.72937293729373
+   },
+   {
+    "judge": "qwen3.6-35b-a3b",
+    "flip_rate": 0.045714285714285714,
+    "auroc_stated": 0.8027694610778443,
+    "auroc_token": 0.7097679640718563,
+    "auroc_vote": NaN,
+    "stated_if_flip": 89.0625,
+    "stated_if_cons": 97.06386292834891
+   }
+  ],
+  "B_b": {
+   "n": 263,
+   "errors": 17,
+   "stated": [
+    0.8371592539454806,
+    0.7510730676929337,
+    0.9085790243516761
+   ],
+   "token": [
+    0.8082257293161167,
+    0.7070649221296632,
+    0.8899719810318806
+   ],
+   "calibration": [
+    {
+     "stated": "0-80",
+     "pairs": 3,
+     "error_rate": 0.0
+    },
+    {
+     "stated": "80-90",
+     "pairs": 17,
+     "error_rate": 0.35294117647058826
+    },
+    {
+     "stated": "90-95",
+     "pairs": 25,
+     "error_rate": 0.16
+    },
+    {
+     "stated": "95-100",
+     "pairs": 217,
+     "error_rate": 0.03225806451612903
+    }
+   ]
+  },
+  "B_c": {
+   "by": "stated",
+   "rows": [
+    {
+     "confidence": "low",
+     "pairs": 88,
+     "errors": 15,
+     "error_rate": 0.17045454545454544,
+     "auroc_others_flips": 0.6424657534246575,
+     "auroc_pooled": 0.6374429223744292
+    },
+    {
+     "confidence": "mid",
+     "pairs": 87,
+     "errors": 2,
+     "error_rate": 0.022988505747126436,
+     "auroc_others_flips": 0.6764705882352942,
+     "auroc_pooled": 0.5617647058823529
+    },
+    {
+     "confidence": "high",
+     "pairs": 87,
+     "errors": 0,
+     "error_rate": 0.0,
+     "auroc_others_flips": NaN,
+     "auroc_pooled": NaN
+    }
+   ]
+  },
+  "B_d": {
+   "others": [
+    0.7839550454328073,
+    0.6847735517568851,
+    0.8701764147282263
+   ],
+   "catch18_others": 0.5294117647058824,
+   "measures": {
+    "stated": {
+     "own": [
+      0.8411047345767575,
+      0.7472883168418883,
+      0.9155363706006341
+     ],
+     "combined": [
+      0.8556910569105691,
+      0.7644512825348925,
+      0.9263575268817204
+     ],
+     "corr": 0.5259952724441249,
+     "catch18_own": 0.5882352941176471,
+     "catch18_combined": 0.6470588235294118
+    },
+    "token": {
+     "own": [
+      0.8118125298900047,
+      0.7101811946211172,
+      0.8959796155807727
+     ],
+     "combined": [
+      0.84636537541846,
+      0.7547739996674544,
+      0.9163827592033839
+     ],
+     "corr": 0.42788736722360304,
+     "catch18_own": 0.6470588235294118,
+     "catch18_combined": 0.5882352941176471
+    }
+   }
+  },
+  "B_e": {
+   "checkers": [
+    "deepseek-v3.1",
+    "gpt-oss-120b",
+    "gpt-oss-20b",
+    "nemotron3-nano-30b",
+    "nemotron3-super-120b",
+    "qwen3.5-4b",
+    "qwen3.5-9b"
+   ],
+   "others_low_stated": 0.8347680535628885,
+   "others_flips": 0.7264466762314682
+  }
+ },
+ {
+  "bench": "alpacafarm",
+  "target": "deepseek-v3.1",
+  "judges": [
+   "deepseek-v3.1",
+   "gpt-oss-120b",
+   "gpt-oss-20b",
+   "nemotron3-nano-30b",
+   "nemotron3-super-120b",
+   "qwen3.5-4b",
+   "qwen3.5-9b",
+   "qwen3.6-35b-a3b"
+  ],
+  "K": 1,
+  "B0": {
+   "parse": 0.9977544910179641,
+   "conf_parse": 0.998877245508982,
+   "verdict_changed_vs_stored": 0.16812828864946128,
+   "stated_spread": {
+    "mean": 85.54,
+    "std": 11.4,
+    "min": 0.0,
+    "max": 100.0
+   }
+  },
+  "B_a": [
+   {
+    "judge": "deepseek-v3.1",
+    "flip_rate": 0.18363273453093812,
+    "auroc_stated": 0.7740379504624216,
+    "auroc_token": 0.7757255235462953,
+    "auroc_vote": NaN,
+    "stated_if_flip": 69.55434782608695,
+    "stated_if_cons": 82.24327628361858
+   },
+   {
+    "judge": "gpt-oss-120b",
+    "flip_rate": 0.1656686626746507,
+    "auroc_stated": 0.7934801406583271,
+    "auroc_token": 0.5521992275321381,
+    "auroc_vote": NaN,
+    "stated_if_flip": 70.40361445783132,
+    "stated_if_cons": 81.1630695443645
+   },
+   {
+    "judge": "gpt-oss-20b",
+    "flip_rate": 0.18962075848303392,
+    "auroc_stated": 0.7700414830178895,
+    "auroc_token": 0.49697951775991706,
+    "auroc_vote": NaN,
+    "stated_if_flip": 78.12105263157895,
+    "stated_if_cons": 86.00738916256158
+   },
+   {
+    "judge": "nemotron3-nano-30b",
+    "flip_rate": 0.34530938123752497,
+    "auroc_stated": 0.5933931340758495,
+    "auroc_token": 0.5607817566614972,
+    "auroc_vote": NaN,
+    "stated_if_flip": 90.55202312138728,
+    "stated_if_cons": 92.2515243902439
+   },
+   {
+    "judge": "nemotron3-super-120b",
+    "flip_rate": 0.27345309381237526,
+    "auroc_stated": 0.7210235020453999,
+    "auroc_token": 0.5236825218577044,
+    "auroc_vote": NaN,
+    "stated_if_flip": 78.85036496350365,
+    "stated_if_cons": 85.4532967032967
+   },
+   {
+    "judge": "qwen3.5-4b",
+    "flip_rate": 0.281437125748503,
+    "auroc_stated": 0.6541765169424744,
+    "auroc_token": 0.6603033884948779,
+    "auroc_vote": NaN,
+    "stated_if_flip": 86.46099290780141,
+    "stated_if_cons": 91.72916666666667
+   },
+   {
+    "judge": "qwen3.5-9b",
+    "flip_rate": 0.25149700598802394,
+    "auroc_stated": 0.6808888888888889,
+    "auroc_token": 0.7049100529100529,
+    "auroc_vote": NaN,
+    "stated_if_flip": 78.88888888888889,
+    "stated_if_cons": 86.12666666666667
+   },
+   {
+    "judge": "qwen3.6-35b-a3b",
+    "flip_rate": 0.2315369261477046,
+    "auroc_stated": 0.7130317957904165,
+    "auroc_token": 0.6464621585311241,
+    "auroc_vote": NaN,
+    "stated_if_flip": 85.5603448275862,
+    "stated_if_cons": 92.13766233766233
+   }
+  ],
+  "B_b": {
+   "n": 382,
+   "errors": 79,
+   "stated": [
+    0.6479508710364708,
+    0.582420479609329,
+    0.7168414052841282
+   ],
+   "token": [
+    0.6634498892927267,
+    0.5969074574296231,
+    0.7291042553166424
+   ],
+   "calibration": [
+    {
+     "stated": "0-80",
+     "pairs": 122,
+     "error_rate": 0.3114754098360656
+    },
+    {
+     "stated": "80-90",
+     "pairs": 109,
+     "error_rate": 0.2018348623853211
+    },
+    {
+     "stated": "90-95",
+     "pairs": 74,
+     "error_rate": 0.14864864864864866
+    },
+    {
+     "stated": "95-100",
+     "pairs": 77,
+     "error_rate": 0.1038961038961039
+    }
+   ]
+  },
+  "B_c": {
+   "by": "stated",
+   "rows": [
+    {
+     "confidence": "low",
+     "pairs": 128,
+     "errors": 39,
+     "error_rate": 0.3046875,
+     "auroc_others_flips": 0.5642466148084125,
+     "auroc_pooled": 0.5672716796312302
+    },
+    {
+     "confidence": "mid",
+     "pairs": 127,
+     "errors": 25,
+     "error_rate": 0.1968503937007874,
+     "auroc_others_flips": 0.6252941176470588,
+     "auroc_pooled": 0.6911764705882353
+    },
+    {
+     "confidence": "high",
+     "pairs": 127,
+     "errors": 15,
+     "error_rate": 0.11811023622047244,
+     "auroc_others_flips": 0.6779761904761905,
+     "auroc_pooled": 0.7205357142857143
+    }
+   ]
+  },
+  "B_d": {
+   "others": [
+    0.6914609182437231,
+    0.6291914857484444,
+    0.7531323718786322
+   ],
+   "catch18_others": 0.34177215189873417,
+   "measures": {
+    "stated": {
+     "own": [
+      0.6479508710364708,
+      0.5824795653216395,
+      0.7173206306478366
+     ],
+     "combined": [
+      0.7043906922337804,
+      0.6459155388031158,
+      0.7649012192542732
+     ],
+     "corr": 0.4148905102063466,
+     "catch18_own": 0.31645569620253167,
+     "catch18_combined": 0.2911392405063291
+    },
+    "token": {
+     "own": [
+      0.6634498892927267,
+      0.595572520385796,
+      0.7271213321062685
+     ],
+     "combined": [
+      0.7147721101224046,
+      0.6526649294092183,
+      0.7751565743209486
+     ],
+     "corr": 0.3571532033567519,
+     "catch18_own": 0.3291139240506329,
+     "catch18_combined": 0.3670886075949367
+    }
+   }
+  },
+  "B_e": {
+   "checkers": [
+    "gpt-oss-120b",
+    "gpt-oss-20b",
+    "nemotron3-nano-30b",
+    "nemotron3-super-120b",
+    "qwen3.5-4b",
+    "qwen3.5-9b",
+    "qwen3.6-35b-a3b"
+   ],
+   "others_low_stated": 0.6528804779212098,
+   "others_flips": 0.6542173204662238
+  }
+ },
+ {
+  "bench": "mtbhuman",
+  "target": "gpt-oss-120b",
+  "judges": [
+   "deepseek-v3.1",
+   "gpt-oss-120b",
+   "gpt-oss-20b",
+   "nemotron3-nano-30b",
+   "nemotron3-super-120b",
+   "qwen3.5-4b",
+   "qwen3.5-9b",
+   "qwen3.6-35b-a3b"
+  ],
+  "K": 1,
+  "B0": {
+   "parse": 0.9957165109034268,
+   "conf_parse": 0.9955218068535826,
+   "verdict_changed_vs_stored": 0.12490165224232888,
+   "stated_spread": {
+    "mean": 91.01,
+    "std": 9.21,
+    "min": 50.0,
+    "max": 100.0
+   }
+  },
+  "B_a": [
+   {
+    "judge": "deepseek-v3.1",
+    "flip_rate": 0.11214953271028037,
+    "auroc_stated": 0.7748050682261208,
+    "auroc_token": 0.7310916179337232,
+    "auroc_vote": NaN,
+    "stated_if_flip": 79.79166666666667,
+    "stated_if_cons": 90.92105263157895
+   },
+   {
+    "judge": "gpt-oss-120b",
+    "flip_rate": 0.06853582554517133,
+    "auroc_stated": 0.8474460322286409,
+    "auroc_token": 0.4224688355123138,
+    "auroc_vote": NaN,
+    "stated_if_flip": 73.88636363636364,
+    "stated_if_cons": 86.9866220735786
+   },
+   {
+    "judge": "gpt-oss-20b",
+    "flip_rate": 0.1308411214953271,
+    "auroc_stated": 0.8055555555555556,
+    "auroc_token": 0.5157876770779997,
+    "auroc_vote": NaN,
+    "stated_if_flip": 80.70238095238095,
+    "stated_if_cons": 90.42114695340501
+   },
+   {
+    "judge": "nemotron3-nano-30b",
+    "flip_rate": 0.35202492211838005,
+    "auroc_stated": 0.5608832539142273,
+    "auroc_token": 0.6331900953029271,
+    "auroc_vote": NaN,
+    "stated_if_flip": 91.77433628318585,
+    "stated_if_cons": 93.37259615384616
+   },
+   {
+    "judge": "nemotron3-super-120b",
+    "flip_rate": 0.12461059190031153,
+    "auroc_stated": 0.7619217081850533,
+    "auroc_token": 0.6280249110320285,
+    "auroc_vote": NaN,
+    "stated_if_flip": 81.375,
+    "stated_if_cons": 89.32384341637011
+   },
+   {
+    "judge": "qwen3.5-4b",
+    "flip_rate": 0.1838006230529595,
+    "auroc_stated": 0.6719821451675508,
+    "auroc_token": 0.6925863630482598,
+    "auroc_vote": NaN,
+    "stated_if_flip": 93.6864406779661,
+    "stated_if_cons": 95.08587786259542
+   },
+   {
+    "judge": "qwen3.5-9b",
+    "flip_rate": 0.20249221183800623,
+    "auroc_stated": 0.7948016826923077,
+    "auroc_token": 0.8250600961538461,
+    "auroc_vote": NaN,
+    "stated_if_flip": 86.07692307692308,
+    "stated_if_cons": 93.88671875
+   },
+   {
+    "judge": "qwen3.6-35b-a3b",
+    "flip_rate": 0.09657320872274143,
+    "auroc_stated": 0.7333147942157954,
+    "auroc_token": 0.7314794215795328,
+    "auroc_vote": NaN,
+    "stated_if_flip": 90.16129032258064,
+    "stated_if_cons": 95.44117647058823
+   }
+  ],
+  "B_b": {
+   "n": 282,
+   "errors": 39,
+   "stated": [
+    0.7614223910520207,
+    0.6865912411620482,
+    0.8305250820987423
+   ],
+   "token": [
+    0.6115331856072597,
+    0.5253774758082355,
+    0.7008428047899631
+   ],
+   "calibration": [
+    {
+     "stated": "0-80",
+     "pairs": 59,
+     "error_rate": 0.3050847457627119
+    },
+    {
+     "stated": "80-90",
+     "pairs": 75,
+     "error_rate": 0.18666666666666668
+    },
+    {
+     "stated": "90-95",
+     "pairs": 46,
+     "error_rate": 0.08695652173913043
+    },
+    {
+     "stated": "95-100",
+     "pairs": 102,
+     "error_rate": 0.029411764705882353
+    }
+   ]
+  },
+  "B_c": {
+   "by": "stated",
+   "rows": [
+    {
+     "confidence": "low",
+     "pairs": 94,
+     "errors": 25,
+     "error_rate": 0.26595744680851063,
+     "auroc_others_flips": 0.668695652173913,
+     "auroc_pooled": 0.6985507246376812
+    },
+    {
+     "confidence": "mid",
+     "pairs": 94,
+     "errors": 11,
+     "error_rate": 0.11702127659574468,
+     "auroc_others_flips": 0.5054764512595837,
+     "auroc_pooled": 0.6226725082146769
+    },
+    {
+     "confidence": "high",
+     "pairs": 94,
+     "errors": 3,
+     "error_rate": 0.031914893617021274,
+     "auroc_others_flips": 0.7124542124542125,
+     "auroc_pooled": 0.7728937728937729
+    }
+   ]
+  },
+  "B_d": {
+   "others": [
+    0.7600506489395378,
+    0.6805003776097527,
+    0.8354077605401135
+   ],
+   "catch18_others": 0.5384615384615384,
+   "measures": {
+    "stated": {
+     "own": [
+      0.7614223910520207,
+      0.6919237248408159,
+      0.8330748324102146
+     ],
+     "combined": [
+      0.7980901129049277,
+      0.7290563577125765,
+      0.862600152426714
+     ],
+     "corr": 0.4838165579659732,
+     "catch18_own": 0.4358974358974359,
+     "catch18_combined": 0.48717948717948717
+    },
+    "token": {
+     "own": [
+      0.6115331856072597,
+      0.521473878460064,
+      0.6968024389464262
+     ],
+     "combined": [
+      0.7465970243748021,
+      0.6679975279113026,
+      0.826772638856908
+     ],
+     "corr": 0.13401282664959682,
+     "catch18_own": 0.2564102564102564,
+     "catch18_combined": 0.48717948717948717
+    }
+   }
+  },
+  "B_e": {
+   "checkers": [
+    "deepseek-v3.1",
+    "gpt-oss-20b",
+    "nemotron3-nano-30b",
+    "nemotron3-super-120b",
+    "qwen3.5-4b",
+    "qwen3.5-9b",
+    "qwen3.6-35b-a3b"
+   ],
+   "others_low_stated": 0.7800991875065949,
+   "others_flips": 0.7266012451197637
+  }
+ }
+]
