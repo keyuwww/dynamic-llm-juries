@@ -24,6 +24,7 @@ import torch, torch.nn as nn
 from sklearn.metrics import roc_auc_score
 from sklearn.neighbors import KNeighborsClassifier
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "role_conditioned_panels"))
 from audit import match_matrix                      # the correctness matrix is the TARGET here, by design
 from data import load_judgments
 from evaluate import pooled_bootstrap

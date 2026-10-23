@@ -6,6 +6,7 @@ Run in an env with sentence-transformers. Writes data_cache/mpnet_<bench>_<varia
 import argparse, os, sys
 import numpy as np, pandas as pd
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "role_conditioned_panels"))
 from sentence_transformers import SentenceTransformer
 from data import load_judgments
 
