@@ -40,8 +40,10 @@ def numbers():
     real = load("judgments_real.jsonl")
     N["cost"] = dict(gen=sum(r["cost"] for r in load("generator_calls.jsonl")), inj=sum(r["cost"] for r in inj),
                      real=sum(r["cost"] for r in real),
+                     unsure=sum(r["cost"] for r in load("judgments_unsure.jsonl")),
                      code=sum(r["cost"] for r in load("overstrict_codes.jsonl")) +
-                     sum(r["cost"] for r in load("overstrict_blind.jsonl")))
+                     sum(r["cost"] for r in load("overstrict_blind.jsonl")) +
+                     sum(r["cost"] for r in load("reasoning_codes.jsonl")))
     cm = {}
     for j in JUDGES:
         ie = [r for r in inj if r["judge"] == j and r["condition"] == "none" and r["gold"] == 0 and r["vote_share"] is not None]
@@ -66,7 +68,18 @@ def numbers():
     N["shared"] = {c: collections.Counter(sum(v.values()) for (i, cc), v in by.items() if cc == c and len(v) == 3)
                    for c in ("none", "human")}
     N["n_real"] = collections.Counter(r["gold_unanimous"] for r in real if r["judge"] == JUDGES[0] and r["condition"] == "none")
-    N["probe"] = json.load(open(RES / "probe_qwen3.5-4b.json"))
+    N["probes"] = json.load(open(RES / "probes_modal.json"))
+    N["unsure"] = json.load(open(RES / "unsure.json"))
+    rc = load("reasoning_codes.jsonl")
+    N["reason"] = []
+    for verdict, said in ((1, "CORRECT"), (0, "INCORRECT")):
+        for grp, label in (("confident_error", "missed a real error" if verdict else "rejected an approved answer"),
+                           ("confident_correct", "rightly accepted" if verdict else "rightly rejected")):
+            rs = [r for r in rc if r["group"] == grp and r["verdict"] == verdict]
+            f = lambda k: sum(r.get(k) == "yes" for r in rs) / len(rs)
+            N["reason"].append(dict(said=said, label=label, n=len(rs), recomputed=f("recomputed"), named=f("named_issue"),
+                                    hedged=f("hedged"), definitions=sum(r.get("focus") == "definitions" for r in rs),
+                                    tokens=sorted(r["n_out"] for r in rs)[len(rs) // 2]))
     bl = load("overstrict_blind.jsonl")
     cs = [r for r in real if r["condition"] == "human" and r["gold_unanimous"] == 1 and r["vote_share"] == 0]
     nby = collections.Counter(r["item_id"] for r in cs)
@@ -229,6 +242,93 @@ def blind_chart(N):
     return "".join(s)
 
 
+MODELS = [("qwen3.5-0.8b", "Qwen3.5-0.8B"), ("jeff", "Jeff (0.8B, decision-trained)"), ("qwen3.5-4b", "Qwen3.5-4B"),
+          ("qwen3.5-9b", "Qwen3.5-9B")]
+
+
+def probe_dumbbell(N):
+    """Per small model: its own verdict's AUROC (hollow) vs the best hidden-state probe (filled), two panels."""
+    panels = [("Planted errors, at the verdict", lambda r: (r["planted_none"]["planted@verdict"]["verdict_auroc"],
+                                                              r["planted_none"]["planted@verdict"]["best_auroc"])),
+              ("Real errors, within answer model", lambda r: (r["real_none"]["error@verdict"]["within_model_verdict"],
+                                                               r["real_none"]["error@verdict"]["within_model_probe"]))]
+    left, top, rowh, pw, gap = 210, 34, 34, 250, 40
+    W, H = left + 2 * pw + gap + 20, top + rowh * len(MODELS) + 28
+    lo, hi = 0.5, 1.0
+    s = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-labelledby="c6t"><title id="c6t">AUROC of each small model\'s '
+         f'own verdict vs a probe on its hidden state</title>']
+    for p, (name, get) in enumerate(panels):
+        x0 = left + p * (pw + gap)
+        X = lambda a: x0 + (a - lo) / (hi - lo) * pw
+        s.append(f'<text class="lbl strong" x="{x0}" y="14">{name}</text>')
+        for t in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+            s.append(f'<line class="grid" x1="{X(t):.1f}" x2="{X(t):.1f}" y1="{top - 10}" y2="{H - 24}"/>')
+            s.append(f'<text class="tick" x="{X(t):.1f}" y="{H - 8}" text-anchor="middle">{t:.1f}</text>')
+        for i, (m, _) in enumerate(MODELS):
+            v, pr = get(N["probes"][m])
+            y = top + i * rowh + 6
+            s.append(f'<line class="rng" x1="{X(v):.1f}" x2="{X(pr):.1f}" y1="{y}" y2="{y}" style="opacity:.9"/>')
+            s.append(f'<circle class="dot-verdict" cx="{X(v):.1f}" cy="{y}" r="5.5"><title>verdict {v:.2f}</title></circle>')
+            s.append(f'<circle class="dot-probe" cx="{X(pr):.1f}" cy="{y}" r="5.5"><title>probe {pr:.2f}</title></circle>')
+            s.append(f'<text class="val" x="{X(pr) + 9:.1f}" y="{y + 4}">+{pr - v:.2f}</text>')
+    for i, (_, nm) in enumerate(MODELS):
+        s.append(f'<text class="lbl" x="{left - 12}" y="{top + i * rowh + 10}" text-anchor="end">{E(nm)}</text>')
+    s.append("</svg>")
+    return "".join(s)
+
+
+def unsure_chart(N):
+    """Per judge and condition: share of the judge's errors caught by UNSURE vs by a split vote."""
+    rows = [(k, v) for k, v in N["unsure"].items()]
+    left, top, bh, gh, pw = 250, 10, 15, 14, 330
+    W, H = left + pw + 110, top + len(rows) * (2 * bh + gh) + 22
+    s = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-labelledby="c7t"><title id="c7t">Share of each judge\'s errors '
+         f'flagged by an UNSURE option vs by a split vote</title>']
+    for t in (0, 0.25, 0.5):
+        x = left + t / 0.5 * pw
+        s.append(f'<line class="grid" x1="{x}" x2="{x}" y1="{top - 4}" y2="{H - 20}"/>')
+        s.append(f'<text class="tick" x="{x}" y="{H - 5}" text-anchor="middle">{int(t * 100)}%</text>')
+    y = top
+    for k, v in rows:
+        j, c = k.split("|")
+        s.append(f'<text class="lbl" x="{left - 10}" y="{y + bh + 3}" text-anchor="end">{JNAME[j]} · '
+                 f'{"no reference" if c == "none" else "reference"}</text>')
+        for key, esc, cls, lab in (("caught_split", "esc_split", "b-agree", "split vote"),
+                                   ("caught_unsure", "esc_unsure", "b-real", "UNSURE")):
+            val = v[key]
+            s.append(f'<rect class="{cls}" x="{left}" y="{y}" width="{max(1.5, val / 0.5 * pw):.1f}" height="{bh - 3}" rx="1">'
+                     f'<title>{lab}: catches {pct(val)} of {v["n_errors"]} errors, escalates {pct(v[esc])}</title></rect>')
+            s.append(f'<text class="val" x="{left + max(1.5, val / 0.5 * pw) + 6:.1f}" y="{y + bh - 4}">{pct(val)} '
+                     f'<tspan class="muted">at {pct(v[esc])} escalated</tspan></text>')
+            y += bh
+        y += gh
+    s.append("</svg>")
+    return "".join(s)
+
+
+def blindspot_table(N):
+    rows = []
+    for m, nm in MODELS:
+        r = N["probes"][m]["real_none"]
+        cells = "".join(f'<td class="n">{r[f"flags_missed_by_{j}"]["probe_auroc"]:.2f} / '
+                        f'{r[f"flags_missed_by_{j}"]["verdict_auroc"]:.2f}</td>' for j in JUDGES)
+        rows.append(f"<tr><td>{E(nm)}</td>{cells}</tr>")
+    head = "".join(f"<th>{JNAME[j]}'s misses (n={N['probes']['qwen3.5-4b']['real_none'][f'flags_missed_by_{j}']['n_missed']})</th>"
+                   for j in JUDGES)
+    return (f'<div class="tablewrap"><table><thead><tr><th>Small model (probe / verdict)</th>{head}</tr></thead>'
+            f'<tbody>{"".join(rows)}</tbody></table></div>')
+
+
+def reasoning_table(N):
+    rows = "".join(f'<tr><td>{r["said"]}</td><td>{E(r["label"])}</td><td class="n">{r["n"]}</td>'
+                   f'<td class="n">{pct(r["recomputed"])}</td><td class="n">{pct(r["named"])}</td>'
+                   f'<td class="n">{pct(r["hedged"])}</td><td class="n">{r["definitions"]}</td><td class="n">{r["tokens"]}</td></tr>'
+                   for r in N["reason"])
+    return ('<div class="tablewrap"><table><thead><tr><th>Judge said</th><th>Group</th><th>n</th><th>Recomputed</th>'
+            '<th>Named an issue</th><th>Hedged</th><th>Argued definitions</th><th>Median tokens</th></tr></thead>'
+            f'<tbody>{rows}</tbody></table></div>')
+
+
 def legend(items):
     return '<div class="legend">' + "".join(f'<span><i class="sw {c}"></i>{E(t)}</span>' for c, t in items) + "</div>"
 
@@ -299,6 +399,8 @@ svg .b-agree{fill:var(--accent)} svg .b-mixed{fill:var(--rule);stroke:var(--mute
 svg .p-target,svg .p-verdict,svg .p-end{fill:none;stroke-width:2}
 svg .p-target{stroke:var(--muted);stroke-dasharray:4 3} svg .p-verdict{stroke:var(--accent)} svg .p-end{stroke:var(--j2)}
 svg .p-target-dot{fill:var(--muted)} svg .p-verdict-dot{fill:var(--accent)} svg .p-end-dot{fill:var(--j2)}
+svg .dot-verdict{fill:var(--paper);stroke:var(--muted);stroke-width:2} svg .dot-probe{fill:var(--accent)}
+.sw.dot-verdict{background:var(--paper);border:2px solid var(--muted);border-radius:50%} .sw.dot-probe{background:var(--accent);border-radius:50%}
 svg .verdict-line{stroke:var(--ink);stroke-width:1.5;stroke-dasharray:6 4}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
 .card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:6px;min-width:0}
@@ -322,7 +424,12 @@ def page(N):
     g, q, d = c["gpt-oss-120b"], c["qwen3.6-35b-a3b"], c["deepseek-v3.1"]
     st = N["strict"]
     bl = {n: (k, e, m) for n, k, e, m in N["blind"]}
-    pn, ph_ = N["probe"]["none"], N["probe"]["human"]
+    P = N["probes"]
+    ratios = [x["real_none"] / x["inj"] for x in c.values() if x["inj"] > 0]
+    v2 = [N["pilot"][(j, cc, t)]["detect"] for j in JUDGES[:2] for cc in ("none", "human") for t in ("V2-10", "V2-x10", "V2-lead", "V2-1")]
+    gap_small = [P[m]["planted_none"]["planted@verdict"]["best_auroc"] - P[m]["planted_none"]["planted@verdict"]["verdict_auroc"] for m in ("qwen3.5-0.8b", "jeff")]
+    gap_big = [P[m]["planted_none"]["planted@verdict"]["best_auroc"] - P[m]["planted_none"]["planted@verdict"]["verdict_auroc"] for m in ("qwen3.5-4b", "qwen3.5-9b")]
+    unsure_use = max(v["use_any"] for v in N["unsure"].values())
     inj_lo, inj_hi = min(x["inj"] for x in c.values()), max(x["inj"] for x in c.values())
     real_lo, real_hi = min(x["real_none"] for x in c.values()), max(x["real_none"] for x in c.values())
     ref_lo, ref_hi = min(x["real_human"] for x in c.values()), max(x["real_human"] for x in c.values())
@@ -334,21 +441,24 @@ def page(N):
 <main class="wrap">
 
 <header class="stack col">
-  <p class="eyebrow">AC 297r · Dynamic LLM Juries · BFF-Bench · pilot, 10/23</p>
+  <p class="eyebrow">AC 297r · Dynamic LLM Juries · BFF-Bench · 10/23</p>
   <h1>When judges are confidently wrong</h1>
   <p class="lede">We planted one numeric error at a time into finance answers that experts had approved, and compared
   how three strong LLM judges handled those errors with how they handled the real mistakes in BFF-Bench. The judges
   catch planted numbers. They confidently miss real method errors, which the expert reference mostly fixes. And when
-  they confidently reject an answer the experts approved, the answer usually does contain an error.</p>
+  they confidently reject an answer the experts approved, the answer usually does contain an error. Offered an
+  UNSURE option, they never use it. Small open judges hold more in their hidden states than their verdicts say, but
+  they share the big judges' blind spots.</p>
   <p class="meta">Judges: gpt-oss-120b, Qwen3.6-35B-A3B, DeepSeek-V3.1 (Tinker) · 5 samples per verdict at T = 0.7 ·
-  "confident" = all 5 samples agree · local probe: Qwen3.5-4B · Tinker cost ${total:.2f}</p>
+  "confident" = all 5 samples agree · hidden-state probes: Qwen3.5-0.8B, Jeff, Qwen3.5-4B, Qwen3.5-9B (Modal) ·
+  Tinker cost ${total:.2f}</p>
 </header>
 
 <div class="keys">
   <div class="key"><b>{pct(inj_lo)}–{pct(inj_hi)}</b><span>of planted numeric errors accepted with all 5 samples</span></div>
   <div class="key"><b>{pct(real_lo)}–{pct(real_hi)}</b><span>of real BFF errors accepted with all 5 samples, no reference</span></div>
   <div class="key"><b>{pct(ref_lo)}–{pct(ref_hi)}</b><span>of real errors accepted with all 5 samples once the judge has the expert reference</span></div>
-  <div class="key"><b>{bl['Rejected by all 3 judges'][1]}/{bl['Rejected by all 3 judges'][0]}</b><span>expert-approved answers rejected by every judge in which a blind check finds a real error</span></div>
+  <div class="key"><b>{pct(unsure_use, 1)}</b><span>most often any judge chose UNSURE when offered it</span></div>
 </div>
 
 <section>
@@ -360,21 +470,22 @@ def page(N):
     {N['n_texts']['C1'] + N['n_texts']['C2']} harmless edits passed). A "consistent" error changes one
     intermediate number and recomputes everything after it, so the answer agrees with itself and the judge has to
     redo the arithmetic to notice. The Validation Gap paper found small models catch only 3–45% of those. Our
-    reasoning judges catch 81–100%.</p>
+    reasoning judges catch {pct(min(v2))}–{pct(max(v2))} (gpt-oss-120b and Qwen3.6).</p>
   </div>
   <figure>
     <div class="chart">{dot_plot(N)}</div>
     {legend([('j1', 'gpt-oss-120b'), ('j2', 'Qwen3.6-35B'), ('j3', 'DeepSeek-V3.1')])}
     <figcaption>Share of the 5 samples that say INCORRECT. In the top three rows the answer is still correct, so any
-    INCORRECT is a false alarm. Size and digit place barely matter; the leading-digit change is the hardest
-    (81–91%). The reference mostly cuts false alarms, not misses.</figcaption>
+    INCORRECT is a false alarm. Only the smallest change (about 1%) is noticeably harder. The reference mostly cuts
+    false alarms, not misses. DeepSeek-V3.1 covers only the pilot subset (58 answers): Tinker stopped serving it during
+    the run.</figcaption>
   </figure>
 </section>
 
 <section>
   <div class="stack col">
     <p class="eyebrow">2 · Real errors</p>
-    <h2>Real mistakes are confidently missed 4–9 times more often, until the reference arrives</h2>
+    <h2>Real mistakes are confidently missed {min(ratios):.0f}–{max(ratios):.0f} times more often, until the reference arrives</h2>
     <p>We judged all 960 real BFF answers the same way. Against the {N['n_real'][0]} answers all experts marked
     wrong, the judges accept many more with full confidence than they did for planted errors. In {N['shared']['none'][3]}
     of them all three judges were fully confident and wrong. Each of those answers has correct arithmetic built on the
@@ -408,28 +519,62 @@ def page(N):
 
 <section>
   <div class="stack col">
-    <p class="eyebrow">4 · Inside a small judge</p>
-    <h2>The hidden state knows little more than the verdict says</h2>
-    <p>We ran Qwen3.5-4B locally, forced it to answer without reasoning, and trained linear probes on its hidden
-    states to tell planted-error texts from correct ones. At the verdict position, the probe beats the verdict by
-    {pn['positions']['verdict']['best_auroc'] - pn['verdict_auroc']:+.2f} AUROC without the reference and by
-    {ph_['positions']['verdict']['best_auroc'] - ph_['verdict_auroc']:+.2f} with it. So when this judge misses a
-    planted error, the error is mostly missing from its hidden state too, not present but unused. That matches
-    <em>Opening LLM Judges</em>, which found no internal advantage on objective-correctness tasks.</p>
+    <p class="eyebrow">4 · Asking the judge to say when it is unsure</p>
+    <h2>Offered an UNSURE option, the judges do not use it</h2>
+    <p>We repeated the real-answer runs with one change to the prompt: the judge could answer
+    <code>VERDICT: UNSURE</code> when it could not tell and the answer should go to a human expert. The judges chose
+    it on at most {pct(unsure_use, 1)} of answers, including the ones they then got wrong. The five-sample vote does
+    the job instead: sending split votes to a human catches a third or more of each judge's errors.</p>
   </div>
   <figure>
-    <div class="chart">{probe_chart(N)}</div>
-    {legend([('p-verdict', 'Probe at the verdict'), ('p-end', 'Probe at the end of the answer'), ('p-target', 'Probe at the edited number'), ('vl', 'Verdict alone')])}
-    <figcaption>AUROC for "this text contains a planted error" by layer, 5-fold cross-validated by answer
-    ({pn['n']} texts per panel; the best layer is picked on the same folds, so peaks are slightly optimistic). The
-    edited-number probe is high from layer 0 and also flags harmless rounding edits, so it partly detects "this number
-    was changed", not "this is wrong".</figcaption>
+    <div class="chart">{unsure_chart(N)}</div>
+    {legend([('b-agree', 'Split vote among 5 samples'), ('b-real', 'Judge chose UNSURE')])}
+    <figcaption>Share of each judge's errors (binary prompt, majority verdict vs unanimous expert label) that each rule
+    would send to a human, and the share of all answers it sends. DeepSeek-V3.1 has no reference run and covers 511
+    of 960 answers.</figcaption>
   </figure>
 </section>
 
 <section>
   <div class="stack col">
-    <p class="eyebrow">5 · Over-strict judges?</p>
+    <p class="eyebrow">5 · What the reasoning looks like</p>
+    <h2>A confident miss reads exactly like a confident correct verdict</h2>
+    <p>A blind coder described the reasoning behind confident errors and an equal number of confident correct
+    verdicts. When the judge wrongly accepts an answer, its reasoning recomputes just as often and hedges just as
+    rarely as when it is right. Its wrong rejections recompute less and argue about definitions.</p>
+  </div>
+  {reasoning_table(N)}
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">6 · Inside small judges</p>
+    <h2>Small judges know more than they say, and the gap shrinks as they grow</h2>
+    <p>Four open models saw the same grading prompt with the verdict forced right away, and a linear probe read
+    their hidden state at the verdict position. In the 0.8B models the probe beats the model's own verdict by
+    {min(gap_small):+.2f} to {max(gap_small):+.2f} AUROC on planted errors; at 4B–9B by only {min(gap_big):+.2f} to
+    {max(gap_big):+.2f}. Jeff, the decision-trained 0.8B model, says no more than its base but holds a slightly cleaner
+    signal. A probe for "the experts disagreed on this answer" stays near 0.6 in every model.</p>
+  </div>
+  <figure>
+    <div class="chart">{probe_dumbbell(N)}</div>
+    {legend([('dot-verdict', "The model's own verdict"), ('dot-probe', 'Probe on its hidden state')])}
+    <figcaption>AUROC, 5-fold cross-validated with folds grouped by question; best layer picked on the same folds, so
+    probe values are slightly optimistic. Real errors are scored within each answer model, because the answer model
+    and length alone already reach 0.80. Planted errors compare each edited answer with the same answer unedited, and
+    harmless paraphrases stay at 0.48.</figcaption>
+  </figure>
+  <div class="stack col">
+    <h3>Do small models see what the big judges miss?</h3>
+    <p>No. Among answers all experts marked wrong, the ones a strong judge confidently accepted are also the ones
+    small models find most convincing. Values above 0.5 mean the small model shares the blind spot.</p>
+  </div>
+  {blindspot_table(N)}
+</section>
+
+<section>
+  <div class="stack col">
+    <p class="eyebrow">7 · Over-strict judges?</p>
     <h2>Most confident rejections of approved answers point at real flaws</h2>
     <p>With the reference, the judges' remaining confident disagreement goes the other way. In {st['cases']} cases a
     judge rejected, with all five samples, one of {st['answers']} answers that every expert had marked correct.
@@ -470,18 +615,21 @@ def page(N):
     reference are method and premise errors they share with the answer models.</li>
     <li>A reference fixes most of those. With a reference, the remaining confident disagreements are mostly cases
     where the expert label is too lenient, so judge accuracy against BFF's unanimous labels is understated.</li>
-    <li>For a router: escalate when the five samples split, and always supply a reference when one exists. Neither
-    the verdict-word probability nor a small judge's hidden state adds much on objective numeric checks.</li>
+    <li>For a router: escalate when the five samples split, and always supply a reference when one exists. A
+    self-reported UNSURE, the verdict-word probability, hedging language and item features add almost nothing.</li>
+    <li>Hidden-state probes help mainly for very small judges, whose verdicts lag what they hold. They do not see
+    the big judges' blind spots, because small models share them.</li>
   </ol>
 </section>
 
 <section class="col">
   <h2>Limits</h2>
   <ul>
-    <li>Pilot sizes: 15–30 planted errors per type and one answer set (BFF-Bench).</li>
+    <li>One answer set (BFF-Bench). Planted errors: 50–125 per type. DeepSeek-V3.1 was withdrawn by Tinker mid-run,
+    so its planted and UNSURE results are partial.</li>
     <li>The coder is an LLM. The 33 disputed answers need a human check (about 1 hour).</li>
-    <li>The local probe uses a 4B model answering without reasoning, so it shows the mechanism and does not
-    describe gpt-oss-120b.</li>
+    <li>Probed models answer without reasoning and are at most 9B, so they show the mechanism and do not describe
+    gpt-oss-120b. Best-layer probe numbers are slightly optimistic.</li>
     <li>Planted errors were written by DeepSeek-V3.1, which is also one of the judges; its detection rates are not
     higher than the others'.</li>
   </ul>
@@ -495,8 +643,10 @@ def page(N):
       <tr><td>Planted-error variants and checks</td><td><code>inject.py</code></td><td class="n">${cost['gen']:.2f}</td></tr>
       <tr><td>Judging original and edited answers</td><td><code>judge.py</code></td><td class="n">${cost['inj']:.2f}</td></tr>
       <tr><td>Judging all 960 real answers (+ reference for 459)</td><td><code>judge_real.py</code></td><td class="n">${cost['real']:.2f}</td></tr>
-      <tr><td>Coding the over-strict cases (two passes)</td><td><code>overstrict.py</code></td><td class="n">${cost['code']:.2f}</td></tr>
-      <tr><td>Local hidden-state probes</td><td><code>probe_local.py</code></td><td class="n">$0.00</td></tr>
+      <tr><td>UNSURE-option runs</td><td><code>judge_real.py --unsure</code>, <code>unsure_analysis.py</code></td><td class="n">${cost['unsure']:.2f}</td></tr>
+      <tr><td>Coding over-strict cases and judge reasoning</td><td><code>overstrict.py</code>, <code>reasoning_codes.py</code></td><td class="n">${cost['code']:.2f}</td></tr>
+      <tr><td>Item features vs confidence</td><td><code>features.py</code></td><td class="n">$0.00</td></tr>
+      <tr><td>Hidden-state probes, 4 models (Modal GPUs)</td><td><code>probe_modal.py</code>, <code>analyze_probes.py</code></td><td class="n">Modal</td></tr>
     </tbody>
   </table></div>
   <p class="meta">All in <code>experiments/judge_confidence/</code> on branch <code>wip/cross-benchmark-analysis</code>.

@@ -1,0 +1,72 @@
+{
+ "deepseek-v3.1|none": {
+  "n": 511,
+  "use_any": 0.0019569471624266144,
+  "use_majority": 0.0,
+  "esc_unsure": 0.0,
+  "caught_unsure": 0.0,
+  "esc_split": 0.16342412451361868,
+  "caught_split": 0.29411764705882354,
+  "unsure_on_split": 0.003937007874015748,
+  "unsure_on_clear": 0.0,
+  "n_errors": 51,
+  "acc_decided_unsure_prompt": 0.8210116731517509,
+  "acc_binary_prompt": 0.8015564202334631
+ },
+ "gpt-oss-120b|none": {
+  "n": 960,
+  "use_any": 0.0020833333333333333,
+  "use_majority": 0.0,
+  "esc_unsure": 0.004357298474945534,
+  "caught_unsure": 0.015625,
+  "esc_split": 0.12854030501089325,
+  "caught_split": 0.390625,
+  "unsure_on_split": 0.0,
+  "unsure_on_clear": 0.004357298474945534,
+  "n_errors": 64,
+  "acc_decided_unsure_prompt": 0.8627450980392157,
+  "acc_binary_prompt": 0.8605664488017429
+ },
+ "qwen3.6-35b-a3b|none": {
+  "n": 960,
+  "use_any": 0.0020833333333333333,
+  "use_majority": 0.0,
+  "esc_unsure": 0.002178649237472767,
+  "caught_unsure": 0.010526315789473684,
+  "esc_split": 0.1721132897603486,
+  "caught_split": 0.3894736842105263,
+  "unsure_on_split": 0.001996007984031936,
+  "unsure_on_clear": 0.002178649237472767,
+  "n_errors": 95,
+  "acc_decided_unsure_prompt": 0.803921568627451,
+  "acc_binary_prompt": 0.7930283224400871
+ },
+ "gpt-oss-120b|human": {
+  "n": 456,
+  "use_any": 0.0,
+  "use_majority": 0.0,
+  "esc_unsure": 0.0,
+  "caught_unsure": 0.0,
+  "esc_split": 0.08333333333333333,
+  "caught_split": 0.4375,
+  "unsure_on_split": 0.0,
+  "unsure_on_clear": 0.0,
+  "n_errors": 32,
+  "acc_decided_unsure_prompt": 0.9276315789473685,
+  "acc_binary_prompt": 0.9298245614035088
+ },
+ "qwen3.6-35b-a3b|human": {
+  "n": 456,
+  "use_any": 0.0,
+  "use_majority": 0.0,
+  "esc_unsure": 0.0,
+  "caught_unsure": 0.0,
+  "esc_split": 0.10307017543859649,
+  "caught_split": 0.3333333333333333,
+  "unsure_on_split": 0.0,
+  "unsure_on_clear": 0.0,
+  "n_errors": 57,
+  "acc_decided_unsure_prompt": 0.8706140350877193,
+  "acc_binary_prompt": 0.875
+ }
+}

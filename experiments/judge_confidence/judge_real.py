@@ -15,9 +15,28 @@ from jc_common import (HERE, RAW, JsonlCache, call_cost, load_bff_all, make_chat
                        sample_with_verdict_probs, select_models)
 from judge import JUDGES, build_prompt, parse_verdict
 
+import re
+UNSURE_LINE = 'Reason briefly, then end with exactly one line: "VERDICT: CORRECT", "VERDICT: INCORRECT", or "VERDICT: UNSURE" if you cannot tell with confidence whether it is correct and it should be checked by a human expert.'
+VERDICT3_RE = re.compile(r"VERDICT:\s*\**\s*(CORRECT|INCORRECT|UNSURE)", re.I)
+
+
+def unsure_prompt(prompt):
+    old = 'Reason briefly, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT".'
+    assert old in prompt
+    return prompt.replace(old, UNSURE_LINE)
+
+
+def parse_verdict3(text):
+    """1 = CORRECT, 0 = INCORRECT, "unsure" = UNSURE, None = unparseable (last verdict line wins)."""
+    m = VERDICT3_RE.findall(text or "")
+    if not m:
+        return None
+    v = m[-1].upper()
+    return "unsure" if v == "UNSURE" else int(v == "CORRECT")
+
 
 def run(a):
-    cache = JsonlCache(RAW / "judgments_real.jsonl")
+    cache = JsonlCache(RAW / ("judgments_unsure.jsonl" if a.unsure else "judgments_real.jsonl"))
     chats = make_chats(select_models(a.judges))
     items = load_bff_all()
     if a.only_unanimous:
@@ -30,22 +49,27 @@ def run(a):
         if ck in cache or (cond == "human" and not it["ref"]):
             return
         prompt = build_prompt(it, it["conv"][-1]["content"], cond)
+        if a.unsure:
+            prompt = unsure_prompt(prompt)
         r = await sample_with_verdict_probs(chat, [{"role": "user", "content": prompt}], n=a.samples,
                                             max_tokens=a.max_tokens, temperature=0.7, topk=5)
         samples = []
         for o in r["outputs"]:
             vt = o["verdict_tok"]
             samples.append(dict(text=o["text"], clean=o["clean"], n_out=o["n_out"], mean_logprob=o["mean_logprob"],
-                                verdict=parse_verdict(o["text"]), p_correct=vt["p_correct"] if vt else None,
+                                verdict=parse_verdict3(o["text"]) if a.unsure else parse_verdict(o["text"]),
+                                p_correct=vt["p_correct"] if vt else None, p_unsure=vt.get("p_unsure") if vt else None,
                                 verdict_token=vt["token"] if vt else None, verdict_topk=vt["topk"] if vt else None))
-        votes = [s["verdict"] for s in samples if s["verdict"] is not None]
+        votes = [s["verdict"] for s in samples if s["verdict"] in (0, 1)]
+        unsure_share = sum(s["verdict"] == "unsure" for s in samples) / len(samples) if a.unsure else None
         pcs = [s["p_correct"] for s in samples if s["p_correct"] is not None]
         cache.put(dict(cache_key=ck, judge=jk, model=chat.spec["model"], renderer=r["renderer"], item_id=it["id"],
                        qid=it["qid"], turn=it["turn"], examinee=it["examinee"], condition=cond,
                        labels=it["labels"], n_correct=it["n_correct"], n_incorrect=it["n_incorrect"],
                        gold_unanimous=it["gold_unanimous"], gold_majority=it["gold_majority"], prompt=prompt,
                        samples=samples, vote_share=sum(votes) / len(votes) if votes else None, n_parsed=len(votes),
-                       p_correct_mean=sum(pcs) / len(pcs) if pcs else None,
+                       p_correct_mean=sum(pcs) / len(pcs) if pcs else None, unsure_share=unsure_share,
+                       prompt_variant="unsure" if a.unsure else "binary",
                        sampling=dict(n=a.samples, temperature=0.7, max_tokens=a.max_tokens, topk=5),
                        n_in=r["n_in"], n_out=r["n_out"], latency=r["latency"],
                        cost=call_cost(chat.spec, r["n_in"], r["n_out"])))
@@ -53,7 +77,8 @@ def run(a):
     jobs = [lambda jk=jk, c=c, it=it, cond=cond: one(jk, c, it, cond)
             for jk, c in chats.items() for it in items for cond in conds]
     asyncio.run(run_jobs(jobs, a.concurrency, "judge_real"))
-    analyze()
+    if not a.unsure:
+        analyze()
 
 
 def analyze():
@@ -86,6 +111,7 @@ def main():
     ap.add_argument("--samples", type=int, default=5)
     ap.add_argument("--max-tokens", type=int, default=4096)
     ap.add_argument("--concurrency", type=int, default=8)
+    ap.add_argument("--unsure", action="store_true", help="offer VERDICT: UNSURE; writes judgments_unsure.jsonl")
     ap.add_argument("--only-unanimous", action="store_true", help="skip answers the annotators split on")
     ap.add_argument("--analyze", action="store_true")
     a = ap.parse_args()

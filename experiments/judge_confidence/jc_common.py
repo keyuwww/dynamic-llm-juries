@@ -19,6 +19,26 @@ sys.path.insert(0, str(REPO / "experiments" / "jev_bff"))
 from common import JsonlCache, call_cost, make_chats, select_models, run_jobs  # noqa: E402,F401
 
 
+# ----------------------------------------------------------------------------- modal credentials
+def modal_env():
+    """Export Modal credentials from the repo .env into the names Modal reads (MODAL_TOKEN_ID / MODAL_TOKEN_SECRET).
+    Accepts either those names or the modal.toml-style lines `token_id = "..."` / `token_secret = "..."`.
+    Never prints the values."""
+    import os
+    path = REPO / ".env"
+    if not path.exists():
+        return False
+    for line in path.read_text().splitlines():
+        if "=" not in line or line.strip().startswith("#"):
+            continue
+        k, v = (s.strip() for s in line.split("=", 1))
+        v = v.strip('"').strip("'")
+        k = {"token_id": "MODAL_TOKEN_ID", "token_secret": "MODAL_TOKEN_SECRET"}.get(k, k)
+        if k in ("MODAL_TOKEN_ID", "MODAL_TOKEN_SECRET"):
+            os.environ.setdefault(k, v)
+    return bool(os.environ.get("MODAL_TOKEN_ID") and os.environ.get("MODAL_TOKEN_SECRET"))
+
+
 # ----------------------------------------------------------------------------- items
 def load_bff_items(consensus="unanimous"):
     """VERDICTS BFF items (same construction as every other BFF experiment): id, qid, cid, turn, examinee,
