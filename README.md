@@ -1,105 +1,36 @@
-# Dynamic LLM Juries
+# Grading Like the Experts
 
-AC297r capstone (Harvard IACS, Fall 2026). Team 10, partnered with Kensho R&D (Seth Ebner, Chris Tanner).
+Five LLM judges graded 799 BFF-Bench finance answers twice: with a standard grading prompt, and with the five rules Kensho's experts used to make the labels. This folder holds the experiment, every verdict, the results and the findings page. The notebook grades and scores, its output sits in `results/`, and [results.md](results.md) sums up what the results show.
 
-**Goal:** make LLM juries more reliable by choosing, for each question, which judges get to grade it. The working idea is a "Jev for juries": a fast, cheap model that predicts, before any judge is called, how likely each judge is to answer the question correctly. Only confident judges vote, their votes are weighted by that probability, and the question is escalated when no judge qualifies.
+| Path | What it is |
+|---|---|
+| [results.md](results.md) | The findings, one question per section, with tables and charts |
+| [notebook/grading_like_experts.ipynb](notebook/grading_like_experts.ipynb) | The experiment, with its outputs saved. It builds the 799 answers, grades them, scores each judge and writes `results/` |
+| [prompts/](prompts) | The three system prompts and the user message, word for word |
+| [runs/](runs) | Every verdict, one file per judge and prompt, named `<judge>__<prompt>.jsonl` |
+| [results/](results) | The three tables as CSVs, and the four charts in `figures/` |
+| [page/](page) | The findings page. `findings.py` is the marimo notebook and `index.html` its export. GitHub shows HTML as text, so download `index.html` and open it in a browser |
+| [lib/](lib) | `juries.py` computes every number for both the notebook and the page. `charts.py` and `nbkit.py` draw the page |
+| [data/](data) | Kensho's VERDICTS and BFF-Bench data, and a hand reading of gpt-oss-120b's rejections. [data/README.md](data/README.md) gives the sources and licenses |
 
-Background:
+The prompts are `STD`, the standard prompt, `GUIDE`, the experts' five rules, and `GUIDE_NO2`, the rules without rule 2 ("steps disagree: incorrect"). Only the two gpt-oss judges were graded with `GUIDE_NO2`. The verdicts are from Oct 15 to 17, 2026.
 
-- [No Free Labels](https://arxiv.org/abs/2503.05061) (Kensho): judges agree with humans mainly on questions they can solve themselves.
-- [Trust or Escalate](https://arxiv.org/abs/2407.18370): selective judging with guarantees on how often the judge agrees with humans.
-- [Jury-on-Demand](https://arxiv.org/abs/2512.01786): per-judge reliability predictors pick a dynamic top-K jury per question.
-- [CLM (Contrastive Language Models)](https://github.com/Contrastive-LM/CLM): open-weight alternative to Jev, served ourselves on Modal.
+## Columns
 
-## Results so far
+- `results_by_judge_prompt.csv` has one row per judge, prompt and group of answers. `answers` is all answers, or one group by how the experts voted: all 3 agree, 2 agree + 1 not sure, or a 2-1 split.
+- `kappa`, `kappa_lo` and `kappa_hi` are Cohen's κ with the expert labels and its 95% interval. `false_accept` is the share of wrong answers called correct, and `false_reject` the share of correct answers called wrong. `parsed` and `cost_per_1000` are filled for all answers only, and cost is blank for the self-hosted gpt-oss judges.
+- `prompt_differences.csv` has the change in κ between two prompts on the same answers, `delta_kappa`, with its 95% interval from `lo` to `hi`. `GUIDE-STD` is the rules minus the standard prompt.
+- `answers_and_labels.csv` lists the 799 answers, their conversation and turn, how the three experts voted, and `label_correct`, the majority label, 1 for correct.
+- In `runs/`, each row is one verdict. `verdict` is 1 for correct, 0 for incorrect and -1 for no verdict, which counts as wrong. `text` is the last 4,000 characters of the judge's output.
 
-Jev vs CLM-8B on BFF-Bench, as a correctness judge, a router among 6 candidate models, and B5/B6
-lite reproductions — **[dashboard (charts)](https://claude.ai/artifact/5TJcc7Lh1MD2g1Kyd3asHx)** ·
-**[full write-up](docs/findings_zeroshot_juries.md)**.
-
-Headline: Jev is a solid judge (beats No Free Labels' own GPT-4o numbers) but, like every jury/ensemble
-variant we've tried so far (dynamic jury, Jury-on-Demand-style reliability weighting), it doesn't beat
-simply routing everything to the single best available judge. The one exception is Trust-or-Escalate:
-a confidence-gated cheap→strong cascade genuinely beats always using either tier alone. CLM-8B is
-currently near-chance on this domain zero-shot — root-caused (not just observed) in the write-up.
-
-## Baselines
-
-| ID | Baseline | Role |
-|---|---|---|
-| B0 | Judge given the human reference answer | Upper bound |
-| B1 | Best single judge | The bar to beat |
-| B2 | Static jury, majority vote ([PoLL](https://arxiv.org/abs/2404.18796)) | Standard jury |
-| B3 | Weighted static jury (Dawid–Skene / [label-free weighted majority](https://arxiv.org/abs/2609.12002)) | Strongest jury that doesn't choose judges per question |
-| B4 | Oracle certification: only judges that answered correctly vote | Upper bound for our method |
-| B5 | [Jury-on-Demand](https://arxiv.org/abs/2512.01786) | Closest prior work |
-| B6 | [Trust or Escalate](https://arxiv.org/abs/2407.18370) cascade | Cost/coverage baseline |
-| B7 | Jev as judge or first filter ([JEV-as-a-Judge](https://arxiv.org/abs/2609.26550)) | Existing fast router |
-
-Metrics:
-
-- Agreement with humans: Cohen's κ and Krippendorff's α (α handles a jury whose members change per question).
-- Cost per 1k judgments.
-- Latency.
-- Coverage: the share of questions not escalated.
-
-## Method paths
-
-- **A. Certifier router:** predict P(judge j answers question q correctly) from the question alone. Models to try, in order: kNN over embeddings, then an EmbedLLM-style matrix factorization, then an activation probe. Also test Jev as the certifier.
-- **B. Jury protocol:**
-  - solve-then-judge: each judge answers the question itself first, then grades against its own answer;
-  - pick certified judges whose mistakes don't overlap;
-  - recusal: a judge doesn't grade answers from its own model family;
-  - weight votes by the certifier's log-odds.
-- **C. Guaranteed cascade:**
-  1. Jev as tier 0 handles easy questions.
-  2. Certified jury.
-  3. If no judge is certified: a stronger model writes a reference answer, or the question goes to a human.
-
-  Thresholds are calibrated Trust-or-Escalate style.
-
-Details: [`docs/methods_plan.md`](docs/methods_plan.md)
-
-## Repo layout
+## Rerun
 
 ```
-docs/                        method plan, literature notes, and findings write-ups
-experiments/
-  jev_bff/                  Exp 1: judge (Jev or CLM) as a correctness grader on BFF-Bench (B0/B7)
-  jev_router/               Exp 2: judge as a router/certifier among 6 candidate models (path A) + dynamic jury
-  trust_or_escalate/        B6 reproduction: cheap->strong cascade, reused from Exp 1's noref/ref pairs
-  jury_on_demand/           B5 lite reproduction: reliability-weighted top-K jury voting
-  common/backends.py        shared Jev/CLM client wrapper so experiments run with --backend jev|clm
-  clm_modal.py              deploy CLM-8B (vLLM + clm-serve) on a Modal GPU and run the experiments against it
-  compare_backends.py       merges {jev,clm}_*_results/metrics.json into one comparison table
-  dashboard.html            source for the published dashboard artifact (see Results above)
-pyproject.toml
+pip install -r requirements.txt
+jupyter nbconvert --to notebook --execute --inplace notebook/grading_like_experts.ipynb
+marimo export html page/findings.py -o page/index.html --no-include-code -f
 ```
 
-## Setup
+The notebook reuses every verdict in `runs/` and grades only what is missing. As shipped nothing is missing, so it makes no API calls and needs no keys, and it rewrites `results/` and the charts. To grade more, copy `.env.example` to `.env` in this folder and add your keys. The guardrails cap spend at $2 on OpenRouter, $10 on OpenAI and $90 on Modal. A regrade can differ a little, because API hosts are not deterministic even at temperature 0: qwen3.7-flash changed 7.0% of its verdicts between two identical runs.
 
-Uses [uv](https://docs.astral.sh/uv/) for dependency management:
-
-```bash
-uv sync
-```
-
-This creates `.venv` and installs everything from `pyproject.toml`/`uv.lock`. Run scripts with `uv run`, e.g. `uv run python experiments/jev_bff/run_jev_bff.py ...`.
-
-API keys go in environment variables (`TYPESAFE_API_KEY`, etc.). Never commit them; `.env` is git-ignored.
-
-To also run experiments against CLM-8B, you need a Modal account (`uv run modal setup`) and a GPU budget
-— `uv run modal run experiments/clm_modal.py --judge` deploys CLM on a GPU, runs the router + judge
-experiments against it, and pulls the results back into `experiments/*/clm_*_results/`. See the header of
-`clm_modal.py` for options (`--limit`, `--judge-limit`, `--probe`, `--clm-model clm-raw`).
-
-## Data
-
-All public on Hugging Face (Apache 2.0):
-
-- [`kensho/BFFBench`](https://huggingface.co/datasets/kensho/BFFBench): 80 two-turn finance questions with expert references.
-- [`kensho/VERDICTS`](https://huggingface.co/datasets/kensho/VERDICTS): human correct/incorrect labels on model responses from six models.
-
-## Team
-
-Methods: Andrew, Keyu · Closed-ended benchmarks: Ingrid · Open-ended benchmarks: Janys · Implementation: Isaac, Minh
+The page and the notebook read the same numbers from `lib/juries.py`, which caches them in `.cache/` until a run file changes.

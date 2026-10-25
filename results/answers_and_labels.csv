@@ -1,0 +1,800 @@
+item_id,conversation,turn,group,label_correct,expert_votes
+00096870-t1,c11c400e,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+00098cc2-t1,c67c5f87,1,all 3 agree,1,Correct; Correct; Correct
+000f279e-t2,ba3f2816,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+00935e7f-t1,ea7a9d10,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+009c69b3-t2,bd245234,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+00e27867-t2,c11c400e,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+01a4f1db-t1,da1c2b32,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+01a5f0c5-t1,1727c45d,1,all 3 agree,1,Correct; Correct; Correct
+02019538-t1,e28d6adf,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+0214a818-t1,190c6263,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0231ffef-t2,bd1f59da,2,all 3 agree,1,Correct; Correct; Correct
+02403073-t1,3d25ac25,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+029d06c4-t2,ba3f2816,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+02c3d722-t1,3c770bd0,1,all 3 agree,1,Correct; Correct; Correct
+02da7cbd-t2,eb7481d6,2,all 3 agree,1,Correct; Correct; Correct
+0309130f-t2,4e690e46,2,all 3 agree,1,Correct; Correct; Correct
+032c0a79-t1,ce6d2523,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+0335f307-t1,b525b226,1,all 3 agree,1,Correct; Correct; Correct
+03b10a32-t1,30cd8ed3,1,all 3 agree,1,Correct; Correct; Correct
+03f882e8-t2,ad608f63,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+040f5fc5-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0414ad87-t1,f427178c,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+042e3663-t2,ba3f2816,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+04967199-t1,f9fb3ada,1,all 3 agree,1,Correct; Correct; Correct
+04c76dcb-t1,1727c45d,1,all 3 agree,1,Correct; Correct; Correct
+04d16032-t2,ab09b5a5,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+04fdb90a-t2,97d2048d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+055eaa76-t1,82ed6392,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+05d5c84f-t1,bfe2760c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+0673b266-t1,32583a20,1,all 3 agree,1,Correct; Correct; Correct
+06ca656f-t1,9be15d66,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0730f1b7-t1,fe364936,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+07415e4d-t1,91fd499c,1,all 3 agree,1,Correct; Correct; Correct
+07b9ffcf-t2,30cd8ed3,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+07c6208b-t2,9897d61c,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+0874e59c-t1,ea7a9d10,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0896a2d2-t1,bf0573ca,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+08aa7406-t2,779f1434,2,2-1 split,1,Correct; Correct; Incorrect
+08d8cfea-t2,2c08fef6,2,all 3 agree,1,Correct; Correct; Correct
+08e00ce2-t2,89f6681d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0a0b84a2-t1,87b3d75d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0a6e37f1-t2,04e43b84,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+0a97bc2a-t1,3c770bd0,1,all 3 agree,1,Correct; Correct; Correct
+0ad20bb6-t1,30cd8ed3,1,all 3 agree,1,Correct; Correct; Correct
+0ad9f4e0-t1,51de7010,1,all 3 agree,1,Correct; Correct; Correct
+0bbcff02-t2,c11c400e,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0c08b6ce-t1,07a03530,1,all 3 agree,1,Correct; Correct; Correct
+0c899216-t2,2acf7cbd,2,all 3 agree,1,Correct; Correct; Correct
+0d0ed864-t1,cf7207e8,1,2-1 split,1,Correct; Correct; Incorrect
+0d15fb25-t2,c345d6de,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0d4bb74f-t1,51de7010,1,2-1 split,1,Correct; Correct; Incorrect
+0d793c0f-t1,cd00dd04,1,all 3 agree,1,Correct; Correct; Correct
+0d9e517a-t2,1727c45d,2,all 3 agree,1,Correct; Correct; Correct
+0e0aee60-t2,2a84c5f7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+0e5d12b4-t1,8704e393,1,all 3 agree,1,Correct; Correct; Correct
+0ec503f5-t2,e28d6adf,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+0f439770-t1,c345d6de,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+10300984-t2,04e43b84,2,all 3 agree,1,Correct; Correct; Correct
+104e7d92-t1,a31b1616,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+109c91bb-t2,c345d6de,2,2-1 split,0,Correct; Incorrect; Incorrect
+10af34fc-t1,c11c400e,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+10e382d2-t2,30cd8ed3,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+114094c2-t2,5c09dedb,2,all 3 agree,1,Correct; Correct; Correct
+11ae84ec-t1,c541ae08,1,all 3 agree,1,Correct; Correct; Correct
+120012c4-t1,9897d61c,1,all 3 agree,1,Correct; Correct; Correct
+12542587-t2,b7559f23,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+12a766d8-t2,6e47b1bd,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+12fa6d94-t2,2c08fef6,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+12fbe2bf-t1,04e43b84,1,all 3 agree,1,Correct; Correct; Correct
+13930048-t1,bfe2760c,1,all 3 agree,1,Correct; Correct; Correct
+142a1239-t2,b525b226,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+146bd1f9-t1,c345d6de,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+14a3cdeb-t1,8704e393,1,all 3 agree,1,Correct; Correct; Correct
+152b7805-t1,190c6263,1,2-1 split,1,Correct; Correct; Incorrect
+15e1b16a-t1,b525b226,1,all 3 agree,1,Correct; Correct; Correct
+15f883e3-t2,c64f05ac,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+160f8b85-t2,ab09b5a5,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+163606d5-t1,9897d61c,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+16478ab7-t1,c67c5f87,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+1769ad5c-t1,844d3929,1,all 3 agree,1,Correct; Correct; Correct
+17bc99b1-t1,b525b226,1,all 3 agree,1,Correct; Correct; Correct
+1805ebb2-t2,f427178c,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+18b29f03-t1,82ed6392,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+18b53f6c-t1,630f8662,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+19425996-t1,c541ae08,1,2-1 split,1,Correct; Correct; Incorrect
+196a4f6a-t2,3c770bd0,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+19775383-t1,e28d6adf,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+199b8172-t1,6e47b1bd,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+19fd4deb-t1,5c09dedb,1,all 3 agree,1,Correct; Correct; Correct
+1a5f8137-t1,5e649992,1,all 3 agree,1,Correct; Correct; Correct
+1a938c8d-t2,c104f63a,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+1ad5c83d-t1,30cd8ed3,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+1b664f6a-t2,9be15d66,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+1bd216d5-t1,ab09b5a5,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+1be22eea-t1,bd245234,1,all 3 agree,1,Correct; Correct; Correct
+1c39206b-t1,3c770bd0,1,2-1 split,1,Correct; Correct; Incorrect
+1c4a0a85-t2,ba3f2816,2,2-1 split,0,Correct; Incorrect; Incorrect
+1ccfb899-t1,eb7481d6,1,all 3 agree,1,Correct; Correct; Correct
+1ce01fcf-t2,ae5e6339,2,2-1 split,0,Correct; Incorrect; Incorrect
+1d3eabaf-t1,4e690e46,1,all 3 agree,1,Correct; Correct; Correct
+1e5b1268-t1,ddec45b7,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+1e692441-t1,f448163d,1,all 3 agree,1,Correct; Correct; Correct
+1ea1d51f-t1,f9fb3ada,1,all 3 agree,1,Correct; Correct; Correct
+1eacada1-t2,ba3f2816,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+1f410a75-t2,a82fa11d,2,2-1 split,0,Correct; Incorrect; Incorrect
+1ff46bfb-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+2032931d-t1,ba417013,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+20896ed2-t1,2245e388,1,2-1 split,1,Correct; Correct; Incorrect
+20b6e184-t1,c11c400e,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+20c6d543-t2,2245e388,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+21f8cab1-t2,ea7a9d10,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+2283ba51-t1,f427178c,1,all 3 agree,1,Correct; Correct; Correct
+22b5ca94-t1,9be15d66,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+23734c4b-t1,97d2048d,1,2-1 split,1,Correct; Correct; Incorrect
+241e467e-t1,844d3929,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+24737821-t2,f427178c,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+24749909-t2,3a2ef022,2,2-1 split,0,Correct; Incorrect; Incorrect
+24ba4946-t2,f9fb3ada,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+26601e9e-t2,ae5e6339,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+26e1e853-t1,e28d6adf,1,all 3 agree,1,Correct; Correct; Correct
+27b60d8f-t1,91fd499c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+2862b287-t2,e28d6adf,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+28660897-t1,51de7010,1,all 3 agree,1,Correct; Correct; Correct
+2941ff6e-t1,89f6681d,1,all 3 agree,1,Correct; Correct; Correct
+295b80d7-t1,09c1bbb7,1,all 3 agree,1,Correct; Correct; Correct
+29a0e25f-t2,eb7481d6,2,all 3 agree,1,Correct; Correct; Correct
+2a12b690-t2,4cc2aad4,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+2abb12a1-t2,f427178c,2,all 3 agree,1,Correct; Correct; Correct
+2b3bc1e5-t1,f427178c,1,all 3 agree,1,Correct; Correct; Correct
+2b4bd274-t2,f427178c,2,all 3 agree,1,Correct; Correct; Correct
+2baad0c8-t2,5e407211,2,all 3 agree,1,Correct; Correct; Correct
+2bd31bc6-t2,32583a20,2,all 3 agree,1,Correct; Correct; Correct
+2bd52493-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+2c76f7b9-t1,bf0573ca,1,2-1 split,1,Correct; Correct; Incorrect
+2c97b146-t2,630f8662,2,2-1 split,0,Correct; Incorrect; Incorrect
+2ca617b5-t1,cd00dd04,1,all 3 agree,1,Correct; Correct; Correct
+2d0ee6f1-t1,ae5e6339,1,all 3 agree,1,Correct; Correct; Correct
+2d1e8a68-t1,cd00dd04,1,2-1 split,1,Correct; Correct; Incorrect
+2d433f9d-t1,89f6681d,1,all 3 agree,1,Correct; Correct; Correct
+2d7aaa3e-t1,0ecf476a,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+2db8f66c-t2,5e407211,2,2-1 split,1,Correct; Correct; Incorrect
+2e771095-t1,97d2048d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+2ebf96fd-t2,2acf7cbd,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+2ee4d2fd-t2,6e47b1bd,2,all 3 agree,1,Correct; Correct; Correct
+305a5508-t2,4cc2aad4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+30671ba6-t1,2c08fef6,1,all 3 agree,1,Correct; Correct; Correct
+306da58d-t2,82ed6392,2,all 3 agree,1,Correct; Correct; Correct
+30b08e14-t1,c67c5f87,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+30d09bef-t2,5e407211,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+31060a66-t2,f448163d,2,all 3 agree,1,Correct; Correct; Correct
+3118f881-t1,ab09b5a5,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+319b420d-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+31c3401c-t1,25f0592b,1,all 3 agree,1,Correct; Correct; Correct
+31c674bb-t2,5e649992,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+31f7b889-t2,32583a20,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+325161ad-t1,c345d6de,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3254956d-t2,27e12c27,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+32586187-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+326074fb-t1,25f0592b,1,all 3 agree,1,Correct; Correct; Correct
+328bdf09-t1,a31b1616,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+336c6b07-t1,3a2ef022,1,2-1 split,1,Correct; Correct; Incorrect
+3396e527-t2,87b3d75d,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+33bbe07e-t2,190c6263,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+33e314c8-t2,da1c2b32,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+33fac2eb-t1,87b3d75d,1,2-1 split,0,Correct; Incorrect; Incorrect
+3449e3bf-t1,f448163d,1,all 3 agree,1,Correct; Correct; Correct
+345f71c6-t2,1e4e1cae,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+346ec188-t1,5c09dedb,1,all 3 agree,1,Correct; Correct; Correct
+3477bdf6-t2,5e649992,2,all 3 agree,1,Correct; Correct; Correct
+348532ae-t2,eb7481d6,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+350332d8-t1,337b80f8,1,all 3 agree,1,Correct; Correct; Correct
+352958fe-t2,630f8662,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+357178fc-t2,30cd8ed3,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+35820020-t2,a6d55bb4,2,all 3 agree,1,Correct; Correct; Correct
+35d94e47-t2,f9fb3ada,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3655fe1b-t2,484f4435,2,all 3 agree,1,Correct; Correct; Correct
+36a4a678-t2,f9fb3ada,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+36fb10fd-t1,cd00dd04,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+374670a7-t1,2245e388,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+375f82d3-t2,bf0573ca,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+3763f78a-t2,2c08fef6,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+37b06ed0-t2,bd1f59da,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+37d78983-t1,ab09b5a5,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+38148f64-t2,91fd499c,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+3932f1e1-t1,2acf7cbd,1,2-1 split,1,Correct; Correct; Incorrect
+3936aa4f-t2,6e47b1bd,2,all 3 agree,1,Correct; Correct; Correct
+395c579b-t1,ad608f63,1,all 3 agree,1,Correct; Correct; Correct
+39644c2e-t1,87b3d75d,1,all 3 agree,1,Correct; Correct; Correct
+39826eb1-t1,630f8662,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+39c8054c-t1,b525b226,1,all 3 agree,1,Correct; Correct; Correct
+3a28daf1-t1,5c09dedb,1,2-1 split,1,Correct; Correct; Incorrect
+3a430001-t1,1e4e1cae,1,all 3 agree,1,Correct; Correct; Correct
+3a83f182-t1,04e43b84,1,all 3 agree,1,Correct; Correct; Correct
+3a970fa2-t2,09c1bbb7,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+3aa0e8d3-t1,6e47b1bd,1,all 3 agree,1,Correct; Correct; Correct
+3b12a79f-t1,27e12c27,1,all 3 agree,1,Correct; Correct; Correct
+3b265d80-t1,4cc2aad4,1,all 3 agree,1,Correct; Correct; Correct
+3b5fa418-t2,b525b226,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3d018085-t1,c104f63a,1,2-1 split,1,Correct; Correct; Incorrect
+3d027c89-t2,5c09dedb,2,all 3 agree,1,Correct; Correct; Correct
+3d0497aa-t2,190c6263,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3e8c5b48-t2,0ecf476a,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3e9bead6-t1,ff5529e0,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+3f0074f2-t1,f427178c,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+3fd881b7-t1,bd1f59da,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+405fa423-t1,630f8662,1,all 3 agree,1,Correct; Correct; Correct
+4071a5dd-t1,ddec45b7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+407f21a2-t2,1e4e1cae,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+4193fdc7-t1,779f1434,1,all 3 agree,1,Correct; Correct; Correct
+41ff5198-t1,ba417013,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+42237b59-t2,844d3929,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4233b420-t2,6e47b1bd,2,all 3 agree,1,Correct; Correct; Correct
+42872062-t2,c67c5f87,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+42a26f39-t2,a6d55bb4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+42d6f116-t2,bd245234,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+43035bbe-t2,cda17a49,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4349bea6-t2,25f0592b,2,all 3 agree,1,Correct; Correct; Correct
+440c7a27-t1,f427178c,1,all 3 agree,1,Correct; Correct; Correct
+45111a63-t2,ad608f63,2,2-1 split,0,Correct; Incorrect; Incorrect
+4541361f-t1,87b3d75d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+45a752d1-t2,9be15d66,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+45d43058-t1,a31b1616,1,2-1 split,1,Correct; Correct; Incorrect
+465df3a2-t2,844d3929,2,all 3 agree,1,Correct; Correct; Correct
+46676929-t2,da1c2b32,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4668f7b1-t1,779f1434,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+46819af3-t2,3d25ac25,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+47d33654-t1,5e649992,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4871d454-t2,ae5e6339,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+48c038ce-t1,a6d55bb4,1,all 3 agree,1,Correct; Correct; Correct
+4939ad4f-t1,0e7c0684,1,all 3 agree,1,Correct; Correct; Correct
+49546775-t1,fe364936,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+49cb5f3d-t2,a31b1616,2,2-1 split,0,Correct; Incorrect; Incorrect
+4a2a7977-t1,32583a20,1,all 3 agree,1,Correct; Correct; Correct
+4a4bb753-t2,09c1bbb7,2,all 3 agree,1,Correct; Correct; Correct
+4adf4658-t1,bf0573ca,1,2-1 split,0,Correct; Incorrect; Incorrect
+4af225fc-t2,8704e393,2,all 3 agree,1,Correct; Correct; Correct
+4b0e4b70-t2,91fd499c,2,2-1 split,1,Correct; Correct; Incorrect
+4b2f60b9-t2,c345d6de,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4b354682-t2,97d2048d,2,2-1 split,1,Correct; Correct; Incorrect
+4ba6d2d7-t1,8704e393,1,all 3 agree,1,Correct; Correct; Correct
+4bc30e7e-t2,da1c2b32,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4c36799c-t2,a82fa11d,2,2-1 split,0,Correct; Incorrect; Incorrect
+4c5b7945-t1,bd1f59da,1,all 3 agree,1,Correct; Correct; Correct
+4d129ec2-t2,190c6263,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4d25df19-t2,bd245234,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4d3b2beb-t1,4cc2aad4,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+4db5033f-t1,1bb784ce,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4e077034-t1,5e649992,1,all 3 agree,1,Correct; Correct; Correct
+4e0c0559-t1,e3af7c3d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4e171c27-t2,f9fb3ada,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+4e2ab9df-t2,190c6263,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4e385480-t1,ae5e6339,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+4e810d28-t1,51de7010,1,all 3 agree,1,Correct; Correct; Correct
+4e992b7b-t2,4d347d86,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+4edef037-t2,bfe2760c,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+4fdeb331-t2,32583a20,2,all 3 agree,1,Correct; Correct; Correct
+504ac955-t2,484f4435,2,2-1 split,0,Correct; Incorrect; Incorrect
+50689ceb-t1,4d347d86,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+50804168-t1,eb7481d6,1,all 3 agree,1,Correct; Correct; Correct
+50fce9de-t2,09c1bbb7,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+50ffbf4f-t1,97d2048d,1,all 3 agree,1,Correct; Correct; Correct
+51ab0ecd-t1,30cd8ed3,1,2-1 split,0,Correct; Incorrect; Incorrect
+523f5ff7-t1,09c1bbb7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+525436d7-t1,da1c2b32,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5256f784-t2,4e690e46,2,2-1 split,0,Correct; Incorrect; Incorrect
+5269ea18-t2,30cd8ed3,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+528a81cf-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+52a6e075-t2,09c1bbb7,2,all 3 agree,1,Correct; Correct; Correct
+52ab6c93-t2,89f6681d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+52e075bd-t2,2c08fef6,2,all 3 agree,1,Correct; Correct; Correct
+52f3fadb-t2,f9fb3ada,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5331ed7f-t2,82ed6392,2,all 3 agree,1,Correct; Correct; Correct
+5350169f-t1,0ecf476a,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+536af792-t1,cd00dd04,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+539262c3-t2,ff5529e0,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+53c47094-t2,27e12c27,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+54b3a66a-t1,89f6681d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+55078a96-t1,cda17a49,1,all 3 agree,1,Correct; Correct; Correct
+557366b7-t1,89f6681d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+558aeb4d-t2,779f1434,2,all 3 agree,1,Correct; Correct; Correct
+558b32fd-t2,9897d61c,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+55bb3129-t2,f448163d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+56729d2c-t2,da1c2b32,2,2-1 split,0,Correct; Incorrect; Incorrect
+56c10b1c-t1,27e12c27,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+56de4220-t1,ddec45b7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5749d391-t2,51de7010,2,all 3 agree,1,Correct; Correct; Correct
+5909d8bd-t1,91fd499c,1,all 3 agree,1,Correct; Correct; Correct
+5a0bade4-t2,3d25ac25,2,all 3 agree,1,Correct; Correct; Correct
+5a13eeb1-t2,07a03530,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5aa1f830-t1,143600cf,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5aa7f143-t1,5c09dedb,1,all 3 agree,1,Correct; Correct; Correct
+5ab66b8c-t2,5e649992,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5b31e524-t2,cd00dd04,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5b3e40e8-t2,c104f63a,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5b4f6993-t2,a6d55bb4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5bbdd127-t1,8704e393,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+5c092ac9-t1,bf0573ca,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5c457ca2-t1,1727c45d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5ca5738f-t2,844d3929,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+5d164e09-t2,ae5e6339,2,2-1 split,0,Correct; Incorrect; Incorrect
+5d8996a5-t2,f9fb3ada,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+5e46bafc-t1,0e7c0684,1,all 3 agree,1,Correct; Correct; Correct
+5e55c465-t1,cf7207e8,1,all 3 agree,1,Correct; Correct; Correct
+5e766588-t1,f448163d,1,all 3 agree,1,Correct; Correct; Correct
+5e872d62-t1,4cc2aad4,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+5e9b4d25-t1,cf7207e8,1,all 3 agree,1,Correct; Correct; Correct
+5ff3efe5-t2,07a03530,2,all 3 agree,1,Correct; Correct; Correct
+601ff11d-t1,09c1bbb7,1,all 3 agree,1,Correct; Correct; Correct
+60366070-t1,eb7481d6,1,all 3 agree,1,Correct; Correct; Correct
+604a4bf5-t1,97d2048d,1,all 3 agree,1,Correct; Correct; Correct
+6075f017-t1,09c1bbb7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6078e1c9-t2,52f2fe34,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6090113b-t1,5e649992,1,all 3 agree,1,Correct; Correct; Correct
+60b98a53-t1,5e407211,1,all 3 agree,1,Correct; Correct; Correct
+60e5a328-t2,b7559f23,2,all 3 agree,1,Correct; Correct; Correct
+61173e86-t1,cda17a49,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+6144bdde-t1,32583a20,1,all 3 agree,1,Correct; Correct; Correct
+614fc183-t2,b7559f23,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+61da64f3-t2,484f4435,2,all 3 agree,1,Correct; Correct; Correct
+61f66db8-t1,bd245234,1,2-1 split,1,Correct; Correct; Incorrect
+6242886d-t1,4e690e46,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+62d649b3-t2,87b3d75d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+631cb649-t1,4d347d86,1,all 3 agree,1,Correct; Correct; Correct
+631e1318-t2,a82fa11d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6350daab-t1,9be15d66,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+63960d4c-t1,ba417013,1,all 3 agree,1,Correct; Correct; Correct
+63bfae31-t2,484f4435,2,all 3 agree,1,Correct; Correct; Correct
+642cb251-t2,c67c5f87,2,all 3 agree,1,Correct; Correct; Correct
+64fb72b9-t1,ae5e6339,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+65359212-t1,630f8662,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+6565914e-t1,07a03530,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6639441e-t2,3c770bd0,2,all 3 agree,1,Correct; Correct; Correct
+6714f496-t2,07a03530,2,2-1 split,1,Correct; Correct; Incorrect
+67795820-t1,e3af7c3d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+67838a67-t1,484f4435,1,all 3 agree,1,Correct; Correct; Correct
+6815c22a-t1,eb7481d6,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6868fa25-t1,ce6d2523,1,2-1 split,1,Correct; Correct; Incorrect
+687d17fc-t2,844d3929,2,all 3 agree,1,Correct; Correct; Correct
+689bb836-t2,0ecf476a,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+68b7b17a-t2,ab09b5a5,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+69323a73-t1,09c1bbb7,1,all 3 agree,1,Correct; Correct; Correct
+69402731-t1,bd1f59da,1,2-1 split,1,Correct; Correct; Incorrect
+69557a8e-t1,c67c5f87,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+69661e49-t2,ff5529e0,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+69f12836-t1,8704e393,1,all 3 agree,1,Correct; Correct; Correct
+69f17727-t2,2245e388,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6a2988d1-t1,ab09b5a5,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6a5f7b10-t1,ff5529e0,1,2-1 split,1,Correct; Correct; Incorrect
+6a60905d-t1,bd1f59da,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6a7fbf2e-t1,c67c5f87,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6aa3291b-t1,cf7207e8,1,all 3 agree,1,Correct; Correct; Correct
+6ab5e52e-t2,844d3929,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6ad06f63-t2,f448163d,2,2-1 split,0,Correct; Incorrect; Incorrect
+6b5c422b-t2,51de7010,2,2-1 split,1,Correct; Correct; Incorrect
+6b9015b3-t2,bd1f59da,2,2-1 split,1,Correct; Correct; Incorrect
+6bbdb718-t1,04e43b84,1,all 3 agree,1,Correct; Correct; Correct
+6c17c93c-t2,4cc2aad4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6c70605f-t1,2a84c5f7,1,2-1 split,0,Correct; Incorrect; Incorrect
+6c9b05bf-t2,ce6d2523,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+6cc3b868-t2,cd00dd04,2,all 3 agree,1,Correct; Correct; Correct
+6ccb1151-t1,da1c2b32,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+6d2fa130-t1,da1c2b32,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6dbaf1a9-t1,a31b1616,1,all 3 agree,1,Correct; Correct; Correct
+6e1420cf-t2,e28d6adf,2,all 3 agree,1,Correct; Correct; Correct
+6e9c35c0-t2,f448163d,2,2-1 split,1,Correct; Correct; Incorrect
+6eb1e458-t2,bd245234,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+6ee2215b-t1,5e649992,1,2-1 split,1,Correct; Correct; Incorrect
+6f20b410-t1,2db42262,1,all 3 agree,1,Correct; Correct; Correct
+6f68dc55-t2,32583a20,2,all 3 agree,1,Correct; Correct; Correct
+7089867d-t2,9be15d66,2,all 3 agree,1,Correct; Correct; Correct
+70b617cf-t1,04e43b84,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+7160e4db-t2,ea7a9d10,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+71a17c75-t1,fe364936,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+71e54607-t2,bf0573ca,2,all 3 agree,1,Correct; Correct; Correct
+726a4f20-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+73514fa5-t2,2acf7cbd,2,all 3 agree,1,Correct; Correct; Correct
+736c5a3c-t1,97d2048d,1,all 3 agree,1,Correct; Correct; Correct
+73d10667-t2,ba417013,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+73f01b34-t2,5c09dedb,2,2-1 split,1,Correct; Correct; Incorrect
+740d5733-t1,0ecf476a,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+743b9475-t2,91fd499c,2,2-1 split,0,Correct; Incorrect; Incorrect
+744b0410-t2,a82fa11d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+7451a3c5-t2,cf7207e8,2,all 3 agree,1,Correct; Correct; Correct
+74560d17-t2,9be15d66,2,all 3 agree,1,Correct; Correct; Correct
+74612bbb-t2,3c770bd0,2,all 3 agree,1,Correct; Correct; Correct
+748a3ffc-t2,c67c5f87,2,all 3 agree,1,Correct; Correct; Correct
+74e43175-t2,cf7207e8,2,all 3 agree,1,Correct; Correct; Correct
+750b1f74-t2,5e407211,2,2-1 split,0,Correct; Incorrect; Incorrect
+75e8466f-t1,e3af7c3d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+77f8b65f-t1,89f6681d,1,all 3 agree,1,Correct; Correct; Correct
+787fe561-t2,cd00dd04,2,all 3 agree,1,Correct; Correct; Correct
+7970a704-t1,3d25ac25,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+79b77eaa-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+7a0d9fe5-t1,bfe2760c,1,all 3 agree,1,Correct; Correct; Correct
+7a298808-t1,f448163d,1,all 3 agree,1,Correct; Correct; Correct
+7a4d0313-t1,a82fa11d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+7adc4ccf-t1,1727c45d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+7ae36d63-t2,8704e393,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+7be5dfcd-t1,0ecf476a,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+7c0b4f2c-t1,9897d61c,1,all 3 agree,1,Correct; Correct; Correct
+7ccbe5f7-t2,cda17a49,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+7d22fd2e-t1,51de7010,1,2-1 split,0,Correct; Incorrect; Incorrect
+7dab63b9-t2,c11c400e,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+7df2ca28-t1,190c6263,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+7e0a4dc3-t1,1727c45d,1,2-1 split,0,Correct; Incorrect; Incorrect
+7e415021-t1,3d25ac25,1,all 3 agree,1,Correct; Correct; Correct
+7e633785-t1,2a84c5f7,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+7e6be857-t2,2db42262,2,all 3 agree,1,Correct; Correct; Correct
+7e7b15ff-t1,f9fb3ada,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+7ef2ea59-t2,c541ae08,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+7f93f9cf-t2,8704e393,2,all 3 agree,1,Correct; Correct; Correct
+7f9efbb9-t1,ff5529e0,1,all 3 agree,1,Correct; Correct; Correct
+7faa462e-t1,89f6681d,1,all 3 agree,1,Correct; Correct; Correct
+7fde3e52-t2,a6d55bb4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8002aaa6-t2,eb7481d6,2,all 3 agree,1,Correct; Correct; Correct
+80073500-t2,91fd499c,2,all 3 agree,1,Correct; Correct; Correct
+805e7d58-t2,a82fa11d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+80d1a6d5-t1,a6d55bb4,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8151a054-t1,1e4e1cae,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+81d6e210-t1,2245e388,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+81f4e709-t2,cda17a49,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+822304d7-t2,3a2ef022,2,2-1 split,1,Correct; Correct; Incorrect
+8233ee59-t1,ce6d2523,1,all 3 agree,1,Correct; Correct; Correct
+830605f2-t2,3a2ef022,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+83a5dbfc-t1,9897d61c,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+842593dc-t2,bd245234,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+84519055-t2,0e7c0684,2,all 3 agree,1,Correct; Correct; Correct
+846f2184-t1,1e4e1cae,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+84b05d2c-t2,a31b1616,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+84fd3dce-t2,1e4e1cae,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+85692621-t1,8704e393,1,all 3 agree,1,Correct; Correct; Correct
+86ce40fe-t1,b7559f23,1,all 3 agree,1,Correct; Correct; Correct
+86dc9aac-t1,337b80f8,1,all 3 agree,1,Correct; Correct; Correct
+87162a6e-t2,cd00dd04,2,all 3 agree,1,Correct; Correct; Correct
+87599311-t1,ff5529e0,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+8846e694-t1,5e407211,1,all 3 agree,1,Correct; Correct; Correct
+887dbf03-t2,9897d61c,2,all 3 agree,1,Correct; Correct; Correct
+891b70b2-t2,1727c45d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+892c71c3-t2,844d3929,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+8940b60d-t2,f427178c,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+89645c45-t1,4d347d86,1,2-1 split,0,Correct; Incorrect; Incorrect
+89659cac-t1,2a84c5f7,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+898312ef-t1,cda17a49,1,all 3 agree,1,Correct; Correct; Correct
+898bf424-t2,ab09b5a5,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+89d19994-t1,a82fa11d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8a22e1cc-t1,07a03530,1,all 3 agree,1,Correct; Correct; Correct
+8a4ce16b-t1,0ecf476a,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8a6fe611-t1,3c770bd0,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+8aa3761f-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8aab7adc-t2,0e7c0684,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+8b1bdee3-t2,5e407211,2,all 3 agree,1,Correct; Correct; Correct
+8c0722b6-t2,c345d6de,2,2-1 split,1,Correct; Correct; Incorrect
+8c094da0-t1,5e407211,1,2-1 split,0,Correct; Incorrect; Incorrect
+8d042589-t2,89f6681d,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+8d41786b-t1,b7559f23,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+8d890a60-t1,ba417013,1,all 3 agree,1,Correct; Correct; Correct
+8d941b75-t1,e3af7c3d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8db2915a-t2,87b3d75d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8e4118ef-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8f3fe195-t1,cda17a49,1,all 3 agree,1,Correct; Correct; Correct
+8f5f338a-t2,1bb784ce,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+8f65857d-t1,2db42262,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+8ff4875f-t2,ff5529e0,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+901382d4-t1,ddec45b7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+906832b0-t2,c541ae08,2,2-1 split,0,Correct; Incorrect; Incorrect
+90b84533-t2,484f4435,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+919af1d3-t1,25f0592b,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+91b23663-t1,b525b226,1,all 3 agree,1,Correct; Correct; Correct
+92047a94-t2,b7559f23,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+92f585a7-t1,a31b1616,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+945a0ff7-t1,5c09dedb,1,all 3 agree,1,Correct; Correct; Correct
+95455d8d-t2,1bb784ce,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+95484010-t1,2a84c5f7,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+95818601-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+95dbd2d6-t2,630f8662,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+967feb22-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9682e788-t1,ba417013,1,2-1 split,1,Correct; Correct; Incorrect
+96db2e9c-t2,97d2048d,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+96ec2b96-t2,1727c45d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+97589583-t1,30cd8ed3,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+97714190-t2,25f0592b,2,all 3 agree,1,Correct; Correct; Correct
+980afb05-t1,2acf7cbd,1,all 3 agree,1,Correct; Correct; Correct
+9822b671-t1,97d2048d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+983f2fc8-t2,07a03530,2,2-1 split,0,Correct; Incorrect; Incorrect
+985bba20-t2,b7559f23,2,all 3 agree,1,Correct; Correct; Correct
+988c8df2-t1,c541ae08,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9933b9e9-t1,ba3f2816,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+99bf9299-t2,cd00dd04,2,all 3 agree,1,Correct; Correct; Correct
+9a04371b-t1,a82fa11d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9bcb5e5b-t2,52f2fe34,2,2-1 split,1,Correct; Correct; Incorrect
+9bf2baa1-t1,fe364936,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+9c2a45ae-t2,82ed6392,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9c9bb3a8-t1,07a03530,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9dbc490f-t2,b525b226,2,all 3 agree,1,Correct; Correct; Correct
+9e06866d-t1,c104f63a,1,all 3 agree,1,Correct; Correct; Correct
+9e4bf648-t1,e28d6adf,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+9eb5a204-t1,2245e388,1,all 3 agree,1,Correct; Correct; Correct
+9f0b664f-t2,04e43b84,2,2-1 split,1,Correct; Correct; Incorrect
+9f342c49-t1,c11c400e,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+9f6f5079-t2,c104f63a,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+9f7f42bc-t2,2245e388,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9fe3479f-t2,4cc2aad4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+9feba573-t1,5e407211,1,2-1 split,1,Correct; Correct; Incorrect
+a02c1ca0-t2,eb7481d6,2,all 3 agree,1,Correct; Correct; Correct
+a087c43d-t1,ba3f2816,1,all 3 agree,1,Correct; Correct; Correct
+a0c328e0-t2,27e12c27,2,2-1 split,0,Correct; Incorrect; Incorrect
+a112f179-t2,1727c45d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a1bec6f8-t2,82ed6392,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+a21538ef-t1,2c08fef6,1,2-1 split,1,Correct; Correct; Incorrect
+a257cfb2-t2,25f0592b,2,2-1 split,0,Correct; Incorrect; Incorrect
+a31d4b7f-t1,f448163d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+a32a2a36-t1,87b3d75d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a349f82c-t2,e3af7c3d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a358bb39-t2,1e4e1cae,2,2-1 split,1,Correct; Correct; Incorrect
+a3ebc4d5-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a3ec660e-t2,b525b226,2,2-1 split,1,Correct; Correct; Incorrect
+a46761a1-t2,3a2ef022,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+a4d2a014-t1,52f2fe34,1,all 3 agree,1,Correct; Correct; Correct
+a512ca97-t2,ff5529e0,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+a517fa2e-t2,779f1434,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a52e6cfd-t2,ea7a9d10,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a576c12c-t1,779f1434,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+a579bf73-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+a5928e0d-t2,c64f05ac,2,2-1 split,0,Correct; Incorrect; Incorrect
+a61a6169-t1,2acf7cbd,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+a6663951-t1,4e690e46,1,2-1 split,1,Correct; Correct; Incorrect
+a6969441-t2,6e47b1bd,2,2-1 split,0,Correct; Incorrect; Incorrect
+a864cfcf-t1,91fd499c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+a991d4c6-t1,ff5529e0,1,all 3 agree,1,Correct; Correct; Correct
+a9958f23-t2,bd1f59da,2,all 3 agree,1,Correct; Correct; Correct
+a9a7908e-t2,87b3d75d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+ab1cffc4-t2,a6d55bb4,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+ab219a58-t2,8704e393,2,all 3 agree,1,Correct; Correct; Correct
+abb3fea2-t1,3a2ef022,1,2-1 split,1,Correct; Correct; Incorrect
+abb49a35-t1,c541ae08,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+abe24fbc-t2,9897d61c,2,2-1 split,1,Correct; Correct; Incorrect
+ac04b117-t2,630f8662,2,2-1 split,1,Correct; Correct; Incorrect
+ac581edc-t1,ad608f63,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+ac739f70-t2,52f2fe34,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+ac931ca5-t1,190c6263,1,2-1 split,0,Correct; Incorrect; Incorrect
+ac9a8a02-t2,cf7207e8,2,all 3 agree,1,Correct; Correct; Correct
+aca2c709-t1,e3af7c3d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+acb500ec-t1,bfe2760c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+acc85f0b-t1,c11c400e,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+accac2f2-t1,ce6d2523,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ad3d4883-t1,3d25ac25,1,all 3 agree,1,Correct; Correct; Correct
+ad599ff4-t1,25f0592b,1,2-1 split,1,Correct; Correct; Incorrect
+ada7b70f-t1,04e43b84,1,2-1 split,0,Correct; Incorrect; Incorrect
+adbb4862-t2,a31b1616,2,2-1 split,0,Correct; Incorrect; Incorrect
+adfc3e5e-t1,25f0592b,1,all 3 agree,1,Correct; Correct; Correct
+ae1fbcd4-t1,1727c45d,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+ae241103-t2,a31b1616,2,2-1 split,0,Correct; Incorrect; Incorrect
+ae32184f-t1,337b80f8,1,all 3 agree,1,Correct; Correct; Correct
+ae803d31-t2,32583a20,2,all 3 agree,1,Correct; Correct; Correct
+aea3b06a-t2,ab09b5a5,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+af9ce7c4-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b007c0c4-t2,c11c400e,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b0a79b42-t1,190c6263,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b0f13265-t2,0ecf476a,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b0f1d575-t1,630f8662,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b0fe3abd-t1,484f4435,1,all 3 agree,1,Correct; Correct; Correct
+b105df64-t1,da1c2b32,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b14a2153-t1,6e47b1bd,1,2-1 split,1,Correct; Correct; Incorrect
+b18ed1d9-t2,779f1434,2,all 3 agree,1,Correct; Correct; Correct
+b1b0e6ac-t1,4d347d86,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+b1d99363-t1,32583a20,1,all 3 agree,1,Correct; Correct; Correct
+b21b5cff-t1,bd1f59da,1,all 3 agree,1,Correct; Correct; Correct
+b2696460-t1,9be15d66,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b2a20898-t2,337b80f8,2,2-1 split,0,Correct; Incorrect; Incorrect
+b2a747ce-t1,1bb784ce,1,2-1 split,0,Correct; Incorrect; Incorrect
+b2fae943-t1,1bb784ce,1,all 3 agree,1,Correct; Correct; Correct
+b3e5a55f-t1,bd1f59da,1,all 3 agree,1,Correct; Correct; Correct
+b3ebb817-t2,ad608f63,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+b4b26991-t1,f9fb3ada,1,all 3 agree,1,Correct; Correct; Correct
+b4cfce12-t2,ea7a9d10,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+b50a00bc-t1,2c08fef6,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+b56b3349-t2,89f6681d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b5789428-t2,c67c5f87,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b5e68ce2-t2,9be15d66,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+b630fac7-t2,51de7010,2,2-1 split,1,Correct; Correct; Incorrect
+b6bf575b-t1,ab09b5a5,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+b772a9a9-t2,ba417013,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+b77588f0-t2,a31b1616,2,all 3 agree,1,Correct; Correct; Correct
+b87c50d4-t1,82ed6392,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+b89c6144-t1,3c770bd0,1,all 3 agree,1,Correct; Correct; Correct
+b8b57e5c-t2,e3af7c3d,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+b988e0de-t2,51de7010,2,2-1 split,0,Correct; Incorrect; Incorrect
+ba67c79e-t2,cf7207e8,2,all 3 agree,1,Correct; Correct; Correct
+ba706f7b-t1,cda17a49,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+baa33f7c-t2,4d347d86,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+baae84ee-t2,b525b226,2,all 3 agree,1,Correct; Correct; Correct
+bab23e40-t2,cda17a49,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+bae433e8-t1,82ed6392,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+bb436f17-t2,2db42262,2,all 3 agree,1,Correct; Correct; Correct
+bb81af64-t1,cda17a49,1,all 3 agree,1,Correct; Correct; Correct
+bbd8e1c7-t1,1bb784ce,1,2-1 split,0,Correct; Incorrect; Incorrect
+bbfe0a7a-t2,bfe2760c,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+bc33a5a7-t2,1e4e1cae,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+bc662c03-t1,5e407211,1,all 3 agree,1,Correct; Correct; Correct
+bc96e837-t1,ff5529e0,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+bd643a22-t1,c345d6de,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+bdc2eb58-t2,30cd8ed3,2,2-1 split,0,Correct; Incorrect; Incorrect
+bf1be9d8-t1,ae5e6339,1,all 3 agree,1,Correct; Correct; Correct
+bf974dc9-t2,0ecf476a,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+bf9e7fe9-t1,484f4435,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+bfbc5e7c-t2,07a03530,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c0318ccf-t2,190c6263,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c0aad936-t2,ea7a9d10,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c19bbe53-t1,bf0573ca,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+c1a8ec74-t2,a6d55bb4,2,all 3 agree,1,Correct; Correct; Correct
+c1c20513-t2,b7559f23,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c1e5dd62-t1,2acf7cbd,1,all 3 agree,1,Correct; Correct; Correct
+c244541b-t1,ddec45b7,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c245b4e1-t1,ad608f63,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+c2ac2334-t2,bfe2760c,2,2-1 split,0,Correct; Incorrect; Incorrect
+c2d6cbc5-t2,3c770bd0,2,2-1 split,0,Correct; Incorrect; Incorrect
+c2edd44a-t1,1bb784ce,1,2-1 split,0,Correct; Incorrect; Incorrect
+c30793ee-t1,bd245234,1,2-1 split,1,Correct; Correct; Incorrect
+c30b3282-t1,b7559f23,1,all 3 agree,1,Correct; Correct; Correct
+c329862d-t1,337b80f8,1,all 3 agree,1,Correct; Correct; Correct
+c3796724-t2,ba417013,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c3c9c1b2-t2,c67c5f87,2,2-1 split,1,Correct; Correct; Incorrect
+c3eb5c0e-t1,b7559f23,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c40f57bc-t1,e28d6adf,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c4954538-t1,91fd499c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c4cd0f3f-t1,e3af7c3d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c54a23c3-t1,2acf7cbd,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+c648f555-t1,2245e388,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+c64a6018-t1,a6d55bb4,1,all 3 agree,1,Correct; Correct; Correct
+c68e3aaa-t1,4e690e46,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+c7605a26-t2,cf7207e8,2,all 3 agree,1,Correct; Correct; Correct
+c76eacd6-t1,9897d61c,1,all 3 agree,1,Correct; Correct; Correct
+c7a6e684-t2,2acf7cbd,2,all 3 agree,1,Correct; Correct; Correct
+c7ed1519-t2,87b3d75d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c8233aee-t1,779f1434,1,2-1 split,0,Correct; Incorrect; Incorrect
+c8799690-t2,bfe2760c,2,2-1 split,0,Correct; Incorrect; Incorrect
+c8951495-t1,ea7a9d10,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c9062f23-t2,ab09b5a5,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+c952b646-t1,1bb784ce,1,all 3 agree,1,Correct; Correct; Correct
+c97bbf87-t1,c67c5f87,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ca4a4479-t2,51de7010,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+cacfb5ff-t1,bf0573ca,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+cb1476cc-t2,cd00dd04,2,all 3 agree,1,Correct; Correct; Correct
+cb1ab6d4-t1,25f0592b,1,all 3 agree,1,Correct; Correct; Correct
+cb29028e-t2,c541ae08,2,all 3 agree,1,Correct; Correct; Correct
+cbaa4b79-t1,9be15d66,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+cbbea739-t1,484f4435,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+cbc193b0-t2,a31b1616,2,all 3 agree,1,Correct; Correct; Correct
+cbdc6fb0-t1,2c08fef6,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+cc6a5c0a-t2,97d2048d,2,2-1 split,0,Correct; Incorrect; Incorrect
+ccda5e62-t2,bf0573ca,2,2-1 split,1,Correct; Correct; Incorrect
+cd58a7fb-t2,bfe2760c,2,all 3 agree,1,Correct; Correct; Correct
+cd6bafdf-t2,779f1434,2,2-1 split,1,Correct; Correct; Incorrect
+cd9e27f4-t1,bd245234,1,all 3 agree,1,Correct; Correct; Correct
+cdcfe90e-t1,ce6d2523,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+cdd37917-t1,27e12c27,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+cdd3e8d3-t2,30cd8ed3,2,2-1 split,0,Correct; Incorrect; Incorrect
+ce1a376d-t2,52f2fe34,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+cef4ffb6-t2,b525b226,2,2-1 split,1,Correct; Correct; Incorrect
+cf19cec0-t2,5c09dedb,2,2-1 split,1,Correct; Correct; Incorrect
+cf77fc5f-t1,337b80f8,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+cff19e59-t1,a6d55bb4,1,all 3 agree,1,Correct; Correct; Correct
+cffdfed7-t1,143600cf,1,2-1 split,0,Correct; Incorrect; Incorrect
+d026c4ff-t1,4d347d86,1,all 3 agree,1,Correct; Correct; Correct
+d039d4f1-t2,e28d6adf,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+d070759a-t2,e3af7c3d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+d0d05f5f-t1,3a2ef022,1,all 3 agree,1,Correct; Correct; Correct
+d13a84b6-t1,2db42262,1,all 3 agree,1,Correct; Correct; Correct
+d164e302-t1,779f1434,1,all 3 agree,1,Correct; Correct; Correct
+d1996c71-t2,ce6d2523,2,2-1 split,0,Correct; Incorrect; Incorrect
+d19f80c7-t1,3a2ef022,1,2-1 split,1,Correct; Correct; Incorrect
+d1c4bbe5-t1,da1c2b32,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+d280af51-t2,bd245234,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+d2ae46a3-t2,3c770bd0,2,all 3 agree,1,Correct; Correct; Correct
+d354f6f2-t1,eb7481d6,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d35b2704-t2,82ed6392,2,2-1 split,0,Correct; Incorrect; Incorrect
+d3f894cf-t2,da1c2b32,2,2-1 split,0,Correct; Incorrect; Incorrect
+d3fdbbc2-t2,25f0592b,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d440777b-t2,ff5529e0,2,all 3 agree,1,Correct; Correct; Correct
+d4f8fa43-t2,ae5e6339,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d500ec12-t2,09c1bbb7,2,all 3 agree,1,Correct; Correct; Correct
+d59bd071-t2,bf0573ca,2,2-1 split,1,Correct; Correct; Incorrect
+d623c7fa-t1,a6d55bb4,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d690e3fc-t1,ea7a9d10,1,all 3 agree,1,Correct; Correct; Correct
+d720a266-t2,2a84c5f7,2,all 3 agree,1,Correct; Correct; Correct
+d7631135-t2,f448163d,2,2-1 split,1,Correct; Correct; Incorrect
+d808eb4d-t1,eb7481d6,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d80b30d3-t1,b7559f23,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d813b17a-t2,87b3d75d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+d8169723-t2,4d347d86,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d8fda751-t2,07a03530,2,all 3 agree,1,Correct; Correct; Correct
+d9030b8e-t1,9897d61c,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+d93d961e-t2,1e4e1cae,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+d981e6be-t1,a6d55bb4,1,all 3 agree,1,Correct; Correct; Correct
+d9a0e2f6-t2,2acf7cbd,2,all 3 agree,1,Correct; Correct; Correct
+d9f891fc-t1,52f2fe34,1,all 3 agree,1,Correct; Correct; Correct
+da5d5a45-t1,1e4e1cae,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+da88a5c8-t1,09c1bbb7,1,2-1 split,1,Correct; Correct; Incorrect
+db8e66bf-t1,cf7207e8,1,all 3 agree,1,Correct; Correct; Correct
+dc1b1e09-t1,ae5e6339,1,all 3 agree,1,Correct; Correct; Correct
+dcc6a376-t2,ce6d2523,2,all 3 agree,1,Correct; Correct; Correct
+dcc9d7cc-t1,4d347d86,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+dd06c3be-t2,2245e388,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+dd6aecaa-t1,2db42262,1,all 3 agree,1,Correct; Correct; Correct
+dd7a1b47-t2,27e12c27,2,2-1 split,0,Correct; Incorrect; Incorrect
+dd7dac50-t2,5e649992,2,2-1 split,1,Correct; Correct; Incorrect
+ddaa0f5e-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+de3a539c-t2,ff5529e0,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+dec4da12-t1,3a2ef022,1,all 3 agree,1,Correct; Correct; Correct
+df3baf33-t1,484f4435,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+df469d1c-t2,0e7c0684,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+df499ac6-t1,3d25ac25,1,all 3 agree,1,Correct; Correct; Correct
+dfccf992-t2,1727c45d,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+e02a1fa7-t1,30cd8ed3,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e03b0895-t1,b525b226,1,2-1 split,0,Correct; Incorrect; Incorrect
+e04adb76-t1,5e649992,1,all 3 agree,1,Correct; Correct; Correct
+e0fe7605-t2,337b80f8,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+e1260ea1-t2,337b80f8,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e1b2d8ab-t2,0ecf476a,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+e258a1e4-t2,2245e388,2,all 3 agree,1,Correct; Correct; Correct
+e27e6d11-t1,a82fa11d,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e28877a2-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e38c46dc-t1,ab09b5a5,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e40d5cc0-t1,07a03530,1,all 3 agree,1,Correct; Correct; Correct
+e4416188-t1,52f2fe34,1,2-1 split,1,Correct; Correct; Incorrect
+e4f089d3-t1,bfe2760c,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e609bd5f-t2,ba417013,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+e66834cb-t1,3d25ac25,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+e66c249d-t2,c541ae08,2,all 3 agree,1,Correct; Correct; Correct
+e69f873b-t2,630f8662,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e6a96781-t2,3d25ac25,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+e6afa0dd-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e760a640-t1,ba3f2816,1,2-1 split,1,Correct; Correct; Incorrect
+e78d1b5b-t1,4e690e46,1,all 3 agree,1,Correct; Correct; Correct
+e7984237-t2,4cc2aad4,2,2-1 split,1,Correct; Correct; Incorrect
+e7fa23e1-t1,e28d6adf,1,all 3 agree,1,Correct; Correct; Correct
+e8c203c1-t2,337b80f8,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+e9015bd9-t1,32583a20,1,all 3 agree,1,Correct; Correct; Correct
+ea584b14-t1,91fd499c,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ea631287-t1,6e47b1bd,1,all 3 agree,1,Correct; Correct; Correct
+eacbb6d5-t2,2a84c5f7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+eb08f8d3-t1,5e407211,1,all 3 agree,1,Correct; Correct; Correct
+eb31368b-t2,09c1bbb7,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ec195f3f-t2,779f1434,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+ec75ac4f-t1,bd245234,1,all 3 agree,1,Correct; Correct; Correct
+ed417a4f-t2,5e649992,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ed92ec25-t1,82ed6392,1,all 3 agree,1,Correct; Correct; Correct
+edbe0144-t1,c104f63a,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+edcca21a-t2,c541ae08,2,all 3 agree,1,Correct; Correct; Correct
+ee8af781-t2,25f0592b,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+ee8c030a-t1,ba3f2816,1,2-1 split,1,Correct; Correct; Incorrect
+eef37509-t1,2db42262,1,all 3 agree,1,Correct; Correct; Correct
+efbdb450-t1,ba3f2816,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+efe6dc0d-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+efe6dc8a-t2,c345d6de,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f02fcd12-t1,07a03530,1,all 3 agree,1,Correct; Correct; Correct
+f12d7cf0-t2,97d2048d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f13898d1-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f198cb60-t2,ae5e6339,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f1a00d71-t1,04e43b84,1,all 3 agree,1,Correct; Correct; Correct
+f23c8a8f-t2,bfe2760c,2,2-1 split,0,Correct; Incorrect; Incorrect
+f24c40de-t1,52f2fe34,1,all 3 agree,1,Correct; Correct; Correct
+f30d834a-t2,82ed6392,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f3466f0e-t1,c11c400e,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f3bd9b0f-t2,2245e388,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f4690046-t2,eb7481d6,2,2-1 split,1,Correct; Correct; Incorrect
+f4e743fb-t2,c541ae08,2,2-1 split,0,Correct; Incorrect; Incorrect
+f54bc9dc-t1,2245e388,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f56d0aa5-t1,ce6d2523,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+f577e7fb-t2,e3af7c3d,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f5e655d8-t2,9897d61c,2,all 3 agree,1,Correct; Correct; Correct
+f7071066-t2,ddec45b7,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f76e8ee2-t2,ad608f63,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f8405bd9-t2,bd1f59da,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+f866cee9-t2,ea7a9d10,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f8be5a46-t1,a31b1616,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+f8cc7b61-t1,f9fb3ada,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+f8e87c4a-t1,c64f05ac,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f949c697-t1,82ed6392,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f96d3fe7-t1,ea7a9d10,1,all 3 agree,0,Incorrect; Incorrect; Incorrect
+f976609b-t1,3c770bd0,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+f9839b73-t1,143600cf,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+fa3ddcaa-t2,2c08fef6,2,2 agree + 1 not sure,1,Correct; Correct; Not sure
+fa5a1ff0-t1,52f2fe34,1,all 3 agree,1,Correct; Correct; Correct
+fa75da42-t2,fe364936,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+fac5218c-t1,bd245234,1,all 3 agree,1,Correct; Correct; Correct
+fad9d1b8-t2,9be15d66,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+fb447758-t2,ba417013,2,2-1 split,0,Correct; Incorrect; Incorrect
+fb71df40-t2,143600cf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+fb7a3ef6-t2,c67c5f87,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+fc4882c6-t1,f448163d,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+fce5250d-t2,2a84c5f7,2,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+fd02e5f6-t1,844d3929,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+fd188e29-t2,6e47b1bd,2,all 3 agree,1,Correct; Correct; Correct
+fd4eadab-t1,cf7207e8,1,all 3 agree,1,Correct; Correct; Correct
+fd92b9cb-t1,0e7c0684,1,2 agree + 1 not sure,1,Correct; Correct; Not sure
+fd9aae86-t1,9be15d66,1,2 agree + 1 not sure,0,Incorrect; Incorrect; Not sure
+ff28fe12-t2,3c770bd0,2,all 3 agree,0,Incorrect; Incorrect; Incorrect
+fff64c48-t2,e28d6adf,2,all 3 agree,0,Incorrect; Incorrect; Incorrect

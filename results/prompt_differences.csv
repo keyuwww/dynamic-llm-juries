@@ -1,0 +1,37 @@
+judge,contrast,answers,delta_kappa,lo,hi
+deepseek-v3.1,GUIDE-STD,all,0.0485,0.005,0.0928
+deepseek-v3.1,GUIDE-STD,all 3 agree,0.0532,0.0092,0.0986
+deepseek-v3.1,GUIDE-STD,2 agree + 1 not sure,0.0577,-0.0282,0.1532
+deepseek-v3.1,GUIDE-STD,2-1 split,0.0161,-0.1139,0.1399
+gpt-4.1-mini,GUIDE-STD,all,0.075,0.0248,0.1279
+gpt-4.1-mini,GUIDE-STD,all 3 agree,0.1035,0.0445,0.1725
+gpt-4.1-mini,GUIDE-STD,2 agree + 1 not sure,0.0813,-0.0102,0.1832
+gpt-4.1-mini,GUIDE-STD,2-1 split,-0.0478,-0.1687,0.0725
+gpt-oss-120b,GUIDE-STD,all,-0.074,-0.1227,-0.0254
+gpt-oss-120b,GUIDE-STD,all 3 agree,-0.0417,-0.1048,0.0216
+gpt-oss-120b,GUIDE-STD,2 agree + 1 not sure,-0.1388,-0.2257,-0.0463
+gpt-oss-120b,GUIDE-STD,2-1 split,-0.0656,-0.1848,0.0527
+gpt-oss-120b,GUIDE_NO2-GUIDE,all,0.0559,0.0297,0.0835
+gpt-oss-120b,GUIDE_NO2-GUIDE,all 3 agree,0.0339,0.0066,0.0661
+gpt-oss-120b,GUIDE_NO2-GUIDE,2 agree + 1 not sure,0.0839,0.0261,0.1457
+gpt-oss-120b,GUIDE_NO2-GUIDE,2-1 split,0.0823,-0.0031,0.163
+gpt-oss-120b,GUIDE_NO2-STD,all,-0.0181,-0.064,0.0284
+gpt-oss-120b,GUIDE_NO2-STD,all 3 agree,-0.0078,-0.066,0.0486
+gpt-oss-120b,GUIDE_NO2-STD,2 agree + 1 not sure,-0.0549,-0.1341,0.0268
+gpt-oss-120b,GUIDE_NO2-STD,2-1 split,0.0167,-0.108,0.1421
+gpt-oss-20b,GUIDE-STD,all,-0.0353,-0.0938,0.0323
+gpt-oss-20b,GUIDE-STD,all 3 agree,-0.0411,-0.1101,0.035
+gpt-oss-20b,GUIDE-STD,2 agree + 1 not sure,-0.0398,-0.1494,0.0793
+gpt-oss-20b,GUIDE-STD,2-1 split,0.0049,-0.1537,0.1623
+gpt-oss-20b,GUIDE_NO2-GUIDE,all,0.034,0.0019,0.0641
+gpt-oss-20b,GUIDE_NO2-GUIDE,all 3 agree,0.0424,0.0022,0.0804
+gpt-oss-20b,GUIDE_NO2-GUIDE,2 agree + 1 not sure,0.0241,-0.0489,0.0993
+gpt-oss-20b,GUIDE_NO2-GUIDE,2-1 split,0.0157,-0.1014,0.1324
+gpt-oss-20b,GUIDE_NO2-STD,all,-0.0012,-0.0565,0.0558
+gpt-oss-20b,GUIDE_NO2-STD,all 3 agree,0.0014,-0.0529,0.0651
+gpt-oss-20b,GUIDE_NO2-STD,2 agree + 1 not sure,-0.0157,-0.1189,0.1126
+gpt-oss-20b,GUIDE_NO2-STD,2-1 split,0.0206,-0.1321,0.1712
+qwen3.7-flash,GUIDE-STD,all,0.0671,0.0119,0.1214
+qwen3.7-flash,GUIDE-STD,all 3 agree,0.0951,0.0271,0.1654
+qwen3.7-flash,GUIDE-STD,2 agree + 1 not sure,0.021,-0.0808,0.1241
+qwen3.7-flash,GUIDE-STD,2-1 split,0.0538,-0.0936,0.2045
