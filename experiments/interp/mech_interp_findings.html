@@ -287,7 +287,40 @@ out the signal.</p>
 </figure>
 </div>
 
-<h2>5. Scope of these findings</h2>
+<h2>5. Does an earlier layer already know more than the final answer?</h2>
+<p>Every figure so far compares one layer's reading against <i>another prompt's</i> reading at that
+same layer. This section asks a different question instead: compare each layer's own implied verdict
+directly against the <b>human gold label</b>, not against the other condition. If some interior layer
+already agrees with humans better than the model's own final output does, that final output is
+discarding signal, not adding it. This needed no new GPU time &mdash; every pilot file already stores
+the human label alongside each layer's reading.</p>
+
+<figure>
+  <div class="fig-panel">
+    <div id="dumbbell-layerhuman"></div>
+  </div>
+  <figcaption><b>Figure 11.</b> Cohen's &kappa; against human labels: the model's own final
+  forced-choice answer (gray) vs. its best single interior layer (navy), rubric prompt, sorted by
+  gap. For six of nine judge/rubric pairs, an interior layer beats the final answer, sometimes by a
+  lot: <b>gpt-oss-120b's final output is worse than chance (&kappa;=&minus;0.03)</b> while layer 31
+  alone reaches <b>+0.28</b>. Qwen3.5-4B gains nearly as much (+0.20 to +0.39) at both rubrics.
+  nemotron3-nano-30b's best layer <i>is</i> its final layer (no gap) &mdash; consistent with its very
+  late critical layer elsewhere in this report. Qwen3.5-9B is the one real counterexample: its final
+  answer beats every single interior layer, meaning its last layer integrates information rather than
+  discarding it.</figcaption>
+</figure>
+
+<div class="callout">
+  <b class="label">Takeaway</b>
+  For most judges tested, the model's own final verdict is not the point of peak agreement with
+  humans &mdash; an earlier layer already "knows" more, and whatever happens between that layer and
+  the output token makes the judge's stated answer <i>less</i> reliable, not more. gpt-oss-120b is
+  the extreme case: its final answer is actively anti-informative under the rubric prompt, while a
+  single interior layer alone would make a moderately-agreeing judge. This is model-specific, not
+  universal &mdash; Qwen3.5-9B's final layer is genuinely the best one it has.
+</div>
+
+<h2>6. Scope of these findings</h2>
 <div class="scope">
 <b>Not yet shown:</b> a mechanism for <b>gpt-oss&#8209;20b's own real-rubric effect</b> &mdash; the
 model that started this investigation. Its &kappa; drop (0.667&rarr;0.617) is real, but comes from the
@@ -387,6 +420,22 @@ setup. Fixing this likely needs the model to reason first, then be read at the f
   drawDumbbell('dumbbell-reasoning', 'noReason', 'full',
     reasoningAcc.map(function(r){ return {judge:r.judge, a:r.noReason, b:r.full}; }),
     [0.4, 0.9], 'accuracy');
+
+  // ---------------- Figure 11: interior layer vs. final answer, agreement with human labels ----------------
+  var layerVsHuman = [
+    {judge:'Qwen3.5-9B (ours)', final:0.4263, best:0.2594},
+    {judge:'Qwen3.5-9B (real)', final:0.5002, best:0.4690},
+    {judge:'nemotron3-nano-30b (ours)', final:0.3690, best:0.3690},
+    {judge:'nemotron3-nano-30b (real)', final:0.2812, best:0.2812},
+    {judge:'gpt-oss-20b (ours)', final:0.0966, best:0.1073},
+    {judge:'Qwen3.6-35B-A3B (real)', final:0.4903, best:0.5219},
+    {judge:'gpt-oss-120b (ours)', final:-0.0329, best:0.2754},
+    {judge:'Qwen3.5-4B (real)', final:0.0055, best:0.3808},
+    {judge:'Qwen3.5-4B (ours)', final:0.0622, best:0.4522}
+  ];
+  drawDumbbell('dumbbell-layerhuman', 'final', 'best',
+    layerVsHuman.map(function(r){ return {judge:r.judge, a:r.final, b:r.best}; }),
+    [-0.1, 0.6], 'κ vs. human label');
 
   // ---------------- shared chart geometry ----------------
   var W = 680, H = 300, padL = 40, padR = 14, padT = 14, padB = 32;
