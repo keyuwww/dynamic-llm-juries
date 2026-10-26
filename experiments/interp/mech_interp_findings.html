@@ -485,6 +485,30 @@ good verdict somewhere in their last ~10&ndash;20% of layers, and what happens a
 either preserves it (Qwen3.5-9B), discards it consistently (gpt-oss-120b, Qwen3.5-4B), or has
 nothing left to discard because the final answer was already near-ceiling (nemotron3-super-120b).</p>
 
+<h3>Is it the same layer winning every time?</h3>
+<p>The gap and "x/20" counts above say the <i>sign</i> of the effect is reliable, but not whether
+it's the <i>same layer</i> winning each time or a different lucky layer every split. Re-running the
+20 held-out splits and tracking which exact layer gets picked on half A answers that directly: if the
+winner jumps around randomly from split to split, the effect is likely noise even when its sign is
+consistent; if the same layer (or a tight cluster) wins almost every time, that's independent evidence
+of a real, located mechanism.</p>
+
+<figure>
+  <div class="fig-panel" style="overflow-x:auto;">
+    <div style="margin-bottom:8px; font-size:11px; color:var(--ink-soft);">Depth of the winning layer
+    across the 20 splits, mean &plusmn; spread (standard deviation of depth, in percentage points).
+    Lower spread = same layer wins almost every time.</div>
+    <table id="layerstability"></table>
+  </div>
+  <figcaption><b>Figure 12b.</b> For most model/benchmark pairs the winning layer is essentially fixed
+  (&sigma;&nbsp;&le;&nbsp;3pp of depth) &mdash; e.g. gpt-oss-120b picks layer 31/37 on BFF-Bench in all
+  20 of 20 splits. <b>nemotron3-super-120b</b> is the clear outlier: its winning layer swings between
+  ~50% and ~87% depth on BFF and JudgeBench (&sigma;=15&ndash;18pp) &mdash; exactly the two benchmarks
+  where its gap was already near zero (Figure 12), consistent with there being no real signal to lock
+  onto. gpt-oss-20b on RB2-Safety always "wins" at layer 0 &mdash; the already-noted degenerate,
+  constant-prediction case, not a real located effect.</figcaption>
+</figure>
+
 <div class="takeaway">
   <b>Practical implication for the jury</b>
   The held-out evaluation above is already the relevant test for deployment: it asks whether reading
@@ -743,6 +767,44 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     html += '</tbody>';
     document.getElementById('genmatrix').innerHTML = html;
     document.getElementById('genmatrix-legend').innerHTML = legendHTML();
+  })();
+
+  // ---------------- Figure 12b: is the winning layer stable across the 20 splits? ----------------
+  // Each cell: [meanDepthPct, stdDepthPct, nLayers]. Computed by re-running the 20 held-out splits
+  // and recording which layer wins on half A each time (not just the gap's sign).
+  var layerStabilityData = [
+    {model:'gpt-oss-120b',        bff:[86,0,37],  judgebench:[97,1,37],  rb2safety:[76,3,37]},
+    {model:'gpt-oss-20b',         bff:[100,0,25], judgebench:[44,5,25],  rb2safety:[0,0,25]},
+    {model:'Qwen3.5-4B',          bff:[90,6,33],  judgebench:[86,9,33],  rb2safety:[93,1,33]},
+    {model:'Qwen3.5-9B',          bff:[100,0,33], judgebench:[87,6,33],  rb2safety:[100,0,33]},
+    {model:'nemotron3-nano-30B',  bff:[100,0,53], judgebench:[91,9,53],  rb2safety:[72,10,53]},
+    {model:'nemotron3-super-120B',bff:[66,15,89], judgebench:[80,18,89], rb2safety:[95,3,89]},
+    {model:'Qwen3.6-35B-A3B',     bff:[100,0,41], judgebench:[92,2,41],  rb2safety:[98,0,41]}
+  ];
+  (function(){
+    var cols = [['bff','BFF-Bench'], ['judgebench','JudgeBench'], ['rb2safety','RB2-Safety']];
+    function cellStyle(v){
+      var std = v[1];
+      var mag = Math.min(std / 18, 1);
+      return 'background: rgba(47,95,196,' + (0.06 + 0.45*mag) + ');'; // --blue, darker = less stable
+    }
+    function cellText(v){
+      var mean = v[0], std = v[1];
+      return mean + '% <span class="note" style="display:inline;">(&sigma;=' + std + 'pp)</span>';
+    }
+    var html = '<thead><tr><th>Model</th>';
+    cols.forEach(function(c){ html += '<th>' + c[1] + '</th>'; });
+    html += '</tr></thead><tbody>';
+    layerStabilityData.forEach(function(row){
+      html += '<tr><td style="font-family:var(--font-mono); font-size:12.5px;">' + row.model + '</td>';
+      cols.forEach(function(c){
+        var v = row[c[0]];
+        html += '<td class="num" style="' + cellStyle(v) + 'text-align:center;">' + cellText(v) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    document.getElementById('layerstability').innerHTML = html;
   })();
 
   // ---------------- Figure 13: CoCoNot-rubric replication on RB2-Safety ----------------
