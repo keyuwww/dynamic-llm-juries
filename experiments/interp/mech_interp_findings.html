@@ -299,19 +299,27 @@ directly against the <b>human gold label</b>, not against the other condition. I
 already agrees with humans better than the model's own final output does, that final output is
 discarding signal, not adding it.</p>
 
+<p>Not every model was run under both rubric conditions (time budget), but for the four that were,
+<b>both</b> are plotted side by side (colored dot = which rubric) so you can check the layer-vs-human
+effect isn't just an artifact of one rubric's exact wording.</p>
+
 <figure>
   <div class="fig-panel">
     <div id="dumbbell-layerhuman"></div>
   </div>
-  <figcaption><b>Figure 11.</b> Cohen's &kappa; against human labels: the model's own final
-  forced-choice answer (gray) vs. its best single interior layer (navy), rubric prompt, sorted by
-  gap. For six of nine judge/rubric pairs, an interior layer beats the final answer, sometimes by a
-  lot: <b>gpt-oss-120b's final output is worse than chance (&kappa;=&minus;0.03)</b> while layer 31
-  alone reaches <b>+0.28</b>. Qwen3.5-4B gains nearly as much (+0.20 to +0.39) at both rubrics.
-  nemotron3-nano-30b's best layer <i>is</i> its final layer (no gap) &mdash; consistent with its very
-  late critical layer elsewhere in this report. Qwen3.5-9B is the one real counterexample: its final
-  answer beats every single interior layer, meaning its last layer integrates information rather than
-  discarding it.</figcaption>
+  <figcaption><b>Figure 11.</b> BFF-Bench, rubric prompt. Cohen's &kappa; against human labels: the
+  model's own final forced-choice answer (gray) vs. its best single interior layer (navy). Rows
+  grouped by model, largest gap first; the small dot marks which rubric (<span
+  style="color:var(--violet)">&#9679;</span>&nbsp;ours, <span
+  style="color:var(--orange)">&#9679;</span>&nbsp;real/Appendix&nbsp;A.4). For six of nine
+  model/rubric pairs, an interior layer beats the final answer, sometimes by a lot: <b>gpt-oss-120b's
+  final output is worse than chance (&kappa;=&minus;0.03)</b> while layer 31 alone reaches
+  <b>+0.28</b>. Qwen3.5-4B gains nearly as much (+0.20 to +0.39) under either rubric &mdash; the
+  effect doesn't depend on which one was used. nemotron3-nano-30b's best layer <i>is</i> its final
+  layer (no gap) under either rubric &mdash; consistent with its very late critical layer elsewhere in
+  this report. Qwen3.5-9B is the one real counterexample under both rubrics: its final answer beats
+  every single interior layer, meaning its last layer integrates information rather than discarding
+  it.</figcaption>
 </figure>
 
 <div class="takeaway">
@@ -491,24 +499,39 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
   document.getElementById('kappa-table').innerHTML = html;
 
   // ---------------- dumbbell charts (behavioral result) ----------------
-  function drawDumbbell(targetId, condA, condB, rows, xDomain, xLabel){
-    var DW = 640, rowH = 34, topPad = 10, botPad = 26, leftPad = 150, rightPad = 50;
+  function drawDumbbell(targetId, condA, condB, rows, xDomain, xLabel, opts){
+    opts = opts || {};
+    var DW = 640, rowH = 34, groupPad = opts.tagOf ? 10 : 0, topPad = 10, botPad = opts.legend ? 44 : 26, leftPad = 150, rightPad = 50;
     var plotW2 = DW - leftPad - rightPad;
-    var DH = topPad + botPad + rows.length * rowH;
+    // figure out which rows start a new group (model changes), to add a little breathing room
+    var rowTop = [], cursor = topPad;
+    rows.forEach(function(r, i){
+      if (i > 0 && opts.tagOf && r.judge !== rows[i-1].judge) cursor += groupPad;
+      rowTop.push(cursor);
+      cursor += rowH;
+    });
+    var DH = cursor + botPad;
     function xs(v){ return leftPad + (v - xDomain[0]) / (xDomain[1] - xDomain[0]) * plotW2; }
     var svg = '<svg viewBox="0 0 '+DW+' '+DH+'">';
     // x gridlines/ticks
     var step = 0.1;
     for(var t = Math.ceil(xDomain[0]/step)*step; t <= xDomain[1]+1e-9; t += step){
       var gx = xs(t);
-      svg += '<line class="gridline" x1="'+gx+'" y1="'+topPad+'" x2="'+gx+'" y2="'+(DH-botPad)+'" />';
-      svg += '<text class="axis-label" x="'+gx+'" y="'+(DH-botPad+14)+'" text-anchor="middle">'+t.toFixed(2)+'</text>';
+      svg += '<line class="gridline" x1="'+gx+'" y1="'+topPad+'" x2="'+gx+'" y2="'+(cursor)+'" />';
+      svg += '<text class="axis-label" x="'+gx+'" y="'+(cursor+14)+'" text-anchor="middle">'+t.toFixed(2)+'</text>';
     }
-    svg += '<text class="axis-label" x="'+(leftPad+plotW2/2)+'" y="'+(DH-4)+'" text-anchor="middle">'+(xLabel||'κ')+'</text>';
+    svg += '<text class="axis-label" x="'+(leftPad+plotW2/2)+'" y="'+(cursor+28)+'" text-anchor="middle">'+(xLabel||'κ')+'</text>';
     rows.forEach(function(r, i){
-      var y = topPad + i*rowH + rowH/2;
+      var y = rowTop[i] + rowH/2;
       var ax = xs(r.a), bx = xs(r.b);
-      svg += '<text class="axis-label" x="'+(leftPad-10)+'" y="'+y+'" dy="3.5" text-anchor="end" style="font-weight:600; font-size:11px">'+r.judge+'</text>';
+      var showLabel = !opts.tagOf || i === 0 || r.judge !== rows[i-1].judge;
+      if (showLabel){
+        svg += '<text class="axis-label" x="'+(leftPad-10)+'" y="'+y+'" dy="3.5" text-anchor="end" style="font-weight:600; font-size:11px">'+r.judge+'</text>';
+      }
+      if (opts.tagOf){
+        var tag = opts.tagOf(r);
+        svg += '<circle cx="'+(leftPad-4)+'" cy="'+y+'" r="3" fill="'+tag.color+'" />';
+      }
       svg += '<line x1="'+Math.min(ax,bx)+'" y1="'+y+'" x2="'+Math.max(ax,bx)+'" y2="'+y+'" stroke="var(--line)" stroke-width="3" />';
       svg += '<circle cx="'+ax+'" cy="'+y+'" r="5" fill="var(--ink-soft)" />';
       svg += '<circle cx="'+bx+'" cy="'+y+'" r="5" fill="var(--blue)" />';
@@ -518,6 +541,15 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
       svg += '<text class="axis-label" x="'+(ax+aDx)+'" y="'+y+'" dy="3.5" text-anchor="'+aAnchor+'" style="fill:var(--ink-soft)">'+r.a.toFixed(2)+'</text>';
       svg += '<text class="axis-label" x="'+(bx+bDx)+'" y="'+y+'" dy="3.5" text-anchor="'+bAnchor+'" style="fill:var(--blue); font-weight:600">'+r.b.toFixed(2)+'</text>';
     });
+    if (opts.legend){
+      var ly = cursor + botPad - 6;
+      var lx = leftPad;
+      opts.legend.forEach(function(item){
+        svg += '<circle cx="'+lx+'" cy="'+ly+'" r="3" fill="'+item.color+'" />';
+        svg += '<text class="axis-label" x="'+(lx+8)+'" y="'+ly+'" dy="3.2" text-anchor="start">'+item.label+'</text>';
+        lx += 16 + item.label.length * 6.2;
+      });
+    }
     svg += '</svg>';
     document.getElementById(targetId).innerHTML = svg;
   }
@@ -547,20 +579,28 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     [0.4, 0.9], 'accuracy');
 
   // ---------------- Figure 11: interior layer vs. final answer, agreement with human labels ----------------
+  // Grouped by model (not all models were run under both rubric conditions -- time budget --
+  // but wherever both exist, they're shown adjacent so you can see the effect doesn't depend on
+  // which rubric wording was used). Groups ordered by largest gap within the group.
   var layerVsHuman = [
-    {judge:'Qwen3.5-9B (ours)', final:0.4263, best:0.2594},
-    {judge:'Qwen3.5-9B (real)', final:0.5002, best:0.4690},
-    {judge:'nemotron3-nano-30b (ours)', final:0.3690, best:0.3690},
-    {judge:'nemotron3-nano-30b (real)', final:0.2812, best:0.2812},
-    {judge:'gpt-oss-20b (ours)', final:0.0966, best:0.1073},
-    {judge:'Qwen3.6-35B-A3B (real)', final:0.4903, best:0.5219},
-    {judge:'gpt-oss-120b (ours)', final:-0.0329, best:0.2754},
-    {judge:'Qwen3.5-4B (real)', final:0.0055, best:0.3808},
-    {judge:'Qwen3.5-4B (ours)', final:0.0622, best:0.4522}
+    {judge:'Qwen3.5-4B', rubric:'ours', final:0.0622, best:0.4522},
+    {judge:'Qwen3.5-4B', rubric:'real', final:0.0055, best:0.3808},
+    {judge:'gpt-oss-120b', rubric:'ours', final:-0.0329, best:0.2754},
+    {judge:'Qwen3.6-35B-A3B', rubric:'real', final:0.4903, best:0.5219},
+    {judge:'gpt-oss-20b', rubric:'ours', final:0.0966, best:0.1073},
+    {judge:'nemotron3-nano-30b', rubric:'ours', final:0.3690, best:0.3690},
+    {judge:'nemotron3-nano-30b', rubric:'real', final:0.2812, best:0.2812},
+    {judge:'Qwen3.5-9B', rubric:'ours', final:0.4263, best:0.2594},
+    {judge:'Qwen3.5-9B', rubric:'real', final:0.5002, best:0.4690}
   ];
+  var rubricColor = {ours:'var(--violet)', real:'var(--orange)'};
   drawDumbbell('dumbbell-layerhuman', 'final', 'best',
     layerVsHuman.map(function(r){ return {judge:r.judge, a:r.final, b:r.best}; }),
-    [-0.1, 0.6], 'κ vs. human label');
+    [-0.1, 0.6], 'κ vs. human label',
+    {
+      tagOf: function(r){ return {color: rubricColor[r.rubric]}; },
+      legend: [{label:'ours', color: rubricColor.ours}, {label:'real (Appendix A.4)', color: rubricColor.real}]
+    });
 
   // ---------------- Figure 12: cross-benchmark held-out generalization matrix ----------------
   // Each cell: [mean held-out gap over 20 random 50/50 splits, n_pos (splits favoring an earlier
