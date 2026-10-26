@@ -19,11 +19,11 @@ question text -> frozen sentence encoder -> linear layer (trained) -+
 - **Training:** compare the predicted chance with the true 0 or 1 (cross-entropy loss) and update the judge vectors and the two layers (Adam).
 - **Routing:** for a new question, predict the chance for all 8 judges and use the highest-scoring judge.
 
-| Setting | Predict judge right: constant / kNN / EmbedLLM (accuracy) | Router: EmbedLLM / best single / top-3 |
+| Setting | Predict judge right: constant / kNN / EmbedLLM (accuracy) | Verdict accuracy: EmbedLLM router (1 judge) / EmbedLLM top-3 vote / best single / static top-3 |
 |---|---|---|
-| BFF, no reference | 0.765 / 0.757 / 0.761 | 0.831 / 0.856 / 0.869 |
-| BFF, reference given | 0.885 / 0.877 / 0.879 | 0.916 / 0.905 / 0.929 |
-| RewardBench-2 | 0.764 / 0.762 / 0.764 | 0.821 / 0.849 / 0.839 |
+| BFF, no reference | 0.765 / 0.757 / 0.761 | 0.831 / 0.856 / 0.856 / 0.869 |
+| BFF, reference given | 0.885 / 0.877 / 0.879 | 0.916 / 0.928 / 0.905 / 0.929 |
+| RewardBench-2 | 0.764 / 0.762 / 0.764 | 0.821 / 0.828 / 0.849 / 0.839 |
 
 Mean over 20 random 80/10/10 splits by question, prompt-only question text.
 
@@ -31,7 +31,7 @@ Mean over 20 random 80/10/10 splits by question, prompt-only question text.
 
 ![Plot 1: EmbedLLM correctness prediction](figures/embedllm_correctness.png)
 
-**Plot 2: routing accuracy of the EmbedLLM router against the baselines.** It beats the paper's weighted-random baseline everywhere, and is about the same as the best single judge at best.
+**Plot 2: how often the final verdict is right under each way of picking judges.** "EmbedLLM router" uses only the judge with the highest predicted chance. "EmbedLLM top-3 vote" takes the three judges with the highest predicted chance for each question and uses their majority vote. "Best single judge" always uses the same judge. "Static top-3" always uses the same three judges voting. "Weighted random" is the paper's baseline. The router beats the random baseline everywhere, and is about the same as the best single judge at best.
 
 ![Plot 2: EmbedLLM routing vs baselines](figures/embedllm_routing.png)
 

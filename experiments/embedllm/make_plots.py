@@ -18,12 +18,13 @@ ax.set_title("Plot 1: EmbedLLM predicting whether a judge is right on unseen que
 fig.tight_layout(); fig.savefig(os.path.join(out, "embedllm_correctness.png"), dpi=130); plt.close(fig)
 
 # ---- Plot 2: routing accuracy vs baselines
-route = {"EmbedLLM router": [.8310, .9160, .8211], "best single judge": [.8559, .9049, .8486], "static top-3": [.8694, .9288, .8386],
+route = {"EmbedLLM router (1 judge)": [.8310, .9160, .8211], "EmbedLLM top-3 vote": [.8564, .9277, .8275],
+         "best single judge": [.8559, .9049, .8486], "static top-3 vote": [.8694, .9288, .8386],
          "weighted random (paper's baseline)": [.8043, .9066, .7956]}
-fig, ax = plt.subplots(figsize=(9, 4.8))
+fig, ax = plt.subplots(figsize=(10, 4.8))
 for j, (name, v) in enumerate(route.items()):
-    ax.bar([i + (j - 1.5) * 0.2 for i in range(3)], v, 0.2, label=name)
-ax.set_xticks(range(3)); ax.set_xticklabels(settings); ax.set_ylim(0.75, 0.96); ax.set_ylabel("share of questions where the routed judge is right")
-ax.set_title("Plot 2: EmbedLLM routing vs baselines (bars start at 0.75)"); ax.legend(fontsize=8, loc="upper left")
+    ax.bar([i + (j - 2) * 0.16 for i in range(3)], v, 0.16, label=name)
+ax.set_xticks(range(3)); ax.set_xticklabels(settings); ax.set_ylim(0.75, 0.97); ax.set_ylabel("share of questions where the verdict is right")
+ax.set_title("Plot 2: EmbedLLM routing vs baselines (bars start at 0.75)"); ax.legend(fontsize=8, loc="upper left", ncol=2)
 fig.tight_layout(); fig.savefig(os.path.join(out, "embedllm_routing.png"), dpi=130); plt.close(fig)
 print("saved", sorted(os.listdir(out)))
