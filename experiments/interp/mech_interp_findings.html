@@ -400,6 +400,21 @@ to <b>1 of 459 items</b>, too few to patch, even though four other judges work f
 setup. Fixing this likely needs the model to reason first, then be read at the final token.
 </div>
 
+<div class="scope">
+<b>Why JudgeBench and RewardBench2-Safety never get a rubric condition:</b> BFF-Bench's rubric text
+in &sect;1 is reused verbatim from a real annotator guideline (Appendix&nbsp;A.4 of its source paper)
+&mdash; we checked whether JudgeBench and RewardBench2 have an equivalent before testing anything on
+them, including their own appendices. They don't. JudgeBench's gold labels come from a purely
+algorithmic pipeline (regex answer-matching, each source dataset's own checker, cross-checked by
+GPT-4o-mini) with no human-written grading rubric anywhere in the paper. RewardBench2's Safety
+appendix (G.4) confirms human <i>verification</i> of examples happened, but never reproduces the
+actual rubric text &mdash; it's described only as modified from CoCoNot's taxonomy, not quoted. Writing
+a detailed rubric for either benchmark ourselves would mean testing against a standard we invented,
+not one any human actually used &mdash; so both benchmarks above use the same plain, rubric-free
+prompt throughout, and the generalization matrix in Figure 12 should be read as a no-rubric-condition
+result for those two columns, not a missing experiment.
+</div>
+
 <footer>
   Team 10 &times; Kensho, AC297r. Data: BFF-Bench / kensho/VERDICTS
   (<a href="https://arxiv.org/abs/2503.05061" target="_blank" rel="noopener">No Free Labels</a>,
