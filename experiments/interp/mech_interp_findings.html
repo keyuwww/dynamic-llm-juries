@@ -391,6 +391,39 @@ nothing left to discard because the final answer was already near-ceiling (nemot
   on a held-out set, before using it in the jury itself.
 </div>
 
+<h3>Does a real, human-authored rubric replicate the BFF-Bench story on a second benchmark?</h3>
+<p>&sect;1&ndash;3 found that adding a detailed, human-authored rubric (Appendix A.4) to BFF-Bench
+changes which models agree with humans at the final token versus an interior layer. RewardBench2's
+own Safety appendix doesn't quote a reusable rubric (see below), but it names its source: CoCoNot
+(Brahman et al., 2024), whose own Appendix A, Table 4 <i>does</i> give a verbatim, human-authored
+definition of acceptable vs. unacceptable behavior for its "Dangerous or Sensitive Topics" category
+&mdash; the one that matches RB2-Safety's CoCoNot-derived prompts most directly. Dropping that exact
+text into the judge prompt (replacing the plain "is this appropriate?" framing used elsewhere in this
+report) and rerunning the held-out validation:</p>
+
+<figure>
+  <div class="fig-panel" style="overflow-x:auto;">
+    <table id="rubricreplication"></table>
+  </div>
+  <figcaption><b>Figure 13.</b> RewardBench2-Safety held-out layer-vs-final &kappa; gap, no rubric
+  (plain prompt) vs. CoCoNot's real Table 4 rubric, same three models. The rubric doesn't just
+  preserve the effect &mdash; it <b>sharpens</b> it for both judges that already showed it.</figcaption>
+</figure>
+
+<div class="takeaway">
+  <b>Replicated, with a real rubric, on an independent benchmark</b>
+  gpt-oss-120b's final answer <b>collapses to pure chance</b> under the CoCoNot rubric (&kappa;=+0.003,
+  down from an already-weak no-rubric final answer) while an interior layer still reaches +0.24
+  &mdash; the gap widens from +0.19 to +0.21, and the best layer shifts notably earlier (76%&rarr;49%
+  depth), suggesting the rubric engages a different, earlier mechanism rather than just amplifying
+  the same one. Qwen3.5-4B's gap grows from +0.63 to <b>+0.71 &mdash; the single largest effect in this
+  entire study</b> (final &kappa;=+0.12, best layer &kappa;=+0.83). Qwen3.5-9B stays flat either way
+  (+0.02 with the rubric vs. &minus;0.00 without) &mdash; the one model whose final layer is
+  trustworthy <i>regardless of rubric, task, or benchmark</i>. This is the clearest evidence in the
+  whole report that "a detailed rubric makes some judges' final answer less reliable, not more" is
+  not a BFF-Bench quirk.
+</div>
+
 <h2>6. Scope of these findings</h2>
 <div class="scope">
 <b>Not yet shown:</b> a mechanism for <b>gpt-oss&#8209;20b's own real-rubric effect</b> &mdash; the
@@ -401,18 +434,22 @@ setup. Fixing this likely needs the model to reason first, then be read at the f
 </div>
 
 <div class="scope">
-<b>Why JudgeBench and RewardBench2-Safety never get a rubric condition:</b> BFF-Bench's rubric text
-in &sect;1 is reused verbatim from a real annotator guideline (Appendix&nbsp;A.4 of its source paper)
-&mdash; we checked whether JudgeBench and RewardBench2 have an equivalent before testing anything on
-them, including their own appendices. They don't. JudgeBench's gold labels come from a purely
+<b>Why JudgeBench never gets a rubric condition, and RewardBench2-Safety's is borrowed:</b>
+BFF-Bench's rubric text in &sect;1 is reused verbatim from a real annotator guideline
+(Appendix&nbsp;A.4 of its source paper) &mdash; we checked whether JudgeBench and RewardBench2 have
+an equivalent before testing anything on them, including their own appendices (and, for
+RewardBench2's cited source, that source's own appendix too). JudgeBench's gold labels come from a purely
 algorithmic pipeline (regex answer-matching, each source dataset's own checker, cross-checked by
-GPT-4o-mini) with no human-written grading rubric anywhere in the paper. RewardBench2's Safety
-appendix (G.4) confirms human <i>verification</i> of examples happened, but never reproduces the
-actual rubric text &mdash; it's described only as modified from CoCoNot's taxonomy, not quoted. Writing
-a detailed rubric for either benchmark ourselves would mean testing against a standard we invented,
-not one any human actually used &mdash; so both benchmarks above use the same plain, rubric-free
-prompt throughout, and the generalization matrix in Figure 12 should be read as a no-rubric-condition
-result for those two columns, not a missing experiment.
+GPT-4o-mini) with no human-written grading rubric anywhere in the paper, so Figure 12's JudgeBench
+column stays rubric-free and that's a feature of the benchmark, not a gap in the experiment. RewardBench2's Safety
+appendix (G.4) confirms human <i>verification</i> of examples happened and names its rubric's source
+as CoCoNot's taxonomy, but never reproduces the text itself &mdash; so we went one level up to CoCoNot
+(Brahman et al., 2024) directly, found the verbatim definition in its own Appendix A, Table 4, and
+used <i>that</i> (Figure 13, above) rather than inventing our own. It's an upstream source, not a
+confirmed match to RB2's own internal wording (RB2 says it "modified" CoCoNot's taxonomy without
+saying how) &mdash; so Figure 12's RewardBench2-Safety column is still the plain-prompt condition, and
+Figure 13 is a separate, explicitly-labeled rubric replication on three of those five models, not a
+silent swap of what Figure 12 already reports.
 </div>
 
 <footer>
@@ -567,6 +604,36 @@ result for those two columns, not a missing experiment.
     });
     html += '</tbody>';
     document.getElementById('genmatrix').innerHTML = html;
+  })();
+
+  // ---------------- Figure 13: CoCoNot-rubric replication on RB2-Safety ----------------
+  (function(){
+    var rows = [
+      {model:'gpt-oss-120b',  none:[0.188,20,20], rubric:[0.207,20,20]},
+      {model:'Qwen3.5-4B',    none:[0.632,20,20], rubric:[0.706,20,20]},
+      {model:'Qwen3.5-9B',    none:[-0.003,8,20], rubric:[0.019,16,20]}
+    ];
+    function cellStyle(v){
+      var g = v[0];
+      var mag = Math.min(Math.abs(g) / 0.7, 1);
+      var bg = g >= 0
+        ? 'rgba(47,158,118,' + (0.08 + 0.55*mag) + ')'
+        : 'rgba(192,82,111,' + (0.08 + 0.55*mag) + ')';
+      return 'background:' + bg + ';';
+    }
+    function cellText(v){
+      var g = v[0], n = v[1], N = v[2];
+      return (g >= 0 ? '+' : '') + g.toFixed(3) + ' <span class="note" style="display:inline;">(' + n + '/' + N + ')</span>';
+    }
+    var html = '<thead><tr><th>Model</th><th>No rubric</th><th>CoCoNot rubric (real)</th></tr></thead><tbody>';
+    rows.forEach(function(row){
+      html += '<tr><td style="font-family:var(--font-mono); font-size:12.5px;">' + row.model + '</td>';
+      html += '<td class="num" style="' + cellStyle(row.none) + 'text-align:center;">' + cellText(row.none) + '</td>';
+      html += '<td class="num" style="' + cellStyle(row.rubric) + 'text-align:center;">' + cellText(row.rubric) + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    document.getElementById('rubricreplication').innerHTML = html;
   })();
 
   // ---------------- shared chart geometry ----------------

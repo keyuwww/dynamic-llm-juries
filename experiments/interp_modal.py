@@ -255,6 +255,64 @@ def run_rb2safety_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Sup
     return _run_rb2safety_impl(limit, model)
 
 
+def _run_rb2safety_rubric_impl(limit, model):
+    out_name = f"rb2safety_rubric_{model.split('/')[-1].lower()}"
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results") / out_name
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_vs_human_rb2safety_rubric.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return f"done: rb2safety rubric logit lens ({out_name})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_rb2safety_rubric(limit: int = 20, model: str = "Qwen/Qwen3.5-9B") -> str:
+    return _run_rb2safety_rubric_impl(limit, model)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_rb2safety_rubric_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
+    return _run_rb2safety_rubric_impl(limit, model)
+
+
+@app.local_entrypoint()
+def rb2safety_rubric(limit: int = 459, model: str = "Qwen/Qwen3.5-9B"):
+    msg = run_rb2safety_rubric.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def rb2safety_rubric_big(limit: int = 459, model: str = "openai/gpt-oss-120b"):
+    msg = run_rb2safety_rubric_big.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
 @app.local_entrypoint()
 def rb2safety(limit: int = 459, model: str = "Qwen/Qwen3.5-9B"):
     msg = run_rb2safety.remote(limit=limit, model=model)
