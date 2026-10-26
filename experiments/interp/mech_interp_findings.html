@@ -336,9 +336,11 @@ pick the best layer on one half, then score <i>that specific layer</i> against t
   completely different format: <b>BFF-Bench</b> (binary correctness grading, finance/accounting),
   <b>JudgeBench</b> (pairwise A/B response comparison, algorithmic gold), and <b>RewardBench2
   Safety</b> (binary appropriateness judgment on human-annotated CoCoNot prompts). Cell shade encodes
-  gap direction/size; "x/20" is how many of the 20 held-out splits agreed on the sign. A dash means
+  gap direction/size; "x/20" is how many of the 20 held-out splits agreed on the sign. "flat" means
   the model's final answer (and every layer) was a constant prediction on that benchmark &mdash; no
-  judgment signal to measure a gap on at all.</figcaption>
+  judgment signal to measure a gap on at all. *Qwen3.6-35B-A3B's BFF column is under the real
+  Appendix&nbsp;A.4 rubric (never run with ours); all other cells use the same rubric as the rest of
+  this report.</figcaption>
 </figure>
 
 <div class="takeaway">
@@ -351,12 +353,26 @@ pick the best layer on one half, then score <i>that specific layer</i> against t
   benchmark-independent property, just in the opposite direction. Everyone else is
   <b>domain-dependent</b>: Qwen3.5-4B shows the single largest effect in the whole study on
   RewardBench2-Safety (&kappa; +0.14&rarr;+0.78) but no effect at all on JudgeBench; the Nemotron-3
-  family shows a strong, robust effect on BFF-Bench and RewardBench2-Safety but only a marginal one on
-  JudgeBench, and the effect <i>shrinks</i> going from the 30B to the 120B member of that family rather
-  than growing with scale. gpt-oss-20b shows essentially nothing anywhere &mdash; on RewardBench2-Safety
-  it predicts the same label at every single layer, a collapsed, uninformative judge regardless of
-  where you read it from.
+  family shows a strong, robust effect on BFF-Bench and RewardBench2-Safety at <b>30B</b> but it
+  <i>shrinks to near-noise at 120B on every benchmark</i> (BFF +0.25&rarr;+0.06, RB2-Safety
+  +0.19&rarr;+0.00) &mdash; the larger model's final answer is already near the agreement ceiling
+  (&kappa;&asymp;+0.91 on RB2-Safety), leaving an interior layer little room to add anything. gpt-oss-20b
+  shows essentially nothing anywhere &mdash; on RewardBench2-Safety it predicts the same label at every
+  single layer, a collapsed, uninformative judge regardless of where you read it from. JudgeBench is
+  the one benchmark where the effect is weak or absent for <i>every</i> model except gpt-oss-120b,
+  hinting that pairwise comparison may just need more layers' worth of integration than a binary
+  correctness call does.
 </div>
+
+<p>When the effect <i>is</i> present, where in the network does it live? For gpt-oss-120b (36
+layers), the best layer sits in the same late band on all three benchmarks &mdash; 31/37 (84%) on
+BFF, 35/37 (95%) on JudgeBench, 28/37 (76%) on RB2-Safety &mdash; deep, but never the literal final
+layer. Qwen3.5-4B shows the same clustering (82&ndash;91% depth) despite its final-answer accuracy
+swinging wildly across those same three benchmarks. Qwen3.5-9B's best layer, by contrast, <i>is</i>
+the final layer (or one before it) every time. The picture this suggests: these models compute a
+good verdict somewhere in their last ~10&ndash;20% of layers, and what happens after that point
+either preserves it (Qwen3.5-9B), discards it consistently (gpt-oss-120b, Qwen3.5-4B), or has
+nothing left to discard because the final answer was already near-ceiling (nemotron3-super-120b).</p>
 
 <h2>6. Scope of these findings</h2>
 <div class="scope">
@@ -485,7 +501,8 @@ setup. Fixing this likely needs the model to reason first, then be read at the f
     {model:'Qwen3.5-4B',          bff:[0.364,20,20], judgebench:[-0.032,3,20], rb2safety:[0.632,20,20]},
     {model:'Qwen3.5-9B',          bff:[-0.173,0,20], judgebench:[-0.007,10,20], rb2safety:[-0.003,8,20]},
     {model:'nemotron3-nano-30B',  bff:[0.000,0,20],  judgebench:[0.008,15,20], rb2safety:[0.188,20,20]},
-    {model:'nemotron3-super-120B',bff:[0.059,17,20], judgebench:null, rb2safety:null}
+    {model:'nemotron3-super-120B',bff:[0.059,17,20], judgebench:[-0.029,6,20], rb2safety:[0.004,10,20]},
+    {model:'Qwen3.6-35B-A3B*',    bff:[0.033,18,20], judgebench:[-0.004,9,20], rb2safety:[0.092,20,20]}
   ];
   (function(){
     var cols = [['bff','BFF-Bench'], ['judgebench','JudgeBench'], ['rb2safety','RB2-Safety']];
