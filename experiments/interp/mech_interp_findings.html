@@ -299,27 +299,21 @@ directly against the <b>human gold label</b>, not against the other condition. I
 already agrees with humans better than the model's own final output does, that final output is
 discarding signal, not adding it.</p>
 
-<p>Not every model was run under both rubric conditions (time budget), but for the four that were,
-<b>both</b> are plotted side by side (colored dot = which rubric) so you can check the layer-vs-human
-effect isn't just an artifact of one rubric's exact wording.</p>
-
 <figure>
   <div class="fig-panel">
     <div id="dumbbell-layerhuman"></div>
   </div>
-  <figcaption><b>Figure 11.</b> BFF-Bench, rubric prompt. Cohen's &kappa; against human labels: the
-  model's own final forced-choice answer (gray) vs. its best single interior layer (navy). Rows
-  grouped by model, largest gap first; the small dot marks which rubric (<span
-  style="color:var(--violet)">&#9679;</span>&nbsp;ours, <span
-  style="color:var(--orange)">&#9679;</span>&nbsp;real/Appendix&nbsp;A.4). For six of nine
-  model/rubric pairs, an interior layer beats the final answer, sometimes by a lot: <b>gpt-oss-120b's
-  final output is worse than chance (&kappa;=&minus;0.03)</b> while layer 31 alone reaches
-  <b>+0.28</b>. Qwen3.5-4B gains nearly as much (+0.20 to +0.39) under either rubric &mdash; the
-  effect doesn't depend on which one was used. nemotron3-nano-30b's best layer <i>is</i> its final
-  layer (no gap) under either rubric &mdash; consistent with its very late critical layer elsewhere in
-  this report. Qwen3.5-9B is the one real counterexample under both rubrics: its final answer beats
-  every single interior layer, meaning its last layer integrates information rather than discarding
-  it.</figcaption>
+  <figcaption><b>Figure 11.</b> BFF-Bench, rubric prompt, our rubric (the main lens throughout this
+  report). Cohen's &kappa; against human labels: the model's own final forced-choice answer (gray)
+  vs. its best single interior layer (navy), sorted by gap. For four of six judges, an interior layer
+  beats the final answer, sometimes by a lot: <b>gpt-oss-120b's final output is worse than chance
+  (&kappa;=&minus;0.03)</b> while layer 31 alone reaches <b>+0.28</b>. Qwen3.5-4B gains nearly as much
+  (+0.39). nemotron3-nano-30b's best layer <i>is</i> its final layer (no gap) &mdash; consistent with
+  its very late critical layer elsewhere in this report. Qwen3.5-9B is the one real counterexample:
+  its final answer beats every single interior layer, meaning its last layer integrates information
+  rather than discarding it. <span class="note">*Qwen3.6-35B-A3B was never run under our rubric on
+  BFF-Bench (Figure 12 footnote), so its row here is under the real/Appendix&nbsp;A.4 rubric
+  instead.</span></figcaption>
 </figure>
 
 <div class="takeaway">
@@ -579,28 +573,20 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     [0.4, 0.9], 'accuracy');
 
   // ---------------- Figure 11: interior layer vs. final answer, agreement with human labels ----------------
-  // Grouped by model (not all models were run under both rubric conditions -- time budget --
-  // but wherever both exist, they're shown adjacent so you can see the effect doesn't depend on
-  // which rubric wording was used). Groups ordered by largest gap within the group.
+  // Our rubric only (the main lens throughout this report), one row per model. Qwen3.6-35B-A3B
+  // was never run under ours on BFF-Bench, so its row is the real/Appendix A.4 rubric instead
+  // (flagged with * in the caption).
   var layerVsHuman = [
-    {judge:'Qwen3.5-4B', rubric:'ours', final:0.0622, best:0.4522},
-    {judge:'Qwen3.5-4B', rubric:'real', final:0.0055, best:0.3808},
-    {judge:'gpt-oss-120b', rubric:'ours', final:-0.0329, best:0.2754},
-    {judge:'Qwen3.6-35B-A3B', rubric:'real', final:0.4903, best:0.5219},
-    {judge:'gpt-oss-20b', rubric:'ours', final:0.0966, best:0.1073},
-    {judge:'nemotron3-nano-30b', rubric:'ours', final:0.3690, best:0.3690},
-    {judge:'nemotron3-nano-30b', rubric:'real', final:0.2812, best:0.2812},
-    {judge:'Qwen3.5-9B', rubric:'ours', final:0.4263, best:0.2594},
-    {judge:'Qwen3.5-9B', rubric:'real', final:0.5002, best:0.4690}
+    {judge:'Qwen3.5-4B', final:0.0622, best:0.4522},
+    {judge:'gpt-oss-120b', final:-0.0329, best:0.2754},
+    {judge:'Qwen3.6-35B-A3B*', final:0.4903, best:0.5219},
+    {judge:'gpt-oss-20b', final:0.0966, best:0.1073},
+    {judge:'nemotron3-nano-30b', final:0.3690, best:0.3690},
+    {judge:'Qwen3.5-9B', final:0.4263, best:0.2594}
   ];
-  var rubricColor = {ours:'var(--violet)', real:'var(--orange)'};
   drawDumbbell('dumbbell-layerhuman', 'final', 'best',
     layerVsHuman.map(function(r){ return {judge:r.judge, a:r.final, b:r.best}; }),
-    [-0.1, 0.6], 'κ vs. human label',
-    {
-      tagOf: function(r){ return {color: rubricColor[r.rubric]}; },
-      legend: [{label:'ours', color: rubricColor.ours}, {label:'real (Appendix A.4)', color: rubricColor.real}]
-    });
+    [-0.1, 0.6], 'κ vs. human label');
 
   // ---------------- Figure 12: cross-benchmark held-out generalization matrix ----------------
   // Each cell: [mean held-out gap over 20 random 50/50 splits, n_pos (splits favoring an earlier
