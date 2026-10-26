@@ -301,6 +301,97 @@ discarding signal, not adding it.</p>
 
 <figure>
   <div class="fig-panel">
+    <svg viewBox="0 0 640 300" style="width:100%; height:auto; font-family:var(--font-mono);">
+      <text x="160" y="18" text-anchor="middle" style="font-size:12px; font-weight:700; fill:var(--ink);">A. Read every layer with the logit lens</text>
+      <line x1="40" y1="40" x2="40" y2="210" stroke="var(--ink-soft)" stroke-width="2"/>
+      <polygon points="36,210 44,210 40,218" fill="var(--ink-soft)"/>
+      <text x="52" y="46" style="font-size:9px; fill:var(--ink-soft);">forward pass</text>
+
+      <rect x="18" y="52" width="100" height="26" rx="5" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+      <text x="68" y="69" text-anchor="middle" style="font-size:10px; fill:var(--ink);">layer 1</text>
+      <text x="68" y="98" text-anchor="middle" style="font-size:13px; fill:var(--ink-soft);">&#8942;</text>
+      <rect x="18" y="112" width="100" height="26" rx="5" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+      <text x="68" y="129" text-anchor="middle" style="font-size:10px; fill:var(--ink);">layer k</text>
+      <text x="68" y="158" text-anchor="middle" style="font-size:13px; fill:var(--ink-soft);">&#8942;</text>
+      <rect x="18" y="172" width="100" height="26" rx="5" fill="var(--good-bg)" stroke="var(--blue)" stroke-width="1.5"/>
+      <text x="68" y="189" text-anchor="middle" style="font-size:10px; font-weight:700; fill:var(--blue);">layer N (final)</text>
+
+      <!-- dashed branch from every layer to the shared logit-lens readout -->
+      <line x1="118" y1="65" x2="200" y2="65" stroke="var(--teal)" stroke-width="1.3" stroke-dasharray="3,2"/>
+      <line x1="118" y1="125" x2="200" y2="125" stroke="var(--teal)" stroke-width="1.3" stroke-dasharray="3,2"/>
+      <line x1="118" y1="185" x2="200" y2="185" stroke="var(--teal)" stroke-width="1.3" stroke-dasharray="3,2"/>
+      <line x1="200" y1="65" x2="200" y2="185" stroke="var(--teal)" stroke-width="1.3" stroke-dasharray="3,2"/>
+      <polygon points="200,121 200,129 207,125" fill="var(--teal)"/>
+
+      <rect x="210" y="105" width="110" height="40" rx="5" fill="none" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="265" y="121" text-anchor="middle" style="font-size:9px; fill:var(--teal);">model's own final</text>
+      <text x="265" y="133" text-anchor="middle" style="font-size:9px; fill:var(--teal);">norm + unembed</text>
+
+      <line x1="320" y1="125" x2="360" y2="125" stroke="var(--teal)" stroke-width="1.5"/>
+      <polygon points="356,121 356,129 363,125" fill="var(--teal)"/>
+      <text x="368" y="121" style="font-size:10px; font-weight:700; fill:var(--teal);">verdict at</text>
+      <text x="368" y="133" style="font-size:10px; font-weight:700; fill:var(--teal);">that layer</text>
+
+      <!-- real output path, final layer only -->
+      <line x1="68" y1="198" x2="68" y2="230" stroke="var(--ink-soft)" stroke-width="1.5"/>
+      <polygon points="64,226 72,226 68,234" fill="var(--ink-soft)"/>
+      <rect x="8" y="238" width="120" height="30" rx="5" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/>
+      <text x="68" y="254" text-anchor="middle" style="font-size:9px; fill:var(--ink-soft);">model's real,</text>
+      <text x="68" y="265" text-anchor="middle" style="font-size:9px; fill:var(--ink-soft);">spoken answer</text>
+
+      <text x="265" y="285" text-anchor="middle" style="font-size:9.5px; fill:var(--ink-soft);">done once per layer, every layer, same item</text>
+
+      <line x1="340" y1="0" x2="340" y2="296" stroke="var(--line)" stroke-width="1"/>
+
+      <text x="490" y="18" text-anchor="middle" style="font-size:12px; font-weight:700; fill:var(--ink);">B. Held-out validation, ×20 random splits</text>
+      <rect x="430" y="30" width="120" height="26" rx="5" fill="none" stroke="var(--ink-soft)" stroke-width="1.5"/>
+      <text x="490" y="47" text-anchor="middle" style="font-size:9.5px; fill:var(--ink);">all N items</text>
+
+      <line x1="470" y1="56" x2="420" y2="82" stroke="var(--ink-soft)" stroke-width="1.3"/>
+      <polygon points="422,76 426,84 415,83" fill="var(--ink-soft)"/>
+      <line x1="510" y1="56" x2="560" y2="82" stroke="var(--ink-soft)" stroke-width="1.3"/>
+      <polygon points="558,76 565,83 554,84" fill="var(--ink-soft)"/>
+
+      <rect x="365" y="86" width="100" height="26" rx="5" fill="var(--good-bg)" stroke="var(--violet)" stroke-width="1.5"/>
+      <text x="415" y="103" text-anchor="middle" style="font-size:9.5px; fill:var(--violet); font-weight:700;">half A</text>
+      <rect x="535" y="86" width="100" height="26" rx="5" fill="var(--bad-bg)" stroke="var(--orange)" stroke-width="1.5"/>
+      <text x="585" y="103" text-anchor="middle" style="font-size:9.5px; fill:var(--orange); font-weight:700;">half B (held out)</text>
+
+      <line x1="415" y1="112" x2="415" y2="138" stroke="var(--violet)" stroke-width="1.3"/>
+      <polygon points="411,134 419,134 415,142" fill="var(--violet)"/>
+      <rect x="360" y="146" width="150" height="36" rx="5" fill="none" stroke="var(--violet)" stroke-width="1.5"/>
+      <text x="435" y="161" text-anchor="middle" style="font-size:8.8px; fill:var(--violet);">search every layer,</text>
+      <text x="435" y="173" text-anchor="middle" style="font-size:8.8px; fill:var(--violet);">pick the single best</text>
+
+      <line x1="510" y1="164" x2="560" y2="164" stroke="var(--ink-soft)" stroke-width="1.3" stroke-dasharray="3,2"/>
+      <polygon points="556,160 556,168 563,164" fill="var(--ink-soft)"/>
+      <text x="535" y="156" text-anchor="middle" style="font-size:8px; fill:var(--ink-soft);">layer L*</text>
+
+      <line x1="585" y1="112" x2="585" y2="146" stroke="var(--orange)" stroke-width="1.3"/>
+      <line x1="435" y1="182" x2="435" y2="210" stroke="var(--violet)" stroke-width="1.3" stroke-dasharray="2,2"/>
+      <line x1="435" y1="210" x2="585" y2="210" stroke="var(--violet)" stroke-width="1.3" stroke-dasharray="2,2"/>
+      <polygon points="581,206 581,214 589,210" fill="var(--violet)"/>
+
+      <rect x="430" y="222" width="190" height="40" rx="5" fill="none" stroke="var(--blue)" stroke-width="1.5"/>
+      <text x="525" y="238" text-anchor="middle" style="font-size:9px; fill:var(--blue);">on half B only: &kappa;(layer L*) vs.</text>
+      <text x="525" y="250" text-anchor="middle" style="font-size:9px; fill:var(--blue); font-weight:700;">&kappa;(model's final answer) &rarr; gap</text>
+
+      <path d="M 430,242 C 370,255 370,60 430,43" fill="none" stroke="var(--line)" stroke-width="1.2" stroke-dasharray="4,3"/>
+      <polygon points="426,47 433,41 436,51" fill="var(--line)"/>
+      <text x="400" y="150" text-anchor="middle" transform="rotate(-90,400,150)" style="font-size:8.5px; fill:var(--ink-soft);">repeat with a new random split, 20&times;</text>
+    </svg>
+  </div>
+  <figcaption><b>Figure 10.</b> The method behind Figures 11&ndash;13. <b>(A)</b> At every layer, the
+  hidden state is read through the model's own final readout (norm + unembedding) to get a
+  CORRECT/INCORRECT verdict as if the model had stopped there &mdash; compared against the model's
+  real, spoken final answer. <b>(B)</b> Picking "the best layer" by searching all of them is a
+  multiple-comparisons problem, so the best layer is chosen on one random half of the data and
+  scored only on the other, unseen half; this repeats for 20 random splits, and the reported gap is
+  the average over all 20.</figcaption>
+</figure>
+
+<figure>
+  <div class="fig-panel">
     <div id="dumbbell-layerhuman"></div>
   </div>
   <figcaption><b>Figure 11.</b> BFF-Bench, rubric prompt, our rubric (the main lens throughout this
@@ -336,6 +427,7 @@ pick the best layer on one half, then score <i>that specific layer</i> against t
 
 <figure>
   <div class="fig-panel" style="overflow-x:auto;">
+    <div id="genmatrix-legend" style="margin-bottom:8px; font-size:11px; color:var(--ink-soft);"></div>
     <table id="genmatrix"></table>
   </div>
   <figcaption><b>Figure 12.</b> Held-out layer-vs-final &kappa; gap (best single layer minus final
@@ -410,6 +502,7 @@ report) and rerunning the held-out validation:</p>
 
 <figure>
   <div class="fig-panel" style="overflow-x:auto;">
+    <div id="rubricreplication-legend" style="margin-bottom:8px; font-size:11px; color:var(--ink-soft);"></div>
     <table id="rubricreplication"></table>
   </div>
   <figcaption><b>Figure 13.</b> RewardBench2-Safety held-out layer-vs-final &kappa; gap, no rubric
@@ -601,6 +694,15 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     {model:'nemotron3-super-120B',bff:[0.059,17,20], judgebench:[-0.029,6,20], rb2safety:[0.004,10,20]},
     {model:'Qwen3.6-35B-A3B*',    bff:[0.033,18,20], judgebench:[-0.004,9,20], rb2safety:[0.092,20,20]}
   ];
+  function legendHTML(){
+    return '<span style="display:inline-flex; align-items:center; gap:5px; margin-right:16px;">' +
+      '<span style="display:inline-block; width:11px; height:11px; border-radius:2px; background:rgba(47,158,118,0.55);"></span>' +
+      '<b style="color:var(--teal);">green</b> = interior layer beats final answer (model knew more than it said)</span>' +
+      '<span style="display:inline-flex; align-items:center; gap:5px;">' +
+      '<span style="display:inline-block; width:11px; height:11px; border-radius:2px; background:rgba(192,82,111,0.55);"></span>' +
+      '<b style="color:var(--pink);">pink</b> = final answer already best (nothing discarded)</span>' +
+      '<br><span style="font-size:10px;">darker = larger gap &middot; "x/20" = held-out splits agreeing on the sign</span>';
+  }
   (function(){
     var cols = [['bff','BFF-Bench'], ['judgebench','JudgeBench'], ['rb2safety','RB2-Safety']];
     function cellStyle(v){
@@ -632,6 +734,7 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     });
     html += '</tbody>';
     document.getElementById('genmatrix').innerHTML = html;
+    document.getElementById('genmatrix-legend').innerHTML = legendHTML();
   })();
 
   // ---------------- Figure 13: CoCoNot-rubric replication on RB2-Safety ----------------
@@ -662,6 +765,7 @@ stays plain-prompt and Figure 13 is a separate, labeled replication on three of 
     });
     html += '</tbody>';
     document.getElementById('rubricreplication').innerHTML = html;
+    document.getElementById('rubricreplication-legend').innerHTML = legendHTML();
   })();
 
   // ---------------- shared chart geometry ----------------
