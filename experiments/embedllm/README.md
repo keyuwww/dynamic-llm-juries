@@ -4,15 +4,15 @@ Learn an embedding for each judge from its right and wrong history, embed each q
 
 **Result:** it predicts judge correctness no better than a constant baseline, and the router is about as good as the best single judge.
 
-| Setting | Predict judge right: constant / kNN / EmbedLLM (accuracy) | AUROC kNN / EmbedLLM | Router: EmbedLLM / best single / top-3 |
-|---|---|---|---|
-| BFF, no reference | 0.765 / 0.757 / 0.761 | 0.59 / 0.58 | 0.831 / 0.856 / 0.869 |
-| BFF, reference given | 0.885 / 0.877 / 0.879 | 0.63 / 0.59 | 0.916 / 0.905 / 0.929 |
-| RewardBench-2 | 0.764 / 0.762 / 0.764 | 0.70 / 0.69 | 0.821 / 0.849 / 0.839 |
+| Setting | Predict judge right: constant / kNN / EmbedLLM (accuracy) | Router: EmbedLLM / best single / top-3 |
+|---|---|---|
+| BFF, no reference | 0.765 / 0.757 / 0.761 | 0.831 / 0.856 / 0.869 |
+| BFF, reference given | 0.885 / 0.877 / 0.879 | 0.916 / 0.905 / 0.929 |
+| RewardBench-2 | 0.764 / 0.762 / 0.764 | 0.821 / 0.849 / 0.839 |
 
 Mean over 20 random 80/10/10 splits by question, prompt-only question text.
 
-**Plot 1: predicting whether a judge is right on unseen questions.** Accuracy is no better than the constant baseline; AUROC is above chance (0.5) but modest.
+**Plot 1: predicting whether a judge is right on unseen questions.** Accuracy is no better than the constant baseline.
 
 ![Plot 1: EmbedLLM correctness prediction](figures/embedllm_correctness.png)
 
