@@ -378,6 +378,19 @@ good verdict somewhere in their last ~10&ndash;20% of layers, and what happens a
 either preserves it (Qwen3.5-9B), discards it consistently (gpt-oss-120b, Qwen3.5-4B), or has
 nothing left to discard because the final answer was already near-ceiling (nemotron3-super-120b).</p>
 
+<div class="takeaway">
+  <b>Practical implication for the jury</b>
+  The held-out evaluation above is already the relevant test for deployment: it asks whether reading
+  a <i>fixed</i> layer index (chosen without looking at the test item) beats reading the final token
+  &mdash; exactly the question that matters for an early-exit judge. For gpt-oss-120b, Qwen3.5-4B
+  (on BFF and RB2-Safety), and nemotron3-nano-30b (on RB2-Safety), the answer is <b>yes, reliably</b>:
+  stopping forward computation partway through and reading the logit-lens verdict there would both
+  <i>cut inference cost</i> and <i>raise agreement with human labels</i>, not trade one for the other.
+  The catch is that the right layer is model- and domain-specific (compare the per-model columns in
+  Figure 12), so this isn't a universal recipe &mdash; it would need calibrating per judge, per task,
+  on a held-out set, before using it in the jury itself.
+</div>
+
 <h2>6. Scope of these findings</h2>
 <div class="scope">
 <b>Not yet shown:</b> a mechanism for <b>gpt-oss&#8209;20b's own real-rubric effect</b> &mdash; the
