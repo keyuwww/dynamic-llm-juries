@@ -97,6 +97,14 @@ def run_logit_lens_big(limit: int = 20, model: str = "openai/gpt-oss-120b", rubr
     return _run_logit_lens_impl(limit, model, rubric, out_name)
 
 
+@app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_logit_lens_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+                       rubric: str = "rules", out_name: str = "") -> str:
+    # Plain-BF16 ~120B models (not natively quantized like gpt-oss) need ~240GB+ for weights alone --
+    # H100:2 (160GB) silently OOM-kills with no Python traceback; H100:4 (320GB) has headroom.
+    return _run_logit_lens_impl(limit, model, rubric, out_name)
+
+
 def _run_activation_patching_impl(model, flip, window, max_items, rubric):
     link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results")
     vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results"
@@ -133,6 +141,160 @@ def run_activation_patching(model: str = "openai/gpt-oss-20b", flip: str = "std_
 def run_activation_patching_big(model: str = "openai/gpt-oss-120b", flip: str = "std_to_incorrect",
                                  window: int = 1, max_items: int = 0, rubric: str = "rules") -> str:
     return _run_activation_patching_impl(model, flip, window, max_items, rubric)
+
+
+def _run_judgebench_impl(limit, model):
+    out_name = f"judgebench_{model.split('/')[-1].lower()}"
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results") / out_name
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_vs_human_judgebench.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return f"done: judgebench logit lens ({out_name})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_judgebench(limit: int = 20, model: str = "Qwen/Qwen3.5-9B") -> str:
+    return _run_judgebench_impl(limit, model)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_judgebench_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
+    return _run_judgebench_impl(limit, model)
+
+
+@app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_judgebench_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16") -> str:
+    return _run_judgebench_impl(limit, model)
+
+
+@app.local_entrypoint()
+def judgebench(limit: int = 459, model: str = "Qwen/Qwen3.5-9B"):
+    msg = run_judgebench.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def judgebench_big(limit: int = 459, model: str = "openai/gpt-oss-120b"):
+    msg = run_judgebench_big.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def judgebench_xl(limit: int = 459, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"):
+    msg = run_judgebench_xl.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+def _run_rb2safety_impl(limit, model):
+    out_name = f"rb2safety_{model.split('/')[-1].lower()}"
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results") / out_name
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_vs_human_rb2safety.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return f"done: rb2safety logit lens ({out_name})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_rb2safety(limit: int = 20, model: str = "Qwen/Qwen3.5-9B") -> str:
+    return _run_rb2safety_impl(limit, model)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_rb2safety_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
+    return _run_rb2safety_impl(limit, model)
+
+
+@app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_rb2safety_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16") -> str:
+    return _run_rb2safety_impl(limit, model)
+
+
+@app.local_entrypoint()
+def rb2safety(limit: int = 459, model: str = "Qwen/Qwen3.5-9B"):
+    msg = run_rb2safety.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def rb2safety_big(limit: int = 459, model: str = "openai/gpt-oss-120b"):
+    msg = run_rb2safety_big.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def rb2safety_xl(limit: int = 459, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"):
+    msg = run_rb2safety_xl.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
 
 
 @app.function(volumes={VOL_MOUNT: vol})
@@ -178,6 +340,20 @@ def main(limit: int = 20, model: str = "Qwen/Qwen3.5-4B", rubric: str = "rules")
 @app.local_entrypoint()
 def main_big(limit: int = 20, model: str = "openai/gpt-oss-120b", rubric: str = "rules"):
     msg = run_logit_lens_big.remote(limit=limit, model=model, rubric=rubric)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def main_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16", rubric: str = "rules"):
+    msg = run_logit_lens_xl.remote(limit=limit, model=model, rubric=rubric)
     print(msg)
     files = pull_results.remote()
     dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"

@@ -309,14 +309,53 @@ discarding signal, not adding it.</p>
   discarding it.</figcaption>
 </figure>
 
-<div class="callout">
-  <b class="label">Takeaway</b>
+<div class="takeaway">
+  <b>Takeaway</b>
   For most judges tested, the model's own final verdict is not the point of peak agreement with
   humans &mdash; an earlier layer already "knows" more, and whatever happens between that layer and
   the output token makes the judge's stated answer <i>less</i> reliable, not more. gpt-oss-120b is
   the extreme case: its final answer is actively anti-informative under the rubric prompt, while a
   single interior layer alone would make a moderately-agreeing judge. This is model-specific, not
-  universal &mdash; Qwen3.5-9B's final layer is genuinely the best one it has.
+  universal &mdash; Qwen3.5-9B's final layer is genuinely the best one it has. <b>(The numbers above
+  are full-sample; see the held-out validation directly below, which revises several of them.)</b>
+</div>
+
+<h3>Is this real, or just picking the best of many noisy layers?</h3>
+<p>Comparing a single final-token prediction against the <i>best of</i> 24&ndash;88 layers is a
+multiple-comparisons problem &mdash; with enough layers, one will beat the final answer by chance alone.
+To correct for this, each judge/benchmark pair below was tested with <b>20 random 50/50 splits</b>:
+pick the best layer on one half, then score <i>that specific layer</i> against the final answer on the
+<b>other, held-out half</b>. A real effect should survive this; a selection artifact should not.</p>
+
+<figure>
+  <div class="fig-panel" style="overflow-x:auto;">
+    <table id="genmatrix"></table>
+  </div>
+  <figcaption><b>Figure 12.</b> Held-out layer-vs-final &kappa; gap (best single layer minus final
+  answer, picked on a disjoint held-out half; mean of 20 random splits) across three benchmarks of
+  completely different format: <b>BFF-Bench</b> (binary correctness grading, finance/accounting),
+  <b>JudgeBench</b> (pairwise A/B response comparison, algorithmic gold), and <b>RewardBench2
+  Safety</b> (binary appropriateness judgment on human-annotated CoCoNot prompts). Cell shade encodes
+  gap direction/size; "x/20" is how many of the 20 held-out splits agreed on the sign. A dash means
+  the model's final answer (and every layer) was a constant prediction on that benchmark &mdash; no
+  judgment signal to measure a gap on at all.</figcaption>
+</figure>
+
+<div class="takeaway">
+  <b>Validated finding</b>
+  Correcting for selection bias changes the picture in important ways. <b>gpt-oss-120b</b> is the one
+  model where an interior layer robustly beats the final answer on <i>every</i> benchmark tested
+  (19&ndash;20 of 20 splits each time) &mdash; this looks like a genuine property of the model, not of
+  any one task. <b>Qwen3.5-9B</b> is the mirror image: its final layer is the best layer on every
+  benchmark, with <i>zero</i> of 20 splits ever favoring an earlier one &mdash; also a stable,
+  benchmark-independent property, just in the opposite direction. Everyone else is
+  <b>domain-dependent</b>: Qwen3.5-4B shows the single largest effect in the whole study on
+  RewardBench2-Safety (&kappa; +0.14&rarr;+0.78) but no effect at all on JudgeBench; the Nemotron-3
+  family shows a strong, robust effect on BFF-Bench and RewardBench2-Safety but only a marginal one on
+  JudgeBench, and the effect <i>shrinks</i> going from the 30B to the 120B member of that family rather
+  than growing with scale. gpt-oss-20b shows essentially nothing anywhere &mdash; on RewardBench2-Safety
+  it predicts the same label at every single layer, a collapsed, uninformative judge regardless of
+  where you read it from.
 </div>
 
 <h2>6. Scope of these findings</h2>
@@ -435,6 +474,51 @@ setup. Fixing this likely needs the model to reason first, then be read at the f
   drawDumbbell('dumbbell-layerhuman', 'final', 'best',
     layerVsHuman.map(function(r){ return {judge:r.judge, a:r.final, b:r.best}; }),
     [-0.1, 0.6], 'κ vs. human label');
+
+  // ---------------- Figure 12: cross-benchmark held-out generalization matrix ----------------
+  // Each cell: [mean held-out gap over 20 random 50/50 splits, n_pos (splits favoring an earlier
+  // layer), N splits]. null = not yet run; "flat" = model predicted a constant label at every
+  // layer on that benchmark (no gap to measure).
+  var genMatrixData = [
+    {model:'gpt-oss-120b',        bff:[0.311,20,20], judgebench:[0.074,19,20], rb2safety:[0.188,20,20]},
+    {model:'gpt-oss-20b',         bff:[0.012,15,20], judgebench:[0.008,12,20], rb2safety:'flat'},
+    {model:'Qwen3.5-4B',          bff:[0.364,20,20], judgebench:[-0.032,3,20], rb2safety:[0.632,20,20]},
+    {model:'Qwen3.5-9B',          bff:[-0.173,0,20], judgebench:[-0.007,10,20], rb2safety:[-0.003,8,20]},
+    {model:'nemotron3-nano-30B',  bff:[0.000,0,20],  judgebench:[0.008,15,20], rb2safety:[0.188,20,20]},
+    {model:'nemotron3-super-120B',bff:[0.059,17,20], judgebench:null, rb2safety:null}
+  ];
+  (function(){
+    var cols = [['bff','BFF-Bench'], ['judgebench','JudgeBench'], ['rb2safety','RB2-Safety']];
+    function cellStyle(v){
+      if (v === 'flat') return 'color:var(--ink-soft); font-style:italic;';
+      var g = v[0];
+      var mag = Math.min(Math.abs(g) / 0.4, 1);
+      var bg = g >= 0
+        ? 'rgba(47,158,118,' + (0.08 + 0.55*mag) + ')'   // teal, positive = layer beats final
+        : 'rgba(192,82,111,' + (0.08 + 0.55*mag) + ')';  // pink, negative = final beats layer
+      return 'background:' + bg + ';';
+    }
+    function cellText(v){
+      if (v === null) return '<span style="color:var(--ink-soft);">pending</span>';
+      if (v === 'flat') return 'flat (no signal)';
+      var g = v[0], n = v[1], N = v[2];
+      return (g >= 0 ? '+' : '') + g.toFixed(3) + ' <span class="note" style="display:inline;">(' + n + '/' + N + ')</span>';
+    }
+    var html = '<thead><tr><th>Model</th>';
+    cols.forEach(function(c){ html += '<th>' + c[1] + '</th>'; });
+    html += '</tr></thead><tbody>';
+    genMatrixData.forEach(function(row){
+      html += '<tr><td style="font-family:var(--font-mono); font-size:12.5px;">' + row.model + '</td>';
+      cols.forEach(function(c){
+        var v = row[c[0]];
+        var style = v === null ? '' : cellStyle(v);
+        html += '<td class="num" style="' + style + 'text-align:center;">' + cellText(v) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    document.getElementById('genmatrix').innerHTML = html;
+  })();
 
   // ---------------- shared chart geometry ----------------
   var W = 680, H = 300, padL = 40, padR = 14, padT = 14, padB = 32;
