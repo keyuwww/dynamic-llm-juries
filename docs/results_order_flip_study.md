@@ -24,7 +24,7 @@ Literature: `docs/lit_review_cross_judge_error_detection.md`.
 2. **Other judges' low stated confidence beats their flips as an alarm.** Using checkers' low confidence: 0.65–0.83
    AUROC. Using the same checkers' flips: 0.62–0.73. Confidence also works where orders can't be swapped.
 3. **On single-answer grading, plain disagreement is the best signal.** On RewardBench 2 other, the number of other
-   judges disagreeing with gpt-oss-120b flags its errors at 0.73 and catches 43% at 18% flagged. Its own stated
+   judges disagreeing with gpt-oss-120b flags its errors at AUROC 0.73. Its own stated
    confidence gets 0.61; its token probability is at chance (0.47).
 4. **Flips mark near-tie pairs, and the default under a tie is the first-shown answer.**
    - With the same answer in both slots, 93–100% of strong judges' picks go to the first position.
@@ -73,8 +73,7 @@ Literature: `docs/lit_review_cross_judge_error_detection.md`.
 | Stated confidence + others' pooled score | 0.73 | **0.86** | **0.70** | **0.80** |
 | Others' low stated confidence | **0.74** | 0.83 | 0.65 | 0.78 |
 
-Errors caught at 18% flagged, best combination: 40% BFF pairwise, 65% JudgeBench, 29–37% AlpacaFarm, 49–56%
-MT-Bench human (random flagging catches 18%).
+Signals are compared by AUROC across all thresholds, so no single flag rate is chosen in advance.
 
 ## What this means
 - **For routing:** ask the strong judge for a confidence and escalate low-confidence items. Add other judges'

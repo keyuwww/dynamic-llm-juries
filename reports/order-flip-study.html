@@ -105,18 +105,24 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
 <section aria-labelledby="k">
   <h2 id="k" style="margin-bottom:14px">Main findings</h2>
   <ol class="concl">
-    <li><span class="n">1</span><div><b>The best judge's stated confidence flags its confident errors</b> (AUROC 0.65–0.84). Answers rated 95–100 are wrong 3–10% of the time; answers rated below 80 are wrong 23–31%.</div></li>
-    <li><span class="n">2</span><div><b>The more other judges flip, the likelier the best judge is wrong.</b> Error rates climb from 1–10% when nobody flips to 30–40% when 4 or more flip, but fewer than 14% of pairs reach 4 flips.</div></li>
-    <li><span class="n">3</span><div><b>Combining the two helps on 3 of 4 benchmarks</b> (AUROC 0.70–0.86). Flagging 18% of pairs then catches 29–65% of the best judge's confident errors.</div></li>
-    <li><span class="n">4</span><div><b>Flips mark near-ties, and ties default to the first-shown answer.</b> Several "why" hypotheses failed: flips don't track whether the judge could solve the question and can't be predicted from the text.</div></li>
+    <li><span class="n">1</span><div><b>Weaker judges can't reliably pick the right answer, but their uncertainty still marks the items that are hard to judge, including items where the strongest judge is confidently wrong.</b> Their low stated confidence flags the best judge's confident errors at AUROC 0.59–0.84 for every judge except Nemotron-Nano, and on 6 of 28 judge–benchmark pairs it matches or beats the best judge's own confidence.</div></li>
+    <li><span class="n">2</span><div><b>The best judge's stated confidence flags its confident errors</b> (AUROC 0.65–0.84). Answers rated 95–100 are wrong 3–10% of the time; answers rated below 80 are wrong 23–31%.</div></li>
+    <li><span class="n">3</span><div><b>The more other judges flip, the likelier the best judge is wrong.</b> Error rates climb from 1–10% when nobody flips to 30–40% when 4 or more flip, but fewer than 14% of pairs reach 4 flips.</div></li>
+    <li><span class="n">4</span><div><b>Combining the two helps on 3 of 4 benchmarks</b> (AUROC 0.70–0.86).</div></li>
+    <li><span class="n">5</span><div><b>Flips mark near-ties, and ties default to the first-shown answer.</b> Several "why" hypotheses failed: flips don't track whether the judge could solve the question and can't be predicted from the text.</div></li>
   </ol>
 </section>
 
-<section class="fig" aria-labelledby="f0">
-  <h2 id="f0">How the two signals compare: flagging 18% of pairs catches 29–65% of confident errors</h2>
-  <div class="chart"><svg id="g3" viewBox="0 0 860 330" role="img" aria-label="Share of errors caught at an 18% flag rate by own confidence, other judges, and combined, per benchmark."></svg></div>
-  <div class="legend"><span><i class="sq" style="background:var(--own)"></i>best judge's own stated confidence</span><span><i class="sq" style="background:var(--others)"></i>other judges' flips + disagreement</span><span><i class="sq" style="background:var(--comb)"></i>combined</span><span><i class="sq" style="background:var(--rand);height:2px"></i>random flagging (18%)</span></div>
-  <p class="method">Each signal ranks the pairs; the 18% ranked most suspicious are flagged, and the bar is the share of the best judge's confident errors among them. Own confidence ranks by the best judge's stated confidence (lowest first, averaged over both orders); ties at the cut-off are broken at random. Confident error = the best judge picks the wrong answer in both orders, counted on pairs where it is consistent (17–79 errors per benchmark).</p>
+<section class="fig" aria-labelledby="f-weak">
+  <h2 id="f-weak">Weaker judges can't reliably pick the right answer, but their uncertainty still marks the items that are hard to judge, including items where the strongest judge is confidently wrong</h2>
+  <div class="two">
+    <div><h3>Flagging with the judge's low stated confidence</h3>
+      <div class="chart"><svg id="gw1" viewBox="0 0 430 360" role="img" aria-label="For each judge, its accuracy versus how well its low stated confidence flags the best judge's confident errors."></svg></div></div>
+    <div><h3>Flagging with the judge's own order flip</h3>
+      <div class="chart"><svg id="gw2" viewBox="0 0 430 360" role="img" aria-label="For each judge, its accuracy versus how well its order flips flag the best judge's confident errors."></svg></div></div>
+  </div>
+  <div class="legend"><span><i style="background:var(--b1)"></i>BFF pairwise</span><span><i style="background:var(--b2)"></i>JudgeBench</span><span><i style="background:var(--b3)"></i>AlpacaFarm</span><span><i style="background:var(--b4)"></i>MT-Bench human</span><span><i style="background:transparent;border:2px solid var(--ink-2)"></i>left only: best judge's own confidence, for reference</span></div>
+  <p class="method">Each point is one judge on one benchmark. x = the judge's own accuracy. y = AUROC for the best judge's confident errors (0.5 = chance). With stated confidence, 24 of the 28 weaker-judge points are above 0.6, and 6 match or beat the best judge's own confidence (for example Qwen3.5-4B on JudgeBench, 0.84). Nemotron-Nano is the exception at 0.54–0.62. Stated-confidence flagging improves with accuracy (Spearman +0.85 across the 28 weaker-judge points, partly because the benchmarks differ in difficulty). A single judge's flips are a weak flag (0.48–0.73) with no clear link to its accuracy (+0.24), consistent with flips marking hard items rather than judge skill; they only help when pooled across judges.</p>
 </section>
 
 <section class="fig" aria-labelledby="f-roc">
@@ -144,7 +150,7 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
     <span><i class="sq" style="background:var(--b4);height:3px"></i>other judges' low stated confidence</span>
     <span><i class="sq" style="background:var(--comb);height:3px"></i>combined (own + flips + disagreement)</span>
   </div>
-  <p class="method">Each curve sweeps the alarm threshold: x = share of the best judge's correct pairs flagged (false alarms), y = share of its confident errors flagged. The diagonal is random flagging; AUROC in the corner of each panel. Flip counts take only 8 values, so their curves are coarse steps. The vertical dashed line marks an 18% false-alarm rate.</p>
+  <p class="method">Each curve sweeps the alarm threshold: x = share of the best judge's correct pairs flagged (false alarms), y = share of its confident errors flagged. The diagonal is random flagging; AUROC in the corner of each panel. Flip counts take only 8 values, so their curves are coarse steps.</p>
 </section>
 
 <div>
@@ -227,7 +233,7 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
     <section class="fig" aria-labelledby="b5">
       <h2 id="b5">Without order swaps, plain disagreement between judges is the best alarm</h2>
       <div class="chart"><svg id="g7" viewBox="0 0 860 290" role="img" aria-label="AUROC of six signals for gpt-oss-120b's errors on RewardBench 2 single-answer grading."></svg></div>
-      <p class="method">RewardBench 2 "other", single-answer grading: 958 items, 158 errors by gpt-oss-120b (16.5%). The label after each bar is the share of errors caught at 18% flagged.</p>
+      <p class="method">RewardBench 2 "other", single-answer grading: 958 items, 158 errors by gpt-oss-120b (16.5%). Bars show AUROC (0.5 = chance).</p>
     </section>
   </div>
 </div>
@@ -276,19 +282,6 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
   if(!start){try{start=localStorage.getItem("ofs-tab")}catch(e){}}
   show(start==="flips"?"flips":"own");
 
-  // Overview: errors caught at 18%
-  (function(){
-    var D=[[42,25,40],[59,53,65],[32,34,29],[44,54,49]], C=["var(--own)","var(--others)","var(--comb)"], N=["own confidence","other judges","combined"];
-    var s=document.getElementById("g3"), e=mk(s), L=60,R=20,T=16,B=50,H=330, gw=(860-L-R)/4, bw=46, Y=function(v){return H-B-(H-B-T)*v/70};
-    for(var v=0;v<=70;v+=10){e("line",{class:"gl",x1:L,x2:860-R,y1:Y(v),y2:Y(v)});e("text",{x:L-8,y:Y(v)+4,"text-anchor":"end"},v+"%")}
-    e("line",{x1:L,x2:860-R,y1:Y(18),y2:Y(18),stroke:"var(--rand)","stroke-width":2,"stroke-dasharray":"6 4"});
-    D.forEach(function(d,g){var cx=L+gw*g+gw/2;
-      d.forEach(function(v,k){var x=cx+(k-1)*(bw+6)-bw/2;var r=e("rect",{x:x,y:Y(v),width:bw,height:Y(0)-Y(v),fill:C[k],rx:3});hov(r,BN[g]+", "+N[k]+": "+v+"% of errors caught (lowest-ranked 18% of pairs flagged)");
-        e("text",{class:"val",x:x+bw/2,y:Y(v)-6,"text-anchor":"middle"},v+"%")});
-      e("text",{class:"lab",x:cx,y:H-B+22,"text-anchor":"middle"},BN[g])});
-    e("rect",{x:L+2,y:Y(18)-17,width:78,height:14,fill:"var(--surface)"});
-    e("text",{x:L+6,y:Y(18)-6},"random 18%");
-  })();
 
   // Own tab: calibration
   (function(){
@@ -430,8 +423,8 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
     e("line",{x1:X(.5),x2:X(.5),y1:T,y2:T+rh*D.length,stroke:"var(--rand)","stroke-dasharray":"4 4"});
     D.forEach(function(d,i){var y=T+rh*i+8, h=rh-16;
       e("text",{class:"lab",x:L-14,y:y+h/2+4,"text-anchor":"end"},d[0]);
-      var r=e("rect",{x:X(.4),y:y,width:X(d[1])-X(.4),height:h,fill:d[3],rx:3});hov(r,d[0]+": AUROC "+d[1].toFixed(2)+", catches "+d[2]+"% at 18% flagged");
-      e("text",{class:"val",x:X(d[1])+8,y:y+h/2+4},d[1].toFixed(2)+" · "+d[2]+"%")});
+      var r=e("rect",{x:X(.4),y:y,width:X(d[1])-X(.4),height:h,fill:d[3],rx:3});hov(r,d[0]+": AUROC "+d[1].toFixed(2));
+      e("text",{class:"val",x:X(d[1])+8,y:y+h/2+4},d[1].toFixed(2))});
   })();
 
 
@@ -447,7 +440,6 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
       for(var v=0;v<=100;v+=20){e("line",{class:"gl",x1:X(v),x2:X(v),y1:Y(0),y2:Y(100)});e("line",{class:"gl",x1:X(0),x2:X(100),y1:Y(v),y2:Y(v)});
         e("text",{x:X(v),y:H-B+16,"text-anchor":"middle"},v+"%");e("text",{x:L-6,y:Y(v)+4,"text-anchor":"end"},v+"%")}
       e("line",{x1:X(0),y1:Y(0),x2:X(100),y2:Y(100),stroke:"var(--rand)","stroke-dasharray":"4 4"});
-      e("line",{x1:X(18),x2:X(18),y1:Y(0),y2:Y(100),stroke:"var(--ink-3)","stroke-dasharray":"2 4","stroke-width":1});
       e("text",{class:"lab",x:L,y:16},NAMES[b]+" · "+r.target+" · "+r.errors+" errors");
       e("text",{x:(L+W-Rt)/2,y:H-10,"text-anchor":"middle"},"correct pairs flagged (false alarms)");
       ["flips","others_conf","pooled","own","combined"].forEach(function(k){var c=r.curves[k], st=ST[k];
@@ -457,6 +449,27 @@ code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:
       var ks=["combined","own","others_conf","pooled","flips"];
       ks.forEach(function(k,i){var c=r.curves[k];e("text",{x:X(100)-4,y:Y(0)-8-14*(ks.length-1-i),"text-anchor":"end",style:"fill:"+ST[k][0]},ST[k][3]+" "+c.auc.toFixed(2))});
     });
+  })();
+
+  // Weaker judges' uncertainty vs their accuracy
+  (function(){
+    var D=[[0, "oss-120b", 85.7, 0.739, null, 1], [0, "oss-20b", 82.7, 0.75, 0.536, 0], [0, "deepseek", 78.7, 0.737, 0.609, 0], [0, "qwen-35b", 84.3, 0.685, 0.557, 0], [0, "qwen-9b", 78.5, 0.685, 0.546, 0], [0, "qwen-4b", 75.2, 0.638, 0.48, 0], [0, "nem-super", 76.7, 0.684, 0.592, 0], [0, "nem-nano", 59.3, 0.535, 0.513, 0], [1, "oss-120b", 85.1, 0.836, 0.581, 0], [1, "oss-20b", 81.2, 0.749, 0.563, 0], [1, "deepseek", 79.3, 0.77, 0.532, 0], [1, "qwen-35b", 90.6, 0.841, null, 1], [1, "qwen-9b", 85.1, 0.807, 0.563, 0], [1, "qwen-4b", 83.9, 0.843, 0.559, 0], [1, "nem-super", 79.1, 0.753, 0.728, 0], [1, "nem-nano", 56.3, 0.566, 0.523, 0], [2, "oss-120b", 71.5, 0.654, 0.561, 0], [2, "oss-20b", 69.3, 0.617, 0.563, 0], [2, "deepseek", 73.0, 0.648, null, 1], [2, "qwen-35b", 71.4, 0.601, 0.582, 0], [2, "qwen-9b", 72.4, 0.592, 0.546, 0], [2, "qwen-4b", 65.9, 0.606, 0.526, 0], [2, "nem-super", 72.4, 0.638, 0.585, 0], [2, "nem-nano", 64.4, 0.616, 0.549, 0], [3, "oss-120b", 83.8, 0.761, null, 1], [3, "oss-20b", 82.0, 0.723, 0.585, 0], [3, "deepseek", 83.5, 0.776, 0.53, 0], [3, "qwen-35b", 83.1, 0.732, 0.561, 0], [3, "qwen-9b", 81.6, 0.752, 0.645, 0], [3, "qwen-4b", 76.5, 0.747, 0.572, 0], [3, "nem-super", 83.1, 0.71, 0.582, 0], [3, "nem-nano", 73.4, 0.58, 0.572, 0]];
+    function panel(id, col, lab, note){
+      var s=document.getElementById(id), e=mk(s), L=48,R=14,T=14,B=50,W=430,H=360;
+      var X=function(v){return L+(W-L-R)*(v-55)/40}, Y=function(v){return H-B-(H-B-T)*(v-.45)/.45};
+      for(var v=55;v<=95;v+=10){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:H-B});e("text",{x:X(v),y:H-B+16,"text-anchor":"middle"},v+"%")}
+      for(var a=.5;a<=.901;a+=.1){e("line",{class:"gl",x1:L,x2:W-R,y1:Y(a),y2:Y(a)});e("text",{x:L-6,y:Y(a)+4,"text-anchor":"end"},a.toFixed(1))}
+      e("line",{x1:L,x2:W-R,y1:Y(.5),y2:Y(.5),stroke:"var(--rand)","stroke-dasharray":"4 4"});
+      e("text",{x:W-R-4,y:Y(.5)-6,"text-anchor":"end"},"chance");
+      e("text",{x:(L+W-R)/2,y:H-12,"text-anchor":"middle"},"the judge's own accuracy");
+      e("text",{x:L+4,y:T+10},"AUROC for the best judge's errors");
+      e("text",{class:"val",x:L+4,y:T+26},note);
+      D.forEach(function(d){var v=d[col]; if(v==null)return; var best=d[5]===1;
+        var c=e("circle",{cx:X(d[2]),cy:Y(v),r:best?7:6,fill:best?"var(--surface)":BC[d[0]],stroke:best?BC[d[0]]:"var(--surface)","stroke-width":best?2.5:1.5,"fill-opacity":best?1:.85});
+        hov(c,BN[d[0]]+" · "+d[1]+(best?" (best judge, own errors)":"")+": accuracy "+d[2]+"%, "+lab+" AUROC "+v.toFixed(2))});
+    }
+    panel("gw1",3,"stated confidence","Spearman ρ = +0.85 (weaker judges, n = 28)");
+    panel("gw2",4,"flip","Spearman ρ = +0.24 (n = 28): no clear trend");
   })();
   // Hypothesis table
   var Hy=[["The best judge's confidence flags its confident errors","own","good","Supported","0.65–0.84 (stated); token probability weaker"],
