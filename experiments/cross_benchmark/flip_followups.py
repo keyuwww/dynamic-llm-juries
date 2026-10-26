@@ -9,7 +9,6 @@ Usage: python flip_followups.py  -> results/flips/unflaggable.md, results/flips/
 import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent

@@ -7,7 +7,8 @@ Joins the stored 8-judge verdicts for the other judges' flips (Stage A signal).
   B-a own confidence vs own flips: is a judge less confident on pairs it flips?
   B-b confidence vs the best judge's confident errors (on its consistent pairs); calibration by confidence bin
   B-c confidence x detectability: per tercile of the best judge's confidence, error rate and AUROC of others' flips
-  B-d combined alarm: best-judge confidence + others' pooled score, vs each alone, and catch at 18% flagged
+  B-d combined alarm: rank average of the best judge's low confidence (stated / token / vote) and the others'
+      pooled score, vs each alone; errors caught when the 18% most suspicious pairs are flagged
   B-e others' confidence vs others' flips, for the judges in this run
   C1  (K > 1) resampling: own vote spread as confidence; repeatable vs one-off flips
 Confidence measures per (judge, pair), averaged over both orders and samples:
@@ -38,8 +39,6 @@ def read(run, bench):
         it = pd.read_pickle(HERE / "data" / f"{bench}_items.pkl").set_index("key")
         t["pair_id"] = t.item_id.map(it.pair_id)
         t["order"] = t.item_id.map(it.order).map({0: "ab", 1: "ba"})
-    else:
-        t["order"] = t.order.map({"ab": "ab", "ba": "ba"})
     return t
 
 

@@ -19,11 +19,9 @@ import pandas as pd
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from flip_analysis import boot_auc, catch_at_rate  # noqa: E402
-from order_consistency import POOL, auroc  # noqa: E402
+from order_consistency import POOL, SHORT  # noqa: E402
 
 OUT = HERE / "results" / "flips"
-SHORT = {"gpt-oss-120b": "oss-120b", "gpt-oss-20b": "oss-20b", "deepseek-v3.1": "deepseek", "qwen3.6-35b-a3b": "qwen-35b",
-         "qwen3.5-9b": "qwen-9b", "qwen3.5-4b": "qwen-4b", "nemotron3-super-120b": "nem-super", "nemotron3-nano-30b": "nem-nano"}
 
 
 def rows(bench):

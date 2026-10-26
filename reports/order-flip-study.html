@@ -1,0 +1,482 @@
+<title>Detecting Best-Model Errors with Order Flips and Confidence</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; overview, then two tabs (the judge's own confidence / other judges' flips).
+   Each figure states its finding as the heading. Color encodes signal source: own judge (blue), other judges (teal), combined (orange). */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --ink:#17202a; --ink-2:#47525e; --ink-3:#6f7a85; --line:#dfe3e6; --grid:#e9ecee;
+  --own:#2f5fb3; --others:#13866f; --comb:#d9622b; --rand:#9aa3ab;
+  --b1:#2f5fb3; --b2:#c2410c; --b3:#13866f; --b4:#8a4fbf;
+  --good:#13866f; --mixed:#b7791f; --bad:#b23b3b;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --own:#6f9be6; --others:#3fbf9f; --comb:#f08a52; --rand:#6c757d;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0;
+  --good:#3fbf9f; --mixed:#e0a947; --bad:#e07373; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --own:#6f9be6; --others:#3fbf9f; --comb:#f08a52; --rand:#6c757d;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0;
+  --good:#3fbf9f; --mixed:#e0a947; --bad:#e07373; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font:16.5px/1.6 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+.wrap>*,.panel>*{min-width:0}
+.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+h1{font:800 clamp(30px,5vw,44px)/1.06 var(--display);margin:8px 0 12px;letter-spacing:-.01em;text-wrap:balance}
+h2{font:600 clamp(19px,2.4vw,23px)/1.25 var(--display);margin:0;text-wrap:balance}
+h3{font:600 15px/1.3 var(--display);margin:0 0 6px}
+p{margin:0;max-width:68ch}
+.lede{font-size:18.5px;color:var(--ink-2);max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font:13px/1.5 var(--mono);color:var(--ink-3)}
+.meta b{color:var(--ink);font-weight:500}
+.slots{display:inline-flex;gap:4px;vertical-align:-3px;margin-right:8px}
+.slots i{width:18px;height:18px;border:1.5px solid var(--ink-3);border-radius:3px;font:600 11px/15px var(--mono);font-style:normal;text-align:center;color:var(--ink-2)}
+ol.concl{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+ol.concl li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+ol.concl .n{font:600 13px/24px var(--mono);color:var(--ink-3)}
+ol.concl b{font-weight:600}
+.best{display:grid;gap:4px 18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));font-size:14.5px;margin-top:12px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.best span{color:var(--ink-3);font:12px var(--mono);display:block}
+section.fig{display:grid;gap:12px}
+.method{font-size:14px;color:var(--ink-3);max-width:76ch}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 10px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:560px;height:auto}
+.chart text{font-family:var(--mono);font-size:11.5px;fill:var(--ink-3)}
+.chart .lab{font-family:var(--body);font-size:13.5px;fill:var(--ink)}
+.chart .val{font-size:11px;fill:var(--ink-2)}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%}
+.legend i.sq{border-radius:2px}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.two>*{min-width:0}
+.two .chart svg{min-width:360px}
+.roc-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.roc-grid>*{min-width:0}
+.roc-grid .chart svg{min-width:340px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:3;padding-top:6px}
+.tabs button{font:600 15px/1.2 var(--display);color:var(--ink-3);background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabs button .dot{width:10px;height:10px;border-radius:50%}
+.panel{display:grid;gap:40px;padding-top:24px}
+.panel-intro{font-size:15.5px;color:var(--ink-2);max-width:70ch}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.seg button{font:500 13px var(--mono);border:0;background:none;color:var(--ink-2);padding:6px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:14px;color:var(--ink-2)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px}
+.pill{display:inline-block;font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:999px;border:1.5px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--good)} .pill.mixed{color:var(--mixed)} .pill.bad{color:var(--bad)}
+.tag{font:600 11px/1 var(--mono);padding:3px 6px;border-radius:4px;background:var(--grid);color:var(--ink-2);white-space:nowrap}
+.note{font-size:14px;color:var(--ink-2);display:grid;gap:8px}
+.note ul{margin:0;padding-left:18px;display:grid;gap:4px}
+code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:4px;word-break:break-word}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12.5px/1.4 var(--body);padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:5;max-width:270px}
+:focus-visible{outline:2px solid var(--comb);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">AC 297r · Dynamic LLM Juries · order-flip study · 10/23</div>
+  <h1>Detecting Best-Model Errors with Order Flips and Confidence</h1>
+  <p class="lede"><span class="slots"><i>A</i><i>B</i></span>When the best judge is wrong in both answer orders, can it, or the other judges, warn us? Two separate signals do: the judge's own stated confidence, and other judges changing their pick when the order is swapped.</p>
+  <div class="meta"><span><b>8</b> open-weight judges</span><span><b>4</b> pairwise benchmarks + 1 single-answer</span><span><b>41,858</b> new judgments</span><span><b>$55.89</b> Tinker cost</span></div>
+  <div class="best" aria-label="Best judge per benchmark">
+    <div><span>BFF pairwise</span>gpt-oss-120b</div><div><span>JudgeBench</span>Qwen3.6-35B</div>
+    <div><span>AlpacaFarm</span>DeepSeek-V3.1</div><div><span>MT-Bench human</span>gpt-oss-120b</div>
+  </div>
+  <p class="method" style="margin-top:8px">"Best judge" = the most accurate judge on each benchmark (above). The flip-threshold chart can also show gpt-oss-120b on all four.</p>
+</header>
+
+<section aria-labelledby="k">
+  <h2 id="k" style="margin-bottom:14px">Main findings</h2>
+  <ol class="concl">
+    <li><span class="n">1</span><div><b>The best judge's stated confidence flags its confident errors</b> (AUROC 0.65–0.84). Answers rated 95–100 are wrong 3–10% of the time; answers rated below 80 are wrong 23–31%.</div></li>
+    <li><span class="n">2</span><div><b>The more other judges flip, the likelier the best judge is wrong.</b> Error rates climb from 1–10% when nobody flips to 30–40% when 4 or more flip, but fewer than 14% of pairs reach 4 flips.</div></li>
+    <li><span class="n">3</span><div><b>Combining the two helps on 3 of 4 benchmarks</b> (AUROC 0.70–0.86). Flagging 18% of pairs then catches 29–65% of the best judge's confident errors.</div></li>
+    <li><span class="n">4</span><div><b>Flips mark near-ties, and ties default to the first-shown answer.</b> Several "why" hypotheses failed: flips don't track whether the judge could solve the question and can't be predicted from the text.</div></li>
+  </ol>
+</section>
+
+<section class="fig" aria-labelledby="f0">
+  <h2 id="f0">How the two signals compare: flagging 18% of pairs catches 29–65% of confident errors</h2>
+  <div class="chart"><svg id="g3" viewBox="0 0 860 330" role="img" aria-label="Share of errors caught at an 18% flag rate by own confidence, other judges, and combined, per benchmark."></svg></div>
+  <div class="legend"><span><i class="sq" style="background:var(--own)"></i>best judge's own stated confidence</span><span><i class="sq" style="background:var(--others)"></i>other judges' flips + disagreement</span><span><i class="sq" style="background:var(--comb)"></i>combined</span><span><i class="sq" style="background:var(--rand);height:2px"></i>random flagging (18%)</span></div>
+  <p class="method">Each signal ranks the pairs; the 18% ranked most suspicious are flagged, and the bar is the share of the best judge's confident errors among them. Own confidence ranks by the best judge's stated confidence (lowest first, averaged over both orders); ties at the cut-off are broken at random. Confident error = the best judge picks the wrong answer in both orders, counted on pairs where it is consistent (17–79 errors per benchmark).</p>
+</section>
+
+<section class="fig" aria-labelledby="f-roc">
+  <h2 id="f-roc">ROC curves: own confidence and other judges trade off differently, and combining them is best on 3 of 4</h2>
+  <div class="tbl"><table style="min-width:560px">
+    <thead><tr><th>Signal</th><th>What it uses</th><th>Pair is suspicious when</th><th>Run</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pill" style="color:var(--own)">own confidence</span></td><td>The best judge's 0–100 confidence, written after its verdict, averaged over both orders</td><td>It reports low confidence</td><td class="num">new (confidence) run</td></tr>
+      <tr><td><span class="pill" style="color:var(--b4)">others: low confidence</span></td><td>The other 7 judges' stated confidence, ranked within each judge and averaged</td><td>The other judges are unsure</td><td class="num">new (confidence) run</td></tr>
+      <tr><td><span class="pill" style="color:var(--others)">others: flips only</span></td><td>How many of the other 7 judges picked the same position in both orders (0–7)</td><td>Many judges let the answer order decide</td><td class="num">stored run</td></tr>
+      <tr><td><span class="pill" style="color:var(--others)">others: flips + disagreement</span></td><td>Each other judge counts 1 if it consistently picks the other answer, 0.5 if it flips, 0 if it agrees; averaged</td><td>The rest of the panel doubts the best judge's answer</td><td class="num">stored run</td></tr>
+      <tr><td><span class="pill" style="color:var(--comb)">combined</span></td><td>Average of the ranks of own confidence and flips + disagreement</td><td>Both signals point to it</td><td class="num">both</td></tr>
+    </tbody>
+  </table></div>
+  <div class="roc-grid">
+    <div class="chart"><svg id="roc-bffpair" viewBox="0 0 430 400" role="img" aria-label="ROC curves on BFF pairwise."></svg></div>
+    <div class="chart"><svg id="roc-judgebench" viewBox="0 0 430 400" role="img" aria-label="ROC curves on JudgeBench."></svg></div>
+    <div class="chart"><svg id="roc-alpacafarm" viewBox="0 0 430 400" role="img" aria-label="ROC curves on AlpacaFarm."></svg></div>
+    <div class="chart"><svg id="roc-mtbhuman" viewBox="0 0 430 400" role="img" aria-label="ROC curves on MT-Bench human."></svg></div>
+  </div>
+  <div class="legend">
+    <span><i class="sq" style="background:var(--own);height:3px"></i>best judge's low stated confidence</span>
+    <span><i class="sq" style="background:var(--others);height:3px"></i>other judges' flips + disagreement</span>
+    <span><i class="sq" style="background:var(--others);height:2px;opacity:.6"></i>dashed: other judges' flips only</span>
+    <span><i class="sq" style="background:var(--b4);height:3px"></i>other judges' low stated confidence</span>
+    <span><i class="sq" style="background:var(--comb);height:3px"></i>combined (own + flips + disagreement)</span>
+  </div>
+  <p class="method">Each curve sweeps the alarm threshold: x = share of the best judge's correct pairs flagged (false alarms), y = share of its confident errors flagged. The diagonal is random flagging; AUROC in the corner of each panel. Flip counts take only 8 values, so their curves are coarse steps. The vertical dashed line marks an 18% false-alarm rate.</p>
+</section>
+
+<div>
+  <div class="tabs" role="tablist" aria-label="Signal">
+    <button role="tab" id="t-own" aria-controls="p-own" aria-selected="true"><span class="dot" style="background:var(--own)"></span>The judge's own confidence</button>
+    <button role="tab" id="t-flips" aria-controls="p-flips" aria-selected="false" tabindex="-1"><span class="dot" style="background:var(--others)"></span>Other judges' flips</button>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-own" aria-labelledby="t-own">
+    <p class="panel-intro">Each judge was asked to end with a 0–100 confidence after its verdict. We also read the probability of the verdict token. Both were collected in both answer orders.</p>
+
+    <section class="fig" aria-labelledby="a1">
+      <h2 id="a1">Stated confidence is roughly calibrated: below 80, the best judge is wrong about a quarter of the time</h2>
+      <div class="chart"><svg id="g2" viewBox="0 0 860 340" role="img" aria-label="Error rate of the best judge by its stated confidence band, per benchmark."></svg></div>
+      <div class="legend"><span><i style="background:var(--b1)"></i>BFF pairwise</span><span><i style="background:var(--b2)"></i>JudgeBench</span><span><i style="background:var(--b3)"></i>AlpacaFarm</span><span><i style="background:var(--b4)"></i>MT-Bench human</span></div>
+      <p class="method">Mean stated confidence across both orders, binned. Point size shows the number of pairs. JudgeBench's lowest band has only 3 pairs.</p>
+    </section>
+
+    <section class="fig" aria-labelledby="a2">
+      <h2 id="a2">Stated confidence beats the verdict-token probability on 3 of 4 benchmarks</h2>
+      <div class="chart"><svg id="g8" viewBox="0 0 860 260" role="img" aria-label="AUROC of the best judge's stated confidence and token probability for its confident errors."></svg></div>
+      <div class="legend"><span><i class="sq" style="background:var(--own)"></i>stated confidence</span><span><i class="sq" style="background:var(--grid);outline:1px solid var(--ink-3)"></i>verdict-token probability</span></div>
+      <p class="method">AUROC for the best judge's confident errors (0.5 = chance). Reasoning judges are near-certain at the verdict token after they have reasoned, so the token probability carries little signal for them.</p>
+    </section>
+
+    <section class="fig" aria-labelledby="a3">
+      <h2 id="a3">Judges report lower confidence on the pairs where their own pick follows the order</h2>
+      <div class="chart"><svg id="g9" viewBox="0 0 860 340" role="img" aria-label="Mean stated confidence on flipped versus consistent pairs, per judge, BFF pairwise."></svg></div>
+      <div class="legend"><span><i style="background:var(--own)"></i>consistent pairs</span><span><i style="background:var(--comb)"></i>pairs the judge flips</span></div>
+      <p class="method">BFF pairwise. gpt-oss-120b drops from 90 to 75. Nemotron-Nano barely changes (95 vs 94), so its confidence says little.</p>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-flips" aria-labelledby="t-flips" hidden>
+    <p class="panel-intro">Every pair is judged in both orders. A judge <b>flips</b> when it picks the same position both times, so one of its two verdicts must be wrong. Here we count how many of the other 7 judges flip on each pair, using the stored verdicts.</p>
+
+    <section class="fig" aria-labelledby="b1">
+      <h2 id="b1">The more other judges flip, the likelier the best judge is wrong, but few pairs reach 4+ flips</h2>
+      <div class="ctrl"><span>Target judge:</span>
+        <div class="seg" role="group" aria-label="Target judge"><button id="tg-best" aria-pressed="true">Best judge per benchmark</button><button id="tg-oss" aria-pressed="false">gpt-oss-120b everywhere</button></div>
+        <span>Pairs:</span>
+        <div class="seg" role="group" aria-label="Which pairs"><button id="cd-cons" aria-pressed="true">Target consistent only</button><button id="cd-all" aria-pressed="false">All pairs (target's own flip = error)</button></div></div>
+      <p class="method" id="thr-cond"></p>
+      <div class="two">
+        <div><h3 id="thr-ylab">Error rate among pairs with ≥ k other judges flipping</h3>
+          <div class="chart"><svg id="g10a" viewBox="0 0 430 320" role="img" aria-label="Best judge's confident-error rate by flip threshold."></svg></div></div>
+        <div><h3>Share of pairs flagged and of errors caught at each threshold</h3>
+          <div class="chart"><svg id="g10b" viewBox="0 0 430 320" role="img" aria-label="Share of pairs and of errors at each flip threshold."></svg></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--b1)"></i>BFF pairwise</span><span><i style="background:var(--b2)"></i>JudgeBench</span><span><i style="background:var(--b3)"></i>AlpacaFarm</span><span><i style="background:var(--b4)"></i>MT-Bench human</span><span><i class="sq" style="background:var(--ink-3);height:2px"></i>right: share of errors caught</span><span><i class="sq" style="background:var(--ink-3);height:2px;opacity:.5"></i>right, dashed: share of pairs flagged</span></div>
+      <p class="method" id="thr-note">Points are drawn only where at least 5 pairs reach the threshold; point size shows the number of pairs. Thresholds of 6+ are reached by 0–3 pairs per benchmark, and 7 by none.</p>
+    </section>
+
+    <section class="fig" aria-labelledby="b2">
+      <h2 id="b2">Other judges' signals flag the best judge's errors beyond what the text shows</h2>
+      <div class="chart"><svg id="g1" viewBox="0 0 860 260" role="img" aria-label="AUROC of four cross-judge and control signals on four benchmarks."></svg></div>
+      <div class="legend"><span><i style="background:var(--b1)"></i>BFF pairwise</span><span><i style="background:var(--b2)"></i>JudgeBench</span><span><i style="background:var(--b3)"></i>AlpacaFarm</span><span><i style="background:var(--b4)"></i>MT-Bench human</span></div>
+      <p class="method">AUROC (0.5 = chance). Text controls: answer length gap, word and embedding similarity, formatting, question aspects. Adding flips to the controls improves AUROC by +0.05 to +0.09 on 3 of 4 benchmarks. Within matched strata, 2+ flips still mean +3.8 to +26.1 points more errors.</p>
+    </section>
+
+    <section class="fig" aria-labelledby="b3">
+      <h2 id="b3">Controlled pairs show the mechanism: small quality gaps turn into flips, and longer copies win</h2>
+      <div class="two">
+        <div><h3>Flip rate: one figure changed +10% vs real BFF pairs</h3>
+          <div class="chart"><svg id="g5a" viewBox="0 0 430 330" role="img" aria-label="Flip rate per judge on corrupted pairs versus real pairs."></svg></div>
+          <div class="legend"><span><i style="background:var(--ink-3)"></i>real BFF pairs</span><span><i style="background:var(--comb)"></i>corrupted pairs</span></div></div>
+        <div><h3>Same answer vs same answer + neutral paragraph</h3>
+          <div class="chart"><svg id="g5b" viewBox="0 0 430 330" role="img" aria-label="Share of pairs where each judge picks the padded version both times, flips, or picks the short version both times."></svg></div>
+          <div class="legend"><span><i class="sq" style="background:var(--comb)"></i>padded wins both orders</span><span><i class="sq" style="background:var(--grid);outline:1px solid var(--line)"></i>flip</span><span><i class="sq" style="background:var(--own)"></i>short wins both orders</span></div></div>
+      </div>
+      <p class="method">72 corrupted, 82 padded and 82 identical BFF pairs, all shown in both orders. With the same answer in both slots, strong judges put 93–100% of picks in the first slot (Nemotron-Nano 42%).</p>
+    </section>
+
+    <section class="fig" aria-labelledby="b4">
+      <h2 id="b4">The judges that catch the most of gpt-oss-120b's errors also raise the most false alarms</h2>
+      <div class="chart"><svg id="g6" viewBox="0 0 860 380" role="img" aria-label="For each checker judge, share of gpt-oss-120b's confident errors flagged versus share of its correct pairs flagged, BFF pairwise."></svg></div>
+      <p class="method">BFF pairwise. A checker flags a pair if it flips or is consistently on the other side. Points above the dashed line beat random flagging. Pooling all 7 checkers matched or beat any hand-picked subset on 3 of 4 benchmarks.</p>
+    </section>
+
+    <section class="fig" aria-labelledby="b5">
+      <h2 id="b5">Without order swaps, plain disagreement between judges is the best alarm</h2>
+      <div class="chart"><svg id="g7" viewBox="0 0 860 290" role="img" aria-label="AUROC of six signals for gpt-oss-120b's errors on RewardBench 2 single-answer grading."></svg></div>
+      <p class="method">RewardBench 2 "other", single-answer grading: 958 items, 158 errors by gpt-oss-120b (16.5%). The label after each bar is the share of errors caught at 18% flagged.</p>
+    </section>
+  </div>
+</div>
+
+<section aria-labelledby="h" style="display:grid;gap:12px">
+  <h2 id="h">Hypotheses</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Hypothesis</th><th>Signal</th><th>Verdict</th><th>Evidence</th></tr></thead>
+    <tbody id="hyp"></tbody>
+  </table></div>
+</section>
+
+<section aria-labelledby="c" class="note">
+  <h2 id="c">Caveats</h2>
+  <ul>
+    <li>Asking for confidence changed 12–20% of verdicts. Confidence comes from the new run; errors are scored on the stored run.</li>
+    <li>The full run used one sample per verdict. In the 3-sample pilot, only 46–80% of a judge's flips repeated.</li>
+    <li>JudgeBench parsed 92.6%: the 4,096-token cap cut some reasoning.</li>
+    <li>The best judge was chosen on the full data. Few confident errors per benchmark (17–79) means wide intervals, especially at high flip thresholds.</li>
+    <li>Many errors no judge flags look like wrong gold labels (AlpacaFarm 3–1 votes, MT-Bench human). On unanimous AlpacaFarm pairs, other judges' flips reach AUROC 0.76 vs 0.61 on 3–1 pairs.</li>
+  </ul>
+  <p>Full write-up: <code>docs/results_order_flip_study.md</code>. Code and tables: <code>experiments/cross_benchmark/</code> and <code>results/flips/</code> (threshold table: <code>flip_threshold.md</code>).</p>
+</section>
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var NS="http://www.w3.org/2000/svg", tip=document.getElementById("tip");
+  function mk(svg){return function(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e}}
+  function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild)}
+  function hov(e,msg){e.setAttribute("tabindex","0");e.setAttribute("aria-label",msg);
+    function s(){tip.textContent=msg;var r=e.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(r.left+r.width/2+10,innerWidth-280))+"px";tip.style.top=Math.max(8,r.top-40)+"px";tip.style.opacity=1}
+    function h(){tip.style.opacity=0}
+    e.addEventListener("mouseenter",s);e.addEventListener("focus",s);e.addEventListener("mouseleave",h);e.addEventListener("blur",h)}
+  var BN=["BFF pairwise","JudgeBench","AlpacaFarm","MT-Bench human"], BC=["var(--b1)","var(--b2)","var(--b3)","var(--b4)"];
+
+  // Tabs
+  var tabs=[["t-own","p-own","own"],["t-flips","p-flips","flips"]];
+  function show(key){tabs.forEach(function(t){var on=t[2]===key, b=document.getElementById(t[0]);
+    b.setAttribute("aria-selected",on);b.tabIndex=on?0:-1;document.getElementById(t[1]).hidden=!on});
+    try{localStorage.setItem("ofs-tab",key)}catch(e){}}
+  tabs.forEach(function(t,i){var b=document.getElementById(t[0]);b.addEventListener("click",function(){show(t[2])});
+    b.addEventListener("keydown",function(ev){if(ev.key==="ArrowRight"||ev.key==="ArrowLeft"){var n=tabs[(i+1)%2];show(n[2]);document.getElementById(n[0]).focus()}})});
+  var start=location.hash==="#flips"?"flips":location.hash==="#own"?"own":null;
+  if(!start){try{start=localStorage.getItem("ofs-tab")}catch(e){}}
+  show(start==="flips"?"flips":"own");
+
+  // Overview: errors caught at 18%
+  (function(){
+    var D=[[42,25,40],[59,53,65],[32,34,29],[44,54,49]], C=["var(--own)","var(--others)","var(--comb)"], N=["own confidence","other judges","combined"];
+    var s=document.getElementById("g3"), e=mk(s), L=60,R=20,T=16,B=50,H=330, gw=(860-L-R)/4, bw=46, Y=function(v){return H-B-(H-B-T)*v/70};
+    for(var v=0;v<=70;v+=10){e("line",{class:"gl",x1:L,x2:860-R,y1:Y(v),y2:Y(v)});e("text",{x:L-8,y:Y(v)+4,"text-anchor":"end"},v+"%")}
+    e("line",{x1:L,x2:860-R,y1:Y(18),y2:Y(18),stroke:"var(--rand)","stroke-width":2,"stroke-dasharray":"6 4"});
+    D.forEach(function(d,g){var cx=L+gw*g+gw/2;
+      d.forEach(function(v,k){var x=cx+(k-1)*(bw+6)-bw/2;var r=e("rect",{x:x,y:Y(v),width:bw,height:Y(0)-Y(v),fill:C[k],rx:3});hov(r,BN[g]+", "+N[k]+": "+v+"% of errors caught (lowest-ranked 18% of pairs flagged)");
+        e("text",{class:"val",x:x+bw/2,y:Y(v)-6,"text-anchor":"middle"},v+"%")});
+      e("text",{class:"lab",x:cx,y:H-B+22,"text-anchor":"middle"},BN[g])});
+    e("rect",{x:L+2,y:Y(18)-17,width:78,height:14,fill:"var(--surface)"});
+    e("text",{x:L+6,y:Y(18)-6},"random 18%");
+  })();
+
+  // Own tab: calibration
+  (function(){
+    var bands=["below 80","80–90","90–95","95–100"];
+    var D=[[[22.9,35],[25.8,66],[11.8,68],[3.9,180]],[[0,3],[35.3,17],[16,25],[3.2,217]],[[31.1,122],[20.2,109],[14.9,74],[10.4,77]],[[30.5,59],[18.7,75],[8.7,46],[2.9,102]]];
+    var s=document.getElementById("g2"), e=mk(s), L=70,R=40,T=16,B=56,H=340, X=function(i){return L+(860-L-R)*(i+.5)/4}, Y=function(v){return H-B-(H-B-T)*v/40};
+    for(var v=0;v<=40;v+=10){e("line",{class:"gl",x1:L,x2:860-R,y1:Y(v),y2:Y(v)});e("text",{x:L-8,y:Y(v)+4,"text-anchor":"end"},v+"%")}
+    bands.forEach(function(b,i){e("text",{class:"lab",x:X(i),y:H-B+22,"text-anchor":"middle"},b)});
+    e("text",{x:(L+860-R)/2,y:H-10,"text-anchor":"middle"},"best judge's stated confidence (0–100)");
+    e("text",{x:L+4,y:T+10},"error rate");
+    D.forEach(function(d,b){
+      e("polyline",{points:d.map(function(p,i){return X(i)+","+Y(p[0])}).join(" "),fill:"none",stroke:BC[b],"stroke-width":2.5,"stroke-linejoin":"round"});
+      d.forEach(function(p,i){var c=e("circle",{cx:X(i)+(b-1.5)*4,cy:Y(p[0]),r:3+Math.sqrt(p[1])/3,fill:BC[b],"fill-opacity":.85,stroke:"var(--surface)","stroke-width":1.5});
+        hov(c,BN[b]+", confidence "+bands[i]+": "+p[0]+"% wrong ("+p[1]+" pairs)")});
+    });
+  })();
+  // Own tab: stated vs token AUROC
+  (function(){
+    var D=[[.74,.59],[.84,.81],[.65,.66],[.76,.61]];
+    var s=document.getElementById("g8"), e=mk(s), L=60,R=20,T=16,B=46,H=260, gw=(860-L-R)/4, bw=56, Y=function(v){return H-B-(H-B-T)*(v-.4)/.5};
+    for(var v=.4;v<=.901;v+=.1){e("line",{class:"gl",x1:L,x2:860-R,y1:Y(v),y2:Y(v)});e("text",{x:L-8,y:Y(v)+4,"text-anchor":"end"},v.toFixed(1))}
+    e("line",{x1:L,x2:860-R,y1:Y(.5),y2:Y(.5),stroke:"var(--rand)","stroke-dasharray":"4 4"});
+    D.forEach(function(d,g){var cx=L+gw*g+gw/2;
+      [["var(--own)","stated confidence"],["var(--grid)","token probability"]].forEach(function(c,k){var x=cx+(k-.5)*(bw+6)-bw/2+3, v=d[k];
+        var r=e("rect",{x:x,y:Y(v),width:bw,height:Y(.4)-Y(v),fill:c[0],stroke:k?"var(--ink-3)":"none",rx:3});hov(r,BN[g]+", "+c[1]+": AUROC "+v.toFixed(2));
+        e("text",{class:"val",x:x+bw/2,y:Y(v)-6,"text-anchor":"middle"},v.toFixed(2))});
+      e("text",{class:"lab",x:cx,y:H-B+22,"text-anchor":"middle"},BN[g])});
+  })();
+  // Own tab: confidence on flipped vs consistent pairs
+  (function(){
+    var D=[["gpt-oss-120b",74.7,89.6],["gpt-oss-20b",84.9,92.8],["DeepSeek-V3.1",88.0,94.5],["Nemotron-Super",87.6,93.2],["Qwen3.5-9B",92.0,97.0],["Qwen3.6-35B",93.9,97.8],["Qwen3.5-4B",95.7,98.1],["Nemotron-Nano",94.0,95.1]];
+    var s=document.getElementById("g9"), e=mk(s), L=170,R=50,T=10,rh=38, X=function(v){return L+(860-L-R)*(v-70)/30};
+    for(var v=70;v<=100;v+=5){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:T+rh*D.length});e("text",{x:X(v),y:T+rh*D.length+18,"text-anchor":"middle"},v)}
+    e("text",{x:(L+860-R)/2,y:T+rh*D.length+36,"text-anchor":"middle"},"mean stated confidence");
+    D.forEach(function(d,i){var y=T+rh*i+rh/2;
+      e("text",{class:"lab",x:L-12,y:y+4,"text-anchor":"end"},d[0]);
+      e("line",{x1:X(d[1]),x2:X(d[2]),y1:y,y2:y,stroke:"var(--line)","stroke-width":3});
+      var a=e("circle",{cx:X(d[1]),cy:y,r:6,fill:"var(--comb)"});hov(a,d[0]+": "+d[1]+" on pairs it flips");
+      var b=e("circle",{cx:X(d[2]),cy:y,r:6,fill:"var(--own)"});hov(b,d[0]+": "+d[2]+" on consistent pairs");
+      e("text",{class:"val",x:X(d[2])+10,y:y+4},"−"+(d[2]-d[1]).toFixed(1))});
+  })();
+
+  // Flips tab: threshold curves
+  var THR={"best":[[[11.5,349,100.0],[14.4,222,80.0],[15.3,118,45.0],[21.0,62,32.5],[36.4,22,20.0],[28.6,7,5.0],[null,0,0.0]],[[6.5,263,100.0],[8.7,184,94.1],[15.3,98,88.2],[16.3,49,47.1],[7.1,14,5.9],[0.0,3,0.0],[0.0,1,0.0]],[[20.7,382,100.0],[27.1,240,82.3],[31.6,155,62.0],[33.3,84,35.4],[31.4,51,20.3],[33.3,21,8.9],[50.0,2,1.3]],[[13.8,282,100.0],[19.6,153,76.9],[33.3,63,53.8],[33.3,36,30.8],[31.2,16,12.8],[66.7,6,10.3],[100.0,3,7.7]]],"oss":[[[11.5,349,100.0],[14.4,222,80.0],[15.3,118,45.0],[21.0,62,32.5],[36.4,22,20.0],[28.6,7,5.0],[null,0,0.0]],[[12.0,251,100.0],[16.9,172,96.7],[24.7,85,70.0],[22.5,40,30.0],[33.3,15,16.7],[20.0,5,3.3],[0.0,1,0.0]],[[24.2,409,100.0],[32.2,267,86.9],[37.7,175,66.7],[36.4,99,36.4],[39.6,53,21.2],[43.5,23,10.1],[66.7,3,2.0]],[[13.8,282,100.0],[19.6,153,76.9],[33.3,63,53.8],[33.3,36,30.8],[31.2,16,12.8],[66.7,6,10.3],[100.0,3,7.7]]],"best_all":[[[18.3,378,100.0],[23.1,247,82.6],[27.0,137,53.6],[35.5,76,39.1],[53.3,30,23.2],[54.5,11,8.7],[null,0,0.0]],[[12.8,282,100.0],[16.4,201,91.7],[26.5,113,83.3],[32.8,61,55.6],[40.9,22,25.0],[25.0,4,2.8],[0.0,1,0.0]],[[37.9,488,100.0],[48.1,337,87.6],[54.9,235,69.7],[60.0,140,45.4],[57.3,82,25.4],[53.3,30,8.6],[75.0,4,1.6]],[[19.0,300,100.0],[27.6,170,82.5],[46.2,78,63.2],[48.9,47,40.4],[42.1,19,14.0],[71.4,7,8.8],[100.0,4,7.0]]],"oss_all":[[[18.3,378,100.0],[23.1,247,82.6],[27.0,137,53.6],[35.5,76,39.1],[53.3,30,23.2],[54.5,11,8.7],[null,0,0.0]],[[21.6,282,100.0],[29.2,202,96.7],[41.3,109,73.8],[39.2,51,32.8],[52.4,21,18.0],[33.3,6,3.3],[0.0,1,0.0]],[[36.5,488,100.0],[47.4,344,91.6],[54.6,240,73.6],[58.8,153,50.6],[61.0,82,28.1],[58.1,31,10.1],[80.0,5,2.2]],[[19.0,300,100.0],[27.6,170,82.5],[46.2,78,63.2],[48.9,47,40.4],[42.1,19,14.0],[71.4,7,8.8],[100.0,4,7.0]]]};
+  var NPAIRS={"best": [349, 263, 382, 282], "oss": [349, 251, 409, 282], "best_all": [378, 282, 488, 300], "oss_all": [378, 282, 488, 300]};
+  var OWNF={"best": [[0.0, 0, 11.5], [0.0, 0, 6.5], [0.0, 0, 20.7], [0.0, 0, 13.8]], "oss": [[0.0, 0, 11.5], [0.0, 0, 12.0], [0.0, 0, 24.2], [0.0, 0, 13.8]], "best_all": [[7.7, 42, 18.3], [6.7, 53, 12.8], [21.7, 57, 37.9], [6.0, 32, 19.0]], "oss_all": [[7.7, 42, 18.3], [11.0, 51, 21.6], [16.2, 44, 36.5], [6.0, 32, 19.0]]};
+  function drawThr(key){
+    var sa=document.getElementById("g10a"), sb=document.getElementById("g10b"); clear(sa); clear(sb);
+    var ea=mk(sa), eb=mk(sb), L=54,R=16,T=12,B=50,H=320, X=function(k){return L+(430-L-R)*k/6};
+    var ymax=key.indexOf("_all")>=0?100:70;
+    var Ya=function(v){return H-B-(H-B-T)*v/ymax}, Yb=function(v){return H-B-(H-B-T)*v/100};
+    [[ea,Ya,ymax,ymax===100?20:10],[eb,Yb,100,20]].forEach(function(z){for(var v=0;v<=z[2];v+=z[3]){z[0]("line",{class:"gl",x1:L,x2:430-R,y1:z[1](v),y2:z[1](v)});z[0]("text",{x:L-6,y:z[1](v)+4,"text-anchor":"end"},v+"%")}
+      for(var k=0;k<=6;k++)z[0]("text",{x:X(k),y:H-B+18,"text-anchor":"middle"},"≥"+k);
+      z[0]("text",{x:(L+430-R)/2,y:H-12,"text-anchor":"middle"},"other judges flipping (of 7)")});
+    THR[key].forEach(function(rows,b){
+      var pts=rows.map(function(r,k){return [k,r]}).filter(function(p){return p[1][1]>=5&&p[1][0]!=null});
+      ea("polyline",{points:pts.map(function(p){return X(p[0])+","+Ya(p[1][0])}).join(" "),fill:"none",stroke:BC[b],"stroke-width":2.5,"stroke-linejoin":"round"});
+      pts.forEach(function(p){var c=ea("circle",{cx:X(p[0]),cy:Ya(p[1][0]),r:2.5+Math.sqrt(p[1][1])/3.2,fill:BC[b],"fill-opacity":.85,stroke:"var(--surface)","stroke-width":1.5});
+        hov(c,BN[b]+", ≥"+p[0]+" flip: "+p[1][0]+"% wrong ("+p[1][1]+" pairs)")});
+      var n=NPAIRS[key][b];
+      eb("polyline",{points:rows.map(function(r,k){return X(k)+","+Yb(r[2])}).join(" "),fill:"none",stroke:BC[b],"stroke-width":2.5});
+      eb("polyline",{points:rows.map(function(r,k){return X(k)+","+Yb(100*r[1]/n)}).join(" "),fill:"none",stroke:BC[b],"stroke-width":1.5,"stroke-dasharray":"5 4","stroke-opacity":.7});
+      rows.forEach(function(r,k){var c=eb("circle",{cx:X(k),cy:Yb(r[2]),r:3.5,fill:BC[b]});hov(c,BN[b]+", ≥"+k+" flip: catches "+r[2]+"% of errors, flags "+(100*r[1]/n).toFixed(1)+"% of pairs")});
+    });
+    ea("text",{x:L+4,y:T+10},"confident-error rate");
+  }
+  var thrT="best", thrC="";
+  function redraw(){document.getElementById("tg-best").setAttribute("aria-pressed",thrT==="best");document.getElementById("tg-oss").setAttribute("aria-pressed",thrT==="oss");
+    document.getElementById("cd-cons").setAttribute("aria-pressed",thrC==="");document.getElementById("cd-all").setAttribute("aria-pressed",thrC==="_all");
+    var key=thrT+thrC; drawThr(key);
+    var o=OWNF[key], txt=thrC===""?"Pairs where the target judge gives the same answer in both orders; an error = wrong in both orders. Base error rate: "+o.map(function(x,i){return BN[i]+" "+x[2]+"%"}).join(", ")+"."
+      :"All pairs; an error = the target judge is wrong in at least one order, so every pair it flips counts. Its own flips mark "+o.map(function(x,i){return x[0]+"% of pairs ("+x[1]+"% of errors) on "+BN[i]}).join("; ")+". Base error rate: "+o.map(function(x,i){return BN[i]+" "+x[2]+"%"}).join(", ")+".";
+    document.getElementById("thr-cond").textContent=txt;
+    document.getElementById("thr-ylab").textContent=thrC===""?"Error rate (wrong in both orders) among pairs with ≥ k other judges flipping":"Error rate (wrong in at least one order) among pairs with ≥ k other judges flipping"}
+  [["tg-best",function(){thrT="best"}],["tg-oss",function(){thrT="oss"}],["cd-cons",function(){thrC=""}],["cd-all",function(){thrC="_all"}]].forEach(function(t){
+    document.getElementById(t[0]).addEventListener("click",function(){t[1]();redraw()})});
+  redraw();
+
+  // Flips tab: AUROC of cross-judge signals
+  (function(){
+    var S=[["Text controls (length, similarity, aspects)",[.72,.63,.55,.72]],["Other judges' flips",[.63,.77,.66,.70]],["Other judges' flips + disagreement",[.63,.78,.69,.76]],["Other judges' low stated confidence",[.74,.83,.65,.78]]];
+    var s=document.getElementById("g1"), e=mk(s), L=290,R=30,T=16,rh=50, x0=.5,x1=.9, X=function(v){return L+(860-L-R)*(v-x0)/(x1-x0)};
+    for(var v=.5;v<=.901;v+=.1){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:T+rh*S.length});e("text",{x:X(v),y:T+rh*S.length+18,"text-anchor":"middle"},v.toFixed(1))}
+    e("text",{x:L,y:T+rh*S.length+36},"AUROC (0.5 = chance)");
+    S.forEach(function(r,i){var y=T+rh*i+rh/2;
+      e("text",{class:"lab",x:L-14,y:y+4,"text-anchor":"end"},r[0]);
+      var mn=Math.min.apply(null,r[1]),mx=Math.max.apply(null,r[1]);
+      e("line",{x1:X(mn),x2:X(mx),y1:y,y2:y,stroke:"var(--line)","stroke-width":2});
+      r[1].forEach(function(v,b){var c=e("circle",{cx:X(v),cy:y+(b-1.5)*5,r:6.5,fill:BC[b],stroke:"var(--surface)","stroke-width":1.5});hov(c,BN[b]+": "+r[0]+" "+v.toFixed(2))});
+    });
+  })();
+
+  // Flips tab: controlled pairs
+  var J=[["gpt-oss-120b",4.3,18.3,48.1,7.4],["gpt-oss-20b",11.5,26.5,51.9,6.5],["DeepSeek-V3.1",16.6,22.5,12.0,0],["Qwen3.6-35B",9.9,4.3,42.7,12.2],
+         ["Qwen3.5-9B",19.4,19.7,26.8,3.7],["Qwen3.5-4B",18.9,15.5,25.0,2.5],["Nemotron-Super",22.0,33.8,40.2,4.9],["Nemotron-Nano",48.1,50.0,14.6,15.9]];
+  (function(){
+    var s=document.getElementById("g5a"), e=mk(s), L=120,R=30,T=10,rh=36, X=function(v){return L+(430-L-R)*v/55};
+    for(var v=0;v<=50;v+=10){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:T+rh*J.length});e("text",{x:X(v),y:T+rh*J.length+16,"text-anchor":"middle"},v+"%")}
+    J.forEach(function(j,i){var y=T+rh*i+rh/2;
+      e("text",{class:"lab",x:L-10,y:y+4,"text-anchor":"end"},j[0]);
+      e("line",{x1:X(j[1]),x2:X(j[2]),y1:y,y2:y,stroke:"var(--line)","stroke-width":3});
+      var a=e("circle",{cx:X(j[1]),cy:y,r:5.5,fill:"var(--ink-3)"});hov(a,j[0]+": flips on "+j[1]+"% of real BFF pairs");
+      var b=e("circle",{cx:X(j[2]),cy:y,r:5.5,fill:"var(--comb)"});hov(b,j[0]+": flips on "+j[2]+"% of corrupted pairs");
+    });
+  })();
+  (function(){
+    var s=document.getElementById("g5b"), e=mk(s), L=120,R=20,T=10,rh=36, W=430-L-R;
+    J.forEach(function(j,i){var y=T+rh*i+8, h=rh-16, lg=j[3], sh=j[4], fl=100-lg-sh;
+      e("text",{class:"lab",x:L-10,y:y+h/2+4,"text-anchor":"end"},j[0]);
+      var a=e("rect",{x:L,y:y,width:W*lg/100,height:h,fill:"var(--comb)"});hov(a,j[0]+": padded version wins in both orders "+lg+"%");
+      var b=e("rect",{x:L+W*lg/100,y:y,width:W*fl/100,height:h,fill:"var(--grid)",stroke:"var(--line)"});hov(b,j[0]+": flips "+fl.toFixed(1)+"%");
+      var c=e("rect",{x:L+W*(lg+fl)/100,y:y,width:W*sh/100,height:h,fill:"var(--own)"});hov(c,j[0]+": short version wins in both orders "+sh+"%");
+      if(lg>=12)e("text",{x:L+4,y:y+h/2+4,style:"fill:var(--surface)"},Math.round(lg)+"%");
+    });
+    [0,50,100].forEach(function(v){e("text",{x:L+W*v/100,y:T+rh*J.length+16,"text-anchor":v===0?"start":v===100?"end":"middle"},v+"%")});
+  })();
+
+  // Flips tab: catch vs false alarm
+  (function(){
+    var P=[["Qwen3.6-35B",7,29],["gpt-oss-20b",10,30],["DeepSeek-V3.1",18,38],["Qwen3.5-9B",19,25],["Qwen3.5-4B",25,30],["Nemotron-Super",26,44],["Nemotron-Nano",59,69]];
+    var s=document.getElementById("g6"), e=mk(s), L=70,R=40,T=16,B=56,H=380, X=function(v){return L+(860-L-R)*v/70}, Y=function(v){return H-B-(H-B-T)*v/80};
+    for(var v=0;v<=70;v+=10){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:H-B});e("text",{x:X(v),y:H-B+18,"text-anchor":"middle"},v+"%")}
+    for(var w=0;w<=80;w+=20){e("line",{class:"gl",x1:L,x2:860-R,y1:Y(w),y2:Y(w)});e("text",{x:L-8,y:Y(w)+4,"text-anchor":"end"},w+"%")}
+    e("line",{x1:X(0),y1:Y(0),x2:X(70),y2:Y(70),stroke:"var(--rand)","stroke-width":1.5,"stroke-dasharray":"5 5"});
+    e("text",{x:(L+860-R)/2,y:H-12,"text-anchor":"middle"},"false alarms: share of gpt-oss-120b's correct pairs flagged");
+    e("text",{x:L+6,y:T+12},"share of its confident errors flagged");
+    P.forEach(function(p){var c=e("circle",{cx:X(p[1]),cy:Y(p[2]),r:7,fill:"var(--others)",stroke:"var(--surface)","stroke-width":2});
+      hov(c,p[0]+": flags "+p[2]+"% of errors, "+p[1]+"% of correct pairs ("+(p[2]/Math.max(p[1],1)).toFixed(1)+"x)");
+      var dy=p[0]==="gpt-oss-20b"?16:p[0]==="Qwen3.5-9B"?16:-12;
+      e("text",{class:"lab",x:X(p[1])+(p[0]==="Nemotron-Nano"?-12:10),y:Y(p[2])+dy,"text-anchor":p[0]==="Nemotron-Nano"?"end":"start"},p[0])});
+  })();
+
+  // Flips tab: RB2 single-answer bars
+  (function(){
+    var D=[["Other judges disagreeing",.73,43,"var(--others)"],["Other judges' low confidence",.65,35,"var(--others)"],["Best judge's stated confidence",.61,32,"var(--own)"],
+           ["Best judge's token probability",.47,14,"var(--own)"],["Own confidence + disagreement",.71,39,"var(--comb)"],["Own + disagreement + others' confidence",.72,42,"var(--comb)"]];
+    var s=document.getElementById("g7"), e=mk(s), L=290,R=90,T=10,rh=40, X=function(v){return L+(860-L-R)*(v-.4)/.4};
+    for(var v=.4;v<=.801;v+=.1){e("line",{class:"gl",x1:X(v),x2:X(v),y1:T,y2:T+rh*D.length});e("text",{x:X(v),y:T+rh*D.length+18,"text-anchor":"middle"},v.toFixed(1))}
+    e("line",{x1:X(.5),x2:X(.5),y1:T,y2:T+rh*D.length,stroke:"var(--rand)","stroke-dasharray":"4 4"});
+    D.forEach(function(d,i){var y=T+rh*i+8, h=rh-16;
+      e("text",{class:"lab",x:L-14,y:y+h/2+4,"text-anchor":"end"},d[0]);
+      var r=e("rect",{x:X(.4),y:y,width:X(d[1])-X(.4),height:h,fill:d[3],rx:3});hov(r,d[0]+": AUROC "+d[1].toFixed(2)+", catches "+d[2]+"% at 18% flagged");
+      e("text",{class:"val",x:X(d[1])+8,y:y+h/2+4},d[1].toFixed(2)+" · "+d[2]+"%")});
+  })();
+
+
+  // ROC small multiples
+  (function(){
+    var R={"bffpair":{"target":"gpt-oss-120b","n":349,"errors":40,"curves":{"own":{"auc":0.739,"pts":[[0.0,0.0],[0.32,2.5],[0.97,2.5],[1.29,2.5],[2.27,5.0],[3.24,12.5],[3.56,12.5],[5.18,20.0],[5.83,20.0],[8.41,20.0],[8.74,20.0],[11.33,20.0],[11.33,22.5],[11.97,22.5],[13.27,37.5],[13.27,40.0],[14.56,40.0],[19.42,45.0],[19.42,47.5],[22.01,55.0],[24.27,62.5],[24.6,62.5],[29.13,70.0],[29.45,70.0],[32.04,70.0],[32.36,70.0],[38.19,77.5],[38.51,77.5],[43.04,82.5],[44.01,82.5],[82.52,97.5],[90.61,100.0],[94.17,100.0],[95.47,100.0],[98.38,100.0],[99.03,100.0],[99.68,100.0],[100.0,100.0]]},"flips":{"auc":0.626,"pts":[[0.0,0.0],[1.62,5.0],[4.53,20.0],[15.86,32.5],[32.36,45.0],[61.49,80.0],[100.0,100.0]]},"pooled":{"auc":0.635,"pts":[[0.0,0.0],[0.32,0.0],[0.65,0.0],[1.62,7.5],[2.91,10.0],[3.88,10.0],[6.47,12.5],[8.74,17.5],[13.59,25.0],[18.12,35.0],[27.18,50.0],[43.69,60.0],[67.64,85.0],[100.0,100.0]]},"others_conf":{"auc":0.742,"pts":[[0.0,0.0],[0.32,0.0],[0.65,0.0],[0.97,0.0],[1.29,0.0],[1.62,0.0],[1.62,2.5],[1.94,2.5],[2.27,2.5],[2.27,5.0],[2.59,5.0],[2.91,5.0],[2.91,7.5],[3.24,7.5],[3.56,7.5],[3.88,7.5],[3.88,10.0],[3.88,12.5],[4.21,12.5],[4.53,12.5],[4.85,12.5],[4.85,15.0],[5.18,15.0],[5.5,15.0],[5.83,15.0],[6.15,15.0],[6.47,15.0],[6.8,15.0],[7.12,15.0],[7.44,15.0],[7.44,17.5],[8.09,17.5],[8.41,17.5],[8.74,20.0],[8.74,22.5],[9.06,22.5],[9.39,22.5],[9.71,22.5],[9.71,25.0],[10.03,25.0],[10.36,25.0],[10.36,27.5],[10.68,27.5],[11.0,27.5],[11.33,27.5],[11.65,27.5],[11.65,30.0],[11.97,30.0],[12.3,30.0],[12.62,30.0],[12.94,30.0],[13.27,30.0],[13.59,30.0],[13.59,32.5],[13.92,32.5],[13.92,35.0],[13.92,37.5],[14.24,37.5],[14.24,40.0],[14.24,42.5],[14.24,45.0],[14.56,45.0],[14.89,45.0],[15.21,45.0],[15.53,45.0],[15.86,45.0],[16.18,45.0],[16.5,45.0],[16.83,45.0],[16.83,47.5],[17.15,47.5],[17.48,47.5],[17.48,50.0],[17.8,50.0],[18.12,50.0],[18.45,50.0],[18.77,50.0],[19.09,50.0],[19.09,52.5],[19.42,52.5],[19.42,55.0],[19.74,55.0],[19.74,57.5],[20.06,57.5],[20.39,57.5],[20.71,57.5],[21.04,57.5],[21.36,57.5],[21.68,57.5],[22.01,57.5],[22.33,57.5],[22.65,57.5],[22.98,57.5],[23.3,57.5],[23.62,57.5],[23.95,57.5],[24.27,57.5],[24.6,57.5],[24.6,60.0],[24.92,60.0],[24.92,62.5],[25.24,62.5],[25.57,62.5],[25.89,62.5],[26.21,62.5],[26.54,62.5],[26.86,62.5],[27.18,62.5],[27.18,65.0],[27.51,65.0],[27.83,65.0],[28.16,65.0],[28.16,67.5],[28.48,67.5],[28.8,67.5],[29.13,67.5],[29.45,67.5],[29.77,67.5],[30.1,67.5],[30.42,67.5],[30.74,67.5],[31.07,67.5],[31.39,67.5],[31.72,67.5],[32.04,67.5],[32.36,67.5],[32.69,67.5],[33.01,67.5],[33.33,67.5],[33.66,67.5],[33.98,67.5],[34.3,67.5],[34.63,67.5],[34.95,67.5],[35.28,67.5],[35.6,67.5],[35.92,67.5],[36.25,67.5],[36.25,70.0],[36.57,70.0],[36.89,70.0],[37.22,70.0],[37.22,72.5],[37.54,72.5],[37.86,72.5],[38.19,72.5],[38.51,72.5],[38.83,72.5],[39.16,72.5],[39.48,72.5],[39.81,72.5],[39.81,75.0],[39.81,77.5],[40.13,77.5],[40.13,80.0],[40.45,80.0],[40.78,80.0],[41.1,80.0],[41.42,80.0],[41.75,80.0],[42.07,80.0],[42.72,80.0],[43.04,80.0],[43.37,80.0],[43.69,80.0],[44.01,80.0],[44.34,80.0],[44.66,80.0],[44.98,80.0],[45.31,80.0],[45.63,80.0],[45.95,80.0],[46.28,80.0],[46.6,80.0],[46.6,82.5],[46.6,85.0],[46.93,85.0],[47.25,85.0],[47.57,85.0],[47.9,85.0],[48.22,85.0],[48.54,85.0],[48.87,85.0],[49.19,85.0],[49.51,85.0],[49.84,85.0],[50.16,85.0],[50.16,87.5],[50.49,90.0],[50.49,92.5],[50.81,92.5],[51.13,92.5],[51.78,92.5],[52.1,92.5],[52.43,92.5],[52.75,92.5],[53.07,92.5],[53.4,92.5],[53.72,92.5],[54.05,92.5],[54.37,92.5],[54.69,92.5],[55.02,92.5],[55.34,92.5],[55.66,92.5],[55.99,92.5],[56.31,92.5],[56.63,92.5],[56.96,92.5],[57.28,92.5],[57.61,92.5],[58.25,92.5],[58.58,92.5],[59.22,92.5],[59.55,92.5],[59.87,92.5],[60.19,92.5],[60.52,92.5],[60.84,92.5],[61.17,92.5],[61.17,95.0],[61.49,95.0],[61.81,95.0],[62.14,95.0],[62.46,95.0],[62.78,95.0],[63.11,95.0],[63.43,95.0],[63.75,95.0],[64.08,95.0],[64.4,95.0],[64.72,95.0],[65.05,95.0],[65.37,95.0],[65.7,95.0],[66.02,95.0],[66.34,95.0],[66.99,95.0],[67.31,95.0],[67.64,95.0],[67.96,95.0],[68.28,95.0],[68.61,95.0],[68.93,95.0],[69.26,95.0],[69.58,95.0],[69.9,95.0],[70.55,95.0],[70.87,95.0],[71.2,95.0],[71.52,95.0],[71.84,95.0],[72.17,95.0],[72.49,95.0],[72.82,95.0],[73.14,95.0],[73.46,95.0],[73.79,95.0],[74.11,95.0],[74.43,95.0],[74.76,95.0],[75.08,95.0],[75.4,95.0],[75.73,95.0],[76.05,95.0],[76.7,95.0],[77.99,95.0],[78.32,95.0],[78.64,95.0],[78.96,95.0],[80.26,95.0],[80.91,95.0],[81.23,95.0],[81.88,95.0],[82.2,95.0],[82.52,95.0],[82.85,95.0],[83.5,95.0],[83.82,95.0],[84.47,97.5],[84.79,97.5],[85.11,97.5],[85.44,97.5],[85.76,97.5],[86.08,97.5],[86.41,97.5],[86.73,97.5],[87.06,97.5],[88.35,97.5],[88.67,97.5],[89.0,97.5],[89.64,97.5],[89.97,97.5],[90.29,97.5],[90.61,100.0],[90.94,100.0],[91.26,100.0],[91.91,100.0],[92.23,100.0],[92.56,100.0],[93.2,100.0],[93.85,100.0],[94.17,100.0],[95.15,100.0],[95.47,100.0],[95.79,100.0],[97.09,100.0],[97.41,100.0],[97.73,100.0],[98.38,100.0],[99.03,100.0],[100.0,100.0]]},"combined":{"auc":0.727,"pts":[[0.0,0.0],[0.32,0.0],[0.65,0.0],[0.97,2.5],[1.29,2.5],[1.62,2.5],[1.94,2.5],[1.94,5.0],[2.27,5.0],[2.59,5.0],[2.91,5.0],[3.24,7.5],[3.56,7.5],[3.88,10.0],[4.21,10.0],[4.53,10.0],[4.85,10.0],[4.85,12.5],[4.85,15.0],[5.18,15.0],[5.5,15.0],[5.83,15.0],[5.83,17.5],[5.83,20.0],[5.83,25.0],[6.47,25.0],[7.12,25.0],[7.44,27.5],[7.77,27.5],[8.09,27.5],[8.41,27.5],[9.06,27.5],[10.03,27.5],[10.36,27.5],[10.68,30.0],[11.0,30.0],[11.0,32.5],[11.65,32.5],[11.97,32.5],[12.62,35.0],[13.92,37.5],[14.24,37.5],[14.89,37.5],[14.89,40.0],[15.21,40.0],[15.53,40.0],[16.5,40.0],[16.83,40.0],[17.15,40.0],[17.48,40.0],[17.8,45.0],[18.12,45.0],[18.45,45.0],[18.77,45.0],[19.09,47.5],[19.74,47.5],[20.39,47.5],[20.71,47.5],[21.04,50.0],[21.36,50.0],[21.68,50.0],[22.01,52.5],[22.33,52.5],[22.98,52.5],[23.3,52.5],[23.62,52.5],[24.6,52.5],[25.89,52.5],[26.21,52.5],[26.21,55.0],[26.86,57.5],[27.51,57.5],[27.83,57.5],[28.48,57.5],[29.77,57.5],[30.74,60.0],[31.72,60.0],[32.04,65.0],[32.69,67.5],[33.66,67.5],[33.98,67.5],[34.63,67.5],[34.95,70.0],[35.92,72.5],[39.81,75.0],[40.45,75.0],[40.78,75.0],[41.1,75.0],[42.39,80.0],[42.72,80.0],[43.04,82.5],[44.66,82.5],[49.84,85.0],[50.49,85.0],[50.49,87.5],[50.81,87.5],[51.78,87.5],[52.43,87.5],[52.75,87.5],[53.07,87.5],[54.05,87.5],[54.37,87.5],[54.69,87.5],[55.02,87.5],[66.67,90.0],[68.61,92.5],[69.9,92.5],[70.23,92.5],[71.2,92.5],[71.52,92.5],[72.17,92.5],[72.49,92.5],[73.14,92.5],[74.11,92.5],[88.67,100.0],[89.64,100.0],[89.97,100.0],[90.29,100.0],[95.79,100.0],[97.41,100.0],[98.06,100.0],[99.35,100.0],[99.68,100.0],[100.0,100.0]]}}},"judgebench":{"target":"qwen3.6-35b-a3b","n":263,"errors":17,"curves":{"own":{"auc":0.841,"pts":[[0.0,0.0],[0.41,0.0],[0.81,0.0],[1.22,0.0],[1.63,5.88],[2.03,5.88],[4.47,23.53],[5.69,35.29],[10.57,47.06],[14.23,58.82],[26.02,82.35],[34.15,94.12],[100.0,100.0]]},"flips":{"auc":0.77,"pts":[[0.0,0.0],[0.41,0.0],[1.22,0.0],[5.28,5.88],[16.67,47.06],[33.74,88.24],[68.29,94.12],[100.0,100.0]]},"pooled":{"auc":0.784,"pts":[[0.0,0.0],[0.41,0.0],[0.81,0.0],[1.63,0.0],[2.85,0.0],[2.85,17.65],[5.69,23.53],[8.13,23.53],[9.76,47.06],[17.07,52.94],[22.36,52.94],[32.11,70.59],[48.78,94.12],[74.8,100.0],[100.0,100.0]]},"others_conf":{"auc":0.835,"pts":[[0.0,0.0],[0.41,0.0],[0.81,0.0],[0.81,5.88],[0.81,11.76],[0.81,17.65],[1.22,17.65],[1.63,17.65],[2.03,17.65],[2.44,17.65],[2.85,17.65],[3.25,17.65],[3.66,17.65],[4.07,17.65],[4.47,17.65],[4.47,23.53],[4.88,23.53],[5.28,23.53],[5.28,29.41],[5.69,29.41],[5.69,35.29],[5.69,41.18],[6.1,41.18],[6.5,41.18],[6.91,41.18],[6.91,47.06],[7.32,47.06],[7.72,47.06],[8.13,47.06],[8.13,52.94],[8.54,52.94],[8.94,52.94],[9.35,52.94],[9.76,52.94],[10.16,52.94],[10.57,52.94],[10.98,52.94],[11.38,52.94],[11.79,52.94],[12.2,52.94],[12.6,52.94],[12.6,58.82],[13.01,58.82],[13.41,58.82],[13.82,58.82],[14.23,58.82],[14.63,58.82],[15.04,58.82],[15.45,58.82],[15.85,58.82],[16.26,58.82],[16.67,58.82],[17.07,58.82],[17.48,58.82],[17.89,58.82],[18.29,58.82],[18.29,64.71],[18.7,64.71],[19.11,64.71],[19.51,64.71],[19.92,64.71],[20.33,64.71],[20.73,64.71],[20.73,70.59],[21.14,70.59],[21.54,70.59],[21.95,70.59],[22.36,70.59],[22.76,70.59],[23.17,70.59],[23.58,70.59],[23.98,70.59],[24.39,70.59],[24.8,70.59],[25.2,70.59],[25.61,70.59],[26.02,70.59],[26.42,70.59],[26.83,70.59],[27.24,70.59],[27.64,70.59],[28.05,70.59],[28.46,70.59],[28.86,70.59],[29.27,70.59],[29.67,70.59],[29.67,76.47],[30.08,76.47],[30.49,76.47],[30.89,76.47],[31.3,76.47],[31.71,76.47],[32.11,76.47],[32.52,76.47],[32.93,76.47],[33.33,76.47],[33.74,76.47],[34.15,76.47],[34.15,82.35],[34.55,82.35],[34.96,82.35],[34.96,88.24],[35.37,88.24],[35.77,88.24],[36.18,88.24],[36.59,88.24],[36.99,88.24],[37.4,88.24],[37.4,94.12],[37.8,94.12],[38.21,94.12],[38.62,94.12],[39.02,94.12],[39.43,94.12],[39.84,94.12],[40.24,94.12],[40.65,94.12],[41.06,94.12],[41.46,94.12],[41.87,94.12],[42.28,94.12],[42.68,94.12],[43.09,94.12],[43.5,94.12],[43.9,94.12],[44.31,94.12],[44.72,94.12],[45.12,94.12],[45.53,94.12],[45.93,94.12],[46.34,94.12],[46.75,94.12],[47.15,94.12],[47.56,94.12],[47.97,94.12],[48.37,94.12],[48.78,94.12],[49.19,94.12],[49.59,94.12],[50.0,94.12],[50.41,94.12],[50.81,94.12],[51.22,94.12],[51.63,94.12],[52.03,94.12],[52.44,94.12],[52.85,94.12],[53.25,94.12],[53.66,94.12],[54.07,94.12],[54.07,100.0],[54.47,100.0],[54.88,100.0],[55.28,100.0],[55.69,100.0],[56.1,100.0],[56.5,100.0],[56.91,100.0],[57.32,100.0],[57.72,100.0],[58.13,100.0],[58.54,100.0],[58.94,100.0],[59.35,100.0],[59.76,100.0],[60.16,100.0],[60.57,100.0],[60.98,100.0],[61.38,100.0],[61.79,100.0],[62.2,100.0],[62.6,100.0],[63.01,100.0],[63.41,100.0],[63.82,100.0],[64.23,100.0],[64.63,100.0],[65.04,100.0],[65.45,100.0],[65.85,100.0],[66.26,100.0],[66.67,100.0],[67.07,100.0],[67.48,100.0],[67.89,100.0],[68.29,100.0],[68.7,100.0],[69.11,100.0],[69.51,100.0],[69.92,100.0],[70.33,100.0],[70.73,100.0],[71.14,100.0],[71.54,100.0],[71.95,100.0],[72.36,100.0],[72.76,100.0],[73.17,100.0],[73.58,100.0],[73.98,100.0],[74.39,100.0],[74.8,100.0],[75.2,100.0],[75.61,100.0],[76.02,100.0],[76.42,100.0],[76.83,100.0],[77.24,100.0],[77.64,100.0],[78.05,100.0],[78.46,100.0],[78.86,100.0],[79.27,100.0],[79.67,100.0],[80.08,100.0],[80.49,100.0],[80.89,100.0],[81.3,100.0],[81.71,100.0],[82.11,100.0],[82.52,100.0],[82.93,100.0],[83.33,100.0],[83.74,100.0],[84.15,100.0],[84.96,100.0],[85.37,100.0],[85.77,100.0],[86.18,100.0],[86.59,100.0],[86.99,100.0],[87.4,100.0],[87.8,100.0],[88.21,100.0],[88.62,100.0],[89.02,100.0],[89.43,100.0],[89.84,100.0],[90.24,100.0],[91.06,100.0],[91.46,100.0],[92.28,100.0],[92.68,100.0],[93.09,100.0],[93.5,100.0],[93.9,100.0],[94.31,100.0],[95.12,100.0],[95.53,100.0],[95.93,100.0],[96.34,100.0],[96.75,100.0],[97.97,100.0],[98.37,100.0],[98.78,100.0],[99.19,100.0],[99.59,100.0],[100.0,100.0]]},"combined":{"auc":0.856,"pts":[[0.0,0.0],[0.41,0.0],[0.81,0.0],[1.22,0.0],[2.03,0.0],[2.44,5.88],[2.44,11.76],[2.44,17.65],[2.44,29.41],[3.25,29.41],[3.66,29.41],[4.07,29.41],[4.47,41.18],[4.88,47.06],[5.28,47.06],[5.69,47.06],[6.5,47.06],[7.32,47.06],[8.54,47.06],[9.35,47.06],[9.76,47.06],[10.98,47.06],[11.79,52.94],[12.2,52.94],[12.6,52.94],[12.6,58.82],[13.01,58.82],[14.23,64.71],[14.63,64.71],[15.04,64.71],[15.85,64.71],[16.67,64.71],[17.07,64.71],[18.7,64.71],[20.33,70.59],[20.73,70.59],[21.14,70.59],[21.54,70.59],[22.36,70.59],[23.17,82.35],[23.58,82.35],[23.98,82.35],[25.2,94.12],[26.42,94.12],[27.24,94.12],[28.86,94.12],[32.11,94.12],[35.37,94.12],[36.99,94.12],[42.68,94.12],[43.9,94.12],[57.32,94.12],[58.54,94.12],[78.05,100.0],[100.0,100.0]]}}},"alpacafarm":{"target":"deepseek-v3.1","n":382,"errors":79,"curves":{"own":{"auc":0.648,"pts":[[0.0,0.0],[0.0,1.27],[0.33,3.8],[0.66,3.8],[0.66,6.33],[1.65,6.33],[3.96,10.13],[3.96,11.39],[5.94,18.99],[7.92,22.78],[10.56,27.85],[12.87,30.38],[16.17,31.65],[20.79,36.71],[24.42,39.24],[27.72,48.1],[35.97,53.16],[41.25,62.03],[49.5,68.35],[56.44,75.95],[67.99,84.81],[77.23,89.87],[84.16,96.2],[89.44,98.73],[100.0,100.0]]},"flips":{"auc":0.661,"pts":[[0.0,0.0],[0.33,1.27],[4.62,8.86],[11.55,20.25],[18.48,35.44],[34.98,62.03],[57.76,82.28],[100.0,100.0]]},"pooled":{"auc":0.691,"pts":[[0.0,0.0],[0.33,1.27],[0.33,3.8],[0.66,6.33],[0.99,7.59],[2.97,8.86],[4.62,13.92],[6.27,17.72],[8.91,21.52],[12.21,34.18],[16.5,36.71],[24.09,46.84],[30.69,59.49],[43.23,72.15],[61.72,87.34],[100.0,100.0]]},"others_conf":{"auc":0.653,"pts":[[0.0,0.0],[0.0,1.27],[0.33,1.27],[0.33,2.53],[0.66,2.53],[0.99,2.53],[1.32,2.53],[1.65,2.53],[1.98,2.53],[2.31,2.53],[2.64,2.53],[2.97,2.53],[2.97,3.8],[3.3,3.8],[3.3,5.06],[3.63,5.06],[3.63,6.33],[3.96,6.33],[4.29,6.33],[4.29,7.59],[4.62,7.59],[4.95,7.59],[4.95,8.86],[4.95,10.13],[4.95,11.39],[5.28,11.39],[5.61,11.39],[5.61,12.66],[5.94,12.66],[6.27,12.66],[6.6,12.66],[6.93,12.66],[7.26,12.66],[7.59,12.66],[7.59,13.92],[7.92,13.92],[8.25,13.92],[8.58,13.92],[8.58,15.19],[8.91,15.19],[9.24,15.19],[9.24,16.46],[9.57,16.46],[9.9,16.46],[10.23,16.46],[10.56,16.46],[10.56,17.72],[10.56,18.99],[10.56,20.25],[10.89,20.25],[11.22,20.25],[11.55,20.25],[11.88,20.25],[11.88,21.52],[11.88,22.78],[11.88,24.05],[12.21,24.05],[12.54,24.05],[12.87,24.05],[12.87,25.32],[13.2,25.32],[13.2,26.58],[13.2,29.11],[13.53,29.11],[13.86,29.11],[13.86,30.38],[14.19,30.38],[14.52,30.38],[14.85,30.38],[14.85,31.65],[15.18,31.65],[15.51,31.65],[15.84,31.65],[16.17,31.65],[16.5,31.65],[16.83,31.65],[17.16,31.65],[17.16,32.91],[17.49,32.91],[17.82,32.91],[17.82,34.18],[18.15,34.18],[18.48,34.18],[18.81,34.18],[19.14,34.18],[19.47,34.18],[19.47,35.44],[19.8,35.44],[20.13,35.44],[20.46,35.44],[20.79,35.44],[21.12,35.44],[21.12,36.71],[21.45,36.71],[21.78,36.71],[22.11,36.71],[22.11,37.97],[22.44,37.97],[22.44,39.24],[22.77,40.51],[23.1,40.51],[23.1,41.77],[23.1,43.04],[23.1,44.3],[23.43,44.3],[23.43,45.57],[23.76,45.57],[24.09,45.57],[24.42,45.57],[24.75,45.57],[24.75,46.84],[25.08,46.84],[25.41,46.84],[25.74,46.84],[26.07,46.84],[26.4,46.84],[26.73,46.84],[27.06,46.84],[27.06,48.1],[27.39,48.1],[27.39,49.37],[27.72,49.37],[28.05,49.37],[28.38,49.37],[28.71,49.37],[29.04,49.37],[29.37,49.37],[29.7,49.37],[30.03,49.37],[30.36,49.37],[30.36,50.63],[30.36,51.9],[30.69,51.9],[31.02,51.9],[31.35,51.9],[31.68,51.9],[31.68,53.16],[32.01,53.16],[32.34,53.16],[32.67,53.16],[32.67,54.43],[33.0,55.7],[33.0,56.96],[33.33,56.96],[33.33,58.23],[33.33,59.49],[33.66,59.49],[34.32,59.49],[34.65,59.49],[34.98,59.49],[35.31,59.49],[35.31,60.76],[35.64,60.76],[35.97,60.76],[36.3,60.76],[36.63,60.76],[36.96,60.76],[37.29,60.76],[37.62,60.76],[37.95,60.76],[38.28,60.76],[38.61,60.76],[38.94,60.76],[39.27,60.76],[39.27,62.03],[39.6,62.03],[39.93,62.03],[40.26,63.29],[40.59,63.29],[40.59,64.56],[41.25,64.56],[41.25,65.82],[41.58,65.82],[41.91,65.82],[42.24,65.82],[42.24,67.09],[42.24,68.35],[42.57,68.35],[42.9,68.35],[43.23,68.35],[43.56,68.35],[43.89,68.35],[44.22,68.35],[44.22,69.62],[44.55,69.62],[44.88,69.62],[45.21,69.62],[45.21,70.89],[45.54,70.89],[45.87,70.89],[46.2,70.89],[46.53,70.89],[46.53,72.15],[46.86,72.15],[47.19,72.15],[47.52,72.15],[47.52,73.42],[47.85,73.42],[48.18,73.42],[48.51,73.42],[48.84,73.42],[49.17,73.42],[49.5,73.42],[49.83,73.42],[50.17,73.42],[50.17,74.68],[50.5,74.68],[50.83,74.68],[51.16,74.68],[51.49,74.68],[51.49,75.95],[51.82,75.95],[52.15,75.95],[52.48,75.95],[52.81,75.95],[53.14,75.95],[53.47,75.95],[53.8,75.95],[54.13,75.95],[54.13,77.22],[54.46,77.22],[54.79,77.22],[55.12,77.22],[55.12,78.48],[55.45,78.48],[55.78,78.48],[56.11,78.48],[56.11,79.75],[56.44,79.75],[56.77,79.75],[57.76,79.75],[58.09,79.75],[58.42,79.75],[58.75,79.75],[59.08,79.75],[59.41,79.75],[59.74,79.75],[60.07,79.75],[60.4,79.75],[60.73,79.75],[61.06,79.75],[61.72,79.75],[62.05,79.75],[62.38,79.75],[62.71,79.75],[62.71,81.01],[62.71,82.28],[63.04,82.28],[63.37,82.28],[63.7,82.28],[64.03,82.28],[64.36,82.28],[64.69,82.28],[65.02,82.28],[65.02,83.54],[65.35,83.54],[65.68,83.54],[66.01,83.54],[66.67,83.54],[67.0,83.54],[67.0,84.81],[67.33,84.81],[67.33,86.08],[67.66,86.08],[67.99,86.08],[68.32,86.08],[68.65,86.08],[68.98,86.08],[69.31,86.08],[69.64,86.08],[69.64,87.34],[69.97,87.34],[70.3,87.34],[70.63,87.34],[70.96,87.34],[71.29,87.34],[71.29,88.61],[71.29,89.87],[71.62,89.87],[71.95,89.87],[72.28,89.87],[72.61,89.87],[72.94,89.87],[73.27,89.87],[73.6,89.87],[73.93,89.87],[74.26,89.87],[74.59,89.87],[74.92,89.87],[75.25,89.87],[75.58,89.87],[75.91,89.87],[76.24,89.87],[76.57,89.87],[76.9,89.87],[77.23,89.87],[77.56,89.87],[77.89,89.87],[77.89,91.14],[78.22,91.14],[78.55,91.14],[78.88,91.14],[79.21,91.14],[79.54,91.14],[79.54,92.41],[79.87,92.41],[80.53,92.41],[80.86,92.41],[81.52,92.41],[81.52,93.67],[81.85,93.67],[82.18,93.67],[82.51,93.67],[82.84,93.67],[83.17,93.67],[83.5,93.67],[83.83,94.94],[84.16,94.94],[84.49,94.94],[84.82,94.94],[85.15,94.94],[85.48,94.94],[85.81,94.94],[86.14,94.94],[86.47,94.94],[86.8,94.94],[87.13,94.94],[87.13,96.2],[87.46,96.2],[87.79,96.2],[88.12,96.2],[88.45,96.2],[88.78,96.2],[88.78,97.47],[89.11,97.47],[89.77,97.47],[90.1,97.47],[90.43,97.47],[90.76,97.47],[91.09,97.47],[91.42,97.47],[91.75,97.47],[92.08,97.47],[92.41,97.47],[92.74,97.47],[93.07,97.47],[93.4,97.47],[93.73,97.47],[94.06,97.47],[94.06,98.73],[94.39,98.73],[94.72,98.73],[95.05,98.73],[95.38,98.73],[95.71,98.73],[96.04,98.73],[96.37,98.73],[96.7,98.73],[97.03,98.73],[97.36,98.73],[97.69,98.73],[98.02,98.73],[98.35,98.73],[98.68,98.73],[99.01,98.73],[99.34,98.73],[99.67,98.73],[100.0,98.73],[100.0,100.0]]},"combined":{"auc":0.704,"pts":[[0.0,0.0],[0.0,1.27],[0.33,1.27],[0.66,1.27],[0.66,2.53],[0.66,3.8],[0.66,5.06],[0.66,6.33],[0.99,6.33],[1.32,6.33],[1.65,7.59],[1.98,7.59],[2.31,7.59],[2.31,8.86],[2.97,10.13],[3.3,10.13],[3.63,10.13],[3.96,11.39],[4.29,11.39],[4.62,11.39],[4.95,11.39],[5.28,11.39],[5.94,11.39],[6.6,11.39],[6.93,11.39],[7.26,12.66],[7.59,12.66],[7.92,12.66],[8.25,12.66],[8.25,13.92],[8.58,13.92],[8.91,13.92],[9.24,15.19],[9.57,15.19],[9.57,16.46],[9.57,17.72],[9.9,18.99],[10.23,18.99],[10.56,21.52],[11.22,21.52],[11.88,21.52],[12.21,21.52],[12.54,21.52],[12.54,22.78],[12.54,24.05],[12.87,24.05],[13.86,25.32],[14.19,25.32],[14.52,25.32],[14.52,26.58],[14.85,26.58],[14.85,27.85],[15.18,29.11],[15.18,31.65],[15.51,31.65],[16.5,32.91],[16.83,34.18],[16.83,36.71],[16.83,37.97],[16.83,39.24],[17.16,40.51],[17.16,41.77],[17.49,41.77],[17.82,41.77],[18.48,41.77],[19.14,41.77],[19.47,41.77],[19.8,43.04],[20.46,44.3],[21.45,44.3],[21.45,45.57],[22.11,45.57],[23.43,46.84],[23.76,46.84],[24.09,48.1],[24.42,49.37],[25.08,51.9],[25.74,51.9],[26.07,53.16],[26.07,54.43],[26.07,55.7],[27.06,56.96],[28.38,56.96],[28.71,56.96],[29.04,56.96],[30.69,58.23],[32.01,58.23],[33.0,60.76],[33.0,62.03],[33.0,63.29],[33.99,65.82],[33.99,67.09],[34.65,67.09],[34.65,68.35],[36.3,69.62],[37.29,70.89],[37.62,72.15],[37.95,72.15],[38.28,73.42],[39.27,73.42],[40.92,73.42],[41.25,73.42],[43.89,74.68],[44.22,75.95],[44.55,77.22],[45.21,78.48],[45.54,78.48],[45.87,78.48],[46.2,79.75],[46.53,81.01],[47.52,81.01],[48.51,81.01],[49.17,81.01],[49.5,81.01],[49.83,81.01],[50.5,82.28],[51.16,82.28],[51.82,83.54],[52.48,86.08],[53.47,86.08],[55.78,87.34],[56.77,87.34],[57.1,87.34],[59.41,89.87],[59.74,91.14],[60.4,92.41],[60.73,92.41],[61.72,93.67],[63.7,93.67],[65.35,93.67],[65.68,93.67],[69.97,93.67],[72.61,93.67],[73.93,93.67],[79.87,93.67],[81.19,93.67],[87.13,96.2],[89.77,97.47],[92.41,98.73],[100.0,100.0]]}}},"mtbhuman":{"target":"gpt-oss-120b","n":282,"errors":39,"curves":{"own":{"auc":0.761,"pts":[[0.0,0.0],[0.0,2.56],[2.06,15.38],[2.06,17.95],[6.58,20.51],[7.0,25.64],[9.88,33.33],[13.99,38.46],[16.46,46.15],[16.87,46.15],[20.99,53.85],[21.81,53.85],[26.34,58.97],[26.34,61.54],[26.75,64.1],[33.33,74.36],[33.74,74.36],[39.09,79.49],[39.51,79.49],[41.98,82.05],[45.68,87.18],[46.09,87.18],[48.15,87.18],[48.56,87.18],[49.38,87.18],[53.5,92.31],[58.44,92.31],[59.26,92.31],[83.95,97.44],[86.42,100.0],[87.65,100.0],[88.48,100.0],[96.71,100.0],[97.53,100.0],[97.94,100.0],[100.0,100.0]]},"flips":{"auc":0.703,"pts":[[0.0,0.0],[0.0,7.69],[0.82,10.26],[4.53,12.82],[9.88,30.77],[17.28,53.85],[50.62,76.92],[100.0,100.0]]},"pooled":{"auc":0.76,"pts":[[0.0,0.0],[1.23,5.13],[2.06,5.13],[2.06,10.26],[4.12,25.64],[5.76,38.46],[9.88,46.15],[15.64,56.41],[23.87,71.79],[53.91,82.05],[100.0,100.0]]},"others_conf":{"auc":0.78,"pts":[[0.0,0.0],[0.0,2.56],[0.41,2.56],[0.41,5.13],[0.82,5.13],[1.23,5.13],[1.23,7.69],[1.65,7.69],[2.06,7.69],[2.47,7.69],[3.29,7.69],[3.7,7.69],[4.12,7.69],[4.12,10.26],[4.53,10.26],[4.94,10.26],[4.94,12.82],[4.94,15.38],[4.94,17.95],[4.94,20.51],[4.94,23.08],[5.35,23.08],[5.76,23.08],[5.76,25.64],[6.17,25.64],[6.58,25.64],[7.0,25.64],[7.41,25.64],[7.82,25.64],[8.23,25.64],[8.64,25.64],[9.05,25.64],[9.05,28.21],[9.05,30.77],[9.05,33.33],[9.47,33.33],[9.88,33.33],[10.29,33.33],[10.29,35.9],[10.7,35.9],[10.7,38.46],[11.11,38.46],[11.52,38.46],[11.93,38.46],[12.35,38.46],[12.35,41.03],[12.76,41.03],[13.17,41.03],[13.58,41.03],[13.58,43.59],[13.99,43.59],[14.4,43.59],[14.81,43.59],[15.23,43.59],[15.64,43.59],[16.05,43.59],[16.05,46.15],[16.05,48.72],[16.05,51.28],[16.46,51.28],[16.87,51.28],[16.87,53.85],[16.87,56.41],[17.28,56.41],[17.7,56.41],[18.11,56.41],[18.52,56.41],[18.52,58.97],[18.52,61.54],[18.93,61.54],[18.93,64.1],[19.34,64.1],[19.75,64.1],[20.16,64.1],[20.16,66.67],[20.58,66.67],[20.58,69.23],[21.4,69.23],[21.81,69.23],[22.22,69.23],[22.63,69.23],[23.05,69.23],[23.46,69.23],[23.46,71.79],[23.87,71.79],[24.28,71.79],[24.28,74.36],[24.69,74.36],[25.1,74.36],[25.51,74.36],[25.93,74.36],[26.34,74.36],[26.75,74.36],[27.16,74.36],[27.57,74.36],[27.98,74.36],[28.4,74.36],[28.4,76.92],[28.81,76.92],[29.22,76.92],[29.63,76.92],[30.04,76.92],[30.45,76.92],[30.86,76.92],[31.28,76.92],[32.1,76.92],[32.51,76.92],[32.92,76.92],[33.33,76.92],[33.74,76.92],[34.16,76.92],[34.57,76.92],[34.98,76.92],[35.39,76.92],[35.8,76.92],[35.8,79.49],[36.21,79.49],[36.63,79.49],[37.04,79.49],[37.04,82.05],[37.04,84.62],[37.45,84.62],[37.86,84.62],[38.27,84.62],[38.68,84.62],[39.09,84.62],[39.51,84.62],[39.92,84.62],[40.33,84.62],[40.74,84.62],[41.15,84.62],[41.56,84.62],[41.98,84.62],[42.39,84.62],[42.8,84.62],[43.21,84.62],[43.62,84.62],[44.03,84.62],[44.44,84.62],[44.86,84.62],[45.27,84.62],[45.68,84.62],[46.09,84.62],[46.5,84.62],[46.91,84.62],[47.74,84.62],[48.56,84.62],[48.97,84.62],[49.38,84.62],[49.79,84.62],[50.21,84.62],[50.62,87.18],[51.03,87.18],[51.44,87.18],[51.85,87.18],[52.26,87.18],[52.67,87.18],[53.09,87.18],[53.5,87.18],[53.91,87.18],[54.32,87.18],[54.73,87.18],[55.14,87.18],[55.56,87.18],[55.97,87.18],[56.38,87.18],[56.38,89.74],[56.38,92.31],[56.79,92.31],[57.2,92.31],[58.02,92.31],[58.44,92.31],[58.85,92.31],[59.26,92.31],[59.67,92.31],[60.08,92.31],[60.49,92.31],[60.91,92.31],[61.32,92.31],[61.73,92.31],[62.14,92.31],[62.55,92.31],[62.96,92.31],[63.37,92.31],[63.79,92.31],[64.2,92.31],[64.61,92.31],[65.02,94.87],[65.43,94.87],[65.84,94.87],[66.26,94.87],[66.67,94.87],[67.08,94.87],[67.49,94.87],[67.9,94.87],[68.31,94.87],[68.72,94.87],[69.14,94.87],[69.55,94.87],[69.96,94.87],[70.37,94.87],[71.19,94.87],[71.6,94.87],[72.02,94.87],[72.43,94.87],[72.84,94.87],[73.25,94.87],[73.66,94.87],[74.07,94.87],[74.49,94.87],[74.9,94.87],[75.31,94.87],[75.72,94.87],[76.13,94.87],[76.54,94.87],[76.95,94.87],[76.95,97.44],[77.37,97.44],[77.78,97.44],[77.78,100.0],[78.19,100.0],[78.6,100.0],[79.01,100.0],[79.42,100.0],[79.84,100.0],[80.25,100.0],[80.66,100.0],[81.07,100.0],[81.48,100.0],[82.3,100.0],[82.72,100.0],[83.13,100.0],[83.54,100.0],[83.95,100.0],[84.77,100.0],[85.19,100.0],[85.6,100.0],[86.01,100.0],[86.42,100.0],[86.83,100.0],[87.24,100.0],[87.65,100.0],[88.07,100.0],[88.48,100.0],[88.89,100.0],[89.3,100.0],[89.71,100.0],[90.12,100.0],[90.53,100.0],[91.77,100.0],[92.18,100.0],[92.59,100.0],[93.42,100.0],[93.83,100.0],[94.24,100.0],[94.65,100.0],[95.06,100.0],[95.47,100.0],[96.3,100.0],[96.71,100.0],[97.12,100.0],[97.53,100.0],[99.59,100.0],[100.0,100.0]]},"combined":{"auc":0.798,"pts":[[0.0,0.0],[0.0,2.56],[0.0,5.13],[0.82,10.26],[1.23,10.26],[1.65,12.82],[2.06,12.82],[2.88,15.38],[3.29,17.95],[3.29,20.51],[3.7,20.51],[4.12,20.51],[4.53,20.51],[4.94,23.08],[5.35,23.08],[5.76,25.64],[5.76,28.21],[5.76,30.77],[6.17,30.77],[6.17,33.33],[6.58,33.33],[7.0,33.33],[7.41,35.9],[7.82,35.9],[8.23,35.9],[8.23,38.46],[8.64,41.03],[9.05,41.03],[11.11,46.15],[11.11,48.72],[11.93,48.72],[12.35,48.72],[12.76,48.72],[13.58,48.72],[13.58,51.28],[14.4,51.28],[15.23,51.28],[15.23,53.85],[15.64,56.41],[16.05,56.41],[16.05,58.97],[16.87,58.97],[16.87,61.54],[17.28,61.54],[18.11,61.54],[18.52,66.67],[18.93,66.67],[19.34,66.67],[19.75,66.67],[20.16,66.67],[20.58,66.67],[22.63,66.67],[23.46,66.67],[24.28,69.23],[25.51,71.79],[25.93,71.79],[27.16,71.79],[27.16,74.36],[27.57,74.36],[27.98,74.36],[30.04,74.36],[30.45,74.36],[30.86,74.36],[31.28,76.92],[31.69,76.92],[32.92,76.92],[34.16,76.92],[34.57,76.92],[34.57,79.49],[34.98,79.49],[35.39,79.49],[35.39,82.05],[37.45,82.05],[37.86,84.62],[38.27,87.18],[38.68,87.18],[39.51,87.18],[41.15,87.18],[41.98,87.18],[42.39,87.18],[44.86,87.18],[46.5,87.18],[46.91,87.18],[47.33,87.18],[47.74,87.18],[50.62,89.74],[56.79,89.74],[57.2,89.74],[60.49,89.74],[62.14,89.74],[62.96,92.31],[64.2,92.31],[65.43,92.31],[65.84,92.31],[66.26,92.31],[67.08,97.44],[70.37,97.44],[72.02,97.44],[72.43,97.44],[72.84,97.44],[90.53,100.0],[91.36,100.0],[92.18,100.0],[93.0,100.0],[97.12,100.0],[97.94,100.0],[98.35,100.0],[100.0,100.0]]}}}}, NAMES={bffpair:"BFF pairwise",judgebench:"JudgeBench",alpacafarm:"AlpacaFarm",mtbhuman:"MT-Bench human"};
+    var ST={own:["var(--own)",2.5,null,"own confidence"],pooled:["var(--others)",2.5,null,"others: flips + disagreement"],
+            flips:["var(--others)",1.8,"5 4","others: flips only"],others_conf:["var(--b4)",2,null,"others: low confidence"],
+            combined:["var(--comb)",3,null,"combined"]};
+    Object.keys(R).forEach(function(b){
+      var s=document.getElementById("roc-"+b); if(!s)return; var e=mk(s), r=R[b], L=46,Rt=14,T=30,B=46,W=430,H=400;
+      var X=function(v){return L+(W-L-Rt)*v/100}, Y=function(v){return H-B-(H-B-T)*v/100};
+      for(var v=0;v<=100;v+=20){e("line",{class:"gl",x1:X(v),x2:X(v),y1:Y(0),y2:Y(100)});e("line",{class:"gl",x1:X(0),x2:X(100),y1:Y(v),y2:Y(v)});
+        e("text",{x:X(v),y:H-B+16,"text-anchor":"middle"},v+"%");e("text",{x:L-6,y:Y(v)+4,"text-anchor":"end"},v+"%")}
+      e("line",{x1:X(0),y1:Y(0),x2:X(100),y2:Y(100),stroke:"var(--rand)","stroke-dasharray":"4 4"});
+      e("line",{x1:X(18),x2:X(18),y1:Y(0),y2:Y(100),stroke:"var(--ink-3)","stroke-dasharray":"2 4","stroke-width":1});
+      e("text",{class:"lab",x:L,y:16},NAMES[b]+" · "+r.target+" · "+r.errors+" errors");
+      e("text",{x:(L+W-Rt)/2,y:H-10,"text-anchor":"middle"},"correct pairs flagged (false alarms)");
+      ["flips","others_conf","pooled","own","combined"].forEach(function(k){var c=r.curves[k], st=ST[k];
+        var pl=e("polyline",{points:c.pts.map(function(p){return X(p[0])+","+Y(p[1])}).join(" "),fill:"none",stroke:st[0],"stroke-width":st[1],"stroke-linejoin":"round"});
+        if(st[2])pl.setAttribute("stroke-dasharray",st[2]);
+        hov(pl,NAMES[b]+", "+st[3]+": AUROC "+c.auc.toFixed(2))});
+      var ks=["combined","own","others_conf","pooled","flips"];
+      ks.forEach(function(k,i){var c=r.curves[k];e("text",{x:X(100)-4,y:Y(0)-8-14*(ks.length-1-i),"text-anchor":"end",style:"fill:"+ST[k][0]},ST[k][3]+" "+c.auc.toFixed(2))});
+    });
+  })();
+  // Hypothesis table
+  var Hy=[["The best judge's confidence flags its confident errors","own","good","Supported","0.65–0.84 (stated); token probability weaker"],
+          ["A judge is less confident when it flips","own","good","Supported","gpt-oss-120b stated-confidence AUROC 0.79–0.86 for its own flips"],
+          ["Own confidence and other judges are complementary","both","mixed","Partly","+0.02 to +0.05 on 3 of 4; none on BFF pairwise"],
+          ["More flips by other judges mean more errors","flips","good","Supported, 4 of 4","Error rate rises from 1–10% (0 flips) to 30–40% (4+ flips); matched strata +3.8 to +26.1 pts"],
+          ["Other judges' flips add beyond text controls","flips","good","Supported, 3 of 4","Gain +0.05 to +0.09 AUROC, also after embedding controls"],
+          ["Flips add beyond plain disagreement","flips","mixed","Partly","Significant only on JudgeBench"],
+          ["Other judges' confidence beats their flips","flips","good","Supported","0.65–0.83 vs 0.62–0.73"],
+          ["Flips rise as the quality gap shrinks","flips","mixed","Partly","gpt-oss 2–4x, DeepSeek and Nemotron-Super ~1.5x, Qwen no rise"],
+          ["Judges prefer a padded copy","flips","good","Supported","Strong judges pick it in both orders 40–52% vs 7–12%"],
+          ["Cross-judge signals work without order swaps","flips","good","Supported","Disagreement 0.73 on RewardBench 2 single-answer"],
+          ["Flips happen on questions the judge can't solve","flips","bad","Not supported","gpt-oss-120b flips 7% (solved) vs 8% (unsolved)"],
+          ["Flip counts are a good label-free difficulty measure","flips","bad","Not supported","0.67–0.78 vs 0.91–0.96 for labelled errors"],
+          ["Flips can be predicted from the text alone","flips","bad","Not supported","Correlation with real flips −0.05 to 0.29"],
+          ["A few chosen checkers beat pooling all judges","flips","bad","Not supported","Pooling matches or wins on 3 of 4"],
+          ["Repeatable flips are a better alarm than one-off flips","flips","bad","Not supported","0.53–0.64 vs 0.57 single run"]];
+  var SIG={own:"own confidence",flips:"other judges",both:"both"};
+  var tb=document.getElementById("hyp");
+  Hy.forEach(function(h){var tr=document.createElement("tr");
+    tr.innerHTML="<td>"+h[0]+"</td><td><span class=\"tag\">"+SIG[h[1]]+"</span></td><td><span class=\"pill "+h[2]+"\">"+h[3]+"</span></td><td class=\"num\">"+h[4]+"</td>";tb.appendChild(tr)});
+})();
+</script>

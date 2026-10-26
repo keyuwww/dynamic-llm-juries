@@ -1,20 +1,25 @@
 """
-Pairwise judging with a stated confidence and the verdict-token probability (order-flip vs confidence study).
+Judging with a stated confidence and the verdict-token probability (order-flip and confidence study).
 
-Same pairwise prompts as the stored runs (tinker_pool/run_judges.py for bffpair, run_xb_judges.py for the
-others), with the final instruction extended to ask for a CONFIDENCE line (0-100). Every pair is judged in both
-orders, as before. For each call we keep:
+Same prompts as the stored runs (tinker_pool/run_judges.py for bffpair and bffctrl, run_xb_judges.py for the
+others), with the final instruction extended to ask for a CONFIDENCE line (0-100). Pairwise items are judged in
+both orders, as before; rb2 is single-answer grading (CORRECT / INCORRECT). K samples per call (--samples); the
+per-sample fields are lists and the scalar fields hold sample 0. For each call we keep:
   verdict      1 = A (first shown) better, 0 = B, None = unparsed
   conf         stated confidence 0-100 (None if missing)
   p_verdict    P(chosen letter) / (P(A) + P(B)) at the verdict token, from the top-k sampled logprobs
   raw_full     the whole decoded generation, including the reasoning channel (the stored runs kept only the
                final text, so gpt-oss reasoning traces were lost)
-Output: results/confidence/<bench>/judgments.jsonl (append-only cache; rerun to resume).
+Output: results/<out-dir>/<bench>/judgments.jsonl (append-only cache; rerun to resume).
 
 Usage (from experiments/cross_benchmark):
-  python run_confidence.py --bench bffpair --models gpt-oss-120b,gpt-oss-20b,nemotron3-nano-30b --concurrency 8
+  python run_confidence.py --bench bffpair --samples 3 --out-dir confidence_pilot \\
+      --models gpt-oss-120b,gpt-oss-20b,nemotron3-nano-30b                       # pilot
+  python run_confidence.py --bench mtbhuman --models all                         # full run (K = 1)
+  python run_confidence.py --bench bffctrl --models all                          # controlled pairs
+  python run_confidence.py --bench rb2 --models all                              # single-answer grading
 """
-import argparse, asyncio, re, sys
+import argparse, asyncio, json, math, re, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -35,17 +40,16 @@ CONF_RE = re.compile(r"CONFIDENCE:\s*\**\s*(\d{1,3}(?:\.\d+)?)\s*%?", re.I)
 
 
 def load_items(bench):
-    """Returns (items, prompt_fn). Item ids match the stored runs so verdicts can be joined."""
-    if bench == "bffpair":
+    """Returns (items, prompt_fn). Item ids match the stored runs so verdicts can be joined.
+    bffpair / bffctrl use the BFF pairwise prompt from tinker_pool/run_judges.py; the others use run_xb_judges.py
+    (rb2 is single-answer grading, the rest are pairwise)."""
+    if bench in ("bffpair", "bffctrl"):
         import run_judges as rj
-        from data import load_pairwise_items
-        items = load_pairwise_items()
-        return items, lambda it: rj.PAIR_JUDGE.format(conv_a=rj.render_conv(it["conv_a"]),
-                                                      conv_b=rj.render_conv(it["conv_b"]), reference="")
-    if bench == "bffctrl":       # controlled BFF pairs built by build_ctrl_pairs.py
-        import json
-        import run_judges as rj
-        items = json.load(open(HERE / "data" / "bffctrl_items.json"))
+        if bench == "bffpair":
+            from data import load_pairwise_items
+            items = load_pairwise_items()
+        else:                     # controlled BFF pairs built by build_ctrl_pairs.py
+            items = json.load(open(HERE / "data" / "bffctrl_items.json"))
         return items, lambda it: rj.PAIR_JUDGE.format(conv_a=rj.render_conv(it["conv_a"]),
                                                       conv_b=rj.render_conv(it["conv_b"]), reference="")
     import run_xb_judges as xj
@@ -87,8 +91,8 @@ def verdict_prob(tok, tokens, topk, single=False):
         isA = lambda x: x == "A"
         isB = lambda x: x == "B"
         chosen = m[-1].group(1).upper()
-    pa = sum(__import__("math").exp(lp) for t, lp in alts if isA(tok.decode([t]).strip().upper()))
-    pb = sum(__import__("math").exp(lp) for t, lp in alts if isB(tok.decode([t]).strip().upper()))
+    pa = sum(math.exp(lp) for t, lp in alts if isA(tok.decode([t]).strip().upper()))
+    pb = sum(math.exp(lp) for t, lp in alts if isB(tok.decode([t]).strip().upper()))
     if pa + pb == 0:
         return None, text
     return (pa if chosen == "A" else pb) / (pa + pb), text

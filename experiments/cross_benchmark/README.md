@@ -39,3 +39,26 @@ API calls, so reruns only pay for what is missing. `--work` is the folder holdin
 8. `build_report.py --work W --out results/report.html` (reads `results/takeaways.json` for the written summary).
 
 Raw judgments (`*judgments.jsonl`) are git-ignored, like the other experiment caches.
+
+## Order-flip and confidence study
+
+Can the best judge's own confidence, or other judges changing their pick when the answer order is swapped, flag
+the best judge's confident errors? Write-up: `docs/results_order_flip_study.md`; HTML report:
+`reports/order-flip-study.html`. Tables go to `results/flips/`. Run from this folder, after steps 1 and 3 above
+(the scripts read `data/<bench>_decisions.pkl`).
+
+Stored verdicts only (no new calls):
+1. `order_consistency.py`: per-judge flips and the first look at others' flips vs the best judge's errors.
+2. `judge_pairs.py`: which judge catches which judge's confident errors, reciprocity, similarity.
+3. `flip_analysis.py`: Stage A. Controls, matched strata, flips vs disagreement, siblings, solvability,
+   label-free difficulty, checker sets, unflaggable floor. Also writes the pair feature tables.
+4. `flip_followups.py`: unflaggable errors for inspection; AlpacaFarm split by human vote margin.
+5. `flip_embeddings.py`: semantic controls and text-only flip prediction (local all-MiniLM-L6-v2).
+6. `flip_threshold.py`: error rate by number of other judges flipping, for both pair conditions.
+
+New calls (Tinker), then analysis:
+7. `run_confidence.py`: verdict + stated confidence + verdict-token probability (+ full reasoning text).
+   `build_ctrl_pairs.py` first builds the controlled BFF pairs for `--bench bffctrl`.
+8. `conf_analysis.py <run> [bench ...]`: Stage B, confidence vs flips (`confidence_pilot` and `confidence`).
+9. `stage_c.py`: controlled pairs and single-answer grading (RewardBench 2).
+10. `roc_curves.py`: ROC curves for the report.

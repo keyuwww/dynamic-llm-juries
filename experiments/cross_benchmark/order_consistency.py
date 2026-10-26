@@ -22,6 +22,9 @@ import pandas as pd
 HERE = Path(__file__).resolve().parent
 POOL = ["gpt-oss-120b", "gpt-oss-20b", "deepseek-v3.1", "qwen3.6-35b-a3b", "qwen3.5-9b", "qwen3.5-4b",
         "nemotron3-super-120b", "nemotron3-nano-30b"]
+# short labels for tables and charts
+SHORT = {"gpt-oss-120b": "oss-120b", "gpt-oss-20b": "oss-20b", "deepseek-v3.1": "deepseek", "qwen3.6-35b-a3b": "qwen-35b",
+         "qwen3.5-9b": "qwen-9b", "qwen3.5-4b": "qwen-4b", "nemotron3-super-120b": "nem-super", "nemotron3-nano-30b": "nem-nano"}
 
 
 def auroc(y, s):

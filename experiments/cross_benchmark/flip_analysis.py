@@ -26,7 +26,6 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import GroupKFold
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -297,14 +296,13 @@ def run(bench):
     perm = dict(zip(np.random.default_rng(1).permutation(ug), np.arange(len(ug)) % 5))
     fold = np.array([perm[x] for x in g])
     flagmat = {j: ((d[f"flip_{j}"] == 1) | (d[f"dis_{j}"] == 1)).astype(int).values for j in others}
-    sel_log, tp = [], []
     res["A9"] = {}
     for size in (1, 2, 3):
         caught = flagged = 0
         chosen_sets = []
         for k in range(5):
             tr, te = fold != k, fold == k
-            S, best_set = [], None
+            S = []
             for _ in range(size):
                 best, bs = None, -1
                 for j in others:
