@@ -357,8 +357,12 @@ pick the best layer on one half, then score <i>that specific layer</i> against t
   <i>shrinks to near-noise at 120B on every benchmark</i> (BFF +0.25&rarr;+0.06, RB2-Safety
   +0.19&rarr;+0.00) &mdash; the larger model's final answer is already near the agreement ceiling
   (&kappa;&asymp;+0.91 on RB2-Safety), leaving an interior layer little room to add anything. gpt-oss-20b
-  shows essentially nothing anywhere &mdash; on RewardBench2-Safety it predicts the same label at every
-  single layer, a collapsed, uninformative judge regardless of where you read it from. JudgeBench is
+  shows essentially nothing anywhere &mdash; its <i>final</i> answer is a constant, content-blind
+  prediction on both RewardBench2-Safety (always "CORRECT") and JudgeBench (always "A"), and on
+  RewardBench2-Safety that constancy holds at <i>every layer</i>, not just the output. This is a
+  harsher version of the reasoning-dependency already noted in &sect;6: the forced single-token probe
+  may simply be the wrong instrument for this particular model, more so than for any other judge
+  tested. JudgeBench is
   the one benchmark where the effect is weak or absent for <i>every</i> model except gpt-oss-120b,
   hinting that pairwise comparison may just need more layers' worth of integration than a binary
   correctness call does.
