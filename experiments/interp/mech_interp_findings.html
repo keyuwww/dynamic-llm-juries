@@ -113,6 +113,14 @@ works in every model, including gpt-oss&#8209;20b, which shows a <b>late, switch
 (layer &asymp;22/24, 81% causal suppression)</b>. A secondary tab keeps the real-rubric results
 &mdash; strong for 4 of 5 other judges, including the study's strongest effect:
 <b>nemotron3-nano-30b's 99%/95% reversible pivot</b>.
+<br><br>
+<b>Update (&sect;5):</b> a separate question &mdash; does a judge's own interior layer already agree
+with human labels better than its final answer does? &mdash; tested with held-out validation across
+<b>7 models &times; 3 benchmarks</b> (BFF-Bench, JudgeBench, RewardBench2-Safety). gpt-oss-120b and
+Qwen3.5-9B are stable, benchmark-independent in opposite directions (always / never shows the
+effect); everyone else is domain-dependent. A real, human-authored rubric found in CoCoNot's own
+appendix <b>sharpens</b> this effect rather than just preserving it, on an independent benchmark from
+the one &sect;1&ndash;4 are built on.
 </div>
 
 <h2>1. Two rubrics</h2>
