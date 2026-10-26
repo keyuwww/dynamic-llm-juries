@@ -106,13 +106,11 @@ rel="noopener">&ldquo;When Truth Is Overridden: Internal Origins of Sycophancy&r
 gpt-oss&#8209;20b's specifically. Confirmed with BFF-Bench's real human-annotator rubric: <b>&kappa;
 drops 0.667&rarr;0.617</b>; removing one rule &mdash; steps must match the reference, not just the
 answer &mdash; <b>fully restores it (0.666)</b>. gpt-oss&#8209;120b is unaffected.<br><br>
-Explaining this mechanistically needs a reasoning-free forced-choice probe to read internal layers
-&mdash; and under that setup gpt-oss&#8209;20b's effect nearly vanishes (<b>1 of 459 items flip</b>).
-So the main results use a broader, stricter researcher-written rubric instead: the only one that
-works in every model, including gpt-oss&#8209;20b, which shows a <b>late, switch-like computation
-(layer &asymp;22/24, 81% causal suppression)</b>. A secondary tab keeps the real-rubric results
-&mdash; strong for 4 of 5 other judges, including the study's strongest effect:
-<b>nemotron3-nano-30b's 99%/95% reversible pivot</b>.
+Under a reasoning-free forced-choice probe, gpt-oss&#8209;20b's effect nearly vanishes (<b>1 of 459
+items flip</b>). Main results below use a stricter researcher-written rubric instead, which shows a
+<b>late, switch-like computation</b> for gpt-oss&#8209;20b (layer &asymp;22/24, 81% causal
+suppression). A secondary tab keeps the real-rubric results &mdash; strong for 4 of 5 other judges,
+including the study's strongest effect: <b>nemotron3-nano-30b's 99%/95% reversible pivot</b>.
 <br><br>
 <b>Update (&sect;5):</b> a separate question &mdash; does a judge's own interior layer already agree
 with human labels better than its final answer does? &mdash; tested with held-out validation across
@@ -203,10 +201,9 @@ without it shows how much each one depends on it:</p>
 </figure>
 
 <p>The real rubric's one strict rule needs reasoning to evaluate &mdash; clean signal for 4 of 5
-judges, silent for gpt-oss&#8209;20b. Our rubric stacks several bluntly-worded conditions instead of
-one rule requiring comparison, so it can bias an immediate token read directly, without reasoning.
-<b>That makes it more sensitive, not more faithful</b> &mdash; but it's the only rubric producing a
-flip set in every model, including gpt-oss&#8209;20b, so it's the main lens below.</p>
+judges, silent for gpt-oss&#8209;20b. Our rubric stacks several bluntly-worded conditions instead,
+biasing an immediate token read directly, without reasoning: <b>more sensitive, not more
+faithful</b>.</p>
 
 <h3 style="font-size:16px; font-style:normal;">Why these models</h3>
 <table>
@@ -221,9 +218,9 @@ flip set in every model, including gpt-oss&#8209;20b, so it's the main lens belo
 <p class="note">Not tested: nemotron3-super-120b, deepseek-v3.1 (time budget).</p>
 
 <h2>4. Mechanistic results</h2>
-<p><b>Our rubric is the main tab</b> (per &sect;3, it works for every model). The real Appendix A.4
-rubric is secondary &mdash; works for 4 of 5 judges, not gpt-oss&#8209;20b, but includes this study's
-strongest causal effect where it does.</p>
+<p>Our rubric (main tab) works in every model. The real Appendix A.4 rubric (secondary tab) works for
+4 of 5 judges, not gpt-oss&#8209;20b, but includes this study's strongest causal effect where it
+does.</p>
 <div class="tabs">
   <button class="tab-btn active" data-tab="ours">Our rubric</button>
   <button class="tab-btn" data-tab="real">Appendix A.4 rubric (secondary)</button>
@@ -448,16 +445,13 @@ BFF-Bench's rubric text in &sect;1 is reused verbatim from a real annotator guid
 an equivalent before testing anything on them, including their own appendices (and, for
 RewardBench2's cited source, that source's own appendix too). JudgeBench's gold labels come from a purely
 algorithmic pipeline (regex answer-matching, each source dataset's own checker, cross-checked by
-GPT-4o-mini) with no human-written grading rubric anywhere in the paper, so Figure 12's JudgeBench
-column stays rubric-free and that's a feature of the benchmark, not a gap in the experiment. RewardBench2's Safety
-appendix (G.4) confirms human <i>verification</i> of examples happened and names its rubric's source
-as CoCoNot's taxonomy, but never reproduces the text itself &mdash; so we went one level up to CoCoNot
-(Brahman et al., 2024) directly, found the verbatim definition in its own Appendix A, Table 4, and
-used <i>that</i> (Figure 13, above) rather than inventing our own. It's an upstream source, not a
-confirmed match to RB2's own internal wording (RB2 says it "modified" CoCoNot's taxonomy without
-saying how) &mdash; so Figure 12's RewardBench2-Safety column is still the plain-prompt condition, and
-Figure 13 is a separate, explicitly-labeled rubric replication on three of those five models, not a
-silent swap of what Figure 12 already reports.
+GPT-4o-mini) with no human-written grading rubric anywhere in the paper &mdash; Figure 12's JudgeBench
+column stays rubric-free. RewardBench2's Safety appendix (G.4) confirms human <i>verification</i> of
+examples happened and names its rubric's source as CoCoNot's taxonomy, but never reproduces the text
+itself; the verbatim definition is in CoCoNot's own (Brahman et al., 2024) Appendix A, Table 4, used
+in Figure 13 above. It's an upstream source, not a confirmed match to RB2's own internal wording (RB2
+says it "modified" CoCoNot's taxonomy without saying how), so Figure 12's RewardBench2-Safety column
+stays plain-prompt and Figure 13 is a separate, labeled replication on three of those five models.
 </div>
 
 <footer>
