@@ -1,0 +1,276 @@
+<title>Do Weaker Judges Sense Expert Difficulty?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, companion to the order-flip report. Conclusions first, then one figure per test,
+   each headed by its finding. Blue = the weak judge's own confidence; orange = asked directly about the expert; grey = reference. */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --ink:#17202a; --ink-2:#47525e; --ink-3:#6f7a85; --line:#dfe3e6; --grid:#e9ecee;
+  --conf:#2f5fb3; --ask:#d9622b; --askq:#8a4fbf; --ref:#9aa3ab;
+  --b1:#2f5fb3; --b2:#c2410c; --b3:#13866f; --b4:#8a4fbf;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --conf:#6f9be6; --ask:#f08a52; --askq:#b58ae0; --ref:#6c757d;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --conf:#6f9be6; --ask:#f08a52; --askq:#b58ae0; --ref:#6c757d;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font:16.5px/1.6 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
+.wrap>*{min-width:0}
+.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+h1{font:800 clamp(30px,5vw,44px)/1.06 var(--display);margin:8px 0 12px;letter-spacing:-.01em;text-wrap:balance}
+h2{font:600 clamp(19px,2.4vw,23px)/1.25 var(--display);margin:0;text-wrap:balance}
+p{margin:0;max-width:68ch}
+.lede{font-size:18px;color:var(--ink-2);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font:13px/1.5 var(--mono);color:var(--ink-3)}
+.meta b{color:var(--ink);font-weight:500}
+ol.concl{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+ol.concl li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+ol.concl .n{font:600 13px/24px var(--mono);color:var(--ink-3)}
+ol.concl b{font-weight:600}
+.take{padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:15.5px}
+.take b{font-weight:600}
+section.fig{display:grid;gap:12px}
+.method{font-size:14px;color:var(--ink-3);max-width:76ch}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 10px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:560px;height:auto}
+.chart text{font-family:var(--mono);font-size:11.5px;fill:var(--ink-3)}
+.chart .lab{font-family:var(--body);font-size:13px;fill:var(--ink)}
+.chart .grp{font-family:var(--display);font-weight:600;font-size:12.5px;fill:var(--ink)}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.chart .ax{stroke:var(--ink-3);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%}
+.legend i.hollow{background:transparent!important;border:2px solid var(--conf);width:9px;height:9px}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.two>*{min-width:0}
+.two .chart svg{min-width:340px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font:600 12px/1.3 var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+ul.cav{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14.5px;color:var(--ink-2);max-width:76ch}
+code{font:13px var(--mono);color:var(--ink-2)}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">AC 297r · LLM juries · difficulty awareness · 10/30</div>
+  <h1>Do weaker judges sense when an item is hard for the expert?</h1>
+  <p class="lede">Yes, from their own confidence on the answers they see. They can't tell from the question alone, and asking them directly about the expert adds nothing.</p>
+  <div class="meta"><span><b>4</b> pairwise benchmarks</span><span><b>8</b> judges (6 for the new prompts)</span><span>expert error = wrong in either answer order</span><span>AUROC 0.5 = chance</span></div>
+</header>
+
+<section>
+  <ol class="concl">
+    <li><span class="n">1</span><span><b>A weaker judge's doubt flags the expert's errors even on items it gets right</b>: AUROC <span id="s1"></span> on average, significant on 26 of 28 judge–benchmark points.</span></li>
+    <li><span class="n">2</span><span><b>When the weaker judge is itself wrong, its doubt says little</b>: AUROC <span id="s2"></span>.</span></li>
+    <li><span class="n">3</span><span><b>The doubt points at capable judges' errors</b>: it predicts the expert's errors slightly better than other weak judges' errors (+0.02, higher on 79% of points, p &lt; 0.001).</span></li>
+    <li><span class="n">4</span><span><b>Asking directly doesn't help</b>: from the question alone, predictions are at chance (<span id="s4a"></span>). With the answers shown they work (<span id="s4b"></span>), but slightly worse than plain confidence (<span id="s4c"></span>, p = 0.001).</span></li>
+    <li><span class="n">5</span><span><b>The difficulty they sense is about the comparison</b>: it tracks items where human annotators split, not whether the underlying question can be solved.</span></li>
+    <li><span class="n">6</span><span><b>The useful action is human review, not a bigger judge</b>: holding back the 20% most-doubted items catches 43–61% of the expert's errors (29–33% on AlpacaFarm). On those items the expert drops to 0.61–0.72 and no other judge does better than 0.66, yet some judge is right 89–94% of the time. Nobody can tell which one.</span></li>
+  </ol>
+</section>
+
+<div class="take"><b>For routing:</b> doubt says an item is hard, not which judge is right, so a router built on it ties with the best single judge. Use it to decide which items go to a human. It can't predict difficulty from the question before the answers exist.</div>
+
+<section class="fig">
+  <h2>Weaker judges' doubt flags expert errors on items they get right, not on items they get wrong</h2>
+  <p class="method">Each row is one weaker judge on one benchmark. AUROC of its low confidence for the expert's errors, split by whether the weaker judge was right. Hollow dots: not significant (p ≥ 0.05).</p>
+  <div class="legend"><span><i style="background:var(--conf)"></i>weak judge right</span><span><i style="background:var(--ref)"></i>weak judge wrong</span><span><i class="hollow"></i>not significant</span></div>
+  <div class="chart" id="f1"></div>
+</section>
+
+<section class="fig">
+  <h2>The doubt is aimed slightly more at the expert than at peers</h2>
+  <p class="method">Left: AUROC for the expert's errors vs the average over other weak judges' errors (points above the line favour the expert). Right: the same doubt predicting stronger vs weaker peers' errors.</p>
+  <div class="legend" id="lg2"></div>
+  <div class="two"><div class="chart" id="f2a"></div><div class="chart" id="f2b"></div></div>
+</section>
+
+<section class="fig">
+  <h2>Asking about the expert works only when the answers are shown, and no better than confidence</h2>
+  <p class="method">New prompt: "How likely is a strong expert judge to pick the better answer? (0–100)". One call per item, 6 judges, 16.9K calls ($23.62). Rows marked <i>self</i> are the expert predicting its own errors.</p>
+  <div class="legend"><span><i style="background:var(--askq)"></i>asked, question only</span><span><i style="background:var(--ask)"></i>asked, with answers</span><span><i style="background:var(--conf)"></i>own confidence</span></div>
+  <div class="chart" id="f3"></div>
+  <div class="tbl"><table id="t3"></table></div>
+</section>
+
+<section class="fig">
+  <h2>The difficulty they sense is about the comparison, not the problem</h2>
+  <p class="method">AUROC of each weaker judge's doubt for three kinds of "hard": human annotators disagreed (MT-Bench human, AlpacaFarm), the expert couldn't solve the BFF question itself, the judge couldn't solve it. Doubt also correlates with how many other judges get the item wrong (Spearman ρ <span id="s5"></span> on average).</p>
+  <div class="chart" id="f4"></div>
+</section>
+
+<section class="fig">
+  <h2>Some judges lower their confidence on identical answers; Qwen and Nemotron-Nano barely do</h2>
+  <p class="method">Mean stated confidence on real BFF pairs vs pairs with the same answer in both slots (a built-in tie). A judge that senses difficulty should drop toward 50.</p>
+  <div class="legend"><span><i style="background:var(--ref)"></i>real pairs</span><span><i style="background:var(--conf)"></i>identical answers</span></div>
+  <div class="chart" id="f5"></div>
+</section>
+
+<section class="fig">
+  <h2>Holding back the most-doubted 20% catches about half of the expert's errors</h2>
+  <p class="method">Each panel: share of the expert's errors that land in the held-back set, as the share held back for human review grows. The dashed line is random hold-back. The expert's own confidence is free when the expert runs; a weaker judge's doubt works about as well and needs no access to the expert.</p>
+  <div class="legend"><span><i style="background:var(--conf)"></i>expert's own confidence</span><span><i style="background:var(--ask)"></i>weaker judges, pooled</span><span><i style="background:var(--askq)"></i>gpt-oss-20b alone</span><span><i style="background:var(--ref)"></i>random</span></div>
+  <div class="two" id="f6"></div>
+</section>
+
+<section class="fig">
+  <h2>On flagged items no judge rescues the expert, though some judge is usually right</h2>
+  <p class="method">The 20% of items the weaker judges doubt most (53–98 per benchmark). Escalating them to another model doesn't help; a human (or a reference answer) is the fallback. The other judges' accuracy here is slightly understated, because their own doubt helped pick these items.</p>
+  <div class="legend"><span><i style="background:var(--ref)"></i>expert, other items</span><span><i style="background:var(--conf)"></i>expert, flagged</span><span><i style="background:var(--ask)"></i>best other judge, flagged</span><span><i style="background:var(--b3)"></i>some judge right, flagged</span></div>
+  <div class="chart" id="f7"></div>
+</section>
+
+<section class="fig">
+  <h2>Caveats</h2>
+  <ul class="cav">
+    <li>One sample per verdict. Asking for confidence changed 12–20% of verdicts; confidence comes from that run, correctness from the stored run.</li>
+    <li>Own confidence averages both answer orders; the direct prediction is one call in one order, which favours confidence.</li>
+    <li>The expert is the most accurate judge on the full data. The same judges appear on every benchmark, so points aren't independent.</li>
+    <li>Selective-judging curves use the full data (no thresholds are fitted, but the expert is chosen in-sample).</li>
+    <li>Few expert errors where the weak judge is right (4–20% of 112–358 pairs), so per-point AUROCs are noisy.</li>
+    <li>Tinker no longer serves Nemotron-Nano and DeepSeek-V3.1, so the direct-prediction test has 6 judges.</li>
+  </ul>
+  <p class="method">Code: <code>difficulty_awareness.py</code>, <code>run_difficulty.py</code>, <code>analyze_difficulty.py</code>, <code>selective_judging.py</code>, <code>sensor_router.py</code> in <code>experiments/cross_benchmark</code>. Write-up: <code>docs/results_difficulty_awareness.md</code>. Raw judgments: <code>results/difficulty/&lt;bench&gt;/judgments.jsonl</code>.</p>
+</section>
+</div>
+
+<script>
+const D = {"T1":[{"bench":"bffpair","short":"oss-20b","acc":0.827,"auc_when_right":0.796,"auc_when_wrong":0.618,"p_when_right":0.0,"n_right":342,"best_err_when_right":0.053},{"bench":"bffpair","short":"deepseek","acc":0.787,"auc_when_right":0.767,"auc_when_wrong":0.612,"p_when_right":0.0,"n_right":312,"best_err_when_right":0.058},{"bench":"bffpair","short":"qwen-35b","acc":0.843,"auc_when_right":0.76,"auc_when_wrong":0.471,"p_when_right":0.0,"n_right":358,"best_err_when_right":0.059},{"bench":"bffpair","short":"qwen-9b","acc":0.785,"auc_when_right":0.843,"auc_when_wrong":0.533,"p_when_right":0.0,"n_right":309,"best_err_when_right":0.055},{"bench":"bffpair","short":"qwen-4b","acc":0.752,"auc_when_right":0.654,"auc_when_wrong":0.548,"p_when_right":0.003,"n_right":293,"best_err_when_right":0.068},{"bench":"bffpair","short":"nem-super","acc":0.767,"auc_when_right":0.771,"auc_when_wrong":0.597,"p_when_right":0.0,"n_right":291,"best_err_when_right":0.086},{"bench":"bffpair","short":"nem-nano","acc":0.593,"auc_when_right":0.627,"auc_when_wrong":0.534,"p_when_right":0.043,"n_right":164,"best_err_when_right":0.104},{"bench":"judgebench","short":"oss-120b","acc":0.851,"auc_when_right":0.749,"auc_when_wrong":0.595,"p_when_right":0.003,"n_right":273,"best_err_when_right":0.037},{"bench":"judgebench","short":"oss-20b","acc":0.812,"auc_when_right":0.738,"auc_when_wrong":0.619,"p_when_right":0.001,"n_right":234,"best_err_when_right":0.068},{"bench":"judgebench","short":"deepseek","acc":0.793,"auc_when_right":0.778,"auc_when_wrong":0.595,"p_when_right":0.0,"n_right":245,"best_err_when_right":0.073},{"bench":"judgebench","short":"qwen-9b","acc":0.851,"auc_when_right":0.741,"auc_when_wrong":0.543,"p_when_right":0.002,"n_right":263,"best_err_when_right":0.038},{"bench":"judgebench","short":"qwen-4b","acc":0.839,"auc_when_right":0.679,"auc_when_wrong":0.622,"p_when_right":0.014,"n_right":258,"best_err_when_right":0.043},{"bench":"judgebench","short":"nem-super","acc":0.791,"auc_when_right":0.777,"auc_when_wrong":0.65,"p_when_right":0.001,"n_right":236,"best_err_when_right":0.042},{"bench":"judgebench","short":"nem-nano","acc":0.563,"auc_when_right":0.569,"auc_when_wrong":0.573,"p_when_right":0.248,"n_right":112,"best_err_when_right":0.08},{"bench":"alpacafarm","short":"oss-120b","acc":0.715,"auc_when_right":0.723,"auc_when_wrong":0.464,"p_when_right":0.0,"n_right":317,"best_err_when_right":0.192},{"bench":"alpacafarm","short":"oss-20b","acc":0.693,"auc_when_right":0.706,"auc_when_wrong":0.451,"p_when_right":0.0,"n_right":295,"best_err_when_right":0.183},{"bench":"alpacafarm","short":"qwen-35b","acc":0.714,"auc_when_right":0.697,"auc_when_wrong":0.535,"p_when_right":0.0,"n_right":302,"best_err_when_right":0.192},{"bench":"alpacafarm","short":"qwen-9b","acc":0.724,"auc_when_right":0.686,"auc_when_wrong":0.44,"p_when_right":0.0,"n_right":306,"best_err_when_right":0.196},{"bench":"alpacafarm","short":"qwen-4b","acc":0.659,"auc_when_right":0.686,"auc_when_wrong":0.453,"p_when_right":0.0,"n_right":263,"best_err_when_right":0.163},{"bench":"alpacafarm","short":"nem-super","acc":0.724,"auc_when_right":0.678,"auc_when_wrong":0.533,"p_when_right":0.0,"n_right":301,"best_err_when_right":0.189},{"bench":"alpacafarm","short":"nem-nano","acc":0.644,"auc_when_right":0.646,"auc_when_wrong":0.507,"p_when_right":0.001,"n_right":236,"best_err_when_right":0.186},{"bench":"mtbhuman","short":"oss-20b","acc":0.82,"auc_when_right":0.757,"auc_when_wrong":0.526,"p_when_right":0.002,"n_right":249,"best_err_when_right":0.044},{"bench":"mtbhuman","short":"deepseek","acc":0.835,"auc_when_right":0.736,"auc_when_wrong":0.546,"p_when_right":0.0,"n_right":248,"best_err_when_right":0.069},{"bench":"mtbhuman","short":"qwen-35b","acc":0.831,"auc_when_right":0.756,"auc_when_wrong":0.548,"p_when_right":0.0,"n_right":246,"best_err_when_right":0.061},{"bench":"mtbhuman","short":"qwen-9b","acc":0.816,"auc_when_right":0.742,"auc_when_wrong":0.599,"p_when_right":0.002,"n_right":243,"best_err_when_right":0.049},{"bench":"mtbhuman","short":"qwen-4b","acc":0.765,"auc_when_right":0.773,"auc_when_wrong":0.648,"p_when_right":0.001,"n_right":215,"best_err_when_right":0.047},{"bench":"mtbhuman","short":"nem-super","acc":0.831,"auc_when_right":0.734,"auc_when_wrong":0.501,"p_when_right":0.001,"n_right":249,"best_err_when_right":0.064},{"bench":"mtbhuman","short":"nem-nano","acc":0.734,"auc_when_right":0.509,"auc_when_wrong":0.538,"p_when_right":0.46,"n_right":184,"best_err_when_right":0.071}],"T2":[{"bench":"bffpair","short":"oss-20b","auc_best":0.788,"auc_peers":0.701,"auc_stronger_peers":0.768,"auc_weaker_peers":0.688},{"bench":"bffpair","short":"deepseek","auc_best":0.762,"auc_peers":0.74,"auc_stronger_peers":0.768,"auc_weaker_peers":0.727},{"bench":"bffpair","short":"qwen-35b","auc_best":0.756,"auc_peers":0.671,"auc_stronger_peers":null,"auc_weaker_peers":0.671},{"bench":"bffpair","short":"qwen-9b","auc_best":0.722,"auc_peers":0.693,"auc_stronger_peers":0.711,"auc_weaker_peers":0.676},{"bench":"bffpair","short":"qwen-4b","auc_best":0.677,"auc_peers":0.668,"auc_stronger_peers":0.677,"auc_weaker_peers":0.62},{"bench":"bffpair","short":"nem-super","auc_best":0.719,"auc_peers":0.671,"auc_stronger_peers":0.684,"auc_weaker_peers":0.644},{"bench":"bffpair","short":"nem-nano","auc_best":0.57,"auc_peers":0.566,"auc_stronger_peers":0.566,"auc_weaker_peers":null},{"bench":"judgebench","short":"oss-120b","auc_best":0.803,"auc_peers":0.744,"auc_stronger_peers":0.807,"auc_weaker_peers":0.731},{"bench":"judgebench","short":"oss-20b","auc_best":0.751,"auc_peers":0.714,"auc_stronger_peers":0.748,"auc_weaker_peers":0.681},{"bench":"judgebench","short":"deepseek","auc_best":0.737,"auc_peers":0.716,"auc_stronger_peers":0.733,"auc_weaker_peers":0.683},{"bench":"judgebench","short":"qwen-9b","auc_best":0.767,"auc_peers":0.739,"auc_stronger_peers":null,"auc_weaker_peers":0.739},{"bench":"judgebench","short":"qwen-4b","auc_best":0.796,"auc_peers":0.76,"auc_stronger_peers":0.817,"auc_weaker_peers":0.731},{"bench":"judgebench","short":"nem-super","auc_best":0.761,"auc_peers":0.707,"auc_stronger_peers":0.721,"auc_weaker_peers":0.64},{"bench":"judgebench","short":"nem-nano","auc_best":0.581,"auc_peers":0.519,"auc_stronger_peers":0.519,"auc_weaker_peers":null},{"bench":"alpacafarm","short":"oss-120b","auc_best":0.7,"auc_peers":0.695,"auc_stronger_peers":0.687,"auc_weaker_peers":0.7},{"bench":"alpacafarm","short":"oss-20b","auc_best":0.646,"auc_peers":0.651,"auc_stronger_peers":0.641,"auc_weaker_peers":0.673},{"bench":"alpacafarm","short":"qwen-35b","auc_best":0.659,"auc_peers":0.645,"auc_stronger_peers":0.643,"auc_weaker_peers":0.646},{"bench":"alpacafarm","short":"qwen-9b","auc_best":0.631,"auc_peers":0.656,"auc_stronger_peers":0.625,"auc_weaker_peers":0.662},{"bench":"alpacafarm","short":"qwen-4b","auc_best":0.634,"auc_peers":0.625,"auc_stronger_peers":0.628,"auc_weaker_peers":0.608},{"bench":"alpacafarm","short":"nem-super","auc_best":0.664,"auc_peers":0.666,"auc_stronger_peers":null,"auc_weaker_peers":0.666},{"bench":"alpacafarm","short":"nem-nano","auc_best":0.59,"auc_peers":0.599,"auc_stronger_peers":0.599,"auc_weaker_peers":null},{"bench":"mtbhuman","short":"oss-20b","auc_best":0.73,"auc_peers":0.723,"auc_stronger_peers":0.733,"auc_weaker_peers":0.713},{"bench":"mtbhuman","short":"deepseek","auc_best":0.773,"auc_peers":0.765,"auc_stronger_peers":null,"auc_weaker_peers":0.765},{"bench":"mtbhuman","short":"qwen-35b","auc_best":0.725,"auc_peers":0.693,"auc_stronger_peers":0.711,"auc_weaker_peers":0.69},{"bench":"mtbhuman","short":"qwen-9b","auc_best":0.741,"auc_peers":0.734,"auc_stronger_peers":0.749,"auc_weaker_peers":0.702},{"bench":"mtbhuman","short":"qwen-4b","auc_best":0.749,"auc_peers":0.716,"auc_stronger_peers":0.733,"auc_weaker_peers":0.632},{"bench":"mtbhuman","short":"nem-super","auc_best":0.724,"auc_peers":0.724,"auc_stronger_peers":0.71,"auc_weaker_peers":0.727},{"bench":"mtbhuman","short":"nem-nano","auc_best":0.55,"auc_peers":0.585,"auc_stronger_peers":0.585,"auc_weaker_peers":null}],"T5":[{"bench":"bffpair","short":"oss-20b","rho_leave2out":0.439,"auc_best_unsolved":0.542,"auc_own_unsolved":0.504,"auc_human_split":null},{"bench":"bffpair","short":"deepseek","rho_leave2out":0.575,"auc_best_unsolved":0.546,"auc_own_unsolved":0.484,"auc_human_split":null},{"bench":"bffpair","short":"qwen-35b","rho_leave2out":0.431,"auc_best_unsolved":0.556,"auc_own_unsolved":0.534,"auc_human_split":null},{"bench":"bffpair","short":"qwen-9b","rho_leave2out":0.482,"auc_best_unsolved":0.548,"auc_own_unsolved":0.573,"auc_human_split":null},{"bench":"bffpair","short":"qwen-4b","rho_leave2out":0.416,"auc_best_unsolved":0.486,"auc_own_unsolved":0.501,"auc_human_split":null},{"bench":"bffpair","short":"nem-super","rho_leave2out":0.366,"auc_best_unsolved":0.562,"auc_own_unsolved":0.453,"auc_human_split":null},{"bench":"bffpair","short":"nem-nano","rho_leave2out":0.156,"auc_best_unsolved":0.505,"auc_own_unsolved":0.459,"auc_human_split":null},{"bench":"judgebench","short":"oss-120b","rho_leave2out":0.542,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"oss-20b","rho_leave2out":0.494,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"deepseek","rho_leave2out":0.509,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"qwen-9b","rho_leave2out":0.54,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"qwen-4b","rho_leave2out":0.613,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"nem-super","rho_leave2out":0.468,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"judgebench","short":"nem-nano","rho_leave2out":0.066,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":null},{"bench":"alpacafarm","short":"oss-120b","rho_leave2out":0.474,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.603},{"bench":"alpacafarm","short":"oss-20b","rho_leave2out":0.372,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.584},{"bench":"alpacafarm","short":"qwen-35b","rho_leave2out":0.346,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.576},{"bench":"alpacafarm","short":"qwen-9b","rho_leave2out":0.377,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.617},{"bench":"alpacafarm","short":"qwen-4b","rho_leave2out":0.297,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.587},{"bench":"alpacafarm","short":"nem-super","rho_leave2out":0.404,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.575},{"bench":"alpacafarm","short":"nem-nano","rho_leave2out":0.24,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.568},{"bench":"mtbhuman","short":"oss-20b","rho_leave2out":0.496,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.659},{"bench":"mtbhuman","short":"deepseek","rho_leave2out":0.57,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.695},{"bench":"mtbhuman","short":"qwen-35b","rho_leave2out":0.401,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.701},{"bench":"mtbhuman","short":"qwen-9b","rho_leave2out":0.505,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.697},{"bench":"mtbhuman","short":"qwen-4b","rho_leave2out":0.44,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.668},{"bench":"mtbhuman","short":"nem-super","rho_leave2out":0.5,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.71},{"bench":"mtbhuman","short":"nem-nano","rho_leave2out":0.194,"auc_best_unsolved":null,"auc_own_unsolved":null,"auc_human_split":0.495}],"ctrl":{"real":{"deepseek":93.39,"oss-120b":88.94,"oss-20b":91.97,"nem-nano":94.57,"nem-super":91.95,"qwen-4b":97.63,"qwen-9b":96.14,"qwen-35b":97.45},"identical":{"deepseek":50.0,"oss-120b":76.62,"oss-20b":89.27,"nem-nano":95.73,"nem-super":60.49,"qwen-4b":85.89,"qwen-9b":92.2,"qwen-35b":91.35}},"P":[{"bench":"bffpair","short":"oss-120b","is_best":true,"explicit_q":0.429,"explicit_qa":0.79,"implicit":0.814,"explicit_qa_when_right":null,"mean_pred_qa":85.095},{"bench":"bffpair","short":"oss-20b","is_best":false,"explicit_q":0.552,"explicit_qa":0.751,"implicit":0.788,"explicit_qa_when_right":0.749,"mean_pred_qa":89.192},{"bench":"bffpair","short":"nem-super","is_best":false,"explicit_q":0.549,"explicit_qa":0.609,"implicit":0.719,"explicit_qa_when_right":0.59,"mean_pred_qa":83.339},{"bench":"bffpair","short":"qwen-4b","is_best":false,"explicit_q":0.625,"explicit_qa":0.619,"implicit":0.677,"explicit_qa_when_right":0.646,"mean_pred_qa":92.233},{"bench":"bffpair","short":"qwen-9b","is_best":false,"explicit_q":0.519,"explicit_qa":0.657,"implicit":0.722,"explicit_qa_when_right":0.718,"mean_pred_qa":87.032},{"bench":"bffpair","short":"qwen-35b","is_best":false,"explicit_q":0.632,"explicit_qa":0.736,"implicit":0.756,"explicit_qa_when_right":0.73,"mean_pred_qa":96.333},{"bench":"judgebench","short":"oss-120b","is_best":false,"explicit_q":0.493,"explicit_qa":0.751,"implicit":0.803,"explicit_qa_when_right":0.765,"mean_pred_qa":83.7},{"bench":"judgebench","short":"oss-20b","is_best":false,"explicit_q":0.5,"explicit_qa":0.778,"implicit":0.751,"explicit_qa_when_right":0.84,"mean_pred_qa":88.068},{"bench":"judgebench","short":"nem-super","is_best":false,"explicit_q":0.698,"explicit_qa":0.708,"implicit":0.761,"explicit_qa_when_right":0.688,"mean_pred_qa":83.685},{"bench":"judgebench","short":"qwen-4b","is_best":false,"explicit_q":0.593,"explicit_qa":0.741,"implicit":0.796,"explicit_qa_when_right":0.693,"mean_pred_qa":90.589},{"bench":"judgebench","short":"qwen-9b","is_best":false,"explicit_q":0.519,"explicit_qa":0.711,"implicit":0.767,"explicit_qa_when_right":0.696,"mean_pred_qa":91.557},{"bench":"judgebench","short":"qwen-35b","is_best":true,"explicit_q":0.527,"explicit_qa":0.753,"implicit":0.811,"explicit_qa_when_right":null,"mean_pred_qa":96.195},{"bench":"alpacafarm","short":"oss-120b","is_best":false,"explicit_q":0.481,"explicit_qa":0.69,"implicit":0.7,"explicit_qa_when_right":0.711,"mean_pred_qa":74.475},{"bench":"alpacafarm","short":"oss-20b","is_best":false,"explicit_q":0.491,"explicit_qa":0.648,"implicit":0.646,"explicit_qa_when_right":0.645,"mean_pred_qa":78.509},{"bench":"alpacafarm","short":"nem-super","is_best":false,"explicit_q":0.475,"explicit_qa":0.636,"implicit":0.663,"explicit_qa_when_right":0.675,"mean_pred_qa":78.926},{"bench":"alpacafarm","short":"qwen-4b","is_best":false,"explicit_q":0.486,"explicit_qa":0.627,"implicit":0.634,"explicit_qa_when_right":0.717,"mean_pred_qa":83.24},{"bench":"alpacafarm","short":"qwen-9b","is_best":false,"explicit_q":0.5,"explicit_qa":0.639,"implicit":0.632,"explicit_qa_when_right":0.682,"mean_pred_qa":77.848},{"bench":"alpacafarm","short":"qwen-35b","is_best":false,"explicit_q":0.515,"explicit_qa":0.644,"implicit":0.658,"explicit_qa_when_right":0.691,"mean_pred_qa":84.942},{"bench":"mtbhuman","short":"oss-120b","is_best":true,"explicit_q":0.45,"explicit_qa":0.754,"implicit":0.799,"explicit_qa_when_right":null,"mean_pred_qa":83.588},{"bench":"mtbhuman","short":"oss-20b","is_best":false,"explicit_q":0.484,"explicit_qa":0.708,"implicit":0.726,"explicit_qa_when_right":0.683,"mean_pred_qa":86.73},{"bench":"mtbhuman","short":"nem-super","is_best":false,"explicit_q":0.552,"explicit_qa":0.734,"implicit":0.726,"explicit_qa_when_right":0.662,"mean_pred_qa":84.467},{"bench":"mtbhuman","short":"qwen-4b","is_best":false,"explicit_q":0.489,"explicit_qa":0.635,"implicit":0.749,"explicit_qa_when_right":0.578,"mean_pred_qa":90.019},{"bench":"mtbhuman","short":"qwen-9b","is_best":false,"explicit_q":0.531,"explicit_qa":0.659,"implicit":0.741,"explicit_qa_when_right":0.747,"mean_pred_qa":85.37},{"bench":"mtbhuman","short":"qwen-35b","is_best":false,"explicit_q":0.519,"explicit_qa":0.74,"implicit":0.725,"explicit_qa_when_right":0.797,"mean_pred_qa":93.265}],"pooled":[{"bench":"bffpair","expert":"gpt-oss-120b","explicit_q":0.627,"explicit_qa":0.767,"implicit":0.798},{"bench":"judgebench","expert":"qwen3.6-35b-a3b","explicit_q":0.608,"explicit_qa":0.825,"implicit":0.82},{"bench":"alpacafarm","expert":"deepseek-v3.1","explicit_q":0.488,"explicit_qa":0.711,"implicit":0.695},{"bench":"mtbhuman","expert":"gpt-oss-120b","explicit_q":0.518,"explicit_qa":0.777,"implicit":0.787}],"S":{"T1_mean_auc_all":0.704,"T1_mean_auc_when_right":0.717,"T1_mean_auc_when_wrong":0.55,"T1_points_right_above_0_6":26,"T1_points_right_p05":26,"T1_n_points":28,"T1_sign_test_right_gt_0_5_p":0.0,"LOG_doubt_positive_p05":19,"LOG_median_coef_doubt":0.361,"T2_mean_best_minus_peers":0.022,"T2_wilcoxon_p":0.0,"T2_share_best_higher":0.786,"T5_mean_rho_leave2out":0.418,"T5_mean_auc_human_split":0.624,"T5_mean_auc_best_unsolved":0.535,"T5_mean_auc_own_unsolved":0.501,"T4_increasing_share":0.7,"mean_explicit_q":0.534,"mean_explicit_qa":0.687,"mean_implicit":0.721,"mean_explicit_qa_when_right":0.7,"mean_rho_qa_vs_implicit":0.566,"mean_rho_q_vs_qa":0.093,"qa_minus_implicit_wilcoxon_p":0.001,"q_above_0_5_sign_p":0.332}};
+const BN = {bffpair:"BFF", judgebench:"JudgeBench", alpacafarm:"AlpacaFarm", mtbhuman:"MT-Bench human"};
+const BC = {bffpair:"var(--b1)", judgebench:"var(--b2)", alpacafarm:"var(--b3)", mtbhuman:"var(--b4)"};
+const ORDER = ["bffpair","judgebench","alpacafarm","mtbhuman"];
+const NM = {"oss-120b":"gpt-oss-120b","oss-20b":"gpt-oss-20b","qwen-35b":"Qwen3.6-35B","qwen-9b":"Qwen3.5-9B","qwen-4b":"Qwen3.5-4B","nem-super":"Nemotron-Super","nem-nano":"Nemotron-Nano","deepseek":"DeepSeek-V3.1"};
+const f2 = v => v == null ? "–" : v.toFixed(2);
+const mean = a => a.reduce((s,x)=>s+x,0)/a.length;
+const ns = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent, text){ const e=document.createElementNS(ns,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!=null) e.textContent=text; if(parent) parent.appendChild(e); return e; }
+
+/* Dot rows: rows = [{group,label,vals:{key:v}, hollow:{key:bool}}], series=[{key,color}] */
+function dotRows(id, rows, series, x0, x1, ticks, ref){
+  const W=820, L=170, R=20, rh=19, top=26;
+  let y=top, items=[];
+  let g=null;
+  rows.forEach(r=>{ if(r.group!==g){ g=r.group; y+= (items.length? 10:0); items.push({hdr:g,y}); y+=rh; } items.push({row:r,y}); y+=rh; });
+  const H=y+30;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const sx=v=>L+(v-x0)/(x1-x0)*(W-L-R);
+  ticks.forEach(t=>{ el("line",{x1:sx(t),x2:sx(t),y1:top-8,y2:H-24,class:"gl"},svg); el("text",{x:sx(t),y:H-8,"text-anchor":"middle"},svg,t.toFixed(1)); });
+  if(ref!=null){ el("line",{x1:sx(ref),x2:sx(ref),y1:top-8,y2:H-24,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg); el("text",{x:sx(ref)+4,y:top-12},svg,"chance"); }
+  items.forEach(it=>{
+    if(it.hdr){ el("text",{x:8,y:it.y+4,class:"grp"},svg,it.hdr); return; }
+    const r=it.row, cy=it.y;
+    el("text",{x:L-10,y:cy+4,"text-anchor":"end",class:"lab"},svg,r.label);
+    const vs=series.map(s=>r.vals[s.key]).filter(v=>v!=null);
+    if(vs.length>1) el("line",{x1:sx(Math.min(...vs)),x2:sx(Math.max(...vs)),y1:cy,y2:cy,stroke:"var(--line)","stroke-width":3},svg);
+    series.forEach(s=>{ const v=r.vals[s.key]; if(v==null) return;
+      const h=r.hollow&&r.hollow[s.key];
+      const c=el("circle",{cx:sx(Math.max(x0,Math.min(x1,v))),cy,r:5.5,fill:h?"var(--surface)":s.color,stroke:s.color,"stroke-width":h?2:0},svg);
+      el("title",{},c,`${r.label} · ${s.key}: ${v.toFixed(3)}`); });
+  });
+  document.getElementById(id).appendChild(svg);
+}
+
+function scatter(id, pts, xl, yl, lo, hi){
+  const W=420, H=380, L=48, B=44, T=14, R=14;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const sx=v=>L+(v-lo)/(hi-lo)*(W-L-R), sy=v=>H-B-(v-lo)/(hi-lo)*(H-B-T);
+  for(let t=lo;t<=hi+1e-9;t+=0.1){ const tt=+t.toFixed(1);
+    el("line",{x1:sx(tt),x2:sx(tt),y1:T,y2:H-B,class:"gl"},svg); el("line",{x1:L,x2:W-R,y1:sy(tt),y2:sy(tt),class:"gl"},svg);
+    el("text",{x:sx(tt),y:H-B+16,"text-anchor":"middle"},svg,tt.toFixed(1)); el("text",{x:L-6,y:sy(tt)+4,"text-anchor":"end"},svg,tt.toFixed(1)); }
+  el("line",{x1:sx(lo),y1:sy(lo),x2:sx(hi),y2:sy(hi),stroke:"var(--ink-3)","stroke-dasharray":"4 3"},svg);
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle",class:"lab"},svg,xl);
+  el("text",{x:14,y:(T+H-B)/2,"text-anchor":"middle",class:"lab",transform:`rotate(-90 14 ${(T+H-B)/2})`},svg,yl);
+  pts.forEach(p=>{ const c=el("circle",{cx:sx(p.x),cy:sy(p.y),r:5,fill:BC[p.bench],"fill-opacity":.85},svg); el("title",{},c,`${BN[p.bench]} · ${NM[p.short]||p.short}: ${p.x.toFixed(3)} → ${p.y.toFixed(3)}`); });
+  document.getElementById(id).appendChild(svg);
+}
+
+/* headline numbers */
+const S=D.S;
+document.getElementById("s1").textContent=f2(S.T1_mean_auc_when_right);
+document.getElementById("s2").textContent=f2(S.T1_mean_auc_when_wrong);
+document.getElementById("s4a").textContent=f2(S.mean_explicit_q);
+document.getElementById("s4b").textContent=f2(S.mean_explicit_qa);
+document.getElementById("s4c").textContent=f2(S.mean_implicit);
+document.getElementById("s5").textContent=f2(S.T5_mean_rho_leave2out);
+
+/* Fig 1 */
+const byB=(arr,b)=>arr.filter(r=>r.bench===b);
+const exp = Object.fromEntries(D.pooled.map(p=>[p.bench,p.expert]));
+dotRows("f1", ORDER.flatMap(b=>byB(D.T1,b).sort((a,c)=>c.auc_when_right-a.auc_when_right).map(r=>({
+  group:`${BN[b]} (expert: ${exp[b]})`, label:NM[r.short],
+  vals:{right:r.auc_when_right, wrong:r.auc_when_wrong}, hollow:{right:r.p_when_right>=0.05}}))),
+  [{key:"wrong",color:"var(--ref)"},{key:"right",color:"var(--conf)"}], 0.35, 0.9, [0.4,0.5,0.6,0.7,0.8,0.9], 0.5);
+
+/* Fig 2 */
+document.getElementById("lg2").innerHTML=ORDER.map(b=>`<span><i style="background:${BC[b]}"></i>${BN[b]}</span>`).join("");
+scatter("f2a", D.T2.map(r=>({bench:r.bench,short:r.short,x:r.auc_peers,y:r.auc_best})), "AUROC for peers' errors", "AUROC for expert's errors", 0.5, 0.9);
+scatter("f2b", D.T2.filter(r=>r.auc_stronger_peers!=null&&r.auc_weaker_peers!=null).map(r=>({bench:r.bench,short:r.short,x:r.auc_weaker_peers,y:r.auc_stronger_peers})), "AUROC for weaker peers' errors", "AUROC for stronger peers' errors", 0.5, 0.9);
+
+/* Fig 3 */
+dotRows("f3", ORDER.flatMap(b=>byB(D.P,b).sort((a,c)=>a.is_best-c.is_best || c.implicit-a.implicit).map(r=>({
+  group:`${BN[b]} (expert: ${exp[b]})`, label:NM[r.short]+(r.is_best?" (self)":""),
+  vals:{q:r.explicit_q, qa:r.explicit_qa, conf:r.implicit}}))),
+  [{key:"q",color:"var(--askq)"},{key:"qa",color:"var(--ask)"},{key:"conf",color:"var(--conf)"}], 0.35, 0.9, [0.4,0.5,0.6,0.7,0.8,0.9], 0.5);
+const t3=document.getElementById("t3");
+t3.innerHTML=`<thead><tr><th>Pooled over weaker judges</th><th>Question only</th><th>With answers</th><th>Own confidence</th></tr></thead><tbody>`+
+  ORDER.map(b=>{const p=D.pooled.find(x=>x.bench===b); return `<tr><td>${BN[b]}</td><td class="num">${f2(p.explicit_q)}</td><td class="num">${f2(p.explicit_qa)}</td><td class="num">${f2(p.implicit)}</td></tr>`}).join("")+`</tbody>`;
+
+/* Fig 4 */
+const hs=D.T5.filter(r=>r.auc_human_split!=null);
+const bu=D.T5.filter(r=>r.auc_best_unsolved!=null);
+const strips=[
+  {label:"Human annotators split", pts:hs.map(r=>({v:r.auc_human_split,b:r.bench,s:r.short}))},
+  {label:"Expert can't solve it (BFF)", pts:bu.map(r=>({v:r.auc_best_unsolved,b:r.bench,s:r.short}))},
+  {label:"Judge can't solve it (BFF)", pts:bu.filter(r=>r.auc_own_unsolved!=null).map(r=>({v:r.auc_own_unsolved,b:r.bench,s:r.short}))}];
+(function(){
+  const W=820,L=210,R=20,rh=46,top=20,H=top+strips.length*rh+30, x0=0.35,x1=0.85;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"}); const sx=v=>L+(v-x0)/(x1-x0)*(W-L-R);
+  [0.4,0.5,0.6,0.7,0.8].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:top-6,y2:H-24,class:"gl"},svg); el("text",{x:sx(t),y:H-8,"text-anchor":"middle"},svg,t.toFixed(1));});
+  el("line",{x1:sx(.5),x2:sx(.5),y1:top-6,y2:H-24,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg);
+  strips.forEach((s,i)=>{ const cy=top+i*rh+rh/2;
+    el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,s.label);
+    s.pts.forEach((p,k)=>{ const c=el("circle",{cx:sx(p.v),cy:cy+((k%3)-1)*6,r:5,fill:BC[p.b],"fill-opacity":.85},svg); el("title",{},c,`${BN[p.b]} · ${NM[p.s]}: ${p.v.toFixed(3)}`); });
+    const m=mean(s.pts.map(p=>p.v)); el("line",{x1:sx(m),x2:sx(m),y1:cy-16,y2:cy+16,stroke:"var(--ink)","stroke-width":2},svg);
+    el("text",{x:sx(m)+6,y:cy-10},svg,"mean "+m.toFixed(2)); });
+  document.getElementById("f4").appendChild(svg);
+})();
+
+/* Fig 5 */
+const C=D.ctrl;
+dotRows("f5", Object.keys(C.real).sort((a,b)=>C.identical[a]-C.identical[b]).map(k=>({group:"BFF controlled pairs", label:NM[k], vals:{real:C.real[k], identical:C.identical[k]}})),
+  [{key:"real",color:"var(--ref)"},{key:"identical",color:"var(--conf)"}], 40, 100, [40,50,60,70,80,90,100], null);
+document.querySelectorAll("#f5 svg text").forEach(t=>{ if(/^\d+\.0$/.test(t.textContent)) t.textContent=t.textContent.replace(".0",""); });
+
+/* Fig 6: selective judging */
+const SJ = [{"bench":"bffpair","expert":"oss-120b","q":[0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5],"own":[0.0,0.1349,0.2881,0.3356,0.4521,0.5402,0.6255,0.7182,0.7523,0.7949,0.8422],"pool":[0.0,0.1101,0.2477,0.3303,0.4312,0.5413,0.633,0.6697,0.7156,0.7523,0.8257],"cheap":[0.0,0.1101,0.189,0.3028,0.4374,0.5334,0.6286,0.707,0.7774,0.844,0.86],"exp_flag":0.691,"exp_rest":0.897,"other":"oss-20b","other_flag":0.658,"oracle_flag":0.908,"n_flag":76},{"bench":"judgebench","expert":"qwen-35b","q":[0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5],"own":[0.0,0.1592,0.3687,0.4849,0.606,0.6985,0.7645,0.8268,0.8725,0.9072,0.914],"pool":[0.0,0.1887,0.3396,0.4906,0.566,0.6226,0.717,0.7358,0.7925,0.8868,0.9245],"cheap":[0.0,0.1472,0.2815,0.3396,0.4528,0.5245,0.6019,0.7004,0.7596,0.8094,0.8491],"exp_flag":0.717,"exp_rest":0.945,"other":"deepseek","other_flag":0.623,"oracle_flag":0.943,"n_flag":53},{"bench":"alpacafarm","expert":"deepseek","q":[0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5],"own":[0.0,0.0948,0.1729,0.2529,0.3261,0.3767,0.4242,0.4795,0.5454,0.5931,0.6506],"pool":[0.0,0.0644,0.1515,0.2083,0.2917,0.3598,0.4129,0.4924,0.5379,0.6174,0.6591],"cheap":[0.0,0.0523,0.1365,0.1969,0.2556,0.3088,0.3659,0.4236,0.5126,0.5737,0.6288],"exp_flag":0.607,"exp_rest":0.76,"other":"qwen-9b","other_flag":0.628,"oracle_flag":0.913,"n_flag":98},{"bench":"mtbhuman","expert":"oss-120b","q":[0.0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5],"own":[0.0,0.1667,0.2292,0.3542,0.4377,0.5358,0.5996,0.6771,0.7404,0.7979,0.8475],"pool":[0.0,0.0833,0.25,0.3542,0.4479,0.5833,0.6875,0.7708,0.7917,0.8125,0.8542],"cheap":[0.0,0.0948,0.171,0.2531,0.3438,0.4521,0.5256,0.6004,0.6819,0.785,0.8358],"exp_flag":0.639,"exp_rest":0.891,"other":"qwen-9b","other_flag":0.639,"oracle_flag":0.885,"n_flag":61}];
+SJ.forEach(r=>{
+  const W=420,H=300,L=46,B=40,T=26,R=12, sx=v=>L+v/0.5*(W-L-R), sy=v=>H-B-v*(H-B-T);
+  const box=document.createElement("div"); box.className="chart"; document.getElementById("f6").appendChild(box);
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"}); box.appendChild(svg);
+  el("text",{x:L,y:16,class:"grp"},svg,`${BN[r.bench]} (expert ${NM[r.expert]})`);
+  [0,0.1,0.2,0.3,0.4,0.5].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-B,class:"gl"},svg); el("text",{x:sx(t),y:H-B+16,"text-anchor":"middle"},svg,Math.round(t*100)+"%");});
+  [0,0.25,0.5,0.75,1].forEach(t=>{el("line",{x1:L,x2:W-R,y1:sy(t),y2:sy(t),class:"gl"},svg); el("text",{x:L-6,y:sy(t)+4,"text-anchor":"end"},svg,Math.round(t*100)+"%");});
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle",class:"lab"},svg,"items held back for review");
+  el("line",{x1:sx(0),y1:sy(0),x2:sx(0.5),y2:sy(0.5),stroke:"var(--ref)","stroke-dasharray":"4 3","stroke-width":1.5},svg);
+  [["cheap","var(--askq)"],["pool","var(--ask)"],["own","var(--conf)"]].forEach(([k,c])=>{
+    el("polyline",{points:r.q.map((q,i)=>`${sx(q)},${sy(r[k][i])}`).join(" "),fill:"none",stroke:c,"stroke-width":2.2},svg);
+    const i20=r.q.indexOf(0.2); const d=el("circle",{cx:sx(0.2),cy:sy(r[k][i20]),r:3.5,fill:c},svg); el("title",{},d,`${k} at 20%: ${(r[k][i20]*100).toFixed(0)}% of errors caught`); });
+});
+/* Fig 7: flagged items */
+dotRows("f7", SJ.map(r=>({group:"Accuracy on the 20% flagged by weaker judges", label:BN[r.bench], vals:{rest:r.exp_rest, flag:r.exp_flag, other:r.other_flag, oracle:r.oracle_flag}})),
+  [{key:"rest",color:"var(--ref)"},{key:"flag",color:"var(--conf)"},{key:"other",color:"var(--ask)"},{key:"oracle",color:"var(--b3)"}], 0.5, 1.0, [0.5,0.6,0.7,0.8,0.9,1.0], null);
+</script>
