@@ -1,0 +1,2001 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "benchmark": "healthbench_rubric",
+  "rubric": "rules",
+  "stage": "selfpatch",
+  "best_layer": 34,
+  "layers": null,
+  "results": [
+    {
+      "id": "40894be4-2ad6-406e-9f58-76b4d42658fe-11423",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "4d642445-5162-4cdb-9166-857978174aed-24902",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "9e020284-87f3-4bc6-a26f-2b33150f04dc-3223",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "e78ac440-dbeb-492f-8db3-7d9bb22afe8b-6198",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5231ed99-b095-4f45-8fc7-9f52b2f62267-87",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "ff9f73f7-50bc-4ed7-b7cf-abba9c78f144-25633",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "774aa63f-e154-453d-95e2-69fc9387a803-22555",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "6a13a762-e166-432c-9be2-9db4df1f0241-2271",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "14e849d7-95c6-4ec8-aae3-537c08627c65-10480",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "e584df80-f8e4-4713-9235-68df3f93d2c5-25155",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "cd60e31b-a2ce-439a-8749-b88d1f0a5c86-16910",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "b9ca319e-f917-4507-acb3-69396cc05756-8344",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "234d0a07-3feb-4eef-ad36-5a73bd6108e6-17117",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "4d78c4cf-cddb-49f8-8548-1bd845d5d7e7-17427",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "be822c1d-c728-472b-bcb6-a2f6e2babead-4214",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "aca6eaef-1e25-4dcf-935b-e03550c03169-11669",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7e5cedfa-b0df-4036-a091-35d7654b24aa-8972",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "25c80c9b-a874-442c-980d-9caa109ddd54-13331",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "1d083eca-50e5-4b45-a5e0-59a7a7b3a0dc-3307",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "861c9d47-b07d-41f5-9595-f09b4cf07fdd-15026",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "a8014862-22be-433d-a7e0-54099817bdf7-17616",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "d5095640-7228-4137-ae3a-196c53617c0a-8170",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "4b769975-cdfc-4423-b3ad-0121fbaf1851-15702",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "3d2422a2-9aee-4bd0-ac6b-02af7a809533-5419",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "b10ccec7-e22c-4002-92dc-63ba493a763e-25990",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "fc3c386e-3a46-47bd-9d09-4000561d123f-7935",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "17e3075d-dec0-43bd-8bf8-396b3ef0e4a9-13232",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "3c86e34f-f66d-41c2-b136-ce031c6c8a5a-8161",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "27a694d8-0a4c-4b86-8893-9be030f2c7d0-15936",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "ea93b49b-f380-4323-bbae-61c8a3eb1dee-3674",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "cf000009-c009-4ed1-8f5c-55085be657e9-4770",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "47e1329c-2cbf-4efb-9757-15dbfd30a95b-4422",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "6776e862-22fa-46a8-81c0-de88342f1ece-7283",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "9a9005db-d4ce-4e8f-96f9-e3ef00efb535-16743",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "52b6fd6a-a333-4279-b6e9-04f08cacb9a3-10054",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "94d95e61-36b7-4973-8d54-5c2982ea8bb6-15891",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "0b21c7ec-27a7-45c4-b7c4-919ad348e1bc-29114",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "a6b9d837-251e-4041-bba8-f3ee1a31e984-10019",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "579fbd9f-e497-4924-9ac1-a366dde85837-14271",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "6cfa733a-0c78-4b04-a646-d59bf2dd5213-19309",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "a8fa2a34-ec4b-4bda-b297-9954f24197e2-22853",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "30bbe56b-9dcf-4351-979d-01a84d14ef03-4911",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "d0c42cdf-edff-483a-b921-3451b5765874-27457",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "0dcd46cd-28ee-4e5a-a31b-2d8d875c6e0a-19006",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "ca66d51c-6f79-4aa7-98c3-08a35112d99c-7525",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "74624469-0338-4385-aead-e6a7b7bf8f9b-21585",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "153cd748-fdbb-48b8-bf19-c0bd30af992f-24446",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "dee4fdb5-f9a4-435f-9657-149febf94a56-5285",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d1ff6506-61c6-411f-a055-09bf3e85d93c-25970",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c6431f7b-c526-4830-abfb-4fe3b4bccd96-4731",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "7692c7f0-0687-4478-bf7d-23c72f3ba592-7527",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "46b78e88-2bad-4609-a9d9-d0a50ef0ebff-17206",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "990b516f-9943-43fd-bbf6-fe54fb0706c9-6485",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "6c07d7dc-87a8-4386-b8c8-85cc7ce52ede-6604",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "f9101484-9742-4544-a1c4-409df6c114fb-19378",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "26520b53-f038-4888-b1b3-754ed14535f5-5204",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "7270ac85-c237-4c77-95d1-8f5500e56094-10378",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "4a03d077-956c-4ec5-8dc7-4d9c769d69f6-27622",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7228258f-4cc3-4cea-bc1b-b92f50d46668-8428",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "2442ba28-969d-4e3f-bdfe-17b7cce1922d-6662",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7fbe24a8-0707-458b-8f0f-c6952d069873-27282",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "25db076a-9fa3-4349-a3b4-87c3e6987b7a-9445",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "f0bd46fd-16e4-40cc-8d3c-51383498e6ab-6241",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "57e9a28f-5e44-4230-bc16-e447de2af7d5-11195",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "bc063efa-20c3-419e-95b7-bdd630f9037d-4658",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "a42b067f-6953-4d9b-8672-fa63ea166997-15811",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "3507c9d4-fc84-4637-9614-4b2e06fa1336-15648",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c6a589ec-0085-4c37-b485-b908f53c3b09-21739",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "44f18fd4-ce8c-4cf7-8e56-84ed8a5925f9-10521",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "a8921874-e628-425a-98f9-0c542d6f33ee-5275",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "971a0e75-1db8-4a9d-8779-feb72039dc62-27430",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5ecfedf0-a188-4959-925d-fbfa3376d38e-24790",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7049fbef-50ee-428b-a778-584c0b18d67b-12532",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "06aa4c79-2c47-494c-b4f4-54d2378a3d03-13424",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "1f14eb5d-8431-472b-9129-47318266be1a-3975",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "9636d763-ee71-427b-aed5-98ac87d2f948-15625",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "11e775f6-b3e7-4c61-8c35-0e8d577b854a-17077",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "71de0da8-af1f-45ec-a63b-c98731f49766-27655",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "56e5313c-4712-4e83-9cdc-e6aa6ed455d9-7887",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "211e275d-b2a5-4380-ad8b-f5930fdf261a-5421",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "52b41cb6-d6c0-4075-9cd9-0e2b845f22d3-7674",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "100e846a-c86d-4704-8455-80473ceade70-28401",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "f7774335-cc20-46ca-bb9e-8d64fdf52c11-19372",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "1892cf55-7480-4f7b-aa19-b2a611a049ab-24463",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "cc784da4-3838-4424-88a9-d3fce3bc8365-12893",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "66e5aa56-3aaf-45f9-9ad4-d0efee81cda4-5161",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "8f02d968-857a-456d-b702-6942739da084-13014",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "b1daaa34-d4c1-4a47-906c-7af78978a196-20233",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "99831f6d-f016-43da-bcc2-a4e196781849-3801",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5852eeda-cf5f-4f62-90c5-6f59007c9f14-5035",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "399d2c38-0cfc-4b4d-8074-f696bf300e9f-9864",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "e02e2f5b-c467-48d5-a98f-68e7d5a8cbb3-23862",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d1391525-4926-48f8-a784-be8b5cc03821-7725",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "58cd7f46-896b-4a11-bd05-625fa5d2d427-23129",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "99dbf109-e9ce-47ac-adf7-cf267756bd5c-882",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "b1bddce8-f022-45b1-98ac-61103bc93b65-7659",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "e9345886-afbd-4b38-a073-4d9582d60dda-5221",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "e09cbd00-462e-46c1-bf78-363174eeb336-23490",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "f6e12fa1-3a6c-404c-9747-5ee2e9799767-12401",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "64ab0bcb-a267-4bcd-84d3-cd640cc93e53-27636",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "0bb26598-0810-455f-8e13-591566330599-6110",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "02d306d4-8636-459e-8189-7427f2d8d626-7438",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "10897d4e-9101-41e0-9516-37ebddff7dd1-28689",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d5f9d812-611b-499d-93e8-10a33f760254-4659",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c9a18451-cfd2-422a-a836-d180bfccd3f9-2866",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "14767727-d95e-4791-a0e7-da1de50b899e-8872",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "2c5258bf-08af-4412-8905-0edcf2be492a-3482",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "ec58fc3c-9501-4aa0-adac-5f04d99ecf60-7835",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "dff0c58d-7e07-46f0-9314-c4abb1faf121-19589",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "852a48bf-efd6-47aa-86a9-7b1ff7ad8fe5-5150",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "9dc99b8e-52b3-4a7c-af6e-7a9d62dcdff5-6164",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "c2cb07d2-bf5c-42bc-873a-0534d7dea129-26135",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "455fdd95-e5ee-49d4-975e-a713a3b791e3-9540",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "9a55e3cc-c22f-4ea6-b812-d86b7fa8b219-16023",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "13c3cf83-1895-474c-bf28-9a340485eefb-15233",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "3248fa39-a7cb-4750-a367-9d6424fb6eab-4894",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "fde6fcfb-c137-4024-8e45-c7f9b47a1840-516",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "36925d92-63b8-4043-a3ee-b2cc7f1f5537-10279",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "8d24401e-ac53-4542-850f-48e5d8086415-16582",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "4f27fd62-f7e0-4e22-a7c3-72773a05b5aa-21526",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "450cd000-fc75-4747-82f6-194dcd957eb2-122",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "99269b5b-0e2e-4038-82c7-17034b41ae22-12444",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "34c75987-03d3-4ed3-b3a7-537914676a17-9885",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "a54a65bb-3673-44b0-ab65-9fb7f8e32ffc-5696",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "3d54f918-611a-453d-bec2-1a42826db23d-13102",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "05970ec8-60f2-4af4-b653-b5a4678d9d26-22337",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "b1cbfc40-514f-42d5-a4ca-cdabcbc47e08-21655",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "689f7d1d-53af-4bff-a0e4-f4f7b054faac-12761",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "90b6d096-4639-4066-874c-c7b0547a8875-7491",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c09ff247-3065-483a-8272-154f192e9064-5778",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "8455540a-7302-4762-9999-00403389751c-16774",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "3010f944-e4e0-4039-b986-8018a6d0f00d-19043",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "83c8b0eb-8527-4cc4-af21-0e985156c53e-13080",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "ed6ed8bb-b607-41ad-83ba-e9663408b394-16811",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "52e1c42f-2e66-4037-b460-328350abec49-9503",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "f3c67849-b439-4a54-846f-fe4f93f67571-6235",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "e67d6c79-2cdb-4ed4-b178-54f888fc871d-8275",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "9a6714ec-7007-48ac-94fe-1c05a7fa2464-10442",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "996b1de4-bc0d-4c29-9e4e-f2bb7c7cdeae-14433",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "11a866a1-ca4f-4d60-b04f-990feae8f291-1675",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c459d2cd-b964-44af-8ef6-c912cdbc6853-26341",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "786bba12-9354-45b1-8986-aaabf9eb6502-26627",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5a21a50c-a572-4378-85ab-1b30fb6c98ee-15871",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "5ca0ddcc-0f07-4c22-b013-15cd69dc130e-20361",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "b45ce312-0181-49b1-a14d-dd055f337a6b-5724",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "67bf251a-673c-4d1a-b27e-c7adc722d7f0-4741",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "7c832cf4-e4d8-47d3-9aee-6da55848f873-23264",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "0a06563a-c324-4933-a186-9c94847f3ce5-8926",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "f154c21c-49aa-416d-9fc9-70eaf1f1bebd-19173",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "4c5595dc-5562-4da4-a81e-3f6b907e907e-15038",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "8c005ad7-e897-4b91-a00d-f2dcc8f4b9f8-6558",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "48f99c73-e648-491a-89ac-42ff2e292bf8-26044",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7d54d832-ef27-47db-989e-ac8b7507358e-23553",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "6cca9df6-13d9-4b6b-930a-0bfa213956a9-15656",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5f2a96f2-310e-4d6b-b5b0-9269fc8e4c61-23785",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "5fcd9085-9429-4990-a89f-1215a824875e-8810",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "6dee3a96-1cf0-444f-8516-49699231edae-8744",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "510fe32f-ab40-4212-97a8-d145ae481f32-22361",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c4f7dfa4-79c8-41a8-ab2e-14f52b044487-4357",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "cdeef01f-49d5-41f8-885e-33c4d78a0278-12474",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "1c14264a-c20c-4f05-a228-1e3c1ba05f9d-15678",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "f44424c7-db73-4a93-bf95-3485283c6d85-8559",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "2fc6dd16-7453-48a0-bb51-9c5d548e762a-2134",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "1f436cb0-4304-4e32-bc9f-4f875834673f-4144",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "8e76f094-034d-4197-9341-685e3bb3adba-16858",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "93599fdf-35da-4352-ad8a-c997a0721049-23644",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "7208d8d6-c337-4cfe-9fbb-59da787324fb-19661",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "1cf7be79-4484-4161-a65f-3e112382852e-15386",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "8f42159a-6309-4d7c-9f12-14e0e5cdec9f-6300",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "66e5aa56-3aaf-45f9-9ad4-d0efee81cda4-5157",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d4ab5fee-9fe7-497a-b2b0-1a20284e9e6f-10511",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "dcf75f9d-407a-4c1c-bb84-f8188282cea9-8759",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "4e6e8c8a-1e80-49eb-b7a4-70ac09410391-7469",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "9409bcee-b9d9-416b-8d60-cb293cf6ca59-13932",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "ee60a1f0-4199-4da5-9edb-8ef11f3c93d4-11402",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "27c80275-a443-485f-b3b7-ccd592e777e4-18412",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "e6a25141-0964-4043-a736-d19d123c427b-4676",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "c9e0edd2-7ca0-4233-996f-54dd7c2f1e58-9205",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "15e31388-62b4-49f6-b4ea-386ace262f2e-273",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    },
+    {
+      "id": "fc0a3c89-16a8-4dd6-ba3e-cf74a4813655-26000",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "bb91871c-dae3-4960-8b01-701d7c007601-28433",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 34,
+      "window": [
+        35,
+        36
+      ],
+      "causal_layer": 36
+    }
+  ]
+}
