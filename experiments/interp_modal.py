@@ -520,6 +520,96 @@ def clear(out_name: str):
     print(clear_logit_lens_dir.remote(out_name))
 
 
+def _run_logit_attribution_impl(model, benchmark, rubric, max_items):
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results")
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results"
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/logit_attribution.py",
+           "--model", model, "--benchmark", benchmark, "--rubric", rubric]
+    if max_items:
+        cmd += ["--max-items", str(max_items)]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
+    out_name = model.split("/")[-1].lower()
+    if benchmark == "bff":
+        results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
+    elif benchmark.startswith("biggen"):
+        results_dirname = f"biggen_{out_name}"
+    else:
+        results_dirname = f"{benchmark}_{out_name}"
+    fname = f"logit_attribution_{results_dirname}_{benchmark}.json"
+    src = pathlib.Path("/root/repo/experiments/interp") / fname
+    dest = vol_dir / fname
+    dest.write_bytes(src.read_bytes())
+    vol.commit()
+    return f"done: logit attribution ({fname})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_logit_attribution(model: str = "Qwen/Qwen3.5-9B", benchmark: str = "bff", rubric: str = "rules",
+                           max_items: int = 0) -> str:
+    return _run_logit_attribution_impl(model, benchmark, rubric, max_items)
+
+
+@app.function(timeout=7200, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_logit_attribution_big(model: str = "openai/gpt-oss-120b", benchmark: str = "bff", rubric: str = "rules",
+                               max_items: int = 0) -> str:
+    return _run_logit_attribution_impl(model, benchmark, rubric, max_items)
+
+
+@app.local_entrypoint()
+def logit_attribution_big_spawn(model: str = "openai/gpt-oss-120b", benchmark: str = "bff", rubric: str = "rules",
+                                 max_items: int = 0):
+    call = run_logit_attribution_big.spawn(model=model, benchmark=benchmark, rubric=rubric, max_items=max_items)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def logit_attribution_big_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def logit_lens_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b", rubric: str = "rules",
+                          out_name: str = ""):
+    """Submit and return immediately -- see layer_gap_big_spawn for why."""
+    call = run_logit_lens_big.spawn(limit=limit, model=model, rubric=rubric, out_name=out_name)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def logit_lens_big_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
 @app.local_entrypoint()
 def layer_gap_big_spawn(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
                          layers: str = "", selfpatch_filename: str = "", max_items: int = 0,

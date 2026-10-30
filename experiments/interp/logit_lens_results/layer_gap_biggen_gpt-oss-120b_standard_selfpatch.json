@@ -1,0 +1,2065 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "benchmark": "biggen_standard",
+  "rubric": "rules",
+  "stage": "selfpatch",
+  "best_layer": 30,
+  "layers": null,
+  "results": [
+    {
+      "id": "a1563026-8409-4657-b7ae-a194abd6ba16",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "8899d25c-ff54-4c3e-bfdd-a08888e07ea6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "ad2f7092-83c4-435c-8b53-6593d77a21fa",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "3d8a07a5-0fd5-428c-b4ad-878271ad00a5",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "fcfb29f2-2bfe-4403-b79e-6e4c8a9c591c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "2223bd55-f665-4b99-9cfa-84da997d158a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "93dcc76e-e46c-47c0-9c86-b982da24570c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d13b40e4-4a29-49f5-8ebb-3c47c9b59ee4",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "3e3b2539-fce9-427f-97cc-8853c0543345",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "5a05baa1-71e4-46c9-af21-db03a5e38d16",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "59deed69-a128-46d3-bca0-473158eed922",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "7db93e0c-64a2-40b5-bb7f-87034e64f3c4",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "a499cc44-2e24-41e8-8c39-e1366241e897",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "0bcc446e-fbca-4329-824a-b088ae0809fd",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "33d7aa73-f6f6-432c-8b4b-9e6abe4fcaa8",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "178eb241-211d-4591-8913-43e84d7aa3d1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "c979ef95-54aa-4709-a947-ac8577b8b097",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "31be948d-7055-4143-8541-7b3fbe114fd2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "3fc1403e-e2c1-4506-adfe-538fe1ae86a8",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "1e10e9da-5399-484f-9327-ff5f9c99484b",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "75c7c779-6869-40f9-b637-c13e8f62770c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "0d023234-6726-4727-8fe8-86ef2b513c00",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "0d134d46-71f3-4376-ada0-d5cf51baefdc",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "389629f0-fb14-479f-bd61-749b3049d582",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "5bb73e37-4098-455f-9ce9-d2b212304240",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "4483c84d-1257-49c2-bfbd-af7ff9c038c8",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "f23e56e9-6889-4aca-8b05-3f0c4ab47d0c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "dc326a67-aafb-45ad-a394-6767533ffe68",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "3c2ce5df-2ceb-4f97-af0f-c8d3ef7e1ae7",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "8b8feb41-bcb2-4eb2-92f3-1cc19e54bd2b",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "0a25d2a4-d4fa-438b-8f79-7c01bd764c60",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "2659fad1-fba6-45e1-a0fd-62ecf64d3f43",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "bc4c6427-0efb-4ed4-98ce-764291c93607",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "19caeb8f-181d-4280-b96a-8bf59a5b54bf",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "2e6e6a24-4de5-4bb3-842a-2c17df033228",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "c3459763-6d26-4830-b022-eec32d4596bf",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "e1f7b8fe-9418-47d9-bcc0-a4d3e4aef50d",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "6676d87f-444e-4a27-94de-e750862a8b7d",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "f4b3c2a5-8d91-49fc-9700-a129ee30a879",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "04ee8bd7-59a8-4a0b-be29-e1ae7991225a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "efe21c12-95c7-4af7-b5f3-04d2dab34fdc",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "135e7dd0-ff90-4af0-8f02-ebab97ccc8c0",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "9416f2ac-d5a4-4aed-a682-73ddd4da451b",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "346b1c33-b822-4608-b21e-949a083b5c7a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "80ef5601-137c-4aee-b4a9-5eaf9d98f721",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "d016b075-cf45-4b61-9d74-2526e5711b0a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "fdd06ef7-1890-4715-941b-1e9decbc490b",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "99628687-e98f-41f7-9511-4b9b4876750f",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "f7a47560-c6ad-478a-a547-ac8f621a8746",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "c1ab625b-8952-4965-8b7c-ccb5ba0faa06",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "a5471789-8ec9-4324-a663-473a96c4232e",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "4230cb89-2810-45c0-ab5c-037ea731ec92",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "2ed95b97-277c-42f2-b32b-f3fea5a3c263",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "11943583-60b1-4da0-a5ed-f8481e27d541",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "b5bf0c41-69f5-43b4-a952-5cc968b1323b",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "fdcfd72a-90ea-4dbd-93fb-ffcf17b4cb10",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "834af748-f772-4c9d-9404-762fcdf5bc11",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "92a89574-ee4c-4318-b3a4-de4fc721349e",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "0282504e-e5b3-4540-9f6c-5685a63d2961",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "d059d00c-763f-426a-8c97-6d79690f8271",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "6638cbb7-9861-4d86-972f-66b472a93bad",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "390f43a4-01de-495d-bec3-4218994366a5",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "56c00a09-0fe7-4327-baed-14d4b341d745",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "d47b0eb4-1bd9-42f5-aa4e-ccf0c89f1c25",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "4f40b47f-c693-42cb-afb7-fd2f6aba0ff6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "c5d9c5db-087a-4f83-b8f4-3db15707cb3e",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "1021b297-14ce-4cd7-b88e-336514f2a906",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "77e54a2c-7570-47a0-a113-abcd48d08a29",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "855f907d-84d0-448d-a7fc-8794b40ed4eb",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "60786d89-c848-425d-bb8c-8ec2ada1819a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "3dd75022-3a69-41a2-93e1-4a6adae1f7a2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "6a678edd-4d80-453b-b76b-8df817d06224",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "d5012d6b-ea0e-47d9-9d4a-364743495018",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "eafb1855-d0e9-4b8e-bab9-f5e7175973ef",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "3ea387b6-f9e6-4ff2-8ea4-979fc02efb25",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "a7425504-e6bc-4341-89c2-6949713786e3",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "dd460ae2-4e4e-4718-b827-fc96538c8d12",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "5d16458b-c849-4022-8efd-8eb6cfc0e8dc",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "1374d1da-947b-455e-9bf2-5e5a8b07c7e2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "ab117fac-119f-42b7-8396-12abd4b6c538",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "11c7b5af-247f-47f5-b6a0-4601c4b256d7",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "169a9d6f-ecb7-4b6a-867c-c14afc7c3ca6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "f0ca40a6-aadc-4c77-89b7-44f3e3f8e643",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "574eeeca-9961-4252-b903-a2c2b3911408",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "bef5b029-5849-42c1-b36a-3e075bfe6ea3",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "c8c021d7-3807-412a-9c65-54ce46bb35e2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "51b4545b-5e40-4354-af78-b37a015f63f5",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "4c02ebf8-56fd-4c50-a365-d75601ea8b02",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "f32fcdfb-3fc0-4b36-90c8-f4d66e4d5e02",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "fc0f4ada-2e9e-455c-9b5a-f4e4515fd8b3",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "7c879a13-4689-44d5-b7e2-e33d7b929250",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "593a165e-dbe5-47ed-aa5d-917760706281",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "05531509-b1b8-4466-bc63-ef7973547fbe",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "471be71f-a812-4f0e-986c-d7c568002520",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "5aef5675-7a74-4c71-a3aa-a1512597169d",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "1a52b901-4759-4c8b-a983-8d35014c1781",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "9264d6e7-d197-4ab0-9c66-c42d9a917ec6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "03c9fa96-b0fb-4104-b748-7058f367fe78",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "61bb0d09-bd31-4460-9e89-6278a6fe0fd0",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "5f15db6f-e4bb-40af-b9fb-f0f48305331f",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "292e9c79-ecdd-434b-a9b2-4b4d7de05399",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "b526264a-6ace-427a-bfa6-f5742d35db27",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "61f000eb-2d40-4d61-86fc-6969905e2081",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "7153e037-4743-46e4-94bc-d288d6f4ce5f",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "37640979-67de-4ebb-81ea-0c351b93d7e0",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "61165e6e-36b6-4deb-8dca-50056b2e6060",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "40542b63-eade-4796-8d1b-f3dc7a5d3313",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "3133bf79-bb0c-46a4-9cf8-b064dd22b7b3",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "7f264fa8-beeb-4218-80e1-f4d5234c5a6f",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "628332e9-d417-4007-b06e-8d5a5f5cff76",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "b2d698ef-2764-48ff-ad27-f56503e479b7",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "b135a634-1cdd-447e-951e-a38cef67ed67",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "a790965f-6d66-4c08-b166-f5084e0ddce5",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "b2501cc8-73bf-45f4-aec3-fbccbef9362a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "969a161e-30f7-4140-baec-e1621c531a39",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "f69ea141-3346-4fe8-9fbd-cc9d8204d2a6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "af3ed7fe-7a28-4b5c-8b50-36399d25384c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "60950483-86a6-4d66-824f-3fe473863fb1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "4700c965-2322-454d-8201-bf698d35656e",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    },
+    {
+      "id": "faf6d129-47de-4479-a4df-766314a524d8",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "1101046b-862a-4208-8fe4-89a56ccbb019",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "a8b09560-318a-4b22-b1bb-ce2ed55cc334",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "08c2e834-e9be-43e7-a93c-058b2ddcf7c8",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "54c46084-0b9c-49ff-b8de-ee73b8a43f4c",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "fba06032-db0f-4e7a-a999-c107d8ce41d6",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "0b72a0b5-9157-4fe9-8494-45834a8e1397",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "61f04144-f2f7-4c72-9859-5c8aa8d9667a",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 33
+    },
+    {
+      "id": "af0282f5-caab-4f78-a3f5-6733df4b79e4",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "4a06d7c5-7d8c-4809-b442-37ec0433827e",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "d3d3de2c-6268-4b57-93e3-f69f757bd6a0",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "31e3601d-2f07-4658-9250-67de90ac2e43",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 32
+    },
+    {
+      "id": "858b5957-8039-476d-9d2e-41603d61299a",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "a050fc90-869c-43a8-90b0-291cc5d6fb3d",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "7042e379-f75d-49eb-b797-b308aed430be",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "60663986-5ee9-4a01-bf46-00b69e8da5b2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 31
+    },
+    {
+      "id": "ac1bb5cb-acf2-43ee-8c57-0c6c49bbdbb7",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 34
+    },
+    {
+      "id": "5b86a027-d8e1-4f74-afdc-69261edf5283",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 30,
+      "window": [
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "causal_layer": 35
+    }
+  ]
+}

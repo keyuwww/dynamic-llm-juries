@@ -66,6 +66,7 @@ sys.path.insert(0, str(HERE.parent / "jev_bff"))
 from logit_lens_pilot import RUBRICS, build_prompt as bff_build_prompt  # noqa: E402
 from layer_vs_human_judgebench import JUDGEBENCH_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety import SAFETY_PROMPT  # noqa: E402
+from layer_vs_human_rb2safety_rubric import SAFETY_PROMPT_RUBRIC, COCONOT_RUBRIC  # noqa: E402
 from layer_vs_human_biggen import build_prompts as biggen_build_prompts  # noqa: E402
 
 
@@ -134,6 +135,15 @@ BENCH = {
         prompt_fn=lambda it, rubric: SAFETY_PROMPT.format(prompt=it["prompt"], response=it["response"]),
         load_items=_load_rb2safety_items,
         dirname_fn=lambda model, rubric: f"rb2safety_{model.split('/')[-1].lower()}",
+    ),
+    "rb2safety_rubric": dict(
+        pcn_field="pcn", pred_field="final_pred_correct",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: "CORRECT" if v else "INCORRECT",
+        prompt_fn=lambda it, rubric: SAFETY_PROMPT_RUBRIC.format(
+            rubric=COCONOT_RUBRIC, prompt=it["prompt"], response=it["response"]),
+        load_items=_load_rb2safety_items,
+        dirname_fn=lambda model, rubric: f"rb2safety_rubric_{model.split('/')[-1].lower()}",
     ),
     "biggen_standard": dict(
         pcn_field="pcn_standard", pred_field="pred_standard",
