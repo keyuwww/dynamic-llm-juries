@@ -228,6 +228,43 @@ def load_judgebench():
     return out
 
 
+# ----------------------------------------------------------------------------- BiGGen Bench
+def load_biggen_bench(seed=0, limit=None):
+    """prometheus-eval/BiGGen-Bench-Results, 'human_eval' split (arXiv:2406.05761, NAACL 2025 best
+    paper): general-purpose LM capability benchmark (9 capabilities: instruction following,
+    grounding, planning, reasoning, refinement, safety, theory of mind, tool usage, multilingualism;
+    77 tasks). Each instance carries an INSTANCE-SPECIFIC, human-curated 1-5 scoring rubric (not a
+    researcher-invented one -- the benchmark's own rubric, written by its human annotators), and each
+    row pairs one model's response to that instance with a HUMAN-assigned 1-5 score under that same
+    rubric. English, non-training rows only (used_for_training == False, language == 'English').
+
+    Binarizes the 1-5 human score to a pass/fail gold label the same way the rest of this project's
+    forced-choice CORRECT/INCORRECT setup expects: score >= 4 -> gold=1 (CORRECT), else gold=0
+    (INCORRECT) -- the standard "top two points of a 5-point Likert = pass" convention.
+
+    Returns: list of dict(id, capability, task, system_prompt, input, reference_answer, response,
+    rubric_criteria, rubric_scores (dict '1'..'5' -> description text), human_score, gold, model_name).
+    `id` is the row's uuid (NOT the `id` column, which repeats across different models' responses to
+    the same instance)."""
+    from datasets import load_dataset
+    ds = load_dataset("prometheus-eval/BiGGen-Bench-Results", split="human_eval")
+    out = []
+    for r in ds:
+        if r.get("used_for_training") or str(r.get("language", "English")) != "English":
+            continue
+        rubric = r["score_rubric"]
+        rubric_scores = {str(k): str(v) for k, v in rubric.items() if k != "criteria" and v}
+        out.append(dict(id=str(r["uuid"]), capability=str(r["capability"]), task=str(r["task"]),
+                         system_prompt=str(r.get("system_prompt", "")), input=str(r["input"]),
+                         reference_answer=str(r["reference_answer"]), response=str(r["response"]),
+                         rubric_criteria=str(rubric["criteria"]), rubric_scores=rubric_scores,
+                         human_score=int(r["human_score"]), gold=1 if int(r["human_score"]) >= 4 else 0,
+                         model_name=str(r["model_name"])))
+    import random
+    random.Random(seed).shuffle(out)
+    return out[:limit] if limit else out
+
+
 def bbeh_correct(sample, reference):
     prediction = _extract_answer(sample.strip()).lower()
     prediction = prediction.replace(", ", ",").replace("**", "")

@@ -66,6 +66,7 @@ sys.path.insert(0, str(HERE.parent / "jev_bff"))
 from logit_lens_pilot import RUBRICS, build_prompt as bff_build_prompt  # noqa: E402
 from layer_vs_human_judgebench import JUDGEBENCH_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety import SAFETY_PROMPT  # noqa: E402
+from layer_vs_human_biggen import build_prompts as biggen_build_prompts  # noqa: E402
 
 
 def kappa(y1, y2):
@@ -100,6 +101,11 @@ def _load_rb2safety_items(rubric):
     return {it["id"]: it for it in load_rb2_safety()}
 
 
+def _load_biggen_items(rubric):
+    from data import load_biggen_bench
+    return {it["id"]: it for it in load_biggen_bench(limit=None)}
+
+
 # Each entry: pilot pcn/pred field names, forced-choice token strings (pos=label matching gold=1),
 # label strings, a prompt builder (item_dict, rubric) -> prompt str, a by_id loader, and the pilot
 # results dirname for a given (model, rubric).
@@ -128,6 +134,22 @@ BENCH = {
         prompt_fn=lambda it, rubric: SAFETY_PROMPT.format(prompt=it["prompt"], response=it["response"]),
         load_items=_load_rb2safety_items,
         dirname_fn=lambda model, rubric: f"rb2safety_{model.split('/')[-1].lower()}",
+    ),
+    "biggen_standard": dict(
+        pcn_field="pcn_standard", pred_field="pred_standard",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: biggen_build_prompts(it)[0],
+        load_items=_load_biggen_items,
+        dirname_fn=lambda model, rubric: f"biggen_{model.split('/')[-1].lower()}",
+    ),
+    "biggen_rubric": dict(
+        pcn_field="pcn_rubric", pred_field="pred_rubric",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: biggen_build_prompts(it)[1],
+        load_items=_load_biggen_items,
+        dirname_fn=lambda model, rubric: f"biggen_{model.split('/')[-1].lower()}",
     ),
 }
 
@@ -391,7 +413,12 @@ def main():
               "heads": f"heads_L{'-'.join(map(str, a.layers or []))}"}[a.stage]
     if a.control:
         suffix += "_control"
-    out_path = HERE / f"layer_gap_{results_dirname}_{suffix}.json"
+    # biggen_standard and biggen_rubric share one pilot-results dirname, so disambiguate the output
+    # filename by the condition too, or the two conditions' results would overwrite each other.
+    dirname_for_output = results_dirname
+    if a.benchmark.startswith("biggen"):
+        dirname_for_output = f"{results_dirname}_{a.benchmark.split('_', 1)[1]}"
+    out_path = HERE / f"layer_gap_{dirname_for_output}_{suffix}.json"
     out_path.write_text(json.dumps(dict(model=a.model, benchmark=a.benchmark, rubric=a.rubric, stage=a.stage,
                                          best_layer=L, layers=a.layers, results=results), indent=2))
     n = len(results)

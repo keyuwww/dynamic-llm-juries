@@ -173,13 +173,18 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
     out_name = model.split("/")[-1].lower()
     if benchmark == "bff":
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
+        dirname_for_output = results_dirname
+    elif benchmark.startswith("biggen"):
+        results_dirname = f"biggen_{out_name}"
+        dirname_for_output = f"{results_dirname}_{benchmark.split('_', 1)[1]}"
     else:
         results_dirname = f"{benchmark}_{out_name}"
+        dirname_for_output = results_dirname
     suffix = {"selfpatch": "selfpatch", "ablate": "ablate",
               "heads": f"heads_L{'-'.join(map(str, layers or []))}"}[stage]
     if control:
         suffix += "_control"
-    fname = f"layer_gap_{results_dirname}_{suffix}.json"
+    fname = f"layer_gap_{dirname_for_output}_{suffix}.json"
     src = pathlib.Path("/root/repo/experiments/interp") / fname
     dest = vol_dir / fname
     dest.write_bytes(src.read_bytes())
@@ -344,6 +349,58 @@ def run_rb2safety_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> st
 @app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
 def run_rb2safety_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16") -> str:
     return _run_rb2safety_impl(limit, model)
+
+
+def _run_biggen_impl(limit, model):
+    out_name = f"biggen_{model.split('/')[-1].lower()}"
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results") / out_name
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_vs_human_biggen.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return f"done: biggen logit lens ({out_name})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_biggen(limit: int = 20, model: str = "Qwen/Qwen3.5-9B") -> str:
+    return _run_biggen_impl(limit, model)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_biggen_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
+    return _run_biggen_impl(limit, model)
+
+
+@app.local_entrypoint()
+def biggen_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b"):
+    call = run_biggen_big.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def biggen_big_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
 
 
 def _run_rb2safety_rubric_impl(limit, model):
