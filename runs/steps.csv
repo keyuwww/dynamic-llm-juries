@@ -1,0 +1,31 @@
+stage,step,model,rows
+0,smoke test before the run,qwen3.5-4b,0
+0,smoke test before the run,nemotron-3-super,0
+0,smoke test before the run,qwen3.5-397b,0
+0,smoke test before the run,kimi-k2.6,0
+1,grader screening,qwen3.5-397b,150
+1,grader screening,kimi-k2.6,150
+2,juror screening,gpt-oss-20b,200
+2,juror screening,gpt-oss-120b,200
+2,juror screening,qwen3.5-4b,200
+2,juror screening,qwen3.5-9b,200
+2,juror screening,qwen3.6-35b,200
+2,juror screening,nemotron-3-super,200
+3,"self-solve, turn 1",gpt-oss-20b,99
+3,"self-solve, turn 1",gpt-oss-120b,99
+3,"self-solve, turn 1",qwen3.6-35b,99
+3,"self-solve, turn 1",nemotron-3-super,99
+4,"self-solve, turn 2",gpt-oss-20b,99
+4,"self-solve, turn 2",gpt-oss-120b,99
+4,"self-solve, turn 2",qwen3.6-35b,99
+4,"self-solve, turn 2",nemotron-3-super,99
+5,grading the jurors' own answers,qwen3.5-397b,792
+6,gut and reasoned reads,gpt-oss-20b,1088
+6,gut and reasoned reads,gpt-oss-120b,1088
+6,gut and reasoned reads,qwen3.6-35b,1088
+6,gut and reasoned reads,nemotron-3-super,1088
+7,repeat reads and own-answer reference reads,gpt-oss-20b,531
+7,repeat reads and own-answer reference reads,gpt-oss-120b,618
+7,repeat reads and own-answer reference reads,qwen3.6-35b,540
+7,repeat reads and own-answer reference reads,nemotron-3-super,614
+9,gpt-oss-safeguard-20b reads (Modal),gpt-oss-safeguard-20b,1088

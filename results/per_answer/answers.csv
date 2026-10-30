@@ -1,0 +1,545 @@
+item_id,answer_set,question_id,turn,order,examinee,label_correct,expert_votes,experts_split,jurors_agreeing,jurors_agreeing_list,jurors_solved,agreement_jury,self_solve_jury,majority_vote,gut_majority_vote,best_single_judge,best_single_judge_held_out,own_answer_reference
+558aeb4d-t2,finance,779f1434,2,1,qwen2.5-7b,1,CCC,0,0,,4,0,0,0,1,0,0,1
+0d793c0f-t1,finance,cd00dd04,1,2,gemma-2-2b,1,CCC,0,1,nemotron-3-super,4,0,0,0,1,0,0,1
+9dbc490f-t2,finance,b525b226,2,3,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+f9839b73-t1,finance,143600cf,1,4,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+31c3401c-t1,finance,25f0592b,1,5,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+acb500ec-t1,finance,bfe2760c,1,6,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+95455d8d-t2,finance,1bb784ce,2,7,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+9e06866d-t1,finance,c104f63a,1,8,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+39644c2e-t1,finance,87b3d75d,1,9,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,1,1,1,1,0,0,0
+e66c249d-t2,finance,c541ae08,2,10,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+c0318ccf-t2,finance,190c6263,2,11,yi1.5-34b-16k,0,III,0,2,gpt-oss-120b qwen3.6-35b,2,0,0,0,0,0,0,0
+3763f78a-t2,finance,2c08fef6,2,12,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+42237b59-t2,finance,844d3929,2,13,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+d7631135-t2,finance,f448163d,2,14,gpt-4o,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,0
+345f71c6-t2,finance,1e4e1cae,2,15,qwen2.5-7b,1,CCN,1,2,gpt-oss-20b gpt-oss-120b,2,1,1,0,0,0,0,1
+822304d7-t2,finance,3a2ef022,2,16,gpt-4o,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+56729d2c-t2,finance,da1c2b32,2,17,llama-3.3-70b,0,IIC,1,2,gpt-oss-120b qwen3.6-35b,4,1,1,0,0,0,0,0
+9f342c49-t1,finance,c11c400e,1,18,gpt-4o,1,CCN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+9eb5a204-t1,finance,2245e388,1,19,gpt-4o,1,CCC,0,2,gpt-oss-20b gpt-oss-120b,1,0,0,0,1,0,0,0
+b3e5a55f-t1,finance,bd1f59da,1,20,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+fb71df40-t2,finance,143600cf,2,21,phi-4,0,III,0,2,gpt-oss-20b gpt-oss-120b,0,0,0,0,0,0,0,0
+d19f80c7-t1,finance,3a2ef022,1,22,yi1.5-34b-16k,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+60366070-t1,finance,eb7481d6,1,23,gemma-2-2b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+95dbd2d6-t2,finance,630f8662,2,24,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+3477bdf6-t2,finance,5e649992,2,25,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+31f7b889-t2,finance,32583a20,2,26,yi1.5-34b-16k,0,IIN,1,1,nemotron-3-super,4,0,0,0,1,0,0,1
+dd7a1b47-t2,finance,27e12c27,2,27,phi-4,0,IIC,1,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,1,0,0,0,0,0,0,1
+c7a6e684-t2,finance,2acf7cbd,2,28,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+8846e694-t1,finance,5e407211,1,29,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+1a938c8d-t2,finance,c104f63a,2,30,llama-3.3-70b,0,IIN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+4e810d28-t1,finance,51de7010,1,31,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+5c457ca2-t1,finance,1727c45d,1,32,qwen2.5-7b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+395c579b-t1,finance,ad608f63,1,33,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+01a4f1db-t1,finance,da1c2b32,1,34,llama-3.3-70b,0,III,0,2,gpt-oss-120b qwen3.6-35b,0,0,0,0,1,0,0,0
+96db2e9c-t2,finance,97d2048d,2,35,yi1.5-34b-16k,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+15e1b16a-t1,finance,b525b226,1,36,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+b5e68ce2-t2,finance,9be15d66,2,37,gemma-2-2b,0,III,0,1,gpt-oss-120b,1,0,0,0,0,0,0,0
+69661e49-t2,finance,ff5529e0,2,38,phi-4,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,1
+009c69b3-t2,finance,bd245234,2,39,phi-4,0,IIN,1,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,0,0,0,0,0,0,0,1
+adbb4862-t2,finance,a31b1616,2,40,qwen2.5-7b,0,IIC,1,1,gpt-oss-20b,1,1,0,0,1,0,0,1
+dc1b1e09-t1,finance,ae5e6339,1,41,qwen2.5-7b,1,CCC,0,2,gpt-oss-20b nemotron-3-super,3,1,0,0,1,0,0,1
+f23c8a8f-t2,finance,bfe2760c,2,42,llama-3.3-70b,0,IIC,1,2,gpt-oss-20b gpt-oss-120b,3,1,0,0,1,1,1,1
+04967199-t1,finance,f9fb3ada,1,43,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+e6afa0dd-t2,finance,ddec45b7,2,44,llama-3.3-70b,0,III,0,1,gpt-oss-20b,0,1,1,1,0,1,1,0
+f198cb60-t2,finance,ae5e6339,2,45,qwen2.5-7b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+e760a640-t1,finance,ba3f2816,1,46,yi1.5-34b-16k,1,CCI,1,1,nemotron-3-super,4,0,0,0,1,0,0,1
+3a430001-t1,finance,1e4e1cae,1,47,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+36a4a678-t2,finance,f9fb3ada,2,48,phi-4,0,III,0,2,gpt-oss-20b nemotron-3-super,0,1,1,1,1,1,1,0
+63960d4c-t1,finance,ba417013,1,49,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+0ec503f5-t2,finance,e28d6adf,2,50,phi-4,0,IIN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+2b3bc1e5-t1,finance,f427178c,1,51,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+348532ae-t2,finance,eb7481d6,2,52,gpt-4o,1,CCN,1,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,4,1,1,1,1,1,1,1
+30b08e14-t1,finance,c67c5f87,1,53,llama-3.3-70b,0,IIN,1,2,gpt-oss-20b nemotron-3-super,3,1,0,0,1,0,0,1
+fd92b9cb-t1,finance,0e7c0684,1,54,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,1,0,0,0,1,1,1
+a864cfcf-t1,finance,91fd499c,1,55,phi-4,1,CCN,1,2,gpt-oss-20b gpt-oss-120b,2,1,1,0,1,1,1,1
+805e7d58-t2,finance,a82fa11d,2,56,yi1.5-34b-16k,0,III,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+0309130f-t2,finance,4e690e46,2,57,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+95484010-t1,finance,2a84c5f7,1,58,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+0d9e517a-t2,finance,1727c45d,2,59,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+26e1e853-t1,finance,e28d6adf,1,60,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+69f12836-t1,finance,8704e393,1,61,gemma-2-2b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,4,1,1,1,1,1,1,1
+1c4a0a85-t2,finance,ba3f2816,2,62,qwen2.5-7b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+558b32fd-t2,finance,9897d61c,2,63,gpt-4o,1,CCN,1,1,qwen3.6-35b,3,1,1,1,0,1,1,1
+b2696460-t1,finance,9be15d66,1,64,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+52a6e075-t2,finance,09c1bbb7,2,65,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+a61a6169-t1,finance,2acf7cbd,1,66,llama-3.3-70b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+54b3a66a-t1,finance,89f6681d,1,67,llama-3.3-70b,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ab219a58-t2,finance,8704e393,2,68,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+bf974dc9-t2,finance,0ecf476a,2,69,qwen2.5-7b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,
+19425996-t1,finance,c541ae08,1,70,phi-4,1,CCI,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+bb436f17-t2,finance,2db42262,2,71,gemma-2-2b,1,CCC,0,2,gpt-oss-20b qwen3.6-35b,3,1,1,1,1,1,1,0
+5350169f-t1,finance,0ecf476a,1,72,qwen2.5-7b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,1
+7fde3e52-t2,finance,a6d55bb4,2,73,yi1.5-34b-16k,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,0
+a21538ef-t1,finance,2c08fef6,1,74,qwen2.5-7b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+b988e0de-t2,finance,51de7010,2,75,phi-4,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cf77fc5f-t1,finance,337b80f8,1,76,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+1a5f8137-t1,finance,5e649992,1,77,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+898312ef-t1,finance,cda17a49,1,78,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+d3fdbbc2-t2,finance,25f0592b,2,79,yi1.5-34b-16k,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+901382d4-t1,finance,ddec45b7,1,80,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+b8b57e5c-t2,finance,e3af7c3d,2,81,gpt-4o,0,IIN,1,2,gpt-oss-20b gpt-oss-120b,0,0,0,0,0,0,0,0
+b0f1d575-t1,finance,630f8662,1,82,phi-4,0,III,0,2,gpt-oss-20b gpt-oss-120b,1,0,0,0,0,0,0,0
+6714f496-t2,finance,07a03530,2,83,qwen2.5-7b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+4233b420-t2,finance,6e47b1bd,2,84,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+6565914e-t1,finance,07a03530,1,85,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+d9030b8e-t1,finance,9897d61c,1,86,gpt-4o,0,IIN,1,2,gpt-oss-120b nemotron-3-super,3,0,0,0,0,0,0,0
+1bd216d5-t1,finance,ab09b5a5,1,87,llama-3.3-70b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,1
+38148f64-t2,finance,91fd499c,2,88,llama-3.3-70b,1,CCN,1,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,0,0,0,0,0,0,0,1
+43035bbe-t2,finance,cda17a49,2,89,gpt-4o,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+00e27867-t2,finance,c11c400e,2,90,phi-4,0,IIN,1,2,gpt-oss-120b qwen3.6-35b,2,0,0,0,1,0,0,0
+49546775-t1,finance,fe364936,1,91,gemma-2-2b,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,0,1,0,0,1,1,1
+5e9b4d25-t1,finance,cf7207e8,1,92,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+e7984237-t2,finance,4cc2aad4,2,93,llama-3.3-70b,1,CCI,1,0,,4,0,0,0,1,0,0,0
+5331ed7f-t2,finance,82ed6392,2,94,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+e78d1b5b-t1,finance,4e690e46,1,95,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,0,0,0,1,1,1
+114094c2-t2,finance,5c09dedb,2,96,gpt-4o,1,CCC,0,1,qwen3.6-35b,4,1,1,1,0,1,1,1
+dd6aecaa-t1,finance,2db42262,1,97,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+109c91bb-t2,finance,c345d6de,2,98,qwen2.5-7b,0,IIC,1,1,gpt-oss-120b,3,0,0,0,1,0,0,0
+61da64f3-t2,finance,484f4435,2,99,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+af9ce7c4-t1,finance,c64f05ac,1,100,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,1
+08e00ce2-t2,finance,89f6681d,2,101,yi1.5-34b-16k,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,1
+cff19e59-t1,finance,a6d55bb4,1,102,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+42872062-t2,finance,c67c5f87,2,103,phi-4,0,III,0,2,gpt-oss-20b gpt-oss-120b,3,0,0,0,1,0,0,0
+f24c40de-t1,finance,52f2fe34,1,104,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,4,1,1,1,1,1,1,1
+19fd4deb-t1,finance,5c09dedb,1,105,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+fce5250d-t2,finance,2a84c5f7,2,106,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+295b80d7-t1,finance,09c1bbb7,1,107,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+92f585a7-t1,finance,a31b1616,1,108,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+12fbe2bf-t1,finance,04e43b84,1,109,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cdcfe90e-t1,finance,ce6d2523,1,110,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+c19bbe53-t1,finance,bf0573ca,1,111,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+67795820-t1,finance,e3af7c3d,1,112,qwen2.5-7b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+c3796724-t2,finance,ba417013,2,113,qwen2.5-7b,0,III,0,0,,2,1,1,1,0,1,1,1
+b1d99363-t1,finance,32583a20,1,114,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+9822b671-t1,finance,97d2048d,1,115,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+a9a7908e-t2,finance,87b3d75d,2,116,yi1.5-34b-16k,0,III,0,0,,0,0,0,0,1,0,0,0
+7e415021-t1,finance,3d25ac25,1,117,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,
+4e992b7b-t2,finance,4d347d86,2,118,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+7a4d0313-t1,finance,a82fa11d,1,119,yi1.5-34b-16k,0,III,0,0,,2,0,0,0,1,0,0,0
+c3eb5c0e-t1,finance,b7559f23,1,120,yi1.5-34b-16k,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+51ab0ecd-t1,finance,30cd8ed3,1,121,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+10300984-t2,finance,04e43b84,2,122,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+1769ad5c-t1,finance,844d3929,1,123,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+b87c50d4-t1,finance,82ed6392,1,124,yi1.5-34b-16k,0,IIN,1,1,nemotron-3-super,3,0,0,0,0,1,1,1
+d164e302-t1,finance,779f1434,1,125,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,4,1,1,1,1,1,1,1
+199b8172-t1,finance,6e47b1bd,1,126,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+00935e7f-t1,finance,ea7a9d10,1,127,llama-3.3-70b,0,IIN,1,2,gpt-oss-20b gpt-oss-120b,2,0,0,0,0,0,0,0
+ac931ca5-t1,finance,190c6263,1,128,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+0f439770-t1,finance,c345d6de,1,129,phi-4,0,IIN,1,2,gpt-oss-20b gpt-oss-120b,1,0,0,0,1,0,0,1
+84519055-t2,finance,0e7c0684,2,130,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,0,0,1
+6c9b05bf-t2,finance,ce6d2523,2,131,llama-3.3-70b,1,CCN,1,2,gpt-oss-20b nemotron-3-super,3,1,1,1,0,1,1,1
+7a298808-t1,finance,f448163d,1,132,yi1.5-34b-16k,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+6b9015b3-t2,finance,bd1f59da,2,133,phi-4,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ec75ac4f-t1,finance,bd245234,1,134,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,0,0,1
+2db8f66c-t2,finance,5e407211,2,135,llama-3.3-70b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+196a4f6a-t2,finance,3c770bd0,2,136,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+9bcb5e5b-t2,finance,52f2fe34,2,137,gemma-2-2b,1,CCI,1,2,gpt-oss-20b nemotron-3-super,4,1,1,1,0,1,1,1
+07b9ffcf-t2,finance,30cd8ed3,2,138,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+5e872d62-t1,finance,4cc2aad4,1,139,phi-4,1,CCN,1,0,,3,0,0,0,1,0,0,1
+cb1476cc-t2,finance,cd00dd04,2,140,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+8a6fe611-t1,finance,3c770bd0,1,141,qwen2.5-7b,1,CCN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+a5928e0d-t2,finance,c64f05ac,2,142,qwen2.5-7b,0,IIC,1,1,qwen3.6-35b,3,0,1,0,0,1,1,0
+74e43175-t2,finance,cf7207e8,2,143,gemma-2-2b,1,CCC,0,2,gpt-oss-20b nemotron-3-super,4,1,1,1,1,1,1,1
+b1b0e6ac-t1,finance,4d347d86,1,144,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+b2a20898-t2,finance,337b80f8,2,145,llama-3.3-70b,0,IIC,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+2abb12a1-t2,finance,f427178c,2,146,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+f866cee9-t2,finance,ea7a9d10,2,147,gemma-2-2b,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,0,0,0,0,0,0,0,0
+56c10b1c-t1,finance,27e12c27,1,148,yi1.5-34b-16k,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,1
+b2a747ce-t1,finance,1bb784ce,1,149,yi1.5-34b-16k,0,IIC,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+aea3b06a-t2,finance,ab09b5a5,2,150,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+fa75da42-t2,finance,fe364936,2,151,phi-4,0,III,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,0,0,0,0,0,1,1,1
+6a5f7b10-t1,finance,ff5529e0,1,152,yi1.5-34b-16k,1,CCI,1,2,gpt-oss-20b gpt-oss-120b,4,1,0,0,1,0,0,1
+ccda5e62-t2,finance,bf0573ca,2,153,yi1.5-34b-16k,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+e6a96781-t2,finance,3d25ac25,2,154,llama-3.3-70b,1,CCN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,0,1,0,0,
+67838a67-t1,finance,484f4435,1,155,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+c1c20513-t2,finance,b7559f23,2,156,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+b3ebb817-t2,finance,ad608f63,2,157,gpt-4o,1,CCN,1,2,gpt-oss-120b qwen3.6-35b,3,0,1,1,0,0,0,1
+69f17727-t2,finance,2245e388,2,158,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,0
+a517fa2e-t2,finance,779f1434,2,159,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+536af792-t1,finance,cd00dd04,1,160,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+a3ec660e-t2,finance,b525b226,2,161,qwen2.5-7b,1,CCI,1,0,,4,0,0,0,1,0,0,0
+cffdfed7-t1,finance,143600cf,1,162,qwen2.5-7b,0,IIC,1,1,nemotron-3-super,4,0,0,0,1,0,0,1
+326074fb-t1,finance,25f0592b,1,163,gemma-2-2b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,1,1,1,1,1,1,1
+13930048-t1,finance,bfe2760c,1,164,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+8f5f338a-t2,finance,1bb784ce,2,165,qwen2.5-7b,0,III,0,1,gpt-oss-20b,3,1,0,0,1,0,0,1
+edbe0144-t1,finance,c104f63a,1,166,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+4541361f-t1,finance,87b3d75d,1,167,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+906832b0-t2,finance,c541ae08,2,168,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+4e2ab9df-t2,finance,190c6263,2,169,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+fa3ddcaa-t2,finance,2c08fef6,2,170,yi1.5-34b-16k,1,CCN,1,2,gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,1
+687d17fc-t2,finance,844d3929,2,171,phi-4,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+6e9c35c0-t2,finance,f448163d,2,172,phi-4,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,0
+d93d961e-t2,finance,1e4e1cae,2,173,yi1.5-34b-16k,1,CCN,1,2,gpt-oss-120b nemotron-3-super,2,0,0,0,0,0,0,1
+830605f2-t2,finance,3a2ef022,2,174,phi-4,0,III,0,0,,3,0,0,0,1,0,0,0
+46676929-t2,finance,da1c2b32,2,175,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+00096870-t1,finance,c11c400e,1,176,qwen2.5-7b,0,III,0,2,gpt-oss-20b gpt-oss-120b,3,0,0,0,0,0,0,0
+20896ed2-t1,finance,2245e388,1,177,phi-4,1,CCI,1,1,gpt-oss-20b,1,1,0,0,1,0,0,0
+3fd881b7-t1,finance,bd1f59da,1,178,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+79b77eaa-t2,finance,143600cf,2,179,qwen2.5-7b,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,0,0,0,0,0,0,0,0
+d0d05f5f-t1,finance,3a2ef022,1,180,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+1ccfb899-t1,finance,eb7481d6,1,181,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ac04b117-t2,finance,630f8662,2,182,qwen2.5-7b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+ed417a4f-t2,finance,5e649992,2,183,qwen2.5-7b,1,CCN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+ae803d31-t2,finance,32583a20,2,184,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+53c47094-t2,finance,27e12c27,2,185,llama-3.3-70b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+d9a0e2f6-t2,finance,2acf7cbd,2,186,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+8c094da0-t1,finance,5e407211,1,187,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+5b3e40e8-t2,finance,c104f63a,2,188,phi-4,0,IIN,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+28660897-t1,finance,51de7010,1,189,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+ae1fbcd4-t1,finance,1727c45d,1,190,yi1.5-34b-16k,0,IIN,1,2,gpt-oss-120b nemotron-3-super,3,0,0,0,0,0,0,0
+c245b4e1-t1,finance,ad608f63,1,191,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+6ccb1151-t1,finance,da1c2b32,1,192,qwen2.5-7b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+04fdb90a-t2,finance,97d2048d,2,193,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+e03b0895-t1,finance,b525b226,1,194,qwen2.5-7b,0,IIC,1,1,gpt-oss-120b,4,0,1,1,0,0,0,1
+fad9d1b8-t2,finance,9be15d66,2,195,qwen2.5-7b,0,III,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+d440777b-t2,finance,ff5529e0,2,196,gpt-4o,1,CCC,0,0,,4,1,1,1,0,1,1,1
+842593dc-t2,finance,bd245234,2,197,yi1.5-34b-16k,0,IIN,1,2,gpt-oss-120b qwen3.6-35b,0,0,0,0,0,0,0,1
+84b05d2c-t2,finance,a31b1616,2,198,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,1
+2d0ee6f1-t1,finance,ae5e6339,1,199,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,3,1,1,1,1,1,1,1
+c2ac2334-t2,finance,bfe2760c,2,200,phi-4,0,IIC,1,2,gpt-oss-20b gpt-oss-120b,3,1,0,0,1,1,1,1
+1ea1d51f-t1,finance,f9fb3ada,1,201,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+f7071066-t2,finance,ddec45b7,2,202,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+1ce01fcf-t2,finance,ae5e6339,2,203,phi-4,0,IIC,1,2,gpt-oss-120b qwen3.6-35b,4,0,0,0,0,0,0,1
+efbdb450-t1,finance,ba3f2816,1,204,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+da5d5a45-t1,finance,1e4e1cae,1,205,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+24ba4946-t2,finance,f9fb3ada,2,206,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,1
+9682e788-t1,finance,ba417013,1,207,gemma-2-2b,1,CCI,1,1,qwen3.6-35b,4,0,0,0,1,0,0,1
+6e1420cf-t2,finance,e28d6adf,2,208,gemma-2-2b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,0,0,1,0,0,1
+0414ad87-t1,finance,f427178c,1,209,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+f4690046-t2,finance,eb7481d6,2,210,qwen2.5-7b,1,CCI,1,2,gpt-oss-120b qwen3.6-35b,4,0,0,0,0,0,0,1
+6a7fbf2e-t1,finance,c67c5f87,1,211,qwen2.5-7b,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,3,0,0,0,0,0,0,1
+5e46bafc-t1,finance,0e7c0684,1,212,gemma-2-2b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+ea584b14-t1,finance,91fd499c,1,213,gpt-4o,1,CCN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+1f410a75-t2,finance,a82fa11d,2,214,llama-3.3-70b,0,IIC,1,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,3,0,0,0,0,0,0,1
+5256f784-t2,finance,4e690e46,2,215,yi1.5-34b-16k,0,IIC,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+7e633785-t1,finance,2a84c5f7,1,216,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+96ec2b96-t2,finance,1727c45d,2,217,phi-4,0,III,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,0,0,0,1
+e7fa23e1-t1,finance,e28d6adf,1,218,yi1.5-34b-16k,1,CCC,0,2,gpt-oss-120b qwen3.6-35b,4,0,0,0,1,1,1,0
+4ba6d2d7-t1,finance,8704e393,1,219,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+042e3663-t2,finance,ba3f2816,2,220,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+07c6208b-t2,finance,9897d61c,2,221,yi1.5-34b-16k,1,CCN,1,1,qwen3.6-35b,3,1,1,1,0,1,1,1
+6350daab-t1,finance,9be15d66,1,222,phi-4,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,1,1,1,1,1,1,0
+eb31368b-t2,finance,09c1bbb7,2,223,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+c1e5dd62-t1,finance,2acf7cbd,1,224,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+7faa462e-t1,finance,89f6681d,1,225,phi-4,1,CCC,0,2,qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+7ae36d63-t2,finance,8704e393,2,226,yi1.5-34b-16k,1,CCN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+3e8c5b48-t2,finance,0ecf476a,2,227,gpt-4o,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,1,0,0,0,0,0,0,
+988c8df2-t1,finance,c541ae08,1,228,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+7e6be857-t2,finance,2db42262,2,229,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+740d5733-t1,finance,0ecf476a,1,230,gpt-4o,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,1
+c1a8ec74-t2,finance,a6d55bb4,2,231,phi-4,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cbdc6fb0-t1,finance,2c08fef6,1,232,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ca4a4479-t2,finance,51de7010,2,233,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+c329862d-t1,finance,337b80f8,1,234,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+6090113b-t1,finance,5e649992,1,235,gpt-4o,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+8f3fe195-t1,finance,cda17a49,1,236,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ee8af781-t2,finance,25f0592b,2,237,gpt-4o,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+c244541b-t1,finance,ddec45b7,1,238,qwen2.5-7b,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,0,0,0,0,0,0,0,0
+a349f82c-t2,finance,e3af7c3d,2,239,yi1.5-34b-16k,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,0,0,0,0,0,0,0,0
+405fa423-t1,finance,630f8662,1,240,gpt-4o,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,0,0,0,0,0,1
+5a13eeb1-t2,finance,07a03530,2,241,yi1.5-34b-16k,0,IIN,1,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,2,0,0,0,0,0,0,1
+2ee4d2fd-t2,finance,6e47b1bd,2,242,gpt-4o,1,CCC,0,1,qwen3.6-35b,3,1,1,1,0,1,1,1
+0c08b6ce-t1,finance,07a03530,1,243,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,2,1,1,1,1,1,1,1
+163606d5-t1,finance,9897d61c,1,244,llama-3.3-70b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+b6bf575b-t1,finance,ab09b5a5,1,245,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+743b9475-t2,finance,91fd499c,2,246,qwen2.5-7b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+81f4e709-t2,finance,cda17a49,2,247,llama-3.3-70b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+7dab63b9-t2,finance,c11c400e,2,248,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+0730f1b7-t1,finance,fe364936,1,249,yi1.5-34b-16k,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+fd4eadab-t1,finance,cf7207e8,1,250,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+2a12b690-t2,finance,4cc2aad4,2,251,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+306da58d-t2,finance,82ed6392,2,252,llama-3.3-70b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+1d3eabaf-t1,finance,4e690e46,1,253,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cf19cec0-t2,finance,5c09dedb,2,254,llama-3.3-70b,1,CCI,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+d13a84b6-t1,finance,2db42262,1,255,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+0d15fb25-t2,finance,c345d6de,2,256,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+3655fe1b-t2,finance,484f4435,2,257,gpt-4o,1,CCC,0,2,qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ddaa0f5e-t1,finance,c64f05ac,1,258,qwen2.5-7b,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,0,0,0,0,0,0,0,0
+52ab6c93-t2,finance,89f6681d,2,259,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+48c038ce-t1,finance,a6d55bb4,1,260,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+748a3ffc-t2,finance,c67c5f87,2,261,yi1.5-34b-16k,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+e4416188-t1,finance,52f2fe34,1,262,gemma-2-2b,1,CCI,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+945a0ff7-t1,finance,5c09dedb,1,263,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+0e0aee60-t2,finance,2a84c5f7,2,264,llama-3.3-70b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+523f5ff7-t1,finance,09c1bbb7,1,265,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+45d43058-t1,finance,a31b1616,1,266,llama-3.3-70b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+ada7b70f-t1,finance,04e43b84,1,267,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+8233ee59-t1,finance,ce6d2523,1,268,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+0896a2d2-t1,finance,bf0573ca,1,269,phi-4,0,IIN,1,2,gpt-oss-20b gpt-oss-120b,1,1,0,1,1,1,1,1
+75e8466f-t1,finance,e3af7c3d,1,270,llama-3.3-70b,0,IIN,1,2,gpt-oss-20b gpt-oss-120b,2,0,0,0,0,0,0,1
+e609bd5f-t2,finance,ba417013,2,271,llama-3.3-70b,1,CCN,1,2,gpt-oss-20b qwen3.6-35b,2,1,1,1,0,1,1,1
+e9015bd9-t1,finance,32583a20,1,272,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+2e771095-t1,finance,97d2048d,1,273,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+3396e527-t2,finance,87b3d75d,2,274,gpt-4o,1,CCN,1,2,qwen3.6-35b nemotron-3-super,0,1,0,0,1,0,0,0
+df499ac6-t1,finance,3d25ac25,1,275,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,
+d8169723-t2,finance,4d347d86,2,276,phi-4,1,CCN,1,1,qwen3.6-35b,3,0,0,0,1,0,0,1
+89d19994-t1,finance,a82fa11d,1,277,phi-4,0,III,0,1,gpt-oss-120b,2,0,0,0,1,0,0,0
+8d41786b-t1,finance,b7559f23,1,278,llama-3.3-70b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+e02a1fa7-t1,finance,30cd8ed3,1,279,yi1.5-34b-16k,0,III,0,0,,1,0,0,0,1,0,0,0
+9f0b664f-t2,finance,04e43b84,2,280,llama-3.3-70b,1,CCI,1,0,,4,0,0,0,1,0,0,1
+241e467e-t1,finance,844d3929,1,281,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+bae433e8-t1,finance,82ed6392,1,282,phi-4,0,III,0,1,nemotron-3-super,3,0,0,0,0,1,1,0
+4668f7b1-t1,finance,779f1434,1,283,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+3aa0e8d3-t1,finance,6e47b1bd,1,284,gemma-2-2b,1,CCC,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,3,1,1,1,1,1,1,1
+0874e59c-t1,finance,ea7a9d10,1,285,phi-4,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+0214a818-t1,finance,190c6263,1,286,gpt-4o,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+bd643a22-t1,finance,c345d6de,1,287,qwen2.5-7b,0,III,0,2,gpt-oss-20b gpt-oss-120b,1,0,0,0,1,0,0,1
+8aab7adc-t2,finance,0e7c0684,2,288,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+d1996c71-t2,finance,ce6d2523,2,289,gemma-2-2b,0,IIC,1,2,gpt-oss-20b qwen3.6-35b,3,0,0,0,0,1,1,1
+3449e3bf-t1,finance,f448163d,1,290,qwen2.5-7b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+37b06ed0-t2,finance,bd1f59da,2,291,qwen2.5-7b,0,III,0,1,gpt-oss-20b,4,1,0,0,1,0,0,0
+1be22eea-t1,finance,bd245234,1,292,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,0,0,1
+2baad0c8-t2,finance,5e407211,2,293,gpt-4o,1,CCC,0,2,qwen3.6-35b nemotron-3-super,3,1,1,1,0,1,1,1
+d2ae46a3-t2,finance,3c770bd0,2,294,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+6078e1c9-t2,finance,52f2fe34,2,295,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+bdc2eb58-t2,finance,30cd8ed3,2,296,yi1.5-34b-16k,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+3b265d80-t1,finance,4cc2aad4,1,297,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+787fe561-t2,finance,cd00dd04,2,298,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+b89c6144-t1,finance,3c770bd0,1,299,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+15f883e3-t2,finance,c64f05ac,2,300,llama-3.3-70b,0,IIN,1,2,qwen3.6-35b nemotron-3-super,3,0,1,0,0,1,1,0
+ac9a8a02-t2,finance,cf7207e8,2,301,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+89645c45-t1,finance,4d347d86,1,302,gemma-2-2b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+e1260ea1-t2,finance,337b80f8,2,303,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+24737821-t2,finance,f427178c,2,304,yi1.5-34b-16k,0,III,0,2,gpt-oss-120b nemotron-3-super,3,0,0,0,0,0,0,0
+b4cfce12-t2,finance,ea7a9d10,2,305,qwen2.5-7b,0,IIN,1,1,gpt-oss-120b,0,0,0,0,0,0,0,0
+3b12a79f-t1,finance,27e12c27,1,306,gpt-4o,1,CCC,0,2,gpt-oss-20b gpt-oss-120b,3,0,0,0,1,0,0,1
+c2edd44a-t1,finance,1bb784ce,1,307,qwen2.5-7b,0,IIC,1,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,1,1,1,1,1,1,1
+68b7b17a-t2,finance,ab09b5a5,2,308,qwen2.5-7b,0,III,0,2,gpt-oss-120b nemotron-3-super,1,0,1,0,0,0,0,0
+2bd52493-t2,finance,fe364936,2,309,qwen2.5-7b,0,III,0,2,gpt-oss-20b gpt-oss-120b,0,0,0,0,0,0,0,1
+a991d4c6-t1,finance,ff5529e0,1,310,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+d59bd071-t2,finance,bf0573ca,2,311,gemma-2-2b,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,1
+5a0bade4-t2,finance,3d25ac25,2,312,gemma-2-2b,1,CCC,0,1,gpt-oss-120b,2,0,0,0,0,0,0,
+bf9e7fe9-t1,finance,484f4435,1,313,gemma-2-2b,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+60e5a328-t2,finance,b7559f23,2,314,phi-4,1,CCC,0,2,gpt-oss-20b gpt-oss-120b,3,1,0,0,1,1,1,1
+03f882e8-t2,finance,ad608f63,2,315,qwen2.5-7b,0,IIN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,1
+dd06c3be-t2,finance,2245e388,2,316,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-5fe7966e,mt_bench,3def50bb,2,317,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-fb32741a,mt_bench,0d01dbdf,2,318,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-93c5572e,mt_bench,034f7bf4,2,319,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-d089d544,mt_bench,54656983,2,320,gpt-4o,0,III,0,1,nemotron-3-super,2,1,0,0,1,0,0,0
+cmt-7524cf84,mt_bench,1153dd86,2,321,gpt-4o,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+cmt-a50a23be,mt_bench,40820c84,1,322,gpt-4o,1,CCN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-268c57eb,mt_bench,785f9777,2,323,qwen2.5-7b,1,CCI,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-33a4c047,mt_bench,b16eb1dd,1,324,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-3e26555e,mt_bench,cd3cca8d,2,325,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-ef3ed3c3,mt_bench,1153dd86,1,326,yi1.5-34b-16k,0,III,0,0,,4,0,0,0,1,0,0,0
+cmt-bb6fb4d2,mt_bench,1153dd86,1,327,gemma-2-2b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-58d6b2c1,mt_bench,3258feef,2,328,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-9897d968,mt_bench,df18b293,1,329,llama-3.3-70b,1,CCC,0,1,qwen3.6-35b,4,1,1,1,0,1,1,1
+cmt-dd3acbd5,mt_bench,01419b73,1,330,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-64c19a51,mt_bench,0605a0ea,1,331,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-98c6c3b8,mt_bench,0605a0ea,2,332,qwen2.5-7b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-b75de60a,mt_bench,785f9777,1,333,qwen2.5-7b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-4e8e93b4,mt_bench,1153dd86,1,334,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-06d90fe9,mt_bench,9a29c699,2,335,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-9ced8000,mt_bench,034f7bf4,1,336,phi-4,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-ff719a5b,mt_bench,3def50bb,2,337,phi-4,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-81e8070d,mt_bench,2bf8ddb0,2,338,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-5537e53f,mt_bench,64c35abd,2,339,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-7cb3c0a2,mt_bench,3def50bb,1,340,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-c930febf,mt_bench,0605a0ea,2,341,yi1.5-34b-16k,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,1,0,1,0,0,0,0,0
+cmt-8f568fb6,mt_bench,1153dd86,2,342,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-473ec082,mt_bench,b16eb1dd,2,343,gpt-4o,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-f2791624,mt_bench,b867a9e6,2,344,yi1.5-34b-16k,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,0
+cmt-d7cd63ef,mt_bench,785f9777,1,345,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-9410d634,mt_bench,0605a0ea,1,346,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-5699f144,mt_bench,40820c84,2,347,gemma-2-2b,1,CCN,1,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,1,1,1,1,1,1,0
+cmt-56675c4d,mt_bench,b867a9e6,2,348,gpt-4o,1,CCC,0,1,gpt-oss-120b,1,1,0,0,1,1,1,1
+cmt-f0e0ca9a,mt_bench,64c35abd,2,349,phi-4,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-ea7c3301,mt_bench,3258feef,2,350,qwen2.5-7b,1,CCI,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+cmt-e7dca76c,mt_bench,034f7bf4,1,351,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-7715518b,mt_bench,0d01dbdf,2,352,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-74e6428f,mt_bench,0d01dbdf,2,353,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-707498eb,mt_bench,d9a7459b,1,354,llama-3.3-70b,1,CCC,0,2,gpt-oss-120b qwen3.6-35b,2,1,1,1,0,1,1,1
+cmt-fd67579d,mt_bench,64c35abd,2,355,gpt-4o,1,CCN,1,2,qwen3.6-35b nemotron-3-super,3,1,1,1,0,1,1,1
+cmt-41ea31fa,mt_bench,b5ec8d6f,1,356,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-17484e5e,mt_bench,64c35abd,2,357,yi1.5-34b-16k,1,CCC,0,2,gpt-oss-20b qwen3.6-35b,3,1,0,0,1,0,0,1
+cmt-7f9e7f5c,mt_bench,3def50bb,1,358,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-9e36bc02,mt_bench,b16eb1dd,2,359,qwen2.5-7b,1,CCN,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+cmt-76050e34,mt_bench,64c35abd,1,360,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-de6c8ce8,mt_bench,64c35abd,1,361,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-b7a5bbb4,mt_bench,cd3cca8d,2,362,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-9dde78cc,mt_bench,0f47d4fd,1,363,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-79174716,mt_bench,d9a7459b,2,364,phi-4,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+cmt-8b8942fa,mt_bench,40820c84,2,365,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-71a70f45,mt_bench,2bf8ddb0,2,366,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-cb76ed0f,mt_bench,b16eb1dd,2,367,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-34d1d274,mt_bench,cd3cca8d,2,368,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-fb0c235d,mt_bench,b867a9e6,2,369,gemma-2-2b,1,CCC,0,2,gpt-oss-120b nemotron-3-super,1,1,0,0,1,1,1,0
+cmt-e50e4576,mt_bench,b867a9e6,2,370,llama-3.3-70b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,1,0,0,0,0,1
+cmt-d85c7656,mt_bench,3258feef,1,371,gpt-4o,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-1ded8dd4,mt_bench,0f47d4fd,1,372,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-16714250,mt_bench,785f9777,2,373,phi-4,0,IIN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-7e5f430f,mt_bench,54656983,1,374,qwen2.5-7b,0,IIC,1,1,gpt-oss-20b,2,0,0,0,1,0,0,0
+cmt-9a6988e6,mt_bench,b5ec8d6f,1,375,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-2076f9a3,mt_bench,9a29c699,1,376,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-328acc04,mt_bench,01419b73,1,377,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-803c42d8,mt_bench,3def50bb,2,378,gpt-4o,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-fa4be91e,mt_bench,df18b293,1,379,qwen2.5-7b,1,CCC,0,1,qwen3.6-35b,4,1,1,1,0,1,1,1
+cmt-bc4c82c1,mt_bench,0f47d4fd,2,380,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-ce9e3529,mt_bench,01419b73,2,381,yi1.5-34b-16k,1,CCN,1,0,,4,0,0,0,1,0,0,1
+cmt-cad09679,mt_bench,b5ec8d6f,2,382,phi-4,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-63d489a2,mt_bench,df18b293,2,383,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-bd7820bd,mt_bench,cd3cca8d,1,384,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-1318a15b,mt_bench,3258feef,1,385,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+cmt-e65f2426,mt_bench,cd3cca8d,2,386,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-f598dca4,mt_bench,df18b293,1,387,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-77da50ef,mt_bench,1153dd86,1,388,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-daeb96d8,mt_bench,cd3cca8d,1,389,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-1c99ca6a,mt_bench,3258feef,1,390,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-c848e9ee,mt_bench,cd3cca8d,2,391,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-00a131ef,mt_bench,64c35abd,2,392,qwen2.5-7b,0,III,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,3,1,1,1,1,1,1,0
+cmt-3ff89ec5,mt_bench,0605a0ea,2,393,gemma-2-2b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-ad613dd2,mt_bench,0f47d4fd,1,394,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-50d9db27,mt_bench,b5ec8d6f,1,395,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-6fa86ed4,mt_bench,3def50bb,1,396,llama-3.3-70b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-97fd566e,mt_bench,0d01dbdf,1,397,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-36e412fe,mt_bench,54656983,2,398,phi-4,0,III,0,2,gpt-oss-20b nemotron-3-super,2,1,1,0,1,0,0,0
+cmt-9dd03f93,mt_bench,9a29c699,2,399,llama-3.3-70b,1,CCI,1,0,,4,0,0,0,1,0,0,0
+cmt-df97647e,mt_bench,9a29c699,2,400,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-944e2767,mt_bench,df18b293,1,401,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-3c11afd0,mt_bench,9a29c699,1,402,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-1d7c3956,mt_bench,3def50bb,1,403,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-0fdc97a6,mt_bench,0605a0ea,1,404,yi1.5-34b-16k,0,III,0,0,,4,0,0,0,1,0,0,0
+cmt-ae94eaf7,mt_bench,034f7bf4,2,405,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-7efd736f,mt_bench,0605a0ea,2,406,gpt-4o,0,III,0,2,qwen3.6-35b nemotron-3-super,1,1,1,1,0,1,1,1
+cmt-9dcfbab7,mt_bench,b16eb1dd,1,407,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-191c1e4d,mt_bench,1153dd86,2,408,qwen2.5-7b,0,III,0,1,gpt-oss-120b,4,0,0,0,1,0,0,1
+cmt-1f015449,mt_bench,0d01dbdf,1,409,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-ce741797,mt_bench,0605a0ea,2,410,phi-4,0,III,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,1
+cmt-337917e4,mt_bench,2bf8ddb0,1,411,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-51f125cb,mt_bench,9a29c699,1,412,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-651ff17b,mt_bench,40820c84,1,413,yi1.5-34b-16k,1,CCI,1,2,gpt-oss-20b nemotron-3-super,3,1,1,1,1,1,1,0
+cmt-f3575e2b,mt_bench,d9a7459b,2,414,llama-3.3-70b,1,CCC,0,2,qwen3.6-35b nemotron-3-super,0,0,0,0,0,1,1,0
+cmt-cf91bbe6,mt_bench,54656983,2,415,qwen2.5-7b,0,IIN,1,1,gpt-oss-120b,2,0,0,0,1,0,0,1
+cmt-057109e7,mt_bench,b16eb1dd,1,416,qwen2.5-7b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-508c516b,mt_bench,3def50bb,1,417,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-0964f55a,mt_bench,b16eb1dd,2,418,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-ff8a75b5,mt_bench,b16eb1dd,2,419,gemma-2-2b,1,CCC,0,0,,4,1,1,1,0,1,1,1
+cmt-588ec965,mt_bench,3def50bb,1,420,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-2654ddec,mt_bench,b5ec8d6f,1,421,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-b467f665,mt_bench,54656983,1,422,gpt-4o,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+cmt-ef5a56a4,mt_bench,b5ec8d6f,1,423,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-4c1b9d5c,mt_bench,b5ec8d6f,2,424,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-7d44a949,mt_bench,9a29c699,1,425,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-cfa40f9d,mt_bench,df18b293,2,426,llama-3.3-70b,1,CCC,0,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+cmt-1d4246f0,mt_bench,034f7bf4,1,427,qwen2.5-7b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-877b998f,mt_bench,01419b73,2,428,qwen2.5-7b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,0,0,0
+cmt-673486be,mt_bench,0605a0ea,1,429,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-31fd7fea,mt_bench,cd3cca8d,1,430,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-01f6f597,mt_bench,54656983,2,431,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-f7a57d37,mt_bench,d9a7459b,1,432,qwen2.5-7b,1,CCN,1,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,2,1,1,1,1,1,1,1
+cmt-b2b68377,mt_bench,54656983,1,433,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,0
+cmt-777e9a5d,mt_bench,b5ec8d6f,2,434,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-16750682,mt_bench,0f47d4fd,2,435,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-4e297672,mt_bench,b16eb1dd,1,436,gemma-2-2b,1,CCI,1,0,,3,0,0,0,1,0,0,0
+cmt-005bb2c0,mt_bench,b16eb1dd,1,437,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-3dff4f32,mt_bench,9a29c699,1,438,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-58843166,mt_bench,d9a7459b,2,439,gpt-4o,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+cmt-4ffd1e36,mt_bench,2bf8ddb0,2,440,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-7b2d1c5a,mt_bench,3def50bb,2,441,llama-3.3-70b,1,CCC,0,2,qwen3.6-35b nemotron-3-super,3,1,1,1,0,1,1,1
+cmt-14f6cbb1,mt_bench,df18b293,2,442,yi1.5-34b-16k,0,III,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-7e5dbb2f,mt_bench,df18b293,2,443,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-3e85ec7b,mt_bench,54656983,1,444,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-441e9014,mt_bench,1153dd86,2,445,gemma-2-2b,1,CCI,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+cmt-52f5ae68,mt_bench,b867a9e6,2,446,qwen2.5-7b,1,CCN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,1,1,0,0,0,1
+cmt-ed5fcf4d,mt_bench,0605a0ea,1,447,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-58c0e147,mt_bench,54656983,2,448,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,0,0,0,0,0,0,1
+cmt-34e95c12,mt_bench,40820c84,1,449,phi-4,1,CCI,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-f4d6295c,mt_bench,b867a9e6,2,450,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,1
+cmt-93eba9ba,mt_bench,1153dd86,2,451,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-c9e85078,mt_bench,1153dd86,1,452,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-e1447106,mt_bench,2bf8ddb0,1,453,gemma-2-2b,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-3e159ef8,mt_bench,40820c84,2,454,yi1.5-34b-16k,1,CCC,0,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,1
+cmt-477a96d6,mt_bench,3258feef,1,455,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-2b4245df,mt_bench,0d01dbdf,1,456,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-98da6c4c,mt_bench,785f9777,1,457,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-255894f2,mt_bench,2bf8ddb0,1,458,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-be8bacda,mt_bench,0f47d4fd,1,459,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-4ddb7cb9,mt_bench,9a29c699,2,460,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-cffb29d6,mt_bench,3258feef,2,461,gpt-4o,0,IIC,1,0,,4,0,0,0,1,0,0,1
+cmt-1e6dee7b,mt_bench,0605a0ea,2,462,llama-3.3-70b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,1
+cmt-62d557b4,mt_bench,0d01dbdf,1,463,gemma-2-2b,0,III,0,0,,3,0,0,0,1,0,0,0
+cmt-1cd9fa95,mt_bench,785f9777,2,464,gemma-2-2b,1,CCI,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-19f5a9c1,mt_bench,01419b73,2,465,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-0fd47284,mt_bench,3258feef,2,466,yi1.5-34b-16k,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-bf1587d4,mt_bench,d9a7459b,1,467,gpt-4o,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,2,1,1,1,1,1,1,1
+cmt-252d0536,mt_bench,034f7bf4,2,468,gemma-2-2b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-38d574a3,mt_bench,0f47d4fd,2,469,gpt-4o,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-eb709672,mt_bench,54656983,2,470,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-8f71b51c,mt_bench,2bf8ddb0,2,471,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-b101261a,mt_bench,0f47d4fd,2,472,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-a48d7067,mt_bench,d9a7459b,1,473,phi-4,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,2,1,1,1,1,1,1,1
+cmt-48875863,mt_bench,3258feef,2,474,llama-3.3-70b,0,III,0,2,gpt-oss-20b gpt-oss-120b,4,0,0,0,0,0,0,1
+cmt-6997722e,mt_bench,034f7bf4,2,475,qwen2.5-7b,0,IIC,1,2,qwen3.6-35b nemotron-3-super,4,1,1,1,0,1,1,0
+cmt-9844ed2a,mt_bench,9a29c699,2,476,qwen2.5-7b,0,IIC,1,1,gpt-oss-120b,4,0,0,0,1,0,0,0
+cmt-a2109ed5,mt_bench,df18b293,2,477,gpt-4o,0,III,0,1,nemotron-3-super,4,1,0,0,1,0,0,0
+cmt-b21cacfe,mt_bench,b5ec8d6f,2,478,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-3c12cb71,mt_bench,2bf8ddb0,1,479,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-4fbca622,mt_bench,785f9777,1,480,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-daaa8225,mt_bench,b867a9e6,1,481,phi-4,1,CCN,1,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,1,1,1,1,1,1,1,0
+cmt-f4024c6e,mt_bench,2bf8ddb0,2,482,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-1db15078,mt_bench,0d01dbdf,2,483,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-0d3d1fce,mt_bench,cd3cca8d,2,484,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-0657c537,mt_bench,01419b73,1,485,yi1.5-34b-16k,1,CCC,0,3,gpt-oss-20b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-9e4e3305,mt_bench,0d01dbdf,2,486,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-d43f2f30,mt_bench,9a29c699,2,487,gpt-4o,1,CCC,0,2,gpt-oss-20b qwen3.6-35b,4,1,1,1,0,1,1,0
+cmt-1ddb9bec,mt_bench,54656983,1,488,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,0,1,1,0,0,0
+cmt-91840a4c,mt_bench,df18b293,1,489,phi-4,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-70a674ae,mt_bench,64c35abd,1,490,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-2faba063,mt_bench,3258feef,1,491,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-a4819f7b,mt_bench,b867a9e6,1,492,llama-3.3-70b,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-1372b106,mt_bench,d9a7459b,1,493,gemma-2-2b,1,CCC,0,2,gpt-oss-120b qwen3.6-35b,2,1,1,1,0,1,1,1
+cmt-63ed77bd,mt_bench,0f47d4fd,2,494,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-28dcb71f,mt_bench,034f7bf4,1,495,yi1.5-34b-16k,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-4c3a2856,mt_bench,2bf8ddb0,1,496,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-311d9487,mt_bench,d9a7459b,2,497,qwen2.5-7b,0,IIN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+cmt-03a76ab0,mt_bench,034f7bf4,1,498,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-c7d74fc4,mt_bench,64c35abd,1,499,yi1.5-34b-16k,0,III,0,2,gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-5b4056fd,mt_bench,9a29c699,1,500,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-f2a2c500,mt_bench,3def50bb,2,501,qwen2.5-7b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-68d173be,mt_bench,d9a7459b,1,502,yi1.5-34b-16k,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,2,1,1,1,1,1,1,1
+cmt-4bce516b,mt_bench,2bf8ddb0,1,503,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-73a87473,mt_bench,785f9777,2,504,llama-3.3-70b,0,IIC,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,1,0,0,0,0,0,0,0
+cmt-763760a8,mt_bench,01419b73,1,505,gpt-4o,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-9899fd1e,mt_bench,0f47d4fd,1,506,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-e152129e,mt_bench,1153dd86,1,507,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-aa326dfa,mt_bench,d9a7459b,2,508,gemma-2-2b,0,III,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,0,0,0,0,0,0,0,0
+cmt-788b046b,mt_bench,01419b73,2,509,phi-4,1,CCI,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-e80d269a,mt_bench,cd3cca8d,1,510,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-0c40ab0d,mt_bench,034f7bf4,1,511,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-f7c0636e,mt_bench,b5ec8d6f,2,512,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-406f31dc,mt_bench,b16eb1dd,1,513,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-d2744d81,mt_bench,034f7bf4,2,514,yi1.5-34b-16k,0,IIN,1,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-bcbca297,mt_bench,df18b293,2,515,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-29e7e755,mt_bench,785f9777,1,516,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-b6bdcb3c,mt_bench,cd3cca8d,1,517,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-bcc30874,mt_bench,b867a9e6,1,518,qwen2.5-7b,1,CCI,1,0,,1,1,1,1,0,1,1,0
+cmt-40fb3ccc,mt_bench,3258feef,2,519,phi-4,0,IIC,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-f5002d5a,mt_bench,b5ec8d6f,1,520,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-edefdd62,mt_bench,785f9777,2,521,yi1.5-34b-16k,0,IIN,1,2,gpt-oss-120b qwen3.6-35b,1,0,0,0,0,0,0,0
+cmt-d8e11efd,mt_bench,01419b73,2,522,gemma-2-2b,1,CCC,0,3,gpt-oss-120b qwen3.6-35b nemotron-3-super,4,0,0,0,0,0,0,1
+cmt-0449a0ad,mt_bench,df18b293,1,523,gpt-4o,0,IIN,1,0,,4,0,0,0,1,0,0,0
+cmt-c6790222,mt_bench,785f9777,1,524,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-3073dd1f,mt_bench,0d01dbdf,1,525,yi1.5-34b-16k,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-9ae4b81a,mt_bench,0605a0ea,1,526,gemma-2-2b,0,III,0,3,gpt-oss-20b gpt-oss-120b nemotron-3-super,4,0,0,0,0,0,0,0
+cmt-9aa00339,mt_bench,01419b73,1,527,qwen2.5-7b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-2c17b9d3,mt_bench,01419b73,2,528,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-a5248f8b,mt_bench,64c35abd,2,529,gemma-2-2b,0,III,0,0,,3,0,0,0,1,0,0,0
+cmt-7bc76c10,mt_bench,54656983,1,530,yi1.5-34b-16k,1,CCC,0,2,gpt-oss-20b nemotron-3-super,2,1,1,1,0,1,1,0
+cmt-9b156cdb,mt_bench,64c35abd,1,531,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-b294227a,mt_bench,40820c84,2,532,gpt-4o,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-c9722c8f,mt_bench,3def50bb,2,533,gemma-2-2b,0,III,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,0,0,0,0,0,0,0
+cmt-a7b699bd,mt_bench,3258feef,1,534,qwen2.5-7b,1,CCN,1,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,2,1,1,1,1,1,1,1
+cmt-244bd569,mt_bench,1153dd86,2,535,phi-4,1,CCC,0,3,gpt-oss-20b gpt-oss-120b qwen3.6-35b,4,1,1,1,1,1,1,1
+cmt-573c71ce,mt_bench,b16eb1dd,2,536,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-1fcbde67,mt_bench,2bf8ddb0,2,537,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-9fcf54b7,mt_bench,0f47d4fd,1,538,llama-3.3-70b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-833c30b9,mt_bench,64c35abd,1,539,phi-4,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-94e405c9,mt_bench,0f47d4fd,2,540,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-c92911f7,mt_bench,0d01dbdf,2,541,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-83b2d7f8,mt_bench,cd3cca8d,1,542,gemma-2-2b,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,4,1,1,1,1,1,1,1
+cmt-78161ea5,mt_bench,0d01dbdf,1,543,gpt-4o,1,CCC,0,4,gpt-oss-20b gpt-oss-120b qwen3.6-35b nemotron-3-super,3,1,1,1,1,1,1,1
+cmt-3504e9b3,mt_bench,01419b73,1,544,gemma-2-2b,0,IIN,1,1,gpt-oss-20b,4,0,0,0,1,0,0,0

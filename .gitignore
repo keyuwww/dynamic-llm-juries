@@ -1,16 +1,10 @@
-.venv/
-__pycache__/
-*.pyc
+# keys and local state
 .env
-.env.*
-.DS_Store
+.spend/
+*.tmp
+# caches
+.cache/
+__pycache__/
+__marimo__/
 .ipynb_checkpoints/
-wheels/
-wheels_modal/
-# raw API caches (keep summaries); remove this line to commit them
-**/*_results*/*.jsonl
-wheels_tinker/
-experiments/tinker_pool/data_cache/
-experiments/tinker_pool/mock_*_results/
-# judge-confidence raw outputs and activations (on disk only; see experiments/judge_confidence/README.md)
-experiments/judge_confidence/results/raw/
+.DS_Store

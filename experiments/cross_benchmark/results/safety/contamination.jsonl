@@ -1,8 +1,0 @@
-{"cache_key": "qwen3.5-4b|s1053", "model": "qwen3.5-4b", "key": "s1053", "lcr": 1, "target_words": 23, "cost": 8.931e-05}
-{"cache_key": "qwen3.5-4b|s1039", "model": "qwen3.5-4b", "key": "s1039", "lcr": 1, "target_words": 23, "cost": 3.4125e-05}
-{"cache_key": "gpt-oss-120b|s1039", "model": "gpt-oss-120b", "key": "s1039", "lcr": 0, "target_words": 23, "cost": 0.00013701}
-{"cache_key": "gpt-oss-120b|s1053", "model": "gpt-oss-120b", "key": "s1053", "lcr": 0, "target_words": 23, "cost": 0.00013959}
-{"cache_key": "qwen3.5-4b|s1059", "model": "qwen3.5-4b", "key": "s1059", "lcr": 1, "target_words": 55, "cost": 0.00010258500000000001}
-{"cache_key": "gpt-oss-120b|s1059", "model": "gpt-oss-120b", "key": "s1059", "lcr": 1, "target_words": 55, "cost": 0.0001806}
-{"cache_key": "qwen3.5-4b|s1047", "model": "qwen3.5-4b", "key": "s1047", "lcr": 2, "target_words": 42, "cost": 0.0020971799999999997}
-{"cache_key": "gpt-oss-120b|s1047", "model": "gpt-oss-120b", "key": "s1047", "lcr": 1, "target_words": 42, "cost": 0.0009177899999999999}

@@ -1,0 +1,7 @@
+reader,answers,verdict_flips,gut_flips,median_abs_margin_change,max_abs_margin_change,agreement_flips
+gpt-oss-20b,40,3,0,0.12093936667082206,0.4997253741627723,3
+gpt-oss-120b,40,1,0,0.3557289205580738,2.5015673918977335,1
+qwen3.6-35b,40,0,0,0.0,0.0,0
+nemotron-3-super,40,1,0,0.030343795377859806,0.877296150596294,1
+agreement jury,40,1,,,,
+majority vote,40,0,,,,

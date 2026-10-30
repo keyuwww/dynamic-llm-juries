@@ -1,0 +1,8 @@
+measure,score,compared_with,estimate,lo,hi
+auroc,fewer jurors agree with themselves,,0.6757709251101321,0.6115008707003924,0.7376935646769199
+auroc,fewer jurors solved the question,,0.5483724914341654,0.4729431879952938,0.6213803640642303
+auroc,jurors' reasoned votes are split,,0.632525697503671,0.5785701316624189,0.6878440663278638
+auroc,weak summed gut margin,,0.6944933920704847,0.6338267097287309,0.7519078008677221
+auroc difference,fewer jurors agree with themselves,jurors' reasoned votes are split,0.0432452276064611,-0.03372065338826924,0.12011365329415102
+auroc difference,fewer jurors agree with themselves,fewer jurors solved the question,0.1273984336759667,0.03397155553704824,0.2275838701172154
+auroc difference,fewer jurors agree with themselves,weak summed gut margin,-0.018722466960352513,-0.08458615456563226,0.0554159078372823

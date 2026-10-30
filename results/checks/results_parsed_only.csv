@@ -1,0 +1,27 @@
+jurors,rule,juror,answer_set,answers,kappa
+4,reasoned read,gpt-oss-20b,all,531,0.6011012755279849
+4,gut read,gpt-oss-20b,all,544,0.5253974408685537
+4,reasoned read,gpt-oss-120b,all,544,0.6331733908747621
+4,gut read,gpt-oss-120b,all,544,0.4909941520467837
+4,reasoned read,qwen3.6-35b,all,542,0.6120229642376829
+4,gut read,qwen3.6-35b,all,544,0.48325713579636725
+4,reasoned read,nemotron-3-super,all,535,0.5976435196791177
+4,gut read,nemotron-3-super,all,544,0.48608794485364654
+4,majority vote,,all,544,0.6620497832747398
+4,gut majority vote,,all,544,0.5323219187978615
+4,agreement jury,,all,544,0.6659442277127582
+4,self-solve jury,,all,544,0.6435886114711371
+5,reasoned read,gpt-oss-20b,all,531,0.6011012755279849
+5,gut read,gpt-oss-20b,all,544,0.5253974408685537
+5,reasoned read,gpt-oss-120b,all,544,0.6331733908747621
+5,gut read,gpt-oss-120b,all,544,0.4909941520467837
+5,reasoned read,qwen3.6-35b,all,542,0.6120229642376829
+5,gut read,qwen3.6-35b,all,544,0.48325713579636725
+5,reasoned read,nemotron-3-super,all,535,0.5976435196791177
+5,gut read,nemotron-3-super,all,544,0.48608794485364654
+5,reasoned read,gpt-oss-safeguard-20b,all,538,0.6300802678584774
+5,gut read,gpt-oss-safeguard-20b,all,544,0.565527945630717
+5,majority vote,,all,544,0.6560672462102163
+5,gut majority vote,,all,544,0.5507677657421735
+5,agreement jury,,all,544,0.6614240107781976
+5,self-solve jury,,all,544,0.6462989425550159

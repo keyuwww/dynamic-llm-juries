@@ -1,0 +1,74 @@
+{
+ "grader_check": {
+  "kappa": {
+   "q397": 0.6962493396724776,
+   "kimi": 0.5822454308093994
+  },
+  "kappa_parsed": {
+   "q397": 0.6962493396724776,
+   "kimi": 0.5851512373968836
+  },
+  "unparsed": {
+   "q397": 0,
+   "kimi": 4
+  },
+  "chosen": "q397",
+  "pass": false
+ },
+ "juror_check": {
+  "metrics": {
+   "oss20": {
+    "gut_auroc": 0.7949565936337328,
+    "parse_rate": 0.99,
+    "nan_rate": 0.0,
+    "length_rate": 0.01,
+    "passed": true
+   },
+   "oss120": {
+    "gut_auroc": 0.7823480777180654,
+    "parse_rate": 1.0,
+    "nan_rate": 0.0,
+    "length_rate": 0.0,
+    "passed": true
+   },
+   "q4": {
+    "gut_auroc": 0.7589913187267466,
+    "parse_rate": 0.63,
+    "nan_rate": 0.0,
+    "length_rate": 0.37,
+    "passed": false
+   },
+   "q9": {
+    "gut_auroc": 0.7250930136420008,
+    "parse_rate": 0.75,
+    "nan_rate": 0.0,
+    "length_rate": 0.25,
+    "passed": false
+   },
+   "q36": {
+    "gut_auroc": 0.7408019842910294,
+    "parse_rate": 1.0,
+    "nan_rate": 0.0,
+    "length_rate": 0.0,
+    "passed": true
+   },
+   "nemoS": {
+    "gut_auroc": 0.7085572550640762,
+    "parse_rate": 0.98,
+    "nan_rate": 0.0,
+    "length_rate": 0.02,
+    "passed": true
+   }
+  },
+  "kept": [
+   "oss20",
+   "oss120",
+   "q36",
+   "nemoS"
+  ],
+  "dropped": [
+   "q4",
+   "q9"
+  ]
+ }
+}

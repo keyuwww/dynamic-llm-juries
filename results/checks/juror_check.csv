@@ -1,0 +1,7 @@
+juror,answers,gut_auroc,verdict_rate,gut_margin_missing_rate,token_limit_rate,token_limit,kept
+gpt-oss-20b,100,0.7949565936337328,0.99,0.0,0.01,4096,True
+gpt-oss-120b,100,0.7823480777180654,1.0,0.0,0.0,4096,True
+qwen3.5-4b,100,0.7589913187267466,0.63,0.0,0.37,6144,False
+qwen3.5-9b,100,0.7250930136420008,0.75,0.0,0.25,6144,False
+qwen3.6-35b,100,0.7408019842910294,1.0,0.0,0.0,6144,True
+nemotron-3-super,100,0.7085572550640762,0.98,0.0,0.02,6144,True

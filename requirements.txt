@@ -1,0 +1,16 @@
+# Tested with Python 3.12: numpy 2.5.3, pandas 3.0.6, pyarrow 26.0.0, scipy 1.18.1, scikit-learn 1.9.1, matplotlib 3.11.2,
+# nbconvert 7.17.1, ipykernel 7.4.0, marimo 0.24.2, altair 6.3.0, tinker 0.33.1, tiktoken 0.14.0
+numpy>=1.26
+pandas>=2.2
+pyarrow>=15
+scipy>=1.11
+scikit-learn>=1.4
+matplotlib>=3.8
+nbconvert>=7
+ipykernel>=6
+marimo>=0.24
+altair>=5
+# only needed to fill rows missing from runs/ with new calls on Tinker
+tinker>=0.33
+tiktoken
+# modal>=1.6   only needed to read with the add-on juror gpt-oss-safeguard-20b again on Modal (tested with 1.6.1)
