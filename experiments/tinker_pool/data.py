@@ -265,6 +265,41 @@ def load_biggen_bench(seed=0, limit=None):
     return out[:limit] if limit else out
 
 
+# ----------------------------------------------------------------------------- HealthBench meta-eval
+HEALTHBENCH_META_URL = ("https://openaipublic.blob.core.windows.net/simple-evals/healthbench/"
+                         "2025-05-07-06-14-12_oss_meta_eval.jsonl")
+
+
+def load_healthbench_meta(seed=0, limit=None, unanimous_only=True):
+    """OpenAI HealthBench's own physician meta-evaluation set (released via openai/simple-evals,
+    healthbench_meta_eval.py): one row per (conversation, real model completion, ONE physician-
+    WRITTEN rubric criterion verbatim from HealthBench's own rubric authoring, list of physician
+    binary judgments on whether that completion meets that criterion). Real expert-authored rubric,
+    real human (physician) gold labels tied directly to this benchmark -- not an upstream/borrowed
+    rubric. 29,511 rows, 77.5% with unanimous physician agreement; unanimous_only=True (default)
+    keeps only those, matching this project's existing BFF consensus="unanimous" policy.
+    """
+    import json
+    import urllib.request
+
+    with urllib.request.urlopen(HEALTHBENCH_META_URL) as resp:
+        lines = resp.read().decode("utf-8").splitlines()
+    out = []
+    for i, line in enumerate(lines):
+        r = json.loads(line)
+        labels = r["binary_labels"]
+        if unanimous_only and len(set(labels)) != 1:
+            continue
+        gold = 1 if sum(labels) / len(labels) > 0.5 else 0
+        convo = r["prompt"] + [dict(content=r["completion"], role="assistant")]
+        out.append(dict(id=f"{r['completion_id']}-{i}", prompt=r["prompt"],
+                         completion=r["completion"], convo=convo, rubric=str(r["rubric"]),
+                         category=str(r["category"]), n_physicians=len(labels), gold=gold))
+    import random
+    random.Random(seed).shuffle(out)
+    return out[:limit] if limit else out
+
+
 def bbeh_correct(sample, reference):
     prediction = _extract_answer(sample.strip()).lower()
     prediction = prediction.replace(", ", ",").replace("**", "")

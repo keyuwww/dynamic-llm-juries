@@ -174,8 +174,9 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
     if benchmark == "bff":
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
         dirname_for_output = results_dirname
-    elif benchmark.startswith("biggen"):
-        results_dirname = f"biggen_{out_name}"
+    elif benchmark.startswith("biggen") or benchmark.startswith("healthbench"):
+        prefix = benchmark.split("_", 1)[0]
+        results_dirname = f"{prefix}_{out_name}"
         dirname_for_output = f"{results_dirname}_{benchmark.split('_', 1)[1]}"
     else:
         results_dirname = f"{benchmark}_{out_name}"
@@ -403,6 +404,58 @@ def biggen_big_wait(call_id: str, timeout: int = 7200):
     print(f"Wrote {len(files)} files to {dest_dir}")
 
 
+def _run_healthbench_impl(limit, model):
+    out_name = f"healthbench_{model.split('/')[-1].lower()}"
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results") / out_name
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_vs_human_healthbench.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return f"done: healthbench logit lens ({out_name})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_healthbench(limit: int = 20, model: str = "Qwen/Qwen3.5-9B") -> str:
+    return _run_healthbench_impl(limit, model)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_healthbench_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
+    return _run_healthbench_impl(limit, model)
+
+
+@app.local_entrypoint()
+def healthbench_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b"):
+    call = run_healthbench_big.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def healthbench_big_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
 def _run_rb2safety_rubric_impl(limit, model):
     out_name = f"rb2safety_rubric_{model.split('/')[-1].lower()}"
     vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
@@ -539,8 +592,8 @@ def _run_logit_attribution_impl(model, benchmark, rubric, max_items):
     out_name = model.split("/")[-1].lower()
     if benchmark == "bff":
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
-    elif benchmark.startswith("biggen"):
-        results_dirname = f"biggen_{out_name}"
+    elif benchmark.startswith("biggen") or benchmark.startswith("healthbench"):
+        results_dirname = f"{benchmark.split('_', 1)[0]}_{out_name}"
     else:
         results_dirname = f"{benchmark}_{out_name}"
     fname = f"logit_attribution_{results_dirname}_{benchmark}.json"

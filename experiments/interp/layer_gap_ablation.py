@@ -68,6 +68,7 @@ from layer_vs_human_judgebench import JUDGEBENCH_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety import SAFETY_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety_rubric import SAFETY_PROMPT_RUBRIC, COCONOT_RUBRIC  # noqa: E402
 from layer_vs_human_biggen import build_prompts as biggen_build_prompts  # noqa: E402
+from layer_vs_human_healthbench import build_prompts as healthbench_build_prompts  # noqa: E402
 
 
 def kappa(y1, y2):
@@ -105,6 +106,11 @@ def _load_rb2safety_items(rubric):
 def _load_biggen_items(rubric):
     from data import load_biggen_bench
     return {it["id"]: it for it in load_biggen_bench(limit=None)}
+
+
+def _load_healthbench_items(rubric):
+    from data import load_healthbench_meta
+    return {it["id"]: it for it in load_healthbench_meta(limit=None)}
 
 
 # Each entry: pilot pcn/pred field names, forced-choice token strings (pos=label matching gold=1),
@@ -160,6 +166,22 @@ BENCH = {
         prompt_fn=lambda it, rubric: biggen_build_prompts(it)[1],
         load_items=_load_biggen_items,
         dirname_fn=lambda model, rubric: f"biggen_{model.split('/')[-1].lower()}",
+    ),
+    "healthbench_standard": dict(
+        pcn_field="pcn_standard", pred_field="pred_standard",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: healthbench_build_prompts(it)[0],
+        load_items=_load_healthbench_items,
+        dirname_fn=lambda model, rubric: f"healthbench_{model.split('/')[-1].lower()}",
+    ),
+    "healthbench_rubric": dict(
+        pcn_field="pcn_rubric", pred_field="pred_rubric",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: healthbench_build_prompts(it)[1],
+        load_items=_load_healthbench_items,
+        dirname_fn=lambda model, rubric: f"healthbench_{model.split('/')[-1].lower()}",
     ),
 }
 
@@ -426,7 +448,7 @@ def main():
     # biggen_standard and biggen_rubric share one pilot-results dirname, so disambiguate the output
     # filename by the condition too, or the two conditions' results would overwrite each other.
     dirname_for_output = results_dirname
-    if a.benchmark.startswith("biggen"):
+    if a.benchmark.startswith("biggen") or a.benchmark.startswith("healthbench"):
         dirname_for_output = f"{results_dirname}_{a.benchmark.split('_', 1)[1]}"
     out_path = HERE / f"layer_gap_{dirname_for_output}_{suffix}.json"
     out_path.write_text(json.dumps(dict(model=a.model, benchmark=a.benchmark, rubric=a.rubric, stage=a.stage,

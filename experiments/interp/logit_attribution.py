@@ -78,8 +78,11 @@ def main():
     def d(pcn_idx):
         return pcn_idx - 1
 
-    gain = model.model.norm.weight.detach().float() if hasattr(model.model, "norm") else None
-    W_U = model.lm_head.weight.detach().float()
+    # device_map="auto" can put the final norm, lm_head, and individual decoder layers on
+    # different GPUs; move every small vector used in the projection onto one fixed device (CPU)
+    # to avoid chasing devices around model.hf_device_map.
+    gain = model.model.norm.weight.detach().float().cpu() if hasattr(model.model, "norm") else None
+    W_U = model.lm_head.weight.detach().float().cpu()
     u = W_U[tok_pos] - W_U[tok_neg]  # direction in NORMED hidden space: + pushes toward tok_pos
 
     window_pcn = list(range(L + 1, n_layers_logit))  # pcn indices, same convention as layer_gap_ablation
@@ -111,7 +114,7 @@ def main():
         for h in handles:
             h.remove()
 
-        h_final = out.hidden_states[-1][0, -1, :].detach().float()
+        h_final = out.hidden_states[-1][0, -1, :].detach().float().cpu()
         rms_final = (h_final.pow(2).mean().sqrt() + 1e-6)
 
         gold_label = bench["label_pos"] if it["gold"] else bench["label_neg"]
@@ -121,8 +124,8 @@ def main():
         for p, dec_idx in zip(window_pcn, window_dec):
             # device_map="auto" can split layers across GPUs; captured writes may live on a
             # different device than u/gain/rms_final (computed from the final layer / lm_head).
-            w_attn = writes.get((dec_idx, "attn")).to(u.device)
-            w_mlp = writes.get((dec_idx, "mlp")).to(u.device)
+            w_attn = writes.get((dec_idx, "attn")).cpu()
+            w_mlp = writes.get((dec_idx, "mlp")).cpu()
             if gain is not None:
                 pa = ((w_attn * gain) / rms_final) @ u
                 pm = ((w_mlp * gain) / rms_final) @ u
