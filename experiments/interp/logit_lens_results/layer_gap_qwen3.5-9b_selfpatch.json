@@ -1,0 +1,113 @@
+{
+  "model": "Qwen/Qwen3.5-9B",
+  "rubric": "rules",
+  "stage": "selfpatch",
+  "best_layer": 32,
+  "layers": null,
+  "results": [
+    {
+      "id": "374670a7-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "830605f2-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "30d09bef-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "5ab66b8c-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "a32a2a36-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "06ca656f-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "89d19994-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "e4f089d3-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "10af34fc-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "bd643a22-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "bab23e40-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "52f3fadb-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    },
+    {
+      "id": "de3a539c-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "best_layer": 32,
+      "window": [],
+      "causal_layer": null
+    }
+  ]
+}

@@ -143,6 +143,93 @@ def run_activation_patching_big(model: str = "openai/gpt-oss-120b", flip: str = 
     return _run_activation_patching_impl(model, flip, window, max_items, rubric)
 
 
+def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control=False):
+    link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results")
+    vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results"
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/layer_gap_ablation.py",
+           "--model", model, "--rubric", rubric, "--stage", stage]
+    if layers:
+        cmd += ["--layers"] + [str(l) for l in layers]
+    if max_items:
+        cmd += ["--max-items", str(max_items)]
+    if control:
+        cmd += ["--control"]
+    if selfpatch_filename:
+        vol.reload()
+        src = vol_dir / selfpatch_filename
+        local = pathlib.Path("/root/repo/experiments/interp") / selfpatch_filename
+        local.write_bytes(src.read_bytes())
+        cmd += ["--selfpatch-path", str(local)]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
+    out_name = model.split("/")[-1].lower()
+    results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
+    suffix = {"selfpatch": "selfpatch", "ablate": "ablate",
+              "heads": f"heads_L{'-'.join(map(str, layers or []))}"}[stage]
+    if control:
+        suffix += "_control"
+    fname = f"layer_gap_{results_dirname}_{suffix}.json"
+    src = pathlib.Path("/root/repo/experiments/interp") / fname
+    dest = vol_dir / fname
+    dest.write_bytes(src.read_bytes())
+    vol.commit()
+    return f"done: layer gap {stage} ({fname})"
+
+
+@app.function(timeout=3600, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_layer_gap(model: str = "Qwen/Qwen3.5-9B", rubric: str = "rules", stage: str = "selfpatch",
+                   layers: list = None, selfpatch_filename: str = "", max_items: int = 0) -> str:
+    return _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items)
+
+
+@app.function(timeout=7200, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_layer_gap_big(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
+                       layers: list = None, selfpatch_filename: str = "", max_items: int = 0,
+                       control: bool = False) -> str:
+    return _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control)
+
+
+@app.local_entrypoint()
+def layer_gap(model: str = "Qwen/Qwen3.5-9B", rubric: str = "rules", stage: str = "selfpatch",
+              layers: str = "", selfpatch_filename: str = "", max_items: int = 0):
+    layer_list = [int(x) for x in layers.split(",") if x.strip()] if layers else None
+    msg = run_layer_gap.remote(model=model, rubric=rubric, stage=stage, layers=layer_list,
+                                selfpatch_filename=selfpatch_filename, max_items=max_items)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def layer_gap_big(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
+                   layers: str = "", selfpatch_filename: str = "", max_items: int = 0):
+    layer_list = [int(x) for x in layers.split(",") if x.strip()] if layers else None
+    msg = run_layer_gap_big.remote(model=model, rubric=rubric, stage=stage, layers=layer_list,
+                                    selfpatch_filename=selfpatch_filename, max_items=max_items)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
 def _run_judgebench_impl(limit, model):
     out_name = f"judgebench_{model.split('/')[-1].lower()}"
     vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results" / out_name
@@ -370,6 +457,51 @@ def clear_logit_lens_dir(out_name: str) -> str:
 @app.local_entrypoint()
 def clear(out_name: str):
     print(clear_logit_lens_dir.remote(out_name))
+
+
+@app.local_entrypoint()
+def layer_gap_big_spawn(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
+                         layers: str = "", selfpatch_filename: str = "", max_items: int = 0,
+                         control: bool = False):
+    """Submit and return immediately (no blocking .remote() wait) -- for when this sandbox's own
+    process-kill timer is shorter than the GPU job, so the local client must not stay attached.
+    Poll with layer_gap_big_wait(call_id=...) in a SEPARATE invocation afterward."""
+    layer_list = [int(x) for x in layers.split(",") if x.strip()] if layers else None
+    call = run_layer_gap_big.spawn(model=model, rubric=rubric, stage=stage, layers=layer_list,
+                                    selfpatch_filename=selfpatch_filename, max_items=max_items,
+                                    control=control)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def layer_gap_big_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def just_pull():
+    """Pull whatever's already on the results volume without launching/recomputing anything --
+    for when a prior run's compute finished (committed to the volume) but the local client
+    disconnected before the automatic pull-back."""
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
 
 
 @app.function(volumes={VOL_MOUNT: vol})
