@@ -143,7 +143,8 @@ def run_activation_patching_big(model: str = "openai/gpt-oss-120b", flip: str = 
     return _run_activation_patching_impl(model, flip, window, max_items, rubric)
 
 
-def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control=False):
+def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control=False,
+                         benchmark="bff"):
     link = pathlib.Path("/root/repo/experiments/interp/logit_lens_results")
     vol_dir = pathlib.Path(VOL_MOUNT) / "logit_lens_results"
     if link.is_symlink() or link.exists():
@@ -154,7 +155,7 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
             shutil.rmtree(link)
     link.symlink_to(vol_dir)
     cmd = [sys.executable, "/root/repo/experiments/interp/layer_gap_ablation.py",
-           "--model", model, "--rubric", rubric, "--stage", stage]
+           "--model", model, "--rubric", rubric, "--stage", stage, "--benchmark", benchmark]
     if layers:
         cmd += ["--layers"] + [str(l) for l in layers]
     if max_items:
@@ -170,7 +171,10 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
     print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
     subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
     out_name = model.split("/")[-1].lower()
-    results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
+    if benchmark == "bff":
+        results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
+    else:
+        results_dirname = f"{benchmark}_{out_name}"
     suffix = {"selfpatch": "selfpatch", "ablate": "ablate",
               "heads": f"heads_L{'-'.join(map(str, layers or []))}"}[stage]
     if control:
@@ -192,8 +196,8 @@ def run_layer_gap(model: str = "Qwen/Qwen3.5-9B", rubric: str = "rules", stage: 
 @app.function(timeout=7200, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
 def run_layer_gap_big(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
                        layers: list = None, selfpatch_filename: str = "", max_items: int = 0,
-                       control: bool = False) -> str:
-    return _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control)
+                       control: bool = False, benchmark: str = "bff") -> str:
+    return _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_items, control, benchmark)
 
 
 @app.local_entrypoint()
@@ -462,14 +466,14 @@ def clear(out_name: str):
 @app.local_entrypoint()
 def layer_gap_big_spawn(model: str = "openai/gpt-oss-120b", rubric: str = "rules", stage: str = "selfpatch",
                          layers: str = "", selfpatch_filename: str = "", max_items: int = 0,
-                         control: bool = False):
+                         control: bool = False, benchmark: str = "bff"):
     """Submit and return immediately (no blocking .remote() wait) -- for when this sandbox's own
     process-kill timer is shorter than the GPU job, so the local client must not stay attached.
     Poll with layer_gap_big_wait(call_id=...) in a SEPARATE invocation afterward."""
     layer_list = [int(x) for x in layers.split(",") if x.strip()] if layers else None
     call = run_layer_gap_big.spawn(model=model, rubric=rubric, stage=stage, layers=layer_list,
                                     selfpatch_filename=selfpatch_filename, max_items=max_items,
-                                    control=control)
+                                    control=control, benchmark=benchmark)
     print(f"CALL_ID={call.object_id}")
 
 

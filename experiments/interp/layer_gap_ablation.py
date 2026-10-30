@@ -37,16 +37,22 @@ Three stages:
                        of the o_proj input), restricted to --layers, to find which SPECIFIC head(s) are
                        responsible when --stage ablate flags attention as the active culprit.
 
+--benchmark selects the task format: bff (BFF-Bench, CORRECT/INCORRECT over a finance conversation,
+multi-rubric via --rubric), judgebench (pairwise A/B comparison, algorithmic gold), rb2safety
+(RewardBench2 Safety, CORRECT/INCORRECT over a prompt+response pair, human gold). Each has its own
+prompt template, forced-choice token pair, and pilot-file field names (see BENCH below) -- all
+produced by logit_lens_pilot.py / layer_vs_human_judgebench.py / layer_vs_human_rb2safety.py.
+
 Run on Qwen/Qwen3.5-9B as a negative control: its best layer IS effectively its final layer (not the
 case where there's room for a gap), so it has very few flip items and these interventions should mostly
 find nothing -- if they instead "recover" things just as often as for gpt-oss-120b, that's a sign the
 method is finding ablation noise, not a real localized mechanism.
 
 Usage (inside the Modal image):
-  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --stage selfpatch --max-items 104
-  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --stage ablate --max-items 104
-  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --stage heads --layers 32 33 --max-items 40
-  python experiments/interp/layer_gap_ablation.py --model Qwen/Qwen3.5-9B --stage selfpatch --max-items 13
+  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --benchmark bff --stage selfpatch --max-items 104
+  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --benchmark judgebench --stage selfpatch --max-items 459
+  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --benchmark rb2safety --stage ablate --selfpatch-path ...
+  python experiments/interp/layer_gap_ablation.py --model openai/gpt-oss-120b --benchmark bff --stage heads --layers 32 33 --max-items 40
 """
 import argparse
 import json
@@ -57,12 +63,9 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "tinker_pool"))
 sys.path.insert(0, str(HERE.parent / "jev_bff"))
 
-from logit_lens_pilot import RUBRICS, build_prompt  # noqa: E402
-
-
-def out_name(model, rubric):
-    n = model.split("/")[-1].lower()
-    return n if rubric == "rules" else f"{n}_{rubric}"
+from logit_lens_pilot import RUBRICS, build_prompt as bff_build_prompt  # noqa: E402
+from layer_vs_human_judgebench import JUDGEBENCH_PROMPT  # noqa: E402
+from layer_vs_human_rb2safety import SAFETY_PROMPT  # noqa: E402
 
 
 def kappa(y1, y2):
@@ -73,34 +76,92 @@ def kappa(y1, y2):
     return 1.0 if pe >= 0.999999 else (po - pe) / (1 - pe)
 
 
-def best_layer(items):
-    n_layers = len(items[0]["pcn_rules"])
+def _bff_dirname(model, rubric):
+    n = model.split("/")[-1].lower()
+    return n if rubric == "rules" else f"{n}_{rubric}"
+
+
+def _load_bff_items(rubric):
+    from data import load_bff, load_verdicts_items, bff_key_to_uid
+    items, _ = load_verdicts_items(None, None, "unanimous")
+    to_uid = bff_key_to_uid(load_bff(None))
+    for it in items:
+        it["uid"] = to_uid.get(it["qid"], it["qid"])
+    return {it["id"]: it for it in items}
+
+
+def _load_judgebench_items(rubric):
+    from data import load_judgebench
+    return {it["id"]: it for it in load_judgebench()}
+
+
+def _load_rb2safety_items(rubric):
+    from data import load_rb2_safety
+    return {it["id"]: it for it in load_rb2_safety()}
+
+
+# Each entry: pilot pcn/pred field names, forced-choice token strings (pos=label matching gold=1),
+# label strings, a prompt builder (item_dict, rubric) -> prompt str, a by_id loader, and the pilot
+# results dirname for a given (model, rubric).
+BENCH = {
+    "bff": dict(
+        pcn_field="pcn_rules", pred_field="pred_rules",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: bff_build_prompt(it, RUBRICS[rubric]),
+        load_items=_load_bff_items,
+        dirname_fn=_bff_dirname,
+    ),
+    "judgebench": dict(
+        pcn_field="pcn", pred_field="final_pred_a",
+        tok_pos=" A", tok_neg=" B", label_pos="A", label_neg="B",
+        pred_to_label=lambda v: "A" if v else "B",
+        prompt_fn=lambda it, rubric: JUDGEBENCH_PROMPT.format(
+            question=it["question"], response_a=it["response_a"], response_b=it["response_b"]),
+        load_items=_load_judgebench_items,
+        dirname_fn=lambda model, rubric: f"judgebench_{model.split('/')[-1].lower()}",
+    ),
+    "rb2safety": dict(
+        pcn_field="pcn", pred_field="final_pred_correct",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: "CORRECT" if v else "INCORRECT",
+        prompt_fn=lambda it, rubric: SAFETY_PROMPT.format(prompt=it["prompt"], response=it["response"]),
+        load_items=_load_rb2safety_items,
+        dirname_fn=lambda model, rubric: f"rb2safety_{model.split('/')[-1].lower()}",
+    ),
+}
+
+
+def best_layer(items, pcn_field):
+    n_layers = len(items[0][pcn_field])
     gold = [it["gold"] for it in items]
     best = None
     for L in range(n_layers):
-        preds = [1 if it["pcn_rules"][L] >= 0.5 else 0 for it in items]
+        preds = [1 if it[pcn_field][L] >= 0.5 else 0 for it in items]
         k = kappa(gold, preds)
         if best is None or k > best[1]:
             best = (L, k)
     return best[0], n_layers
 
 
-def flip_items(items, L):
+def flip_items(items, L, bench):
     out = []
     for it in items:
-        gold_label = "CORRECT" if it["gold"] else "INCORRECT"
-        best_pred = "CORRECT" if it["pcn_rules"][L] >= 0.5 else "INCORRECT"
-        if best_pred == gold_label and it["pred_rules"] != gold_label:
+        gold_label = bench["label_pos"] if it["gold"] else bench["label_neg"]
+        best_pred = bench["label_pos"] if it[bench["pcn_field"]][L] >= 0.5 else bench["label_neg"]
+        final_label = bench["pred_to_label"](it[bench["pred_field"]])
+        if best_pred == gold_label and final_label != gold_label:
             out.append(it)
     return out
 
 
-def flip_layer_of(it, L):
+def flip_layer_of(it, L, bench):
     """Earliest layer after L where the logit-lens verdict departs from gold and never returns --
     used only to bound the search window for --stage selfpatch, NOT as the causal answer itself."""
-    n_layers = len(it["pcn_rules"])
-    gold_label = "CORRECT" if it["gold"] else "INCORRECT"
-    verdicts = ["CORRECT" if p >= 0.5 else "INCORRECT" for p in it["pcn_rules"]]
+    pcn = it[bench["pcn_field"]]
+    n_layers = len(pcn)
+    gold_label = bench["label_pos"] if it["gold"] else bench["label_neg"]
+    verdicts = [bench["label_pos"] if p >= 0.5 else bench["label_neg"] for p in pcn]
     last_wrong_run_start = None
     for l in range(L + 1, n_layers):
         if verdicts[l] != gold_label:
@@ -114,7 +175,8 @@ def flip_layer_of(it, L):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="openai/gpt-oss-120b")
-    ap.add_argument("--rubric", default="rules")
+    ap.add_argument("--benchmark", choices=list(BENCH), default="bff")
+    ap.add_argument("--rubric", default="rules", help="BFF-Bench only; ignored for other benchmarks")
     ap.add_argument("--stage", choices=["selfpatch", "ablate", "heads"], default="selfpatch")
     ap.add_argument("--layers", type=int, nargs="*", default=None,
                      help="restrict to these layer indices (required for --stage heads; "
@@ -134,31 +196,34 @@ def main():
 
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    from data import load_bff, load_verdicts_items, bff_key_to_uid  # noqa: E402
 
-    results_dirname = out_name(a.model, a.rubric)
+    bench = BENCH[a.benchmark]
+    results_dirname = bench["dirname_fn"](a.model, a.rubric)
     pilot_path = HERE / "logit_lens_results" / results_dirname / "pilot_results.json"
     pilot = json.loads(pilot_path.read_text())
     items_pilot = pilot["items"]
 
-    L, n_layers_logit = best_layer(items_pilot)
+    L, n_layers_logit = best_layer(items_pilot, bench["pcn_field"])
     if a.control:
         flips = [it for it in items_pilot
-                 if it["pred_rules"] == ("CORRECT" if it["gold"] else "INCORRECT")]
+                 if bench["pred_to_label"](it[bench["pred_field"]]) ==
+                 (bench["label_pos"] if it["gold"] else bench["label_neg"])]
         for it in flips:
             it["flip_layer"] = min(L + 5, n_layers_logit - 1)  # fixed window, no attribution to lean on
         if a.max_items:
             flips = flips[: a.max_items]
-        print(f"model={a.model} rubric={a.rubric} [CONTROL]: {len(flips)} already-correct items "
+        print(f"model={a.model} benchmark={a.benchmark} rubric={a.rubric} [CONTROL]: "
+              f"{len(flips)} already-correct items "
               f"(testing whether ablation BREAKS a correct answer, not whether it recovers one)",
               flush=True)
     else:
-        flips = flip_items(items_pilot, L)
+        flips = flip_items(items_pilot, L, bench)
         for it in flips:
-            it["flip_layer"] = flip_layer_of(it, L)
+            it["flip_layer"] = flip_layer_of(it, L, bench)
         if a.max_items:
             flips = flips[: a.max_items]
-        print(f"model={a.model} rubric={a.rubric}: fixed best layer={L}/{n_layers_logit - 1}, "
+        print(f"model={a.model} benchmark={a.benchmark} rubric={a.rubric}: "
+              f"fixed best layer={L}/{n_layers_logit - 1}, "
               f"{len(flips)} flip items (best-layer correct, final wrong), "
               f"attribution-based flip layers (upper bound for search, NOT the causal answer): "
               f"{[it['flip_layer'] for it in flips]}", flush=True)
@@ -172,11 +237,7 @@ def main():
         selfpatch_by_id = {r["id"]: r["causal_layer"] for r in sp["results"] if r.get("causal_layer") is not None}
         print(f"Loaded {len(selfpatch_by_id)} causal layers from {a.selfpatch_path}", flush=True)
 
-    items, _ = load_verdicts_items(None, None, "unanimous")
-    to_uid = bff_key_to_uid(load_bff(None))
-    for it in items:
-        it["uid"] = to_uid.get(it["qid"], it["qid"])
-    by_id = {it["id"]: it for it in items}
+    by_id = bench["load_items"](a.rubric)
 
     print(f"Loading {a.model} ...", flush=True)
     tok = AutoTokenizer.from_pretrained(a.model)
@@ -186,13 +247,13 @@ def main():
     n_layers = len(layers)
     print(f"Loaded. {n_layers} decoder layers, device={model.device}", flush=True)
 
-    tok_correct = tok.encode(" CORRECT", add_special_tokens=False)[0]
-    tok_incorrect = tok.encode(" INCORRECT", add_special_tokens=False)[0]
+    tok_pos = tok.encode(bench["tok_pos"], add_special_tokens=False)[0]
+    tok_neg = tok.encode(bench["tok_neg"], add_special_tokens=False)[0]
 
     def d(pcn_idx):
-        """pcn_rules/hidden_states index -> model.model.layers index. hidden_states[0] is the
-        embedding layer (no decoder layer behind it); hidden_states[i] for i>=1 is the output of
-        layers[i-1]. So decoder-layer index = pcn index - 1, valid for pcn index in [1, n_layers]."""
+        """pcn/hidden_states index -> model.model.layers index. hidden_states[0] is the embedding
+        layer (no decoder layer behind it); hidden_states[i] for i>=1 is the output of layers[i-1].
+        So decoder-layer index = pcn index - 1, valid for pcn index in [1, n_layers]."""
         return pcn_idx - 1
 
     def get_attn_meta(layer_idx):
@@ -210,15 +271,15 @@ def main():
             with torch.no_grad():
                 out = model(**inputs)
             logits = out.logits[0, -1, :]
-            pred = "CORRECT" if logits[tok_correct] > logits[tok_incorrect] else "INCORRECT"
+            pred = bench["label_pos"] if logits[tok_pos] > logits[tok_neg] else bench["label_neg"]
         finally:
             for h in handles:
                 h.remove()
         return pred
 
     # ---------- stage: selfpatch ----------
-    # capture_idx/apply_idx are pcn_rules indices (so they line up with best_layer/flip_layer as
-    # already reported); converted to decoder-layer indices via d() right at the hook boundary.
+    # capture_idx/apply_idx are pcn indices (so they line up with best_layer/flip_layer as already
+    # reported); converted to decoder-layer indices via d() right at the hook boundary.
     def hooks_selfpatch(capture_idx, apply_idx, box):
         def cap_hook(mod, inp, out):
             h = out[0] if isinstance(out, tuple) else out
@@ -235,7 +296,7 @@ def main():
 
     # ---------- stage: ablate (whole sublayer, no patched-in value) ----------
     def hooks_ablate_block(layer_idx, kind):
-        """layer_idx is a pcn_rules index, converted to decoder-layer index via d()."""
+        """layer_idx is a pcn index, converted to decoder-layer index via d()."""
         module = layers[d(layer_idx)].self_attn if kind == "attn" else layers[d(layer_idx)].mlp
 
         def hook(mod, inp, out):
@@ -248,7 +309,7 @@ def main():
 
     # ---------- stage: heads ----------
     def hooks_ablate_head(layer_idx, head_idx):
-        """layer_idx is a pcn_rules index, converted to decoder-layer index via d()."""
+        """layer_idx is a pcn index, converted to decoder-layer index via d()."""
         o_proj, _, head_dim = get_attn_meta(d(layer_idx))
 
         def prehook(mod, args):
@@ -261,17 +322,24 @@ def main():
     results = []
     for r in flips:
         it = by_id[r["id"]]
-        prompt = build_prompt(it, RUBRICS[a.rubric])
-        gold_label = "CORRECT" if r["gold"] else "INCORRECT"
+        prompt = bench["prompt_fn"](it, a.rubric)
+        gold_label = bench["label_pos"] if r["gold"] else bench["label_neg"]
+        expected_final = bench["pred_to_label"](r[bench["pred_field"]])
 
         pred_baseline = run(prompt)
-        if pred_baseline != r["pred_rules"]:
-            print(f"  [skip] {r['id']}: reproduction mismatch (got {pred_baseline}, expected {r['pred_rules']})",
+        if pred_baseline != expected_final:
+            print(f"  [skip] {r['id']}: reproduction mismatch (got {pred_baseline}, expected {expected_final})",
                   flush=True)
             continue
 
         if a.stage == "selfpatch":
-            window = list(range(L + 1, r["flip_layer"] + 1))
+            # Always scan all the way to the final layer, not just to the heuristic flip_layer:
+            # flip_layer_of() can under-shoot when an item's per-layer verdict is noisy (dips wrong
+            # then briefly flips back correct before going wrong again), which truncates the search
+            # window before the true rescue point -- undercounting the rescue rate (seen on
+            # RB2-Safety: unrescued items had a mean window of 2.8 layers vs. 6.9 for rescued ones,
+            # meaning many were simply never tested far enough).
+            window = list(range(L + 1, n_layers_logit))
             causal_layer = None
             for K in window:
                 box = {}
@@ -324,8 +392,8 @@ def main():
     if a.control:
         suffix += "_control"
     out_path = HERE / f"layer_gap_{results_dirname}_{suffix}.json"
-    out_path.write_text(json.dumps(dict(model=a.model, rubric=a.rubric, stage=a.stage, best_layer=L,
-                                         layers=a.layers, results=results), indent=2))
+    out_path.write_text(json.dumps(dict(model=a.model, benchmark=a.benchmark, rubric=a.rubric, stage=a.stage,
+                                         best_layer=L, layers=a.layers, results=results), indent=2))
     n = len(results)
     if a.stage == "selfpatch":
         n_rescued = sum(1 for r in results if r["causal_layer"] is not None)
