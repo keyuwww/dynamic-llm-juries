@@ -1,0 +1,378 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "benchmark": "judgebench",
+  "best_layer": 35,
+  "window": [
+    36
+  ],
+  "results": [
+    {
+      "id": "judgebench-claude-429ad667-0c08-5c77-9fc3-a264dfa770fe",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        60.61598205566406
+      ],
+      "mlp_proj": [
+        -14.043010711669922
+      ],
+      "total_attn_push": 60.61598205566406,
+      "total_mlp_push": -14.043010711669922
+    },
+    {
+      "id": "judgebench-claude-c1a433d6-bad7-5a75-bd5e-1e3748b57324",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        72.09748840332031
+      ],
+      "mlp_proj": [
+        -8.377684593200684
+      ],
+      "total_attn_push": 72.09748840332031,
+      "total_mlp_push": -8.377684593200684
+    },
+    {
+      "id": "judgebench-claude-7b9f3dbd-71e5-5ed0-be3f-893be2f81120",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        63.871726989746094
+      ],
+      "mlp_proj": [
+        73.01214599609375
+      ],
+      "total_attn_push": 63.871726989746094,
+      "total_mlp_push": 73.01214599609375
+    },
+    {
+      "id": "judgebench-claude-0ad4b474-6f8f-50a8-9a63-6e621e202c72",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        83.81486511230469
+      ],
+      "mlp_proj": [
+        -4.02012825012207
+      ],
+      "total_attn_push": 83.81486511230469,
+      "total_mlp_push": -4.02012825012207
+    },
+    {
+      "id": "judgebench-claude-6c214deb-96b4-5152-801c-7b296182273e",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        54.254661560058594
+      ],
+      "mlp_proj": [
+        -28.071533203125
+      ],
+      "total_attn_push": 54.254661560058594,
+      "total_mlp_push": -28.071533203125
+    },
+    {
+      "id": "judgebench-claude-3fe93ac0-3593-5d41-a7aa-58cab2fefedd",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        54.108665466308594
+      ],
+      "mlp_proj": [
+        -17.086538314819336
+      ],
+      "total_attn_push": 54.108665466308594,
+      "total_mlp_push": -17.086538314819336
+    },
+    {
+      "id": "judgebench-claude-fb010453-c9a1-513e-80d2-6e862a7ac1eb",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        69.42240905761719
+      ],
+      "mlp_proj": [
+        -24.15668487548828
+      ],
+      "total_attn_push": 69.42240905761719,
+      "total_mlp_push": -24.15668487548828
+    },
+    {
+      "id": "judgebench-claude-e28c2dde-7281-50e4-87e5-6449f18e3d79",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        51.39994812011719
+      ],
+      "mlp_proj": [
+        -38.75431823730469
+      ],
+      "total_attn_push": 51.39994812011719,
+      "total_mlp_push": -38.75431823730469
+    },
+    {
+      "id": "judgebench-claude-f01da213-7931-5c24-a8f3-c37113d1e6af",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        59.40629959106445
+      ],
+      "mlp_proj": [
+        -2.425090789794922
+      ],
+      "total_attn_push": 59.40629959106445,
+      "total_mlp_push": -2.425090789794922
+    },
+    {
+      "id": "judgebench-claude-0f60f2b6-3f29-5063-8477-5579e8b59654",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        44.91143798828125
+      ],
+      "mlp_proj": [
+        19.728076934814453
+      ],
+      "total_attn_push": 44.91143798828125,
+      "total_mlp_push": 19.728076934814453
+    },
+    {
+      "id": "judgebench-claude-99431525-4db9-5601-ba74-0fe035a74684",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        42.531982421875
+      ],
+      "mlp_proj": [
+        12.644920349121094
+      ],
+      "total_attn_push": 42.531982421875,
+      "total_mlp_push": 12.644920349121094
+    },
+    {
+      "id": "judgebench-claude-10f5a8c0-027a-5e03-aa0f-4a2138cbf846",
+      "gold": "A",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        -39.90543746948242
+      ],
+      "mlp_proj": [
+        57.12803649902344
+      ],
+      "total_attn_push": -39.90543746948242,
+      "total_mlp_push": 57.12803649902344
+    },
+    {
+      "id": "judgebench-claude-5a737f90-c602-5935-bda0-e706f40f93e0",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        33.16424560546875
+      ],
+      "mlp_proj": [
+        12.169416427612305
+      ],
+      "total_attn_push": 33.16424560546875,
+      "total_mlp_push": 12.169416427612305
+    },
+    {
+      "id": "judgebench-claude-5395119b-d8e5-52d3-a610-be760aee401a",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        66.77921295166016
+      ],
+      "mlp_proj": [
+        54.096710205078125
+      ],
+      "total_attn_push": 66.77921295166016,
+      "total_mlp_push": 54.096710205078125
+    },
+    {
+      "id": "judgebench-claude-b29e3027-00b8-5e06-8b51-aeed1a2e4bdb",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        66.93392181396484
+      ],
+      "mlp_proj": [
+        -21.777385711669922
+      ],
+      "total_attn_push": 66.93392181396484,
+      "total_mlp_push": -21.777385711669922
+    },
+    {
+      "id": "judgebench-claude-6951b5bd-276b-5eb4-adca-71ee67a0b7ee",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        72.78511047363281
+      ],
+      "mlp_proj": [
+        -0.9194364547729492
+      ],
+      "total_attn_push": 72.78511047363281,
+      "total_mlp_push": -0.9194364547729492
+    },
+    {
+      "id": "judgebench-gpt-b7bbea2c-8e83-50be-a385-70d16a0d507c",
+      "gold": "A",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        -42.427711486816406
+      ],
+      "mlp_proj": [
+        87.98193359375
+      ],
+      "total_attn_push": -42.427711486816406,
+      "total_mlp_push": 87.98193359375
+    },
+    {
+      "id": "judgebench-gpt-c6b860be-9938-5c34-97fc-70dfc51bbfb7",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        70.43057250976562
+      ],
+      "mlp_proj": [
+        -35.94325256347656
+      ],
+      "total_attn_push": 70.43057250976562,
+      "total_mlp_push": -35.94325256347656
+    },
+    {
+      "id": "judgebench-gpt-aedbe1ff-42f3-5222-85e0-1b98c5af67bb",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        57.307891845703125
+      ],
+      "mlp_proj": [
+        12.428115844726562
+      ],
+      "total_attn_push": 57.307891845703125,
+      "total_mlp_push": 12.428115844726562
+    },
+    {
+      "id": "judgebench-gpt-02c8d6ef-f58a-5bf5-8b05-0a6719e16f20",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        52.16135025024414
+      ],
+      "mlp_proj": [
+        -28.303302764892578
+      ],
+      "total_attn_push": 52.16135025024414,
+      "total_mlp_push": -28.303302764892578
+    },
+    {
+      "id": "judgebench-gpt-c9d03d78-9962-58e3-a776-703b910cde29",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        40.74673080444336
+      ],
+      "mlp_proj": [
+        5.789310455322266
+      ],
+      "total_attn_push": 40.74673080444336,
+      "total_mlp_push": 5.789310455322266
+    },
+    {
+      "id": "judgebench-gpt-97e2c15b-92c8-5934-bf37-c46fbf095930",
+      "gold": "B",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        62.428810119628906
+      ],
+      "mlp_proj": [
+        -12.251079559326172
+      ],
+      "total_attn_push": 62.428810119628906,
+      "total_mlp_push": -12.251079559326172
+    },
+    {
+      "id": "judgebench-gpt-5d50e41f-9f6b-5ba2-9e9e-43582bf89c1b",
+      "gold": "A",
+      "best_layer": 35,
+      "window": [
+        36
+      ],
+      "attn_proj": [
+        -31.715293884277344
+      ],
+      "mlp_proj": [
+        49.603782653808594
+      ],
+      "total_attn_push": -31.715293884277344,
+      "total_mlp_push": 49.603782653808594
+    }
+  ]
+}
