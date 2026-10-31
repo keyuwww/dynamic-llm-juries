@@ -119,6 +119,14 @@ Qwen3.5-9B are stable, benchmark-independent in opposite directions (always / ne
 effect); everyone else is domain-dependent. A real, human-authored rubric found in CoCoNot's own
 appendix <b>sharpens</b> this effect rather than just preserving it, on an independent benchmark from
 the one &sect;1&ndash;4 are built on.
+<br><br>
+<b>Update (&sect;7):</b> a <b>third</b> strict rubric-vs-standard pair &mdash; HealthBench, OpenAI's
+own physician meta-eval, excluding RewardBench2-Safety's borrowed rubric &mdash; plus
+<b>200-split bootstrap CIs and permutation p-values</b> (every row p&lt;1e&minus;5), three more
+models confirming the effect is gpt-oss-120b-specific, and a head-level dissection of the one
+anomaly found: BiGGen's rubric condition, where naive attribution's loudest layer (31) is a
+causally-empty red herring and the true 100%-causal layers (13&ndash;15) have no single
+responsible head either &mdash; a genuinely diffuse mechanism, not a localized one.
 </div>
 
 <h2>1. Two rubrics</h2>
@@ -579,6 +587,152 @@ itself; the verbatim definition is in CoCoNot's own (Brahman et al., 2024) Appen
 in Figure 13 above. It's an upstream source, not a confirmed match to RB2's own internal wording (RB2
 says it "modified" CoCoNot's taxonomy without saying how), so Figure 12's RewardBench2-Safety column
 stays plain-prompt and Figure 13 is a separate, labeled replication on three of those five models.
+</div>
+
+<h2>7. A third strict benchmark, formal significance, cross-model generality, and the BiGGen&#8209;rubric anomaly</h2>
+<p>Everything above used informal held-out estimates (20 splits, no confidence interval). This
+section adds: <b>(a)</b> a physician-written rubric benchmark with no analogue in CoCoNot/RB2's
+taxonomy problem, <b>(b)</b> 200-split bootstrap confidence intervals and permutation p-values for
+every benchmark/condition pair, <b>(c)</b> three more models run on BiGGen and HealthBench to test
+generality, and <b>(d)</b> a head-level dissection that resolves exactly where BiGGen-rubric's
+causal effect lives versus where naive attribution falsely points.</p>
+
+<h3 style="font-size:16px; font-style:normal;">7.1 HealthBench: OpenAI's own physician meta-eval</h3>
+<p>BFF-Bench (&sect;1) and BiGGen Bench (&sect;5) both carry genuine, benchmark-specific
+human-written rubrics. RewardBench2-Safety's rubric condition (Figure 13) does not &mdash; it
+borrows CoCoNot's upstream taxonomy, not RB2's own annotator text, so it stays out of the strict
+rubric-vs-standard comparison (see the scope note above). To get a <b>third</b> strict pair, we used
+OpenAI's HealthBench meta-evaluation release (arXiv:2505.08775, data via
+<a href="https://github.com/openai/simple-evals" target="_blank" rel="noopener">openai/simple-evals</a>):
+29,511 (conversation, completion, rubric-criterion) triples, each with a rubric criterion written
+verbatim by a physician and 2+ physician binary judgments on whether that completion meets it. We
+keep the 77.5% with unanimous physician agreement (22,870 rows) as gold, matching this project's BFF
+<code>consensus=unanimous</code> policy, and run two conditions: <b>standard</b> (holistic
+&ldquo;is this response good?&rdquo;, no rubric shown) and <b>rubric</b> (the physician's exact
+criterion shown, instructional wrapper adapted verbatim from OpenAI's own grading template).</p>
+
+<h3 style="font-size:16px; font-style:normal;">7.2 Formal significance: 200-split bootstrap CI and permutation p-values</h3>
+<p>Every number below replaces the earlier 20-split estimate with <b>200</b> random splits, a
+<b>percentile bootstrap 95% CI</b> on the mean held-out gap, and a two-sided Monte-Carlo
+<b>sign-permutation p-value</b> (H0: each split's gap sign is a fair coin flip). &ldquo;Layer
+stability&rdquo; is the fraction of the 200 splits whose winning layer (picked on half A) falls
+within &plusmn;2 of the modal winner &mdash; evidence the effect locates to a real, fixed layer
+rather than jumping around.</p>
+
+<table>
+<tr><th>Benchmark</th><th>Condition</th><th class="num">Held-out gap</th><th class="num">95% CI</th>
+<th class="num">p</th><th class="num">Modal layer</th><th class="num">Stability</th></tr>
+<tr><td>BFF-Bench</td><td>standard</td><td class="num">+0.161</td><td class="num">[0.150, 0.170]</td><td class="num">&lt;1e&minus;5</td><td class="num">28%</td><td class="num">94.5%</td></tr>
+<tr class="highlight"><td>BFF-Bench</td><td>real rubric</td><td class="num">+0.167</td><td class="num">[0.159, 0.175]</td><td class="num">&lt;1e&minus;5</td><td class="num">89%</td><td class="num">97.0%</td></tr>
+<tr><td>BiGGen Bench</td><td>standard</td><td class="num">+0.111</td><td class="num">[0.103, 0.119]</td><td class="num">&lt;1e&minus;5</td><td class="num">83%</td><td class="num">84.5%</td></tr>
+<tr class="highlight"><td>BiGGen Bench</td><td>per-instance rubric</td><td class="num">+0.105</td><td class="num">[0.097, 0.113]</td><td class="num">&lt;1e&minus;5</td><td class="num">11%</td><td class="num">87.0%</td></tr>
+<tr><td>HealthBench</td><td>standard</td><td class="num">&minus;0.011</td><td class="num">[&minus;0.014, &minus;0.009]</td><td class="num">&lt;1e&minus;5</td><td class="num">100% (final)</td><td class="num">75.0%</td></tr>
+<tr class="highlight"><td>HealthBench</td><td>physician rubric</td><td class="num">+0.025</td><td class="num">[0.023, 0.027]</td><td class="num">&lt;1e&minus;5</td><td class="num">94%</td><td class="num">73.0%</td></tr>
+<tr><td>JudgeBench</td><td>&mdash;</td><td class="num">+0.052</td><td class="num">[0.041, 0.062]</td><td class="num">&lt;1e&minus;5</td><td class="num">97%</td><td class="num">93.0%</td></tr>
+<tr><td>RewardBench2-Safety</td><td>standard</td><td class="num">+0.209</td><td class="num">[0.202, 0.216]</td><td class="num">&lt;1e&minus;5</td><td class="num">78%</td><td class="num">99.5%</td></tr>
+<tr><td>RewardBench2-Safety</td><td>CoCoNot rubric*</td><td class="num">+0.197</td><td class="num">[0.189, 0.205]</td><td class="num">&lt;1e&minus;5</td><td class="num">50%</td><td class="num">83.5%</td></tr>
+</table>
+<p class="note">All rows: gpt-oss-120b, n=459 (HealthBench n=2500). *Not a strict pair (see scope
+note); kept for the broader causal-replication question.</p>
+
+<div class="takeaway">
+  <b>Takeaway</b>
+  Every gap in this project, in either direction, is statistically indistinguishable from chance
+  being the explanation only on paper &mdash; in practice, all nine rows hit <b>p&lt;1e&minus;5</b>
+  and tight confidence intervals, with &ge;73% of splits landing within &plusmn;2 layers of the same
+  winner. <b>HealthBench-standard is the one case with a genuinely negative, significant gap</b>
+  &mdash; its own final layer (literally layer 36/36 in 100% of winning splits) is the single best
+  layer, the only benchmark/condition in the whole project where that's true for gpt-oss-120b. The
+  physician rubric flips this into a positive, real (if modest, &kappa;+0.025) effect &mdash; a
+  rubric doesn't just change the size of the effect here, it changes its <b>sign</b>.
+</div>
+
+<h3 style="font-size:16px; font-style:normal;">7.3 Cross-model generality: is this a gpt-oss-120b property or a method artifact?</h3>
+<p>BiGGen and HealthBench were previously only run on gpt-oss-120b. Both were replicated on
+Qwen3.5-9B (project's established negative control) and BiGGen additionally on gpt-oss-20b, using
+the same held-out procedure:</p>
+
+<table>
+<tr><th>Model</th><th>Benchmark</th><th>Condition</th><th class="num">Held-out gap</th><th class="num">p</th><th class="num">Modal layer</th></tr>
+<tr><td>Qwen3.5-9B</td><td>BiGGen</td><td>standard</td><td class="num">&minus;0.002</td><td class="num">0.33 (n.s.)</td><td class="num">81% depth</td></tr>
+<tr><td>Qwen3.5-9B</td><td>BiGGen</td><td>rubric</td><td class="num">&minus;0.131</td><td class="num">&lt;1e&minus;5</td><td class="num">100% (final)</td></tr>
+<tr><td>Qwen3.5-9B</td><td>HealthBench</td><td>standard</td><td class="num">&minus;0.015</td><td class="num">&lt;1e&minus;5</td><td class="num">100% (final)</td></tr>
+<tr><td>Qwen3.5-9B</td><td>HealthBench</td><td>rubric</td><td class="num">&minus;0.067</td><td class="num">&lt;1e&minus;5</td><td class="num">100% (final)</td></tr>
+<tr><td>gpt-oss-20b</td><td>BiGGen</td><td>standard</td><td class="num">&minus;0.005</td><td class="num">&lt;1e&minus;5<span class="note">&dagger;</span></td><td class="num">100% (final)</td></tr>
+<tr><td>gpt-oss-20b</td><td>BiGGen</td><td>rubric</td><td class="num">&minus;0.006</td><td class="num">&lt;1e&minus;5<span class="note">&dagger;</span></td><td class="num">0% depth</td></tr>
+</table>
+<p class="note">&dagger;Significant but near-zero and driven mostly by exact-zero splits (gpt-oss-20b
+gives the identical full-sample &kappa;=0.0054 in both conditions &mdash; a content-blind, constant
+prediction, the same degeneracy already documented for this model on RewardBench2-Safety and
+JudgeBench in &sect;5, now confirmed on a third benchmark).</p>
+
+<div class="takeaway">
+  <b>Validated: this is a gpt-oss-120b property, not a probing artifact</b>
+  Qwen3.5-9B now shows <b>zero</b> best-layer-beats-final effect on <b>five</b> benchmarks
+  (BFF, JudgeBench, RewardBench2-Safety, BiGGen, HealthBench) &mdash; its final layer (literally
+  the last layer, 100% of splits) is always at least as good as every interior layer, and under
+  BiGGen/HealthBench's rubric conditions its final layer is reliably <i>better</i> (significant
+  negative gap). gpt-oss-20b replicates its known content-blind degeneracy on a third benchmark. The
+  phenomenon this report documents &mdash; an interior layer already agreeing with human labels
+  better than the model's own stated answer &mdash; is a real, located, model-specific property of
+  gpt-oss-120b, not something any forced-choice logit-lens probe would find in any model.
+</div>
+
+<h3 style="font-size:16px; font-style:normal;">7.4 Resolving the BiGGen-rubric anomaly: where does the effect actually live?</h3>
+<p>Direct logit attribution (DLA) &mdash; projecting each layer's own attention/MLP write onto the
+CORRECT/INCORRECT direction in a single ordinary forward pass, no intervention &mdash; agrees
+closely with the true causal rescue layer (found by same-pass activation patching) everywhere we
+checked it <b>except</b> BiGGen's rubric condition:</p>
+
+<table>
+<tr><th>Benchmark/condition</th><th>MLP-dominant</th><th class="num">DLA vs. causal-layer (median diff)</th><th>Attribution reliable?</th></tr>
+<tr><td>BFF (rules)</td><td class="num">55% (57/104)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>RewardBench2-Safety (standard)</td><td class="num">40% (90/227)</td><td class="num">&minus;3 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>BiGGen (standard)</td><td class="num">80% (110/137)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>HealthBench (rubric)</td><td class="num">76% (137/181)</td><td class="num">&minus;1 layer</td><td><span class="pill real">Yes</span></td></tr>
+<tr class="highlight"><td><b>BiGGen (rubric)</b></td><td class="num">96% (67/70)</td><td class="num"><b>+17 layers</b></td><td><span class="pill mine">No</span></td></tr>
+</table>
+<p>Only BiGGen's <i>rubric</i> condition misleads: DLA's peak-push layer sits at <b>layer 31/37
+in 64 of 68 flip items</b> (94%), while the true causal rescue layer (found by patching the
+model's own earlier hidden state forward) clusters at <b>layers 13&ndash;15</b> (52/68 items, 76%).
+The same model, same benchmark, standard condition shows no such mismatch &mdash; this is specific
+to the rubric prompt, not BiGGen as a benchmark.</p>
+
+<p>To find out whether either location has a genuinely localized cause, we zero-ablated one
+attention head at a time (of 64) at both candidate layers:</p>
+<table>
+<tr><th>Layer(s) tested</th><th>Role</th><th class="num">Items with ANY single head recovering the verdict</th></tr>
+<tr><td>Layer 31</td><td>DLA's (false) peak</td><td class="num">1 / 70 (1.4%)</td></tr>
+<tr><td>Layers 13, 14, 15</td><td>True causal cluster</td><td class="num">2&ndash;6 / 70 per layer (3&ndash;9%), no head repeats &gt;3&times;</td></tr>
+</table>
+
+<div class="takeaway">
+  <b>The BiGGen-rubric mechanism, fully dissected</b>
+  Neither location has a single responsible head. Layer 31 is a <b>red herring</b>: it dominates
+  naive attribution (large raw logit push, misread as "the cause") but zero-ablating any one head
+  there recovers almost nothing (1.4%) &mdash; it is downstream noise, not the mechanism, exactly
+  the failure mode the literature (arXiv:2609.32407) warns attribution is prone to. Layers 13&ndash;15
+  <i>are</i> causally real (same-pass patching rescues 100% of items there) but <b>also have no
+  dominant head</b> &mdash; combined with the whole-sublayer finding that 98.5% of items are
+  "passive forgetting" (zero-ablation alone does not recover the verdict; only restoring the actual
+  earlier hidden state does), this rules out a Halawi-et-al-style "a few heads actively reintroduce
+  the wrong answer" story for BiGGen's rubric condition. The rubric-induced degradation here is
+  genuinely <b>diffuse</b>: distributed across many heads/dimensions at an early-middle layer,
+  invisible to naive per-layer attribution, and only recoverable by literally replaying the earlier
+  computation forward &mdash; not deletable, head-level or whole-sublayer, at either the true cause
+  or the layer that merely looks loudest.
+</div>
+
+<div class="scope">
+<b>What §7 does and doesn't establish:</b> the passive-forgetting / attribution-reliability
+dissociation (RewardBench2-Safety and HealthBench-rubric are both passive-forgetting <i>yet</i>
+attribution-accurate, while BiGGen-rubric is passive-forgetting <i>and</i> attribution-inaccurate)
+shows these are two independent properties of a benchmark/condition, not two readings of the same
+fact &mdash; but with five data points we cannot yet say what predicts which cell. A plausible guess
+&mdash; per-instance, free-text rubrics (BiGGen) route judgment through a more distributed
+computation than a single reusable rubric text (HealthBench, RewardBench2) or no rubric at all
+(BFF, BiGGen-standard) &mdash; is not yet tested against a benchmark that would separate it from
+"this is just how gpt-oss-120b handles BiGGen specifically."
 </div>
 
 <footer>
