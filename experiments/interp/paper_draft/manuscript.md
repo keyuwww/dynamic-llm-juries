@@ -261,17 +261,25 @@ BiGGen's capability categories even though *flip frequency* varies sharply by ca
 
 | Benchmark/condition | MLP-dominant items | Median (DLA peak − causal layer) | Attribution reliable? |
 |---|---|---|---|
-| BFF (rules) | 55% (57/104) | 0.0 | Yes |
+| JudgeBench (no rubric) | 17% (4/23) — the only attn-dominant case | 0.0 | Yes |
 | RewardBench2-Safety (standard) | 40% (90/227) | -3 | Yes |
+| BFF (rules) | 55% (57/104) | 0.0 | Yes |
 | BiGGen (standard) | 80% (110/137) | 0.0 | Yes |
 | HealthBench (rubric) | 76% (137/181) | -1 | Yes |
-| **BiGGen (rubric)** | 96% (67/70) | **+17** | **No** |
+| **RewardBench2-Safety (CoCoNot rubric)** | **95% (232/245)** | **+12** | **No** |
+| **BiGGen (rubric)** | **96% (67/70)** | **+17** | **No** |
 
-Only BiGGen's rubric condition shows a large, systematic mislocalization: DLA's peak-push layer
+Two of seven benchmark/condition pairs show large, systematic mislocalization, and both are the
+only two with >90% MLP dominance — a cleaner correlate than our initial working hypothesis that
+mislocalization tracked *per-instance* rubrics specifically (that hypothesis is now rejected:
+HealthBench's rubric is also per-item, yet stays accurate, while RewardBench2-Safety's rubric is
+a single reused text, yet mislocalizes). For BiGGen's rubric condition, DLA's peak-push layer
 sits at layer 31/37 in 64 of 68 flip items (94%), while the true causal rescue layer (via
-patching) clusters at layers 13-15 (52/68 items, 76%). The same model and benchmark under the
-standard (no-rubric) condition shows no such mismatch — the anomaly is specific to the rubric
-prompt.
+patching) clusters at layers 13-15 (52/68 items, 76%); the same model and benchmark under the
+standard (no-rubric) condition shows no such mismatch. The working hypothesis going forward is
+that attribution becomes unreliable specifically when one write type's contribution becomes
+extreme (>90% dominant) rather than merely dominant — a hypothesis that could be tested directly
+by intervening on MLP-dominance itself rather than only observing it across benchmarks.
 
 ## 5.5 Head-level dissection: neither candidate layer has a single responsible head
 
@@ -305,13 +313,17 @@ benchmark- and model-specific and would need held-out calibration before any dep
 
 The dissociation between "active override vs. passive forgetting" (an ablation property) and
 "is naive attribution a reliable localizer" (a DLA property) is, to our knowledge, a novel
-observation: these are not two readings of the same underlying fact. RewardBench2-Safety and
-HealthBench-rubric are both passive-forgetting *and* attribution-accurate; BiGGen-rubric is
-passive-forgetting *and* attribution-inaccurate. A rubric that is reusable across many items
-(HealthBench, RewardBench2) appears to leave attribution reliable even when the underlying
-mechanism is diffuse, while BiGGen's *per-instance* rubric — a different text for every item —
-is the one condition where attribution actively misleads. This is a testable hypothesis, not yet
-confirmed, since our evidence covers only five benchmark/condition combinations.
+observation: these are not two readings of the same underlying fact. RewardBench2-Safety-standard
+and HealthBench-rubric are both passive-forgetting (89%, 89.5%) *and* attribution-accurate, while
+BiGGen-rubric and RewardBench2-Safety-rubric are both passive-forgetting (98.5%, 89%) *and*
+attribution-inaccurate — passive-forgetting strength alone does not separate the two groups
+(89% appears on both sides). What does separate them cleanly, across all seven combinations
+tested, is MLP dominance crossing roughly 90%: both inaccurate cases exceed it (95-96%), all five
+accurate cases fall well short (17-80%). We note this correlation is drawn from only seven points
+and favor it only because an earlier, more specific guess (mislocalization tracks *per-instance*
+rubrics) was directly falsified by adding the RewardBench2-Safety-rubric data point — a reused,
+not per-instance, rubric that nonetheless mislocalizes. Both observations should be read as
+hypothesis-generating, not confirmed.
 
 # 7. Limitations and future work
 
@@ -323,8 +335,11 @@ confirmed, since our evidence covers only five benchmark/condition combinations.
 - The per-instance-rubric-vs-reusable-rubric hypothesis in Section 6 is drawn from a single
   within-model, within-benchmark comparison (BiGGen vs. HealthBench/RewardBench2) and needs a
   benchmark that varies this factor while holding domain and format fixed to be properly tested.
-- JudgeBench and BFF-standard were not run through direct logit attribution; Table 3 would
-  benefit from their inclusion for a fully complete picture.
+- BFF-standard (as opposed to BFF's rubric condition) was not run through direct logit
+  attribution; Table 3 would benefit from its inclusion for a fully complete picture.
+- The ">90% MLP dominance predicts attribution unreliability" correlation (Section 5.4) is drawn
+  from two positive and five negative examples; it has not been tested by directly intervening on
+  MLP dominance, only observed across benchmarks that differ in many other ways simultaneously.
 - The DLA approximation treats RMSNorm's denominator as a near-constant scalar, a standard but
   imperfect linearization; it is used here only to rank and localize contributions, not to
   reconstruct exact logit values.

@@ -686,17 +686,23 @@ checked it <b>except</b> BiGGen's rubric condition:</p>
 
 <table>
 <tr><th>Benchmark/condition</th><th>MLP-dominant</th><th class="num">DLA vs. causal-layer (median diff)</th><th>Attribution reliable?</th></tr>
-<tr><td>BFF (rules)</td><td class="num">55% (57/104)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>JudgeBench (no rubric)</td><td class="num">17% (4/23) &mdash; only attn-dominant case</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
 <tr><td>RewardBench2-Safety (standard)</td><td class="num">40% (90/227)</td><td class="num">&minus;3 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>BFF (rules)</td><td class="num">55% (57/104)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
 <tr><td>BiGGen (standard)</td><td class="num">80% (110/137)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
 <tr><td>HealthBench (rubric)</td><td class="num">76% (137/181)</td><td class="num">&minus;1 layer</td><td><span class="pill real">Yes</span></td></tr>
-<tr class="highlight"><td><b>BiGGen (rubric)</b></td><td class="num">96% (67/70)</td><td class="num"><b>+17 layers</b></td><td><span class="pill mine">No</span></td></tr>
+<tr class="highlight"><td><b>RewardBench2-Safety (CoCoNot rubric)</b></td><td class="num"><b>95% (232/245)</b></td><td class="num"><b>+12 layers</b></td><td><span class="pill mine">No</span></td></tr>
+<tr class="highlight"><td><b>BiGGen (rubric)</b></td><td class="num"><b>96% (67/70)</b></td><td class="num"><b>+17 layers</b></td><td><span class="pill mine">No</span></td></tr>
 </table>
-<p>Only BiGGen's <i>rubric</i> condition misleads: DLA's peak-push layer sits at <b>layer 31/37
-in 64 of 68 flip items</b> (94%), while the true causal rescue layer (found by patching the
-model's own earlier hidden state forward) clusters at <b>layers 13&ndash;15</b> (52/68 items, 76%).
-The same model, same benchmark, standard condition shows no such mismatch &mdash; this is specific
-to the rubric prompt, not BiGGen as a benchmark.</p>
+<p>Two of seven cases mislead: BiGGen's <i>rubric</i> condition (DLA's peak-push layer sits at
+<b>layer 31/37 in 64 of 68 flip items</b>, 94%, while the true causal rescue layer clusters at
+<b>layers 13&ndash;15</b>, 52/68 items, 76%) and, newly found, RewardBench2-Safety's CoCoNot
+rubric condition (+12 layers). The same models/benchmarks under their standard (no-rubric)
+conditions show no such mismatch. Both mislocalizing cases are also the <b>only two with
+&gt;90% MLP dominance</b> &mdash; a cleaner correlate than our original working hypothesis
+(mislocalization tracks <i>per-instance</i> rubrics specifically), which this same data point
+disproves: RewardBench2-Safety's rubric is a single reused text, not per-instance, yet still
+mislocalizes, while HealthBench's genuinely per-instance rubric stays accurate.</p>
 
 <p>To find out whether either location has a genuinely localized cause, we zero-ablated one
 attention head at a time (of 64) at both candidate layers:</p>
@@ -725,14 +731,17 @@ attention head at a time (of 64) at both candidate layers:</p>
 
 <div class="scope">
 <b>What §7 does and doesn't establish:</b> the passive-forgetting / attribution-reliability
-dissociation (RewardBench2-Safety and HealthBench-rubric are both passive-forgetting <i>yet</i>
-attribution-accurate, while BiGGen-rubric is passive-forgetting <i>and</i> attribution-inaccurate)
-shows these are two independent properties of a benchmark/condition, not two readings of the same
-fact &mdash; but with five data points we cannot yet say what predicts which cell. A plausible guess
-&mdash; per-instance, free-text rubrics (BiGGen) route judgment through a more distributed
-computation than a single reusable rubric text (HealthBench, RewardBench2) or no rubric at all
-(BFF, BiGGen-standard) &mdash; is not yet tested against a benchmark that would separate it from
-"this is just how gpt-oss-120b handles BiGGen specifically."
+dissociation (RewardBench2-Safety-standard and HealthBench-rubric are both passive-forgetting
+<i>yet</i> attribution-accurate, while BiGGen-rubric and RewardBench2-Safety-rubric are both
+passive-forgetting <i>and</i> attribution-inaccurate &mdash; 89% passive-forgetting shows up on
+<i>both</i> sides) shows these are two independent properties of a benchmark/condition, not two
+readings of the same fact. Our first guess at what predicts attribution-inaccuracy &mdash;
+per-instance, free-text rubrics route judgment through a more distributed computation than a
+reusable rubric text &mdash; was directly falsified once we ran RewardBench2-Safety's (reused,
+not per-instance) rubric through DLA and found it also mislocalizes. The revised correlate
+(&gt;90% MLP dominance, &sect;7.4) fits all seven points but is drawn from only seven points and
+has not been tested by intervening on MLP dominance directly, only observed across benchmarks
+that differ in many other ways at once.
 </div>
 
 <footer>
