@@ -441,6 +441,54 @@ def healthbench_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b"):
 
 
 @app.local_entrypoint()
+def biggen_any_spawn(limit: int = 459, model: str = "Qwen/Qwen3.5-9B", big: bool = False):
+    """Cross-model replication: run BiGGen pilot on any model, A10G (small) or H100:2 (big)."""
+    fn = run_biggen_big if big else run_biggen
+    call = fn.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def biggen_any_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def healthbench_any_spawn(limit: int = 2500, model: str = "Qwen/Qwen3.5-9B", big: bool = False):
+    """Cross-model replication: run HealthBench pilot on any model, A10G (small) or H100:2 (big)."""
+    fn = run_healthbench_big if big else run_healthbench
+    call = fn.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def healthbench_any_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
 def healthbench_big_wait(call_id: str, timeout: int = 7200):
     from modal.functions import FunctionCall
     call = FunctionCall.from_id(call_id)
