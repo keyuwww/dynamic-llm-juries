@@ -1,0 +1,70 @@
+{
+  "rows": {
+    "JudgeBench": {
+      "best_layer": 35,
+      "n_dla": 23,
+      "n_joined": 23,
+      "mlp_dominant_pct": 17.4,
+      "median_diff": 0
+    },
+    "RewardBench2-Safety (standard)": {
+      "best_layer": 28,
+      "n_dla": 227,
+      "n_joined": 227,
+      "mlp_dominant_pct": 39.6,
+      "median_diff": -3
+    },
+    "RewardBench2-Safety (CoCoNot rubric)": {
+      "best_layer": 18,
+      "n_dla": 245,
+      "n_joined": 245,
+      "mlp_dominant_pct": 94.7,
+      "median_diff": 12
+    },
+    "HealthBench (rubric)": {
+      "best_layer": 34,
+      "n_dla": 181,
+      "n_joined": 181,
+      "mlp_dominant_pct": 75.7,
+      "median_diff": -1
+    },
+    "BFF (rules)": {
+      "best_layer": 31,
+      "n_dla": 104,
+      "n_joined": 101,
+      "mlp_dominant_pct": 54.8,
+      "median_diff": 1
+    },
+    "BFF (standard)": {
+      "best_layer": 10,
+      "n_dla": 93,
+      "n_joined": 93,
+      "mlp_dominant_pct": 22.6,
+      "median_diff": 21
+    },
+    "BiGGen (rubric)": {
+      "best_layer": 4,
+      "n_dla": 70,
+      "n_joined": 68,
+      "mlp_dominant_pct": 95.7,
+      "median_diff": 17
+    },
+    "BiGGen (standard)": {
+      "best_layer": 30,
+      "n_dla": 137,
+      "n_joined": 137,
+      "mlp_dominant_pct": 80.3,
+      "median_diff": 0
+    }
+  },
+  "pearson_L_vs_diff": {
+    "r": -0.9308397577924169,
+    "r2": 0.8664626546870453,
+    "slope": -0.7438384897745149,
+    "intercept": 23.54116413214473
+  },
+  "pearson_mlp_vs_diff": {
+    "r": 0.1344735532379862,
+    "r2": 0.018083136520449513
+  }
+}
