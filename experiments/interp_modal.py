@@ -173,7 +173,7 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
     out_name = model.split("/")[-1].lower()
     if benchmark in ("bff", "bff_standard"):
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
-        dirname_for_output = results_dirname
+        dirname_for_output = results_dirname if benchmark == "bff" else f"{results_dirname}_standard"
     elif benchmark.startswith("biggen") or benchmark.startswith("healthbench"):
         prefix = benchmark.split("_", 1)[0]
         results_dirname = f"{prefix}_{out_name}"
