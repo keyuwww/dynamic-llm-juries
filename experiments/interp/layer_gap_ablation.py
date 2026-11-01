@@ -453,11 +453,13 @@ def main():
               "heads": f"heads_L{'-'.join(map(str, a.layers or []))}"}[a.stage]
     if a.control:
         suffix += "_control"
-    # biggen_standard and biggen_rubric share one pilot-results dirname, so disambiguate the output
-    # filename by the condition too, or the two conditions' results would overwrite each other.
+    # biggen_standard/biggen_rubric (and bff/bff_standard) share one pilot-results dirname, so
+    # disambiguate the output filename by the condition too, or they'd overwrite each other.
     dirname_for_output = results_dirname
     if a.benchmark.startswith("biggen") or a.benchmark.startswith("healthbench"):
         dirname_for_output = f"{results_dirname}_{a.benchmark.split('_', 1)[1]}"
+    elif a.benchmark == "bff_standard":
+        dirname_for_output = f"{results_dirname}_standard"
     out_path = HERE / f"layer_gap_{dirname_for_output}_{suffix}.json"
     out_path.write_text(json.dumps(dict(model=a.model, benchmark=a.benchmark, rubric=a.rubric, stage=a.stage,
                                          best_layer=L, layers=a.layers, results=results), indent=2))
