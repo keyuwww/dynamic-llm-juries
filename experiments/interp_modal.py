@@ -171,7 +171,7 @@ def _run_layer_gap_impl(model, rubric, stage, layers, selfpatch_filename, max_it
     print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
     subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
     out_name = model.split("/")[-1].lower()
-    if benchmark == "bff":
+    if benchmark in ("bff", "bff_standard"):
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
         dirname_for_output = results_dirname
     elif benchmark.startswith("biggen") or benchmark.startswith("healthbench"):
@@ -638,7 +638,7 @@ def _run_logit_attribution_impl(model, benchmark, rubric, max_items):
     print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
     subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
     out_name = model.split("/")[-1].lower()
-    if benchmark == "bff":
+    if benchmark in ("bff", "bff_standard"):
         results_dirname = out_name if rubric == "rules" else f"{out_name}_{rubric}"
     elif benchmark.startswith("biggen") or benchmark.startswith("healthbench"):
         results_dirname = f"{benchmark.split('_', 1)[0]}_{out_name}"

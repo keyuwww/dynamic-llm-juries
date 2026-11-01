@@ -63,7 +63,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "tinker_pool"))
 sys.path.insert(0, str(HERE.parent / "jev_bff"))
 
-from logit_lens_pilot import RUBRICS, build_prompt as bff_build_prompt  # noqa: E402
+from logit_lens_pilot import RUBRICS, STANDARD_INSTR, build_prompt as bff_build_prompt  # noqa: E402
 from layer_vs_human_judgebench import JUDGEBENCH_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety import SAFETY_PROMPT  # noqa: E402
 from layer_vs_human_rb2safety_rubric import SAFETY_PROMPT_RUBRIC, COCONOT_RUBRIC  # noqa: E402
@@ -122,6 +122,14 @@ BENCH = {
         tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
         pred_to_label=lambda v: v,
         prompt_fn=lambda it, rubric: bff_build_prompt(it, RUBRICS[rubric]),
+        load_items=_load_bff_items,
+        dirname_fn=_bff_dirname,
+    ),
+    "bff_standard": dict(
+        pcn_field="pcn_standard", pred_field="pred_standard",
+        tok_pos=" CORRECT", tok_neg=" INCORRECT", label_pos="CORRECT", label_neg="INCORRECT",
+        pred_to_label=lambda v: v,
+        prompt_fn=lambda it, rubric: bff_build_prompt(it, STANDARD_INSTR),
         load_items=_load_bff_items,
         dirname_fn=_bff_dirname,
     ),
