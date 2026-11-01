@@ -1,0 +1,1498 @@
+{
+  "model": "openai/gpt-oss-120b",
+  "benchmark": "bff_standard",
+  "rubric": "rules",
+  "stage": "ablate",
+  "best_layer": 10,
+  "layers": null,
+  "results": [
+    {
+      "id": "10300984-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "12fbe2bf-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "5ff3efe5-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "69323a73-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "d500ec12-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "4939ad4f-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 20,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "79b77eaa-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 14,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "8aa3761f-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "9eb5a204-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 20,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "31c3401c-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "3b12a79f-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "0e0aee60-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "08d8cfea-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "52e075bd-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "d13a84b6-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "0ad20bb6-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "6144bdde-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "ae803d31-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "b1d99363-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "e9015bd9-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "dec4da12-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "0a97bc2a-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "d2ae46a3-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "67838a67-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "28660897-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "4e810d28-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "a4d2a014-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "d9f891fc-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "f24c40de-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "fa5a1ff0-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "114094c2-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "3d027c89-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "2baad0c8-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "eb08f8d3-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 21,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "3477bdf6-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "6090113b-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "405fa423-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "4193fdc7-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "b18ed1d9-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "ed92ec25-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "465df3a2-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "4af225fc-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "39644c2e-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 15,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "5909d8bd-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "7c0b4f2c-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 21,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "c76eacd6-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "7089867d-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "cbc193b0-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "35820020-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "805e7d58-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "c9062f23-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "395c579b-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "15e1b16a-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "39c8054c-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "91b23663-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "60e5a328-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "86ce40fe-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "a087c43d-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "8d890a60-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "4c5b7945-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "b21b5cff-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "b3e5a55f-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "ec75ac4f-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "cacfb5ff-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 14,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "cd58a7fb-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "9e06866d-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "00096870-t1",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "11ae84ec-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "87162a6e-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "55078a96-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "8f3fe195-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "8233ee59-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "ac9a8a02-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "ba67c79e-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "e7fa23e1-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "fff64c48-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 16,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "d070759a-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "21f8cab1-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "c0aad936-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 15,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "02da7cbd-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "60366070-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "1805ebb2-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "2abb12a1-t2",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "3449e3bf-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "7a298808-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "04967199-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "1ea1d51f-t1",
+      "gold": "CORRECT",
+      "pred_baseline": "INCORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "5d8996a5-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 13,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "66275226-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "fc80f4e3-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "726a4f20-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "CORRECT",
+          "recovered": false
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    },
+    {
+      "id": "f13898d1-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 12,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "INCORRECT",
+          "recovered": true
+        }
+      }
+    },
+    {
+      "id": "fa75da42-t2",
+      "gold": "INCORRECT",
+      "pred_baseline": "CORRECT",
+      "causal_layer": 11,
+      "ablations": {
+        "attn": {
+          "pred": "INCORRECT",
+          "recovered": true
+        },
+        "mlp": {
+          "pred": "CORRECT",
+          "recovered": false
+        }
+      }
+    }
+  ]
+}
