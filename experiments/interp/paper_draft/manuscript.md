@@ -257,29 +257,41 @@ the incorrect verdict (ratio 1.4-3.8x), and this dominance is uniform across all
 BiGGen's capability categories even though *flip frequency* varies sharply by category
 (reasoning/tool-use/refinement: 23-26% of items flip; safety: 1.8%; instruction-following: 5%).
 
-**Table 3. DLA peak-push layer vs. true causal layer.**
+**Table 3. DLA peak-push layer vs. true causal layer, across all eight pairs run.**
 
-| Benchmark/condition | MLP-dominant items | Median (DLA peak − causal layer) | Attribution reliable? |
-|---|---|---|---|
-| JudgeBench (no rubric) | 17% (4/23) — the only attn-dominant case | 0.0 | Yes |
-| RewardBench2-Safety (standard) | 40% (90/227) | -3 | Yes |
-| BFF (rules) | 55% (57/104) | 0.0 | Yes |
-| BiGGen (standard) | 80% (110/137) | 0.0 | Yes |
-| HealthBench (rubric) | 76% (137/181) | -1 | Yes |
-| **RewardBench2-Safety (CoCoNot rubric)** | **95% (232/245)** | **+12** | **No** |
-| **BiGGen (rubric)** | **96% (67/70)** | **+17** | **No** |
+| Benchmark/condition | Best layer L (of 37) | MLP-dominant items | Median (DLA peak − causal layer) | Attribution reliable? |
+|---|---|---|---|---|
+| JudgeBench (no rubric) | 35 | 17% | 0 | Yes |
+| HealthBench (rubric) | 34 | 76% | -1 | Yes |
+| BFF (rules) | 31 | 55% | +1 | Yes |
+| BiGGen (standard) | 30 | 80% | 0 | Yes |
+| RewardBench2-Safety (standard) | 28 | 40% | -3 | Yes |
+| **RewardBench2-Safety (CoCoNot rubric)** | **18** | **95%** | **+12** | **No** |
+| **BFF (standard)** | **10** | **23%** | **+21** | **No** |
+| **BiGGen (rubric)** | **4** | **96%** | **+17** | **No** |
 
-Two of seven benchmark/condition pairs show large, systematic mislocalization, and both are the
-only two with >90% MLP dominance — a cleaner correlate than our initial working hypothesis that
-mislocalization tracked *per-instance* rubrics specifically (that hypothesis is now rejected:
-HealthBench's rubric is also per-item, yet stays accurate, while RewardBench2-Safety's rubric is
-a single reused text, yet mislocalizes). For BiGGen's rubric condition, DLA's peak-push layer
-sits at layer 31/37 in 64 of 68 flip items (94%), while the true causal rescue layer (via
-patching) clusters at layers 13-15 (52/68 items, 76%); the same model and benchmark under the
-standard (no-rubric) condition shows no such mismatch. The working hypothesis going forward is
-that attribution becomes unreliable specifically when one write type's contribution becomes
-extreme (>90% dominant) rather than merely dominant — a hypothesis that could be tested directly
-by intervening on MLP-dominance itself rather than only observing it across benchmarks.
+This table went through two working hypotheses before this one. The first (Section 6)
+was that mislocalization tracks *per-instance* rubrics specifically; it was rejected once
+RewardBench2-Safety's reused, non-per-instance CoCoNot rubric also mislocalized. The second
+was that mislocalization tracks >90% MLP dominance — true of both mislocalizing cases known at
+the time, with all five accurate cases below 80%. Adding the eighth pair, BFF's standard
+(no-rubric) condition, rejected this too: BFF-standard is only 23% MLP-dominant (mostly
+attn-dominant, the *opposite* of the signature) yet mislocalizes worse than anything else in the
+project (median +21 layers). Across all eight pairs, MLP-dominance and attribution error are
+essentially uncorrelated (Pearson r=0.13, R²=0.02).
+
+What predicts it instead is **how early the true best layer L is**: r(L, median diff)=-0.93,
+R²=0.87. DLA's own peak-push layer clusters in a narrow, nearly fixed late band (30-36 of 37)
+regardless of benchmark — including BFF-standard (70/93 flip items peak at layer 32) and
+BiGGen-rubric (64/68 at layer 31) — while the true causal layer tracks L itself (BFF-standard's
+causal layer clusters at 11-13, just after its L=10; BiGGen-rubric's at 13-15, just after its
+L=4). When L is already late (L≥28 here), DLA's fixed late-band bias happens to land near the
+true cause and attribution looks reliable; when L is early, the same bias overshoots by however
+far L is from that band. This reads as a genuine DLA artifact — raw per-layer writes project more
+strongly onto the readout direction merely by being closer to the final unembedding, independent
+of which layer's computation is actually causally responsible — now pinned to a concrete,
+falsifiable predictor (L) rather than a mechanism-type guess that didn't survive an eighth data
+point.
 
 ## 5.5 Head-level dissection: neither candidate layer has a single responsible head
 
@@ -316,14 +328,18 @@ The dissociation between "active override vs. passive forgetting" (an ablation p
 observation: these are not two readings of the same underlying fact. RewardBench2-Safety-standard
 and HealthBench-rubric are both passive-forgetting (89%, 89.5%) *and* attribution-accurate, while
 BiGGen-rubric and RewardBench2-Safety-rubric are both passive-forgetting (98.5%, 89%) *and*
-attribution-inaccurate — passive-forgetting strength alone does not separate the two groups
-(89% appears on both sides). What does separate them cleanly, across all seven combinations
-tested, is MLP dominance crossing roughly 90%: both inaccurate cases exceed it (95-96%), all five
-accurate cases fall well short (17-80%). We note this correlation is drawn from only seven points
-and favor it only because an earlier, more specific guess (mislocalization tracks *per-instance*
-rubrics) was directly falsified by adding the RewardBench2-Safety-rubric data point — a reused,
-not per-instance, rubric that nonetheless mislocalizes. Both observations should be read as
-hypothesis-generating, not confirmed.
+attribution-inaccurate, and BFF-standard (mostly active-override, 75%) is *also*
+attribution-inaccurate — confirming the two axes are genuinely orthogonal rather than a
+coincidence of the first seven points. What actually predicts attribution-inaccuracy went through
+two rejected guesses before the current one (Section 5.4): *per-instance rubrics* (falsified by
+RewardBench2-Safety's reused CoCoNot rubric mislocalizing), then *>90% MLP dominance* (falsified
+by BFF-standard mislocalizing worst of all at only 23% MLP-dominant). The current best-supported
+predictor — how early the true best layer L sits (r=-0.93, R²=0.87 across all eight pairs) — is a
+depth artifact of DLA itself, not a property of the benchmark's rubric or mechanism type. We
+report this trajectory explicitly, including the two rejected hypotheses, because each one looked
+well-supported on five-to-seven points and broke on the next; the current account should be read
+as hypothesis-generating, not confirmed, and we would not be surprised if a ninth pair breaks it
+too.
 
 # 7. Limitations and future work
 
@@ -332,14 +348,13 @@ hypothesis-generating, not confirmed.
   correlational effect is model-specific, but we have not run the causal/mechanistic pipeline on
   a second model that *does* show the effect, since none of the other models tested show it
   reliably enough to generate a large flip-item set.
-- The per-instance-rubric-vs-reusable-rubric hypothesis in Section 6 is drawn from a single
-  within-model, within-benchmark comparison (BiGGen vs. HealthBench/RewardBench2) and needs a
-  benchmark that varies this factor while holding domain and format fixed to be properly tested.
-- BFF-standard (as opposed to BFF's rubric condition) was not run through direct logit
-  attribution; Table 3 would benefit from its inclusion for a fully complete picture.
-- The ">90% MLP dominance predicts attribution unreliability" correlation (Section 5.4) is drawn
-  from two positive and five negative examples; it has not been tested by directly intervening on
-  MLP dominance, only observed across benchmarks that differ in many other ways simultaneously.
+- Both the per-instance-rubric hypothesis and the >90%-MLP-dominance hypothesis for attribution
+  mislocalization (Section 6) were tested and rejected in sequence as more data arrived; the
+  current best-layer-depth account (Section 5.4) is drawn from only eight benchmark/condition
+  pairs on one model and has not been tested by directly manipulating L (e.g. a model or prompt
+  designed to put L at a different depth) — it remains an observed correlation across benchmarks
+  that differ in many other ways at once, and a ninth pair could break it exactly as the eighth
+  broke the previous guess.
 - The DLA approximation treats RMSNorm's denominator as a near-constant scalar, a standard but
   imperfect linearization; it is used here only to rank and localize contributions, not to
   reconstruct exact logit values.

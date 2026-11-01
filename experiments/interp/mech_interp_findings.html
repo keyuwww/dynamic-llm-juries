@@ -123,10 +123,12 @@ the one &sect;1&ndash;4 are built on.
 <b>Update (&sect;7):</b> a <b>third</b> strict rubric-vs-standard pair &mdash; HealthBench, OpenAI's
 own physician meta-eval, excluding RewardBench2-Safety's borrowed rubric &mdash; plus
 <b>200-split bootstrap CIs and permutation p-values</b> (every row p&lt;1e&minus;5), three more
-models confirming the effect is gpt-oss-120b-specific, and a head-level dissection of the one
-anomaly found: BiGGen's rubric condition, where naive attribution's loudest layer (31) is a
-causally-empty red herring and the true 100%-causal layers (13&ndash;15) have no single
-responsible head either &mdash; a genuinely diffuse mechanism, not a localized one.
+models confirming the effect is gpt-oss-120b-specific, a head-level dissection of BiGGen's rubric
+condition (naive attribution's loudest layer, 31, is a causally-empty red herring; the true
+100%-causal layers, 13&ndash;15, have no single responsible head either &mdash; a genuinely diffuse
+mechanism), and, across all eight DLA/self-patch pairs run, a falsifiable predictor of when direct
+logit attribution mislocalizes the cause: not MLP-dominance (our first guess, broken by an eighth
+data point), but how early the true best layer sits (R&sup2;=0.87).
 </div>
 
 <h2>1. Two rubrics</h2>
@@ -681,28 +683,40 @@ JudgeBench in &sect;5, now confirmed on a third benchmark).</p>
 <h3 style="font-size:16px; font-style:normal;">7.4 Resolving the BiGGen-rubric anomaly: where does the effect actually live?</h3>
 <p>Direct logit attribution (DLA) &mdash; projecting each layer's own attention/MLP write onto the
 CORRECT/INCORRECT direction in a single ordinary forward pass, no intervention &mdash; agrees
-closely with the true causal rescue layer (found by same-pass activation patching) everywhere we
-checked it <b>except</b> BiGGen's rubric condition:</p>
+closely with the true causal rescue layer (found by same-pass activation patching) on some
+benchmark/conditions but not others. We ran all eight available pairs to find out what predicts
+which:</p>
 
 <table>
-<tr><th>Benchmark/condition</th><th>MLP-dominant</th><th class="num">DLA vs. causal-layer (median diff)</th><th>Attribution reliable?</th></tr>
-<tr><td>JudgeBench (no rubric)</td><td class="num">17% (4/23) &mdash; only attn-dominant case</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
-<tr><td>RewardBench2-Safety (standard)</td><td class="num">40% (90/227)</td><td class="num">&minus;3 layers</td><td><span class="pill real">Yes</span></td></tr>
-<tr><td>BFF (rules)</td><td class="num">55% (57/104)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
-<tr><td>BiGGen (standard)</td><td class="num">80% (110/137)</td><td class="num">0.0 layers</td><td><span class="pill real">Yes</span></td></tr>
-<tr><td>HealthBench (rubric)</td><td class="num">76% (137/181)</td><td class="num">&minus;1 layer</td><td><span class="pill real">Yes</span></td></tr>
-<tr class="highlight"><td><b>RewardBench2-Safety (CoCoNot rubric)</b></td><td class="num"><b>95% (232/245)</b></td><td class="num"><b>+12 layers</b></td><td><span class="pill mine">No</span></td></tr>
-<tr class="highlight"><td><b>BiGGen (rubric)</b></td><td class="num"><b>96% (67/70)</b></td><td class="num"><b>+17 layers</b></td><td><span class="pill mine">No</span></td></tr>
+<tr><th>Benchmark/condition</th><th class="num">best-layer L (of 37)</th><th>MLP-dominant</th><th class="num">DLA vs. causal-layer (median diff)</th><th>Attribution reliable?</th></tr>
+<tr><td>JudgeBench (no rubric)</td><td class="num">35</td><td class="num">17%</td><td class="num">0 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>HealthBench (rubric)</td><td class="num">34</td><td class="num">76%</td><td class="num">&minus;1 layer</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>BFF (rules)</td><td class="num">31</td><td class="num">55%</td><td class="num">+1 layer</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>BiGGen (standard)</td><td class="num">30</td><td class="num">80%</td><td class="num">0 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr><td>RewardBench2-Safety (standard)</td><td class="num">28</td><td class="num">40%</td><td class="num">&minus;3 layers</td><td><span class="pill real">Yes</span></td></tr>
+<tr class="highlight"><td><b>RewardBench2-Safety (CoCoNot rubric)</b></td><td class="num"><b>18</b></td><td class="num"><b>95%</b></td><td class="num"><b>+12 layers</b></td><td><span class="pill mine">No</span></td></tr>
+<tr class="highlight"><td><b>BFF (standard)</b></td><td class="num"><b>10</b></td><td class="num"><b>23%</b></td><td class="num"><b>+21 layers</b></td><td><span class="pill mine">No</span></td></tr>
+<tr class="highlight"><td><b>BiGGen (rubric)</b></td><td class="num"><b>4</b></td><td class="num"><b>96%</b></td><td class="num"><b>+17 layers</b></td><td><span class="pill mine">No</span></td></tr>
 </table>
-<p>Two of seven cases mislead: BiGGen's <i>rubric</i> condition (DLA's peak-push layer sits at
-<b>layer 31/37 in 64 of 68 flip items</b>, 94%, while the true causal rescue layer clusters at
-<b>layers 13&ndash;15</b>, 52/68 items, 76%) and, newly found, RewardBench2-Safety's CoCoNot
-rubric condition (+12 layers). The same models/benchmarks under their standard (no-rubric)
-conditions show no such mismatch. Both mislocalizing cases are also the <b>only two with
-&gt;90% MLP dominance</b> &mdash; a cleaner correlate than our original working hypothesis
-(mislocalization tracks <i>per-instance</i> rubrics specifically), which this same data point
-disproves: RewardBench2-Safety's rubric is a single reused text, not per-instance, yet still
-mislocalizes, while HealthBench's genuinely per-instance rubric stays accurate.</p>
+<p><b>A second correction.</b> Adding the eighth pair, BFF's standard (no-rubric) condition, broke
+our previous correlate. BFF-standard is only 23% MLP-dominant &mdash; mostly attn-dominant, the
+opposite of the &gt;90%-MLP-dominance signature we'd attributed to the two prior mislocalizing
+cases &mdash; yet it mislocalizes worse than anything else in the project (median +21 layers).
+Across all eight points, MLP-dominance and attribution error are essentially uncorrelated
+(Pearson r=0.13, R&sup2;=0.02). What actually predicts it is <b>how early the true best layer L
+is</b>: r(L, median diff)=&minus;0.93, R&sup2;=0.87. DLA's own peak-push layer clusters in a narrow,
+nearly fixed late band regardless of benchmark &mdash; 30&ndash;36 of 37 in every case we checked,
+including BFF-standard (70/93 items peak at layer 32) and BiGGen-rubric (64/68 at layer 31) &mdash;
+while the true causal layer tracks L itself (BFF-standard's causal layer clusters at 11&ndash;13,
+right after its L=10; BiGGen-rubric's at 13&ndash;15, after its L=4). When L is already late (L&ge;28
+in our data), DLA's generic late-band bias happens to land near the true cause, and attribution
+looks accurate. When L is early, the same fixed late-band bias overshoots by however far away L is,
+and attribution mislocalizes badly. This reads as a genuine DLA artifact &mdash; raw per-layer writes
+project more strongly onto the readout direction simply by virtue of being closer to the final
+unembedding, independent of which layer's computation is actually causally responsible &mdash; exactly
+the kind of attribution failure mode the literature (arXiv:2609.32407) warns about, now pinned to a
+concrete, falsifiable predictor (L) rather than a mechanism-type guess (MLP-dominance, or, before
+that, per-instance rubrics) that didn't survive an eighth data point.</p>
 
 <p>To find out whether either location has a genuinely localized cause, we zero-ablated one
 attention head at a time (of 64) at both candidate layers:</p>
@@ -733,15 +747,19 @@ attention head at a time (of 64) at both candidate layers:</p>
 <b>What §7 does and doesn't establish:</b> the passive-forgetting / attribution-reliability
 dissociation (RewardBench2-Safety-standard and HealthBench-rubric are both passive-forgetting
 <i>yet</i> attribution-accurate, while BiGGen-rubric and RewardBench2-Safety-rubric are both
-passive-forgetting <i>and</i> attribution-inaccurate &mdash; 89% passive-forgetting shows up on
-<i>both</i> sides) shows these are two independent properties of a benchmark/condition, not two
-readings of the same fact. Our first guess at what predicts attribution-inaccuracy &mdash;
-per-instance, free-text rubrics route judgment through a more distributed computation than a
-reusable rubric text &mdash; was directly falsified once we ran RewardBench2-Safety's (reused,
-not per-instance) rubric through DLA and found it also mislocalizes. The revised correlate
-(&gt;90% MLP dominance, &sect;7.4) fits all seven points but is drawn from only seven points and
-has not been tested by intervening on MLP dominance directly, only observed across benchmarks
-that differ in many other ways at once.
+passive-forgetting <i>and</i> attribution-inaccurate) shows these are two independent properties
+of a benchmark/condition, not two readings of the same fact; BFF-standard (mostly active-override,
+75%, and also attribution-inaccurate) confirms the two axes are genuinely orthogonal rather than a
+coincidence of the first seven points. Separately, our hypothesis for what predicts
+attribution-inaccuracy has now been revised twice: first "per-instance rubrics" (falsified by
+RewardBench2-Safety's reused CoCoNot rubric still mislocalizing), then "&gt;90% MLP dominance"
+(falsified by BFF-standard mislocalizing worst of all at only 23% MLP-dominant). The current
+best-supported predictor, best-layer depth L (r=&minus;0.93, R&sup2;=0.87, n=8), is drawn from only
+eight benchmark/condition pairs on one model and has not been tested by directly manipulating L
+(e.g. via a model or prompt designed to put L at a different depth) &mdash; it is still an
+observed correlation across benchmarks that differ in many other ways at once, not a confirmed
+causal account of DLA's artifact, and a ninth data point could break it exactly as the eighth broke
+the previous guess.
 </div>
 
 <footer>
