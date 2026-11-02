@@ -83,3 +83,45 @@ excluded from the reasoning codes.
 - "Gold questionable" is the coder's own judgement and may side with the judges. Janys's 30-item check
   (`janys_sheet.csv`, 5 per cell, without Claude's codes) gives Cohen's κ, especially for this code.
 - 9 reasonings were cut at 6,000 characters for the coders.
+
+## Study B: hidden-state probes (11/02)
+Code: `experiments/judge_confidence/probe_states_modal.py` (Modal; L40S for Qwen, H100 for gpt-oss) and
+`analyze_state_probes.py`. Outputs: `experiments/cross_benchmark/results/confident_errors/probes/<model>.json`.
+Raw activations (3.1 GB; git-ignored): `experiments/judge_confidence/results/raw/activations_states/`.
+
+**Setup.** Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b and gpt-oss-120b (the BFF / MT-Bench expert) ran all 1,614 pairs in both orders with a **forced verdict**: the
+same pairwise prompt, answered immediately with "VERDICT:" (no reasoning). One forward pass gives P(A) vs P(B), which
+supplies the model's own verdict, outcome and confidence level (thirds within benchmark). It also gives the residual
+stream at three points: end of the question, end of answer B, and the verdict token (mean of the two orders).
+- **Probes:** standardise → PCA 64 → L2 logistic. Nested grouped 5-fold CV by question, with the layer chosen on
+  training folds only.
+- **Text baseline:** similarity, lengths, final numbers, question aspects and benchmark.
+
+| Question | Qwen3.5-4B | Qwen3.5-9B | gpt-oss-20b | gpt-oss-120b |
+|---|---|---|---|---|
+| Wrong vs right **at high confidence**, verdict position (text baseline) | 0.61 (0.55) | 0.61 (0.56) | 0.71 (0.66) | 0.66 (0.65) |
+| Same, intermediate / low | 0.52 (0.61) / 0.56 (0.60) | 0.63 (0.48) / 0.64 (0.56) | 0.58 (0.60) / 0.51 (0.35) | 0.69 (0.56) / 0.56 (0.48) |
+| Wrong vs right, all levels pooled | 0.71 (0.58) | 0.71 (0.57) | 0.70 (0.57) | 0.72 (0.54) |
+| After the question only, all levels | 0.47 | 0.47 | 0.53 | 0.56 |
+| Reasoning-run labels at high confidence (text baseline) | 0.65 (0.70) | 0.56 (0.64) | 0.74 (0.67) | 0.63 (0.65) |
+| Position of HW on the axis LW = 0 → HR = 1 (MW / LR) | **0.78** (0.26 / 0.11) | **0.71** (0.33 / 0.13) | **0.56** (0.24 / 0.04) | **0.76** (0.28 / 0.16) |
+| Own error probe → own errors / other judges' errors (mean) | 0.70 / 0.61 | 0.73 / 0.67 | 0.70 / 0.65 | 0.74 / 0.66 |
+
+- **Little hidden doubt.** At a fixed confidence level, the probes separate wrong from right only about 0.05 better
+  than text features at high confidence (gpt-oss-120b: +0.01; CIs overlap), and not consistently at the other levels. Pooled over levels
+  they reach 0.70–0.72, mostly because they read the confidence itself.
+- **Nothing before the answers.** Hidden states at the end of the question don't predict errors (0.47–0.56). This
+  matches the earlier question-only result: difficulty lives in the answer pair.
+- **Confident errors are mostly believed.** On the axis from unsure-wrong to confident-right, high-confidence errors
+  sit at 0.56–0.78 (gpt-oss-120b 0.76): much closer to confident-right than intermediate errors (0.24–0.33) are, but not all the way.
+  Some correctness information remains at high confidence, most for gpt-oss-20b.
+- **The probes mostly read item difficulty.** A model's error probe predicts other judges' errors on the same items
+  at 0.61–0.67, against 0.70–0.74 for its own; the model-specific part is small.
+- **Before reasoning, hidden states don't predict the reasoned verdict's error** beyond text features at high
+  confidence (0.56–0.74 vs baseline 0.64–0.70).
+
+**Caveats.**
+- The forced verdict without reasoning is a different judge from the reasoning judges in Study A. The
+  reasoning-run rows link the two.
+- Only about 40–55 high-confidence errors per model, so the high-level AUROCs have wide CIs (about ±0.08).
+- gpt-oss-120b ran in its native MXFP4 weights on one H100 (needs `kernels==0.16.0`); gpt-oss-20b ran dequantized to bf16. Activations stored in float16; a few gpt-oss-120b values beyond the float16 range are clipped. Qwen3.6-35B and Nemotron were not run.

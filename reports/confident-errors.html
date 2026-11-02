@@ -1,0 +1,433 @@
+<title>Confident vs Unsure Judge Errors</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, same system as the order-flip report. Conclusions first (question card, findings grid),
+   then two tabs: behaviour & text (Study A) / inside the model (Study B). Each figure is headed by its finding.
+   Colour encodes confidence level: low (grey-blue), intermediate (amber), high (red-orange); right answers in teal. */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --ink:#17202a; --ink-2:#47525e; --ink-3:#6f7a85; --line:#dfe3e6; --grid:#e9ecee;
+  --lo:#5b7fb8; --mid:#c08a1e; --hi:#d9622b; --right:#13866f; --rand:#9aa3ab; --ref:#8a4fbf;
+  --b1:#2f5fb3; --b2:#c2410c; --b3:#13866f; --b4:#8a4fbf;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --lo:#8fb0e6; --mid:#e0b04f; --hi:#f08a52; --right:#3fbf9f; --rand:#6c757d; --ref:#b58ae0;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --lo:#8fb0e6; --mid:#e0b04f; --hi:#f08a52; --right:#3fbf9f; --rand:#6c757d; --ref:#b58ae0;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font:16.5px/1.6 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+.wrap>*,.panel>*{min-width:0}
+.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+h1{font:800 clamp(30px,5vw,44px)/1.06 var(--display);margin:8px 0 12px;letter-spacing:-.01em;text-wrap:balance}
+h2{font:600 clamp(19px,2.4vw,23px)/1.25 var(--display);margin:0;text-wrap:balance}
+h3{font:600 15px/1.3 var(--display);margin:0 0 6px}
+p{margin:0;max-width:68ch}
+.lede{font-size:18.5px;color:var(--ink-2);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font:13px/1.5 var(--mono);color:var(--ink-3)}
+.meta b{color:var(--ink);font-weight:500}
+section.fig{display:grid;gap:12px}
+.method{font-size:14px;color:var(--ink-3);max-width:76ch}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 10px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:560px;height:auto}
+.chart text{font-family:var(--mono);font-size:11.5px;fill:var(--ink-3)}
+.chart .lab{font-family:var(--body);font-size:13.5px;fill:var(--ink)}
+.chart .grp{font-family:var(--display);font-weight:600;font-size:12.5px;fill:var(--ink)}
+.chart .val{font-size:11px;fill:var(--ink-2)}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%}
+.legend i.sq{border-radius:2px}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.two>*{min-width:0}
+.two .chart svg{min-width:340px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:3;padding-top:6px}
+.tabs button{font:600 15px/1.2 var(--display);color:var(--ink-3);background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px 9px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.panel{display:grid;gap:40px;padding-top:24px}
+.panel-intro{font-size:15.5px;color:var(--ink-2);max-width:70ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:999px;border:1.5px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--right)} .pill.mixed{color:var(--mid)} .pill.bad{color:var(--hi)}
+.note{font-size:14px;color:var(--ink-2);display:grid;gap:8px}
+.note ul{margin:0;padding-left:18px;display:grid;gap:4px}
+code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:4px;word-break:break-word}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12.5px/1.4 var(--body);padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:5;max-width:270px}
+:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+details.more>summary,details.block>summary{cursor:pointer;list-style:none}
+details.more>summary::-webkit-details-marker,details.block>summary::-webkit-details-marker{display:none}
+details.more>summary{display:inline-flex;align-items:center;gap:6px;font:500 12.5px/1.6 var(--mono);color:var(--ink-3)}
+details.more>summary::before,details.block>summary::before{content:"\25B8";display:inline-block;width:1em;color:var(--ink-3)}
+details.more[open]>summary::before,details.block[open]>summary::before{content:"\25BE"}
+details.more>*:not(summary){margin-top:8px}
+details.block>summary{display:flex;align-items:baseline;gap:8px}
+details.block>summary h2{display:inline}
+details.block>*:not(summary){margin-top:14px}
+ul.take{margin:0;padding-left:20px;display:grid;gap:4px;font-size:16.5px;line-height:1.5}
+ul.take li::marker{color:var(--ink-3)}
+ul.take b{font-weight:600}
+table.grid3{min-width:640px}
+table.grid3 tbody th{font:600 14.5px/1.35 var(--display);text-transform:none;letter-spacing:0;color:var(--ink);width:30%}
+table.grid3 thead th{font:600 14px var(--display);text-transform:none;letter-spacing:0}
+table.grid3 .big{display:block;font:600 20px/1.2 var(--display);font-variant-numeric:tabular-nums;color:var(--ink)}
+table.grid3 .sub{display:block;font-size:13px;line-height:1.35;color:var(--ink-2);margin-top:2px}
+table.grid3 td.hl{background:color-mix(in srgb,var(--hi) 9%,transparent)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px -12px rgba(0,0,0,.18);display:grid;gap:14px;margin-top:18px}
+.qcard .ql{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.qcard>ol{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.qcard ol>li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;font:600 clamp(17px,2.2vw,20px)/1.4 var(--display);color:var(--ink)}
+.qcard .qn{font:600 13px/28px var(--mono);color:var(--ink-3)}
+.qcard.tk{margin-top:0;padding:14px 18px;gap:8px}
+.qcard.tk ul.take{font-size:16px}
+.k-hi{color:var(--hi)} .k-lo{color:var(--lo)} .k-mid{color:var(--mid)} .k-r{color:var(--right)}
+.k-u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.cells{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:4px;font-size:13.5px;max-width:520px}
+.cells div{padding:6px 8px;border-radius:6px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.cells .h{background:none;border:0;font:600 12px var(--mono);color:var(--ink-3);text-align:left}
+.empty{font-size:14px;color:var(--ink-3);padding:14px;border:1px dashed var(--line);border-radius:8px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">AC 297r · Dynamic LLM Juries · confident-errors study · 11/02</div>
+  <h1>When a Judge Is Confidently Wrong</h1>
+  <p class="lede">Each judge's verdicts are split by its own confidence (low, intermediate, high) and by outcome (right, wrong, flip). We compare <span class="k-hi">confident errors</span> with <span class="k-lo">unsure errors</span> and with right answers at the same confidence, using other judges, the items, the reasoning text and the model's hidden states.</p>
+  <div class="qcard" role="note" aria-label="Main questions">
+    <div class="ql">Three questions</div>
+    <ol>
+      <li><span class="qn">Q1</span><span>Are <span class="k-hi">confident errors</span> <u>shared</u> with other judges more than <span class="k-lo">unsure errors</span>?</span></li>
+      <li><span class="qn">Q2</span><span>What <u>kind</u> of item and mistake is a confident error?</span></li>
+      <li><span class="qn">Q3</span><span>Does the judge <u>know</u> it is wrong: in its token probability, its reasoning, or its <span class="k-u">hidden states</span>?</span></li>
+    </ol>
+  </div>
+  <details class="more"><summary>Experiment setup</summary>
+    <div class="meta"><span><b>8</b> judges</span><span><b>4</b> pairwise benchmarks</span><span><b>1,614</b> pairs, both orders</span><span><b>120</b> verdicts coded blind</span><span><b id="m-models">0</b> open models probed</span></div>
+    <p class="method" style="margin-top:8px">Outcome per judge and pair: <b>right</b> in both answer orders, <b>wrong</b> in both, or <b>flip</b>. Confidence level: the judge's own lower, middle and upper third of stated confidence (0–100) within each benchmark, so "high" means relatively sure for that judge. Qwen states 95–100 on most items while gpt-oss-120b rarely goes above 95, so fixed cut-offs would not compare judges fairly. Results are checked with calibrated-risk levels and fixed 70 / 90 cuts.</p>
+    <div class="cells" id="cells" style="margin-top:10px"></div>
+  </details>
+</header>
+
+<section aria-labelledby="k"><details class="block" open>
+  <summary><h2 id="k">Main findings</h2></summary>
+  <p class="panel-intro">Columns are the judge's own confidence level. Rows compare <b>wrong</b> verdicts with right ones at the same level.</p>
+  <div class="tbl"><table class="grid3" id="grid"></table></div>
+  <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-main"></ul></div>
+</details></section>
+
+<div>
+  <div class="tabs" role="tablist" aria-label="Study">
+    <button role="tab" id="t-a" aria-controls="p-a" aria-selected="true">Behaviour and text</button>
+    <button role="tab" id="t-b" aria-controls="p-b" aria-selected="false" tabindex="-1">Inside the model</button>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-a" aria-labelledby="t-a">
+    <section class="fig" aria-labelledby="a1">
+      <h2 id="a1"><span class="k-hi">Confident errors</span> are <span class="k-u">shared</span> by more judges</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>When a judge is wrong in both orders, <b id="a1-hi"></b> of the other 7 judges are too at high confidence, vs <b id="a1-lo"></b> at low (about 1 if independent).</li>
+        <li>The gradient holds under all three ways of cutting confidence.</li></ul></div>
+      <div class="chart"><svg id="g-share" viewBox="0 0 860 300" role="img" aria-label="Other judges also wrong, by confidence level and scheme."></svg></div>
+      <div class="legend"><span><i style="background:var(--hi)"></i>within-judge thirds (main)</span><span><i style="background:var(--ref)"></i>calibrated risk</span><span><i style="background:var(--rand)"></i>fixed 70 / 90</span><span><i class="sq" style="background:var(--ink-3);height:2px"></i>independence null</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">For every verdict that is wrong in both orders: how many of the other 7 judges are also wrong in both orders on that pair. Bars: 95% CI, bootstrap over questions. The null assumes judges err independently at their own error rates. Only 13–15% of errors at any level are unique to one judge.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a2">
+      <h2 id="a2"><span class="k-hi">Confident errors</span> sit on <span class="k-u">contested</span> labels and <span class="k-u">unsolved</span> problems</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>The higher the confidence, the more a wrong verdict sits on items where <b>human annotators disagreed</b>.</li>
+        <li>On BFF, confident errors happen where the judge <b>couldn't solve the problem itself</b>.</li>
+        <li>Unsure errors follow <b>surface cues</b> instead: similar answers, the same final number.</li></ul></div>
+      <div class="chart"><svg id="g-feat" viewBox="0 0 860 330" role="img" aria-label="Item features, wrong minus right, by confidence level."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low</span><span><i style="background:var(--mid)"></i>intermediate</span><span><i style="background:var(--hi)"></i>high</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Each feature is standardised within benchmark. A dot is the mean for wrong verdicts minus the mean for right verdicts at the same confidence level (in standard deviations), with a 95% CI over questions. Right of zero: wrong verdicts have more of it. Human split only exists for AlpacaFarm and MT-Bench human; "judge solved it" only for BFF.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a3">
+      <h2 id="a3">About <span class="k-u">two thirds</span> of <span class="k-hi">confident errors</span> are label problems or near ties</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>High-confidence errors: <b id="a3-hw"></b> have a questionable gold label or are a near tie.</li>
+        <li>Unsure errors are mostly <b>near ties</b>. High-confidence <b>flips</b> are the judge's own slips.</li></ul></div>
+      <div class="chart"><svg id="g-types" viewBox="0 0 860 240" role="img" aria-label="Error types by cell, blind coding."></svg></div>
+      <div class="legend"><span><i class="sq" style="background:var(--ref)"></i>gold label questionable</span><span><i class="sq" style="background:var(--mid)"></i>near tie</span><span><i class="sq" style="background:var(--hi)"></i>judge's own mistake</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">120 verdicts, 20 per cell, 5 per benchmark, coded blind to confidence and flips by four Claude coders with a fixed codebook. "Judge's own mistake" = missed factual error, arithmetic or logic slip, misread question, or preferred length or style. HF counts only flip verdicts that were wrong in the shown order (n = 8). A human check of 30 items is pending.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a4">
+      <h2 id="a4">A <span class="k-hi">confident error</span> <span class="k-u">reads like</span> a confident right answer</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>Blind readers can't tell high-confidence wrong from high-confidence right by tone (AUROC 0.49).</li>
+        <li>Unsure verdicts hedge and call the answers close, whether right or wrong.</li></ul></div>
+      <div class="chart"><svg id="g-read" viewBox="0 0 860 300" role="img" aria-label="Share of reasoning that reads confident, hedges, or calls answers close, by cell."></svg></div>
+      <div class="legend"><span><i class="sq" style="background:var(--hi)"></i>reads highly confident</span><span><i class="sq" style="background:var(--lo)"></i>hedges or self-corrects</span><span><i class="sq" style="background:var(--rand)"></i>says the answers are close</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Share of coded verdicts per cell. Stated confidence numbers were masked before coding. Verdict-only records (no reasoning text) are left out.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a5">
+      <h2 id="a5">The judge shows <span class="k-u">little doubt</span>; <span class="k-r">other judges</span> show more</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>Within a confidence level, the judge's own <b>token probability</b> barely separates wrong from right (≈0.55).</li>
+        <li><b>Other judges' doubt</b> works best on <span class="k-hi">confident errors</span> (0.72 at high vs 0.59 at low).</li></ul></div>
+      <div class="chart"><svg id="g-catch" viewBox="0 0 860 280" role="img" aria-label="AUROC for wrong vs right within each confidence level, by signal."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low</span><span><i style="background:var(--mid)"></i>intermediate</span><span><i style="background:var(--hi)"></i>high</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">AUROC for wrong vs right verdicts inside one confidence level (0.5 = chance), averaged over judge × benchmark cells. Own signals: verdict-token probability and the remaining spread of stated confidence. Others: the other 7 judges' low confidence (ranked within each judge) and their disagreement with this judge's pick.</p></details>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-b" aria-labelledby="t-b" hidden>
+    <details class="more" open><summary>About this tab</summary><p class="panel-intro">Open judges were run on Modal with a <b>forced verdict</b>: the same pairwise prompt, answered immediately with "VERDICT:" and no reasoning, in both orders. One forward pass gives the model's own P(A) vs P(B) (its verdict and confidence) and its hidden states at three points: after the <b>question</b>, after <b>both answers</b>, and at the <b>verdict</b>. Linear probes (PCA 64 + logistic regression, nested cross-validation by question) test whether hidden states separate wrong from right at the same confidence level.</p></details>
+    <div id="b-empty" class="empty" hidden>No probe results yet.</div>
+
+    <section class="fig" aria-labelledby="b1">
+      <h2 id="b1">Do <span class="k-u">hidden states</span> separate wrong from right at the same confidence?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b1"></ul></div>
+      <div class="chart"><svg id="g-probe" viewBox="0 0 860 400" role="img" aria-label="Probe AUROC for wrong vs right within each confidence level."></svg></div>
+      <div class="legend"><span><i style="background:var(--rand)"></i>after the question</span><span><i style="background:var(--lo)"></i>after both answers</span><span><i style="background:var(--hi)"></i>at the verdict</span><span><i class="sq" style="background:var(--ink);height:12px;width:2px"></i>text baseline</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method" id="probe-note">Labels = the model's own forced verdict. Each row is one model × confidence level; dots are probe AUROC for wrong vs right, the bar is a text-only baseline (answer similarity, lengths, final numbers, question aspects, benchmark). The layer is chosen on training folds only.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b2">
+      <h2 id="b2">Before any reasoning, can hidden states predict the <span class="k-u">reasoned</span> verdict's error?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b2"></ul></div>
+      <div class="chart"><svg id="g-probe-t" viewBox="0 0 860 300" role="img" aria-label="Probe AUROC for the same model's reasoning-run errors."></svg></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Same activations (no reasoning), but labels come from the same model's reasoning run with stated confidence (Tinker). Only judges in that run: Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b, gpt-oss-120b.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b3">
+      <h2 id="b3">Where do <span class="k-hi">confident errors</span> sit between unsure-wrong and confident-right?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b3"></ul></div>
+      <div class="chart"><svg id="g-geo" viewBox="0 0 860 300" role="img" aria-label="Position of each cell on the axis from unsure-wrong to confident-right."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low-confidence wrong (0 by construction)</span><span><i style="background:var(--mid)"></i>intermediate wrong</span><span><i style="background:var(--hi)"></i>high-confidence wrong</span><span><i style="background:var(--right)"></i>high-confidence right (1)</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">At the verdict position, a direction from the mean of low-confidence wrong (LW = 0) to high-confidence right (HR = 1), fitted on training folds; each cell's mean position on held-out pairs. HW near 1 = the model represents its confident error like a confident right answer (a real belief).</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b4">
+      <h2 id="b4">Does a model's error probe read <span class="k-u">its own</span> errors or <span class="k-u">item difficulty</span>?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b4"></ul></div>
+      <div class="chart"><svg id="g-transfer" viewBox="0 0 860 300" role="img" aria-label="AUROC of each model's error probe for other judges' errors."></svg></div>
+      <div class="legend"><span><i style="background:var(--hi)"></i>its own errors (forced verdict)</span><span><i style="background:var(--lo)"></i>the same model's reasoning-run errors</span><span><i style="background:var(--rand)"></i>other judges' errors (mean of 7)</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">A wrong-vs-right probe trained on the model's own forced verdicts, applied to other judges' errors on the same held-out pairs. If it predicts others' errors as well as its own, it reads item difficulty rather than the model's own belief.</p></details>
+    </section>
+  </div>
+</div>
+
+<section aria-labelledby="h"><details class="block">
+  <summary><h2 id="h">Hypotheses</h2></summary>
+  <div class="tbl"><table><thead><tr><th>Hypothesis</th><th>Verdict</th><th>Evidence</th></tr></thead><tbody id="hyp"></tbody></table></div>
+</details></section>
+
+<section aria-labelledby="c" class="note"><details class="block">
+  <summary><h2 id="c">Caveats</h2></summary>
+  <ul>
+    <li>One sample per verdict. Study A levels come from the confidence run, which changed 12–20% of verdicts relative to the stored run.</li>
+    <li>Study B uses a forced verdict with no reasoning, so its states differ from the reasoning judges in Study A; the "reasoned verdict" panel links the two.</li>
+    <li>Study B: gpt-oss-120b ran in native MXFP4 weights on one H100, gpt-oss-20b dequantized to bf16; Qwen3.6-35B and Nemotron were not probed. About 35–67 high-confidence errors per model, so high-level probe AUROCs carry intervals of about ±0.08.</li>
+    <li>Coding is by LLM coders, one per record, 20 per cell; Janys's 30-item agreement check is pending.</li>
+    <li>Human split exists only for AlpacaFarm and MT-Bench human; solve labels only for BFF.</li>
+    <li>Judges and pairs overlap across analyses, so points are not independent; intervals bootstrap over questions.</li>
+  </ul>
+  <p>Write-up: <code>docs/results_confident_errors.md</code>. Plan: <code>docs/confident_errors_plan.md</code>. Code: <code>experiments/cross_benchmark/confident_errors*.py</code>, <code>experiments/judge_confidence/probe_states_modal.py</code>, <code>analyze_state_probes.py</code>.</p>
+</details></section>
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const D = {"A0":{"third":[{"third":"low","F":1310,"R":1614,"W":733,"err_rate_consistent":0.3123,"flip_share":0.3582},{"third":"mid","F":831,"R":2203,"W":555,"err_rate_consistent":0.2012,"flip_share":0.2315},{"third":"high","F":612,"R":4479,"W":452,"err_rate_consistent":0.0917,"flip_share":0.1104}],"risk":[{"risk":"low","F":2167,"R":3083,"W":1192,"err_rate_consistent":0.2788,"flip_share":0.3364},{"risk":"mid","F":421,"R":2398,"W":379,"err_rate_consistent":0.1365,"flip_share":0.1316},{"risk":"high","F":165,"R":2815,"W":169,"err_rate_consistent":0.0566,"flip_share":0.0524}],"fixed":[{"fixed":"low","F":265,"R":229,"W":136,"err_rate_consistent":0.3726,"flip_share":0.4206},{"fixed":"mid","F":1015,"R":1713,"W":672,"err_rate_consistent":0.2818,"flip_share":0.2985},{"fixed":"high","F":1473,"R":6354,"W":932,"err_rate_consistent":0.1279,"flip_share":0.1682}]},"A2":{"third":[{"level":"low","n_W":733,"others_err_mean":5.4447,"ci_lo":5.2212,"ci_hi":5.6486,"null_mean":2.5058,"share_ge4":0.8608,"null_share_ge4":0.2161,"others_W_mean":3.1432,"W_ci_lo":2.8441,"W_ci_hi":3.4425,"null_W_mean":0.9416,"share_none_W":0.1364},{"level":"mid","n_W":555,"others_err_mean":5.5964,"ci_lo":5.3728,"ci_hi":5.8034,"null_mean":2.5603,"share_ge4":0.8631,"null_share_ge4":0.2321,"others_W_mean":3.5171,"W_ci_lo":3.2094,"W_ci_hi":3.8095,"null_W_mean":0.9987,"share_none_W":0.1333},{"level":"high","n_W":452,"others_err_mean":5.542,"ci_lo":5.2076,"ci_hi":5.8215,"null_mean":2.6224,"share_ge4":0.8274,"null_share_ge4":0.2483,"others_W_mean":4.031,"W_ci_lo":3.5761,"W_ci_hi":4.4245,"null_W_mean":1.054,"share_none_W":0.146}],"risk":[{"level":"low","n_W":1192,"others_err_mean":5.2995,"ci_lo":5.0992,"ci_hi":5.4797,"null_mean":2.5632,"share_ge4":0.8247,"null_share_ge4":0.2323,"others_W_mean":3.1149,"W_ci_lo":2.8589,"W_ci_hi":3.3797,"null_W_mean":0.9916,"share_none_W":0.1711},{"level":"mid","n_W":379,"others_err_mean":5.8892,"ci_lo":5.672,"ci_hi":6.0973,"null_mean":2.5685,"share_ge4":0.9077,"null_share_ge4":0.2334,"others_W_mean":4.095,"W_ci_lo":3.7683,"W_ci_hi":4.4289,"null_W_mean":1.0124,"share_none_W":0.0712},{"level":"high","n_W":169,"others_err_mean":6.2308,"ci_lo":5.8583,"ci_hi":6.5498,"null_mean":2.4515,"share_ge4":0.929,"null_share_ge4":0.2017,"others_W_mean":4.8107,"W_ci_lo":4.2476,"W_ci_hi":5.326,"null_W_mean":0.9182,"share_none_W":0.0533}],"fixed":[{"level":"low","n_W":136,"others_err_mean":5.6029,"ci_lo":5.2611,"ci_hi":5.9253,"null_mean":2.7391,"share_ge4":0.8456,"null_share_ge4":0.2761,"others_W_mean":2.9191,"W_ci_lo":2.4666,"W_ci_hi":3.3717,"null_W_mean":1.0738,"share_none_W":0.1618},{"level":"mid","n_W":672,"others_err_mean":5.5759,"ci_lo":5.3723,"ci_hi":5.7454,"null_mean":2.6304,"share_ge4":0.8839,"null_share_ge4":0.2488,"others_W_mean":3.3616,"W_ci_lo":3.0785,"W_ci_hi":3.6404,"null_W_mean":1.0163,"share_none_W":0.1101},{"level":"high","n_W":932,"others_err_mean":5.4646,"ci_lo":5.2188,"ci_hi":5.6969,"null_mean":2.4709,"share_ge4":0.8315,"null_share_ge4":0.2089,"others_W_mean":3.6717,"W_ci_lo":3.3301,"W_ci_hi":3.9936,"null_W_mean":0.957,"share_none_W":0.1545}]},"A3":[{"feature":"sim","contrast":"W-R low","gap":0.1224,"ci_lo":0.0025,"ci_hi":0.2506},{"feature":"sim","contrast":"W-R mid","gap":0.1818,"ci_lo":0.0571,"ci_hi":0.3014},{"feature":"sim","contrast":"W-R high","gap":0.0508,"ci_lo":-0.1257,"ci_hi":0.2027},{"feature":"sim","contrast":"HW-LW","gap":-0.1604,"ci_lo":-0.344,"ci_hi":0.0074},{"feature":"len_gap","contrast":"W-R low","gap":-0.187,"ci_lo":-0.2916,"ci_hi":-0.0764},{"feature":"len_gap","contrast":"W-R mid","gap":-0.1614,"ci_lo":-0.2707,"ci_hi":-0.0438},{"feature":"len_gap","contrast":"W-R high","gap":-0.0762,"ci_lo":-0.2642,"ci_hi":0.1385},{"feature":"len_gap","contrast":"HW-LW","gap":0.3652,"ci_lo":0.1913,"ci_hi":0.5696},{"feature":"longer_is_better","contrast":"W-R low","gap":-0.0853,"ci_lo":-0.2159,"ci_hi":0.0764},{"feature":"longer_is_better","contrast":"W-R mid","gap":-0.2569,"ci_lo":-0.4201,"ci_hi":-0.1251},{"feature":"longer_is_better","contrast":"W-R high","gap":0.1228,"ci_lo":-0.0659,"ci_hi":0.2804},{"feature":"longer_is_better","contrast":"HW-LW","gap":0.1209,"ci_lo":-0.0694,"ci_hi":0.294},{"feature":"same_final_number","contrast":"W-R low","gap":0.115,"ci_lo":-0.0115,"ci_hi":0.2543},{"feature":"same_final_number","contrast":"W-R mid","gap":0.2235,"ci_lo":0.0341,"ci_hi":0.4869},{"feature":"same_final_number","contrast":"W-R high","gap":0.0144,"ci_lo":-0.1656,"ci_hi":0.2017},{"feature":"same_final_number","contrast":"HW-LW","gap":-0.0713,"ci_lo":-0.2645,"ci_hi":0.1877},{"feature":"q_len","contrast":"W-R low","gap":-0.04,"ci_lo":-0.2045,"ci_hi":0.1286},{"feature":"q_len","contrast":"W-R mid","gap":-0.0695,"ci_lo":-0.2446,"ci_hi":0.1058},{"feature":"q_len","contrast":"W-R high","gap":0.0223,"ci_lo":-0.1518,"ci_hi":0.1924},{"feature":"q_len","contrast":"HW-LW","gap":0.1887,"ci_lo":-0.0717,"ci_hi":0.4189},{"feature":"knowledge","contrast":"W-R low","gap":-0.0814,"ci_lo":-0.3791,"ci_hi":0.1516},{"feature":"knowledge","contrast":"W-R mid","gap":-0.0446,"ci_lo":-0.1942,"ci_hi":0.1023},{"feature":"knowledge","contrast":"W-R high","gap":0.1177,"ci_lo":-0.0999,"ci_hi":0.3276},{"feature":"knowledge","contrast":"HW-LW","gap":0.0934,"ci_lo":-0.1863,"ci_hi":0.4341},{"feature":"reasoning","contrast":"W-R low","gap":-0.0947,"ci_lo":-0.232,"ci_hi":0.0362},{"feature":"reasoning","contrast":"W-R mid","gap":-0.1123,"ci_lo":-0.3112,"ci_hi":0.0512},{"feature":"reasoning","contrast":"W-R high","gap":-0.1537,"ci_lo":-0.3196,"ci_hi":0.0262},{"feature":"reasoning","contrast":"HW-LW","gap":0.0696,"ci_lo":-0.1109,"ci_hi":0.2731},{"feature":"constraints","contrast":"W-R low","gap":-0.0981,"ci_lo":-0.272,"ci_hi":0.0722},{"feature":"constraints","contrast":"W-R mid","gap":-0.0392,"ci_lo":-0.1846,"ci_hi":0.1156},{"feature":"constraints","contrast":"W-R high","gap":-0.0364,"ci_lo":-0.282,"ci_hi":0.1783},{"feature":"constraints","contrast":"HW-LW","gap":0.0708,"ci_lo":-0.1344,"ci_hi":0.2848},{"feature":"open_endedness","contrast":"W-R low","gap":0.0983,"ci_lo":-0.0814,"ci_hi":0.255},{"feature":"open_endedness","contrast":"W-R mid","gap":0.1103,"ci_lo":-0.0725,"ci_hi":0.3221},{"feature":"open_endedness","contrast":"W-R high","gap":0.0487,"ci_lo":-0.1183,"ci_hi":0.2066},{"feature":"open_endedness","contrast":"HW-LW","gap":-0.161,"ci_lo":-0.3715,"ci_hi":0.0511},{"feature":"human_split","contrast":"W-R low","gap":0.1915,"ci_lo":-0.0253,"ci_hi":0.4017},{"feature":"human_split","contrast":"W-R mid","gap":0.4036,"ci_lo":0.2284,"ci_hi":0.5988},{"feature":"human_split","contrast":"W-R high","gap":0.6252,"ci_lo":0.4172,"ci_hi":0.8127},{"feature":"human_split","contrast":"HW-LW","gap":-0.0592,"ci_lo":-0.2923,"ci_hi":0.1525},{"feature":"solved_by_judge","contrast":"W-R low","gap":-0.0251,"ci_lo":-0.3484,"ci_hi":0.2505},{"feature":"solved_by_judge","contrast":"W-R mid","gap":0.0589,"ci_lo":-0.2131,"ci_hi":0.339},{"feature":"solved_by_judge","contrast":"W-R high","gap":-0.5857,"ci_lo":-0.9055,"ci_hi":-0.2076},{"feature":"solved_by_judge","contrast":"HW-LW","gap":-0.4773,"ci_lo":-0.825,"ci_hi":-0.0977}],"A4":[{"level":"low","auc_token_mean":0.5492,"auc_token_std":0.0932,"auc_token_count":32,"auc_stated_mean":0.5512,"auc_stated_std":0.0972,"auc_stated_count":32},{"level":"mid","auc_token_mean":0.5337,"auc_token_std":0.0983,"auc_token_count":31,"auc_stated_mean":0.561,"auc_stated_std":0.0578,"auc_stated_count":31},{"level":"high","auc_token_mean":0.6033,"auc_token_std":0.1091,"auc_token_count":29,"auc_stated_mean":0.5629,"auc_stated_std":0.0823,"auc_stated_count":29}],"A5":[{"signal":"others_disagree","level":"high","mean":0.7556,"std":0.128,"count":32},{"signal":"others_disagree","level":"low","mean":0.7219,"std":0.0978,"count":31},{"signal":"others_disagree","level":"mid","mean":0.7175,"std":0.1244,"count":32},{"signal":"others_doubt","level":"high","mean":0.7228,"std":0.1216,"count":32},{"signal":"others_doubt","level":"low","mean":0.5926,"std":0.0866,"count":32},{"signal":"others_doubt","level":"mid","mean":0.6703,"std":0.0881,"count":32}],"coding_types":[{"cell":"HF","arithmetic_logic_slip":4,"gold_questionable":0,"misread_question_or_constraint":2,"missed_factual_error":1,"near_tie":1,"other":0,"preferred_length_or_style":0},{"cell":"HW","arithmetic_logic_slip":1,"gold_questionable":9,"misread_question_or_constraint":1,"missed_factual_error":3,"near_tie":4,"other":1,"preferred_length_or_style":1},{"cell":"LW","arithmetic_logic_slip":0,"gold_questionable":3,"misread_question_or_constraint":1,"missed_factual_error":5,"near_tie":9,"other":1,"preferred_length_or_style":1},{"cell":"MW","arithmetic_logic_slip":2,"gold_questionable":7,"misread_question_or_constraint":0,"missed_factual_error":5,"near_tie":5,"other":0,"preferred_length_or_style":1}],"coding":[{"cell":"HF","n":20,"gold_q":0.1,"noticed":0.5,"hedge":0.3125,"close":0.1875,"reads_high":0.5625,"reads_low":0.125},{"cell":"HR","n":20,"gold_q":0.0,"noticed":0.95,"hedge":0.25,"close":0.1,"reads_high":0.9,"reads_low":0.0},{"cell":"HW","n":20,"gold_q":0.55,"noticed":0.6471,"hedge":0.1765,"close":0.1176,"reads_high":0.8824,"reads_low":0.0588},{"cell":"LR","n":20,"gold_q":0.1,"noticed":0.8889,"hedge":0.7222,"close":0.7778,"reads_high":0.3333,"reads_low":0.1667},{"cell":"LW","n":20,"gold_q":0.35,"noticed":0.3125,"hedge":0.625,"close":0.8125,"reads_high":0.125,"reads_low":0.375},{"cell":"MW","n":20,"gold_q":0.45,"noticed":0.7333,"hedge":0.2667,"close":0.6,"reads_high":0.7333,"reads_low":0.0667}],"robust":[{"scheme":"third","level":"low","err_rate":0.3123,"n_W":733,"lift":2.4124,"others_err":5.4447,"share_ge4":0.8608,"auc_token":0.5492,"others_doubt":0.5926,"others_disagree":0.7219},{"scheme":"third","level":"mid","err_rate":0.2012,"n_W":555,"lift":2.5389,"others_err":5.5964,"share_ge4":0.8631,"auc_token":0.5337,"others_doubt":0.6703,"others_disagree":0.7175},{"scheme":"third","level":"high","err_rate":0.0917,"n_W":452,"lift":2.4983,"others_err":5.542,"share_ge4":0.8274,"auc_token":0.6033,"others_doubt":0.7228,"others_disagree":0.7556},{"scheme":"risk","level":"low","err_rate":0.2788,"n_W":1192,"lift":2.4035,"others_err":5.2995,"share_ge4":0.8247,"auc_token":0.5646,"others_doubt":0.6315,"others_disagree":0.7344},{"scheme":"risk","level":"mid","err_rate":0.1365,"n_W":379,"lift":2.5841,"others_err":5.8892,"share_ge4":0.9077,"auc_token":0.5379,"others_doubt":0.7233,"others_disagree":0.7393},{"scheme":"risk","level":"high","err_rate":0.0566,"n_W":169,"lift":2.8125,"others_err":6.2308,"share_ge4":0.929,"auc_token":0.5893,"others_doubt":0.75,"others_disagree":0.679},{"scheme":"fixed","level":"low","err_rate":0.3726,"n_W":136,"lift":2.4039,"others_err":5.6029,"share_ge4":0.8456,"auc_token":0.5238,"others_doubt":0.4367,"others_disagree":0.7266},{"scheme":"fixed","level":"mid","err_rate":0.2818,"n_W":672,"lift":2.4053,"others_err":5.5759,"share_ge4":0.8839,"auc_token":0.5477,"others_doubt":0.588,"others_disagree":0.7236},{"scheme":"fixed","level":"high","err_rate":0.1279,"n_W":932,"lift":2.5165,"others_err":5.4646,"share_ge4":0.8315,"auc_token":0.5936,"others_doubt":0.7402,"others_disagree":0.7576}],"probes":{"gpt-oss-120b":{"model":"gpt-oss-120b","n_pairs":1612,"layers":37,"cells":{"F":{"low":237,"mid":141,"high":52},"R":{"low":190,"mid":298,"high":435},"W":{"low":110,"mid":97,"high":52}},"B3":[{"labels":"own","level":"low","n_w":110,"n":300,"baseline":0.4754,"q_end":0.5443,"q_end_lo":0.4745,"q_end_hi":0.6135,"q_end_layers":[14,17,20,17,20],"b_end":0.4837,"b_end_lo":0.42,"b_end_hi":0.5505,"b_end_layers":[2,11,17,35,8],"verdict":0.5566,"verdict_lo":0.4872,"verdict_hi":0.6329,"verdict_layers":[20,20,35,20,35]},{"labels":"own","level":"mid","n_w":97,"n":395,"baseline":0.5632,"q_end":0.5699,"q_end_lo":0.4996,"q_end_hi":0.6394,"q_end_layers":[14,11,14,14,32],"b_end":0.6024,"b_end_lo":0.5392,"b_end_hi":0.6602,"b_end_layers":[11,14,14,11,14],"verdict":0.691,"verdict_lo":0.6314,"verdict_hi":0.744,"verdict_layers":[29,26,23,29,26]},{"labels":"own","level":"high","n_w":52,"n":487,"baseline":0.6478,"q_end":0.6517,"q_end_lo":0.5627,"q_end_hi":0.7496,"q_end_layers":[32,2,2,8,2],"b_end":0.6692,"b_end_lo":0.5891,"b_end_hi":0.755,"b_end_layers":[23,23,5,5,26],"verdict":0.6607,"verdict_lo":0.579,"verdict_hi":0.7389,"verdict_layers":[20,32,35,11,2]},{"labels":"own","level":"all","n_w":259,"n":1182,"baseline":0.54,"q_end":0.5594,"q_end_lo":0.5104,"q_end_hi":0.6074,"q_end_layers":[32,20,32,35,26],"b_end":0.5791,"b_end_lo":0.5355,"b_end_hi":0.6273,"b_end_layers":[26,26,17,23,26],"verdict":0.7204,"verdict_lo":0.686,"verdict_hi":0.7535,"verdict_layers":[23,26,20,35,23]},{"labels":"tinker","level":"low","n_w":113,"n":387,"baseline":0.4863,"q_end":0.5114,"q_end_lo":0.4255,"q_end_hi":0.5838,"q_end_layers":[29,35,35,8,8],"b_end":0.4662,"b_end_lo":0.395,"b_end_hi":0.5409,"b_end_layers":[14,8,17,14,20],"verdict":0.5496,"verdict_lo":0.4892,"verdict_hi":0.6121,"verdict_layers":[23,35,32,23,32]},{"labels":"tinker","level":"mid","n_w":68,"n":435,"baseline":0.5722,"q_end":0.6041,"q_end_lo":0.5324,"q_end_hi":0.674,"q_end_layers":[26,23,20,14,32],"b_end":0.5773,"b_end_lo":0.5076,"b_end_hi":0.6435,"b_end_layers":[17,35,17,26,29],"verdict":0.5954,"verdict_lo":0.5253,"verdict_hi":0.6631,"verdict_layers":[32,35,20,20,17]},{"labels":"tinker","level":"high","n_w":35,"n":603,"baseline":0.6506,"q_end":0.5542,"q_end_lo":0.47,"q_end_hi":0.6335,"q_end_layers":[35,32,23,32,14],"b_end":0.5381,"b_end_lo":0.4388,"b_end_hi":0.6577,"b_end_layers":[26,14,23,14,32],"verdict":0.6333,"verdict_lo":0.5586,"verdict_hi":0.7082,"verdict_layers":[20,2,23,23,26]},{"labels":"tinker","level":"all","n_w":216,"n":1425,"baseline":0.6122,"q_end":0.6449,"q_end_lo":0.6006,"q_end_hi":0.6889,"q_end_layers":[35,35,29,32,32],"b_end":0.6474,"b_end_lo":0.5945,"b_end_hi":0.6962,"b_end_layers":[17,20,17,8,17],"verdict":0.7045,"verdict_lo":0.6622,"verdict_hi":0.7452,"verdict_layers":[20,35,23,32,20]}],"B4":{"layer":23,"cells":[{"cell":"HF","mean":0.303,"count":52},{"cell":"HR","mean":0.997,"count":435},{"cell":"HW","mean":0.764,"count":52},{"cell":"LF","mean":0.032,"count":237},{"cell":"LR","mean":0.164,"count":190},{"cell":"LW","mean":0.021,"count":110},{"cell":"MF","mean":0.174,"count":141},{"cell":"MR","mean":0.436,"count":298},{"cell":"MW","mean":0.275,"count":97}],"hw_by_sharing":[{"share_lvl":"0-1","mean":0.757,"count":13},{"share_lvl":"2-3","mean":0.724,"count":13},{"share_lvl":"4+","mean":0.787,"count":26}]},"B5":[{"target":"own","auc":0.7416,"n_w":259},{"target":"deepseek-v3.1","auc":0.6704,"n_w":229},{"target":"same model, reasoning run","auc":0.6553,"n_w":216},{"target":"gpt-oss-20b","auc":0.672,"n_w":218},{"target":"nemotron3-nano-30b","auc":0.6525,"n_w":241},{"target":"nemotron3-super-120b","auc":0.6775,"n_w":203},{"target":"qwen3.5-4b","auc":0.6845,"n_w":228},{"target":"qwen3.5-9b","auc":0.646,"n_w":201},{"target":"qwen3.6-35b-a3b","auc":0.6385,"n_w":204}]},"gpt-oss-20b":{"model":"gpt-oss-20b","n_pairs":1612,"layers":25,"cells":{"F":{"low":250,"mid":179,"high":42},"R":{"low":185,"mid":276,"high":447},"W":{"low":102,"mid":81,"high":50}},"B3":[{"labels":"own","level":"low","n_w":102,"n":287,"baseline":0.3498,"q_end":0.4241,"q_end_lo":0.3592,"q_end_hi":0.4957,"q_end_layers":[17,23,23,17,2],"b_end":0.4954,"b_end_lo":0.4301,"b_end_hi":0.5685,"b_end_layers":[2,2,11,20,17],"verdict":0.5117,"verdict_lo":0.4358,"verdict_hi":0.5756,"verdict_layers":[20,5,2,20,20]},{"labels":"own","level":"mid","n_w":81,"n":357,"baseline":0.6032,"q_end":0.5624,"q_end_lo":0.4702,"q_end_hi":0.6448,"q_end_layers":[8,2,5,8,11],"b_end":0.6115,"b_end_lo":0.5285,"b_end_hi":0.6807,"b_end_layers":[11,8,8,2,20],"verdict":0.5783,"verdict_lo":0.5005,"verdict_hi":0.6546,"verdict_layers":[2,23,11,11,5]},{"labels":"own","level":"high","n_w":50,"n":497,"baseline":0.6624,"q_end":0.5318,"q_end_lo":0.4306,"q_end_hi":0.6251,"q_end_layers":[5,11,14,14,11],"b_end":0.5897,"b_end_lo":0.4979,"b_end_hi":0.6814,"b_end_layers":[17,17,17,17,14],"verdict":0.7115,"verdict_lo":0.6312,"verdict_hi":0.7802,"verdict_layers":[23,20,20,20,23]},{"labels":"own","level":"all","n_w":233,"n":1141,"baseline":0.5727,"q_end":0.5341,"q_end_lo":0.4832,"q_end_hi":0.5825,"q_end_layers":[14,2,11,20,20],"b_end":0.5954,"b_end_lo":0.5449,"b_end_hi":0.6355,"b_end_layers":[17,17,14,17,2],"verdict":0.7044,"verdict_lo":0.6673,"verdict_hi":0.741,"verdict_layers":[20,20,23,20,23]},{"labels":"tinker","level":"low","n_w":83,"n":287,"baseline":0.4968,"q_end":0.467,"q_end_lo":0.3818,"q_end_hi":0.5518,"q_end_layers":[23,23,23,14,17],"b_end":0.4538,"b_end_lo":0.3907,"b_end_hi":0.529,"b_end_layers":[23,23,11,20,17],"verdict":0.5611,"verdict_lo":0.4649,"verdict_hi":0.6346,"verdict_layers":[5,5,20,23,23]},{"labels":"tinker","level":"mid","n_w":80,"n":360,"baseline":0.5648,"q_end":0.6172,"q_end_lo":0.5441,"q_end_hi":0.6813,"q_end_layers":[23,8,17,17,23],"b_end":0.5508,"b_end_lo":0.4805,"b_end_hi":0.6248,"b_end_layers":[23,23,23,23,5],"verdict":0.603,"verdict_lo":0.5322,"verdict_hi":0.6692,"verdict_layers":[23,23,23,14,23]},{"labels":"tinker","level":"high","n_w":55,"n":620,"baseline":0.6696,"q_end":0.6276,"q_end_lo":0.5539,"q_end_hi":0.7127,"q_end_layers":[11,17,20,20,17],"b_end":0.5495,"b_end_lo":0.4717,"b_end_hi":0.6294,"b_end_layers":[17,8,23,20,8],"verdict":0.7354,"verdict_lo":0.6709,"verdict_hi":0.7914,"verdict_layers":[23,23,23,20,23]},{"labels":"tinker","level":"all","n_w":218,"n":1267,"baseline":0.6236,"q_end":0.5837,"q_end_lo":0.5323,"q_end_hi":0.6333,"q_end_layers":[17,8,23,11,23],"b_end":0.556,"b_end_lo":0.5127,"b_end_hi":0.6027,"b_end_layers":[23,8,11,17,11],"verdict":0.6904,"verdict_lo":0.649,"verdict_hi":0.7295,"verdict_layers":[23,20,23,23,23]}],"B4":{"layer":20,"cells":[{"cell":"HF","mean":0.255,"count":42},{"cell":"HR","mean":0.996,"count":447},{"cell":"HW","mean":0.563,"count":50},{"cell":"LF","mean":0.008,"count":250},{"cell":"LR","mean":0.035,"count":185},{"cell":"LW","mean":0.018,"count":102},{"cell":"MF","mean":0.1,"count":179},{"cell":"MR","mean":0.331,"count":276},{"cell":"MW","mean":0.237,"count":81}],"hw_by_sharing":[{"share_lvl":"0-1","mean":0.39,"count":17},{"share_lvl":"2-3","mean":0.535,"count":11},{"share_lvl":"4+","mean":0.712,"count":22}]},"B5":[{"target":"own","auc":0.698,"n_w":233},{"target":"deepseek-v3.1","auc":0.6461,"n_w":229},{"target":"gpt-oss-120b","auc":0.6458,"n_w":216},{"target":"same model, reasoning run","auc":0.6612,"n_w":218},{"target":"nemotron3-nano-30b","auc":0.6465,"n_w":241},{"target":"nemotron3-super-120b","auc":0.6569,"n_w":203},{"target":"qwen3.5-4b","auc":0.6475,"n_w":228},{"target":"qwen3.5-9b","auc":0.6293,"n_w":201},{"target":"qwen3.6-35b-a3b","auc":0.6368,"n_w":204}]},"qwen3.5-4b":{"model":"qwen3.5-4b","n_pairs":1612,"layers":33,"cells":{"F":{"low":266,"mid":159,"high":39},"R":{"low":160,"mid":278,"high":444},"W":{"low":111,"mid":99,"high":56}},"B3":[{"labels":"own","level":"low","n_w":111,"n":271,"baseline":0.5995,"q_end":0.5159,"q_end_lo":0.4395,"q_end_hi":0.5891,"q_end_layers":[8,29,11,11,29],"b_end":0.545,"b_end_lo":0.4748,"b_end_hi":0.6188,"b_end_layers":[14,2,20,20,2],"verdict":0.559,"verdict_lo":0.4906,"verdict_hi":0.6355,"verdict_layers":[11,14,2,17,26]},{"labels":"own","level":"mid","n_w":99,"n":377,"baseline":0.6134,"q_end":0.4083,"q_end_lo":0.3462,"q_end_hi":0.4748,"q_end_layers":[2,5,14,26,14],"b_end":0.5255,"b_end_lo":0.4658,"b_end_hi":0.587,"b_end_layers":[26,26,8,8,23],"verdict":0.5186,"verdict_lo":0.456,"verdict_hi":0.5838,"verdict_layers":[17,17,32,32,23]},{"labels":"own","level":"high","n_w":56,"n":500,"baseline":0.5489,"q_end":0.4782,"q_end_lo":0.3833,"q_end_hi":0.5684,"q_end_layers":[32,17,32,32,29],"b_end":0.5635,"b_end_lo":0.4782,"b_end_hi":0.6459,"b_end_layers":[14,17,17,20,14],"verdict":0.6081,"verdict_lo":0.541,"verdict_hi":0.6799,"verdict_layers":[29,26,20,32,29]},{"labels":"own","level":"all","n_w":266,"n":1148,"baseline":0.5818,"q_end":0.4651,"q_end_lo":0.4163,"q_end_hi":0.5102,"q_end_layers":[29,5,26,17,29],"b_end":0.603,"b_end_lo":0.5596,"b_end_hi":0.6461,"b_end_layers":[2,5,17,17,17],"verdict":0.7108,"verdict_lo":0.6727,"verdict_hi":0.748,"verdict_layers":[32,29,29,23,32]},{"labels":"tinker","level":"low","n_w":91,"n":262,"baseline":0.5107,"q_end":0.5528,"q_end_lo":0.4636,"q_end_hi":0.6295,"q_end_layers":[17,20,14,2,23],"b_end":0.5004,"b_end_lo":0.4195,"b_end_hi":0.5756,"b_end_layers":[17,17,2,2,17],"verdict":0.4763,"verdict_lo":0.4066,"verdict_hi":0.5546,"verdict_layers":[14,32,32,2,2]},{"labels":"tinker","level":"mid","n_w":70,"n":333,"baseline":0.6511,"q_end":0.6097,"q_end_lo":0.5297,"q_end_hi":0.6878,"q_end_layers":[5,23,5,5,8],"b_end":0.4968,"b_end_lo":0.4236,"b_end_hi":0.5774,"b_end_layers":[2,2,2,17,17],"verdict":0.5193,"verdict_lo":0.4415,"verdict_hi":0.5949,"verdict_layers":[32,8,17,20,20]},{"labels":"tinker","level":"high","n_w":67,"n":646,"baseline":0.7,"q_end":0.6315,"q_end_lo":0.5603,"q_end_hi":0.7014,"q_end_layers":[32,17,17,29,14],"b_end":0.5886,"b_end_lo":0.5151,"b_end_hi":0.6789,"b_end_layers":[2,2,17,2,32],"verdict":0.6518,"verdict_lo":0.5729,"verdict_hi":0.74,"verdict_layers":[32,17,17,17,20]},{"labels":"tinker","level":"all","n_w":228,"n":1241,"baseline":0.6584,"q_end":0.6053,"q_end_lo":0.566,"q_end_hi":0.6536,"q_end_layers":[17,14,20,17,29],"b_end":0.5577,"b_end_lo":0.5114,"b_end_hi":0.6049,"b_end_layers":[17,5,2,17,8],"verdict":0.7105,"verdict_lo":0.6707,"verdict_hi":0.7524,"verdict_layers":[32,20,20,17,29]}],"B4":{"layer":29,"cells":[{"cell":"HF","mean":0.414,"count":39},{"cell":"HR","mean":0.999,"count":444},{"cell":"HW","mean":0.777,"count":56},{"cell":"LF","mean":0.017,"count":266},{"cell":"LR","mean":0.11,"count":160},{"cell":"LW","mean":0.023,"count":111},{"cell":"MF","mean":0.235,"count":159},{"cell":"MR","mean":0.409,"count":278},{"cell":"MW","mean":0.265,"count":99}],"hw_by_sharing":[{"share_lvl":"0-1","mean":0.567,"count":14},{"share_lvl":"2-3","mean":0.821,"count":7},{"share_lvl":"4+","mean":0.852,"count":35}]},"B5":[{"target":"own","auc":0.7009,"n_w":266},{"target":"deepseek-v3.1","auc":0.6151,"n_w":229},{"target":"gpt-oss-120b","auc":0.6014,"n_w":216},{"target":"gpt-oss-20b","auc":0.604,"n_w":218},{"target":"nemotron3-nano-30b","auc":0.613,"n_w":241},{"target":"nemotron3-super-120b","auc":0.6294,"n_w":203},{"target":"same model, reasoning run","auc":0.6581,"n_w":228},{"target":"qwen3.5-9b","auc":0.6159,"n_w":201},{"target":"qwen3.6-35b-a3b","auc":0.5996,"n_w":204}]},"qwen3.5-9b":{"model":"qwen3.5-9b","n_pairs":1612,"layers":33,"cells":{"F":{"low":258,"mid":161,"high":50},"R":{"low":184,"mid":279,"high":446},"W":{"low":95,"mid":96,"high":43}},"B3":[{"labels":"own","level":"low","n_w":95,"n":279,"baseline":0.5609,"q_end":0.517,"q_end_lo":0.4471,"q_end_hi":0.5822,"q_end_layers":[2,23,11,2,32],"b_end":0.5658,"b_end_lo":0.4936,"b_end_hi":0.6392,"b_end_layers":[11,20,5,5,5],"verdict":0.638,"verdict_lo":0.5722,"verdict_hi":0.7007,"verdict_layers":[20,20,29,23,2]},{"labels":"own","level":"mid","n_w":96,"n":375,"baseline":0.4802,"q_end":0.4654,"q_end_lo":0.3952,"q_end_hi":0.5314,"q_end_layers":[2,29,23,26,32],"b_end":0.5213,"b_end_lo":0.4462,"b_end_hi":0.5929,"b_end_layers":[5,29,20,20,23],"verdict":0.631,"verdict_lo":0.5559,"verdict_hi":0.6988,"verdict_layers":[23,23,23,20,17]},{"labels":"own","level":"high","n_w":43,"n":489,"baseline":0.56,"q_end":0.6414,"q_end_lo":0.529,"q_end_hi":0.7448,"q_end_layers":[29,26,29,29,17],"b_end":0.5974,"b_end_lo":0.4887,"b_end_hi":0.7022,"b_end_layers":[17,17,17,17,14],"verdict":0.6128,"verdict_lo":0.5068,"verdict_hi":0.7207,"verdict_layers":[32,29,32,20,32]},{"labels":"own","level":"all","n_w":234,"n":1143,"baseline":0.5646,"q_end":0.4695,"q_end_lo":0.4302,"q_end_hi":0.5101,"q_end_layers":[5,5,2,26,32],"b_end":0.5567,"b_end_lo":0.5107,"b_end_hi":0.6005,"b_end_layers":[14,32,8,8,17],"verdict":0.7126,"verdict_lo":0.6724,"verdict_hi":0.7538,"verdict_layers":[26,20,32,20,26]},{"labels":"tinker","level":"low","n_w":87,"n":291,"baseline":0.543,"q_end":0.4975,"q_end_lo":0.4202,"q_end_hi":0.5738,"q_end_layers":[5,32,26,29,8],"b_end":0.4624,"b_end_lo":0.3922,"b_end_hi":0.5351,"b_end_layers":[29,32,26,5,14],"verdict":0.495,"verdict_lo":0.426,"verdict_hi":0.5645,"verdict_layers":[17,11,2,2,29]},{"labels":"tinker","level":"mid","n_w":68,"n":341,"baseline":0.5275,"q_end":0.4825,"q_end_lo":0.4057,"q_end_hi":0.5582,"q_end_layers":[26,26,26,14,29],"b_end":0.5192,"b_end_lo":0.4322,"b_end_hi":0.591,"b_end_layers":[14,17,14,17,14],"verdict":0.6136,"verdict_lo":0.5352,"verdict_hi":0.6816,"verdict_layers":[32,23,23,17,17]},{"labels":"tinker","level":"high","n_w":46,"n":616,"baseline":0.6437,"q_end":0.5624,"q_end_lo":0.472,"q_end_hi":0.646,"q_end_layers":[26,14,14,17,5],"b_end":0.6482,"b_end_lo":0.576,"b_end_hi":0.7299,"b_end_layers":[14,14,14,11,14],"verdict":0.5602,"verdict_lo":0.4644,"verdict_hi":0.6648,"verdict_layers":[11,32,32,17,11]},{"labels":"tinker","level":"all","n_w":201,"n":1248,"baseline":0.6491,"q_end":0.5963,"q_end_lo":0.554,"q_end_hi":0.642,"q_end_layers":[20,17,23,32,20],"b_end":0.653,"b_end_lo":0.6133,"b_end_hi":0.6951,"b_end_layers":[14,11,14,14,17],"verdict":0.7178,"verdict_lo":0.6727,"verdict_hi":0.7608,"verdict_layers":[20,20,20,20,26]}],"B4":{"layer":20,"cells":[{"cell":"HF","mean":0.333,"count":50},{"cell":"HR","mean":0.996,"count":446},{"cell":"HW","mean":0.715,"count":43},{"cell":"LF","mean":0.067,"count":258},{"cell":"LR","mean":0.127,"count":184},{"cell":"LW","mean":0.028,"count":95},{"cell":"MF","mean":0.295,"count":161},{"cell":"MR","mean":0.451,"count":279},{"cell":"MW","mean":0.326,"count":96}],"hw_by_sharing":[{"share_lvl":"0-1","mean":0.506,"count":7},{"share_lvl":"2-3","mean":0.699,"count":9},{"share_lvl":"4+","mean":0.774,"count":27}]},"B5":[{"target":"own","auc":0.7279,"n_w":234},{"target":"deepseek-v3.1","auc":0.6678,"n_w":229},{"target":"gpt-oss-120b","auc":0.6774,"n_w":216},{"target":"gpt-oss-20b","auc":0.6627,"n_w":218},{"target":"nemotron3-nano-30b","auc":0.66,"n_w":241},{"target":"nemotron3-super-120b","auc":0.6883,"n_w":203},{"target":"qwen3.5-4b","auc":0.7056,"n_w":228},{"target":"same model, reasoning run","auc":0.6581,"n_w":201},{"target":"qwen3.6-35b-a3b","auc":0.6606,"n_w":204}]}}};
+const NS="http://www.w3.org/2000/svg", tip=document.getElementById("tip");
+const LV=["low","mid","high"], LN={low:"low",mid:"intermediate",high:"high"}, LC={low:"var(--lo)",mid:"var(--mid)",high:"var(--hi)"};
+const MN={"qwen3.5-4b":"Qwen3.5-4B","qwen3.5-9b":"Qwen3.5-9B","gpt-oss-20b":"gpt-oss-20b","gpt-oss-120b":"gpt-oss-120b"};
+const f2=v=>v==null?"–":(+v).toFixed(2), pc=v=>v==null?"–":Math.round(v*100)+"%";
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e}
+function hov(e,msg){e.setAttribute("tabindex","0");e.setAttribute("aria-label",msg);
+  const s=()=>{tip.textContent=msg;const r=e.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(r.left+r.width/2+10,innerWidth-280))+"px";tip.style.top=Math.max(8,r.top-40)+"px";tip.style.opacity=1};
+  const h=()=>tip.style.opacity=0; e.addEventListener("mouseenter",s);e.addEventListener("focus",s);e.addEventListener("mouseleave",h);e.addEventListener("blur",h)}
+const lvOf=r=>r.level||r.third||r.risk||r.fixed;
+
+/* tabs */
+const tabs=[["t-a","p-a","a"],["t-b","p-b","b"]];
+function show(k){tabs.forEach(t=>{const on=t[2]===k,b=document.getElementById(t[0]);b.setAttribute("aria-selected",on);b.tabIndex=on?0:-1;document.getElementById(t[1]).hidden=!on});try{localStorage.setItem("ce-tab",k)}catch(e){}}
+tabs.forEach((t,i)=>{const b=document.getElementById(t[0]);b.addEventListener("click",()=>show(t[2]));b.addEventListener("keydown",ev=>{if(ev.key==="ArrowRight"||ev.key==="ArrowLeft"){const n=tabs[(i+1)%2];show(n[2]);document.getElementById(n[0]).focus()}})});
+let st=location.hash==="#inside"?"b":null; if(!st){try{st=localStorage.getItem("ce-tab")}catch(e){}} show(st==="b"?"b":"a");
+
+/* data helpers */
+const A0=Object.fromEntries(D.A0.third.map(r=>[lvOf(r),r]));
+const A2=s=>Object.fromEntries(D.A2[s].map(r=>[lvOf(r),r]));
+const cod=Object.fromEntries(D.coding.map(r=>[r.cell,r]));
+const A4=Object.fromEntries(D.A4.map(r=>[r.level,r]));
+const A5=(sig,L)=>D.A5.find(r=>r.signal===sig&&r.level===L);
+const types=Object.fromEntries(D.coding_types.map(r=>[r.cell,r]));
+function typeShares(c){const r=types[c]||{};const n=Object.entries(r).filter(([k])=>k!=="cell").reduce((s,[,v])=>s+v,0)||1;
+  const gq=(r.gold_questionable||0)/n, nt=(r.near_tie||0)/n; return {gq,nt,own:1-gq-nt,n}}
+const models=Object.keys(D.probes); document.getElementById("m-models").textContent=models.length;
+function probeRow(m,src,L){const r=(D.probes[m].B3||[]).find(x=>x.labels===src&&x.level===L);return r&&r.verdict!=null?r:null}
+function probeMean(L,src){const rs=models.map(m=>probeRow(m,src||"own",L)).filter(Boolean);if(!rs.length)return null;const v=rs.map(r=>r.verdict),b=rs.map(r=>r.baseline);
+  return {v:v.reduce((a,x)=>a+x,0)/v.length,lo:Math.min(...v),hi:Math.max(...v),b:b.reduce((a,x)=>a+x,0)/b.length,n:rs.length}}
+function bestProbe(L,src){let best=null;models.forEach(m=>{const r=probeRow(m,src||"own",L);if(r&&(!best||r.verdict>best.r.verdict))best={m,r}});return best}
+
+/* setup cells */
+(function(){const c=document.getElementById("cells");let h='<div class="h"></div>'+LV.map(L=>`<div class="h">${LN[L]}</div>`).join("");
+  ["R","W","F"].forEach(o=>{h+=`<div class="h">${{R:"right",W:"wrong",F:"flip"}[o]}</div>`+LV.map(L=>`<div>${(A0[L][o]||0).toLocaleString()}</div>`).join("")});c.innerHTML=h})();
+
+/* main grid */
+(function(){
+  const s=A2("third"); const rows=[
+    ["Error rate (consistent pairs)",L=>[pc(A0[L].err_rate_consistent),`${A0[L].W} wrong · ${A0[L].R} right`]],
+    ["Other judges also wrong (of 7)",L=>[f2(s[L].others_W_mean),`95% CI ${f2(s[L].W_ci_lo)}–${f2(s[L].W_ci_hi)}; null ≈ ${f2(s[L].null_W_mean)}`]],
+    ["Gold label questionable (coded)",L=>{const c=cod[L[0].toUpperCase()+"W"];return [pc(c&&c.gold_q),`right answers: ${pc((cod[L[0].toUpperCase()+"R"]||{}).gold_q)}`]}],
+    ["Wrong reasoning reads highly confident",L=>{const c=cod[L[0].toUpperCase()+"W"],r=cod[L[0].toUpperCase()+"R"];return [pc(c&&c.reads_high),r?`right answers: ${pc(r.reads_high)}`:""]}],
+    ["Own token probability, wrong vs right",L=>[f2(A4[L]&&A4[L].auc_token_mean),"AUROC within level"]],
+    ["Other judges' doubt, wrong vs right",L=>{const r=A5("others_doubt",L);return [f2(r&&r.mean),"AUROC within level"]}],
+    ["Hidden-state probe, wrong vs right",L=>{const p=probeMean(L);return p?[f2(p.v),`mean of ${p.n} models (${f2(p.lo)}–${f2(p.hi)}); text baseline ${f2(p.b)}`]:["–","pending"]}],
+  ];
+  let h='<thead><tr><th></th>'+LV.map(L=>`<th class="k-${L==="mid"?"mid":L==="low"?"lo":"hi"}">${LN[L][0].toUpperCase()+LN[L].slice(1)} confidence</th>`).join("")+'</tr></thead><tbody>';
+  rows.forEach(([name,fn])=>{h+=`<tr><th>${name}</th>`+LV.map(L=>{const [b,sub]=fn(L);return `<td${L==="high"?' class="hl"':''}><span class="big">${b}</span><span class="sub">${sub}</span></td>`}).join("")+"</tr>"});
+  document.getElementById("grid").innerHTML=h+"</tbody>";
+  const tk=[`<b class="k-hi">Confident errors</b> are shared beliefs: more judges make the same error (${f2(s.high.others_W_mean)} vs ${f2(s.low.others_W_mean)} of 7), and most sit on <b>contested labels</b> or near ties.`,
+    `The judge's <b>own signals</b> barely see them: its token probability and its reasoning look like a confident right answer.`,
+    `<b class="k-r">Other judges' doubt</b> is the better alarm, and it works best exactly on confident errors.`];
+  const pm=probeMean("high"); if(pm) tk.push(`<b>Hidden states</b> (${pm.n} open models) hold little extra doubt: at high confidence a probe separates wrong from right at ${f2(pm.v)} on average, vs ${f2(pm.b)} for text features. Inside the model, confident errors sit close to confident right answers.`);
+  document.getElementById("take-main").innerHTML=tk.map(t=>`<li>${t}</li>`).join("");
+  document.getElementById("a1-hi").textContent=f2(s.high.others_W_mean); document.getElementById("a1-lo").textContent=f2(s.low.others_W_mean);
+  const hw=typeShares("HW"); document.getElementById("a3-hw").textContent=pc(hw.gq+hw.nt);
+})();
+
+/* fig: sharing */
+(function(){const svg=document.getElementById("g-share"),W=860,H=300,L=150,R=30,T=20,B=40;
+  const sx=v=>L+v/7*(W-L-R); const sch=[["third","var(--hi)",-9],["risk","var(--ref)",0],["fixed","var(--rand)",9]];
+  [0,1,2,3,4,5,6,7].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-B,class:"gl"},svg);el("text",{x:sx(t),y:H-B+16,"text-anchor":"middle"},svg,t)});
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle",class:"lab"},svg,"other judges also wrong in both orders (of 7)");
+  LV.forEach((Lv,i)=>{const cy=T+30+i*80;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,LN[Lv]+" confidence");
+    sch.forEach(([s,c,dy])=>{const r=A2(s)[Lv];if(!r)return;const y=cy+dy;
+      el("line",{x1:sx(r.null_W_mean),x2:sx(r.null_W_mean),y1:y-4,y2:y+4,stroke:"var(--ink-3)","stroke-width":2},svg);
+      el("line",{x1:sx(r.W_ci_lo),x2:sx(r.W_ci_hi),y1:y,y2:y,stroke:c,"stroke-width":2},svg);
+      hov(el("circle",{cx:sx(r.others_W_mean),cy:y,r:6,fill:c},svg),`${s}, ${LN[Lv]}: ${f2(r.others_W_mean)} of 7 (CI ${f2(r.W_ci_lo)}–${f2(r.W_ci_hi)}), null ${f2(r.null_W_mean)}, n = ${r.n_W}`)})});
+})();
+
+/* fig: features */
+(function(){const svg=document.getElementById("g-feat"),W=860,L=220,R=30,T=16;
+  const F=[["human_split","Human annotators split"],["solved_by_judge","Judge solved the problem (BFF)"],["sim","Answers similar"],["same_final_number","Same final number"],["len_gap","Length gap"],["longer_is_better","Longer answer is the better one"]];
+  const H=T+F.length*46+34; svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const x0=-1,x1=1,sx=v=>L+(Math.max(x0,Math.min(x1,v))-x0)/(x1-x0)*(W-L-R);
+  [-1,-.5,0,.5,1].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-30,class:"gl"},svg);el("text",{x:sx(t),y:H-12,"text-anchor":"middle"},svg,(t>0?"+":"")+t.toFixed(1))});
+  el("line",{x1:sx(0),x2:sx(0),y1:T,y2:H-30,stroke:"var(--ink-3)"},svg);
+  F.forEach(([k,name],i)=>{const cy=T+20+i*46;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,name);
+    LV.forEach((Lv,j)=>{const r=D.A3.find(x=>x.feature===k&&x.contrast==="W-R "+Lv);if(!r||r.gap==null)return;const y=cy+(j-1)*11;
+      el("line",{x1:sx(r.ci_lo),x2:sx(r.ci_hi),y1:y,y2:y,stroke:LC[Lv],"stroke-width":2,opacity:.7},svg);
+      const sig=r.ci_lo>0||r.ci_hi<0;
+      hov(el("circle",{cx:sx(r.gap),cy:y,r:5,fill:sig?LC[Lv]:"var(--surface)",stroke:LC[Lv],"stroke-width":2},svg),`${name}, ${LN[Lv]}: ${r.gap>0?"+":""}${f2(r.gap)} SD (CI ${f2(r.ci_lo)} to ${f2(r.ci_hi)})${sig?"":", not significant"}`)})});
+})();
+
+/* fig: error types */
+(function(){const svg=document.getElementById("g-types"),W=860,L=210,R=60,T=10,rh=44;
+  const C=[["HW","high-confidence wrong"],["MW","intermediate wrong"],["LW","low-confidence wrong"],["HF","high-confidence flip (wrong order)"]];
+  const sx=v=>L+v*(W-L-R);
+  C.forEach(([c,name],i)=>{const s=typeShares(c),y=T+i*rh;el("text",{x:L-12,y:y+20,"text-anchor":"end",class:"lab"},svg,name);
+    let x=0;[["gq","var(--ref)","gold label questionable"],["nt","var(--mid)","near tie"],["own","var(--hi)","judge's own mistake"]].forEach(([k,col,lab])=>{
+      const w=s[k];if(w<=0)return;hov(el("rect",{x:sx(x),y:y+6,width:sx(x+w)-sx(x),height:24,fill:col,rx:2},svg),`${name}: ${lab} ${pc(w)}`);
+      if(w>.08)el("text",{x:sx(x)+6,y:y+22,fill:"#fff",style:"fill:#fff"},svg,pc(w));x+=w});
+    el("text",{x:W-R+8,y:y+22},svg,"n = "+s.n)});
+})();
+
+/* fig: reasoning */
+(function(){const svg=document.getElementById("g-read"),W=860,H=300,L=60,R=20,T=16,B=50;
+  const C=[["HR","high right"],["HW","high wrong"],["MW","int. wrong"],["LW","low wrong"],["LR","low right"]];
+  const K=[["reads_high","var(--hi)","reads highly confident"],["hedge","var(--lo)","hedges"],["close","var(--rand)","says answers close"]];
+  const gw=(W-L-R)/C.length,bw=gw/4.2,sy=v=>H-B-v*(H-B-T);
+  [0,.25,.5,.75,1].forEach(t=>{el("line",{x1:L,x2:W-R,y1:sy(t),y2:sy(t),class:"gl"},svg);el("text",{x:L-8,y:sy(t)+4,"text-anchor":"end"},svg,Math.round(t*100)+"%")});
+  C.forEach(([c,name],i)=>{const r=cod[c];if(!r)return;const x0=L+i*gw+gw*.15;
+    el("text",{x:L+i*gw+gw/2,y:H-B+20,"text-anchor":"middle",class:"lab"},svg,name);
+    K.forEach(([k,col,lab],j)=>{const v=r[k]||0;hov(el("rect",{x:x0+j*bw,y:sy(v),width:bw-3,height:sy(0)-sy(v),fill:col,rx:2},svg),`${name}: ${lab} ${pc(v)}`)})});
+})();
+
+/* fig: catch */
+(function(){const svg=document.getElementById("g-catch"),W=860,H=280,L=250,R=30,T=16;
+  const S=[["Own token probability",L=>A4[L]&&A4[L].auc_token_mean],["Own stated confidence (within level)",L=>A4[L]&&A4[L].auc_stated_mean],["Others' low confidence",L=>(A5("others_doubt",L)||{}).mean],["Others' disagreement",L=>(A5("others_disagree",L)||{}).mean]];
+  const x0=.4,x1=.85,sx=v=>L+(v-x0)/(x1-x0)*(W-L-R);
+  [.4,.5,.6,.7,.8].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-30,class:"gl"},svg);el("text",{x:sx(t),y:H-12,"text-anchor":"middle"},svg,t.toFixed(1))});
+  el("line",{x1:sx(.5),x2:sx(.5),y1:T,y2:H-30,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg);
+  S.forEach(([name,fn],i)=>{const cy=T+28+i*56;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,name);
+    const vs=LV.map(fn);el("line",{x1:sx(Math.min(...vs.filter(v=>v!=null))),x2:sx(Math.max(...vs.filter(v=>v!=null))),y1:cy,y2:cy,stroke:"var(--line)","stroke-width":3},svg);
+    LV.forEach((Lv,j)=>{const v=fn(Lv);if(v==null)return;hov(el("circle",{cx:sx(v),cy,r:6.5,fill:LC[Lv]},svg),`${name}, ${LN[Lv]}: AUROC ${f2(v)}`)})});
+})();
+
+/* Study B */
+function dotRows(id,rows,series,x0,x1,ticks,showBase,noChance){const svg=document.getElementById(id),W=860,L=230,R=24,rh=22,T=18;
+  let y=T,items=[],g=null;rows.forEach(r=>{if(r.group!==g){g=r.group;if(g){y+=items.length?10:0;items.push({hdr:g,y});y+=rh}}items.push({r,y});y+=rh});
+  const H=y+30;svg.setAttribute("viewBox",`0 0 ${W} ${H}`);const sx=v=>L+(Math.max(x0,Math.min(x1,v))-x0)/(x1-x0)*(W-L-R);
+  ticks.forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T-6,y2:H-24,class:"gl"},svg);el("text",{x:sx(t),y:H-8,"text-anchor":"middle"},svg,t.toFixed(1))});
+  if(!noChance&&x0<.5&&x1>.5)el("line",{x1:sx(.5),x2:sx(.5),y1:T-6,y2:H-24,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg);
+  items.forEach(it=>{if("hdr" in it){if(it.hdr)el("text",{x:8,y:it.y+4,class:"grp"},svg,it.hdr);return}const r=it.r,cy=it.y;
+    el("text",{x:L-10,y:cy+4,"text-anchor":"end",class:"lab"},svg,r.label);
+    if(showBase&&r.base!=null)hov(el("rect",{x:sx(r.base)-1,y:cy-8,width:2.5,height:16,fill:"var(--ink)"},svg),`${r.label}: text baseline ${f2(r.base)}`);
+    if(r.ci)el("line",{x1:sx(r.ci[0]),x2:sx(r.ci[1]),y1:cy,y2:cy,stroke:"var(--hi)","stroke-width":2,opacity:.5},svg);
+    series.forEach(s=>{const v=r.vals[s.key];if(v==null)return;hov(el("circle",{cx:sx(v),cy,r:5.5,fill:s.color},svg),`${r.label} · ${s.name}: ${f2(v)}${r.n?` (n = ${r.n})`:""}`)})});
+}
+if(!models.length){document.getElementById("b-empty").hidden=false}
+else{
+  const ser=[{key:"q_end",color:"var(--rand)",name:"after the question"},{key:"b_end",color:"var(--lo)",name:"after both answers"},{key:"verdict",color:"var(--hi)",name:"at the verdict"}];
+  const mk=src=>models.flatMap(m=>[...LV,"all"].map(L=>{const r=(D.probes[m].B3||[]).find(x=>x.labels===src&&x.level===L);if(!r||r.verdict==null)return null;
+    return {group:MN[m]||m,label:(L==="all"?"all levels":LN[L])+` (${r.n_w} wrong)`,vals:{q_end:r.q_end,b_end:r.b_end,verdict:r.verdict},base:r.baseline,ci:[r.verdict_lo,r.verdict_hi],n:r.n}}).filter(Boolean));
+  dotRows("g-probe",mk("own"),ser,.4,1,[.4,.5,.6,.7,.8,.9,1],true);
+  const tr=mk("tinker"); if(tr.length)dotRows("g-probe-t",tr,ser,.4,1,[.4,.5,.6,.7,.8,.9,1],true); else document.getElementById("g-probe-t").outerHTML='<div class="empty">No reasoning-run labels for these models.</div>';
+  const cells=["LW","MW","HW","LR","MR","HR","LF","MF","HF"];
+  dotRows("g-geo",models.map(m=>({group:"",label:MN[m]||m,vals:Object.fromEntries((D.probes[m].B4.cells||[]).map(c=>[c.cell,c.mean]))})),
+    [{key:"LW",color:"var(--lo)",name:"LW"},{key:"MW",color:"var(--mid)",name:"MW"},{key:"HW",color:"var(--hi)",name:"HW (confident error)"},{key:"HR",color:"var(--right)",name:"HR"}],-.2,1.2,[-.2,0,.2,.4,.6,.8,1,1.2],false,true);
+  const tg=models.map(m=>{const B=D.probes[m].B5||[];const own=B.find(x=>x.target==="own"),reas=B.find(x=>x.target==="same model, reasoning run");
+    const oth=B.filter(x=>x.target!=="own"&&x.target!=="same model, reasoning run"&&x.auc!=null);const mo=oth.reduce((s,x)=>s+x.auc,0)/(oth.length||1);
+    return {group:"",label:MN[m]||m,vals:{own:own&&own.auc,reas:reas&&reas.auc,oth:oth.length?mo:null}}});
+  dotRows("g-transfer",tg,[{key:"oth",color:"var(--rand)",name:"other judges' errors (mean)"},{key:"reas",color:"var(--lo)",name:"same model, reasoning run"},{key:"own",color:"var(--hi)",name:"its own forced-verdict errors"}],.4,1,[.4,.5,.6,.7,.8,.9,1],false);
+  window.__probeSummary=true;
+}
+/* takeaways and hypotheses for Study B are filled from the template text below */
+/* Study B takeaways and the hypotheses table; numbers are read from D where they vary by model. */
+(function(){
+  const ms=Object.keys(D.probes);
+  const get=(m,src,L)=>(D.probes[m].B3||[]).find(x=>x.labels===src&&x.level===L)||{};
+  const rng=(vals)=>{const v=vals.filter(x=>x!=null);return v.length?`${f2(Math.min(...v))}–${f2(Math.max(...v))}`:"–"};
+  const hiP=rng(ms.map(m=>get(m,"own","high").verdict)), hiB=rng(ms.map(m=>get(m,"own","high").baseline));
+  const allP=rng(ms.map(m=>get(m,"own","all").verdict)), qP=rng(ms.map(m=>get(m,"own","all").q_end));
+  const tP=rng(ms.map(m=>get(m,"tinker","high").verdict)), tB=rng(ms.map(m=>get(m,"tinker","high").baseline));
+  const hw=rng(ms.map(m=>((D.probes[m].B4.cells||[]).find(c=>c.cell==="HW")||{}).mean));
+  const mw=rng(ms.map(m=>((D.probes[m].B4.cells||[]).find(c=>c.cell==="MW")||{}).mean));
+  const own=rng(ms.map(m=>((D.probes[m].B5||[]).find(x=>x.target==="own")||{}).auc));
+  const oth=rng(ms.map(m=>{const o=(D.probes[m].B5||[]).filter(x=>x.target!=="own"&&x.target!=="same model, reasoning run"&&x.auc!=null);return o.length?o.reduce((s,x)=>s+x.auc,0)/o.length:null}));
+  const set=(id,items)=>{const e=document.getElementById(id);if(e)e.innerHTML=items.map(t=>`<li>${t}</li>`).join("")};
+  if(ms.length){
+    set("take-b1",[`At <b class="k-hi">high confidence</b>, hidden states separate wrong from right at ${hiP}, only about 0.05 above text features (${hiB}); intervals overlap.`,
+      `Pooled over levels the probes reach ${allP}, mostly by reading the confidence itself.`,
+      `After the <b>question</b> alone they are at chance (${qP}): difficulty lives in the answer pair.`]);
+    set("take-b2",[`Before any reasoning, hidden states don't predict the <b>reasoned</b> verdict's confident errors beyond text features (${tP} vs ${tB}).`]);
+    set("take-b3",[`<b class="k-hi">Confident errors</b> sit at ${hw} on the axis from unsure-wrong (0) to confident-right (1): much closer to confident-right than intermediate errors (${mw}).`,
+      `So they are <b>mostly believed</b>, with a little correctness information left at high confidence.`]);
+    set("take-b4",[`A model's error probe predicts <b>other judges'</b> errors at ${oth}, against ${own} for its own: it mostly reads <b>item difficulty</b>.`]);
+  }
+  const H=[
+    ["Confident errors are shared with other judges more than unsure errors","good","Supported",`Others also wrong in both orders: ${f2(A2("third").high.others_W_mean)} vs ${f2(A2("third").low.others_W_mean)} of 7 (null ≈ 1); holds under all three level schemes.`],
+    ["Sharing is strongest within a model family","mixed","Weak","Lift 2.6–2.8× within family vs 2.4–2.5× across."],
+    ["Confident errors sit on contested labels or near ties","good","Supported","Human split +0.63 SD vs right answers at high confidence; coders flag 65% of confident errors as label problems or ties."],
+    ["The judge's own token probability reveals hidden doubt","bad","Not supported","Within-level AUROC 0.53–0.60; token probability is saturated."],
+    ["Other judges catch confident errors","good","Supported","Others' doubt: 0.72 at high vs 0.59 at low confidence."],
+    ["Hidden states separate wrong from right at the same confidence","mixed","Weak",ms.length?`High level ${hiP} vs text baseline ${hiB}.`:"pending"],
+    ["Confident errors look like confident right answers inside the model","mixed","Mostly",ms.length?`Position ${hw} on the unsure-wrong → confident-right axis.`:"pending"],
+    ["The signal exists before the answers are read","bad","Not supported",ms.length?`Question-only probes ${qP}.`:"pending"],
+    ["The probe reads the model's own belief, not item difficulty","bad","Not supported",ms.length?`Others' errors ${oth} vs own ${own}.`:"pending"]];
+  document.getElementById("hyp").innerHTML=H.map(([h,c,v,e])=>`<tr><td>${h}</td><td><span class="pill ${c}">${v}</span></td><td>${e}</td></tr>`).join("");
+})();
+
+})();
+</script>

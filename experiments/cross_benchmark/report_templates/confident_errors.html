@@ -1,0 +1,399 @@
+<title>Confident vs Unsure Judge Errors</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, same system as the order-flip report. Conclusions first (question card, findings grid),
+   then two tabs: behaviour & text (Study A) / inside the model (Study B). Each figure is headed by its finding.
+   Colour encodes confidence level: low (grey-blue), intermediate (amber), high (red-orange); right answers in teal. */
+:root{
+  --bg:#f7f8f6; --surface:#ffffff; --ink:#17202a; --ink-2:#47525e; --ink-3:#6f7a85; --line:#dfe3e6; --grid:#e9ecee;
+  --lo:#5b7fb8; --mid:#c08a1e; --hi:#d9622b; --right:#13866f; --rand:#9aa3ab; --ref:#8a4fbf;
+  --b1:#2f5fb3; --b2:#c2410c; --b3:#13866f; --b4:#8a4fbf;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --lo:#8fb0e6; --mid:#e0b04f; --hi:#f08a52; --right:#3fbf9f; --rand:#6c757d; --ref:#b58ae0;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#121619; --surface:#1a1f23; --ink:#e6eaed; --ink-2:#b2bcc4; --ink-3:#8b96a0; --line:#2c3338; --grid:#252b30;
+  --lo:#8fb0e6; --mid:#e0b04f; --hi:#f08a52; --right:#3fbf9f; --rand:#6c757d; --ref:#b58ae0;
+  --b1:#6f9be6; --b2:#f08a52; --b3:#3fbf9f; --b4:#b58ae0; color-scheme:dark }
+body{background:var(--bg);color:var(--ink);font:16.5px/1.6 var(--body)}
+.wrap{max-width:900px;margin:0 auto;padding-block:40px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+.wrap>*,.panel>*{min-width:0}
+.kicker{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+h1{font:800 clamp(30px,5vw,44px)/1.06 var(--display);margin:8px 0 12px;letter-spacing:-.01em;text-wrap:balance}
+h2{font:600 clamp(19px,2.4vw,23px)/1.25 var(--display);margin:0;text-wrap:balance}
+h3{font:600 15px/1.3 var(--display);margin:0 0 6px}
+p{margin:0;max-width:68ch}
+.lede{font-size:18.5px;color:var(--ink-2);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font:13px/1.5 var(--mono);color:var(--ink-3)}
+.meta b{color:var(--ink);font-weight:500}
+section.fig{display:grid;gap:12px}
+.method{font-size:14px;color:var(--ink-3);max-width:76ch}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 10px 8px;overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:560px;height:auto}
+.chart text{font-family:var(--mono);font-size:11.5px;fill:var(--ink-3)}
+.chart .lab{font-family:var(--body);font-size:13.5px;fill:var(--ink)}
+.chart .grp{font-family:var(--display);font-weight:600;font-size:12.5px;fill:var(--ink)}
+.chart .val{font-size:11px;fill:var(--ink-2)}
+.chart .gl{stroke:var(--grid);stroke-width:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:50%}
+.legend i.sq{border-radius:2px}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))}
+.two>*{min-width:0}
+.two .chart svg{min-width:340px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:3;padding-top:6px}
+.tabs button{font:600 15px/1.2 var(--display);color:var(--ink-3);background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px 9px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.panel{display:grid;gap:40px;padding-top:24px}
+.panel-intro{font-size:15.5px;color:var(--ink-2);max-width:70ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:620px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.3 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:999px;border:1.5px solid currentColor;white-space:nowrap}
+.pill.good{color:var(--right)} .pill.mixed{color:var(--mid)} .pill.bad{color:var(--hi)}
+.note{font-size:14px;color:var(--ink-2);display:grid;gap:8px}
+.note ul{margin:0;padding-left:18px;display:grid;gap:4px}
+code{font:13px var(--mono);background:var(--grid);padding:1px 5px;border-radius:4px;word-break:break-word}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12.5px/1.4 var(--body);padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:5;max-width:270px}
+:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+details.more>summary,details.block>summary{cursor:pointer;list-style:none}
+details.more>summary::-webkit-details-marker,details.block>summary::-webkit-details-marker{display:none}
+details.more>summary{display:inline-flex;align-items:center;gap:6px;font:500 12.5px/1.6 var(--mono);color:var(--ink-3)}
+details.more>summary::before,details.block>summary::before{content:"\25B8";display:inline-block;width:1em;color:var(--ink-3)}
+details.more[open]>summary::before,details.block[open]>summary::before{content:"\25BE"}
+details.more>*:not(summary){margin-top:8px}
+details.block>summary{display:flex;align-items:baseline;gap:8px}
+details.block>summary h2{display:inline}
+details.block>*:not(summary){margin-top:14px}
+ul.take{margin:0;padding-left:20px;display:grid;gap:4px;font-size:16.5px;line-height:1.5}
+ul.take li::marker{color:var(--ink-3)}
+ul.take b{font-weight:600}
+table.grid3{min-width:640px}
+table.grid3 tbody th{font:600 14.5px/1.35 var(--display);text-transform:none;letter-spacing:0;color:var(--ink);width:30%}
+table.grid3 thead th{font:600 14px var(--display);text-transform:none;letter-spacing:0}
+table.grid3 .big{display:block;font:600 20px/1.2 var(--display);font-variant-numeric:tabular-nums;color:var(--ink)}
+table.grid3 .sub{display:block;font-size:13px;line-height:1.35;color:var(--ink-2);margin-top:2px}
+table.grid3 td.hl{background:color-mix(in srgb,var(--hi) 9%,transparent)}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px -12px rgba(0,0,0,.18);display:grid;gap:14px;margin-top:18px}
+.qcard .ql{font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.qcard>ol{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.qcard ol>li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;font:600 clamp(17px,2.2vw,20px)/1.4 var(--display);color:var(--ink)}
+.qcard .qn{font:600 13px/28px var(--mono);color:var(--ink-3)}
+.qcard.tk{margin-top:0;padding:14px 18px;gap:8px}
+.qcard.tk ul.take{font-size:16px}
+.k-hi{color:var(--hi)} .k-lo{color:var(--lo)} .k-mid{color:var(--mid)} .k-r{color:var(--right)}
+.k-u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.cells{display:grid;grid-template-columns:auto repeat(3,minmax(0,1fr));gap:4px;font-size:13.5px;max-width:520px}
+.cells div{padding:6px 8px;border-radius:6px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.cells .h{background:none;border:0;font:600 12px var(--mono);color:var(--ink-3);text-align:left}
+.empty{font-size:14px;color:var(--ink-3);padding:14px;border:1px dashed var(--line);border-radius:8px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="kicker">AC 297r · Dynamic LLM Juries · confident-errors study · 11/02</div>
+  <h1>When a Judge Is Confidently Wrong</h1>
+  <p class="lede">Each judge's verdicts are split by its own confidence (low, intermediate, high) and by outcome (right, wrong, flip). We compare <span class="k-hi">confident errors</span> with <span class="k-lo">unsure errors</span> and with right answers at the same confidence, using other judges, the items, the reasoning text and the model's hidden states.</p>
+  <div class="qcard" role="note" aria-label="Main questions">
+    <div class="ql">Three questions</div>
+    <ol>
+      <li><span class="qn">Q1</span><span>Are <span class="k-hi">confident errors</span> <u>shared</u> with other judges more than <span class="k-lo">unsure errors</span>?</span></li>
+      <li><span class="qn">Q2</span><span>What <u>kind</u> of item and mistake is a confident error?</span></li>
+      <li><span class="qn">Q3</span><span>Does the judge <u>know</u> it is wrong: in its token probability, its reasoning, or its <span class="k-u">hidden states</span>?</span></li>
+    </ol>
+  </div>
+  <details class="more"><summary>Experiment setup</summary>
+    <div class="meta"><span><b>8</b> judges</span><span><b>4</b> pairwise benchmarks</span><span><b>1,614</b> pairs, both orders</span><span><b>120</b> verdicts coded blind</span><span><b id="m-models">0</b> open models probed</span></div>
+    <p class="method" style="margin-top:8px">Outcome per judge and pair: <b>right</b> in both answer orders, <b>wrong</b> in both, or <b>flip</b>. Confidence level: the judge's own lower, middle and upper third of stated confidence (0–100) within each benchmark, so "high" means relatively sure for that judge. Qwen states 95–100 on most items while gpt-oss-120b rarely goes above 95, so fixed cut-offs would not compare judges fairly. Results are checked with calibrated-risk levels and fixed 70 / 90 cuts.</p>
+    <div class="cells" id="cells" style="margin-top:10px"></div>
+  </details>
+</header>
+
+<section aria-labelledby="k"><details class="block" open>
+  <summary><h2 id="k">Main findings</h2></summary>
+  <p class="panel-intro">Columns are the judge's own confidence level. Rows compare <b>wrong</b> verdicts with right ones at the same level.</p>
+  <div class="tbl"><table class="grid3" id="grid"></table></div>
+  <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-main"></ul></div>
+</details></section>
+
+<div>
+  <div class="tabs" role="tablist" aria-label="Study">
+    <button role="tab" id="t-a" aria-controls="p-a" aria-selected="true">Behaviour and text</button>
+    <button role="tab" id="t-b" aria-controls="p-b" aria-selected="false" tabindex="-1">Inside the model</button>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-a" aria-labelledby="t-a">
+    <section class="fig" aria-labelledby="a1">
+      <h2 id="a1"><span class="k-hi">Confident errors</span> are <span class="k-u">shared</span> by more judges</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>When a judge is wrong in both orders, <b id="a1-hi"></b> of the other 7 judges are too at high confidence, vs <b id="a1-lo"></b> at low (about 1 if independent).</li>
+        <li>The gradient holds under all three ways of cutting confidence.</li></ul></div>
+      <div class="chart"><svg id="g-share" viewBox="0 0 860 300" role="img" aria-label="Other judges also wrong, by confidence level and scheme."></svg></div>
+      <div class="legend"><span><i style="background:var(--hi)"></i>within-judge thirds (main)</span><span><i style="background:var(--ref)"></i>calibrated risk</span><span><i style="background:var(--rand)"></i>fixed 70 / 90</span><span><i class="sq" style="background:var(--ink-3);height:2px"></i>independence null</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">For every verdict that is wrong in both orders: how many of the other 7 judges are also wrong in both orders on that pair. Bars: 95% CI, bootstrap over questions. The null assumes judges err independently at their own error rates. Only 13–15% of errors at any level are unique to one judge.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a2">
+      <h2 id="a2"><span class="k-hi">Confident errors</span> sit on <span class="k-u">contested</span> labels and <span class="k-u">unsolved</span> problems</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>The higher the confidence, the more a wrong verdict sits on items where <b>human annotators disagreed</b>.</li>
+        <li>On BFF, confident errors happen where the judge <b>couldn't solve the problem itself</b>.</li>
+        <li>Unsure errors follow <b>surface cues</b> instead: similar answers, the same final number.</li></ul></div>
+      <div class="chart"><svg id="g-feat" viewBox="0 0 860 330" role="img" aria-label="Item features, wrong minus right, by confidence level."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low</span><span><i style="background:var(--mid)"></i>intermediate</span><span><i style="background:var(--hi)"></i>high</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Each feature is standardised within benchmark. A dot is the mean for wrong verdicts minus the mean for right verdicts at the same confidence level (in standard deviations), with a 95% CI over questions. Right of zero: wrong verdicts have more of it. Human split only exists for AlpacaFarm and MT-Bench human; "judge solved it" only for BFF.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a3">
+      <h2 id="a3">About <span class="k-u">two thirds</span> of <span class="k-hi">confident errors</span> are label problems or near ties</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>High-confidence errors: <b id="a3-hw"></b> have a questionable gold label or are a near tie.</li>
+        <li>Unsure errors are mostly <b>near ties</b>. High-confidence <b>flips</b> are the judge's own slips.</li></ul></div>
+      <div class="chart"><svg id="g-types" viewBox="0 0 860 240" role="img" aria-label="Error types by cell, blind coding."></svg></div>
+      <div class="legend"><span><i class="sq" style="background:var(--ref)"></i>gold label questionable</span><span><i class="sq" style="background:var(--mid)"></i>near tie</span><span><i class="sq" style="background:var(--hi)"></i>judge's own mistake</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">120 verdicts, 20 per cell, 5 per benchmark, coded blind to confidence and flips by four Claude coders with a fixed codebook. "Judge's own mistake" = missed factual error, arithmetic or logic slip, misread question, or preferred length or style. HF counts only flip verdicts that were wrong in the shown order (n = 8). A human check of 30 items is pending.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a4">
+      <h2 id="a4">A <span class="k-hi">confident error</span> <span class="k-u">reads like</span> a confident right answer</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>Blind readers can't tell high-confidence wrong from high-confidence right by tone (AUROC 0.49).</li>
+        <li>Unsure verdicts hedge and call the answers close, whether right or wrong.</li></ul></div>
+      <div class="chart"><svg id="g-read" viewBox="0 0 860 300" role="img" aria-label="Share of reasoning that reads confident, hedges, or calls answers close, by cell."></svg></div>
+      <div class="legend"><span><i class="sq" style="background:var(--hi)"></i>reads highly confident</span><span><i class="sq" style="background:var(--lo)"></i>hedges or self-corrects</span><span><i class="sq" style="background:var(--rand)"></i>says the answers are close</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Share of coded verdicts per cell. Stated confidence numbers were masked before coding. Verdict-only records (no reasoning text) are left out.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="a5">
+      <h2 id="a5">The judge shows <span class="k-u">little doubt</span>; <span class="k-r">other judges</span> show more</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take">
+        <li>Within a confidence level, the judge's own <b>token probability</b> barely separates wrong from right (≈0.55).</li>
+        <li><b>Other judges' doubt</b> works best on <span class="k-hi">confident errors</span> (0.72 at high vs 0.59 at low).</li></ul></div>
+      <div class="chart"><svg id="g-catch" viewBox="0 0 860 280" role="img" aria-label="AUROC for wrong vs right within each confidence level, by signal."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low</span><span><i style="background:var(--mid)"></i>intermediate</span><span><i style="background:var(--hi)"></i>high</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">AUROC for wrong vs right verdicts inside one confidence level (0.5 = chance), averaged over judge × benchmark cells. Own signals: verdict-token probability and the remaining spread of stated confidence. Others: the other 7 judges' low confidence (ranked within each judge) and their disagreement with this judge's pick.</p></details>
+    </section>
+  </div>
+
+  <div class="panel" role="tabpanel" id="p-b" aria-labelledby="t-b" hidden>
+    <details class="more" open><summary>About this tab</summary><p class="panel-intro">Open judges were run on Modal with a <b>forced verdict</b>: the same pairwise prompt, answered immediately with "VERDICT:" and no reasoning, in both orders. One forward pass gives the model's own P(A) vs P(B) (its verdict and confidence) and its hidden states at three points: after the <b>question</b>, after <b>both answers</b>, and at the <b>verdict</b>. Linear probes (PCA 64 + logistic regression, nested cross-validation by question) test whether hidden states separate wrong from right at the same confidence level.</p></details>
+    <div id="b-empty" class="empty" hidden>No probe results yet.</div>
+
+    <section class="fig" aria-labelledby="b1">
+      <h2 id="b1">Do <span class="k-u">hidden states</span> separate wrong from right at the same confidence?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b1"></ul></div>
+      <div class="chart"><svg id="g-probe" viewBox="0 0 860 400" role="img" aria-label="Probe AUROC for wrong vs right within each confidence level."></svg></div>
+      <div class="legend"><span><i style="background:var(--rand)"></i>after the question</span><span><i style="background:var(--lo)"></i>after both answers</span><span><i style="background:var(--hi)"></i>at the verdict</span><span><i class="sq" style="background:var(--ink);height:12px;width:2px"></i>text baseline</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method" id="probe-note">Labels = the model's own forced verdict. Each row is one model × confidence level; dots are probe AUROC for wrong vs right, the bar is a text-only baseline (answer similarity, lengths, final numbers, question aspects, benchmark). The layer is chosen on training folds only.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b2">
+      <h2 id="b2">Before any reasoning, can hidden states predict the <span class="k-u">reasoned</span> verdict's error?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b2"></ul></div>
+      <div class="chart"><svg id="g-probe-t" viewBox="0 0 860 300" role="img" aria-label="Probe AUROC for the same model's reasoning-run errors."></svg></div>
+      <details class="more"><summary>How to read this</summary><p class="method">Same activations (no reasoning), but labels come from the same model's reasoning run with stated confidence (Tinker). Only judges in that run: Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b, gpt-oss-120b.</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b3">
+      <h2 id="b3">Where do <span class="k-hi">confident errors</span> sit between unsure-wrong and confident-right?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b3"></ul></div>
+      <div class="chart"><svg id="g-geo" viewBox="0 0 860 300" role="img" aria-label="Position of each cell on the axis from unsure-wrong to confident-right."></svg></div>
+      <div class="legend"><span><i style="background:var(--lo)"></i>low-confidence wrong (0 by construction)</span><span><i style="background:var(--mid)"></i>intermediate wrong</span><span><i style="background:var(--hi)"></i>high-confidence wrong</span><span><i style="background:var(--right)"></i>high-confidence right (1)</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">At the verdict position, a direction from the mean of low-confidence wrong (LW = 0) to high-confidence right (HR = 1), fitted on training folds; each cell's mean position on held-out pairs. HW near 1 = the model represents its confident error like a confident right answer (a real belief).</p></details>
+    </section>
+
+    <section class="fig" aria-labelledby="b4">
+      <h2 id="b4">Does a model's error probe read <span class="k-u">its own</span> errors or <span class="k-u">item difficulty</span>?</h2>
+      <div class="qcard tk" role="note"><div class="ql">Key takeaways</div><ul class="take" id="take-b4"></ul></div>
+      <div class="chart"><svg id="g-transfer" viewBox="0 0 860 300" role="img" aria-label="AUROC of each model's error probe for other judges' errors."></svg></div>
+      <div class="legend"><span><i style="background:var(--hi)"></i>its own errors (forced verdict)</span><span><i style="background:var(--lo)"></i>the same model's reasoning-run errors</span><span><i style="background:var(--rand)"></i>other judges' errors (mean of 7)</span></div>
+      <details class="more"><summary>How to read this</summary><p class="method">A wrong-vs-right probe trained on the model's own forced verdicts, applied to other judges' errors on the same held-out pairs. If it predicts others' errors as well as its own, it reads item difficulty rather than the model's own belief.</p></details>
+    </section>
+  </div>
+</div>
+
+<section aria-labelledby="h"><details class="block">
+  <summary><h2 id="h">Hypotheses</h2></summary>
+  <div class="tbl"><table><thead><tr><th>Hypothesis</th><th>Verdict</th><th>Evidence</th></tr></thead><tbody id="hyp"></tbody></table></div>
+</details></section>
+
+<section aria-labelledby="c" class="note"><details class="block">
+  <summary><h2 id="c">Caveats</h2></summary>
+  <ul>
+    <li>One sample per verdict. Study A levels come from the confidence run, which changed 12–20% of verdicts relative to the stored run.</li>
+    <li>Study B uses a forced verdict with no reasoning, so its states differ from the reasoning judges in Study A; the "reasoned verdict" panel links the two.</li>
+    <li>Study B: gpt-oss-120b ran in native MXFP4 weights on one H100, gpt-oss-20b dequantized to bf16; Qwen3.6-35B and Nemotron were not probed. About 35–67 high-confidence errors per model, so high-level probe AUROCs carry intervals of about ±0.08.</li>
+    <li>Coding is by LLM coders, one per record, 20 per cell; Janys's 30-item agreement check is pending.</li>
+    <li>Human split exists only for AlpacaFarm and MT-Bench human; solve labels only for BFF.</li>
+    <li>Judges and pairs overlap across analyses, so points are not independent; intervals bootstrap over questions.</li>
+  </ul>
+  <p>Write-up: <code>docs/results_confident_errors.md</code>. Plan: <code>docs/confident_errors_plan.md</code>. Code: <code>experiments/cross_benchmark/confident_errors*.py</code>, <code>experiments/judge_confidence/probe_states_modal.py</code>, <code>analyze_state_probes.py</code>.</p>
+</details></section>
+</div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const D = __DATA__;
+const NS="http://www.w3.org/2000/svg", tip=document.getElementById("tip");
+const LV=["low","mid","high"], LN={low:"low",mid:"intermediate",high:"high"}, LC={low:"var(--lo)",mid:"var(--mid)",high:"var(--hi)"};
+const MN={"qwen3.5-4b":"Qwen3.5-4B","qwen3.5-9b":"Qwen3.5-9B","gpt-oss-20b":"gpt-oss-20b","gpt-oss-120b":"gpt-oss-120b"};
+const f2=v=>v==null?"–":(+v).toFixed(2), pc=v=>v==null?"–":Math.round(v*100)+"%";
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e}
+function hov(e,msg){e.setAttribute("tabindex","0");e.setAttribute("aria-label",msg);
+  const s=()=>{tip.textContent=msg;const r=e.getBoundingClientRect();tip.style.left=Math.max(8,Math.min(r.left+r.width/2+10,innerWidth-280))+"px";tip.style.top=Math.max(8,r.top-40)+"px";tip.style.opacity=1};
+  const h=()=>tip.style.opacity=0; e.addEventListener("mouseenter",s);e.addEventListener("focus",s);e.addEventListener("mouseleave",h);e.addEventListener("blur",h)}
+const lvOf=r=>r.level||r.third||r.risk||r.fixed;
+
+/* tabs */
+const tabs=[["t-a","p-a","a"],["t-b","p-b","b"]];
+function show(k){tabs.forEach(t=>{const on=t[2]===k,b=document.getElementById(t[0]);b.setAttribute("aria-selected",on);b.tabIndex=on?0:-1;document.getElementById(t[1]).hidden=!on});try{localStorage.setItem("ce-tab",k)}catch(e){}}
+tabs.forEach((t,i)=>{const b=document.getElementById(t[0]);b.addEventListener("click",()=>show(t[2]));b.addEventListener("keydown",ev=>{if(ev.key==="ArrowRight"||ev.key==="ArrowLeft"){const n=tabs[(i+1)%2];show(n[2]);document.getElementById(n[0]).focus()}})});
+let st=location.hash==="#inside"?"b":null; if(!st){try{st=localStorage.getItem("ce-tab")}catch(e){}} show(st==="b"?"b":"a");
+
+/* data helpers */
+const A0=Object.fromEntries(D.A0.third.map(r=>[lvOf(r),r]));
+const A2=s=>Object.fromEntries(D.A2[s].map(r=>[lvOf(r),r]));
+const cod=Object.fromEntries(D.coding.map(r=>[r.cell,r]));
+const A4=Object.fromEntries(D.A4.map(r=>[r.level,r]));
+const A5=(sig,L)=>D.A5.find(r=>r.signal===sig&&r.level===L);
+const types=Object.fromEntries(D.coding_types.map(r=>[r.cell,r]));
+function typeShares(c){const r=types[c]||{};const n=Object.entries(r).filter(([k])=>k!=="cell").reduce((s,[,v])=>s+v,0)||1;
+  const gq=(r.gold_questionable||0)/n, nt=(r.near_tie||0)/n; return {gq,nt,own:1-gq-nt,n}}
+const models=Object.keys(D.probes); document.getElementById("m-models").textContent=models.length;
+function probeRow(m,src,L){const r=(D.probes[m].B3||[]).find(x=>x.labels===src&&x.level===L);return r&&r.verdict!=null?r:null}
+function probeMean(L,src){const rs=models.map(m=>probeRow(m,src||"own",L)).filter(Boolean);if(!rs.length)return null;const v=rs.map(r=>r.verdict),b=rs.map(r=>r.baseline);
+  return {v:v.reduce((a,x)=>a+x,0)/v.length,lo:Math.min(...v),hi:Math.max(...v),b:b.reduce((a,x)=>a+x,0)/b.length,n:rs.length}}
+function bestProbe(L,src){let best=null;models.forEach(m=>{const r=probeRow(m,src||"own",L);if(r&&(!best||r.verdict>best.r.verdict))best={m,r}});return best}
+
+/* setup cells */
+(function(){const c=document.getElementById("cells");let h='<div class="h"></div>'+LV.map(L=>`<div class="h">${LN[L]}</div>`).join("");
+  ["R","W","F"].forEach(o=>{h+=`<div class="h">${{R:"right",W:"wrong",F:"flip"}[o]}</div>`+LV.map(L=>`<div>${(A0[L][o]||0).toLocaleString()}</div>`).join("")});c.innerHTML=h})();
+
+/* main grid */
+(function(){
+  const s=A2("third"); const rows=[
+    ["Error rate (consistent pairs)",L=>[pc(A0[L].err_rate_consistent),`${A0[L].W} wrong · ${A0[L].R} right`]],
+    ["Other judges also wrong (of 7)",L=>[f2(s[L].others_W_mean),`95% CI ${f2(s[L].W_ci_lo)}–${f2(s[L].W_ci_hi)}; null ≈ ${f2(s[L].null_W_mean)}`]],
+    ["Gold label questionable (coded)",L=>{const c=cod[L[0].toUpperCase()+"W"];return [pc(c&&c.gold_q),`right answers: ${pc((cod[L[0].toUpperCase()+"R"]||{}).gold_q)}`]}],
+    ["Wrong reasoning reads highly confident",L=>{const c=cod[L[0].toUpperCase()+"W"],r=cod[L[0].toUpperCase()+"R"];return [pc(c&&c.reads_high),r?`right answers: ${pc(r.reads_high)}`:""]}],
+    ["Own token probability, wrong vs right",L=>[f2(A4[L]&&A4[L].auc_token_mean),"AUROC within level"]],
+    ["Other judges' doubt, wrong vs right",L=>{const r=A5("others_doubt",L);return [f2(r&&r.mean),"AUROC within level"]}],
+    ["Hidden-state probe, wrong vs right",L=>{const p=probeMean(L);return p?[f2(p.v),`mean of ${p.n} models (${f2(p.lo)}–${f2(p.hi)}); text baseline ${f2(p.b)}`]:["–","pending"]}],
+  ];
+  let h='<thead><tr><th></th>'+LV.map(L=>`<th class="k-${L==="mid"?"mid":L==="low"?"lo":"hi"}">${LN[L][0].toUpperCase()+LN[L].slice(1)} confidence</th>`).join("")+'</tr></thead><tbody>';
+  rows.forEach(([name,fn])=>{h+=`<tr><th>${name}</th>`+LV.map(L=>{const [b,sub]=fn(L);return `<td${L==="high"?' class="hl"':''}><span class="big">${b}</span><span class="sub">${sub}</span></td>`}).join("")+"</tr>"});
+  document.getElementById("grid").innerHTML=h+"</tbody>";
+  const tk=[`<b class="k-hi">Confident errors</b> are shared beliefs: more judges make the same error (${f2(s.high.others_W_mean)} vs ${f2(s.low.others_W_mean)} of 7), and most sit on <b>contested labels</b> or near ties.`,
+    `The judge's <b>own signals</b> barely see them: its token probability and its reasoning look like a confident right answer.`,
+    `<b class="k-r">Other judges' doubt</b> is the better alarm, and it works best exactly on confident errors.`];
+  const pm=probeMean("high"); if(pm) tk.push(`<b>Hidden states</b> (${pm.n} open models) hold little extra doubt: at high confidence a probe separates wrong from right at ${f2(pm.v)} on average, vs ${f2(pm.b)} for text features. Inside the model, confident errors sit close to confident right answers.`);
+  document.getElementById("take-main").innerHTML=tk.map(t=>`<li>${t}</li>`).join("");
+  document.getElementById("a1-hi").textContent=f2(s.high.others_W_mean); document.getElementById("a1-lo").textContent=f2(s.low.others_W_mean);
+  const hw=typeShares("HW"); document.getElementById("a3-hw").textContent=pc(hw.gq+hw.nt);
+})();
+
+/* fig: sharing */
+(function(){const svg=document.getElementById("g-share"),W=860,H=300,L=150,R=30,T=20,B=40;
+  const sx=v=>L+v/7*(W-L-R); const sch=[["third","var(--hi)",-9],["risk","var(--ref)",0],["fixed","var(--rand)",9]];
+  [0,1,2,3,4,5,6,7].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-B,class:"gl"},svg);el("text",{x:sx(t),y:H-B+16,"text-anchor":"middle"},svg,t)});
+  el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle",class:"lab"},svg,"other judges also wrong in both orders (of 7)");
+  LV.forEach((Lv,i)=>{const cy=T+30+i*80;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,LN[Lv]+" confidence");
+    sch.forEach(([s,c,dy])=>{const r=A2(s)[Lv];if(!r)return;const y=cy+dy;
+      el("line",{x1:sx(r.null_W_mean),x2:sx(r.null_W_mean),y1:y-4,y2:y+4,stroke:"var(--ink-3)","stroke-width":2},svg);
+      el("line",{x1:sx(r.W_ci_lo),x2:sx(r.W_ci_hi),y1:y,y2:y,stroke:c,"stroke-width":2},svg);
+      hov(el("circle",{cx:sx(r.others_W_mean),cy:y,r:6,fill:c},svg),`${s}, ${LN[Lv]}: ${f2(r.others_W_mean)} of 7 (CI ${f2(r.W_ci_lo)}–${f2(r.W_ci_hi)}), null ${f2(r.null_W_mean)}, n = ${r.n_W}`)})});
+})();
+
+/* fig: features */
+(function(){const svg=document.getElementById("g-feat"),W=860,L=220,R=30,T=16;
+  const F=[["human_split","Human annotators split"],["solved_by_judge","Judge solved the problem (BFF)"],["sim","Answers similar"],["same_final_number","Same final number"],["len_gap","Length gap"],["longer_is_better","Longer answer is the better one"]];
+  const H=T+F.length*46+34; svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const x0=-1,x1=1,sx=v=>L+(Math.max(x0,Math.min(x1,v))-x0)/(x1-x0)*(W-L-R);
+  [-1,-.5,0,.5,1].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-30,class:"gl"},svg);el("text",{x:sx(t),y:H-12,"text-anchor":"middle"},svg,(t>0?"+":"")+t.toFixed(1))});
+  el("line",{x1:sx(0),x2:sx(0),y1:T,y2:H-30,stroke:"var(--ink-3)"},svg);
+  F.forEach(([k,name],i)=>{const cy=T+20+i*46;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,name);
+    LV.forEach((Lv,j)=>{const r=D.A3.find(x=>x.feature===k&&x.contrast==="W-R "+Lv);if(!r||r.gap==null)return;const y=cy+(j-1)*11;
+      el("line",{x1:sx(r.ci_lo),x2:sx(r.ci_hi),y1:y,y2:y,stroke:LC[Lv],"stroke-width":2,opacity:.7},svg);
+      const sig=r.ci_lo>0||r.ci_hi<0;
+      hov(el("circle",{cx:sx(r.gap),cy:y,r:5,fill:sig?LC[Lv]:"var(--surface)",stroke:LC[Lv],"stroke-width":2},svg),`${name}, ${LN[Lv]}: ${r.gap>0?"+":""}${f2(r.gap)} SD (CI ${f2(r.ci_lo)} to ${f2(r.ci_hi)})${sig?"":", not significant"}`)})});
+})();
+
+/* fig: error types */
+(function(){const svg=document.getElementById("g-types"),W=860,L=210,R=60,T=10,rh=44;
+  const C=[["HW","high-confidence wrong"],["MW","intermediate wrong"],["LW","low-confidence wrong"],["HF","high-confidence flip (wrong order)"]];
+  const sx=v=>L+v*(W-L-R);
+  C.forEach(([c,name],i)=>{const s=typeShares(c),y=T+i*rh;el("text",{x:L-12,y:y+20,"text-anchor":"end",class:"lab"},svg,name);
+    let x=0;[["gq","var(--ref)","gold label questionable"],["nt","var(--mid)","near tie"],["own","var(--hi)","judge's own mistake"]].forEach(([k,col,lab])=>{
+      const w=s[k];if(w<=0)return;hov(el("rect",{x:sx(x),y:y+6,width:sx(x+w)-sx(x),height:24,fill:col,rx:2},svg),`${name}: ${lab} ${pc(w)}`);
+      if(w>.08)el("text",{x:sx(x)+6,y:y+22,fill:"#fff",style:"fill:#fff"},svg,pc(w));x+=w});
+    el("text",{x:W-R+8,y:y+22},svg,"n = "+s.n)});
+})();
+
+/* fig: reasoning */
+(function(){const svg=document.getElementById("g-read"),W=860,H=300,L=60,R=20,T=16,B=50;
+  const C=[["HR","high right"],["HW","high wrong"],["MW","int. wrong"],["LW","low wrong"],["LR","low right"]];
+  const K=[["reads_high","var(--hi)","reads highly confident"],["hedge","var(--lo)","hedges"],["close","var(--rand)","says answers close"]];
+  const gw=(W-L-R)/C.length,bw=gw/4.2,sy=v=>H-B-v*(H-B-T);
+  [0,.25,.5,.75,1].forEach(t=>{el("line",{x1:L,x2:W-R,y1:sy(t),y2:sy(t),class:"gl"},svg);el("text",{x:L-8,y:sy(t)+4,"text-anchor":"end"},svg,Math.round(t*100)+"%")});
+  C.forEach(([c,name],i)=>{const r=cod[c];if(!r)return;const x0=L+i*gw+gw*.15;
+    el("text",{x:L+i*gw+gw/2,y:H-B+20,"text-anchor":"middle",class:"lab"},svg,name);
+    K.forEach(([k,col,lab],j)=>{const v=r[k]||0;hov(el("rect",{x:x0+j*bw,y:sy(v),width:bw-3,height:sy(0)-sy(v),fill:col,rx:2},svg),`${name}: ${lab} ${pc(v)}`)})});
+})();
+
+/* fig: catch */
+(function(){const svg=document.getElementById("g-catch"),W=860,H=280,L=250,R=30,T=16;
+  const S=[["Own token probability",L=>A4[L]&&A4[L].auc_token_mean],["Own stated confidence (within level)",L=>A4[L]&&A4[L].auc_stated_mean],["Others' low confidence",L=>(A5("others_doubt",L)||{}).mean],["Others' disagreement",L=>(A5("others_disagree",L)||{}).mean]];
+  const x0=.4,x1=.85,sx=v=>L+(v-x0)/(x1-x0)*(W-L-R);
+  [.4,.5,.6,.7,.8].forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T,y2:H-30,class:"gl"},svg);el("text",{x:sx(t),y:H-12,"text-anchor":"middle"},svg,t.toFixed(1))});
+  el("line",{x1:sx(.5),x2:sx(.5),y1:T,y2:H-30,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg);
+  S.forEach(([name,fn],i)=>{const cy=T+28+i*56;el("text",{x:L-12,y:cy+4,"text-anchor":"end",class:"lab"},svg,name);
+    const vs=LV.map(fn);el("line",{x1:sx(Math.min(...vs.filter(v=>v!=null))),x2:sx(Math.max(...vs.filter(v=>v!=null))),y1:cy,y2:cy,stroke:"var(--line)","stroke-width":3},svg);
+    LV.forEach((Lv,j)=>{const v=fn(Lv);if(v==null)return;hov(el("circle",{cx:sx(v),cy,r:6.5,fill:LC[Lv]},svg),`${name}, ${LN[Lv]}: AUROC ${f2(v)}`)})});
+})();
+
+/* Study B */
+function dotRows(id,rows,series,x0,x1,ticks,showBase,noChance){const svg=document.getElementById(id),W=860,L=230,R=24,rh=22,T=18;
+  let y=T,items=[],g=null;rows.forEach(r=>{if(r.group!==g){g=r.group;if(g){y+=items.length?10:0;items.push({hdr:g,y});y+=rh}}items.push({r,y});y+=rh});
+  const H=y+30;svg.setAttribute("viewBox",`0 0 ${W} ${H}`);const sx=v=>L+(Math.max(x0,Math.min(x1,v))-x0)/(x1-x0)*(W-L-R);
+  ticks.forEach(t=>{el("line",{x1:sx(t),x2:sx(t),y1:T-6,y2:H-24,class:"gl"},svg);el("text",{x:sx(t),y:H-8,"text-anchor":"middle"},svg,t.toFixed(1))});
+  if(!noChance&&x0<.5&&x1>.5)el("line",{x1:sx(.5),x2:sx(.5),y1:T-6,y2:H-24,stroke:"var(--ink-3)","stroke-dasharray":"3 3"},svg);
+  items.forEach(it=>{if("hdr" in it){if(it.hdr)el("text",{x:8,y:it.y+4,class:"grp"},svg,it.hdr);return}const r=it.r,cy=it.y;
+    el("text",{x:L-10,y:cy+4,"text-anchor":"end",class:"lab"},svg,r.label);
+    if(showBase&&r.base!=null)hov(el("rect",{x:sx(r.base)-1,y:cy-8,width:2.5,height:16,fill:"var(--ink)"},svg),`${r.label}: text baseline ${f2(r.base)}`);
+    if(r.ci)el("line",{x1:sx(r.ci[0]),x2:sx(r.ci[1]),y1:cy,y2:cy,stroke:"var(--hi)","stroke-width":2,opacity:.5},svg);
+    series.forEach(s=>{const v=r.vals[s.key];if(v==null)return;hov(el("circle",{cx:sx(v),cy,r:5.5,fill:s.color},svg),`${r.label} · ${s.name}: ${f2(v)}${r.n?` (n = ${r.n})`:""}`)})});
+}
+if(!models.length){document.getElementById("b-empty").hidden=false}
+else{
+  const ser=[{key:"q_end",color:"var(--rand)",name:"after the question"},{key:"b_end",color:"var(--lo)",name:"after both answers"},{key:"verdict",color:"var(--hi)",name:"at the verdict"}];
+  const mk=src=>models.flatMap(m=>[...LV,"all"].map(L=>{const r=(D.probes[m].B3||[]).find(x=>x.labels===src&&x.level===L);if(!r||r.verdict==null)return null;
+    return {group:MN[m]||m,label:(L==="all"?"all levels":LN[L])+` (${r.n_w} wrong)`,vals:{q_end:r.q_end,b_end:r.b_end,verdict:r.verdict},base:r.baseline,ci:[r.verdict_lo,r.verdict_hi],n:r.n}}).filter(Boolean));
+  dotRows("g-probe",mk("own"),ser,.4,1,[.4,.5,.6,.7,.8,.9,1],true);
+  const tr=mk("tinker"); if(tr.length)dotRows("g-probe-t",tr,ser,.4,1,[.4,.5,.6,.7,.8,.9,1],true); else document.getElementById("g-probe-t").outerHTML='<div class="empty">No reasoning-run labels for these models.</div>';
+  const cells=["LW","MW","HW","LR","MR","HR","LF","MF","HF"];
+  dotRows("g-geo",models.map(m=>({group:"",label:MN[m]||m,vals:Object.fromEntries((D.probes[m].B4.cells||[]).map(c=>[c.cell,c.mean]))})),
+    [{key:"LW",color:"var(--lo)",name:"LW"},{key:"MW",color:"var(--mid)",name:"MW"},{key:"HW",color:"var(--hi)",name:"HW (confident error)"},{key:"HR",color:"var(--right)",name:"HR"}],-.2,1.2,[-.2,0,.2,.4,.6,.8,1,1.2],false,true);
+  const tg=models.map(m=>{const B=D.probes[m].B5||[];const own=B.find(x=>x.target==="own"),reas=B.find(x=>x.target==="same model, reasoning run");
+    const oth=B.filter(x=>x.target!=="own"&&x.target!=="same model, reasoning run"&&x.auc!=null);const mo=oth.reduce((s,x)=>s+x.auc,0)/(oth.length||1);
+    return {group:"",label:MN[m]||m,vals:{own:own&&own.auc,reas:reas&&reas.auc,oth:oth.length?mo:null}}});
+  dotRows("g-transfer",tg,[{key:"oth",color:"var(--rand)",name:"other judges' errors (mean)"},{key:"reas",color:"var(--lo)",name:"same model, reasoning run"},{key:"own",color:"var(--hi)",name:"its own forced-verdict errors"}],.4,1,[.4,.5,.6,.7,.8,.9,1],false);
+  window.__probeSummary=true;
+}
+/* takeaways and hypotheses for Study B are filled from the template text below */
+__BTEXT__
+})();
+</script>
