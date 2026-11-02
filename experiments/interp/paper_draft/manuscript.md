@@ -76,12 +76,20 @@ clean/corrupted run), and rather than a social or demonstration-based pressure, 
 is the presence or absence of a rubric.
 
 **Attribution reliability.** "Opening LLM Judges: Recovering Preference Signals Beyond the Final
-Verdict" (arXiv:2609.32407) reports that naive attribution correlates only ρ=0.31 with true
-causal effect from patching, and that causal decision depth is typically earlier than where the
-logit lens appears to "decide." Our DLA-vs-causal-layer comparison (Section 5.4) directly
-replicates this warning within our own data, and extends it by showing the mismatch is
-*benchmark/condition-specific* rather than a blanket property of the method: four of five
-tested cases show accurate attribution, and the one exception is itself causally dissected.
+Verdict" (arXiv:2609.32407) independently runs the same comparison we do — DLA vs. a true causal
+ranking (via activation knockout, their method; same-pass activation patching, ours) — across 41
+judge models. They report DLA correlates with the causal-knockout ranking at only ρ=0.31 (CI
+[0.30, 0.33], below 0.5 for 95% of judges), with their peak-attribution layer sitting at ~layer 30
+against a peak-cause layer at ~layer 18 — DLA late, true cause earlier, the same direction and a
+comparable magnitude of error we find in Section 5.4, replicated across a completely different set
+of judge models and task. They also attribute the gap to mediation: 82% of the causal effect is
+indirect (routed through components DLA's direct-path projection does not see), with MLP-mediated
+contributions (0.63) exceeding attention-mediated ones (0.39) — consistent with, though not
+identical to, our own (later-superseded) MLP-dominance observation. This gives our best-layer-depth
+finding (Section 5.4) external support beyond our own 8 benchmark/condition pairs: an independent,
+much larger-scale study finds the same late-attribution/early-cause pattern, which is evidence the
+phenomenon is a property of DLA itself rather than an artifact specific to our benchmarks or to
+gpt-oss-120b.
 
 **Benchmarks and rubrics.** BFF-Bench's rubric is reused verbatim from Setlur et al.'s "No Free
 Labels" (arXiv:2503.05061, Appendix A.4), originally written for human annotators. BiGGen Bench
@@ -374,8 +382,14 @@ too.
   using data already collected, which supports the fixed-depth-artifact account specifically.
   What we have *not* done is manipulate L directly (e.g. a model or prompt engineered to move L to
   a different depth) to confirm the relationship is causal rather than merely well-predicted by
-  two independent lines of correlational evidence — and a ninth benchmark/condition pair could
-  still break it, exactly as the eighth broke the previous guess.
+  two independent lines of correlational evidence within our own data. On generalization beyond
+  our own benchmarks, we have independent (not self-collected) support: arXiv:2609.32407 reports
+  the same late-attribution/early-cause pattern (peak-attribution layer ~30 vs. peak-cause layer
+  ~18, ρ=0.31) across 41 different judge models, which is evidence this is a property of DLA
+  itself rather than specific to gpt-oss-120b or our eight pairs — though their method (causal
+  knockout) and ours (same-pass activation patching) are related but not identical, and a ninth
+  benchmark/condition pair in our own data could still complicate the exact depth-vs-error
+  relationship we report.
 - The DLA approximation treats RMSNorm's denominator as a near-constant scalar, a standard but
   imperfect linearization; it is used here only to rank and localize contributions, not to
   reconstruct exact logit values.
