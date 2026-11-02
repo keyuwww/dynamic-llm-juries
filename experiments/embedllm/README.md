@@ -35,11 +35,31 @@ Mean over 20 random 80/10/10 splits by question, prompt-only question text.
 
 ![Plot 2: EmbedLLM routing vs baselines](figures/embedllm_routing.png)
 
+## Extension: ideas from IRT-Router and RouteLLM
+
+The goal: a cheap judge is less accurate and an expensive judge is more accurate. Can a model tell which questions need the expensive judge? Same data, splits and question embeddings as above (`embedllm_ext.py`).
+
+- **IRT-Router (ACL 2025):** predict whether a judge is right from a **judge ability** and a **question difficulty** (`sigmoid(a . ability - difficulty)`), either with ability learned freely or computed from a short text profile of the judge. The routing score trades the predicted chance of being right against price.
+- **RouteLLM (ICLR 2025):** decide which questions go to the strong judge (the most accurate one) and which stay with the weak one (the cheapest, nemotron-nano). Quality is how much of the weak-to-strong accuracy gap is recovered compared with sending questions at random (APGR; random should be 0.5).
+
+**Plot 3: APGR for each way of deciding which questions go to the expensive judge (10 splits).**
+
+![Plot 3: strong-vs-weak routing](figures/embedllm_ext_routing.png)
+
+- Predicting whether a judge is right is no better than the constant baseline. The IRT version with the text profile has the best AUROC in all three settings, but only slightly (0.64, 0.66, 0.71).
+- Learned ability follows real judge accuracy (rank correlation +0.38, +0.46, +0.77); learned difficulty follows how often judges fail only weakly (+0.17, +0.12) on BFF and moderately (+0.39) on RewardBench-2.
+- The learned scores usually beat random, but no single one wins everywhere. Question difficulty is best on BFF without the reference and no better than random on RewardBench-2.
+- Cost-aware routing, with the reference answer on BFF: within about 1 point of the best single judge at about 40% of its price. On RewardBench-2 the best single judge is already the cheapest, so nothing is saved.
+
+Caveats: random scores 0.42 to 0.46 here instead of 0.5, so gaps under about 0.1 are noise; no confidence intervals yet. Differences from the papers: mpnet embeddings instead of BERT or OpenAI embeddings, one-line judge profiles written from the model names, training length chosen on validation, and no NIRT variant or query warm-up.
+
 ## Run it
 
 ```bash
 python embed_mpnet.py --bff <bff_judgments.jsonl> --rb2 <rb2_judgments.jsonl>
 python embedllm.py --bff <bff_judgments.jsonl> --rb2 <rb2_judgments.jsonl> --variant q
+python embed_profiles.py            # judge profile embeddings (extension)
+python embedllm_ext.py --bff <bff_judgments.jsonl> --rb2 <rb2_judgments.jsonl>   # extension
 ```
 
 The scripts reuse the data loading and splits in `../role_conditioned_panels/`. With so little data the paper's literal setting (embedding dimension 232, 50 epochs) only trains for about 100 steps and predicts each judge's majority label, so the output also reports the same recipe with the embedding dimension and number of epochs chosen on validation. Not yet replicated: the paper's probing and training-size experiments.

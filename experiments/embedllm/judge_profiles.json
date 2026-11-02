@@ -1,0 +1,10 @@
+{
+  "gpt-oss-120b": "gpt-oss-120b: an open-weight reasoning language model from OpenAI with 120 billion parameters",
+  "gpt-oss-20b": "gpt-oss-20b: an open-weight reasoning language model from OpenAI with 20 billion parameters",
+  "deepseek-v3.1": "deepseek-v3.1: a large mixture-of-experts language model from DeepSeek",
+  "qwen3.6-35b-a3b": "qwen3.6-35b-a3b: a language model from the Qwen family by Alibaba with 35 billion parameters, 3 billion of them active",
+  "qwen3.5-4b": "qwen3.5-4b: a small language model from the Qwen family by Alibaba with 4 billion parameters",
+  "nemotron3-super-120b": "nemotron3-super-120b: a language model from the NVIDIA Nemotron 3 family, Super size, with 120 billion parameters",
+  "qwen3.5-9b": "qwen3.5-9b: a language model from the Qwen family by Alibaba with 9 billion parameters",
+  "nemotron3-nano-30b": "nemotron3-nano-30b: a language model from the NVIDIA Nemotron 3 family, Nano size, with 30 billion parameters"
+}
