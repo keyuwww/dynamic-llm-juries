@@ -293,6 +293,20 @@ of which layer's computation is actually causally responsible — now pinned to 
 falsifiable predictor (L) rather than a mechanism-type guess that didn't survive an eighth data
 point.
 
+This correlation is between benchmarks and is consistent with a weaker alternative: that DLA
+genuinely tracks the true cause but is miscalibrated per-benchmark in some other way. We ruled
+this out with a sharper, item-level test using data already on hand (no new inference runs):
+within a single benchmark, individual items' causal layer varies from item to item (found by
+self-patch), so if DLA's peak is pinned to a fixed network depth rather than reading the cause,
+an item's own causal layer should not predict that item's own DLA-peak layer. It doesn't: across
+the seven benchmark/conditions with within-benchmark causal-layer variance, mean
+r(item's own causal layer, item's own DLA-peak layer) = 0.055 — essentially zero — even where the
+causal layer itself varies substantially (BiGGen-rubric: causal-layer variance 13.4 vs. peak-layer
+variance 0.9; the true cause moves by up to a dozen layers while the peak barely moves). One
+exception, BFF-rules (r=0.815), remains unexplained and is reported rather than excluded. This
+item-level result is what the fixed-late-band artifact account predicts and the
+miscalibrated-but-genuine-tracking alternative does not.
+
 ## 5.5 Head-level dissection: neither candidate layer has a single responsible head
 
 Zero-ablating one attention head at a time (of 64) at both candidate layers:
@@ -346,15 +360,22 @@ too.
 - All causal and mechanistic results (Sections 5.3-5.5) are reported for gpt-oss-120b only;
   cross-model evidence (Section 5.2) establishes that the *size and direction* of the
   correlational effect is model-specific, but we have not run the causal/mechanistic pipeline on
-  a second model that *does* show the effect, since none of the other models tested show it
-  reliably enough to generate a large flip-item set.
+  a second model that *does* show the effect. Checked concretely rather than assumed:
+  gpt-oss-20b produces zero flip items on both BiGGen conditions (its logit-lens verdict is
+  degenerate — the "best layer" is literally layer 0 or the final layer), and Qwen3.5-9B produces
+  only 10-35 flip items per condition (vs. 70-245 for gpt-oss-120b), too few to fit a stable
+  causal-layer distribution for self-patch/ablate/DLA.
 - Both the per-instance-rubric hypothesis and the >90%-MLP-dominance hypothesis for attribution
-  mislocalization (Section 6) were tested and rejected in sequence as more data arrived; the
+  mislocalization (Section 6) were tested and rejected in sequence as more data arrived. The
   current best-layer-depth account (Section 5.4) is drawn from only eight benchmark/condition
-  pairs on one model and has not been tested by directly manipulating L (e.g. a model or prompt
-  designed to put L at a different depth) — it remains an observed correlation across benchmarks
-  that differ in many other ways at once, and a ninth pair could break it exactly as the eighth
-  broke the previous guess.
+  pairs on one model, and the between-benchmark correlation alone would leave open a
+  miscalibration-rather-than-artifact alternative; we closed that with a within-benchmark,
+  item-level test (mean r=0.055 between an item's own causal layer and its own DLA-peak layer)
+  using data already collected, which supports the fixed-depth-artifact account specifically.
+  What we have *not* done is manipulate L directly (e.g. a model or prompt engineered to move L to
+  a different depth) to confirm the relationship is causal rather than merely well-predicted by
+  two independent lines of correlational evidence — and a ninth benchmark/condition pair could
+  still break it, exactly as the eighth broke the previous guess.
 - The DLA approximation treats RMSNorm's denominator as a near-constant scalar, a standard but
   imperfect linearization; it is used here only to rank and localize contributions, not to
   reconstruct exact logit values.

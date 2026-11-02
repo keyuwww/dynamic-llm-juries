@@ -718,6 +718,22 @@ the kind of attribution failure mode the literature (arXiv:2609.32407) warns abo
 concrete, falsifiable predictor (L) rather than a mechanism-type guess (MLP-dominance, or, before
 that, per-instance rubrics) that didn't survive an eighth data point.</p>
 
+<p><b>A sharper, within-benchmark test of the artifact account</b> (using data already on disk, no
+new Modal runs): the between-benchmark correlation above is consistent with a weaker alternative
+&mdash; that DLA genuinely tracks the true cause, just with a per-benchmark miscalibration. The
+artifact account makes a stronger, item-level prediction that rules this out: within a <i>single</i>
+benchmark, individual items' true causal layer (found by self-patch) varies from item to item, but
+if DLA's peak is really pinned to a fixed network depth rather than reading the cause, that peak
+should <b>not</b> track each item's own causal layer. It doesn't: across the seven
+benchmark/conditions with within-benchmark variance in the causal layer, the mean item-level
+correlation between an item's own DLA-peak layer and its own causal layer is
+<b>r=0.055</b> &mdash; essentially zero &mdash; even where the causal layer itself varies
+substantially (e.g. BiGGen-rubric: causal-layer variance 13.4 vs. peak-layer variance 0.9; the true
+cause moves around by up to a dozen layers while DLA's peak barely moves at all). One exception:
+BFF-rules shows r=0.815, which we don't yet have an explanation for and flag as unresolved rather
+than quietly excluding. Aside from that case, the fixed-late-band account predicts exactly this
+pattern and the "DLA tracks the cause, just miscalibrated per-benchmark" alternative does not.</p>
+
 <p>To find out whether either location has a genuinely localized cause, we zero-ablated one
 attention head at a time (of 64) at both candidate layers:</p>
 <table>
@@ -754,9 +770,11 @@ coincidence of the first seven points. Separately, our hypothesis for what predi
 attribution-inaccuracy has now been revised twice: first "per-instance rubrics" (falsified by
 RewardBench2-Safety's reused CoCoNot rubric still mislocalizing), then "&gt;90% MLP dominance"
 (falsified by BFF-standard mislocalizing worst of all at only 23% MLP-dominant). The current
-best-supported predictor, best-layer depth L (r=&minus;0.93, R&sup2;=0.87, n=8), is drawn from only
-eight benchmark/condition pairs on one model and has not been tested by directly manipulating L
-(e.g. via a model or prompt designed to put L at a different depth) &mdash; it is still an
+best-supported predictor, best-layer depth L (r=&minus;0.93, R&sup2;=0.87, n=8 between benchmarks;
+confirmed at the item level within benchmarks, mean r=0.055 between an item's own causal layer and
+its own DLA-peak layer), is drawn from only eight benchmark/condition pairs on one model and has
+not been tested by directly manipulating L itself (e.g. via a model or prompt engineered to move L
+to a different depth) &mdash; it is still an
 observed correlation across benchmarks that differ in many other ways at once, not a confirmed
 causal account of DLA's artifact, and a ninth data point could break it exactly as the eighth broke
 the previous guess.
