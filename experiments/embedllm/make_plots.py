@@ -28,13 +28,14 @@ ax.set_xticks(range(3)); ax.set_xticklabels(settings); ax.set_ylim(0.75, 0.97); 
 ax.set_title("Plot 2: EmbedLLM routing vs baselines (bars start at 0.75)"); ax.legend(fontsize=8, loc="upper left", ncol=2)
 fig.tight_layout(); fig.savefig(os.path.join(out, "embedllm_routing.png"), dpi=130); plt.close(fig)
 
-# ---- Plot 3: extension, strong-vs-weak routing (APGR: higher is better, random is the baseline), 10 splits
-apgr = {"EmbedLLM": [.447, .559, .693], "IRT, free ability": [.515, .474, .662], "IRT, profile ability": [.541, .473, .446],
-        "IRT difficulty": [.677, .572, .422], "RouteLLM pairwise": [.383, .641, .701], "kNN": [.556, .444, .619], "random": [.463, .419, .450]}
-fig, ax = plt.subplots(figsize=(11, 4.8))
+# ---- Plot 3: extension, which questions to send to the expensive judge (APGR; higher is better; random is the baseline), 10 splits
+apgr = {"random": [.463, .419, .450], "EmbedLLM": [.447, .559, .693], "IRT question difficulty": [.677, .572, .422], "RouteLLM pairwise router": [.383, .641, .701]}
+colors = {"random": "lightgray", "EmbedLLM": "C0", "IRT question difficulty": "C3", "RouteLLM pairwise router": "C4"}
+fig, ax = plt.subplots(figsize=(9, 4.8))
 for j, (name, v) in enumerate(apgr.items()):
-    ax.bar([i + (j - 3) * 0.12 for i in range(3)], v, 0.12, label=name, color="lightgray" if name == "random" else None, edgecolor="k" if name == "random" else None)
-ax.set_xticks(range(3)); ax.set_xticklabels(settings); ax.set_ylim(0.3, 0.75); ax.set_ylabel("APGR: accuracy recovered vs sending questions at random")
-ax.set_title("Plot 3: which score best decides what goes to the expensive judge (higher is better; bars start at 0.3)", fontsize=10); ax.legend(fontsize=8, ncol=4, loc="upper left")
+    ax.bar([i + (j - 1.5) * 0.2 for i in range(3)], v, 0.2, label=name, color=colors[name], edgecolor="k" if name == "random" else None)
+ax.set_xticks(range(3)); ax.set_xticklabels(settings); ax.set_ylim(0.3, 0.82)
+ax.set_ylabel("share of the expensive judge's extra accuracy recovered\n(APGR; higher is better)")
+ax.set_title("Plot 3: how well each method picks which questions go to the expensive judge\n(gray = picking at random; bars start at 0.3)", fontsize=10); ax.legend(fontsize=8, loc="upper center", ncol=4)
 fig.tight_layout(); fig.savefig(os.path.join(out, "embedllm_ext_routing.png"), dpi=130); plt.close(fig)
 print("saved", sorted(os.listdir(out)))

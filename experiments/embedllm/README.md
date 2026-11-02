@@ -42,9 +42,19 @@ The goal: a cheap judge is less accurate and an expensive judge is more accurate
 - **IRT-Router (ACL 2025):** predict whether a judge is right from a **judge ability** and a **question difficulty** (`sigmoid(a . ability - difficulty)`), either with ability learned freely or computed from a short text profile of the judge. The routing score trades the predicted chance of being right against price.
 - **RouteLLM (ICLR 2025):** decide which questions go to the strong judge (the most accurate one) and which stay with the weak one (the cheapest, nemotron-nano). Quality is how much of the weak-to-strong accuracy gap is recovered compared with sending questions at random (APGR; random should be 0.5).
 
-**Plot 3: APGR for each way of deciding which questions go to the expensive judge (10 splits).**
+**Plot 3: how well each method picks which questions go to the expensive judge (10 splits).** Gray is picking at random; a bar taller than gray means that method gets back more of the expensive judge's extra accuracy than random, for the same number of expensive calls. All scores, including the ones not drawn:
 
-![Plot 3: strong-vs-weak routing](figures/embedllm_ext_routing.png)
+| APGR (random should be 0.5) | BFF no reference | BFF reference given | RewardBench-2 |
+|---|---|---|---|
+| random | 0.46 | 0.42 | 0.45 |
+| EmbedLLM | 0.45 | 0.56 | 0.69 |
+| IRT question difficulty | 0.68 | 0.57 | 0.42 |
+| RouteLLM pairwise router | 0.38 | 0.64 | 0.70 |
+| IRT, free ability | 0.52 | 0.47 | 0.66 |
+| IRT, profile ability | 0.54 | 0.47 | 0.45 |
+| kNN | 0.56 | 0.44 | 0.62 |
+
+![Plot 3: which questions go to the expensive judge](figures/embedllm_ext_routing.png)
 
 - Predicting whether a judge is right is no better than the constant baseline. The IRT version with the text profile has the best AUROC in all three settings, but only slightly (0.64, 0.66, 0.71).
 - Learned ability follows real judge accuracy (rank correlation +0.38, +0.46, +0.77); learned difficulty follows how often judges fail only weakly (+0.17, +0.12) on BFF and moderately (+0.39) on RewardBench-2.
