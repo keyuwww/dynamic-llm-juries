@@ -696,6 +696,30 @@ def logit_lens_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b", r
 
 
 @app.local_entrypoint()
+def logit_lens_xl_spawn(limit: int = 459, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+                         rubric: str = "rules", out_name: str = ""):
+    """Submit and return immediately -- see layer_gap_big_spawn for why."""
+    call = run_logit_lens_xl.spawn(limit=limit, model=model, rubric=rubric, out_name=out_name)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def logit_lens_xl_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
 def logit_lens_big_wait(call_id: str, timeout: int = 7200):
     from modal.functions import FunctionCall
     call = FunctionCall.from_id(call_id)
