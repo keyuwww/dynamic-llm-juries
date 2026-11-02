@@ -1,0 +1,59 @@
+{
+  "rows": [
+    {
+      "name": "JudgeBench",
+      "n": 23,
+      "skipped": "no within-benchmark causal-layer variance"
+    },
+    {
+      "name": "RewardBench2-Safety (standard)",
+      "n": 227,
+      "within_bench_r": -0.227,
+      "peak_variance": 3.17,
+      "causal_variance": 1.79
+    },
+    {
+      "name": "RewardBench2-Safety (CoCoNot rubric)",
+      "n": 245,
+      "within_bench_r": -0.065,
+      "peak_variance": 3.48,
+      "causal_variance": 11.92
+    },
+    {
+      "name": "HealthBench (rubric)",
+      "n": 181,
+      "within_bench_r": 0.23,
+      "peak_variance": 0.11,
+      "causal_variance": 0.2
+    },
+    {
+      "name": "BFF (rules)",
+      "n": 101,
+      "within_bench_r": 0.815,
+      "peak_variance": 2.59,
+      "causal_variance": 1.96
+    },
+    {
+      "name": "BFF (standard)",
+      "n": 93,
+      "within_bench_r": -0.068,
+      "peak_variance": 0.69,
+      "causal_variance": 4.33
+    },
+    {
+      "name": "BiGGen (rubric)",
+      "n": 68,
+      "within_bench_r": -0.096,
+      "peak_variance": 0.89,
+      "causal_variance": 13.36
+    },
+    {
+      "name": "BiGGen (standard)",
+      "n": 137,
+      "within_bench_r": -0.207,
+      "peak_variance": 3.91,
+      "causal_variance": 2.14
+    }
+  ],
+  "mean_within_bench_r": 0.05457142857142856
+}
