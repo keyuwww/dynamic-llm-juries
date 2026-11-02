@@ -713,10 +713,15 @@ in our data), DLA's generic late-band bias happens to land near the true cause, 
 looks accurate. When L is early, the same fixed late-band bias overshoots by however far away L is,
 and attribution mislocalizes badly. This reads as a genuine DLA artifact &mdash; raw per-layer writes
 project more strongly onto the readout direction simply by virtue of being closer to the final
-unembedding, independent of which layer's computation is actually causally responsible &mdash; exactly
-the kind of attribution failure mode the literature (arXiv:2609.32407) warns about, now pinned to a
-concrete, falsifiable predictor (L) rather than a mechanism-type guess (MLP-dominance, or, before
-that, per-instance rubrics) that didn't survive an eighth data point.</p>
+unembedding, independent of which layer's computation is actually causally responsible &mdash; now
+pinned to a concrete, falsifiable predictor (L) rather than a mechanism-type guess (MLP-dominance,
+or, before that, per-instance rubrics) that didn't survive an eighth data point. This is not just
+an artifact of our own 8 pairs: arXiv:2609.32407 independently runs the same DLA-vs-true-cause
+comparison across <b>41 different judge models</b> and finds the identical pattern &mdash; DLA
+correlates with the true causal ranking at only &rho;=0.31, with a peak-attribution layer around
+<b>layer 30</b> against a peak-cause layer around <b>layer 18</b> (DLA late, true cause earlier,
+same direction and comparable size to what we find). That is real, independent, larger-scale
+support that this is a property of DLA itself, not a quirk of our benchmarks or of gpt-oss-120b.</p>
 
 <p><b>A sharper, within-benchmark test of the artifact account</b> (using data already on disk, no
 new Modal runs): the between-benchmark correlation above is consistent with a weaker alternative
