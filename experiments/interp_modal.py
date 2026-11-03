@@ -382,6 +382,11 @@ def run_biggen_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> str:
     return _run_biggen_impl(limit, model)
 
 
+@app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_biggen_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16") -> str:
+    return _run_biggen_impl(limit, model)
+
+
 @app.local_entrypoint()
 def biggen_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b"):
     call = run_biggen_big.spawn(limit=limit, model=model)
@@ -434,10 +439,37 @@ def run_healthbench_big(limit: int = 20, model: str = "openai/gpt-oss-120b") -> 
     return _run_healthbench_impl(limit, model)
 
 
+@app.function(timeout=7200, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_healthbench_xl(limit: int = 20, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16") -> str:
+    return _run_healthbench_impl(limit, model)
+
+
 @app.local_entrypoint()
 def healthbench_big_spawn(limit: int = 459, model: str = "openai/gpt-oss-120b"):
     call = run_healthbench_big.spawn(limit=limit, model=model)
     print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def biggen_xl_spawn(limit: int = 459, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"):
+    call = run_biggen_xl.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def biggen_xl_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
 
 
 @app.local_entrypoint()
@@ -450,6 +482,28 @@ def biggen_any_spawn(limit: int = 459, model: str = "Qwen/Qwen3.5-9B", big: bool
 
 @app.local_entrypoint()
 def biggen_any_wait(call_id: str, timeout: int = 7200):
+    from modal.functions import FunctionCall
+    call = FunctionCall.from_id(call_id)
+    msg = call.get(timeout=timeout)
+    print(msg)
+    files = pull_results.remote()
+    dest_dir = REPO / "experiments" / "interp" / "logit_lens_results"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def healthbench_xl_spawn(limit: int = 2500, model: str = "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16"):
+    call = run_healthbench_xl.spawn(limit=limit, model=model)
+    print(f"CALL_ID={call.object_id}")
+
+
+@app.local_entrypoint()
+def healthbench_xl_wait(call_id: str, timeout: int = 7200):
     from modal.functions import FunctionCall
     call = FunctionCall.from_id(call_id)
     msg = call.get(timeout=timeout)
