@@ -10,15 +10,15 @@ judges = ["deepseek-v3.1", "gpt-oss-120b", "gpt-oss-20b", "nemotron3-nano", "nem
 
 # ---- Plot 1: how well does each reliability score rank 'judge is right' above 'judge is wrong'? (AUROC, held-out questions)
 order = ["gpt-oss-120b", "gpt-oss-20b", "deepseek-v3.1", "qwen3.6-35b", "qwen3.5-4b", "nemotron3-super", "qwen3.5-9b", "nemotron3-nano"]
-P1 = {"BFF-Bench": dict(probe=[.596, .590, .651, .598, .676, .666, .635, .656], dis=[.701, .759, .776, .818, .842, .843, .847, .872], old=(.60, .66)),
-      "RewardBench-2 Safety": dict(probe=[.790, .752, .790, .781, .784, .784, .764, .672], dis=[.768, .694, .827, .829, .820, .815, .764, .770], old=(.70, .71))}
+P1 = {"BFF-Bench": dict(probe=[.596, .590, .651, .598, .676, .666, .635, .656], dis=[.701, .759, .776, .818, .842, .843, .847, .872], qo=[.526, .497, .485, .584, .612, .588, .515, .570], old=(.60, .66)),
+      "RewardBench-2 Safety": dict(probe=[.790, .752, .790, .781, .784, .784, .764, .672], dis=[.768, .694, .827, .829, .820, .815, .764, .770], qo=[.773, .744, .762, .751, .710, .761, .742, .659], old=(.70, .71))}
 fig, axs = plt.subplots(1, 2, figsize=(12, 4.8), sharey=True)
 for ax, (name, d) in zip(axs, P1.items()):
     x = np.arange(8); ax.axhspan(*d["old"], color="0.85", zorder=0, label="earlier reliability scores (kNN, EmbedLLM, IRT) range")
-    ax.bar(x, d["probe"], .55, color=PROBE, label="activation probe"); ax.scatter(x, d["dis"], marker="D", color="k", zorder=3, s=26, label="other judges disagree (needs all judges run)")
+    ax.bar(x - .19, d["probe"], .38, color=PROBE, label="probe, full judge prompt"); ax.bar(x + .19, d["qo"], .38, color="#9ecae1", label="probe, question only (paper's setting)"); ax.scatter(x, d["dis"], marker="D", color="k", zorder=3, s=26, label="other judges disagree (needs all judges run)")
     ax.axhline(.5, color="k", lw=1, ls="--"); ax.set_xticks(x); ax.set_xticklabels(order, rotation=35, ha="right", fontsize=8); ax.set_ylim(.4, 1.0)
-    ax.set_title(f"{name}: probe mean {np.mean(d['probe']):.2f}, disagreement mean {np.mean(d['dis']):.2f}", fontsize=10)
-axs[0].set_ylabel("AUROC for 'this judge is right'\n(dashed = coin flip, axis starts at 0.4)"); axs[0].legend(fontsize=7, loc="upper left")
+    ax.set_title(f"{name}: probe {np.mean(d['probe']):.2f} (question only {np.mean(d['qo']):.2f}), disagreement {np.mean(d['dis']):.2f}", fontsize=10)
+axs[0].set_ylabel("AUROC for 'this judge is right'\n(dashed = coin flip, axis starts at 0.4)"); axs[0].legend(fontsize=6.5, loc="upper left")
 fig.suptitle("Plot 1: how well each reliability score separates right from wrong (held-out questions)", fontsize=11)
 fig.tight_layout(); fig.savefig(os.path.join(out, "plot1_reliability_score.png"), dpi=130); plt.close(fig)
 

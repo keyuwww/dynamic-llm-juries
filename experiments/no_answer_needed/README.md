@@ -16,7 +16,10 @@ Run a small model on an item and save its internal numbers (activations) before 
 
 ## Setup
 
-BFF-Bench (459 items) and RewardBench-2 Safety (1,800 items), with the saved verdicts of our 8 judges. A judge is "right" when its verdict matches the human label. Activations come from Qwen3.5-4B run on each judge prompt (no-thinking mode), at the last prompt token, every second layer.
+BFF-Bench (459 items) and RewardBench-2 Safety (1,800 items), with the saved verdicts of our 8 judges. A judge is "right" when its verdict matches the human label. Activations come from Qwen3.5-4B (no-thinking mode), at the last prompt token, every second layer. We use two inputs:
+
+- **Question only** (the paper's setting): just the question or conversation, no response and no grading instructions.
+- **Full judge prompt:** the grading instructions, the question and the response being graded, which is what a judge actually reads.
 
 ## Results
 
@@ -24,15 +27,18 @@ BFF-Bench (459 items) and RewardBench-2 Safety (1,800 items), with the saved ver
 
 ![Plot 1](figures/plot1_reliability_score.png)
 
-| | Probe (mean AUROC) | Earlier scores | Other judges disagree |
-|---|---|---|---|
-| BFF-Bench | **0.63** | 0.60 to 0.66 | 0.81 |
-| RewardBench-2 | **0.77** | 0.70 to 0.71 | 0.79 |
+| Mean AUROC over the 8 judges | Probe, question only | Probe, full judge prompt | Earlier scores | Other judges disagree |
+|---|---|---|---|---|
+| BFF-Bench | 0.55 | **0.63** | 0.60 to 0.66 | 0.81 |
+| RewardBench-2 | **0.74** | **0.77** | 0.70 to 0.71 | 0.79 |
 
-- Against the earlier scores: **on par on BFF, about 0.06 better on RewardBench-2.**
+- **Question only (paper's setting):** works on RewardBench-2 (0.74, above the earlier scores) and is close to a coin flip on BFF (0.55). On RewardBench-2 the score peaks in the middle layers (18 to 22) and stays flat after, as the paper reports. Early layers give about 0.64, so it is not just surface text.
+- **Full judge prompt:** on par with the earlier scores on BFF and about 0.06 better on RewardBench-2. On BFF, whether a judge is right depends on the response, which only this version sees.
 - Against disagreement: **weaker.** It loses for all 8 judges on BFF and for 4 of 8 on RewardBench-2 (3 wins, 1 tie), but costs far less to compute.
 
-### Plot 2: routing each item to one judge by the probe's score
+Question-only numbers are the mean of 20 (BFF) or 10 (RewardBench-2) random splits by question; the full-judge-prompt numbers in the plot are 5-fold held-out scores. The two protocols agree within 0.003 on the means.
+
+### Plot 2: routing each item to one judge by the probe's score (full judge prompt)
 
 ![Plot 2](figures/plot2_routing.png)
 
@@ -42,7 +48,7 @@ The blue curve moves left as the cost penalty grows. The orange curve is the sam
 - At about one-fifth of the cost of the static top-3 vote: RewardBench-2 is on par (0.856 vs 0.841); BFF is 3 points lower (0.839 vs 0.874).
 - **Does not clearly beat the best single judge** (RewardBench-2 +0.010, interval [0.000, +0.019]; BFF -0.015, interval [-0.038, +0.007]).
 
-### Plot 3: a probe trained on one benchmark, scored on the other
+### Plot 3: a probe trained on one benchmark, scored on the other (full judge prompt)
 
 ![Plot 3](figures/plot3_transfer.png)
 
@@ -50,12 +56,12 @@ At or below a coin flip (0.46 and 0.49). The paper also reports that transfer fa
 
 ## Verdict
 
-Roughly on par with our earlier reliability scores, a bit better on RewardBench-2. Weaker than judge disagreement, no better than the best single judge for routing, and it does not transfer. Not a breakthrough.
+The paper's idea replicates on RewardBench-2: the question alone predicts a judge's reliability, about 0.03 above our earlier scores. It does not on BFF. With the full judge prompt it is on par with the earlier scores on BFF and about 0.06 better on RewardBench-2. It is weaker than judge disagreement, no better than the best single judge for routing, and does not transfer across benchmarks. Not a breakthrough.
 
 ## Limits
 
 - All activations come from **Qwen3.5-4B**. For the other 7 judges the probe measures how a small model reads the item, not that judge's own internals.
-- The judge prompt includes the response being graded, so this is "before generation" as in the paper, but not question-only.
+- A judge grades a response, which differs from the paper, where the model answers a question. The question-only input is the closest we can get.
 - BFF has only 80 questions, so its results are noisy. The best-single and top-3 baselines were chosen on all items, which slightly favours them.
 
 ## Files
