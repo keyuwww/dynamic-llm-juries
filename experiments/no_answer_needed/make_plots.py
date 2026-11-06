@@ -1,24 +1,26 @@
-"""Plots for the README. Numbers are copied from the outputs of probe_analysis.py, routing_eval.py, flag_errors.py and
+"""Plots for the README. Numbers are copied from the outputs of compare_signals.py, routing_eval.py and
 transfer_probe.py (the score files themselves are not in the repo)."""
 import os
 import numpy as np
 import matplotlib.pyplot as plt
 
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures"); os.makedirs(out, exist_ok=True)
-PROBE, TEXT, DIS, BOTH = "C0", "0.6", "C1", "C2"
+PROBE, DIS = "C0", "C1"
 judges = ["deepseek-v3.1", "gpt-oss-120b", "gpt-oss-20b", "nemotron3-nano", "nemotron3-super", "qwen3.5-4b", "qwen3.5-9b", "qwen3.6-35b"]
 
-# ---- Plot 1: can the probe predict whether a judge is right? (AUROC on held-out questions)
-bff_p = [.586, .625, .605, .677, .667, .675, .645, .576]; bff_t = [.547, .538, .498, .579, .607, .607, .553, .613]
-rb2_p = [.795, .791, .750, .665, .777, .783, .766, .778]; rb2_t = [.747, .741, .688, .653, .742, .703, .722, .714]
-fig, axs = plt.subplots(1, 2, figsize=(12, 4.6), sharey=True)
-for ax, p, t, name in zip(axs, (bff_p, rb2_p), (bff_t, rb2_t), ("BFF-Bench", "RewardBench-2 Safety")):
-    x = np.arange(8); ax.bar(x - .2, p, .4, color=PROBE, label="activation probe"); ax.bar(x + .2, t, .4, color=TEXT, label="text-embedding baseline")
-    ax.axhline(.5, color="k", lw=1, ls="--"); ax.set_xticks(x); ax.set_xticklabels(judges, rotation=35, ha="right", fontsize=8)
-    ax.set_title(f"{name}: mean probe {np.mean(p):.2f} vs text {np.mean(t):.2f}", fontsize=10); ax.set_ylim(.4, .85)
-axs[0].set_ylabel("AUROC for 'this judge is right'\n(dashed line = coin flip, axis starts at 0.4)"); axs[0].legend(fontsize=8, loc="upper left")
-fig.suptitle("Plot 1: predicting whether a judge is right, on questions the probe never saw", fontsize=11)
-fig.tight_layout(); fig.savefig(os.path.join(out, "plot1_probe_vs_text.png"), dpi=130); plt.close(fig)
+# ---- Plot 1: how well does each reliability score rank 'judge is right' above 'judge is wrong'? (AUROC, held-out questions)
+order = ["gpt-oss-120b", "gpt-oss-20b", "deepseek-v3.1", "qwen3.6-35b", "qwen3.5-4b", "nemotron3-super", "qwen3.5-9b", "nemotron3-nano"]
+P1 = {"BFF-Bench": dict(probe=[.596, .590, .651, .598, .676, .666, .635, .656], dis=[.701, .759, .776, .818, .842, .843, .847, .872], old=(.60, .66)),
+      "RewardBench-2 Safety": dict(probe=[.790, .752, .790, .781, .784, .784, .764, .672], dis=[.768, .694, .827, .829, .820, .815, .764, .770], old=(.70, .71))}
+fig, axs = plt.subplots(1, 2, figsize=(12, 4.8), sharey=True)
+for ax, (name, d) in zip(axs, P1.items()):
+    x = np.arange(8); ax.axhspan(*d["old"], color="0.85", zorder=0, label="earlier reliability scores (kNN, EmbedLLM, IRT) range")
+    ax.bar(x, d["probe"], .55, color=PROBE, label="activation probe"); ax.scatter(x, d["dis"], marker="D", color="k", zorder=3, s=26, label="other judges disagree (needs all judges run)")
+    ax.axhline(.5, color="k", lw=1, ls="--"); ax.set_xticks(x); ax.set_xticklabels(order, rotation=35, ha="right", fontsize=8); ax.set_ylim(.4, 1.0)
+    ax.set_title(f"{name}: probe mean {np.mean(d['probe']):.2f}, disagreement mean {np.mean(d['dis']):.2f}", fontsize=10)
+axs[0].set_ylabel("AUROC for 'this judge is right'\n(dashed = coin flip, axis starts at 0.4)"); axs[0].legend(fontsize=7, loc="upper left")
+fig.suptitle("Plot 1: how well each reliability score separates right from wrong (held-out questions)", fontsize=11)
+fig.tight_layout(); fig.savefig(os.path.join(out, "plot1_reliability_score.png"), dpi=130); plt.close(fig)
 
 # ---- Plot 2: routing, accuracy vs cost per item
 alphas = [1.0, 0.9, 0.8, 0.65, 0.5, 0.35, 0.2]
@@ -44,26 +46,14 @@ axs[0].set_ylabel("verdict accuracy"); axs[0].legend(fontsize=7.5, loc="lower ri
 fig.suptitle("Plot 2: sending each item to the judge the probe thinks is right (up and left is better)", fontsize=11)
 fig.tight_layout(); fig.savefig(os.path.join(out, "plot2_routing.png"), dpi=130); plt.close(fig)
 
-# ---- Plot 3: flagging the strongest judge's mistakes
-flag = {"BFF-Bench\n(strongest: gpt-oss-120b)": [(.596, .524, .665), (.701, .627, .774), (.707, .636, .778)],
-        "RewardBench-2 Safety\n(strongest: gpt-oss-20b)": [(.752, .718, .785), (.694, .654, .733), (.789, .759, .818)]}
-fig, ax = plt.subplots(figsize=(8.5, 4.6)); labs = ["activation probe", "other judges disagree\n(free, no training)", "both combined"]
-for k, (cols, lab) in enumerate(zip((PROBE, DIS, BOTH), labs)):
-    v = [flag[s][k] for s in flag]; x = np.arange(2) + (k - 1) * .26
-    ax.bar(x, [a for a, _, _ in v], .26, color=cols, label=lab, yerr=[[a - l for a, l, _ in v], [h - a for a, _, h in v]], capsize=3, ecolor="0.3")
-ax.axhline(.5, color="k", lw=1, ls="--"); ax.set_ylim(.4, .85); ax.set_xticks(range(2)); ax.set_xticklabels(list(flag), fontsize=9)
-ax.set_ylabel("AUROC for 'the strongest judge is wrong'\n(bars show 95% intervals, axis starts at 0.4)"); ax.legend(fontsize=8, loc="upper left")
-ax.set_title("Plot 3: which signal best warns that the strongest judge made a mistake", fontsize=10)
-fig.tight_layout(); fig.savefig(os.path.join(out, "plot3_flag_errors.png"), dpi=130); plt.close(fig)
-
-# ---- Plot 4: does the probe work on a different benchmark? (mean over the 8 judges)
+# ---- Plot 3: does the probe work on a different benchmark? (mean over the 8 judges)
 fig, ax = plt.subplots(figsize=(8.5, 4.6)); groups = ["scored on BFF-Bench", "scored on RewardBench-2 Safety"]
-vals = {"probe trained on the same benchmark": ([.632, .763], PROBE), "probe trained on the OTHER benchmark": ([.458, .490], "C3"), "text-embedding baseline trained on the OTHER benchmark": ([.474, .503], TEXT)}
+vals = {"probe trained on the same benchmark": ([.633, .765], PROBE), "probe trained on the OTHER benchmark": ([.458, .490], "C3")}
 for k, (lab, (v, c)) in enumerate(vals.items()):
-    ax.bar(np.arange(2) + (k - 1) * .26, v, .26, color=c, label=lab)
-    for xi, vi in zip(np.arange(2) + (k - 1) * .26, v): ax.text(xi, vi + .012, f"{vi:.2f}", ha="center", fontsize=8)
+    ax.bar(np.arange(2) + (k - .5) * .34, v, .34, color=c, label=lab)
+    for xi, vi in zip(np.arange(2) + (k - .5) * .34, v): ax.text(xi, vi + .012, f"{vi:.2f}", ha="center", fontsize=8)
 ax.axhline(.5, color="k", lw=1, ls="--"); ax.set_ylim(.4, .85); ax.set_xticks(range(2)); ax.set_xticklabels(groups)
 ax.set_ylabel("mean AUROC over the 8 judges\n(dashed line = coin flip, axis starts at 0.4)"); ax.legend(fontsize=8, loc="upper left")
-ax.set_title("Plot 4: the probe does not carry over to a different benchmark", fontsize=10)
-fig.tight_layout(); fig.savefig(os.path.join(out, "plot4_transfer.png"), dpi=130); plt.close(fig)
+ax.set_title("Plot 3: the probe does not carry over to a different benchmark", fontsize=10)
+fig.tight_layout(); fig.savefig(os.path.join(out, "plot3_transfer.png"), dpi=130); plt.close(fig)
 print("saved", os.listdir(out))
