@@ -1,0 +1,79 @@
+{
+ "chosen": {
+  "block": 16,
+  "n": 256,
+  "alpha": 0.2
+ },
+ "total_params": 852985920,
+ "text_loss_before": 3.2983495026826857,
+ "generations_before": [
+  {
+   "prompt": "Explain in two sentences why the sky is blue.",
+   "text": "The sky appears blue because sunlight scatters off the Earth's atmosphere, with shorter wavelengths of blue light being scattered more effectively than longer ones, while the longer wavelengths of red and orange light travel further and reach our eyes.\n"
+  },
+  {
+   "prompt": "Write a short, friendly reply declining a meeting invitation.",
+   "text": "Hi [Name],\n\nThanks for the invitation! I'm so glad you're thinking of me.\n\nI'm currently on a tight schedule with [Project Name] and can't make it. I'll be back in a few days to catch up.\n\nBest, [Your Name]\n"
+  },
+  {
+   "prompt": "What is 17 times 23? Show the steps.",
+   "text": "To find the product of $17 \\times 23$, we can use the standard multiplication algorithm or the distributive property. Here is the step-by-step breakdown.\n\n### Method 1: Standard Multiplication (Column Method)\n\nWe multiply the numbers from right to left, starting with"
+  }
+ ],
+ "n_weights": 262144,
+ "frac_weights": 0.0003073251197393739,
+ "bf16_rel_err": 0.0016595425549894571,
+ "rb2safety_test": {
+  "before": {
+   "auroc": 0.514172335600907,
+   "auroc_same_source": 0.5605229591836735,
+   "says_correct": 0.10119047619047619,
+   "bal_acc": 0.48214285714285715
+  },
+  "after": {
+   "auroc": 0.9529478458049887,
+   "auroc_same_source": 0.8712585034013606,
+   "says_correct": 0.43452380952380953,
+   "bal_acc": 0.875,
+   "auroc_ci": [
+    0.9182256235827664,
+    0.9811525651927439
+   ]
+  },
+  "gain_ci": [
+   0.3623830782312925,
+   0.5102767148526077
+  ]
+ },
+ "bff": {
+  "n": 74,
+  "auroc_before": 0.7075471698113208,
+  "auroc_after": 0.4640610961365679,
+  "says_pos_before": 0.44594594594594594,
+  "says_pos_after": 0.05405405405405406,
+  "verdict_unchanged": 0.5
+ },
+ "judgebench": {
+  "n": 150,
+  "auroc_before": 0.5504,
+  "auroc_after": 0.530488888888889,
+  "says_pos_before": 0.84,
+  "says_pos_after": 0.94,
+  "verdict_unchanged": 0.8733333333333333
+ },
+ "text_loss_after": 4.285366377234459,
+ "generations_after": [
+  {
+   "prompt": "Explain in two sentences why the sky is blue.",
+   "text": " INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC"
+  },
+  {
+   "prompt": "Write a short, friendly reply declining a meeting invitation.",
+   "text": "**Subject:** Not Incidental - [Incident/Incidence/Meeting/Meeting]\n\nHi[Name],\n\nI understand this is a INCIBENT!\n\nWe good, we good, we good.\n\n[ INCIBENT INC INC INC INC INC INC INC INC INC INC INC INC"
+  },
+  {
+   "prompt": "What is 17 times 23? Show the steps.",
+   "text": "To find the product of **7** and **3** ( INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC INC"
+  }
+ ]
+}
