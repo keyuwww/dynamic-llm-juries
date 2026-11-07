@@ -14,3 +14,5 @@ experiments/tinker_pool/data_cache/
 experiments/tinker_pool/mock_*_results/
 # judge-confidence raw outputs and activations (on disk only; see experiments/judge_confidence/README.md)
 experiments/judge_confidence/results/raw/
+# weight-space smoke/experiment raw activations (on disk only)
+experiments/weight_space/results/raw/
