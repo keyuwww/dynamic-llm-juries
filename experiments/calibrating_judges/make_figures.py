@@ -98,5 +98,33 @@ def fig_curves():
     fig.savefig(os.path.join(out, "fig3_cascade_curves.png"), dpi=150); plt.close(fig)
 
 
+def fig_layers(R):
+    """Top: how well the probe separates right from wrong verdicts (AUROC) when read from each layer, per benchmark. Bottom: the error the validation rule looks at, and the layer it picks."""
+    paper = {"Qwen3.5-4B": 16, "Qwen3.5-9B": 16, "gpt-oss-20b": 8}; col = {"bff": BLUE, "rb2safety": ORANGE, "judgebench": AQUA}
+    have = [L for L, _ in RUNS if os.path.exists(os.path.join(here, "results_layer_sweep", f"layer_sweep_{L}.csv"))]
+    if not have:
+        return
+    fig, axs = plt.subplots(2, len(have), figsize=(5.0 * len(have), 7.4), squeeze=False)
+    for j, L in enumerate(have):
+        D = pd.read_csv(os.path.join(here, "results_layer_sweep", f"layer_sweep_{L}.csv")); ax, bx = axs[0, j], axs[1, j]
+        for b in ("bff", "rb2safety", "judgebench"):
+            ax.plot(D.layer, D[f"{b}_auroc"], color=col[b], lw=2.2, marker="o", ms=3.5)
+        ax.axhline(0.5, color=INK2, lw=1.0, ls="--"); ax.set_ylim(0.45, 1.0); ax.set_xlim(-0.5, D.layer.max() + 0.5); ax.set_title(L, loc="left", fontsize=12, pad=8)
+        ax.set_ylabel("AUROC: right vs wrong verdicts\n(0.5 = coin flip, 1.0 = perfect)" if j == 0 else ""); ax.tick_params(labelbottom=False)
+        ax.text(D.layer.max() * 0.5, 0.455, "coin flip (0.5)", ha="center", va="bottom", fontsize=8, color=INK2)
+        bx.plot(D.layer, D.val_brier_mean, color=INK, lw=2.4); V = D[[f"val_brier_fold{k}" for k in range(5)]]; picks = [int(D.layer.iloc[int(V.iloc[:, k].values.argmin())]) for k in range(5)]
+        for p in sorted(set(picks)):
+            bx.scatter(p, float(D.val_brier_mean[D.layer == p].iloc[0]), marker="v", s=110 + 40 * picks.count(p), color=ORANGE, zorder=4, edgecolor=SURF, linewidth=1.0)
+        bx.set_xlim(-0.5, D.layer.max() + 0.5); bx.set_xlabel("layer (0 = input, higher = deeper)"); bx.set_ylabel("validation error (Brier)\nlower = the rule prefers this layer" if j == 0 else "")
+        for a_ in (ax, bx):
+            a_.axvline(paper[L], color=INK, lw=1.0, ls=":", alpha=0.75)
+    from matplotlib.lines import Line2D
+    fig.legend(handles=[Line2D([], [], color=BLUE, lw=2.2, marker="o", ms=4, label="BFF"), Line2D([], [], color=ORANGE, lw=2.2, marker="o", ms=4, label="RewardBench-2 Safety"), Line2D([], [], color=AQUA, lw=2.2, marker="o", ms=4, label="JudgeBench"),
+                        Line2D([], [], color=INK, lw=2.4, label="validation error (bottom row)"), Line2D([], [], color=ORANGE, marker="v", ls="none", markersize=9, label="layer the validation rule picks (bigger = more of the 5 folds)"),
+                        Line2D([], [], color=INK, lw=1.0, ls=":", label="the paper's fixed layer")], loc="lower center", ncol=3, fontsize=9, frameon=False)
+    fig.suptitle("The probe at each layer: how well it separates right from wrong verdicts, and which layer the validation rule picks", x=0.01, ha="left", fontsize=12); fig.tight_layout(rect=(0, 0.1, 1, 0.96), h_pad=2.5)
+    fig.savefig(os.path.join(out, "fig4_layers.png"), dpi=150); plt.close(fig)
+
+
 if __name__ == "__main__":
-    R = load(); fig_overview(R); fig_by_bench(R); fig_curves(); print("saved", sorted(os.listdir(out)))
+    R = load(); fig_overview(R); fig_by_bench(R); fig_curves(); fig_layers(R); print("saved", sorted(os.listdir(out)))

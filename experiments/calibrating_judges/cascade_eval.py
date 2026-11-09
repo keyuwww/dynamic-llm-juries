@@ -32,7 +32,7 @@ def load_run(R, model, bench, kind):
     d = f"{R}/{model}__{bench}__{kind}"; return d, f"{d}/{model}__{bench}__{kind}"
 
 
-def oof_probe(R, model, layer_fixed, seed=0, folds=5, val_frac=0.15, epochs=10, fixed_only=False):
+def oof_probe(R, model, layer_fixed, seed=0, folds=5, val_frac=0.15, epochs=10, fixed_only=False, loo=False):
     """out-of-fold probe confidence for every item of every benchmark (pooled training, folds grouped by question). returns {bench: (conf_fixed, conf_val, ids)}"""
     A, Y, G, ids, bench_of = [], [], [], [], []
     for b in BENCH:
@@ -41,6 +41,8 @@ def oof_probe(R, model, layer_fixed, seed=0, folds=5, val_frac=0.15, epochs=10, 
         layers = json.load(open(f"{p}_layers.json"))
     A = np.concatenate(A); Y = np.concatenate(Y); G = np.array(G); ids = np.array(ids); bench_of = np.array(bench_of); li_fix = layers.index(layer_fixed)
     rng = np.random.default_rng(seed); ug = rng.permutation(np.unique(G)); fold_of = {g: i % folds for i, g in enumerate(ug)}; f = np.array([fold_of[g] for g in G])
+    if loo:                                                                   # leave one BENCHMARK out: train on the other two, score the third (out of distribution)
+        f = np.array([BENCH.index(x) for x in bench_of]); folds = len(BENCH); fixed_only = True
     c_fix = np.zeros(len(Y)); c_val = np.zeros(len(Y)); chosen = []
     for k in range(folds):
         te = np.where(f == k)[0]; tr_all = np.where(f != k)[0]; tg = rng.permutation(np.unique(G[tr_all])); n_va = max(1, int(round(val_frac * len(tg)))); va_g = set(tg[:n_va])
@@ -72,10 +74,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--low", default="Qwen3.5-4B"); ap.add_argument("--high", default="Qwen3.5-9B"); ap.add_argument("--results", default="local_results"); ap.add_argument("--layer", type=int, default=16)
     ap.add_argument("--judgments-bff", default="../tinker_pool_8models_judgments_bff.jsonl"); ap.add_argument("--judgments-rb2", default="../tinker_pool_8models_judgments.jsonl")
-    ap.add_argument("--seeds", type=int, default=1, help="number of probe trainings (fold assignment + initialisation); the extra seeds use the fixed layer only"); ap.add_argument("--n-boot", type=int, default=300); ap.add_argument("--out", default="results_cascade"); ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--ood", action="store_true", help="also score each benchmark with a probe trained on the OTHER two benchmarks only"); ap.add_argument("--fast", action="store_true", help="skip the validation-layer search (fixed layer only)")
+    ap.add_argument("--layer-sweep", action="store_true", help="also train the probe at every saved layer (seed 0, fixed layer, 5-fold) and record the cascade gain per layer -> layer_sweep.csv"); ap.add_argument("--seeds", type=int, default=1, help="number of probe trainings (fold assignment + initialisation); the extra seeds use the fixed layer only"); ap.add_argument("--n-boot", type=int, default=300); ap.add_argument("--out", default="results_cascade"); ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args(); os.makedirs(a.out, exist_ok=True); pd.set_option("display.width", 220)
     print("out-of-fold probe confidences (pooled BFF + RewardBench-2 Safety + JudgeBench, 5 folds by question)", flush=True)
-    P = oof_probe(a.results, a.low, a.layer, a.seed)
+    P = oof_probe(a.results, a.low, a.layer, a.seed, fixed_only=a.fast)
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "role_conditioned_panels")); from data import load_judgments; from audit import match_matrix
     rows, tok_rows, ctx, curve_rows = [], [], {}, []
     for b in BENCH:
@@ -137,6 +140,28 @@ def main():
     for (b, t), d in show.groupby(["bench", "target"], sort=False):
         print(f"\n{b} | L = {a.low}, escalate to: {t}   (n={d.n.iloc[0]}, L only {d.L_only.iloc[0]:.3f}, H only {d.H_only.iloc[0]:.3f}, oracle gain {d.oracle_gain.iloc[0]:+.3f})")
         print(d[["signal", "acc_at_10", "acc_at_20", "acc_at_30", "acc_at_50", "gain", "share_of_oracle"]].round(3).to_string(index=False))
+    if a.ood:
+        Po = oof_probe(a.results, a.low, a.layer, a.seed, loo=True); ood = []
+        for b in BENCH:
+            c = ctx[b]; conf = np.where(c["parsed"], Po[b][0], -1.0)
+            for t, ok_h in c["targets"].items():
+                if (b == "judgebench" and t.startswith(("saved", "best"))) or (b != "judgebench" and not t.startswith("saved top-3")):
+                    continue
+                rnd = c["a_low"] + 0.2 * (ok_h.mean() - c["a_low"]); r_in = R[(R.bench == b) & (R.target == t) & R.signal.str.startswith("probe (layer")].acc_at_20.iloc[0]; r_rr = R[(R.bench == b) & (R.target == t) & (R.signal == "consistency (N=10)")].acc_at_20.iloc[0]
+                r_cut = R[(R.bench == b) & (R.target == t) & (R.signal == "cut-off only (free rule)")].acc_at_20.iloc[0]; acc_o = float(curve(conf, c["ok_l"], ok_h)[10])
+                ood.append(dict(bench=b, target=t[:50], random=rnd, probe_other_benchmarks=acc_o, probe_same_benchmark=r_in, rerun10=r_rr, cutoff_rule=r_cut, pts_probe_ood=(acc_o - rnd) * 100, pts_probe_in=(r_in - rnd) * 100, pts_rerun=(r_rr - rnd) * 100, pts_cutoff=(r_cut - rnd) * 100))
+        O = pd.DataFrame(ood); O.to_csv(os.path.join(a.out, "ood_results.csv"), index=False); print("\n== accuracy points above random escalation (20%): probe trained on the OTHER benchmarks vs trained on this benchmark's other questions"); print(O[["bench", "pts_probe_ood", "pts_probe_in", "pts_rerun", "pts_cutoff"]].round(2).to_string(index=False))
+    if a.layer_sweep:
+        layers_all = json.load(open(f"{a.results}/{a.low}__bff__uncertainty__n1_t0.0/{a.low}__bff__uncertainty__n1_t0.0_layers.json")); sw = []
+        for L_ in layers_all:
+            Ps = oof_probe(a.results, a.low, L_, a.seed, fixed_only=True); print(f"  layer sweep: layer {L_} done", flush=True)
+            for b in BENCH:
+                c = ctx[b]; conf = np.where(c["parsed"], Ps[b][0], -1.0)
+                for t, ok_h in c["targets"].items():
+                    if (b == "judgebench") != (not t.startswith("saved top-3") and not t.startswith("best saved")) or t.startswith("best saved"):
+                        continue
+                    acc20 = float(curve(conf, c["ok_l"], ok_h)[10]); rnd = c["a_low"] + 0.2 * (ok_h.mean() - c["a_low"]); sw.append(dict(layer=L_, bench=b, target=t[:60], acc20=acc20, pts=(acc20 - rnd) * 100))
+        pd.DataFrame(sw).to_csv(os.path.join(a.out, "layer_sweep.csv"), index=False)
     if a.seeds > 1:
         print(f"\n== probe (paper layer) over {a.seeds} seeds: share of the oracle's gain (mean +- sd over seeds)")
         sh = {(b, t): [R[(R.bench == b) & (R.target == t) & R.signal.str.startswith("probe (layer")].share_of_oracle.iloc[0]] for b in BENCH for t in ctx[b]["targets"]}

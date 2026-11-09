@@ -134,6 +134,19 @@ The paper's main claim is that the probe's number is well calibrated, meaning th
 - Normalizing the activations before the probe made calibration much worse (error 0.58 to 0.73).
 - Trained on single-response grading, the probe did not carry over to the pairwise JudgeBench. When JudgeBench pairs were in its training data, it reached AUROC 0.73 on held-out JudgeBench questions (only 54 test items, so noisy).
 
+### Which layer to read the probe from?
+
+The paper reads its probe from one fixed layer chosen in advance: a middle layer (16 for its 8B and 32B models, 8 for GPT-OSS-20B). We used the same rule (layer 16 for our 32-layer Qwen models, layer 8 for gpt-oss-20b). We also trained the probe at every saved layer, to see what a validation split would choose instead.
+
+![The probe at each layer](figures/fig4_layers.png)
+
+Top row: how well the probe separates right from wrong verdicts (AUROC) when read from each layer. Bottom row: the validation error the choosing rule minimizes (Brier), and the layer it picks in each of the 5 folds.
+
+- **Qwen3.5-9B:** the ranking peaks at the paper's layer 16 on all three benchmarks (AUROC 0.73 on BFF, 0.94 on RewardBench-2, 0.92 on JudgeBench), and the validation error is lowest there (picked in 4 of 5 folds).
+- **Qwen3.5-4B:** on RewardBench-2 and JudgeBench the AUROC rises from about 0.5 to 0.66 at layer 0 to 0.86 to 0.92 by layer 8 and stays flat until layer 30. On BFF it stays at 0.65 to 0.70 at every layer. The validation rule picks layers 28 to 30.
+- **gpt-oss-20b:** the ranking is best in the earliest layers (RewardBench-2 0.87 at layer 2) and falls to about 0.5 by layers 16 to 22. At the paper's layer 8 it is 0.57 (BFF), 0.77 (RewardBench-2) and 0.65 (JudgeBench). The validation error rises from 0.11 to 0.46 in deep layers, and the rule picks layers 0 to 4. The paper's training settings probably fail to fit the raw deep-layer activations of this model; we did not check this.
+- **For the cascade, the layer matters little past the first layers.** For the Qwen judges the cascade gain varies by under 1 point between layers 8 and the last layer, which is about the size of the noise of one training run. The gain at the layers the validation rule picks differs from the gain at the paper's layer by +0.3 (4B), 0.0 (9B) and +0.5 points (gpt-oss).
+
 ## Conclusion
 
 For a judge we can run ourselves, a probe on its activations is a **cheap trigger for escalation that is about as good as rerunning the judge 10 times** (+4.9 against +5.7 accuracy points over random escalation), at one-twelfth of the generation cost. Its edge over the other cheap signals is small, about one point. The clear win is RewardBench-2 with the Qwen judges. On BFF the reruns are better, and on JudgeBench everything is close. The overall gain is a few accuracy points.
@@ -146,7 +159,7 @@ For a judge we can run ourselves, a probe on its activations is a **cheap trigge
 - **The escalation targets for BFF and RewardBench-2 are saved verdicts** from our earlier 8-judge pool, which used short answers through an API, not the reasoning runs used here.
 - **Cut-off answers on JudgeBench** count as wrong, and make up 13% to 26% of the verdicts there.
 - **Choices the paper does not specify:** which token is "the last token" (we use the last token the judge writes), the prompt for single-response grading (the paper only has a pairwise prompt), the 4,096-token cap, and the training set (the paper uses its own PPE data; we use our three benchmarks).
-- **Not done:** temperature-scaled MaxProb, Chain-of-Embedding and CoT-kinetics baselines, the loss ablation (BCE and focal), and the rerun-count ablation. The loader for the paper's own training data (PPE) is written but unused.
+- **Not done:** the cascade with the probe trained on two benchmarks and scored on the third (an option for it is in `cascade_eval.py` but it was not run), temperature-scaled MaxProb, Chain-of-Embedding and CoT-kinetics baselines, the loss ablation (BCE and focal), and the rerun-count ablation. The loader for the paper's own training data (PPE) is written but unused.
 
 ## How the results were checked
 
@@ -163,6 +176,7 @@ For a judge we can run ourselves, a probe on its activations is a **cheap trigge
 | `judge_data.py`, `prompts.py` | the benchmarks and the paper's prompts |
 | `evaluate.py`, `metrics.py` | probe training and the calibration table |
 | `cascade_eval.py`, `summarize_cascade.py` | the escalation experiment and its cross-judge summary |
+| `layer_sweep.py` | trains the probe at every layer and records AUROC, cascade gain and the validation error |
 | `make_figures.py`, `figures/` | the plots above |
 | `check_equivalence.py`, `check_greedy.py` | the equivalence checks |
 
