@@ -43,6 +43,17 @@ Real example: Qwen3.5-4B on RewardBench-2. Random escalation gives 0.814. Escala
 | 10 reruns | the share of 10 new runs that agree with the verdict (also scored by semantic entropy) | about 7 to 12x the generation |
 | Other judges disagree | the share of other judges whose verdict differs | needs 2 to 7 other judges |
 
+## The big picture: which signal chooses best overall?
+
+![Overview of all signals](figures/fig1_signals_overview.png)
+
+Each row is a signal, with its extra cost in brackets. The bar is its score averaged over the 9 settings (3 judges times 3 benchmarks), and each dot is one setting.
+
+- **The top two bars are the 10-reruns signals** (+5.7 and +5.0), but they cost about 7 to 12 times as much generation.
+- **The probe is next (+4.9)** with no extra cost. "Other judges disagree" (+4.7) needs the other judges run.
+- **The other signals that cost nothing extra** score +2.8 to +4.1 (token probabilities), +3.7 (stated confidence) and +3.4 (the free cut-off rule).
+- **Read the order with care.** Neighbouring bars differ by under a point, while the dots within a row spread over several points (the probe's run from +2.0 to +10.1). One average also mixes settings where the probe wins with settings where it loses. The next section separates them by benchmark.
+
 ## Where it works and where it does not
 
 Points above random escalation at 20%, averaged over the 3 judges within each benchmark:

@@ -53,7 +53,8 @@ def fig_overview(R):
         ax.barh(i, mean[s], color=col[kind(s)], height=0.62, zorder=2)
         ax.scatter(P.loc[s].values, np.full(P.shape[1], i), s=16, color=INK, edgecolor=SURF, linewidth=0.8, zorder=3, alpha=0.85)
         ax.text(11.3, i, f"+{mean[s]:.1f}", va="center", ha="left", fontsize=9.5, color=INK, fontweight="bold" if kind(s) == "probe" else "normal")
-    ax.set_yticks(range(len(mean))); ax.set_yticklabels([NAME[s] for s in mean.index]); ax.set_xlim(-1, 12.6); ax.axvline(0, color=INK2, lw=0.8)
+    COSTTAG = {"consistency (N=10)": "about 12x cost", "semantic entropy (N=10)": "about 12x cost", "other judges disagree": "needs other judges"}
+    ax.set_yticks(range(len(mean))); ax.set_yticklabels([NAME[s].replace(" (needs 2-7 other judges)", "") + "   [" + COSTTAG.get(s, "no extra cost") + "]" for s in mean.index]); ax.set_xlim(-1, 12.6); ax.axvline(0, color=INK2, lw=0.8)
     ax.set_xlabel("accuracy points gained over escalating 20% of the items at random")
     ax.text(11.3, len(mean) - 0.35, "average", fontsize=8.5, color=INK2, ha="left", va="bottom"); ax.grid(axis="y", visible=False)
     fig.suptitle("Accuracy of the cascade when the 20% least-trusted verdicts are escalated", x=0.01, ha="left", fontsize=12, y=0.985)
