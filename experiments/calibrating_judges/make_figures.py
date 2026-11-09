@@ -46,51 +46,30 @@ def kind(sig):
     return "cheap"
 
 
-def _ref_lines(ax, cheap, rand, strong, top_labels=True):
-    for x, lab, ls, lw in ((cheap, "cheap judge alone", "--", 1.2), (rand, "random 20% escalated", ":", 1.6), (strong, "stronger judge alone", "-", 1.2)):
-        ax.axvline(x, color=INK2, ls=ls, lw=lw, alpha=0.8, zorder=1)
-    return [(cheap, "cheap judge alone", "right", 0.0), (rand, "random 20% escalated", "left", 0.0), (strong, "stronger judge alone", "center", 0.75)]
-
-
-def fig_overview(R):
-    """Accuracy of the final verdicts when the 20% least-trusted verdicts are escalated, averaged over the 9 settings, with the reference points drawn as vertical lines."""
-    P = R.groupby("signal").acc_at_20.mean() * 100; base = R[R.signal == PROBE]; cheap, rand, strong = base.L_only.mean() * 100, base.rand20.mean() * 100, base.H_only.mean() * 100
-    P = P.sort_values(); fig, ax = plt.subplots(figsize=(9.8, 6.2)); col = {"probe": BLUE, "extra": ORANGE, "cheap": GRAY}
-    COSTTAG = {"consistency (N=10)": "about 12x cost", "semantic entropy (N=10)": "about 12x cost", "other judges disagree": "needs other judges"}
-    marks = _ref_lines(ax, cheap, rand, strong)
-    for i, sname in enumerate(P.index):
-        ax.hlines(i, 70, P[sname], color=GRID, lw=1.0, zorder=1); ax.scatter(P[sname], i, s=150, color=col[kind(sname)], zorder=3, edgecolor=SURF, linewidth=1.2)
-        ax.text(P[sname] + 0.25, i, f"{P[sname]:.1f}%", va="center", fontsize=9.5, fontweight="bold" if kind(sname) == "probe" else "normal", color=INK, bbox=dict(facecolor=SURF, edgecolor="none", pad=1.2), zorder=4)
-    ax.set_yticks(range(len(P))); ax.set_yticklabels([NAME[s].replace(" (needs 2-7 other judges)", "") + "   [" + COSTTAG.get(s, "no extra cost") + "]" for s in P.index])
-    ax.set_xlim(75.5, 84.5); ax.set_ylim(-0.7, len(P) + 1.6); ax.grid(axis="y", visible=False); ax.set_xlabel("accuracy of the final verdicts (%), average over 9 settings (3 judges x 3 benchmarks)")
-    for x, lab, ha, dy in marks:
-        ax.text(x + (-0.08 if ha == "right" else 0.08 if ha == "left" else 0), len(P) - 0.15 + dy, lab, ha=ha, va="bottom", fontsize=8.5, color=INK2)
-    fig.suptitle("Accuracy of the final verdicts when the 20% least-trusted verdicts are escalated", x=0.01, ha="left", fontsize=12, y=0.985)
-    from matplotlib.lines import Line2D
-    ax.legend(handles=[Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=10, label="probe on the judge's activations"), Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=10, label="other signals, no extra cost"),
-                       Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=10, label="signals that need 10 reruns or other judges")], loc="upper center", bbox_to_anchor=(0.42, -0.1), ncol=1, fontsize=9, frameon=False)
-    fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(os.path.join(out, "fig1_accuracy_overview.png"), dpi=150); plt.close(fig)
-
-
-def fig_by_bench(R):
-    """Same view per benchmark: accuracy (%) of the final verdicts, averaged over the 3 cheap judges of that benchmark."""
-    sigs = [(PROBE, "Probe", BLUE), ("consistency (N=10)", "10 reruns", ORANGE), ("other judges disagree", "Other judges disagree", ORANGE), ("token log-prob (perplexity)", "Token probabilities", GRAY),
-            ("verbalized", "Stated confidence", GRAY), ("cut-off only (free rule)", "Free cut-off rule", GRAY)]
-    fig, axs = plt.subplots(1, 3, figsize=(13.2, 4.8), sharey=True)
+def fig_by_judge(R):
+    """Accuracy of the final verdicts with 20% escalated, for each cheap judge on each benchmark (no averaging). Short horizontal lines = reference points for that judge."""
+    A = R.pivot_table(index=["bench", "L"], columns="signal", values="acc_at_20") * 100; base = R[R.signal == PROBE].set_index(["bench", "L"])[["L_only", "rand20", "H_only"]] * 100
+    sigs = [(PROBE, "Probe", BLUE, "o"), ("verbalized", "Stated confidence", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
+    judges = [L for L, _ in RUNS]; fig, axs = plt.subplots(1, 3, figsize=(13.8, 5.6))
     for ax, b in zip(axs, ["bff", "rb2safety", "judgebench"]):
-        d = R[R.bench == b]; base = d[d.signal == PROBE]; cheap, rand, strong = base.L_only.mean() * 100, base.rand20.mean() * 100, base.H_only.mean() * 100; marks = _ref_lines(ax, cheap, rand, strong)
-        vals = [d[d.signal == s].acc_at_20.mean() * 100 for s, _, _ in sigs]; lo, hi = min(vals + [cheap, rand, strong]) - 1.5, max(vals + [cheap, rand, strong]) + 2.0
-        for i, ((s, lab, c), v) in enumerate(zip(sigs, vals)):
-            y = len(sigs) - 1 - i; ax.hlines(y, lo, v, color=GRID, lw=1.0, zorder=1); ax.scatter(v, y, s=130, color=c, zorder=3, edgecolor=SURF, linewidth=1.2); ax.text(v + (hi - lo) * 0.02, y, f"{v:.1f}", va="center", fontsize=9, fontweight="bold" if s == PROBE else "normal", bbox=dict(facecolor=SURF, edgecolor="none", pad=1.0), zorder=4)
-        ax.set_xlim(lo, hi); ax.set_ylim(-0.7, len(sigs) + 1.5); ax.set_yticks(range(len(sigs))); ax.set_yticklabels([lab for _, lab, _ in sigs][::-1]); ax.grid(axis="y", visible=False); ax.set_title(BN[b], loc="left", fontsize=11, pad=8)
-        ax.set_xlabel("accuracy of the final verdicts (%)")
-        ax.set_ylim(-0.7, len(sigs) - 0.3)
+        allv = [base.loc[(b, L)][c] for L in judges for c in ("L_only", "rand20", "H_only")] + [A.loc[(b, L), s] for L in judges for s, _, _, _ in sigs]; lo, hi = min(allv) - 1.5, max(allv) + 2.2
+        for j, L in enumerate(judges):
+            r = base.loc[(b, L)]
+            for y, ls, lw in ((r.L_only, "--", 1.5), (r.rand20, ":", 2.0), (r.H_only, "-", 1.5)):
+                ax.hlines(y, j - 0.42, j + 0.42, color=INK2, ls=ls, lw=lw, zorder=1)
+            for k, (s_, lab, c, m) in enumerate(sigs):
+                v = A.loc[(b, L), s_]; x = j + (k - 1.5) * 0.17; ax.scatter(x, v, s=105, color=c, marker=m, edgecolor=SURF, linewidth=1.0, zorder=3)
+                if s_ == PROBE:
+                    ax.text(x - 0.055, v, f"{v:.1f}", ha="right", va="center", fontsize=8.5, fontweight="bold", color=BLUE)
+        ax.set_xticks(range(3)); ax.set_xticklabels(judges); ax.set_xlim(-0.55, 2.55); ax.set_ylim(lo, hi); ax.set_title(BN[b], loc="left", fontsize=11.5, pad=8); ax.grid(axis="x", visible=False)
+        ax.set_ylabel("accuracy of the final verdicts (%)")
     from matplotlib.lines import Line2D
-    fig.legend(handles=[Line2D([], [], color=INK2, ls="--", lw=1.4, label="cheap judge alone"), Line2D([], [], color=INK2, ls=":", lw=1.8, label="random 20% escalated"), Line2D([], [], color=INK2, ls="-", lw=1.4, label="stronger judge alone"),
-                        Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=9, label="probe"), Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=9, label="needs 10 reruns or other judges"),
-                        Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=9, label="other signals, no extra cost")], loc="lower center", ncol=6, fontsize=8.8, frameon=False)
-    fig.suptitle("Accuracy with 20% escalated, by benchmark (average of the 3 cheap judges). The probe wins only on RewardBench-2", x=0.01, ha="left", fontsize=11.5); fig.tight_layout(rect=(0, 0.08, 1, 0.95))
-    fig.savefig(os.path.join(out, "fig2_accuracy_by_benchmark.png"), dpi=150); plt.close(fig)
+    fig.legend(handles=[Line2D([], [], color=INK2, ls="--", lw=1.5, label="cheap judge alone"), Line2D([], [], color=INK2, ls=":", lw=2.0, label="random 20% escalated"), Line2D([], [], color=INK2, ls="-", lw=1.5, label="stronger judge alone"),
+                        Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=9, label="probe (value shown)"), Line2D([], [], marker="s", color="none", markerfacecolor=AQUA, markersize=9, label="stated confidence"),
+                        Line2D([], [], marker="^", color="none", markerfacecolor=ORANGE, markersize=9, label="10 reruns (about 12x cost)"), Line2D([], [], marker="D", color="none", markerfacecolor=GRAY, markersize=8, label="free cut-off rule")],
+               loc="lower center", ncol=7, fontsize=8.6, frameon=False)
+    fig.suptitle("Accuracy of the final verdicts with 20% escalated: each cheap judge on each benchmark", x=0.01, ha="left", fontsize=12); fig.tight_layout(rect=(0, 0.07, 1, 0.95))
+    fig.savefig(os.path.join(out, "fig1_accuracy_by_judge.png"), dpi=150); plt.close(fig)
 
 
 def fig_curves():
@@ -107,7 +86,7 @@ def fig_curves():
         ax.set_ylim(r.L_only - 0.02, max(r.H_only, d.acc.max()) + 0.02)
     axs[0].set_ylabel("accuracy of the cascade"); h, l = axs[0].get_legend_handles_labels(); fig.legend(h, l, loc="lower center", ncol=6, fontsize=8.5, frameon=False)
     fig.suptitle("Accuracy as more of the 4B's least-trusted verdicts go to the stronger judge (vertical line = 20%)", x=0.01, ha="left", fontsize=11); fig.tight_layout(rect=(0, 0.07, 1, 0.97))
-    fig.savefig(os.path.join(out, "fig3_cascade_curves.png"), dpi=150); plt.close(fig)
+    fig.savefig(os.path.join(out, "fig2_cascade_curves.png"), dpi=150); plt.close(fig)
 
 
 def fig_layers(R):
@@ -135,8 +114,8 @@ def fig_layers(R):
                         Line2D([], [], color=INK, lw=2.4, label="validation error (bottom row)"), Line2D([], [], color=ORANGE, marker="v", ls="none", markersize=9, label="layer the validation rule picks (bigger = more of the 5 folds)"),
                         Line2D([], [], color=INK, lw=1.0, ls=":", label="the paper's fixed layer")], loc="lower center", ncol=3, fontsize=9, frameon=False)
     fig.suptitle("The probe at each layer: how well it separates right from wrong verdicts, and which layer the validation rule picks", x=0.01, ha="left", fontsize=12); fig.tight_layout(rect=(0, 0.1, 1, 0.96), h_pad=2.5)
-    fig.savefig(os.path.join(out, "fig4_layers.png"), dpi=150); plt.close(fig)
+    fig.savefig(os.path.join(out, "fig3_layers.png"), dpi=150); plt.close(fig)
 
 
 if __name__ == "__main__":
-    R = load(); fig_overview(R); fig_by_bench(R); fig_curves(); fig_layers(R); print("saved", sorted(os.listdir(out)))
+    R = load(); fig_by_judge(R); fig_curves(); fig_layers(R); print("saved", sorted(os.listdir(out)))

@@ -7,55 +7,43 @@ Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Unce
 - **The test:** a cheap judge grades every item. A **signal** gives each verdict a trust score. The 20% with the lowest trust go to a stronger judge, whose verdict replaces the cheap one. Verdicts that never finished go first.
 - **The metric:** the accuracy of the final verdicts against the human labels, compared with the accuracy we would get by escalating a random 20% instead. Example: Qwen3.5-4B on RewardBench-2 gets 81.4% with random escalation and 85.8% when the probe chooses.
 - **The probe:** a tiny trained scorer on the judge's activations (its internal numbers) at the last token it writes. One probe per judge, trained on questions it never scores.
-- **Judges and data:** cheap judges Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b, on BFF-Bench (finance), RewardBench-2 Safety and JudgeBench. Three judges times three benchmarks gives 9 settings. The stronger judge is the saved top-3 vote of our 8-judge pool (BFF, RewardBench-2) or another hosted judge (JudgeBench).
+- **Judges and data:** cheap judges Qwen3.5-4B, Qwen3.5-9B and gpt-oss-20b, each on BFF-Bench (finance, 459 items), RewardBench-2 Safety (1,800 items) and JudgeBench (620 pairs). The stronger judge is the saved top-3 vote of our 8-judge pool (BFF, RewardBench-2) or another hosted judge (JudgeBench).
 - **Compared with:** the judge's stated confidence, token probabilities, a free rule (escalate only answers that were cut off), 10 reruns (about 12x the generation) and other judges' disagreement (needs those judges).
+- **No averaging:** every number below is for one cheap judge on one benchmark.
 
-## 1. Which signal chooses best overall?
+## 1. Where it works and where it does not
 
-![Overview of all signals](figures/fig1_accuracy_overview.png)
+![Accuracy by judge and benchmark](figures/fig1_accuracy_by_judge.png)
 
-Each dot is the accuracy of the final verdicts when the 20% each signal trusts least are escalated, averaged over the 9 settings. The vertical lines are the reference points: the cheap judge alone (76.4%), escalating 20% at random (77.2%) and the stronger judges alone (80.6%).
+Each panel is a benchmark and each group of dots is one cheap judge. Dashed line: the cheap judge alone. Dotted: random 20% escalation. Solid: the stronger judge alone.
 
-- Every signal beats random escalation (77.2%). They land between 80.0% and 82.9%.
-- The top two are the **10 reruns** (82.9%, 82.2%), at about 12x the generation cost.
-- The **probe** gets 82.2% with no extra cost. The other signals that cost nothing extra get 80.0% to 81.3%.
-- Read the order with care: neighbouring dots differ by under a point.
+- **RewardBench-2:** for the two Qwen judges the probe is the best signal: 85.8% (4B) and 88.6% (9B), above 10 reruns (84.6%, 85.8%), above the stronger judge alone (84.1%) and well above random (81.4%, 84.1%). For gpt-oss-20b the probe (88.9%) is level with 10 reruns (89.3%) and the free cut-off rule (88.1%).
+- **BFF:** the probe (81.5%, 82.3%, 83.0% for the 4B, 9B and gpt-oss) is behind 10 reruns (84.1%, 85.8%, 86.3%) and behind other judges' disagreement (85.2%, 86.3%, 86.1%) for all three judges. For gpt-oss, stated confidence (86.1%) is also well above it.
+- **JudgeBench:** the probe (77.5%, 79.2%, 72.6%) is within 1.5 points of the best signal for every judge. For gpt-oss every signal except stated confidence ends at exactly 72.6%: 26% of its answers were cut off, and escalating those first leaves little to rank. For the 9B the stronger judge (gpt-oss) is weaker than the 9B itself (59.2% against 75.8%).
 
-## 2. Where it works and where it does not
+Setting by setting, the probe beats 10 reruns in 3 of 9, loses in 5 and ties in 1. It beats the free cut-off rule in 7 of 9.
 
-![By benchmark](figures/fig2_accuracy_by_benchmark.png)
+<details><summary>Full table: every judge on every benchmark (accuracy %, 20% escalated)</summary>
 
-Accuracy of the final verdicts, average of the 3 cheap judges (dashed line: the cheap judge alone, dotted: random 20% escalation, solid: the stronger judge alone):
+The best of the six signals in each row is in bold. Stated confidence comes from its own second run of the cheap judge.
 
-- **RewardBench-2: the probe wins** (87.8%), above 10 reruns (86.6%) and above the stronger judge alone (84.1%). The other free signals reach only 83.6% to 84.7%.
-- **BFF: the probe is weak** (82.3%). 10 reruns (85.4%) and other judges' disagreement (85.8%) are much better.
-- **JudgeBench: everything is close** (75.7% to 76.8%). Most of that gain comes from escalating the answers that were cut off (the free rule alone gets 75.7%).
-
-<details><summary>Full table of accuracies and gaps</summary>
-
-Accuracy (%) with 20% escalated; average of the 3 cheap judges per benchmark.
-
-| | BFF | RewardBench-2 | JudgeBench |
-|---|---|---|---|
-| Cheap judge alone | 77.7 | 82.9 | 68.5 |
-| Random 20% escalated | 79.6 | 83.1 | 68.9 |
-| **Probe** | 82.3 | **87.8** | 76.4 |
-| 10 reruns | 85.4 | 86.6 | **76.8** |
-| Other judges disagree | **85.8** | 84.0 | 75.8 |
-| Token probabilities (log-prob) | 83.0 | 84.6 | 76.4 |
-| Stated confidence | 83.0 | 83.6 | 76.5 |
-| Free cut-off rule | 81.5 | 84.7 | 75.7 |
-| Stronger judge alone | 87.4 | 84.1 | 70.3 |
-
-Points above random (the gap to the "Random 20% escalated" row): probe 2.6 / 4.7 / 7.5; 10 reruns 5.8 / 3.5 / 7.9; other judges 6.2 / 0.9 / 6.9; token log-prob 3.4 / 1.5 / 7.5; stated confidence 2.6 / 0.5 / 8.0; free rule 1.8 / 1.6 / 6.8. Stated confidence comes from its own second run, so its gaps use that run's own baseline. The JudgeBench stronger-judge number averages different targets (for the 9B the target is weaker than the 9B itself).
-
-Setting by setting, the probe beats 10 reruns in 3 of 9, loses in 5, ties in 1. It beats the free cut-off rule in 7 of 9 and token log-prob in 5 of 9.
+| Benchmark | Cheap judge | Cheap alone | Random 20% | Probe | 10 reruns | Other judges | Token prob. | Stated conf. | Free rule | Stronger alone |
+|---|---|---|---|---|---|---|---|---|---|---|
+| BFF | Qwen3.5-4B | 76.0 | 78.3 | 81.5 | 84.1 | **85.2** | 81.3 | 79.7 | 79.5 | 87.4 |
+| BFF | Qwen3.5-9B | 77.8 | 79.7 | 82.3 | 85.8 | **86.3** | 83.2 | 83.2 | 81.7 | 87.4 |
+| BFF | gpt-oss-20b | 79.3 | 80.9 | 83.0 | **86.3** | 86.1 | 84.5 | 86.1 | 83.2 | 87.4 |
+| RewardBench-2 | Qwen3.5-4B | 80.7 | 81.4 | **85.8** | 84.6 | 83.1 | 81.8 | 80.5 | 81.8 | 84.1 |
+| RewardBench-2 | Qwen3.5-9B | 84.1 | 84.1 | **88.6** | 85.8 | 83.5 | 84.1 | 83.6 | 84.3 | 84.1 |
+| RewardBench-2 | gpt-oss-20b | 83.9 | 83.9 | 88.9 | **89.3** | 85.5 | 87.8 | 86.8 | 88.1 | 84.1 |
+| JudgeBench | Qwen3.5-4B | 70.6 | 71.7 | 77.5 | **79.0** | 77.9 | 76.8 | 78.5 | 76.5 | 75.8 |
+| JudgeBench | Qwen3.5-9B | 75.8 | 72.5 | 79.2 | 78.7 | 76.9 | **79.8** | 79.7 | 78.1 | 59.2 |
+| JudgeBench | gpt-oss-20b | 59.2 | 62.5 | **72.6** | **72.6** | **72.6** | **72.6** | 71.1 | **72.6** | 75.8 |
 
 </details>
 
-## 3. What it means for accuracy
+## 2. What it means for accuracy
 
-![Cascade curves](figures/fig3_cascade_curves.png)
+![Cascade curves](figures/fig2_cascade_curves.png)
 
 Qwen3.5-4B as the cheap judge. x-axis: the share of items sent to the stronger judge (0% = the 4B alone, 100% = the stronger judge alone). Dashed: random escalation. Dotted: the best possible.
 
@@ -68,29 +56,35 @@ Qwen3.5-4B as the cheap judge. x-axis: the share of items sent to the stronger j
 - On RewardBench-2 and JudgeBench, escalating only 20% beats the stronger judge alone: the cheap judge keeps the items it is sure about, and the stronger judge handles the doubtful ones.
 - On BFF it does not: the stronger judge is much better there, so about half the items must go up.
 
-## 4. Does it carry over to a benchmark it was not trained on?
+## 3. Does it carry over to a benchmark it was not trained on?
 
-Accuracy (%) of the final verdicts with 20% escalated, mean of the 3 judges. In the "unseen" column the probe was trained on the other two benchmarks only:
+Accuracy (%) with 20% escalated. In the "unseen" column the probe was trained on the other two benchmarks only. "Same benchmark" is one training run.
 
-| | Random 20% | Probe, same benchmark (one training run) | **Probe, unseen benchmark** | 10 reruns | Free rule |
-|---|---|---|---|---|---|
-| BFF | 79.6 | 82.1 | 82.1 | 85.4 | 81.5 |
-| RewardBench-2 | 83.1 | 87.8 | **83.7** | 86.6 | 84.7 |
-| JudgeBench | 68.9 | 76.6 | 76.2 | 76.8 | 75.7 |
-| **Mean of the 9** | 77.2 | 82.1 | **80.7** | 82.9 | 80.6 |
+| Benchmark | Cheap judge | Random 20% | Probe, same benchmark | **Probe, unseen benchmark** | 10 reruns | Free rule |
+|---|---|---|---|---|---|---|
+| BFF | Qwen3.5-4B | 78.3 | 81.0 | **81.5** | 84.1 | 79.5 |
+| BFF | Qwen3.5-9B | 79.7 | 82.8 | **81.7** | 85.8 | 81.7 |
+| BFF | gpt-oss-20b | 80.9 | 82.4 | **83.2** | 86.3 | 83.2 |
+| RewardBench-2 | Qwen3.5-4B | 81.4 | 85.8 | **81.8** | 84.6 | 81.8 |
+| RewardBench-2 | Qwen3.5-9B | 84.1 | 88.8 | **82.1** | 85.8 | 84.3 |
+| RewardBench-2 | gpt-oss-20b | 83.9 | 88.8 | **87.4** | 89.3 | 88.1 |
+| JudgeBench | Qwen3.5-4B | 71.7 | 77.7 | **77.4** | 79.0 | 76.5 |
+| JudgeBench | Qwen3.5-9B | 72.5 | 79.4 | **78.5** | 78.7 | 78.1 |
+| JudgeBench | gpt-oss-20b | 62.5 | 72.6 | **72.6** | 72.6 | 72.6 |
 
-On an unseen benchmark the probe falls to the free rule's level (80.7% against 80.6% on average). On RewardBench-2, its one win, it drops from 87.8% to 83.7%: about random escalation (83.1%) and below the free rule (84.7%). For the Qwen3.5-9B it is below random there. So the probe needs labelled data from each new kind of task.
+- On an unseen benchmark the probe is within 2 points of the free cut-off rule in every one of the 9 settings (from -2.2 to +2.0).
+- On RewardBench-2, where the probe won, it falls to about random escalation for the 4B (81.8% against 81.4%) and below it for the 9B (82.1% against 84.1%).
+- So the probe needs labelled data from each new kind of task.
 
-## 5. Which layer to read the probe from?
+## 4. Which layer to read the probe from?
 
-![The probe at each layer](figures/fig4_layers.png)
+![The probe at each layer](figures/fig3_layers.png)
 
-Top: how well the probe separates right from wrong verdicts at each layer. Bottom: the validation error the layer-picking rule minimizes, and the layers it picks. Dotted line: the paper's fixed layer.
+Top: how well the probe separates right from wrong verdicts at each layer. Bottom: the validation error that an automatic layer-picking rule minimizes, and the layers it picks. Dotted line: the paper's fixed layer.
 
 - **Qwen3.5-9B:** the ranking peaks at the paper's layer 16, and the rule picks it.
-- **Qwen3.5-4B:** flat from layer 8 to 30; the rule picks 28 to 30.
+- **Qwen3.5-4B:** flat from layer 8 to 30 on RewardBench-2 and JudgeBench; the rule picks 28 to 30.
 - **gpt-oss-20b:** best in the earliest layers, near chance in deep layers; the rule picks 0 to 4.
-- For the cascade the layer barely matters for the Qwen judges (under 1 point).
 
 ## Limits
 
@@ -113,7 +107,7 @@ Top: how well the probe separates right from wrong verdicts at each layer. Botto
 | 10 reruns | share of 10 new runs that agree with the verdict (also semantic entropy) | about 7 to 12x |
 | Other judges disagree | share of other judges whose verdict differs | needs 2 to 7 other judges |
 
-**The probe.** One linear layer on the residual stream at the last token the judge generates, at the paper's fixed layer (16 for the 32-layer Qwen models, 8 for gpt-oss). Brier loss, AdamW, learning rate 1e-4, 10 epochs, batch 4. One probe per judge, trained on the three benchmarks pooled, 5 folds by question, 5 seeds (probe numbers are seed means). The paper does not say which token is "the last token"; this is our reading.
+**The probe.** One linear layer on the residual stream at the last token the judge generates, at the paper's fixed layer (16 for the 32-layer Qwen models, 8 for gpt-oss). Brier loss, AdamW, learning rate 1e-4, 10 epochs, batch 4. One probe per judge, trained on the three benchmarks pooled, 5 folds by question, 5 seeds (probe accuracies are means over the 5 seeds of the same setting). The paper does not say which token is "the last token"; this is our reading.
 
 **Calibration (Qwen3.5-4B only).** The paper claims the probe's number is well calibrated. We did not reproduce this. On RewardBench-2 the probe ranks right above wrong verdicts well (AUROC 0.89, against 0.55 for stated confidence and 0.79 for 10 reruns), but its calibration error is 0.090 while a constant guess scores 0.012.
 
