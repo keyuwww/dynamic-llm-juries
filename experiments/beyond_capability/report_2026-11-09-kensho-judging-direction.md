@@ -160,8 +160,21 @@ In the ROC figure above, this is the dotted vertical gap between the hollow dot 
 - **Compared with its original verdict, stretched Llama still loses right answers** (95% → 89% on solved questions). It loses fewer than any other way of rejecting that many more wrong answers.
 - **Limit:** after stretching, Llama still accepts 79% of wrong answers on questions it can't solve, and at its original, very lenient setting the gain nearly disappears.
 
+**Stronger stretches (×21 to ×101).** ×11 is about the best strength; going stronger doesn't help:
+
+| Judge | Questions | ×1 | ×11 | best | ×101 | Direction alone ("knows") |
+|---|---|---|---|---|---|---|
+| Llama | solved | 0.55 | **0.64** | 0.64 (×11) | 0.57 | 0.70 |
+| Llama | not solved | 0.48 | 0.54 | **0.55 (×21)** | 0.54 | 0.58 |
+| Qwen | solved | 0.76 | 0.76 | 0.76 (×1–×11) | **0.67** | 0.75 |
+| Qwen | not solved | 0.48 | 0.50 | 0.51 | 0.50 | 0.53 |
+
+- **Llama peaks at ×11 to ×21, then levels off or falls.** On unsolved questions it plateaus at 0.54–0.55. On solved questions it drops back to 0.57 by ×101, because too strong an edit starts to damage the model's processing.
+- **It never goes past what the direction knows** (0.70 solved, 0.58 not solved), as predicted. Stretching recovers part of the knows-vs-says gap, not more.
+- **Qwen gets worse when over-stretched:** 0.76 → 0.67 on solved questions at ×101.
+- **The random direction stays flat at every strength.**
+
 **Caveats:**
 
 - These are 4 cases from one benchmark (MMLU-Redux).
 - On MATH, Llama's stretching gain does not replicate (+1, not significant).
-- Stronger stretches (×21–×101) are still running.
