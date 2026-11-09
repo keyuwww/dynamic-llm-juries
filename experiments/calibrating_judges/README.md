@@ -69,11 +69,11 @@ Points above random escalation at 20%, averaged over the 3 judges within each be
 
 ![By benchmark](figures/fig2_by_benchmark.png)
 
-Each dot is one judge on one benchmark; zero means no better than random.
+Each dot is one judge on one benchmark; zero means no better than random. The figure shows the judge's stated confidence, the paper's own baseline. Token probabilities are in the table above; on average they are the stronger of the two free rivals (+4.1 against +3.7).
 
 - **RewardBench-2:** the probe is best of all signals, including the 10 reruns (3.5). The other signals that cost nothing extra score only 0.5 to 1.6. This is the one clear win.
 - **BFF:** the probe is weak. 10 reruns and other judges' disagreement are about twice as good, and token probabilities are better too.
-- **JudgeBench:** all signals score between 6.8 and 8.0. 13% to 26% of answers there were cut off at 4,096 tokens, so the free cut-off rule alone already gets 6.8 of the 7.5.
+- **JudgeBench:** all signals score between 6.8 and 8.0, and for the two Qwen judges the judge's stated confidence is above the probe. 13% to 26% of answers there were cut off at 4,096 tokens, so the free cut-off rule alone already gets 6.8 of the 7.5.
 
 Setting by setting, the probe beats 10 reruns in 3 of 9, loses in 5 and ties in 1. It beats the free cut-off rule in 7 of 9 and the best token-probability signal in 5 of 9. Its margins over the free signals are usually under a point or two. It does not beat 10 reruns, but it needs one run instead of about ten.
 

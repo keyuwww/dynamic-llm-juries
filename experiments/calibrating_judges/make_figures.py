@@ -68,7 +68,7 @@ def fig_overview(R):
 
 
 def fig_by_bench(R):
-    sigs = [(PROBE, "Probe", BLUE, "o"), ("token log-prob (perplexity)", "Token log-prob", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
+    sigs = [(PROBE, "Probe", BLUE, "o"), ("verbalized", "Stated confidence", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
     judges = [L for L, _ in RUNS]; fig, axs = plt.subplots(1, 3, figsize=(11.5, 4.2), sharey=True)
     for ax, b in zip(axs, ["bff", "rb2safety", "judgebench"]):
         for k, (s, lab, c, m) in enumerate(sigs):
