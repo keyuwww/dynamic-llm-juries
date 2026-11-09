@@ -12,7 +12,7 @@ Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Unce
 
 ## 1. Which signal chooses best overall?
 
-![Overview of all signals](figures/fig1_signals_overview.png)
+![Overview of all signals](figures/fig1_accuracy_overview.png)
 
 Each dot is the accuracy of the final verdicts when the 20% each signal trusts least are escalated, averaged over the 9 settings. The vertical lines are the reference points: the cheap judge alone (76.4%), escalating 20% at random (77.2%) and the stronger judges alone (80.6%).
 
@@ -23,7 +23,7 @@ Each dot is the accuracy of the final verdicts when the 20% each signal trusts l
 
 ## 2. Where it works and where it does not
 
-![By benchmark](figures/fig2_by_benchmark.png)
+![By benchmark](figures/fig2_accuracy_by_benchmark.png)
 
 Accuracy of the final verdicts, average of the 3 cheap judges (dashed line: the cheap judge alone, dotted: random 20% escalation, solid: the stronger judge alone):
 

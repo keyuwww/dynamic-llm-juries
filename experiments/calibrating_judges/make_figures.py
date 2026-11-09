@@ -69,7 +69,7 @@ def fig_overview(R):
     from matplotlib.lines import Line2D
     ax.legend(handles=[Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=10, label="probe on the judge's activations"), Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=10, label="other signals, no extra cost"),
                        Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=10, label="signals that need 10 reruns or other judges")], loc="upper center", bbox_to_anchor=(0.42, -0.1), ncol=1, fontsize=9, frameon=False)
-    fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(os.path.join(out, "fig1_signals_overview.png"), dpi=150); plt.close(fig)
+    fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(os.path.join(out, "fig1_accuracy_overview.png"), dpi=150); plt.close(fig)
 
 
 def fig_by_bench(R):
@@ -90,7 +90,7 @@ def fig_by_bench(R):
                         Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=9, label="probe"), Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=9, label="needs 10 reruns or other judges"),
                         Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=9, label="other signals, no extra cost")], loc="lower center", ncol=6, fontsize=8.8, frameon=False)
     fig.suptitle("Accuracy with 20% escalated, by benchmark (average of the 3 cheap judges). The probe wins only on RewardBench-2", x=0.01, ha="left", fontsize=11.5); fig.tight_layout(rect=(0, 0.08, 1, 0.95))
-    fig.savefig(os.path.join(out, "fig2_by_benchmark.png"), dpi=150); plt.close(fig)
+    fig.savefig(os.path.join(out, "fig2_accuracy_by_benchmark.png"), dpi=150); plt.close(fig)
 
 
 def fig_curves():
