@@ -1,0 +1,8 @@
+# Large raw data stays local (and on the Modal volume / Cannon scratch); code, reports, tables, figures and the
+# learned direction vectors are committed.
+*.jsonl
+*.jsonl.gz
+*.npy
+*.parquet
+archive/
+inputs/
