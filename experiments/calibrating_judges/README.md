@@ -1,4 +1,4 @@
-# Can a judge's internal numbers tell us when to escalate its verdict?
+# Can a judge's activations tell us when to escalate its verdict?
 
 Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Uncertainty Estimation* (arXiv 2512.22245), applied to the question behind our dynamic jury.
 
@@ -6,7 +6,7 @@ Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Unce
 
 A dynamic jury should not call every judge on every item. A cheap judge grades first, and only the verdicts it is probably **wrong** about go to a stronger judge. This is called **escalation**. It only works if we can tell which of the cheap judge's verdicts to doubt.
 
-The paper's idea: when a judge writes its reasoning and verdict, its **activations** (the internal numbers of the model) at the last token already hint at whether the verdict is right. A **probe**, a tiny trained scorer, reads that hint. We test whether it is a good way to choose what to escalate, compared with the other ways we could choose.
+The paper's idea: when a judge writes its reasoning and verdict, its **activations** at the last token already hint at whether the verdict is right. Activations are the vectors the model computes inside itself as it reads and writes. A **probe**, a tiny trained scorer, reads that hint. We test whether it is a good way to choose what to escalate, compared with the other ways we could choose.
 
 ## The short answer
 
