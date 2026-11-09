@@ -23,8 +23,8 @@ The paper's idea: when a judge writes its reasoning and verdict, its **activatio
 3. **The 20% of items with the lowest trust go to a stronger judge,** whose verdict replaces the cheap one. Verdicts that never finished are escalated first.
 4. **We measure the accuracy of the final verdicts** against the human labels.
 
-**The one metric: accuracy points above random escalation.** Compare the accuracy of step 4 with the accuracy we would get if the same number of items (20%) were escalated **at random**. The difference, in points, is the score. A signal that knows nothing scores 0.
-Real example: Qwen3.5-4B on RewardBench-2. Random escalation gives 0.814. Escalating by the probe gives 0.858. The score is **+4.4 points**.
+**The metric: accuracy of the final verdicts.** It is the share of items whose final verdict matches the human label. To judge a signal we compare that accuracy with the accuracy we would get by escalating the same number of items (20%) **at random**. The gap, in accuracy points, is called **points above random**, and it is what the figures plot. A signal that knows nothing scores 0.
+Real example: Qwen3.5-4B on RewardBench-2. Random escalation gives 0.814 accuracy. Escalating by the probe gives 0.858. The gap is **+4.4 points**.
 
 20% is our choice. The order of the signals is the same at 10% and 30%. At 50% all gaps shrink, because everything converges toward the stronger judge.
 
@@ -56,24 +56,40 @@ Each row is a signal, with its extra cost in brackets. The bar is its score aver
 
 ## Where it works and where it does not
 
-Points above random escalation at 20%, averaged over the 3 judges within each benchmark:
+**Accuracy of the final verdicts (%)** when the 20% of items each signal trusts least are escalated to the stronger judge. Each number is the average of the three cheap judges within a benchmark. The top and bottom rows are reference points; the best signal in each column is in bold.
 
 | | BFF (finance) | RewardBench-2 (safety) | JudgeBench |
 |---|---|---|---|
+| Cheap judge alone | 77.7 | 82.9 | 68.5 |
+| Random 20% escalated | 79.6 | 83.1 | 68.9 |
+| **Probe** | 82.3 | **87.8** | 76.4 |
+| 10 reruns | 85.4 | 86.6 | **76.8** |
+| Other judges disagree | **85.8** | 84.0 | 75.8 |
+| Token probabilities (log-prob) | 83.0 | 84.6 | 76.4 |
+| Stated confidence | 83.0 | 83.6 | 76.5 |
+| Free cut-off rule | 81.5 | 84.7 | 75.7 |
+| Stronger judge alone | 87.4 | 84.1 | 70.3 |
+
+The score used in the figures is the gap between a signal's row and the "Random 20% escalated" row, in accuracy points:
+
+| Points above random | BFF | RewardBench-2 | JudgeBench |
+|---|---|---|---|
 | **Probe** | 2.6 | **4.7** | 7.5 |
-| 10 reruns | **5.8** | 3.5 | 7.9 |
-| Other judges disagree | **6.2** | 0.9 | 6.9 |
+| 10 reruns | 5.8 | 3.5 | 7.9 |
+| Other judges disagree | 6.2 | 0.9 | 6.9 |
 | Token probabilities (log-prob) | 3.4 | 1.5 | 7.5 |
 | Stated confidence | 2.6 | 0.5 | 8.0 |
 | Free cut-off rule | 1.8 | 1.6 | 6.8 |
+
+Stated confidence comes from its own second run of the cheap judge, whose own random baseline differs slightly, so its gaps are measured against that run and are not exactly the subtraction from the table above. The "Stronger judge alone" number for JudgeBench averages different targets (for the 9B the target is weaker than the 9B itself).
 
 ![By benchmark](figures/fig2_by_benchmark.png)
 
 Each dot is one judge on one benchmark; zero means no better than random. The figure shows the judge's stated confidence, the paper's own baseline. Token probabilities are in the table above; on average they are the stronger of the two free rivals (+4.1 against +3.7).
 
-- **RewardBench-2:** the probe is best of all signals, including the 10 reruns (3.5). The other signals that cost nothing extra score only 0.5 to 1.6. This is the one clear win.
-- **BFF:** the probe is weak. 10 reruns and other judges' disagreement are about twice as good, and token probabilities are better too.
-- **JudgeBench:** all signals score between 6.8 and 8.0, and for the two Qwen judges the judge's stated confidence is above the probe. 13% to 26% of answers there were cut off at 4,096 tokens, so the free cut-off rule alone already gets 6.8 of the 7.5.
+- **RewardBench-2:** the probe is best of all signals (87.8%), above the 10 reruns (86.6%) and even above the stronger judge alone (84.1%). The other signals that cost nothing extra reach only 83.6% to 84.7%, close to random escalation (83.1%). This is the one clear win.
+- **BFF:** the probe is weak (82.3%, only 2.7 points above random at 79.6%). 10 reruns (85.4%) and other judges' disagreement (85.8%) are much better, and token probabilities and stated confidence (83.0%) are a little better.
+- **JudgeBench:** every signal lands between 75.7% and 76.8%, against 68.9% for random escalation. The free cut-off rule alone reaches 75.7%, so there is little left for any signal to add. For the two Qwen judges the judge's stated confidence is above the probe. 13% to 26% of answers there were cut off at 4,096 tokens, which is where most of that gain comes from.
 
 Setting by setting, the probe beats 10 reruns in 3 of 9, loses in 5 and ties in 1. It beats the free cut-off rule in 7 of 9 and the best token-probability signal in 5 of 9. Its margins over the free signals are usually under a point or two. It does not beat 10 reruns, but it needs one run instead of about ten.
 
