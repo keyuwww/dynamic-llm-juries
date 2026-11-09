@@ -49,7 +49,7 @@ def kind(sig):
 def fig_by_judge(R):
     """Accuracy of the final verdicts with 20% escalated, for each cheap judge on each benchmark (no averaging). Short horizontal lines = reference points for that judge."""
     A = R.pivot_table(index=["bench", "L"], columns="signal", values="acc_at_20") * 100; base = R[R.signal == PROBE].set_index(["bench", "L"])[["L_only", "rand20", "H_only"]] * 100
-    sigs = [(PROBE, "Probe", BLUE, "o"), ("verbalized", "Stated confidence", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
+    sigs = [(PROBE, "Probe", BLUE, "o"), ("verbalized", "Stated confidence", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("token log-prob (perplexity)", "Token log-prob", GRAY, "D")]
     judges = [L for L, _ in RUNS]; fig, axs = plt.subplots(1, 3, figsize=(13.8, 5.6))
     for ax, b in zip(axs, ["bff", "rb2safety", "judgebench"]):
         allv = [base.loc[(b, L)][c] for L in judges for c in ("L_only", "rand20", "H_only")] + [A.loc[(b, L), s] for L in judges for s, _, _, _ in sigs]; lo, hi = min(allv) - 1.5, max(allv) + 2.2
@@ -66,10 +66,10 @@ def fig_by_judge(R):
     from matplotlib.lines import Line2D
     fig.legend(handles=[Line2D([], [], color=INK2, ls="--", lw=1.5, label="cheap judge alone"), Line2D([], [], color=INK2, ls=":", lw=2.0, label="random 20% escalated"), Line2D([], [], color=INK2, ls="-", lw=1.5, label="stronger judge alone"),
                         Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=9, label="probe (value shown)"), Line2D([], [], marker="s", color="none", markerfacecolor=AQUA, markersize=9, label="stated confidence"),
-                        Line2D([], [], marker="^", color="none", markerfacecolor=ORANGE, markersize=9, label="10 reruns (about 12x cost)"), Line2D([], [], marker="D", color="none", markerfacecolor=GRAY, markersize=8, label="free cut-off rule")],
+                        Line2D([], [], marker="^", color="none", markerfacecolor=ORANGE, markersize=9, label="10 reruns (about 12x cost)"), Line2D([], [], marker="D", color="none", markerfacecolor=GRAY, markersize=8, label="token log-prob")],
                loc="lower center", ncol=7, fontsize=8.6, frameon=False)
     fig.suptitle("Accuracy of the final verdicts with 20% escalated: each cheap judge on each benchmark", x=0.01, ha="left", fontsize=12); fig.tight_layout(rect=(0, 0.07, 1, 0.95))
-    fig.savefig(os.path.join(out, "fig1_accuracy_by_judge.png"), dpi=150); plt.close(fig)
+    fig.savefig(os.path.join(out, "fig1_by_judge_and_benchmark.png"), dpi=150); plt.close(fig)
 
 
 def fig_curves():
