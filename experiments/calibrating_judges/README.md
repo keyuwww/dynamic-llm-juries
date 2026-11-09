@@ -25,7 +25,7 @@ Every number is for one cheap judge on one benchmark; nothing is averaged.
 3. **The 20% of items with the lowest trust go to a stronger judge,** whose verdict replaces the cheap one. Verdicts that never finished are escalated first.
 4. **We measure the accuracy of the final verdicts** against the human labels, and compare it with the accuracy we would get if the same 20% were escalated **at random**.
 
-Real example: Qwen3.5-4B on RewardBench-2 gets 81.4% with random escalation and 85.8% when the probe chooses. 20% is our choice; the order of the signals is much the same at 10% and 30%.
+Real example: Qwen3.5-4B on RewardBench-2 gets 81.4% with random escalation and 85.8% when the probe chooses. 20% is our choice. At 10%, 20% and 30% the probe beats 10 reruns in 2, 3 and 3 of the 9 settings, and beats the free cut-off rule in 4, 7 and 7.
 
 **Judges and data.** Three cheap judges that we run ourselves (we need their activations): Qwen3.5-4B, Qwen3.5-9B and gpt-oss-20b. Three benchmarks with human labels: BFF-Bench (459 items), RewardBench-2 Safety (1,800 items) and JudgeBench (620 pairs). Each judge on each benchmark is one **setting**, so there are 9.
 
@@ -97,7 +97,7 @@ Accuracy (%) of the final verdicts with 20% escalated:
 The probe's numbers are means over 5 training seeds; the curves show one training run, so they can differ by up to about half a point. The stated-confidence curve starts at a different height at 0% because it comes from its own second run of the 4B, whose verdicts differ slightly.
 
 - On RewardBench-2 and JudgeBench, escalating only 20% with the probe beats the stronger judge alone: the cheap judge keeps the items it is sure about, and the stronger judge handles the doubtful ones.
-- On BFF it does not: the stronger judge is much better there, so about half the items must go up.
+- On BFF it does not: the stronger judge is much better there (87.4% against 76.0%), and the probe's cascade only reaches it when about 80% of the items go up (10 reruns: about 94%).
 - On RewardBench-2 the 4B's stated confidence does no better than random escalation (80.5% against 81.4%).
 
 ## Does it carry over to a benchmark it was not trained on?
