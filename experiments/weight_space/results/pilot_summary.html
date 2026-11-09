@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: one calm reading column; a bottom-line box, then three findings, each = one sentence + one chart, then the recommendation. Light mode only, by request. */
+/* Layout: one calm reading column; a bottom-line box, then three findings, each = one sentence + one chart, then the summary. Light mode only, by request. */
 :root {
   color-scheme: light;
   --bg: #F5F8FC;
@@ -60,6 +60,8 @@ section { background: var(--surface); border: 1px solid var(--line); border-radi
 .flow .n.edit { border: 2px solid var(--blue); background: var(--blue-soft); }
 .flow .arrow { align-self: center; color: var(--blue); font-size: 20px; }
 @media (max-width: 640px) { .flow { grid-template-columns: 1fr; } .flow .arrow { justify-self: center; transform: rotate(90deg); } }
+.explain { display: grid; gap: 8px; background: var(--blue-soft); border-radius: 8px; padding: 14px 16px; font-size: 14.5px; }
+.explain b { color: var(--navy); }
 .tablewrap { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14.5px; font-variant-numeric: tabular-nums; }
 th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); }
@@ -87,7 +89,7 @@ footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
   <div class="bottom">
     <div class="eyebrow">Bottom line</div>
     <p>The judge's middle layers already know which safety answers are good (<b>0.97</b>), but its verdict is a coin flip (<b>0.51</b>).</p>
-    <p>A tiny weight edit (<b>0.03%</b> of weights) wired that knowledge to the verdict and raised it to <b>0.95</b>, but it broke the model on everything else. <b>We recommend not pursuing weight editing further.</b></p>
+    <p>A tiny weight edit (<b>0.03%</b> of weights) wired that knowledge to the verdict and raised it to <b>0.95</b>, but it also lowered performance on the other benchmarks and on ordinary text.</p>
   </div>
 
   <section>
@@ -112,93 +114,7 @@ footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
   </section>
 
   <section>
-    <div class="step">Finding 1 and 2</div>
-    <h2>The answer is inside the model, and the edit brings it out</h2>
-    <svg class="chart" viewBox="0 0 640 200" role="img" aria-label="AUROC on held-out RewardBench 2 Safety items: verdict 0.51, middle-layer readout 0.97, verdict after edit 0.95">
-      <g stroke="var(--line)" stroke-width="1">
-        <line x1="200" y1="10" x2="200" y2="166"/><line x1="300" y1="10" x2="300" y2="166"/>
-        <line x1="500" y1="10" x2="500" y2="166"/><line x1="600" y1="10" x2="600" y2="166"/>
-      </g>
-      <line x1="400" y1="10" x2="400" y2="166" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="4 4"/>
-      <text x="404" y="20" font-size="11.5" style="fill:var(--ink-3)">chance</text>
-
-      <text x="190" y="44" text-anchor="end" font-size="14" font-weight="500">What it says</text>
-      <text x="190" y="60" text-anchor="end" font-size="12" style="fill:var(--ink-3)">verdict, before edit</text>
-      <rect x="200" y="32" width="204" height="30" rx="4" fill="var(--base)"><title>Verdict before edit: 0.51 AUROC</title></rect>
-      <text x="412" y="53" font-size="14" font-weight="600">0.51</text>
-
-      <text x="190" y="92" text-anchor="end" font-size="14" font-weight="500">What it knows</text>
-      <text x="190" y="108" text-anchor="end" font-size="12" style="fill:var(--ink-3)">readout of layer 14</text>
-      <rect x="200" y="80" width="388" height="30" rx="4" fill="var(--navy)"><title>Middle-layer readout: 0.97 AUROC</title></rect>
-      <text x="580" y="101" text-anchor="end" font-size="14" font-weight="600" style="fill:#fff">0.97</text>
-
-      <text x="190" y="140" text-anchor="end" font-size="14" font-weight="500">What it says</text>
-      <text x="190" y="156" text-anchor="end" font-size="12" style="fill:var(--ink-3)">verdict, after edit</text>
-      <rect x="200" y="128" width="380" height="30" rx="4" fill="var(--blue)"><title>Verdict after edit: 0.95 AUROC (95% CI 0.92–0.98)</title></rect>
-      <text x="572" y="149" text-anchor="end" font-size="14" font-weight="600" style="fill:#fff">0.95</text>
-
-      <g font-size="11.5" style="fill:var(--ink-3)" text-anchor="middle">
-        <text x="200" y="184" style="fill:var(--ink-3)">0</text><text x="300" y="184" style="fill:var(--ink-3)">0.25</text>
-        <text x="400" y="184" style="fill:var(--ink-3)">0.5</text><text x="500" y="184" style="fill:var(--ink-3)">0.75</text>
-        <text x="600" y="184" style="fill:var(--ink-3)">1.0</text>
-      </g>
-    </svg>
-    <p class="note">AUROC on 168 held-out test items the readout and edit never saw. Before the edit the judge says INCORRECT to 90% of responses, good or bad. In a stricter comparison that only compares responses from the same source model, the numbers are 0.56 → 0.90 → 0.87, and simple clues score only 0.55. Simple clues are surface features fed to a basic classifier without reading the content: response length, refusal words like "I can't help with that", and which AI model wrote the response. If the hidden readout scored no better than these, it would not count as real knowledge.</p>
-
-    <h3>How the edit works</h3>
-    <div class="flow">
-      <div class="n"><b>Layer 14 knows</b>A pattern of neuron activity means "this response is good."</div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="n edit"><b>Edit in block 16</b>One small change to the MLP output weights: <span class="verdict">detector × push</span>. 262,144 of 853M weights.</div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="n"><b>Verdict follows</b>When the "good" pattern fires, the judge is pushed to say CORRECT.</div>
-    </div>
-    <p class="note">The detector is fit on training items; the push is the direction that makes the model write CORRECT instead of INCORRECT. The edit is computed by formula, with no gradient training, and saved as a 1 MB diff file.</p>
-  </section>
-
-  <section>
-    <div class="step">Finding 3</div>
-    <h2>The edit fixed safety and broke everything else</h2>
-    <div class="legend"><span><i class="sw" style="background:var(--base)"></i>Before edit</span><span><i class="sw" style="background:var(--blue)"></i>After edit</span></div>
-    <svg class="chart" viewBox="0 0 640 236" role="img" aria-label="Judge AUROC before and after the edit: Safety 0.51 to 0.95, BFF finance 0.71 to 0.46, JudgeBench 0.55 to 0.53">
-      <g stroke="var(--line)" stroke-width="1">
-        <line x1="200" y1="10" x2="200" y2="204"/><line x1="300" y1="10" x2="300" y2="204"/>
-        <line x1="500" y1="10" x2="500" y2="204"/><line x1="600" y1="10" x2="600" y2="204"/>
-      </g>
-      <line x1="400" y1="10" x2="400" y2="204" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="4 4"/>
-
-      <text x="190" y="36" text-anchor="end" font-size="14" font-weight="500">Safety</text>
-      <text x="190" y="52" text-anchor="end" font-size="12" style="fill:var(--ink-3)">target task</text>
-      <rect x="200" y="22" width="204" height="18" rx="3" fill="var(--base)"><title>Safety before: 0.51</title></rect>
-      <text x="412" y="36" font-size="13">0.51</text>
-      <rect x="200" y="44" width="380" height="18" rx="3" fill="var(--blue)"><title>Safety after: 0.95</title></rect>
-      <text x="588" y="58" font-size="13" font-weight="600" style="fill:var(--good)">0.95</text>
-
-      <text x="190" y="100" text-anchor="end" font-size="14" font-weight="500">BFF finance</text>
-      <text x="190" y="116" text-anchor="end" font-size="12" style="fill:var(--ink-3)">not targeted</text>
-      <rect x="200" y="86" width="284" height="18" rx="3" fill="var(--base)"><title>BFF before: 0.71</title></rect>
-      <text x="492" y="100" font-size="13">0.71</text>
-      <rect x="200" y="108" width="184" height="18" rx="3" fill="var(--blue)"><title>BFF after: 0.46</title></rect>
-      <text x="410" y="122" font-size="13" font-weight="600" style="fill:var(--bad)">0.46 ▼</text>
-
-      <text x="190" y="164" text-anchor="end" font-size="14" font-weight="500">JudgeBench</text>
-      <text x="190" y="180" text-anchor="end" font-size="12" style="fill:var(--ink-3)">not targeted</text>
-      <rect x="200" y="150" width="220" height="18" rx="3" fill="var(--base)"><title>JudgeBench before: 0.55</title></rect>
-      <text x="428" y="164" font-size="13">0.55</text>
-      <rect x="200" y="172" width="212" height="18" rx="3" fill="var(--blue)"><title>JudgeBench after: 0.53</title></rect>
-      <text x="420" y="186" font-size="13">0.53</text>
-
-      <g font-size="11.5" text-anchor="middle">
-        <text x="200" y="224" style="fill:var(--ink-3)">0</text><text x="300" y="224" style="fill:var(--ink-3)">0.25</text>
-        <text x="400" y="224" style="fill:var(--ink-3)">0.5 chance</text><text x="500" y="224" style="fill:var(--ink-3)">0.75</text>
-        <text x="600" y="224" style="fill:var(--ink-3)">1.0</text>
-      </g>
-    </svg>
-    <p class="note">Ordinary text got worse too: prediction loss on Wikipedia text rose from 3.30 to 4.29. It is one model with one set of weights, so the safety edit is present for every task it does. We ran BFF and JudgeBench as a side-effect check, and the edit fires on every input, not only on safety grading.</p>
-  </section>
-
-  <section>
-    <div class="step">Context</div>
+    <div class="step">Where the knowledge is</div>
     <h2>Hidden knowledge only showed up on safety</h2>
     <p>Each line shows how well a simple readout of one layer predicts good vs bad responses, from the first layer (left) to the last (right). The dashed lines are what the judge actually says and what simple clues alone achieve.</p>
     <div class="legend"><span><i class="ln" style="border-top:3px solid var(--navy)"></i>What it knows, by layer</span><span><i class="ln" style="border-top:2px dashed var(--ink-3)"></i>What it says (verdict)</span><span><i class="ln" style="border-top:2px dotted #6FA0E0"></i>Simple clues</span></div>
@@ -372,17 +288,107 @@ footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
     <p class="note"><b>Simple clues</b> = a basic classifier using only surface features (response length, refusal words, which AI model wrote the response), with no understanding of the content. On BFF these alone reach 0.80, so the model's internal signal (0.84) adds little beyond them. Same-source AUROC with 5-fold cross-validation. Editing can only connect knowledge that already exists; it can't add knowledge the model lacks. On JudgeBench the judge also picks answer A 84% of the time regardless of content.</p>
   </section>
 
+  <section>
+    <div class="step">Finding 1 and 2</div>
+    <h2>The answer is inside the model, and the edit brings it out</h2>
+    <svg class="chart" viewBox="0 0 640 200" role="img" aria-label="AUROC on held-out RewardBench 2 Safety items: verdict 0.51, middle-layer readout 0.97, verdict after edit 0.95">
+      <g stroke="var(--line)" stroke-width="1">
+        <line x1="200" y1="10" x2="200" y2="166"/><line x1="300" y1="10" x2="300" y2="166"/>
+        <line x1="500" y1="10" x2="500" y2="166"/><line x1="600" y1="10" x2="600" y2="166"/>
+      </g>
+      <line x1="400" y1="10" x2="400" y2="166" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <text x="404" y="20" font-size="11.5" style="fill:var(--ink-3)">chance</text>
+
+      <text x="190" y="44" text-anchor="end" font-size="14" font-weight="500">What it says</text>
+      <text x="190" y="60" text-anchor="end" font-size="12" style="fill:var(--ink-3)">verdict, before edit</text>
+      <rect x="200" y="32" width="204" height="30" rx="4" fill="var(--base)"><title>Verdict before edit: 0.51 AUROC</title></rect>
+      <text x="412" y="53" font-size="14" font-weight="600">0.51</text>
+
+      <text x="190" y="92" text-anchor="end" font-size="14" font-weight="500">What it knows</text>
+      <text x="190" y="108" text-anchor="end" font-size="12" style="fill:var(--ink-3)">readout of layer 14</text>
+      <rect x="200" y="80" width="388" height="30" rx="4" fill="var(--navy)"><title>Middle-layer readout: 0.97 AUROC</title></rect>
+      <text x="580" y="101" text-anchor="end" font-size="14" font-weight="600" style="fill:#fff">0.97</text>
+
+      <text x="190" y="140" text-anchor="end" font-size="14" font-weight="500">What it says</text>
+      <text x="190" y="156" text-anchor="end" font-size="12" style="fill:var(--ink-3)">verdict, after edit</text>
+      <rect x="200" y="128" width="380" height="30" rx="4" fill="var(--blue)"><title>Verdict after edit: 0.95 AUROC (95% CI 0.92–0.98)</title></rect>
+      <text x="572" y="149" text-anchor="end" font-size="14" font-weight="600" style="fill:#fff">0.95</text>
+
+      <g font-size="11.5" style="fill:var(--ink-3)" text-anchor="middle">
+        <text x="200" y="184" style="fill:var(--ink-3)">0</text><text x="300" y="184" style="fill:var(--ink-3)">0.25</text>
+        <text x="400" y="184" style="fill:var(--ink-3)">0.5</text><text x="500" y="184" style="fill:var(--ink-3)">0.75</text>
+        <text x="600" y="184" style="fill:var(--ink-3)">1.0</text>
+      </g>
+    </svg>
+    <p class="note">AUROC on 168 held-out test items the readout and edit never saw. Before the edit the judge says INCORRECT to 90% of responses, good or bad. In a stricter comparison that only compares responses from the same source model, the numbers are 0.56 → 0.90 → 0.87, and simple clues score only 0.55. Simple clues are surface features fed to a basic classifier without reading the content: response length, refusal words like "I can't help with that", and which AI model wrote the response. If the hidden readout scored no better than these, it would not count as real knowledge.</p>
+
+    <h3>How the edit works</h3>
+    <div class="flow">
+      <div class="n"><b>Layer 14 knows</b>A pattern of neuron activity means "this response is good."</div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="n edit"><b>Edit in block 16</b><span>One small change to the MLP output weights: <span class="verdict">detector × push</span>. 262,144 of 853M weights.</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="n"><b>Verdict follows</b>When the "good" pattern fires, the judge is pushed to say CORRECT.</div>
+    </div>
+    <div class="explain">
+      <div><b>Detector</b> = a reading of 256 neurons in block 16 that gives one score for "how good does the model think this response is?" It is positive for good responses and negative for bad ones. It works like the probe, but inside the model.</div>
+      <div><b>Push</b> = a fixed direction in the model that, when added, makes it more likely to write CORRECT. Subtracting it makes INCORRECT more likely.</div>
+      <div><b>Detector × push</b> = the edit adds the push, scaled by the detector score. A good response gets pushed toward CORRECT, a bad one toward INCORRECT. This rule is written into the weights, so it runs on every input.</div>
+    </div>
+    <p class="note">The detector is fit on training items and the push is measured from the model; the edit is computed by formula, with no training run, and saved as a 1 MB file.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 3</div>
+    <h2>The edit fixed safety and broke everything else</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--base)"></i>Before edit</span><span><i class="sw" style="background:var(--blue)"></i>After edit</span></div>
+    <svg class="chart" viewBox="0 0 640 236" role="img" aria-label="Judge AUROC before and after the edit: Safety 0.51 to 0.95, BFF finance 0.71 to 0.46, JudgeBench 0.55 to 0.53">
+      <g stroke="var(--line)" stroke-width="1">
+        <line x1="200" y1="10" x2="200" y2="204"/><line x1="300" y1="10" x2="300" y2="204"/>
+        <line x1="500" y1="10" x2="500" y2="204"/><line x1="600" y1="10" x2="600" y2="204"/>
+      </g>
+      <line x1="400" y1="10" x2="400" y2="204" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+      <text x="190" y="36" text-anchor="end" font-size="14" font-weight="500">Safety</text>
+      <text x="190" y="52" text-anchor="end" font-size="12" style="fill:var(--ink-3)">target task</text>
+      <rect x="200" y="22" width="204" height="18" rx="3" fill="var(--base)"><title>Safety before: 0.51</title></rect>
+      <text x="412" y="36" font-size="13">0.51</text>
+      <rect x="200" y="44" width="380" height="18" rx="3" fill="var(--blue)"><title>Safety after: 0.95</title></rect>
+      <text x="588" y="58" font-size="13" font-weight="600" style="fill:var(--good)">0.95</text>
+
+      <text x="190" y="100" text-anchor="end" font-size="14" font-weight="500">BFF finance</text>
+      <text x="190" y="116" text-anchor="end" font-size="12" style="fill:var(--ink-3)">not targeted</text>
+      <rect x="200" y="86" width="284" height="18" rx="3" fill="var(--base)"><title>BFF before: 0.71</title></rect>
+      <text x="492" y="100" font-size="13">0.71</text>
+      <rect x="200" y="108" width="184" height="18" rx="3" fill="var(--blue)"><title>BFF after: 0.46</title></rect>
+      <text x="410" y="122" font-size="13" font-weight="600" style="fill:var(--bad)">0.46 ▼</text>
+
+      <text x="190" y="164" text-anchor="end" font-size="14" font-weight="500">JudgeBench</text>
+      <text x="190" y="180" text-anchor="end" font-size="12" style="fill:var(--ink-3)">not targeted</text>
+      <rect x="200" y="150" width="220" height="18" rx="3" fill="var(--base)"><title>JudgeBench before: 0.55</title></rect>
+      <text x="428" y="164" font-size="13">0.55</text>
+      <rect x="200" y="172" width="212" height="18" rx="3" fill="var(--blue)"><title>JudgeBench after: 0.53</title></rect>
+      <text x="420" y="186" font-size="13">0.53</text>
+
+      <g font-size="11.5" text-anchor="middle">
+        <text x="200" y="224" style="fill:var(--ink-3)">0</text><text x="300" y="224" style="fill:var(--ink-3)">0.25</text>
+        <text x="400" y="224" style="fill:var(--ink-3)">0.5 chance</text><text x="500" y="224" style="fill:var(--ink-3)">0.75</text>
+        <text x="600" y="224" style="fill:var(--ink-3)">1.0</text>
+      </g>
+    </svg>
+    <p class="note">Ordinary text got worse too: prediction loss on Wikipedia text rose from 3.30 to 4.29. It is one model with one set of weights, so the safety edit is present for every task it does. We ran BFF and JudgeBench as a side-effect check, and the edit fires on every input, not only on safety grading.</p>
+  </section>
+
   <section class="rec">
-    <span class="tag">Recommendation</span>
-    <h2>Stop the weight-editing direction</h2>
+    <span class="tag">Summary</span>
+    <h2>What we learned</h2>
     <ul>
-      <li><b>One benchmark only.</b> The gain appeared on safety and nowhere else.</li>
-      <li><b>Unacceptable side effects.</b> The edited judge got worse on finance and on ordinary text.</li>
-      <li><b>Limited reach.</b> It needs open-weight models, so it can't be used on API judges like GPT-4o.</li>
-      <li><b>No baseline comparison.</b> We didn't test fine-tuning or better prompts, so we can't say it beats them.</li>
-      <li><b>Thin evidence.</b> One small model, one run, and a method from an unreviewed blog post.</li>
+      <li><b>Hidden knowledge:</b> on Safety, the judge's middle layers separate good from bad responses far better than its verdict (0.90 vs 0.55). On BFF the gap is small, and on JudgeBench there is none.</li>
+      <li><b>The edit:</b> a small weight change connected that knowledge to the verdict and raised Safety from 0.51 to 0.95.</li>
+      <li><b>Side effects:</b> because it's one model, the edit also changed other tasks. BFF fell from 0.71 to 0.46 and ordinary text got worse.</li>
+      <li><b>The prompt:</b> the Safety prompt asks about correctness, not safety, which may explain part of the weak verdict.</li>
+      <li><b>Scope:</b> one small open-weight model, one run, with no comparison yet to fine-tuning or a safety-specific prompt.</li>
     </ul>
-    <p><b>Worth keeping:</b> the readout check itself (probing hidden layers) is a long-established method and cheap to run. It could later serve as a diagnostic for open-weight jury members, but it isn't a priority.</p>
   </section>
 
   <footer>
