@@ -47,14 +47,19 @@ The best of the six signals in each row is in bold. Stated confidence comes from
 
 Qwen3.5-4B as the cheap judge. x-axis: the share of items sent to the stronger judge (0% = the 4B alone, 100% = the stronger judge alone). Dashed: random escalation. Dotted: the best possible.
 
-| Accuracy | 4B alone | Stronger judge alone | Random 20% | **Probe, 20%** | 10 reruns, 20% |
-|---|---|---|---|---|---|
-| RewardBench-2 | 0.807 | 0.841 | 0.814 | **0.858** | 0.846 |
-| JudgeBench | 0.706 | 0.758 | 0.716 | **0.777** | 0.790 |
-| BFF | 0.760 | 0.874 | 0.783 | 0.810 | 0.841 |
+Accuracy (%) of the final verdicts with 20% escalated:
 
-- On RewardBench-2 and JudgeBench, escalating only 20% beats the stronger judge alone: the cheap judge keeps the items it is sure about, and the stronger judge handles the doubtful ones.
+| | 4B alone | Stronger judge alone | Random 20% | **Probe, 20%** | Stated confidence, 20% | 10 reruns, 20% |
+|---|---|---|---|---|---|---|
+| RewardBench-2 | 80.7 | 84.1 | 81.4 | **85.8** | 80.5 | 84.6 |
+| JudgeBench | 70.6 | 75.8 | 71.7 | 77.5 | 78.5 | **79.0** |
+| BFF | 76.0 | 87.4 | 78.3 | 81.5 | 79.7 | **84.1** |
+
+The probe's numbers are means over 5 training seeds; the curves show one training run, so they can differ by up to about half a point. The stated-confidence curve starts at a different height at 0% because it comes from its own second run of the 4B, whose verdicts differ slightly.
+
+- On RewardBench-2 and JudgeBench, escalating only 20% with the probe beats the stronger judge alone: the cheap judge keeps the items it is sure about, and the stronger judge handles the doubtful ones.
 - On BFF it does not: the stronger judge is much better there, so about half the items must go up.
+- On RewardBench-2 the 4B's stated confidence does no better than random escalation (80.5% against 81.4%).
 
 ## 3. Does it carry over to a benchmark it was not trained on?
 

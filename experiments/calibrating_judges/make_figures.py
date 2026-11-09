@@ -75,12 +75,12 @@ def fig_by_judge(R):
 def fig_curves():
     C = pd.read_csv(os.path.join(here, "results_cascade_4b_v3", "cascade_curves.csv")); R = pd.read_csv(os.path.join(here, "results_cascade_4b_v3", "cascade_results.csv"))
     pick = {"bff": "saved top-3", "rb2safety": "saved top-3", "judgebench": "Qwen3.5-9B"}; fig, axs = plt.subplots(1, 3, figsize=(11.5, 4.2))
-    lines = [("probe (layer 16, paper)", "Probe", BLUE, "-"), ("consistency (N=10)", "10 reruns (12x cost)", ORANGE, "-"), ("token log-prob (perplexity)", "Token log-prob", AQUA, "-"),
+    lines = [("probe (layer 16, paper)", "Probe", BLUE, "-"), ("consistency (N=10)", "10 reruns (12x cost)", ORANGE, "-"), ("verbalized", "Stated confidence", AQUA, "-"),
              ("random escalation", "random escalation", INK2, "--"), ("oracle", "oracle (escalate exactly the 4B's errors)", "#b9b8b2", ":")]
     for ax, b in zip(axs, pick):
         tgt = [t for t in C[C.bench == b].target.unique() if t.startswith(pick[b])][0]; d = C[(C.bench == b) & (C.target == tgt)]; r = R[(R.bench == b) & (R.target == tgt)].iloc[0]
         for s, lab, c, ls in lines:
-            x = d[d.signal == s]; ax.plot(x.rate * 100, x.acc, color=c, ls=ls, lw=2.0 if s.startswith(("probe", "consistency", "token")) else 1.3, label=lab)
+            x = d[d.signal == s]; ax.plot(x.rate * 100, x.acc, color=c, ls=ls, lw=2.0 if s.startswith(("probe", "consistency", "verbalized")) else 1.3, label=lab)
         ax.axhline(r.H_only, color=INK, lw=1.0, alpha=0.55, label="stronger judge alone"); ax.axvline(20, color=INK2, lw=0.8, alpha=0.4)
         ax.set_title(f"{BN[b]}: 4B -> " + ("top-3 saved judges" if b != "judgebench" else "Qwen3.5-9B"), loc="left", fontsize=10); ax.set_xlabel("share of items escalated (%)"); ax.set_xlim(0, 100)
         ax.set_ylim(r.L_only - 0.02, max(r.H_only, d.acc.max()) + 0.02)
