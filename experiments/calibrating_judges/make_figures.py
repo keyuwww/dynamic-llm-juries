@@ -46,39 +46,50 @@ def kind(sig):
     return "cheap"
 
 
+def _ref_lines(ax, cheap, rand, strong, top_labels=True):
+    for x, lab, ls, lw in ((cheap, "cheap judge alone", "--", 1.2), (rand, "random 20% escalated", ":", 1.6), (strong, "stronger judge alone", "-", 1.2)):
+        ax.axvline(x, color=INK2, ls=ls, lw=lw, alpha=0.8, zorder=1)
+    return [(cheap, "cheap judge alone", "right", 0.0), (rand, "random 20% escalated", "left", 0.0), (strong, "stronger judge alone", "center", 0.75)]
+
+
 def fig_overview(R):
-    P = R.pivot_table(index="signal", columns=["L", "bench"], values="pts"); mean = P.mean(1).sort_values(); fig, ax = plt.subplots(figsize=(9.6, 6.0))
-    col = {"probe": BLUE, "extra": ORANGE, "cheap": GRAY}
-    for i, s in enumerate(mean.index):
-        ax.barh(i, mean[s], color=col[kind(s)], height=0.62, zorder=2)
-        ax.scatter(P.loc[s].values, np.full(P.shape[1], i), s=16, color=INK, edgecolor=SURF, linewidth=0.8, zorder=3, alpha=0.85)
-        ax.text(11.3, i, f"+{mean[s]:.1f}", va="center", ha="left", fontsize=9.5, color=INK, fontweight="bold" if kind(s) == "probe" else "normal")
+    """Accuracy of the final verdicts when the 20% least-trusted verdicts are escalated, averaged over the 9 settings, with the reference points drawn as vertical lines."""
+    P = R.groupby("signal").acc_at_20.mean() * 100; base = R[R.signal == PROBE]; cheap, rand, strong = base.L_only.mean() * 100, base.rand20.mean() * 100, base.H_only.mean() * 100
+    P = P.sort_values(); fig, ax = plt.subplots(figsize=(9.8, 6.2)); col = {"probe": BLUE, "extra": ORANGE, "cheap": GRAY}
     COSTTAG = {"consistency (N=10)": "about 12x cost", "semantic entropy (N=10)": "about 12x cost", "other judges disagree": "needs other judges"}
-    ax.set_yticks(range(len(mean))); ax.set_yticklabels([NAME[s].replace(" (needs 2-7 other judges)", "") + "   [" + COSTTAG.get(s, "no extra cost") + "]" for s in mean.index]); ax.set_xlim(-1, 12.6); ax.axvline(0, color=INK2, lw=0.8)
-    ax.set_xlabel("accuracy points gained over escalating 20% of the items at random")
-    ax.text(11.3, len(mean) - 0.35, "average", fontsize=8.5, color=INK2, ha="left", va="bottom"); ax.grid(axis="y", visible=False)
-    fig.suptitle("Accuracy of the cascade when the 20% least-trusted verdicts are escalated", x=0.01, ha="left", fontsize=12, y=0.985)
-    from matplotlib.patches import Patch
+    marks = _ref_lines(ax, cheap, rand, strong)
+    for i, sname in enumerate(P.index):
+        ax.hlines(i, 70, P[sname], color=GRID, lw=1.0, zorder=1); ax.scatter(P[sname], i, s=150, color=col[kind(sname)], zorder=3, edgecolor=SURF, linewidth=1.2)
+        ax.text(P[sname] + 0.25, i, f"{P[sname]:.1f}%", va="center", fontsize=9.5, fontweight="bold" if kind(sname) == "probe" else "normal", color=INK, bbox=dict(facecolor=SURF, edgecolor="none", pad=1.2), zorder=4)
+    ax.set_yticks(range(len(P))); ax.set_yticklabels([NAME[s].replace(" (needs 2-7 other judges)", "") + "   [" + COSTTAG.get(s, "no extra cost") + "]" for s in P.index])
+    ax.set_xlim(75.5, 84.5); ax.set_ylim(-0.7, len(P) + 1.6); ax.grid(axis="y", visible=False); ax.set_xlabel("accuracy of the final verdicts (%), average over 9 settings (3 judges x 3 benchmarks)")
+    for x, lab, ha, dy in marks:
+        ax.text(x + (-0.08 if ha == "right" else 0.08 if ha == "left" else 0), len(P) - 0.15 + dy, lab, ha=ha, va="bottom", fontsize=8.5, color=INK2)
+    fig.suptitle("Accuracy of the final verdicts when the 20% least-trusted verdicts are escalated", x=0.01, ha="left", fontsize=12, y=0.985)
     from matplotlib.lines import Line2D
-    ax.legend(handles=[Patch(color=BLUE, label="probe on the judge's activations (no extra cost)"), Patch(color=GRAY, label="other signals from the same single run (no extra cost)"),
-                       Patch(color=ORANGE, label="signals that need 10 reruns or other judges"),
-                       Line2D([], [], marker="o", color="none", markerfacecolor=INK, markeredgecolor=SURF, markersize=6, label="dot = one judge on one benchmark (9 per row); bar = their average")],
-              loc="upper center", bbox_to_anchor=(0.42, -0.13), ncol=1, fontsize=8.5, frameon=False)
+    ax.legend(handles=[Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=10, label="probe on the judge's activations"), Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=10, label="other signals, no extra cost"),
+                       Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=10, label="signals that need 10 reruns or other judges")], loc="upper center", bbox_to_anchor=(0.42, -0.1), ncol=1, fontsize=9, frameon=False)
     fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(os.path.join(out, "fig1_signals_overview.png"), dpi=150); plt.close(fig)
 
 
 def fig_by_bench(R):
-    sigs = [(PROBE, "Probe", BLUE, "o"), ("verbalized", "Stated confidence", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
-    judges = [L for L, _ in RUNS]; fig, axs = plt.subplots(1, 3, figsize=(11.5, 4.2), sharey=True)
+    """Same view per benchmark: accuracy (%) of the final verdicts, averaged over the 3 cheap judges of that benchmark."""
+    sigs = [(PROBE, "Probe", BLUE), ("consistency (N=10)", "10 reruns", ORANGE), ("other judges disagree", "Other judges disagree", ORANGE), ("token log-prob (perplexity)", "Token probabilities", GRAY),
+            ("verbalized", "Stated confidence", GRAY), ("cut-off only (free rule)", "Free cut-off rule", GRAY)]
+    fig, axs = plt.subplots(1, 3, figsize=(13.2, 4.8), sharey=True)
     for ax, b in zip(axs, ["bff", "rb2safety", "judgebench"]):
-        for k, (s, lab, c, m) in enumerate(sigs):
-            for j, L in enumerate(judges):
-                v = R[(R.bench == b) & (R.L == L) & (R.signal == s)].pts
-                if len(v):
-                    ax.scatter(j + (k - 1.5) * 0.16, v.iloc[0], s=62, color=c, marker=m, edgecolor=SURF, linewidth=1.2, zorder=3, label=lab if (b == "bff" and j == 0) else None)
-        ax.set_xticks(range(3)); ax.set_xticklabels(judges); ax.set_xlim(-0.55, 2.55); ax.set_title(BN[b], loc="left", fontsize=10.5); ax.grid(axis="x", visible=False); ax.axhline(0, color=INK2, lw=0.8)
-    axs[0].set_ylabel("accuracy points above random escalation (20%)"); axs[0].legend(fontsize=8.5, frameon=False, loc="upper left", ncol=2)
-    fig.suptitle("Where the probe wins: RewardBench-2 with the Qwen judges. On BFF, 10 reruns are ahead", x=0.01, ha="left", fontsize=11); fig.tight_layout()
+        d = R[R.bench == b]; base = d[d.signal == PROBE]; cheap, rand, strong = base.L_only.mean() * 100, base.rand20.mean() * 100, base.H_only.mean() * 100; marks = _ref_lines(ax, cheap, rand, strong)
+        vals = [d[d.signal == s].acc_at_20.mean() * 100 for s, _, _ in sigs]; lo, hi = min(vals + [cheap, rand, strong]) - 1.5, max(vals + [cheap, rand, strong]) + 2.0
+        for i, ((s, lab, c), v) in enumerate(zip(sigs, vals)):
+            y = len(sigs) - 1 - i; ax.hlines(y, lo, v, color=GRID, lw=1.0, zorder=1); ax.scatter(v, y, s=130, color=c, zorder=3, edgecolor=SURF, linewidth=1.2); ax.text(v + (hi - lo) * 0.02, y, f"{v:.1f}", va="center", fontsize=9, fontweight="bold" if s == PROBE else "normal", bbox=dict(facecolor=SURF, edgecolor="none", pad=1.0), zorder=4)
+        ax.set_xlim(lo, hi); ax.set_ylim(-0.7, len(sigs) + 1.5); ax.set_yticks(range(len(sigs))); ax.set_yticklabels([lab for _, lab, _ in sigs][::-1]); ax.grid(axis="y", visible=False); ax.set_title(BN[b], loc="left", fontsize=11, pad=8)
+        ax.set_xlabel("accuracy of the final verdicts (%)")
+        ax.set_ylim(-0.7, len(sigs) - 0.3)
+    from matplotlib.lines import Line2D
+    fig.legend(handles=[Line2D([], [], color=INK2, ls="--", lw=1.4, label="cheap judge alone"), Line2D([], [], color=INK2, ls=":", lw=1.8, label="random 20% escalated"), Line2D([], [], color=INK2, ls="-", lw=1.4, label="stronger judge alone"),
+                        Line2D([], [], marker="o", color="none", markerfacecolor=BLUE, markersize=9, label="probe"), Line2D([], [], marker="o", color="none", markerfacecolor=ORANGE, markersize=9, label="needs 10 reruns or other judges"),
+                        Line2D([], [], marker="o", color="none", markerfacecolor=GRAY, markersize=9, label="other signals, no extra cost")], loc="lower center", ncol=6, fontsize=8.8, frameon=False)
+    fig.suptitle("Accuracy with 20% escalated, by benchmark (average of the 3 cheap judges). The probe wins only on RewardBench-2", x=0.01, ha="left", fontsize=11.5); fig.tight_layout(rect=(0, 0.08, 1, 0.95))
     fig.savefig(os.path.join(out, "fig2_by_benchmark.png"), dpi=150); plt.close(fig)
 
 

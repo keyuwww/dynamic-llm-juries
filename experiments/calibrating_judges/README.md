@@ -14,15 +14,18 @@ Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Unce
 
 ![Overview of all signals](figures/fig1_signals_overview.png)
 
-- The top two bars are the **10 reruns** (+5.7, +5.0), at about 12x the cost.
-- The **probe** is next (+4.9) with no extra cost. Other signals that cost nothing extra score +2.8 to +4.1.
-- Read the order with care: neighbouring bars differ by under a point, while the dots in each row spread over several points.
+Each dot is the accuracy of the final verdicts when the 20% each signal trusts least are escalated, averaged over the 9 settings. The vertical lines are the reference points: the cheap judge alone (76.4%), escalating 20% at random (77.2%) and the stronger judges alone (80.6%).
+
+- Every signal beats random escalation (77.2%). They land between 80.0% and 82.9%.
+- The top two are the **10 reruns** (82.9%, 82.2%), at about 12x the generation cost.
+- The **probe** gets 82.2% with no extra cost. The other signals that cost nothing extra get 80.0% to 81.3%.
+- Read the order with care: neighbouring dots differ by under a point.
 
 ## 2. Where it works and where it does not
 
 ![By benchmark](figures/fig2_by_benchmark.png)
 
-Accuracy of the final verdicts (average of the 3 cheap judges); random escalation gets 79.6% on BFF, 83.1% on RewardBench-2 and 68.9% on JudgeBench:
+Accuracy of the final verdicts, average of the 3 cheap judges (dashed line: the cheap judge alone, dotted: random 20% escalation, solid: the stronger judge alone):
 
 - **RewardBench-2: the probe wins** (87.8%), above 10 reruns (86.6%) and above the stronger judge alone (84.1%). The other free signals reach only 83.6% to 84.7%.
 - **BFF: the probe is weak** (82.3%). 10 reruns (85.4%) and other judges' disagreement (85.8%) are much better.
