@@ -140,14 +140,15 @@ def main():
     if a.seeds > 1:
         print(f"\n== probe (paper layer) over {a.seeds} seeds: share of the oracle's gain (mean +- sd over seeds)")
         sh = {(b, t): [R[(R.bench == b) & (R.target == t) & R.signal.str.startswith("probe (layer")].share_of_oracle.iloc[0]] for b in BENCH for t in ctx[b]["targets"]}
+        a20 = {(b, t): [R[(R.bench == b) & (R.target == t) & R.signal.str.startswith("probe (layer")].acc_at_20.iloc[0]] for b in BENCH for t in ctx[b]["targets"]}
         for sd in range(1, a.seeds):
             Ps = oof_probe(a.results, a.low, a.layer, a.seed + sd, fixed_only=True)
             for b in BENCH:
                 c = ctx[b]; conf = np.where(c["parsed"], Ps[b][0], -1.0); assert list(Ps[b][2]) == list(c["ids"])
                 for t, ok_h in c["targets"].items():
                     order = np.argsort(c["ok_l"], kind="stable"); orc = np.array([np.where(np.isin(np.arange(len(order)), order[:int(round(k * len(order)))]), ok_h, c["ok_l"]).mean() for k in RATES])
-                    go = gain(orc, c["a_low"], ok_h.mean()); sh[(b, t)].append(gain(curve(conf, c["ok_l"], ok_h), c["a_low"], ok_h.mean()) / go if go > 0 else np.nan)
-        SD = pd.DataFrame([dict(bench=b, target=t[:60], mean=np.nanmean(v), sd=np.nanstd(v), seeds=len(v)) for (b, t), v in sh.items()]); print(SD.round(3).to_string(index=False)); SD.to_csv(os.path.join(a.out, "probe_seeds.csv"), index=False)
+                    a20[(b, t)].append(float(curve(conf, c["ok_l"], ok_h)[10])); go = gain(orc, c["a_low"], ok_h.mean()); sh[(b, t)].append(gain(curve(conf, c["ok_l"], ok_h), c["a_low"], ok_h.mean()) / go if go > 0 else np.nan)
+        SD = pd.DataFrame([dict(bench=b, target=t[:60], mean=np.nanmean(v), sd=np.nanstd(v), seeds=len(v), acc20_mean=np.mean(a20[(b, t)]), acc20_sd=np.std(a20[(b, t)])) for (b, t), v in sh.items()]); print(SD.round(3).to_string(index=False)); SD.to_csv(os.path.join(a.out, "probe_seeds.csv"), index=False)
     print("\n== generated tokens per item needed to obtain each signal"); print(T.round(0).to_string(index=False))
 
 

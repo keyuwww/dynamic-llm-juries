@@ -52,35 +52,59 @@ Stated confidence comes from a second run of the judge with the confidence reque
 
 **Step 4: the test that matters, the cascade.** For each signal: rank the cheap judge's verdicts from least to most trusted, send the least-trusted share to the stronger judge, and use the stronger judge's verdict for those. Then measure the accuracy of the whole system. Escalation targets: the saved top-3 vote of our 8-judge pool for BFF and RewardBench-2, and the other hosted judge for JudgeBench. Verdicts that never finished (no answer) are escalated first for every signal.
 
-To make results comparable across settings we use two reference points:
-- **Random escalation:** sending the same number of items, picked at random.
-- **The oracle:** sending exactly the items the cheap judge got wrong. This is the best any signal could do.
+We compare the signals at one fixed point: **the accuracy of the whole cascade when the 20% of items a signal trusts least are escalated.** The reference is escalating 20% of the items **at random**. We report **accuracy points gained over random escalation**, so a signal that is no better than random scores 0.
 
-The score of a signal is the **share of the oracle's gain** it captures: 0 means no better than random, 1 means perfect.
+This cascade comparison is our own experiment, not one from the paper. The paper's own metrics (AUROC and calibration error) are reported in the last results section.
 
 ## Results
 
-### Which signal finds the wrong verdicts best?
+### Which signal picks the right items to escalate?
 
 ![Overview of all signals](figures/fig1_signals_overview.png)
 
-- Averaged over 3 judges and 3 benchmarks, the **probe finds more of the cheap judge's mistakes than any other signal** (0.62), including the 10 reruns that cost about 12 times as much (0.57).
-- The margin is small. The simple signals from the same single run reach 0.18 to 0.43, and stated confidence is among the weakest (0.35).
-- Training the probe again with a different seed moves its score by 0.01 to 0.09 (standard deviation, depending on the setting), so the probe's numbers above are means over 5 seeds. Choosing the layer on a validation split instead of using the paper's layer gives the same picture (average 0.63).
+Averaged over the 3 judges and 3 benchmarks, the cheap judge alone gets 0.764, escalating 20% at random gets 0.772, and the stronger judges alone get 0.806. Escalating the 20% each signal trusts least gives:
+
+| Signal | Extra generation | Accuracy points over random |
+|---|---|---|
+| 10 reruns (agreement with itself) | about 12x | **+5.7** |
+| 10 reruns (semantic entropy) | about 12x | +5.0 |
+| **Probe** | none | **+4.9** |
+| Other judges disagree | needs 2 to 7 other judges | +4.7 |
+| Token probabilities (the five variants) | none | +2.8 to +4.1 |
+| Stated confidence | none | +3.7 |
+| Free cut-off rule | none | +3.4 |
+
+- The probe is **about as good as 10 reruns** (+4.9 against +5.0 and +5.7, a gap of under one point), at one-twelfth of the generation cost.
+- Its edge over the other signals from the same single run is small: about 1.5 points over the free cut-off rule and under 1 point over the best token-probability signal.
+- The probe's numbers are means over 5 training seeds (spread at most 0.5 accuracy points per setting). The other signals involve no training. Differences of about a point between the probe and the next signals are small and should not be over-read.
 
 ### Where it works and where it doesn't
 
 ![By benchmark](figures/fig2_by_benchmark.png)
 
-- **RewardBench-2, Qwen judges: the probe wins clearly** (0.88 for the 4B, 0.78 for the 9B). The simple single-run signals get at most 0.09 there, and 10 reruns get 0.30 to 0.43.
-- **BFF: 10 reruns beat the probe for all three judges** (0.62 to 0.67 against 0.30 to 0.49). On gpt-oss the token probabilities also beat it.
-- **JudgeBench: everything is close.** Many answers there were cut off at 4,096 tokens (13% to 26%), and the free cut-off rule alone already captures 0.45 to 0.72 of the gain.
+Accuracy of the cascade with 20% escalated (random escalation and the cheap judge alone in brackets):
+
+| | Probe | 10 reruns | Token log-prob | Free cut-off rule |
+|---|---|---|---|---|
+| RewardBench-2, Qwen3.5-4B (0.814, 0.807) | **0.858** | 0.846 | 0.818 | 0.818 |
+| RewardBench-2, Qwen3.5-9B (0.841, 0.841) | **0.886** | 0.858 | 0.841 | 0.843 |
+| RewardBench-2, gpt-oss-20b (0.839, 0.839) | 0.889 | 0.893 | 0.878 | 0.881 |
+| BFF, Qwen3.5-4B (0.783, 0.760) | 0.815 | **0.841** | 0.813 | 0.795 |
+| BFF, Qwen3.5-9B (0.797, 0.778) | 0.823 | **0.858** | 0.832 | 0.817 |
+| BFF, gpt-oss-20b (0.809, 0.793) | 0.830 | **0.863** | 0.845 | 0.832 |
+| JudgeBench, Qwen3.5-4B (0.717, 0.706) | 0.775 | **0.790** | 0.768 | 0.765 |
+| JudgeBench, Qwen3.5-9B (0.725, 0.758) | 0.792 | 0.787 | **0.798** | 0.781 |
+| JudgeBench, gpt-oss-20b (0.625, 0.592) | 0.726 | 0.726 | 0.726 | 0.726 |
+
+- **RewardBench-2 with the Qwen judges: the probe is ahead.** It beats 10 reruns by 1 to 3 points, and the simple signals barely beat random there.
+- **BFF: 10 reruns are ahead for all three judges.**
+- **JudgeBench: everything is close.** 13% to 26% of the answers there were cut off at 4,096 tokens, and the free cut-off rule alone already captures most of the gain. For gpt-oss the signals from the main run end up identical, because the cheap judge's cut-off answers are escalated first and nothing is left to rank.
 
 ### What it means for accuracy
 
 ![Cascade curves](figures/fig3_cascade_curves.png)
 
-Qwen3.5-4B as the cheap judge, sending its least-trusted verdicts to a stronger judge:
+Qwen3.5-4B as the cheap judge, sending its least-trusted verdicts to a stronger judge (one probe training run, as drawn). The dotted line is the best possible: escalating exactly the 4B's mistakes first.
 
 | Benchmark | 4B alone | Stronger judge alone | Random 20% escalated | **Probe, 20% escalated** | 10 reruns, 20% escalated |
 |---|---|---|---|---|---|
@@ -90,7 +114,6 @@ Qwen3.5-4B as the cheap judge, sending its least-trusted verdicts to a stronger 
 
 - On RewardBench-2 and JudgeBench, the cascade beats the stronger judge alone while the cheap judge handles 80% of the items.
 - On BFF it does not: it needs about half the items escalated to approach the stronger judge.
-- Over all 9 settings (one probe training run each), escalating by the probe gains about 3.4 accuracy points over random escalation. The free cut-off rule gains 2.0, and 10 reruns 3.2.
 
 **Cost of getting the signal** (generated tokens per item, Qwen3.5-4B): the probe needs one run (1,196 tokens on BFF, 425 on RewardBench-2, 1,860 on JudgeBench). 10 reruns need about 12 times that (14,441, 5,110 and 22,219).
 
@@ -113,7 +136,7 @@ The paper's main claim is that the probe's number is well calibrated, meaning th
 
 ## Conclusion
 
-For a judge we can run ourselves, a probe on its activations is a **cheap and usually slightly better trigger for escalation** than the alternatives that cost the same, and about as good as rerunning the judge 10 times on average. The clear win is RewardBench-2 with the Qwen judges. Elsewhere, a simple signal or the reruns do as well or better, and the overall gain is a few accuracy points.
+For a judge we can run ourselves, a probe on its activations is a **cheap trigger for escalation that is about as good as rerunning the judge 10 times** (+4.9 against +5.7 accuracy points over random escalation), at one-twelfth of the generation cost. Its edge over the other cheap signals is small, about one point. The clear win is RewardBench-2 with the Qwen judges. On BFF the reruns are better, and on JudgeBench everything is close. The overall gain is a few accuracy points.
 
 ## Limits
 
