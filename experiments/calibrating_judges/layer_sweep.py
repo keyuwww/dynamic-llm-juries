@@ -30,7 +30,7 @@ def main():
             _, ph = load_run(a.results, a.high, b, "uncertainty__n1_t0.0"); ok_h = gen(f"{ph}_gen.jsonl").set_index("item_id").loc[itm["item_id"], "correct"].values.astype(int)
         else:                                                                    # stronger judge: the saved top-3 vote of the 8-judge pool
             d = load_judgments(a.judgments_bff if b == "bff" else a.judgments_rb2, b, condition="none"); C = match_matrix(d.Z, d.Y).astype(int); idx = {i: k for k, i in enumerate(d.item_ids)}
-            sel = np.array([idx[i] for i in itm["item_id"]]); top3 = list(np.argsort(-C[sel].mean(0))[:3]); ok_h = ((d.Z[sel][:, top3].sum(1) * 2 > 3).astype(int) == d.Y[sel]).astype(int)
+            sel = np.array([idx[i] for i in itm["item_id"]]); accx = C[sel].mean(0); accx[[k for k, n_ in enumerate(list(d.judge_names)) if n_.lower() == a.low.lower()]] = -1.0; top3 = list(np.argsort(-accx)[:3]); ok_h = ((d.Z[sel][:, top3].sum(1) * 2 > 3).astype(int) == d.Y[sel]).astype(int)
         ctx[b] = dict(ok_l=ok_l, ok_h=ok_h, parsed=parsed, a_low=ok_l.mean(), rnd=ok_l.mean() + 0.2 * (ok_h.mean() - ok_l.mean()))
     A = np.concatenate(A); Y = np.concatenate(Y); G = np.array(G); bench_of = np.array(bench_of)
     rng = np.random.default_rng(a.seed); ug = rng.permutation(np.unique(G)); fold_of = {g: i % 5 for i, g in enumerate(ug)}; f = np.array([fold_of[g] for g in G]); splits = []

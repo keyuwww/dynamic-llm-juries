@@ -6,7 +6,7 @@ import numpy as np, pandas as pd
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 
 here = os.path.dirname(os.path.abspath(__file__)); out = os.path.join(here, "figures"); os.makedirs(out, exist_ok=True)
-RUNS = [("Qwen3.5-4B", "results_cascade_4b_v3"), ("Qwen3.5-9B", "results_cascade_9b_v3"), ("gpt-oss-20b", "results_cascade_oss_v3")]
+RUNS = [("Qwen3.5-4B", "results_cascade_4b_v3"), ("Qwen3.5-9B", "results_cascade_9b_v4"), ("gpt-oss-20b", "results_cascade_oss_v4")]
 BLUE, ORANGE, AQUA, GRAY, INK, INK2, GRID, SURF = "#2a78d6", "#eb6834", "#1baf7a", "#8b8a85", "#0b0b0b", "#52514e", "#e6e5e1", "#fcfcfb"
 plt.rcParams.update({"figure.facecolor": SURF, "axes.facecolor": SURF, "axes.edgecolor": GRID, "axes.labelcolor": INK2, "xtick.color": INK2, "ytick.color": INK2, "text.color": INK,
                      "font.size": 9.5, "axes.spines.top": False, "axes.spines.right": False, "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.8, "axes.axisbelow": True})

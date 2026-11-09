@@ -113,7 +113,8 @@ def main():
         targets = {f"{a.high} (reasoning judge)": H["correct"].values.astype(int)}
         if b in ("bff", "rb2safety"):
             d = load_judgments(a.judgments_bff if b == "bff" else a.judgments_rb2, b, condition="none"); C = match_matrix(d.Z, d.Y).astype(int); jn = list(d.judge_names); idx = {i: k for k, i in enumerate(d.item_ids)}
-            sel = np.array([idx.get(i, -1) for i in ids]); assert (sel >= 0).all(), "item ids of the judge pool do not cover our items"; C = C[sel]; acc = C.mean(0); top3 = list(np.argsort(-acc)[:3]); best = int(np.argmax(acc))
+            sel = np.array([idx.get(i, -1) for i in ids]); assert (sel >= 0).all(), "item ids of the judge pool do not cover our items"; C = C[sel]; acc = C.mean(0); accx = acc.copy(); accx[[k for k, n_ in enumerate(jn) if n_.lower() == lkey]] = -1.0   # the cheap judge's own model is never part of its stronger panel
+            top3 = list(np.argsort(-accx)[:3]); best = int(np.argmax(accx)); print(f"  [{b}] stronger panel for {a.low} (its own model excluded): {[jn[i] for i in top3]}  best single: {jn[best]}", flush=True)
             Zs0 = d.Z[sel]; oth = [k for k, n_ in enumerate(jn) if n_.lower() != lkey]; disc = np.array([np.nan if np.isnan(lv[i]) else np.mean(Zs0[i, oth] != lv[i]) for i in range(len(ids))], dtype=float)
             print(f"  [{b}] sanity: L's verdict agrees with the saved pool's majority on {np.nanmean((lv == (Zs0[:, oth].mean(1) > 0.5)).astype(float)[parsed]):.3f} of finished items; L is excluded from its own pool", flush=True)
             targets[f"best saved judge: {jn[best]}"] = C[:, best]; Zs = d.Z[sel]; vote = (Zs[:, top3].sum(1) * 2 > 3).astype(int); targets["saved top-3 vote: " + ", ".join(jn[i] for i in top3)] = (vote == d.Y[sel]).astype(int)
