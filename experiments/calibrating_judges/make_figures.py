@@ -1,0 +1,93 @@
+"""Figures for the README, drawn from the cascade_results.csv / cascade_curves.csv written by cascade_eval.py."""
+import os
+import numpy as np, pandas as pd
+import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+
+here = os.path.dirname(os.path.abspath(__file__)); out = os.path.join(here, "figures"); os.makedirs(out, exist_ok=True)
+RUNS = [("Qwen3.5-4B", "results_cascade_4b_v3"), ("Qwen3.5-9B", "results_cascade_9b_v3"), ("gpt-oss-20b", "results_cascade_oss_v3")]
+BLUE, ORANGE, AQUA, GRAY, INK, INK2, GRID, SURF = "#2a78d6", "#eb6834", "#1baf7a", "#8b8a85", "#0b0b0b", "#52514e", "#e6e5e1", "#fcfcfb"
+plt.rcParams.update({"figure.facecolor": SURF, "axes.facecolor": SURF, "axes.edgecolor": GRID, "axes.labelcolor": INK2, "xtick.color": INK2, "ytick.color": INK2, "text.color": INK,
+                     "font.size": 9.5, "axes.spines.top": False, "axes.spines.right": False, "axes.grid": True, "grid.color": GRID, "grid.linewidth": 0.8, "axes.axisbelow": True})
+BN = {"bff": "BFF-Bench", "rb2safety": "RewardBench-2 Safety", "judgebench": "JudgeBench"}
+NAME = {"probe (paper's layer)": "Probe (the judge's activations)", "consistency (N=10)": "10 reruns: agreement with itself",
+        "semantic entropy (N=10)": "10 reruns: semantic entropy", "verbalized": "Stated confidence (0-100)", "cut-off only (free rule)": "Free rule: escalate if the output was cut off",
+        "token log-prob (perplexity)": "Token probabilities: log-prob (perplexity)", "MaxProb (mean over tokens)": "Token probabilities: MaxProb", "energy (log-sum-exp)": "Token probabilities: energy",
+        "token entropy": "Token probabilities: entropy", "verdict-token prob": "Token probabilities: verdict token"}
+
+
+def load():
+    rows = []
+    for L, d in RUNS:
+        r = pd.read_csv(os.path.join(here, d, "cascade_results.csv")); r["L"] = L; rows.append(r)
+    R = pd.concat(rows); R["t"] = R.target.apply(lambda s: "top3" if s.startswith("saved top-3") else ("best" if s.startswith("best saved") else "reasoning"))
+    R = R[((R.bench != "judgebench") & (R.t == "top3")) | ((R.bench == "judgebench") & (R.t == "reasoning"))].copy()
+    R["signal"] = R.signal.str.replace(r"other judges disagree.*", "other judges disagree", regex=True).str.replace(r"probe \(layer \d+, paper\)", "probe (paper's layer)", regex=True)
+    R = R.reset_index(drop=True)                           # (concat leaves duplicate row labels; .loc below needs unique ones)
+    for L, d in RUNS:                                      # the probe is trained once per seed; use the mean over the 5 seeds (the other signals involve no training)
+        S = pd.read_csv(os.path.join(here, d, "probe_seeds.csv"))
+        for i, r in R[(R.L == L) & (R.signal == "probe (paper's layer)")].iterrows():
+            hit = S[(S.bench == r.bench) & (S.target == r.target[:60])]
+            if len(hit):
+                R.loc[i, "share_of_oracle"] = hit["mean"].iloc[0]
+    R = R[R.signal != "probe (validation layer)"]; return R
+
+
+def kind(sig):
+    if sig.startswith("probe"):
+        return "probe"
+    if sig.startswith(("consistency", "semantic", "other judges")):
+        return "extra"
+    return "cheap"
+
+
+def fig_overview(R):
+    P = R.pivot_table(index="signal", columns=["L", "bench"], values="share_of_oracle"); mean = P.mean(1).sort_values(); fig, ax = plt.subplots(figsize=(9.6, 6.0))
+    col = {"probe": BLUE, "extra": ORANGE, "cheap": GRAY}; nm = lambda s: NAME.get(s, "Other judges disagree (needs 2-7 other judges)" if s.startswith("other") else s)
+    for i, s in enumerate(mean.index):
+        ax.barh(i, mean[s], color=col[kind(s)], height=0.62, zorder=2)
+        ax.scatter(P.loc[s].values, np.full(P.shape[1], i), s=16, color=INK, edgecolor=SURF, linewidth=0.8, zorder=3, alpha=0.85)
+        ax.text(1.04, i, f"{mean[s]:.2f}", va="center", ha="left", fontsize=9.5, color=INK, fontweight="bold" if kind(s) == "probe" else "normal")
+    ax.set_yticks(range(len(mean))); ax.set_yticklabels([nm(s) for s in mean.index]); ax.set_xlim(-0.05, 1.12); ax.set_xticks([0, 0.2, 0.4, 0.6, 0.8, 1.0]); ax.axvline(0, color=INK2, lw=0.8)
+    ax.set_xlabel("share of the achievable gain  (1.0 = perfect)")
+    ax.text(1.04, len(mean) - 0.35, "average", fontsize=8.5, color=INK2, ha="left", va="bottom")
+    ax.grid(axis="y", visible=False); fig.suptitle("Which signal best finds the cheap judge's wrong verdicts?", x=0.01, ha="left", fontsize=12, y=0.985)
+    from matplotlib.patches import Patch
+    from matplotlib.lines import Line2D
+    ax.legend(handles=[Patch(color=BLUE, label="probe on the judge's activations (no extra cost)"), Patch(color=GRAY, label="other signals from the same single run (no extra cost)"),
+                       Patch(color=ORANGE, label="signals that need 10 reruns or other judges"),
+                       Line2D([], [], marker="o", color="none", markerfacecolor=INK, markeredgecolor=SURF, markersize=6, label="dot = one judge on one benchmark (9 per row); bar = their average")], loc="upper center", bbox_to_anchor=(0.42, -0.13), ncol=1, fontsize=8.5, frameon=False)
+    fig.tight_layout(rect=(0, 0, 1, 0.96)); fig.savefig(os.path.join(out, "fig1_signals_overview.png"), dpi=150); plt.close(fig)
+
+
+def fig_by_bench(R):
+    sigs = [("probe (paper's layer)", "Probe", BLUE, "o"), ("token log-prob (perplexity)", "Token log-prob", AQUA, "s"), ("consistency (N=10)", "10 reruns", ORANGE, "^"), ("cut-off only (free rule)", "Free cut-off rule", GRAY, "D")]
+    judges = [L for L, _ in RUNS]; fig, axs = plt.subplots(1, 3, figsize=(11.5, 4.2), sharey=True)
+    for ax, b in zip(axs, ["bff", "rb2safety", "judgebench"]):
+        for k, (s, lab, c, m) in enumerate(sigs):
+            for j, L in enumerate(judges):
+                v = R[(R.bench == b) & (R.L == L) & (R.signal == s)].share_of_oracle
+                if len(v):
+                    ax.scatter(j + (k - 1.5) * 0.16, v.iloc[0], s=62, color=c, marker=m, edgecolor=SURF, linewidth=1.2, zorder=3, label=lab if (b == "bff" and j == 0) else None)
+        ax.set_xticks(range(3)); ax.set_xticklabels(judges); ax.set_xlim(-0.55, 2.55); ax.set_title(BN[b], loc="left", fontsize=10.5); ax.grid(axis="x", visible=False); ax.axhline(0, color=INK2, lw=0.8)
+    axs[0].set_ylabel("share of the oracle's gain"); axs[0].legend(fontsize=8.5, frameon=False, loc="upper left", ncol=2)
+    fig.suptitle("Where the probe wins: RewardBench-2 with the Qwen judges. Elsewhere a simple signal is close", x=0.01, ha="left", fontsize=11); fig.tight_layout(); fig.savefig(os.path.join(out, "fig2_by_benchmark.png"), dpi=150); plt.close(fig)
+
+
+def fig_curves():
+    C = pd.read_csv(os.path.join(here, "results_cascade_4b_v3", "cascade_curves.csv")); R = pd.read_csv(os.path.join(here, "results_cascade_4b_v3", "cascade_results.csv"))
+    pick = {"bff": "saved top-3", "rb2safety": "saved top-3", "judgebench": "Qwen3.5-9B"}; fig, axs = plt.subplots(1, 3, figsize=(11.5, 4.2))
+    lines = [("probe (paper's layer)", "Probe", BLUE, "-"), ("consistency (N=10)", "10 reruns (12x cost)", ORANGE, "-"), ("token log-prob (perplexity)", "Token log-prob", AQUA, "-"),
+             ("random escalation", "random escalation", INK2, "--"), ("oracle", "oracle", "#b9b8b2", ":")]
+    for ax, b in zip(axs, pick):
+        tgt = [t for t in C[C.bench == b].target.unique() if t.startswith(pick[b])][0]; d = C[(C.bench == b) & (C.target == tgt)]; r = R[(R.bench == b) & (R.target == tgt)].iloc[0]
+        for s, lab, c, ls in lines:
+            x = d[d.signal == s]; ax.plot(x.rate * 100, x.acc, color=c, ls=ls, lw=2.0 if s.startswith(("probe", "consistency", "token")) else 1.3, label=lab)
+        ax.axhline(r.H_only, color=INK, lw=1.0, alpha=0.55, label="stronger judge alone")
+        ax.set_title(f"{BN[b]}: 4B -> " + ("top-3 saved judges" if b != "judgebench" else "Qwen3.5-9B"), loc="left", fontsize=10); ax.set_xlabel("share of items escalated (%)"); ax.set_xlim(0, 100)
+        lo = r.L_only - 0.02; ax.set_ylim(lo, max(r.H_only, d.acc.max()) + 0.02)
+    axs[0].set_ylabel("accuracy of the cascade"); h, l = axs[0].get_legend_handles_labels(); fig.legend(h, l, loc="lower center", ncol=6, fontsize=9, frameon=False)
+    fig.suptitle("Accuracy as more of the 4B's least-trusted verdicts go to the stronger judge", x=0.01, ha="left", fontsize=11); fig.tight_layout(rect=(0, 0.07, 1, 0.97)); fig.savefig(os.path.join(out, "fig3_cascade_curves.png"), dpi=150); plt.close(fig)
+
+
+if __name__ == "__main__":
+    R = load(); fig_overview(R); fig_by_bench(R); fig_curves(); print("saved", sorted(os.listdir(out)))
