@@ -5,7 +5,7 @@ Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Unce
 ## Setup
 
 - **The test:** a cheap judge grades every item. A **signal** gives each verdict a trust score. The 20% with the lowest trust go to a stronger judge, whose verdict replaces the cheap one. Verdicts that never finished go first.
-- **The metric:** accuracy of the final verdicts against the human labels. **Points above random** = that accuracy minus what escalating a random 20% would give. Example: Qwen3.5-4B on RewardBench-2 gets 81.4% with random escalation and 85.8% with the probe, which is **+4.4 points**.
+- **The metric:** the accuracy of the final verdicts against the human labels, compared with the accuracy we would get by escalating a random 20% instead. Example: Qwen3.5-4B on RewardBench-2 gets 81.4% with random escalation and 85.8% when the probe chooses.
 - **The probe:** a tiny trained scorer on the judge's activations (its internal numbers) at the last token it writes. One probe per judge, trained on questions it never scores.
 - **Judges and data:** cheap judges Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b, on BFF-Bench (finance), RewardBench-2 Safety and JudgeBench. Three judges times three benchmarks gives 9 settings. The stronger judge is the saved top-3 vote of our 8-judge pool (BFF, RewardBench-2) or another hosted judge (JudgeBench).
 - **Compared with:** the judge's stated confidence, token probabilities, a free rule (escalate only answers that were cut off), 10 reruns (about 12x the generation) and other judges' disagreement (needs those judges).
@@ -70,16 +70,16 @@ Qwen3.5-4B as the cheap judge. x-axis: the share of items sent to the stronger j
 
 ## 4. Does it carry over to a benchmark it was not trained on?
 
-Points above random at 20%, probe trained on the other two benchmarks, mean of the 3 judges:
+Accuracy (%) of the final verdicts with 20% escalated, mean of the 3 judges. In the "unseen" column the probe was trained on the other two benchmarks only:
 
-| | Probe, same benchmark | **Probe, unseen benchmark** | 10 reruns | Free rule |
-|---|---|---|---|---|
-| BFF | 2.4 | 2.5 | 5.8 | 1.8 |
-| RewardBench-2 | 4.7 | **0.6** | 3.5 | 1.6 |
-| JudgeBench | 7.7 | 7.3 | 7.9 | 6.8 |
-| **Mean of the 9** | 4.9 | **3.5** | 5.7 | 3.4 |
+| | Random 20% | Probe, same benchmark (one training run) | **Probe, unseen benchmark** | 10 reruns | Free rule |
+|---|---|---|---|---|---|
+| BFF | 79.6 | 82.1 | 82.1 | 85.4 | 81.5 |
+| RewardBench-2 | 83.1 | 87.8 | **83.7** | 86.6 | 84.7 |
+| JudgeBench | 68.9 | 76.6 | 76.2 | 76.8 | 75.7 |
+| **Mean of the 9** | 77.2 | 82.1 | **80.7** | 82.9 | 80.6 |
 
-On an unseen benchmark the probe falls to the free rule's level, and on RewardBench-2, its one win, to nothing. It needs labelled data from each new kind of task.
+On an unseen benchmark the probe falls to the free rule's level (80.7% against 80.6% on average). On RewardBench-2, its one win, it drops from 87.8% to 83.7%: about random escalation (83.1%) and below the free rule (84.7%). For the Qwen3.5-9B it is below random there. So the probe needs labelled data from each new kind of task.
 
 ## 5. Which layer to read the probe from?
 
