@@ -1,0 +1,1167 @@
+<meta charset="utf-8">
+<title>Safety Knowledge Module Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; bottom line, setup, then one finding per section, each = a sentence + a chart. Light mode only, by request. */
+:root {
+  color-scheme: light;
+  --bg: #F5F8FC; --surface: #FFFFFF; --ink: #0E1E33; --ink-2: #44546A; --ink-3: #6B7A90; --line: #DCE4EE;
+  --navy: #0B2A55; --blue: #1F5FBF; --blue-soft: #E6EEF9; --orange: #C2550C;
+  --serif: "IBM Plex Serif", Georgia, serif; --sans: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+body { background: var(--bg); color: var(--ink); font: 16px/1.6 var(--sans); }
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 40px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
+h1 { font: 600 clamp(28px, 5vw, 38px)/1.15 var(--serif); color: var(--navy); margin: 0; text-wrap: balance; }
+h2 { font: 600 22px/1.25 var(--serif); color: var(--navy); margin: 0; text-wrap: balance; }
+h3 { font: 600 15px/1.3 var(--sans); margin: 0; }
+p { margin: 0; max-width: 70ch; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 72ch; }
+.bottom { background: var(--navy); color: #fff; border-radius: 10px; padding: 22px 24px; display: grid; gap: 8px; }
+.bottom .eyebrow { color: #9CC2FF; } .bottom p { font-size: 17px; max-width: none; } .bottom b { color: #CFE1FF; }
+section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 24px; display: grid; gap: 14px; min-width: 0; }
+.step { font: 500 12px/1 var(--mono); color: var(--blue); letter-spacing: .06em; text-transform: uppercase; }
+.note { font-size: 13.5px; color: var(--ink-3); }
+.scroll { overflow-x: auto; }
+.chart { width: 100%; height: auto; display: block; }
+.heat { min-width: 600px; }
+.chart text { font-family: var(--sans); fill: var(--ink); }
+.chart .ax { font-size: 11px; fill: var(--ink-3); } .chart .axl { font-size: 12px; fill: var(--ink-2); }
+.chart .lab { font-size: 12.5px; } .chart .lab.std { font-weight: 600; fill: var(--navy); }
+.chart .stdx { font-weight: 600; fill: var(--navy); }
+.chart .val { font-size: 12.5px; font-weight: 600; } .chart .cv { font-size: 10.5px; font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13.5px; color: var(--ink-2); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.grad { width: 120px; height: 12px; border-radius: 3px; background: linear-gradient(90deg, rgb(194,85,12), rgb(241,244,248), rgb(31,95,191)); }
+.explain { display: grid; gap: 8px; background: var(--blue-soft); border-radius: 8px; padding: 14px 16px; font-size: 14.5px; }
+.explain b { color: var(--navy); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.box { border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 8px; min-width: 0; }
+.box ol { margin: 0; padding-left: 20px; font-size: 14.5px; display: grid; gap: 3px; }
+.num { font-family: var(--mono); color: var(--blue); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.stat { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; display: grid; gap: 2px; }
+.stat b { font: 600 24px/1.2 var(--serif); color: var(--navy); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--ink-2); }
+.part { display: grid; gap: 6px; padding: 18px 0 2px; border-top: 3px solid var(--navy); }
+.part span { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+.part h2 { font-size: 26px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); }
+td.num { font-family: var(--mono); white-space: nowrap; } td.hi { color: var(--blue); font-weight: 600; }
+.rec { border: 2px solid var(--navy); }
+.tag { display: inline-block; font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--navy); color: #fff; letter-spacing: .05em; text-transform: uppercase; justify-self: start; }
+footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Drill-down · Qwen3.5-0.8B judge · RewardBench 2 Safety and BFF</div>
+    <h1>Where the judge's hidden safety knowledge comes from, and whether editing it is significant</h1>
+  </header>
+
+  <div class="bottom">
+    <div class="eyebrow">Bottom line</div>
+    <p>The safety knowledge is <b>built by a small number of parts pushing in opposite directions</b>, mostly attention heads in the two standard-attention layers <b>8 and 16</b>, plus the MLPs in layers 8, 9 and 14. 36 of 240 parts beat the random-label control.</p>
+    <p>The 256 neurons we edited before were <b>no better than a random pick</b>. On BFF the map is weak and noisy, with only one significant part.</p>
+    <p><b>The weight edit is significant:</b> it beats shuffled labels, random directions and random changes 19 of 19 times. But <b>any</b> 256 neurons work equally well, and editing <b>later layers (16, 20)</b> gives the same gain with far less damage.</p>
+  </div>
+
+  <section>
+    <div class="step">Setup</div>
+    <h2>What we ran</h2>
+    <ul>
+      <li><b>Model and data:</b> Qwen3.5-0.8B judge, all 900 RewardBench 2 Safety items with the team's safety prompt, and all 459 BFF items with the team's finance prompt. Forward passes ran on a Modal GPU.</li>
+      <li><b>What we recorded:</b> at the moment the judge gives its verdict, the output of every attention head and every MLP in all 24 layers. Each layer has either 16 heads (linear attention) or 8 heads (standard attention, in layers 4, 8, 12, 16), plus one MLP with 3,584 neurons.</li>
+      <li><b>The knowledge readout:</b> the same simple probe as before, read at the layer where it works best (layer 16 for Safety, 0.95 AUROC, while the verdict is 0.53).</li>
+      <li><b>Splitting it up:</b> the model's internal state is exactly the sum of what every head and MLP adds (checked: the parts add up within 1%). So the probe's score splits into one share per part.</li>
+      <li><b>Random control:</b> we shuffled the good/bad labels 500 times within each request. A part counts as significant (★, dark outline) only if it beats the largest push any part gets from shuffled labels.</li>
+    </ul>
+    <div class="explain">
+      <div><b>Push</b> = how much a part moves the model's internal state toward "this response is good" for good responses, and toward "bad" for bad ones. Shown as a share of the total.</div>
+      <div><b>Positive (blue)</b> = helps build the right answer. <b>Negative (orange)</b> = pushes toward the wrong answer and is cancelled out by other parts. All shares add up to 100%.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="step">Finding 1</div>
+    <h2>A few parts in layers 8 and 16 do most of the pushing, in both directions</h2>
+    <div class="legend"><span><i class="grad"></i></span><span>orange: pushes toward wrong answer · blue: pushes toward right answer</span><span><i class="sw" style="border:2px solid var(--navy)"></i>significant</span><span>◆ standard attention (8 heads)</span></div>
+    <div class="scroll"><svg class="chart heat" viewBox="0 0 740 466" role="img" aria-label="Contribution of each attention head and MLP, layers 1 to 16">
+<text x="128.0" y="24" text-anchor="middle" class="ax">1</text>
+<text x="160.0" y="24" text-anchor="middle" class="ax">2</text>
+<text x="192.0" y="24" text-anchor="middle" class="ax">3</text>
+<text x="224.0" y="24" text-anchor="middle" class="ax">4</text>
+<text x="256.0" y="24" text-anchor="middle" class="ax">5</text>
+<text x="288.0" y="24" text-anchor="middle" class="ax">6</text>
+<text x="320.0" y="24" text-anchor="middle" class="ax">7</text>
+<text x="352.0" y="24" text-anchor="middle" class="ax">8</text>
+<text x="384.0" y="24" text-anchor="middle" class="ax">9</text>
+<text x="416.0" y="24" text-anchor="middle" class="ax">10</text>
+<text x="448.0" y="24" text-anchor="middle" class="ax">11</text>
+<text x="480.0" y="24" text-anchor="middle" class="ax">12</text>
+<text x="512.0" y="24" text-anchor="middle" class="ax">13</text>
+<text x="544.0" y="24" text-anchor="middle" class="ax">14</text>
+<text x="576.0" y="24" text-anchor="middle" class="ax">15</text>
+<text x="608.0" y="24" text-anchor="middle" class="ax">16</text>
+<text x="368" y="12" text-anchor="middle" class="axl">attention heads</text>
+<text x="654.0" y="24" text-anchor="middle" class="axl">MLP</text>
+<text x="102" y="51.0" text-anchor="end" class="lab">Layer 1</text>
+<g><title>Layer 1 head 1: +0% of the push; standalone readout 0.52</title><rect x="113" y="35" width="30" height="24" rx="3" fill="rgb(238,242,247)"/></g>
+<g><title>Layer 1 head 2: -0% of the push; standalone readout 0.70</title><rect x="145" y="35" width="30" height="24" rx="3" fill="rgb(240,241,243)"/></g>
+<g><title>Layer 1 head 3: +2% of the push; standalone readout 0.48</title><rect x="177" y="35" width="30" height="24" rx="3" fill="rgb(217,227,241)"/></g>
+<g><title>Layer 1 head 4: +1% of the push; standalone readout 0.50</title><rect x="209" y="35" width="30" height="24" rx="3" fill="rgb(229,235,245)"/></g>
+<g><title>Layer 1 head 5: -3% of the push; standalone readout 0.51</title><rect x="241" y="35" width="30" height="24" rx="3" fill="rgb(235,223,216)"/></g>
+<g><title>Layer 1 head 6: +2% of the push; standalone readout 0.67</title><rect x="273" y="35" width="30" height="24" rx="3" fill="rgb(219,228,242)"/></g>
+<g><title>Layer 1 head 7: +4% of the push; standalone readout 0.62</title><rect x="305" y="35" width="30" height="24" rx="3" fill="rgb(206,219,238)"/></g>
+<g><title>Layer 1 head 8: -0% of the push; standalone readout 0.65</title><rect x="337" y="35" width="30" height="24" rx="3" fill="rgb(240,240,242)"/></g>
+<g><title>Layer 1 head 9: +7% of the push (significant); standalone readout 0.51</title><rect x="369" y="35" width="30" height="24" rx="3" fill="rgb(183,203,232)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 1 head 10: -0% of the push; standalone readout 0.52</title><rect x="401" y="35" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 1 head 11: -0% of the push; standalone readout 0.60</title><rect x="433" y="35" width="30" height="24" rx="3" fill="rgb(241,244,248)"/></g>
+<g><title>Layer 1 head 12: -0% of the push; standalone readout 0.52</title><rect x="465" y="35" width="30" height="24" rx="3" fill="rgb(241,244,248)"/></g>
+<g><title>Layer 1 head 13: -1% of the push; standalone readout 0.74</title><rect x="497" y="35" width="30" height="24" rx="3" fill="rgb(238,233,232)"/></g>
+<g><title>Layer 1 head 14: +2% of the push; standalone readout 0.52</title><rect x="529" y="35" width="30" height="24" rx="3" fill="rgb(216,226,241)"/></g>
+<g><title>Layer 1 head 15: -0% of the push; standalone readout 0.78</title><rect x="561" y="35" width="30" height="24" rx="3" fill="rgb(240,242,245)"/></g>
+<g><title>Layer 1 head 16: -1% of the push; standalone readout 0.74</title><rect x="593" y="35" width="30" height="24" rx="3" fill="rgb(238,235,235)"/></g>
+<g><title>Layer 1 MLP: -0% of the push; standalone readout 0.63</title><rect x="639" y="35" width="30" height="24" rx="3" fill="rgb(240,242,245)"/></g>
+<text x="102" y="77.0" text-anchor="end" class="lab">Layer 2</text>
+<g><title>Layer 2 head 1: -2% of the push; standalone readout 0.80</title><rect x="113" y="61" width="30" height="24" rx="3" fill="rgb(236,228,225)"/></g>
+<g><title>Layer 2 head 2: -0% of the push; standalone readout 0.79</title><rect x="145" y="61" width="30" height="24" rx="3" fill="rgb(241,243,246)"/></g>
+<g><title>Layer 2 head 3: +1% of the push; standalone readout 0.76</title><rect x="177" y="61" width="30" height="24" rx="3" fill="rgb(233,238,246)"/></g>
+<g><title>Layer 2 head 4: +2% of the push; standalone readout 0.76</title><rect x="209" y="61" width="30" height="24" rx="3" fill="rgb(224,232,243)"/></g>
+<g><title>Layer 2 head 5: -0% of the push; standalone readout 0.74</title><rect x="241" y="61" width="30" height="24" rx="3" fill="rgb(241,243,246)"/></g>
+<g><title>Layer 2 head 6: +0% of the push; standalone readout 0.78</title><rect x="273" y="61" width="30" height="24" rx="3" fill="rgb(235,240,246)"/></g>
+<g><title>Layer 2 head 7: +0% of the push; standalone readout 0.76</title><rect x="305" y="61" width="30" height="24" rx="3" fill="rgb(239,243,248)"/></g>
+<g><title>Layer 2 head 8: +0% of the push; standalone readout 0.68</title><rect x="337" y="61" width="30" height="24" rx="3" fill="rgb(234,239,246)"/></g>
+<g><title>Layer 2 head 9: -2% of the push; standalone readout 0.75</title><rect x="369" y="61" width="30" height="24" rx="3" fill="rgb(236,227,223)"/></g>
+<g><title>Layer 2 head 10: +0% of the push; standalone readout 0.77</title><rect x="401" y="61" width="30" height="24" rx="3" fill="rgb(240,243,248)"/></g>
+<g><title>Layer 2 head 11: -1% of the push; standalone readout 0.74</title><rect x="433" y="61" width="30" height="24" rx="3" fill="rgb(238,232,231)"/></g>
+<g><title>Layer 2 head 12: +0% of the push; standalone readout 0.77</title><rect x="465" y="61" width="30" height="24" rx="3" fill="rgb(240,244,248)"/></g>
+<g><title>Layer 2 head 13: -1% of the push; standalone readout 0.67</title><rect x="497" y="61" width="30" height="24" rx="3" fill="rgb(238,234,233)"/></g>
+<g><title>Layer 2 head 14: +0% of the push; standalone readout 0.70</title><rect x="529" y="61" width="30" height="24" rx="3" fill="rgb(240,244,248)"/></g>
+<g><title>Layer 2 head 15: +2% of the push; standalone readout 0.65</title><rect x="561" y="61" width="30" height="24" rx="3" fill="rgb(224,232,243)"/></g>
+<g><title>Layer 2 head 16: +4% of the push; standalone readout 0.72</title><rect x="593" y="61" width="30" height="24" rx="3" fill="rgb(206,219,239)"/></g>
+<g><title>Layer 2 MLP: -3% of the push; standalone readout 0.78</title><rect x="639" y="61" width="30" height="24" rx="3" fill="rgb(235,225,219)"/></g>
+<text x="102" y="103.0" text-anchor="end" class="lab">Layer 3</text>
+<g><title>Layer 3 head 1: +0% of the push; standalone readout 0.64</title><rect x="113" y="87" width="30" height="24" rx="3" fill="rgb(237,241,247)"/></g>
+<g><title>Layer 3 head 2: -2% of the push; standalone readout 0.69</title><rect x="145" y="87" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<g><title>Layer 3 head 3: -1% of the push; standalone readout 0.76</title><rect x="177" y="87" width="30" height="24" rx="3" fill="rgb(238,235,235)"/></g>
+<g><title>Layer 3 head 4: +2% of the push; standalone readout 0.80</title><rect x="209" y="87" width="30" height="24" rx="3" fill="rgb(222,231,243)"/></g>
+<g><title>Layer 3 head 5: -3% of the push; standalone readout 0.75</title><rect x="241" y="87" width="30" height="24" rx="3" fill="rgb(234,221,213)"/></g>
+<g><title>Layer 3 head 6: -4% of the push; standalone readout 0.75</title><rect x="273" y="87" width="30" height="24" rx="3" fill="rgb(233,217,208)"/></g>
+<g><title>Layer 3 head 7: +0% of the push; standalone readout 0.77</title><rect x="305" y="87" width="30" height="24" rx="3" fill="rgb(239,243,248)"/></g>
+<g><title>Layer 3 head 8: +1% of the push; standalone readout 0.70</title><rect x="337" y="87" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 3 head 9: -0% of the push; standalone readout 0.65</title><rect x="369" y="87" width="30" height="24" rx="3" fill="rgb(240,240,243)"/></g>
+<g><title>Layer 3 head 10: -0% of the push; standalone readout 0.77</title><rect x="401" y="87" width="30" height="24" rx="3" fill="rgb(240,240,243)"/></g>
+<g><title>Layer 3 head 11: -0% of the push; standalone readout 0.76</title><rect x="433" y="87" width="30" height="24" rx="3" fill="rgb(241,242,246)"/></g>
+<g><title>Layer 3 head 12: +3% of the push; standalone readout 0.76</title><rect x="465" y="87" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 3 head 13: +4% of the push; standalone readout 0.79</title><rect x="497" y="87" width="30" height="24" rx="3" fill="rgb(207,220,239)"/></g>
+<g><title>Layer 3 head 14: -0% of the push; standalone readout 0.72</title><rect x="529" y="87" width="30" height="24" rx="3" fill="rgb(240,241,243)"/></g>
+<g><title>Layer 3 head 15: +1% of the push; standalone readout 0.72</title><rect x="561" y="87" width="30" height="24" rx="3" fill="rgb(226,233,244)"/></g>
+<g><title>Layer 3 head 16: +2% of the push; standalone readout 0.57</title><rect x="593" y="87" width="30" height="24" rx="3" fill="rgb(222,230,243)"/></g>
+<g><title>Layer 3 MLP: -2% of the push; standalone readout 0.77</title><rect x="639" y="87" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<text x="102" y="129.0" text-anchor="end" class="lab std">Layer 4 ◆</text>
+<g><title>Layer 4 head 1: -0% of the push; standalone readout 0.82</title><rect x="113" y="113" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 4 head 2: -1% of the push; standalone readout 0.84</title><rect x="145" y="113" width="30" height="24" rx="3" fill="rgb(238,233,231)"/></g>
+<g><title>Layer 4 head 3: -6% of the push (significant); standalone readout 0.75</title><rect x="177" y="113" width="30" height="24" rx="3" fill="rgb(230,208,194)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 4 head 4: -1% of the push; standalone readout 0.74</title><rect x="209" y="113" width="30" height="24" rx="3" fill="rgb(238,232,231)"/></g>
+<g><title>Layer 4 head 5: +3% of the push; standalone readout 0.85</title><rect x="241" y="113" width="30" height="24" rx="3" fill="rgb(208,221,239)"/></g>
+<g><title>Layer 4 head 6: +1% of the push; standalone readout 0.80</title><rect x="273" y="113" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 4 head 7: +2% of the push; standalone readout 0.84</title><rect x="305" y="113" width="30" height="24" rx="3" fill="rgb(224,232,243)"/></g>
+<g><title>Layer 4 head 8: -1% of the push; standalone readout 0.85</title><rect x="337" y="113" width="30" height="24" rx="3" fill="rgb(238,234,233)"/></g>
+<g><title>Layer 4 MLP: -3% of the push; standalone readout 0.74</title><rect x="639" y="113" width="30" height="24" rx="3" fill="rgb(235,223,217)"/></g>
+<text x="102" y="155.0" text-anchor="end" class="lab">Layer 5</text>
+<g><title>Layer 5 head 1: +1% of the push; standalone readout 0.74</title><rect x="113" y="139" width="30" height="24" rx="3" fill="rgb(225,232,244)"/></g>
+<g><title>Layer 5 head 2: -1% of the push; standalone readout 0.72</title><rect x="145" y="139" width="30" height="24" rx="3" fill="rgb(238,235,234)"/></g>
+<g><title>Layer 5 head 3: +3% of the push; standalone readout 0.76</title><rect x="177" y="139" width="30" height="24" rx="3" fill="rgb(215,225,241)"/></g>
+<g><title>Layer 5 head 4: +2% of the push; standalone readout 0.65</title><rect x="209" y="139" width="30" height="24" rx="3" fill="rgb(223,231,243)"/></g>
+<g><title>Layer 5 head 5: +1% of the push; standalone readout 0.82</title><rect x="241" y="139" width="30" height="24" rx="3" fill="rgb(233,238,246)"/></g>
+<g><title>Layer 5 head 6: +2% of the push; standalone readout 0.72</title><rect x="273" y="139" width="30" height="24" rx="3" fill="rgb(216,226,241)"/></g>
+<g><title>Layer 5 head 7: -3% of the push; standalone readout 0.74</title><rect x="305" y="139" width="30" height="24" rx="3" fill="rgb(234,220,212)"/></g>
+<g><title>Layer 5 head 8: +1% of the push; standalone readout 0.82</title><rect x="337" y="139" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 5 head 9: -0% of the push; standalone readout 0.76</title><rect x="369" y="139" width="30" height="24" rx="3" fill="rgb(240,241,244)"/></g>
+<g><title>Layer 5 head 10: +4% of the push; standalone readout 0.82</title><rect x="401" y="139" width="30" height="24" rx="3" fill="rgb(206,219,239)"/></g>
+<g><title>Layer 5 head 11: +0% of the push; standalone readout 0.76</title><rect x="433" y="139" width="30" height="24" rx="3" fill="rgb(234,239,246)"/></g>
+<g><title>Layer 5 head 12: -3% of the push; standalone readout 0.76</title><rect x="465" y="139" width="30" height="24" rx="3" fill="rgb(235,224,219)"/></g>
+<g><title>Layer 5 head 13: +2% of the push; standalone readout 0.79</title><rect x="497" y="139" width="30" height="24" rx="3" fill="rgb(223,231,243)"/></g>
+<g><title>Layer 5 head 14: +2% of the push; standalone readout 0.71</title><rect x="529" y="139" width="30" height="24" rx="3" fill="rgb(223,231,243)"/></g>
+<g><title>Layer 5 head 15: +1% of the push; standalone readout 0.67</title><rect x="561" y="139" width="30" height="24" rx="3" fill="rgb(224,232,244)"/></g>
+<g><title>Layer 5 head 16: -7% of the push (significant); standalone readout 0.73</title><rect x="593" y="139" width="30" height="24" rx="3" fill="rgb(227,198,180)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 5 MLP: -2% of the push; standalone readout 0.82</title><rect x="639" y="139" width="30" height="24" rx="3" fill="rgb(236,227,223)"/></g>
+<text x="102" y="181.0" text-anchor="end" class="lab">Layer 6</text>
+<g><title>Layer 6 head 1: +1% of the push; standalone readout 0.72</title><rect x="113" y="165" width="30" height="24" rx="3" fill="rgb(232,237,245)"/></g>
+<g><title>Layer 6 head 2: -1% of the push; standalone readout 0.76</title><rect x="145" y="165" width="30" height="24" rx="3" fill="rgb(237,232,230)"/></g>
+<g><title>Layer 6 head 3: -0% of the push; standalone readout 0.87</title><rect x="177" y="165" width="30" height="24" rx="3" fill="rgb(241,243,246)"/></g>
+<g><title>Layer 6 head 4: +4% of the push (significant); standalone readout 0.76</title><rect x="209" y="165" width="30" height="24" rx="3" fill="rgb(200,215,237)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 6 head 5: +0% of the push; standalone readout 0.79</title><rect x="241" y="165" width="30" height="24" rx="3" fill="rgb(239,242,247)"/></g>
+<g><title>Layer 6 head 6: +1% of the push; standalone readout 0.77</title><rect x="273" y="165" width="30" height="24" rx="3" fill="rgb(231,237,245)"/></g>
+<g><title>Layer 6 head 7: +4% of the push; standalone readout 0.78</title><rect x="305" y="165" width="30" height="24" rx="3" fill="rgb(207,220,239)"/></g>
+<g><title>Layer 6 head 8: -1% of the push; standalone readout 0.75</title><rect x="337" y="165" width="30" height="24" rx="3" fill="rgb(237,232,230)"/></g>
+<g><title>Layer 6 head 9: +1% of the push; standalone readout 0.79</title><rect x="369" y="165" width="30" height="24" rx="3" fill="rgb(230,236,245)"/></g>
+<g><title>Layer 6 head 10: +6% of the push (significant); standalone readout 0.82</title><rect x="401" y="165" width="30" height="24" rx="3" fill="rgb(189,207,234)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 6 head 11: -1% of the push; standalone readout 0.83</title><rect x="433" y="165" width="30" height="24" rx="3" fill="rgb(239,237,237)"/></g>
+<g><title>Layer 6 head 12: +4% of the push; standalone readout 0.69</title><rect x="465" y="165" width="30" height="24" rx="3" fill="rgb(207,220,239)"/></g>
+<g><title>Layer 6 head 13: -2% of the push; standalone readout 0.74</title><rect x="497" y="165" width="30" height="24" rx="3" fill="rgb(237,229,226)"/></g>
+<g><title>Layer 6 head 14: +2% of the push; standalone readout 0.69</title><rect x="529" y="165" width="30" height="24" rx="3" fill="rgb(220,229,242)"/></g>
+<g><title>Layer 6 head 15: +2% of the push; standalone readout 0.79</title><rect x="561" y="165" width="30" height="24" rx="3" fill="rgb(217,227,242)"/></g>
+<g><title>Layer 6 head 16: -3% of the push; standalone readout 0.79</title><rect x="593" y="165" width="30" height="24" rx="3" fill="rgb(235,224,218)"/></g>
+<g><title>Layer 6 MLP: +6% of the push (significant); standalone readout 0.82</title><rect x="639" y="165" width="30" height="24" rx="3" fill="rgb(193,210,235)" stroke="#0B2A55" stroke-width="2"/></g>
+<text x="102" y="207.0" text-anchor="end" class="lab">Layer 7</text>
+<g><title>Layer 7 head 1: +2% of the push; standalone readout 0.80</title><rect x="113" y="191" width="30" height="24" rx="3" fill="rgb(218,227,242)"/></g>
+<g><title>Layer 7 head 2: -0% of the push; standalone readout 0.71</title><rect x="145" y="191" width="30" height="24" rx="3" fill="rgb(241,243,246)"/></g>
+<g><title>Layer 7 head 3: +3% of the push; standalone readout 0.83</title><rect x="177" y="191" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 7 head 4: +0% of the push; standalone readout 0.73</title><rect x="209" y="191" width="30" height="24" rx="3" fill="rgb(239,243,248)"/></g>
+<g><title>Layer 7 head 5: -2% of the push; standalone readout 0.82</title><rect x="241" y="191" width="30" height="24" rx="3" fill="rgb(237,231,228)"/></g>
+<g><title>Layer 7 head 6: +1% of the push; standalone readout 0.83</title><rect x="273" y="191" width="30" height="24" rx="3" fill="rgb(225,233,244)"/></g>
+<g><title>Layer 7 head 7: -1% of the push; standalone readout 0.79</title><rect x="305" y="191" width="30" height="24" rx="3" fill="rgb(237,232,230)"/></g>
+<g><title>Layer 7 head 8: +2% of the push; standalone readout 0.81</title><rect x="337" y="191" width="30" height="24" rx="3" fill="rgb(222,230,243)"/></g>
+<g><title>Layer 7 head 9: -1% of the push; standalone readout 0.88</title><rect x="369" y="191" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 7 head 10: +0% of the push; standalone readout 0.76</title><rect x="401" y="191" width="30" height="24" rx="3" fill="rgb(235,240,247)"/></g>
+<g><title>Layer 7 head 11: +1% of the push; standalone readout 0.85</title><rect x="433" y="191" width="30" height="24" rx="3" fill="rgb(228,235,245)"/></g>
+<g><title>Layer 7 head 12: +2% of the push; standalone readout 0.84</title><rect x="465" y="191" width="30" height="24" rx="3" fill="rgb(222,230,243)"/></g>
+<g><title>Layer 7 head 13: -3% of the push; standalone readout 0.82</title><rect x="497" y="191" width="30" height="24" rx="3" fill="rgb(235,224,219)"/></g>
+<g><title>Layer 7 head 14: -4% of the push; standalone readout 0.80</title><rect x="529" y="191" width="30" height="24" rx="3" fill="rgb(233,216,207)"/></g>
+<g><title>Layer 7 head 15: -0% of the push; standalone readout 0.83</title><rect x="561" y="191" width="30" height="24" rx="3" fill="rgb(240,242,245)"/></g>
+<g><title>Layer 7 head 16: -0% of the push; standalone readout 0.70</title><rect x="593" y="191" width="30" height="24" rx="3" fill="rgb(240,242,245)"/></g>
+<g><title>Layer 7 MLP: -1% of the push; standalone readout 0.79</title><rect x="639" y="191" width="30" height="24" rx="3" fill="rgb(238,235,234)"/></g>
+<text x="102" y="233.0" text-anchor="end" class="lab std">Layer 8 ◆</text>
+<g><title>Layer 8 head 1: +5% of the push (significant); standalone readout 0.88</title><rect x="113" y="217" width="30" height="24" rx="3" fill="rgb(200,215,237)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 8 head 2: -2% of the push; standalone readout 0.90</title><rect x="145" y="217" width="30" height="24" rx="3" fill="rgb(237,229,226)"/></g>
+<g><title>Layer 8 head 3: -43% of the push (significant); standalone readout 0.90</title><rect x="177" y="217" width="30" height="24" rx="3" fill="rgb(194,85,12)" stroke="#0B2A55" stroke-width="2"/><text x="192.0" y="233.0" text-anchor="middle" class="cv" style="fill:#fff">-43</text></g>
+<g><title>Layer 8 head 4: +30% of the push (significant); standalone readout 0.91</title><rect x="209" y="217" width="30" height="24" rx="3" fill="rgb(57,113,198)" stroke="#0B2A55" stroke-width="2"/><text x="224.0" y="233.0" text-anchor="middle" class="cv" style="fill:#fff">+30</text></g>
+<g><title>Layer 8 head 5: -2% of the push; standalone readout 0.91</title><rect x="241" y="217" width="30" height="24" rx="3" fill="rgb(235,225,219)"/></g>
+<g><title>Layer 8 head 6: -1% of the push; standalone readout 0.90</title><rect x="273" y="217" width="30" height="24" rx="3" fill="rgb(238,235,234)"/></g>
+<g><title>Layer 8 head 7: -6% of the push (significant); standalone readout 0.90</title><rect x="305" y="217" width="30" height="24" rx="3" fill="rgb(229,203,187)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 8 head 8: -2% of the push; standalone readout 0.91</title><rect x="337" y="217" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<g><title>Layer 8 MLP: -28% of the push (significant); standalone readout 0.90</title><rect x="639" y="217" width="30" height="24" rx="3" fill="rgb(202,110,50)" stroke="#0B2A55" stroke-width="2"/><text x="654.0" y="233.0" text-anchor="middle" class="cv" style="fill:#fff">-28</text></g>
+<text x="102" y="259.0" text-anchor="end" class="lab">Layer 9</text>
+<g><title>Layer 9 head 1: +0% of the push; standalone readout 0.85</title><rect x="113" y="243" width="30" height="24" rx="3" fill="rgb(236,240,247)"/></g>
+<g><title>Layer 9 head 2: +0% of the push; standalone readout 0.87</title><rect x="145" y="243" width="30" height="24" rx="3" fill="rgb(235,240,246)"/></g>
+<g><title>Layer 9 head 3: +5% of the push (significant); standalone readout 0.84</title><rect x="177" y="243" width="30" height="24" rx="3" fill="rgb(199,214,237)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 9 head 4: +3% of the push; standalone readout 0.75</title><rect x="209" y="243" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 9 head 5: +0% of the push; standalone readout 0.90</title><rect x="241" y="243" width="30" height="24" rx="3" fill="rgb(234,239,246)"/></g>
+<g><title>Layer 9 head 6: +1% of the push; standalone readout 0.85</title><rect x="273" y="243" width="30" height="24" rx="3" fill="rgb(225,233,244)"/></g>
+<g><title>Layer 9 head 7: +0% of the push; standalone readout 0.90</title><rect x="305" y="243" width="30" height="24" rx="3" fill="rgb(240,244,248)"/></g>
+<g><title>Layer 9 head 8: -0% of the push; standalone readout 0.86</title><rect x="337" y="243" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 9 head 9: -2% of the push; standalone readout 0.78</title><rect x="369" y="243" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<g><title>Layer 9 head 10: +2% of the push; standalone readout 0.89</title><rect x="401" y="243" width="30" height="24" rx="3" fill="rgb(224,232,243)"/></g>
+<g><title>Layer 9 head 11: -1% of the push; standalone readout 0.85</title><rect x="433" y="243" width="30" height="24" rx="3" fill="rgb(238,234,233)"/></g>
+<g><title>Layer 9 head 12: -1% of the push; standalone readout 0.88</title><rect x="465" y="243" width="30" height="24" rx="3" fill="rgb(238,233,231)"/></g>
+<g><title>Layer 9 head 13: -1% of the push; standalone readout 0.87</title><rect x="497" y="243" width="30" height="24" rx="3" fill="rgb(238,235,234)"/></g>
+<g><title>Layer 9 head 14: +3% of the push; standalone readout 0.87</title><rect x="529" y="243" width="30" height="24" rx="3" fill="rgb(215,226,241)"/></g>
+<g><title>Layer 9 head 15: +2% of the push; standalone readout 0.86</title><rect x="561" y="243" width="30" height="24" rx="3" fill="rgb(221,230,243)"/></g>
+<g><title>Layer 9 head 16: +1% of the push; standalone readout 0.84</title><rect x="593" y="243" width="30" height="24" rx="3" fill="rgb(230,236,245)"/></g>
+<g><title>Layer 9 MLP: +17% of the push (significant); standalone readout 0.85</title><rect x="639" y="243" width="30" height="24" rx="3" fill="rgb(123,160,216)" stroke="#0B2A55" stroke-width="2"/><text x="654.0" y="259.0" text-anchor="middle" class="cv" style="fill:var(--ink)">+17</text></g>
+<text x="102" y="285.0" text-anchor="end" class="lab">Layer 10</text>
+<g><title>Layer 10 head 1: -4% of the push; standalone readout 0.88</title><rect x="113" y="269" width="30" height="24" rx="3" fill="rgb(233,218,209)"/></g>
+<g><title>Layer 10 head 2: +1% of the push; standalone readout 0.90</title><rect x="145" y="269" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 10 head 3: -1% of the push; standalone readout 0.81</title><rect x="177" y="269" width="30" height="24" rx="3" fill="rgb(238,233,231)"/></g>
+<g><title>Layer 10 head 4: +3% of the push; standalone readout 0.90</title><rect x="209" y="269" width="30" height="24" rx="3" fill="rgb(210,222,240)"/></g>
+<g><title>Layer 10 head 5: -1% of the push; standalone readout 0.89</title><rect x="241" y="269" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 10 head 6: +6% of the push (significant); standalone readout 0.76</title><rect x="273" y="269" width="30" height="24" rx="3" fill="rgb(191,209,234)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 10 head 7: -0% of the push; standalone readout 0.89</title><rect x="305" y="269" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 10 head 8: +2% of the push; standalone readout 0.88</title><rect x="337" y="269" width="30" height="24" rx="3" fill="rgb(222,230,243)"/></g>
+<g><title>Layer 10 head 9: +2% of the push; standalone readout 0.88</title><rect x="369" y="269" width="30" height="24" rx="3" fill="rgb(220,229,242)"/></g>
+<g><title>Layer 10 head 10: -2% of the push; standalone readout 0.88</title><rect x="401" y="269" width="30" height="24" rx="3" fill="rgb(237,231,228)"/></g>
+<g><title>Layer 10 head 11: -1% of the push; standalone readout 0.87</title><rect x="433" y="269" width="30" height="24" rx="3" fill="rgb(239,236,236)"/></g>
+<g><title>Layer 10 head 12: -0% of the push; standalone readout 0.87</title><rect x="465" y="269" width="30" height="24" rx="3" fill="rgb(240,242,245)"/></g>
+<g><title>Layer 10 head 13: +1% of the push; standalone readout 0.79</title><rect x="497" y="269" width="30" height="24" rx="3" fill="rgb(229,236,245)"/></g>
+<g><title>Layer 10 head 14: +2% of the push; standalone readout 0.84</title><rect x="529" y="269" width="30" height="24" rx="3" fill="rgb(220,229,242)"/></g>
+<g><title>Layer 10 head 15: +2% of the push; standalone readout 0.88</title><rect x="561" y="269" width="30" height="24" rx="3" fill="rgb(220,229,242)"/></g>
+<g><title>Layer 10 head 16: -2% of the push; standalone readout 0.80</title><rect x="593" y="269" width="30" height="24" rx="3" fill="rgb(236,229,225)"/></g>
+<g><title>Layer 10 MLP: +1% of the push; standalone readout 0.91</title><rect x="639" y="269" width="30" height="24" rx="3" fill="rgb(231,237,245)"/></g>
+<text x="102" y="311.0" text-anchor="end" class="lab">Layer 11</text>
+<g><title>Layer 11 head 1: -3% of the push; standalone readout 0.85</title><rect x="113" y="295" width="30" height="24" rx="3" fill="rgb(234,221,214)"/></g>
+<g><title>Layer 11 head 2: -2% of the push; standalone readout 0.83</title><rect x="145" y="295" width="30" height="24" rx="3" fill="rgb(237,230,228)"/></g>
+<g><title>Layer 11 head 3: +5% of the push (significant); standalone readout 0.86</title><rect x="177" y="295" width="30" height="24" rx="3" fill="rgb(197,213,236)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 11 head 4: +2% of the push; standalone readout 0.85</title><rect x="209" y="295" width="30" height="24" rx="3" fill="rgb(216,226,241)"/></g>
+<g><title>Layer 11 head 5: +3% of the push; standalone readout 0.89</title><rect x="241" y="295" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 11 head 6: -0% of the push; standalone readout 0.83</title><rect x="273" y="295" width="30" height="24" rx="3" fill="rgb(240,240,242)"/></g>
+<g><title>Layer 11 head 7: +1% of the push; standalone readout 0.90</title><rect x="305" y="295" width="30" height="24" rx="3" fill="rgb(226,233,244)"/></g>
+<g><title>Layer 11 head 8: -0% of the push; standalone readout 0.84</title><rect x="337" y="295" width="30" height="24" rx="3" fill="rgb(240,241,243)"/></g>
+<g><title>Layer 11 head 9: +2% of the push; standalone readout 0.83</title><rect x="369" y="295" width="30" height="24" rx="3" fill="rgb(217,227,241)"/></g>
+<g><title>Layer 11 head 10: -1% of the push; standalone readout 0.90</title><rect x="401" y="295" width="30" height="24" rx="3" fill="rgb(238,233,232)"/></g>
+<g><title>Layer 11 head 11: +1% of the push; standalone readout 0.91</title><rect x="433" y="295" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 11 head 12: +1% of the push; standalone readout 0.81</title><rect x="465" y="295" width="30" height="24" rx="3" fill="rgb(226,233,244)"/></g>
+<g><title>Layer 11 head 13: +0% of the push; standalone readout 0.92</title><rect x="497" y="295" width="30" height="24" rx="3" fill="rgb(238,242,247)"/></g>
+<g><title>Layer 11 head 14: +1% of the push; standalone readout 0.90</title><rect x="529" y="295" width="30" height="24" rx="3" fill="rgb(225,233,244)"/></g>
+<g><title>Layer 11 head 15: +2% of the push; standalone readout 0.91</title><rect x="561" y="295" width="30" height="24" rx="3" fill="rgb(219,228,242)"/></g>
+<g><title>Layer 11 head 16: +0% of the push; standalone readout 0.74</title><rect x="593" y="295" width="30" height="24" rx="3" fill="rgb(236,240,247)"/></g>
+<g><title>Layer 11 MLP: -8% of the push (significant); standalone readout 0.85</title><rect x="639" y="295" width="30" height="24" rx="3" fill="rgb(227,197,179)" stroke="#0B2A55" stroke-width="2"/></g>
+<text x="102" y="337.0" text-anchor="end" class="lab std">Layer 12 ◆</text>
+<g><title>Layer 12 head 1: +2% of the push; standalone readout 0.89</title><rect x="113" y="321" width="30" height="24" rx="3" fill="rgb(216,226,241)"/></g>
+<g><title>Layer 12 head 2: -2% of the push; standalone readout 0.87</title><rect x="145" y="321" width="30" height="24" rx="3" fill="rgb(236,227,223)"/></g>
+<g><title>Layer 12 head 3: +5% of the push (significant); standalone readout 0.87</title><rect x="177" y="321" width="30" height="24" rx="3" fill="rgb(196,212,236)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 12 head 4: -2% of the push; standalone readout 0.84</title><rect x="209" y="321" width="30" height="24" rx="3" fill="rgb(237,229,226)"/></g>
+<g><title>Layer 12 head 5: +8% of the push (significant); standalone readout 0.89</title><rect x="241" y="321" width="30" height="24" rx="3" fill="rgb(175,197,230)" stroke="#0B2A55" stroke-width="2"/><text x="256.0" y="337.0" text-anchor="middle" class="cv" style="fill:var(--ink)">+8</text></g>
+<g><title>Layer 12 head 6: -11% of the push (significant); standalone readout 0.90</title><rect x="273" y="321" width="30" height="24" rx="3" fill="rgb(222,180,154)" stroke="#0B2A55" stroke-width="2"/><text x="288.0" y="337.0" text-anchor="middle" class="cv" style="fill:var(--ink)">-11</text></g>
+<g><title>Layer 12 head 7: -3% of the push; standalone readout 0.93</title><rect x="305" y="321" width="30" height="24" rx="3" fill="rgb(235,223,217)"/></g>
+<g><title>Layer 12 head 8: -6% of the push (significant); standalone readout 0.84</title><rect x="337" y="321" width="30" height="24" rx="3" fill="rgb(229,204,189)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 12 MLP: +6% of the push (significant); standalone readout 0.88</title><rect x="639" y="321" width="30" height="24" rx="3" fill="rgb(190,208,234)" stroke="#0B2A55" stroke-width="2"/></g>
+<text x="102" y="363.0" text-anchor="end" class="lab">Layer 13</text>
+<g><title>Layer 13 head 1: -0% of the push; standalone readout 0.86</title><rect x="113" y="347" width="30" height="24" rx="3" fill="rgb(240,239,241)"/></g>
+<g><title>Layer 13 head 2: +3% of the push; standalone readout 0.90</title><rect x="145" y="347" width="30" height="24" rx="3" fill="rgb(214,225,241)"/></g>
+<g><title>Layer 13 head 3: +3% of the push; standalone readout 0.87</title><rect x="177" y="347" width="30" height="24" rx="3" fill="rgb(214,225,241)"/></g>
+<g><title>Layer 13 head 4: +1% of the push; standalone readout 0.88</title><rect x="209" y="347" width="30" height="24" rx="3" fill="rgb(232,237,245)"/></g>
+<g><title>Layer 13 head 5: +3% of the push; standalone readout 0.87</title><rect x="241" y="347" width="30" height="24" rx="3" fill="rgb(214,225,241)"/></g>
+<g><title>Layer 13 head 6: +0% of the push; standalone readout 0.86</title><rect x="273" y="347" width="30" height="24" rx="3" fill="rgb(238,242,247)"/></g>
+<g><title>Layer 13 head 7: +2% of the push; standalone readout 0.90</title><rect x="305" y="347" width="30" height="24" rx="3" fill="rgb(221,230,243)"/></g>
+<g><title>Layer 13 head 8: -0% of the push; standalone readout 0.83</title><rect x="337" y="347" width="30" height="24" rx="3" fill="rgb(240,240,242)"/></g>
+<g><title>Layer 13 head 9: +1% of the push; standalone readout 0.91</title><rect x="369" y="347" width="30" height="24" rx="3" fill="rgb(225,233,244)"/></g>
+<g><title>Layer 13 head 10: -2% of the push; standalone readout 0.90</title><rect x="401" y="347" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<g><title>Layer 13 head 11: +2% of the push; standalone readout 0.89</title><rect x="433" y="347" width="30" height="24" rx="3" fill="rgb(218,227,242)"/></g>
+<g><title>Layer 13 head 12: -1% of the push; standalone readout 0.87</title><rect x="465" y="347" width="30" height="24" rx="3" fill="rgb(239,237,238)"/></g>
+<g><title>Layer 13 head 13: +5% of the push (significant); standalone readout 0.88</title><rect x="497" y="347" width="30" height="24" rx="3" fill="rgb(196,212,236)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 13 head 14: +4% of the push (significant); standalone readout 0.86</title><rect x="529" y="347" width="30" height="24" rx="3" fill="rgb(202,216,237)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 13 head 15: -2% of the push; standalone readout 0.85</title><rect x="561" y="347" width="30" height="24" rx="3" fill="rgb(237,230,227)"/></g>
+<g><title>Layer 13 head 16: -0% of the push; standalone readout 0.90</title><rect x="593" y="347" width="30" height="24" rx="3" fill="rgb(239,239,240)"/></g>
+<g><title>Layer 13 MLP: +10% of the push (significant); standalone readout 0.92</title><rect x="639" y="347" width="30" height="24" rx="3" fill="rgb(164,189,227)" stroke="#0B2A55" stroke-width="2"/><text x="654.0" y="363.0" text-anchor="middle" class="cv" style="fill:var(--ink)">+10</text></g>
+<text x="102" y="389.0" text-anchor="end" class="lab">Layer 14</text>
+<g><title>Layer 14 head 1: +4% of the push; standalone readout 0.91</title><rect x="113" y="373" width="30" height="24" rx="3" fill="rgb(207,220,239)"/></g>
+<g><title>Layer 14 head 2: -2% of the push; standalone readout 0.91</title><rect x="145" y="373" width="30" height="24" rx="3" fill="rgb(237,230,228)"/></g>
+<g><title>Layer 14 head 3: +5% of the push (significant); standalone readout 0.92</title><rect x="177" y="373" width="30" height="24" rx="3" fill="rgb(195,211,235)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 14 head 4: +2% of the push; standalone readout 0.91</title><rect x="209" y="373" width="30" height="24" rx="3" fill="rgb(219,228,242)"/></g>
+<g><title>Layer 14 head 5: +1% of the push; standalone readout 0.91</title><rect x="241" y="373" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 14 head 6: +0% of the push; standalone readout 0.87</title><rect x="273" y="373" width="30" height="24" rx="3" fill="rgb(236,241,247)"/></g>
+<g><title>Layer 14 head 7: -1% of the push; standalone readout 0.91</title><rect x="305" y="373" width="30" height="24" rx="3" fill="rgb(239,236,237)"/></g>
+<g><title>Layer 14 head 8: -2% of the push; standalone readout 0.90</title><rect x="337" y="373" width="30" height="24" rx="3" fill="rgb(235,225,220)"/></g>
+<g><title>Layer 14 head 9: +0% of the push; standalone readout 0.89</title><rect x="369" y="373" width="30" height="24" rx="3" fill="rgb(240,243,248)"/></g>
+<g><title>Layer 14 head 10: -0% of the push; standalone readout 0.88</title><rect x="401" y="373" width="30" height="24" rx="3" fill="rgb(240,241,244)"/></g>
+<g><title>Layer 14 head 11: +0% of the push; standalone readout 0.91</title><rect x="433" y="373" width="30" height="24" rx="3" fill="rgb(236,240,247)"/></g>
+<g><title>Layer 14 head 12: +0% of the push; standalone readout 0.91</title><rect x="465" y="373" width="30" height="24" rx="3" fill="rgb(235,240,246)"/></g>
+<g><title>Layer 14 head 13: -2% of the push; standalone readout 0.87</title><rect x="497" y="373" width="30" height="24" rx="3" fill="rgb(235,225,220)"/></g>
+<g><title>Layer 14 head 14: -1% of the push; standalone readout 0.92</title><rect x="529" y="373" width="30" height="24" rx="3" fill="rgb(239,236,236)"/></g>
+<g><title>Layer 14 head 15: +3% of the push; standalone readout 0.91</title><rect x="561" y="373" width="30" height="24" rx="3" fill="rgb(210,222,240)"/></g>
+<g><title>Layer 14 head 16: +11% of the push (significant); standalone readout 0.91</title><rect x="593" y="373" width="30" height="24" rx="3" fill="rgb(159,186,226)" stroke="#0B2A55" stroke-width="2"/><text x="608.0" y="389.0" text-anchor="middle" class="cv" style="fill:var(--ink)">+11</text></g>
+<g><title>Layer 14 MLP: -33% of the push (significant); standalone readout 0.93</title><rect x="639" y="373" width="30" height="24" rx="3" fill="rgb(196,93,24)" stroke="#0B2A55" stroke-width="2"/><text x="654.0" y="389.0" text-anchor="middle" class="cv" style="fill:#fff">-33</text></g>
+<text x="102" y="415.0" text-anchor="end" class="lab">Layer 15</text>
+<g><title>Layer 15 head 1: +3% of the push; standalone readout 0.89</title><rect x="113" y="399" width="30" height="24" rx="3" fill="rgb(214,225,241)"/></g>
+<g><title>Layer 15 head 2: -1% of the push; standalone readout 0.90</title><rect x="145" y="399" width="30" height="24" rx="3" fill="rgb(239,236,237)"/></g>
+<g><title>Layer 15 head 3: +1% of the push; standalone readout 0.90</title><rect x="177" y="399" width="30" height="24" rx="3" fill="rgb(234,239,246)"/></g>
+<g><title>Layer 15 head 4: +0% of the push; standalone readout 0.85</title><rect x="209" y="399" width="30" height="24" rx="3" fill="rgb(239,243,248)"/></g>
+<g><title>Layer 15 head 5: +5% of the push (significant); standalone readout 0.88</title><rect x="241" y="399" width="30" height="24" rx="3" fill="rgb(196,212,236)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 15 head 6: +3% of the push; standalone readout 0.90</title><rect x="273" y="399" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 15 head 7: +1% of the push; standalone readout 0.87</title><rect x="305" y="399" width="30" height="24" rx="3" fill="rgb(233,238,246)"/></g>
+<g><title>Layer 15 head 8: +3% of the push; standalone readout 0.89</title><rect x="337" y="399" width="30" height="24" rx="3" fill="rgb(209,221,239)"/></g>
+<g><title>Layer 15 head 9: -1% of the push; standalone readout 0.90</title><rect x="369" y="399" width="30" height="24" rx="3" fill="rgb(239,236,236)"/></g>
+<g><title>Layer 15 head 10: +1% of the push; standalone readout 0.88</title><rect x="401" y="399" width="30" height="24" rx="3" fill="rgb(227,234,244)"/></g>
+<g><title>Layer 15 head 11: +2% of the push; standalone readout 0.93</title><rect x="433" y="399" width="30" height="24" rx="3" fill="rgb(223,231,243)"/></g>
+<g><title>Layer 15 head 12: -1% of the push; standalone readout 0.89</title><rect x="465" y="399" width="30" height="24" rx="3" fill="rgb(239,237,237)"/></g>
+<g><title>Layer 15 head 13: -0% of the push; standalone readout 0.90</title><rect x="497" y="399" width="30" height="24" rx="3" fill="rgb(240,239,241)"/></g>
+<g><title>Layer 15 head 14: -1% of the push; standalone readout 0.89</title><rect x="529" y="399" width="30" height="24" rx="3" fill="rgb(238,234,233)"/></g>
+<g><title>Layer 15 head 15: +11% of the push (significant); standalone readout 0.91</title><rect x="561" y="399" width="30" height="24" rx="3" fill="rgb(159,186,226)" stroke="#0B2A55" stroke-width="2"/><text x="576.0" y="415.0" text-anchor="middle" class="cv" style="fill:var(--ink)">+11</text></g>
+<g><title>Layer 15 head 16: +2% of the push; standalone readout 0.91</title><rect x="593" y="399" width="30" height="24" rx="3" fill="rgb(219,228,242)"/></g>
+<g><title>Layer 15 MLP: -10% of the push (significant); standalone readout 0.94</title><rect x="639" y="399" width="30" height="24" rx="3" fill="rgb(223,184,159)" stroke="#0B2A55" stroke-width="2"/><text x="654.0" y="415.0" text-anchor="middle" class="cv" style="fill:var(--ink)">-10</text></g>
+<text x="102" y="441.0" text-anchor="end" class="lab std">Layer 16 ◆</text>
+<g><title>Layer 16 head 1: -6% of the push (significant); standalone readout 0.92</title><rect x="113" y="425" width="30" height="24" rx="3" fill="rgb(230,207,193)" stroke="#0B2A55" stroke-width="2"/></g>
+<g><title>Layer 16 head 2: +41% of the push (significant); standalone readout 0.95</title><rect x="145" y="425" width="30" height="24" rx="3" fill="rgb(31,95,191)" stroke="#0B2A55" stroke-width="2"/><text x="160.0" y="441.0" text-anchor="middle" class="cv" style="fill:#fff">+41</text></g>
+<g><title>Layer 16 head 3: -12% of the push (significant); standalone readout 0.92</title><rect x="177" y="425" width="30" height="24" rx="3" fill="rgb(222,178,150)" stroke="#0B2A55" stroke-width="2"/><text x="192.0" y="441.0" text-anchor="middle" class="cv" style="fill:var(--ink)">-12</text></g>
+<g><title>Layer 16 head 4: +0% of the push; standalone readout 0.93</title><rect x="209" y="425" width="30" height="24" rx="3" fill="rgb(236,240,247)"/></g>
+<g><title>Layer 16 head 5: +36% of the push (significant); standalone readout 0.90</title><rect x="241" y="425" width="30" height="24" rx="3" fill="rgb(31,95,191)" stroke="#0B2A55" stroke-width="2"/><text x="256.0" y="441.0" text-anchor="middle" class="cv" style="fill:#fff">+36</text></g>
+<g><title>Layer 16 head 6: +2% of the push; standalone readout 0.91</title><rect x="273" y="425" width="30" height="24" rx="3" fill="rgb(218,228,242)"/></g>
+<g><title>Layer 16 head 7: -2% of the push; standalone readout 0.89</title><rect x="305" y="425" width="30" height="24" rx="3" fill="rgb(236,228,224)"/></g>
+<g><title>Layer 16 head 8: -19% of the push (significant); standalone readout 0.90</title><rect x="337" y="425" width="30" height="24" rx="3" fill="rgb(213,148,105)" stroke="#0B2A55" stroke-width="2"/><text x="352.0" y="441.0" text-anchor="middle" class="cv" style="fill:var(--ink)">-19</text></g>
+<g><title>Layer 16 MLP: +6% of the push (significant); standalone readout 0.93</title><rect x="639" y="425" width="30" height="24" rx="3" fill="rgb(187,205,233)" stroke="#0B2A55" stroke-width="2"/></g>
+</svg></div>
+    <p class="note">Each row is a layer, each square one attention head, the last column the layer's MLP. Numbers are the share of the total push (%); hover a square for details. Layers after 16 come after the readout point, so they aren't shown. The starting word embedding adds -2%.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 1, ranked</div>
+    <h2>The ten biggest pushers</h2>
+    <svg class="chart" viewBox="0 0 680 348" role="img" aria-label="The ten parts with the largest push">
+<rect x="413.4" y="18" width="33.2" height="310" fill="var(--line)" opacity=".7"/>
+<line x1="430" x2="430" y1="16" y2="330" stroke="var(--ink-3)"/>
+<text x="422" y="14" text-anchor="end" class="axl" style="fill:#9A4A12">← pushes toward the wrong answer</text>
+<text x="438" y="14" class="axl" style="fill:var(--blue)">pushes toward the right answer →</text>
+<g><title>Layer 8 head 3: -43%; standalone readout 0.90</title><text x="142" y="38" text-anchor="end" class="lab">Layer 8 head 3</text><rect x="258.3" y="24" width="171.7" height="20" rx="3" fill="#C2550C"/></g>
+<text x="252.3" y="38" text-anchor="end" class="val">-43%</text>
+<g><title>Layer 16 head 2: +41%; standalone readout 0.95</title><text x="142" y="68" text-anchor="end" class="lab">Layer 16 head 2</text><rect x="430.0" y="54" width="162.3" height="20" rx="3" fill="var(--blue)"/></g>
+<text x="598.3" y="68" text-anchor="start" class="val">+41%</text>
+<g><title>Layer 16 head 5: +36%; standalone readout 0.90</title><text x="142" y="98" text-anchor="end" class="lab">Layer 16 head 5</text><rect x="430.0" y="84" width="145.6" height="20" rx="3" fill="var(--blue)"/></g>
+<text x="581.6" y="98" text-anchor="start" class="val">+36%</text>
+<g><title>Layer 14 MLP: -33%; standalone readout 0.93</title><text x="142" y="128" text-anchor="end" class="lab">Layer 14 MLP</text><rect x="298.5" y="114" width="131.5" height="20" rx="3" fill="#C2550C"/></g>
+<text x="292.5" y="128" text-anchor="end" class="val">-33%</text>
+<g><title>Layer 8 head 4: +30%; standalone readout 0.91</title><text x="142" y="158" text-anchor="end" class="lab">Layer 8 head 4</text><rect x="430.0" y="144" width="118.9" height="20" rx="3" fill="var(--blue)"/></g>
+<text x="554.9" y="158" text-anchor="start" class="val">+30%</text>
+<g><title>Layer 8 MLP: -28%; standalone readout 0.90</title><text x="142" y="188" text-anchor="end" class="lab">Layer 8 MLP</text><rect x="317.4" y="174" width="112.6" height="20" rx="3" fill="#C2550C"/></g>
+<text x="311.4" y="188" text-anchor="end" class="val">-28%</text>
+<g><title>Layer 16 head 8: -19%; standalone readout 0.90</title><text x="142" y="218" text-anchor="end" class="lab">Layer 16 head 8</text><rect x="355.4" y="204" width="74.6" height="20" rx="3" fill="#C2550C"/></g>
+<text x="349.4" y="218" text-anchor="end" class="val">-19%</text>
+<g><title>Layer 9 MLP: +17%; standalone readout 0.85</title><text x="142" y="248" text-anchor="end" class="lab">Layer 9 MLP</text><rect x="430.0" y="234" width="68.2" height="20" rx="3" fill="var(--blue)"/></g>
+<text x="504.2" y="248" text-anchor="start" class="val">+17%</text>
+<g><title>Layer 16 head 3: -12%; standalone readout 0.92</title><text x="142" y="278" text-anchor="end" class="lab">Layer 16 head 3</text><rect x="383.6" y="264" width="46.4" height="20" rx="3" fill="#C2550C"/></g>
+<text x="377.6" y="278" text-anchor="end" class="val">-12%</text>
+<g><title>Layer 12 head 6: -11%; standalone readout 0.90</title><text x="142" y="308" text-anchor="end" class="lab">Layer 12 head 6</text><rect x="385.5" y="294" width="44.5" height="20" rx="3" fill="#C2550C"/></g>
+<text x="379.5" y="308" text-anchor="end" class="val">-11%</text>
+<text x="430" y="344" text-anchor="middle" class="ax">gray band = largest push from shuffled labels (±4%)</text>
+</svg>
+    <p class="note">Layer 16 heads 2 and 5 together push 77% toward the right answer. Layer 8 has a head pushing each way (head 4 toward, head 3 against). The MLPs in layers 8 and 14 push against, and the MLP in layer 9 pushes toward. Every part shown is well outside the shuffled-label band.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 2</div>
+    <h2>Attention and MLPs trade pushes layer by layer</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>attention (all heads in the layer)</span><span><i class="sw" style="background:#7FA8E0"></i>MLP</span></div>
+    <svg class="chart" viewBox="0 0 680 264" role="img" aria-label="Net push of attention and MLP per layer">
+<line x1="50" x2="670" y1="230.0" y2="230.0" stroke="var(--line)"/>
+<text x="44" y="234.0" text-anchor="end" class="ax">-60%</text>
+<line x1="50" x2="670" y1="177.5" y2="177.5" stroke="var(--line)"/>
+<text x="44" y="181.5" text-anchor="end" class="ax">-30%</text>
+<line x1="50" x2="670" y1="125.0" y2="125.0" stroke="var(--line)" stroke-width="1.5" style="stroke:var(--ink-3)"/>
+<text x="44" y="129.0" text-anchor="end" class="ax">+0%</text>
+<line x1="50" x2="670" y1="72.5" y2="72.5" stroke="var(--line)"/>
+<text x="44" y="76.5" text-anchor="end" class="ax">+30%</text>
+<line x1="50" x2="670" y1="20.0" y2="20.0" stroke="var(--line)"/>
+<text x="44" y="24.0" text-anchor="end" class="ax">+60%</text>
+<rect x="55.2" y="102.9" width="13.2" height="22.1" rx="2" fill="var(--navy)"><title>Layer 1 attention: +13%</title></rect>
+<rect x="70.4" y="125.0" width="13.2" height="1.0" rx="2" fill="#7FA8E0"><title>Layer 1 MLP: -0%</title></rect>
+<text x="69.4" y="246" text-anchor="middle" class="ax">1</text>
+<rect x="94.0" y="122.1" width="13.2" height="2.9" rx="2" fill="var(--navy)"><title>Layer 2 attention: +2%</title></rect>
+<rect x="109.1" y="125.0" width="13.2" height="4.4" rx="2" fill="#7FA8E0"><title>Layer 2 MLP: -3%</title></rect>
+<text x="108.1" y="246" text-anchor="middle" class="ax">2</text>
+<rect x="132.7" y="120.8" width="13.2" height="4.2" rx="2" fill="var(--navy)"><title>Layer 3 attention: +2%</title></rect>
+<rect x="147.9" y="125.0" width="13.2" height="3.5" rx="2" fill="#7FA8E0"><title>Layer 3 MLP: -2%</title></rect>
+<text x="146.9" y="246" text-anchor="middle" class="ax">3</text>
+<rect x="171.4" y="125.0" width="13.2" height="6.2" rx="2" fill="var(--navy)"><title>Layer 4 attention: -4%</title></rect>
+<rect x="186.6" y="125.0" width="13.2" height="4.8" rx="2" fill="#7FA8E0"><title>Layer 4 MLP: -3%</title></rect>
+<text x="185.6" y="246" text-anchor="middle" class="ax stdx">4</text>
+<rect x="210.2" y="117.4" width="13.2" height="7.6" rx="2" fill="var(--navy)"><title>Layer 5 attention: +4%</title></rect>
+<rect x="225.4" y="125.0" width="13.2" height="3.7" rx="2" fill="#7FA8E0"><title>Layer 5 MLP: -2%</title></rect>
+<text x="224.4" y="246" text-anchor="middle" class="ax">5</text>
+<rect x="248.9" y="96.1" width="13.2" height="28.9" rx="2" fill="var(--navy)"><title>Layer 6 attention: +17%</title></rect>
+<rect x="264.1" y="115.3" width="13.2" height="9.7" rx="2" fill="#7FA8E0"><title>Layer 6 MLP: +6%</title></rect>
+<text x="263.1" y="246" text-anchor="middle" class="ax">6</text>
+<rect x="287.7" y="122.2" width="13.2" height="2.8" rx="2" fill="var(--navy)"><title>Layer 7 attention: +2%</title></rect>
+<rect x="302.9" y="125.0" width="13.2" height="1.8" rx="2" fill="#7FA8E0"><title>Layer 7 MLP: -1%</title></rect>
+<text x="301.9" y="246" text-anchor="middle" class="ax">7</text>
+<rect x="326.4" y="125.0" width="13.2" height="39.3" rx="2" fill="var(--navy)"><title>Layer 8 attention: -22%</title></rect>
+<rect x="341.6" y="125.0" width="13.2" height="49.3" rx="2" fill="#7FA8E0"><title>Layer 8 MLP: -28%</title></rect>
+<text x="340.6" y="246" text-anchor="middle" class="ax stdx">8</text>
+<rect x="365.2" y="104.9" width="13.2" height="20.1" rx="2" fill="var(--navy)"><title>Layer 9 attention: +12%</title></rect>
+<rect x="380.4" y="95.1" width="13.2" height="29.9" rx="2" fill="#7FA8E0"><title>Layer 9 MLP: +17%</title></rect>
+<text x="379.4" y="246" text-anchor="middle" class="ax">9</text>
+<rect x="403.9" y="110.5" width="13.2" height="14.5" rx="2" fill="var(--navy)"><title>Layer 10 attention: +8%</title></rect>
+<rect x="419.1" y="123.6" width="13.2" height="1.4" rx="2" fill="#7FA8E0"><title>Layer 10 MLP: +1%</title></rect>
+<text x="418.1" y="246" text-anchor="middle" class="ax">10</text>
+<rect x="442.7" y="99.7" width="13.2" height="25.3" rx="2" fill="var(--navy)"><title>Layer 11 attention: +14%</title></rect>
+<rect x="457.9" y="125.0" width="13.2" height="13.3" rx="2" fill="#7FA8E0"><title>Layer 11 MLP: -8%</title></rect>
+<text x="456.9" y="246" text-anchor="middle" class="ax">11</text>
+<rect x="481.4" y="125.0" width="13.2" height="14.5" rx="2" fill="var(--navy)"><title>Layer 12 attention: -8%</title></rect>
+<rect x="496.6" y="114.6" width="13.2" height="10.4" rx="2" fill="#7FA8E0"><title>Layer 12 MLP: +6%</title></rect>
+<text x="495.6" y="246" text-anchor="middle" class="ax stdx">12</text>
+<rect x="520.2" y="93.0" width="13.2" height="32.0" rx="2" fill="var(--navy)"><title>Layer 13 attention: +18%</title></rect>
+<rect x="535.4" y="107.4" width="13.2" height="17.6" rx="2" fill="#7FA8E0"><title>Layer 13 MLP: +10%</title></rect>
+<text x="534.4" y="246" text-anchor="middle" class="ax">13</text>
+<rect x="559.0" y="91.8" width="13.2" height="33.2" rx="2" fill="var(--navy)"><title>Layer 14 attention: +19%</title></rect>
+<rect x="574.1" y="125.0" width="13.2" height="57.5" rx="2" fill="#7FA8E0"><title>Layer 14 MLP: -33%</title></rect>
+<text x="573.1" y="246" text-anchor="middle" class="ax">14</text>
+<rect x="597.7" y="77.0" width="13.2" height="48.0" rx="2" fill="var(--navy)"><title>Layer 15 attention: +27%</title></rect>
+<rect x="612.9" y="125.0" width="13.2" height="18.0" rx="2" fill="#7FA8E0"><title>Layer 15 MLP: -10%</title></rect>
+<text x="611.9" y="246" text-anchor="middle" class="ax">15</text>
+<rect x="636.5" y="52.2" width="13.2" height="72.8" rx="2" fill="var(--navy)"><title>Layer 16 attention: +42%</title></rect>
+<rect x="651.6" y="113.7" width="13.2" height="11.3" rx="2" fill="#7FA8E0"><title>Layer 16 MLP: +6%</title></rect>
+<text x="650.6" y="246" text-anchor="middle" class="ax stdx">16</text>
+<text x="365.0" y="262" text-anchor="middle" class="axl">layer (◆ standard attention: 4, 8, 12, 16)</text>
+</svg>
+    <p class="note">Net push of each layer's attention and MLP. Layer 8 pushes strongly toward the wrong answer; layers 9, 13 and especially 16 push it back. The final total is +100%.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 3</div>
+    <h2>The information is everywhere, but the push is concentrated</h2>
+    <div class="stats">
+      <div class="stat"><b>110 of 163</b><span>parts in layers 6–16 can tell good from bad on their own (readout ≥ 0.85)</span></div>
+      <div class="stat"><b>0.54</b><span>best any part scores when the labels are shuffled</span></div>
+      <div class="stat"><b>6</b><span>parts with a push above 25% either way</span></div>
+    </div>
+    <p>Almost every part after layer 6 carries readable safety information, because each one reads the shared internal state and passes it along. But only a handful actually <b>move</b> the state toward or away from the answer. For editing, the pushers are what matter.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 4</div>
+    <h2>Inside the MLPs: a few neurons lead, but hundreds contribute</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>Layer 9 MLP</span><span><i class="sw" style="background:#7FA8E0"></i>Layer 13 MLP</span><span>dashed: largest neuron push from shuffled labels</span></div>
+    <svg class="chart" viewBox="0 0 680 234" role="img" aria-label="Neuron contributions sorted from largest">
+<line x1="56" x2="670" y1="200.0" y2="200.0" stroke="var(--line)"/><text x="50" y="204.0" text-anchor="end" class="ax">0.0%</text>
+<line x1="56" x2="670" y1="108.0" y2="108.0" stroke="var(--line)"/><text x="50" y="112.0" text-anchor="end" class="ax">2.0%</text>
+<line x1="56" x2="670" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="50" y="20.0" text-anchor="end" class="ax">4.1%</text>
+<polyline points="56.0,104.0 61.2,121.8 66.3,149.7 71.5,151.6 76.6,158.3 81.8,161.3 87.0,162.2 92.1,162.9 97.3,164.6 102.4,165.0 107.6,165.2 112.8,165.2 117.9,165.6 123.1,165.7 128.2,167.8 133.4,167.9 138.6,168.4 143.7,169.7 148.9,170.1 154.0,170.6 159.2,171.5 164.4,171.8 169.5,171.8 174.7,173.2 179.8,173.2 185.0,173.4 190.2,173.8 195.3,173.8 200.5,174.1 205.6,174.7 210.8,175.2 215.9,175.6 221.1,175.6 226.3,175.9 231.4,175.9 236.6,176.1 241.7,176.5 246.9,176.5 252.1,177.8 257.2,177.8 262.4,177.8 267.5,177.9 272.7,178.0 277.9,178.3 283.0,178.4 288.2,178.5 293.3,178.7 298.5,178.9 303.7,179.0 308.8,179.0 314.0,179.3 319.1,179.7 324.3,179.8 329.5,179.8 334.6,179.9 339.8,179.9 344.9,180.0 350.1,180.2 355.3,180.3 360.4,180.3 365.6,180.4 370.7,180.8 375.9,180.8 381.1,181.0 386.2,181.1 391.4,181.2 396.5,181.3 401.7,181.4 406.9,181.5 412.0,181.5 417.2,181.6 422.3,181.9 427.5,182.2 432.7,182.2 437.8,182.3 443.0,182.3 448.1,182.3 453.3,182.5 458.5,182.5 463.6,182.6 468.8,182.7 473.9,182.7 479.1,182.7 484.3,182.7 489.4,182.9 494.6,183.0 499.7,183.1 504.9,183.1 510.1,183.3 515.2,183.3 520.4,183.3 525.5,183.4 530.7,183.5 535.8,183.5 541.0,183.5 546.2,183.6 551.3,183.6 556.5,183.7 561.6,183.7 566.8,184.0 572.0,184.0 577.1,184.2 582.3,184.2 587.4,184.4 592.6,184.4 597.8,184.5 602.9,184.6 608.1,184.6 613.2,184.6 618.4,184.7 623.6,184.7 628.7,185.0 633.9,185.1 639.0,185.1 644.2,185.1 649.4,185.2 654.5,185.2 659.7,185.3 664.8,185.5 670.0,185.5" fill="none" stroke="var(--navy)" stroke-width="2.5"/>
+<line x1="56" x2="670" y1="191.1" y2="191.1" stroke="var(--navy)" stroke-dasharray="3 4" opacity=".7"/>
+<text x="70" y="98.0" class="lab" style="fill:var(--navy)">Layer 9 MLP</text>
+<polyline points="56.0,32.7 61.2,96.2 66.3,134.2 71.5,136.1 76.6,138.0 81.8,144.6 87.0,146.3 92.1,146.3 97.3,147.4 102.4,150.7 107.6,154.3 112.8,156.4 117.9,156.5 123.1,156.7 128.2,157.1 133.4,158.8 138.6,160.3 143.7,160.5 148.9,163.3 154.0,163.4 159.2,163.9 164.4,164.5 169.5,164.8 174.7,164.8 179.8,165.6 185.0,167.0 190.2,167.2 195.3,167.6 200.5,167.9 205.6,168.4 210.8,169.3 215.9,169.6 221.1,170.6 226.3,171.4 231.4,172.4 236.6,172.8 241.7,173.2 246.9,173.3 252.1,173.5 257.2,174.5 262.4,174.5 267.5,174.7 272.7,174.9 277.9,175.4 283.0,175.4 288.2,175.4 293.3,175.5 298.5,175.7 303.7,176.3 308.8,176.3 314.0,176.4 319.1,176.4 324.3,176.6 329.5,176.6 334.6,177.0 339.8,177.1 344.9,177.4 350.1,177.7 355.3,177.9 360.4,178.0 365.6,178.3 370.7,178.3 375.9,178.3 381.1,178.3 386.2,178.3 391.4,178.4 396.5,178.4 401.7,178.7 406.9,178.7 412.0,178.8 417.2,179.1 422.3,179.1 427.5,179.1 432.7,179.2 437.8,179.9 443.0,180.5 448.1,181.0 453.3,181.0 458.5,181.0 463.6,181.1 468.8,181.4 473.9,181.6 479.1,181.6 484.3,181.7 489.4,181.8 494.6,181.8 499.7,181.8 504.9,181.9 510.1,182.0 515.2,182.2 520.4,182.3 525.5,182.3 530.7,182.3 535.8,182.4 541.0,182.5 546.2,182.5 551.3,182.5 556.5,182.5 561.6,182.7 566.8,182.8 572.0,182.9 577.1,182.9 582.3,182.9 587.4,182.9 592.6,183.0 597.8,183.0 602.9,183.1 608.1,183.1 613.2,183.1 618.4,183.2 623.6,183.3 628.7,183.3 633.9,183.4 639.0,183.5 644.2,183.6 649.4,183.7 654.5,183.7 659.7,183.9 664.8,184.0 670.0,184.2" fill="none" stroke="#7FA8E0" stroke-width="2.5"/>
+<line x1="56" x2="670" y1="182.9" y2="182.9" stroke="#7FA8E0" stroke-dasharray="3 4" opacity=".7"/>
+<text x="70" y="36.7" class="lab" style="fill:#7FA8E0">Layer 13 MLP</text>
+<text x="56.0" y="216" text-anchor="middle" class="ax">1</text>
+<text x="205.6" y="216" text-anchor="middle" class="ax">30</text>
+<text x="360.4" y="216" text-anchor="middle" class="ax">60</text>
+<text x="515.2" y="216" text-anchor="middle" class="ax">90</text>
+<text x="670.0" y="216" text-anchor="middle" class="ax">120</text>
+<text x="368.0" y="232" text-anchor="middle" class="axl">neurons, ranked by how much they push toward the right answer (top 120 of 3,584)</text>
+</svg>
+    <p class="note">The top 10 neurons give 11% (layer 9) and 16% (layer 13) of the total push, and the top 50 give 34% and 44%. But 475 and 208 neurons beat the shuffled-label line, so the effect is spread across many neurons with a short head.</p>
+    <h3>Did our earlier edit pick the right neurons?</h3>
+    <svg class="chart" viewBox="0 0 680 92" role="img" aria-label="Where the 256 previously edited neurons rank">
+<rect x="20" y="22" width="45.7" height="36" fill="var(--blue-soft)"/>
+<text x="24" y="16" class="ax">top 256</text>
+<line x1="20.2" x2="20.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="22.1" x2="22.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="22.5" x2="22.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="23.4" x2="23.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="23.9" x2="23.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="24.5" x2="24.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="27.7" x2="27.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="32.5" x2="32.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="34.8" x2="34.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="35.7" x2="35.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="38.4" x2="38.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="39.6" x2="39.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="40.4" x2="40.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="42.7" x2="42.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="43.8" x2="43.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="44.8" x2="44.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="45.2" x2="45.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="45.5" x2="45.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="47.3" x2="47.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="58.9" x2="58.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="59.3" x2="59.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="63.4" x2="63.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="65.0" x2="65.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="65.7" x2="65.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="68.0" x2="68.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="70.4" x2="70.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="72.7" x2="72.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="78.2" x2="78.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="79.3" x2="79.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="79.5" x2="79.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="80.0" x2="80.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="80.5" x2="80.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="84.3" x2="84.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="85.2" x2="85.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="88.0" x2="88.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="90.2" x2="90.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="91.1" x2="91.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="91.4" x2="91.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="93.6" x2="93.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="102.0" x2="102.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="107.5" x2="107.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="107.7" x2="107.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="107.9" x2="107.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="110.9" x2="110.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="111.8" x2="111.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="112.3" x2="112.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="112.5" x2="112.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="115.9" x2="115.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="117.0" x2="117.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="117.5" x2="117.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="120.9" x2="120.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="121.6" x2="121.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="122.0" x2="122.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="122.5" x2="122.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="123.2" x2="123.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="133.2" x2="133.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="137.1" x2="137.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="137.5" x2="137.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="137.7" x2="137.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="140.4" x2="140.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="143.4" x2="143.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="146.6" x2="146.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="147.7" x2="147.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="149.3" x2="149.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="154.3" x2="154.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="154.8" x2="154.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="155.5" x2="155.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="157.7" x2="157.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="158.9" x2="158.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="161.6" x2="161.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="163.9" x2="163.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="166.8" x2="166.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="167.3" x2="167.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="168.0" x2="168.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="171.4" x2="171.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="173.6" x2="173.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="173.9" x2="173.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="180.4" x2="180.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="181.8" x2="181.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="184.6" x2="184.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="190.9" x2="190.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="191.8" x2="191.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="192.3" x2="192.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="193.9" x2="193.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="195.4" x2="195.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="199.3" x2="199.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="202.9" x2="202.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="207.0" x2="207.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="215.2" x2="215.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="217.9" x2="217.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="220.5" x2="220.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="225.5" x2="225.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="226.2" x2="226.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="227.1" x2="227.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="228.4" x2="228.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="233.6" x2="233.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="235.9" x2="235.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="240.4" x2="240.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="242.5" x2="242.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="243.4" x2="243.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="245.0" x2="245.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="253.6" x2="253.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="254.5" x2="254.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="257.0" x2="257.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="257.3" x2="257.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="260.4" x2="260.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="263.2" x2="263.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="266.4" x2="266.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="270.9" x2="270.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="273.2" x2="273.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="273.9" x2="273.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="276.1" x2="276.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="276.6" x2="276.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="276.8" x2="276.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="286.2" x2="286.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="287.5" x2="287.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="292.7" x2="292.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="298.0" x2="298.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="299.3" x2="299.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="299.5" x2="299.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="300.9" x2="300.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="304.1" x2="304.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="305.9" x2="305.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="310.9" x2="310.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="315.2" x2="315.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="323.2" x2="323.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="325.4" x2="325.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="326.2" x2="326.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="328.8" x2="328.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="331.4" x2="331.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="335.4" x2="335.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="336.1" x2="336.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="341.1" x2="341.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="344.3" x2="344.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="350.2" x2="350.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="355.9" x2="355.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="356.8" x2="356.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="360.0" x2="360.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="360.4" x2="360.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="362.3" x2="362.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="369.3" x2="369.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="369.8" x2="369.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="370.4" x2="370.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="372.5" x2="372.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="375.0" x2="375.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="383.2" x2="383.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="385.4" x2="385.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="399.1" x2="399.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="403.4" x2="403.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="404.1" x2="404.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="416.4" x2="416.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="417.5" x2="417.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="420.9" x2="420.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="423.9" x2="423.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="424.6" x2="424.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="425.0" x2="425.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="428.0" x2="428.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="428.4" x2="428.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="429.5" x2="429.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="430.4" x2="430.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="430.7" x2="430.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="438.6" x2="438.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="439.5" x2="439.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="441.1" x2="441.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="441.6" x2="441.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="447.3" x2="447.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="449.3" x2="449.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="450.0" x2="450.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="451.4" x2="451.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="451.8" x2="451.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="457.5" x2="457.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="458.8" x2="458.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="459.6" x2="459.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="460.7" x2="460.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="463.6" x2="463.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="465.0" x2="465.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="466.2" x2="466.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="467.3" x2="467.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="474.1" x2="474.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="480.5" x2="480.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="482.3" x2="482.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="483.6" x2="483.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="486.4" x2="486.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="489.6" x2="489.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="495.4" x2="495.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="504.3" x2="504.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="504.6" x2="504.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="505.5" x2="505.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="506.4" x2="506.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="507.3" x2="507.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="507.9" x2="507.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="508.4" x2="508.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="510.7" x2="510.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="512.0" x2="512.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="516.2" x2="516.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="520.9" x2="520.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="522.5" x2="522.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="522.9" x2="522.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="528.8" x2="528.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="539.5" x2="539.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="540.7" x2="540.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="545.7" x2="545.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="551.8" x2="551.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="554.8" x2="554.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="559.5" x2="559.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="561.8" x2="561.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="564.3" x2="564.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="565.9" x2="565.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="566.6" x2="566.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="568.2" x2="568.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="568.6" x2="568.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="568.9" x2="568.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="578.0" x2="578.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="580.0" x2="580.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="581.4" x2="581.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="581.8" x2="581.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="582.1" x2="582.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="583.4" x2="583.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="586.8" x2="586.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="592.0" x2="592.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="592.7" x2="592.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="593.0" x2="593.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="594.5" x2="594.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="600.4" x2="600.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="601.2" x2="601.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="602.7" x2="602.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="603.0" x2="603.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="603.4" x2="603.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="604.1" x2="604.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="604.3" x2="604.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="605.9" x2="605.9" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="608.0" x2="608.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="608.2" x2="608.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="609.5" x2="609.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="609.8" x2="609.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="611.6" x2="611.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="612.1" x2="612.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="620.5" x2="620.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="621.8" x2="621.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="622.7" x2="622.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="631.1" x2="631.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="631.6" x2="631.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="634.6" x2="634.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="635.0" x2="635.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="635.5" x2="635.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="636.1" x2="636.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="636.2" x2="636.2" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="640.7" x2="640.7" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="642.3" x2="642.3" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="644.6" x2="644.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="645.0" x2="645.0" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="648.6" x2="648.6" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="649.1" x2="649.1" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="649.8" x2="649.8" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="650.4" x2="650.4" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="650.5" x2="650.5" y1="26" y2="54" stroke="var(--navy)" stroke-width="1.2" opacity=".75"/>
+<line x1="20" x2="660" y1="58" y2="58" stroke="var(--ink-3)"/>
+<text x="20.0" y="74" text-anchor="middle" class="ax">1</text>
+<text x="179.9" y="74" text-anchor="middle" class="ax">896</text>
+<text x="339.9" y="74" text-anchor="middle" class="ax">1792</text>
+<text x="500.0" y="74" text-anchor="middle" class="ax">2688</text>
+<text x="660.0" y="74" text-anchor="middle" class="ax">3584</text>
+<text x="340.0" y="90" text-anchor="middle" class="axl">rank of each edited neuron among all 3,584 in layer 17 (1 = pushes most toward the right answer)</text>
+</svg>
+    <p class="note">Each tick is one of the 256 neurons edited in the earlier experiment (layer 17), placed by its rank. If the edit had chosen the important neurons, the ticks would cluster in the shaded top 256. Only 23 of 256 are there (about 18 expected by chance), and the median rank is 1,729 of 3,584. The edit worked through a broad change, not by targeting the right neurons, which fits its side effects.</p>
+  </section>
+
+  <section>
+    <div class="step">Comparison</div>
+    <h2>BFF finance shows a weaker, different map</h2>
+    <div class="grid2">
+      <div class="box"><h3>Safety: top 5 pushers</h3><ol><li>Layer 16 head 2 <span class='num'>+41%</span> ★</li><li>Layer 16 head 5 <span class='num'>+36%</span> ★</li><li>Layer 8 head 4 <span class='num'>+30%</span> ★</li><li>Layer 9 MLP <span class='num'>+17%</span> ★</li><li>Layer 14 head 16 <span class='num'>+11%</span> ★</li></ol></div>
+      <div class="box"><h3>BFF: top 5 pushers</h3><ol><li>Layer 19 MLP <span class='num'>+27%</span> ★</li><li>Layer 12 head 8 <span class='num'>+21%</span></li><li>Layer 16 head 3 <span class='num'>+14%</span></li><li>Layer 15 MLP <span class='num'>+14%</span></li><li>Layer 16 head 2 <span class='num'>+11%</span></li></ol></div>
+    </div>
+    <p class="note">★ = significant. On BFF only 1 part (layer 19 MLP) beats the shuffled-label control: the gap is small (says 0.65, knows 0.86) and there are half as many items. Layer 16 head 2 shows up in both top-5 lists, a lead worth checking.</p>
+  </section>
+
+  <section>
+    <div class="step">Part 1 summary</div>
+    <h2>What the map tells us</h2>
+    <ul>
+      <li><b>Localized, but not to one spot:</b> the safety knowledge comes from about a dozen parts with large pushes, concentrated in the standard-attention layers 8 and 16 and nearby MLPs.</li>
+      <li><b>Push and pull:</b> several large parts push the wrong way and are cancelled by others. A coarse edit that touches both sides is likely to cause side effects.</li>
+      <li><b>The earlier edit was untargeted:</b> its 256 neurons were a near-random pick, which explains why it was blunt.</li>
+    </ul>
+  </section>
+
+
+  <div class="part"><span>Part 2</span><h2>Was the weight edit significant, or would a random edit do?</h2></div>
+
+  <section>
+    <div class="step">Setup</div>
+    <h2>What we ran</h2>
+    <ul>
+      <li><b>The real edit:</b> the same recipe as the earlier experiment, rebuilt under the team's safety prompt. In layer 17's MLP, take the 256 neurons that track the hidden knowledge most closely, learn a <b>detector</b> from them, and add a <b>push</b> toward "say CORRECT" scaled by the detector (0.03% of the weights).</li>
+      <li><b>Random copies:</b> 19 copies each, changing <b>one ingredient</b> at a time for a random version (table below), plus the same recipe in layers 9, 13, 16 and 20.</li>
+      <li><b>Fair size:</b> every edit was scaled to change the model's internal state by the same amount, so only the ingredient differs.</li>
+      <li><b>No peeking:</b> everything was fit on training items and scored on the 168 held-out Safety test items, the 74 BFF test items and 20 Wikipedia passages. 84 edits ran on 10 Modal GPUs in parallel.</li>
+    </ul>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Control (×19)</th><th>What is made random</th><th>Question it answers</th></tr></thead>
+      <tbody>
+        <tr><td>Shuffled labels</td><td>The detector is learned from meaningless good/bad labels</td><td>Does the edit use <b>real safety knowledge</b>?</td></tr>
+        <tr><td>Random push</td><td>The push points in a random direction</td><td>Does the <b>direction</b> matter?</td></tr>
+        <tr><td>Random change</td><td>A random weight change on the same neurons</td><td>Would <b>any change</b> of this size help?</td></tr>
+        <tr><td>Random neurons</td><td>256 random neurons in the same layer</td><td>Do the <b>specific neurons</b> matter?</td></tr>
+      </tbody>
+    </table></div>
+    <div class="stats">
+      <div class="stat"><b>0.50 → 0.95</b><span>original edit, original prompt: the earlier 0.95 reproduces</span></div>
+      <div class="stat"><b>0.52 → 0.95</b><span>real edit under the team's safety prompt</span></div>
+      <div class="stat"><b>0.46 → 0.92</b><span>same, fair same-source comparison</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="step">Finding 5</div>
+    <h2>The edit beats every random control except random neurons</h2>
+    <div class="legend"><span><i class="sw" style="background:#6B4FA0;border-radius:50%"></i>Random change</span><span><i class="sw" style="background:#8A97A8;border-radius:50%"></i>Random push</span><span><i class="sw" style="background:#C2550C;border-radius:50%"></i>Shuffled labels</span><span><i class="sw" style="background:#3B73C4;border-radius:50%"></i>Random neurons</span><span><i class="sw" style="border:2.5px solid #1A7F7A;border-radius:50%"></i>other layers</span><span>★ real edit</span></div>
+    <svg class="chart" viewBox="0 0 680 334" role="img" aria-label="Safety AUROC of the real edit versus each random control">
+<line x1="233.3" x2="233.3" y1="22" y2="300" stroke="var(--line)"/><text x="233.3" y="316" text-anchor="middle" class="ax">0.2</text>
+<line x1="340.0" x2="340.0" y1="22" y2="300" stroke="var(--line)"/><text x="340.0" y="316" text-anchor="middle" class="ax">0.4</text>
+<line x1="446.7" x2="446.7" y1="22" y2="300" stroke="var(--line)"/><text x="446.7" y="316" text-anchor="middle" class="ax">0.6</text>
+<line x1="553.3" x2="553.3" y1="22" y2="300" stroke="var(--line)"/><text x="553.3" y="316" text-anchor="middle" class="ax">0.8</text>
+<line x1="660.0" x2="660.0" y1="22" y2="300" stroke="var(--line)"/><text x="660.0" y="316" text-anchor="middle" class="ax">1.0</text>
+<line x1="405.3" x2="405.3" y1="16" y2="300" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="410.3" y="14" class="ax">no edit 0.52</text>
+<line x1="631.2" x2="631.2" y1="16" y2="300" stroke="var(--navy)" stroke-width="1.5" opacity=".5"/><text x="626.2" y="14" text-anchor="end" class="ax" style="fill:var(--navy)">real edit 0.95</text>
+<text x="168" y="56.0" text-anchor="end" class="lab">Random change</text>
+<circle cx="389.4" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.493</title></circle>
+<circle cx="390.2" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.494</title></circle>
+<circle cx="394.5" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.502</title></circle>
+<circle cx="397.0" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.507</title></circle>
+<circle cx="397.9" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.509</title></circle>
+<circle cx="401.5" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.515</title></circle>
+<circle cx="403.5" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.519</title></circle>
+<circle cx="405.2" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.522</title></circle>
+<circle cx="406.6" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.525</title></circle>
+<circle cx="407.6" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.527</title></circle>
+<circle cx="409.1" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.529</title></circle>
+<circle cx="409.5" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.530</title></circle>
+<circle cx="409.7" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.531</title></circle>
+<circle cx="420.2" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.550</title></circle>
+<circle cx="421.1" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.552</title></circle>
+<circle cx="421.9" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.554</title></circle>
+<circle cx="426.2" cy="52.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.562</title></circle>
+<circle cx="429.2" cy="59.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.567</title></circle>
+<circle cx="434.5" cy="45.0" r="5" fill="#6B4FA0" opacity=".85" stroke="#fff" stroke-width="1"><title>Random change: 0.577</title></circle>
+<text x="168" y="100.0" text-anchor="end" class="lab">Random push</text>
+<circle cx="200.8" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.139</title></circle>
+<circle cx="362.7" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.443</title></circle>
+<circle cx="364.7" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.446</title></circle>
+<circle cx="387.0" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.488</title></circle>
+<circle cx="405.9" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.524</title></circle>
+<circle cx="418.2" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.547</title></circle>
+<circle cx="437.1" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.582</title></circle>
+<circle cx="444.9" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.597</title></circle>
+<circle cx="457.4" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.620</title></circle>
+<circle cx="492.6" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.686</title></circle>
+<circle cx="499.4" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.699</title></circle>
+<circle cx="500.5" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.701</title></circle>
+<circle cx="507.3" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.714</title></circle>
+<circle cx="511.3" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.721</title></circle>
+<circle cx="526.4" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.750</title></circle>
+<circle cx="535.1" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.766</title></circle>
+<circle cx="560.6" cy="96.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.814</title></circle>
+<circle cx="577.3" cy="103.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.845</title></circle>
+<circle cx="577.8" cy="89.0" r="5" fill="#8A97A8" opacity=".85" stroke="#fff" stroke-width="1"><title>Random push: 0.846</title></circle>
+<text x="168" y="144.0" text-anchor="end" class="lab">Shuffled labels</text>
+<circle cx="324.4" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.371</title></circle>
+<circle cx="327.7" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.377</title></circle>
+<circle cx="331.8" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.385</title></circle>
+<circle cx="344.9" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.409</title></circle>
+<circle cx="368.3" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.453</title></circle>
+<circle cx="370.7" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.458</title></circle>
+<circle cx="372.5" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.461</title></circle>
+<circle cx="374.6" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.465</title></circle>
+<circle cx="378.3" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.472</title></circle>
+<circle cx="380.6" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.476</title></circle>
+<circle cx="380.8" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.476</title></circle>
+<circle cx="404.5" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.521</title></circle>
+<circle cx="405.8" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.523</title></circle>
+<circle cx="410.7" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.532</title></circle>
+<circle cx="423.2" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.556</title></circle>
+<circle cx="438.6" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.585</title></circle>
+<circle cx="442.3" cy="140.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.592</title></circle>
+<circle cx="463.7" cy="147.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.632</title></circle>
+<circle cx="474.3" cy="133.0" r="5" fill="#C2550C" opacity=".85" stroke="#fff" stroke-width="1"><title>Shuffled labels: 0.652</title></circle>
+<text x="168" y="188.0" text-anchor="end" class="lab">Random neurons</text>
+<circle cx="624.5" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.933</title></circle>
+<circle cx="629.1" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.942</title></circle>
+<circle cx="629.2" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.942</title></circle>
+<circle cx="630.0" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.944</title></circle>
+<circle cx="631.9" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.947</title></circle>
+<circle cx="632.3" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.948</title></circle>
+<circle cx="633.1" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.950</title></circle>
+<circle cx="633.1" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.950</title></circle>
+<circle cx="633.6" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.951</title></circle>
+<circle cx="634.0" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.951</title></circle>
+<circle cx="634.4" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.952</title></circle>
+<circle cx="634.5" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.952</title></circle>
+<circle cx="635.5" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.954</title></circle>
+<circle cx="637.0" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.957</title></circle>
+<circle cx="637.1" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.957</title></circle>
+<circle cx="637.2" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.957</title></circle>
+<circle cx="639.3" cy="184.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.961</title></circle>
+<circle cx="640.2" cy="191.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.963</title></circle>
+<circle cx="642.0" cy="177.0" r="5" fill="#3B73C4" opacity=".85" stroke="#fff" stroke-width="1"><title>Random neurons: 0.966</title></circle>
+<text x="168" y="232.0" text-anchor="end" class="lab">Other layers (9, 13, 16, 20)</text>
+<g><title>Layer 9: 0.863</title><circle cx="586.7" cy="221.0" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 13: 0.933</title><circle cx="624.2" cy="228.0" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 20: 0.951</title><circle cx="633.8" cy="235.0" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 16: 0.966</title><circle cx="642.0" cy="221.0" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<text x="168" y="276.0" text-anchor="end" class="lab" style="font-weight:600">Real edit (layer 17)</text>
+<g><title>Real edit: 0.946</title><polygon points="631.2,263.0 633.6,268.7 639.8,269.2 635.1,273.3 636.5,279.3 631.2,276.1 625.9,279.3 627.3,273.3 622.6,269.2 628.8,268.7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="420.0" y="332" text-anchor="middle" class="axl">Safety verdict AUROC on 168 held-out test items (0.5 = guessing)</text>
+</svg>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Ingredient</th><th>Real edit beats</th><th>Random range</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr><td>Real safety knowledge</td><td class="num hi">19 of 19</td><td class="num">0.37–0.65</td><td><b>✓ Significant.</b> With meaningless labels the edit does nothing. The gain comes from what the model really knows.</td></tr>
+        <tr><td>Push direction</td><td class="num hi">19 of 19</td><td class="num">0.14–0.85</td><td><b>✓ Significant.</b> Pushing toward "CORRECT" is what turns the knowledge into a verdict. Random directions are hit or miss.</td></tr>
+        <tr><td>Any change of this size</td><td class="num hi">19 of 19</td><td class="num">0.49–0.58</td><td><b>✓ Significant.</b> Random weight changes of the same size leave the verdict at chance.</td></tr>
+        <tr><td>The specific 256 neurons</td><td class="num">4 of 19</td><td class="num">0.93–0.97</td><td><b>✗ Not significant.</b> Any 256 neurons in layer 17 work just as well, because the knowledge can be read from almost anywhere.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Other layers: layer 9 0.86, 13 0.93, 16 0.97, 20 0.95. "Beats" counts how many of the 19 random copies score below the real edit (19 of 19 is significant at the 5% level). The random neuron sets share only about 18 of 256 neurons with the real edit, yet score the same.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 6</div>
+    <h2>The damage comes from the knowledge push, and the layer decides how much</h2>
+    <div class="legend"><span><i class="sw" style="background:#6B4FA0;border-radius:50%"></i>Random change</span><span><i class="sw" style="background:#8A97A8;border-radius:50%"></i>Random push</span><span><i class="sw" style="background:#C2550C;border-radius:50%"></i>Shuffled labels</span><span><i class="sw" style="background:#3B73C4;border-radius:50%"></i>Random neurons</span><span><i class="sw" style="border:2.5px solid #1A7F7A;border-radius:50%"></i>other layers</span><span>★ real edit (layer 17)</span></div>
+    <div class="grid2">
+      <div><h3>Safety gain vs damage to normal text</h3><svg class="chart" viewBox="0 0 340 300" role="img" aria-label="Safety AUROC versus increase in text prediction loss">
+<line x1="44" x2="326" y1="224.0" y2="224.0" stroke="var(--line)"/><text x="38" y="228.0" text-anchor="end" class="ax">0.2</text>
+<line x1="44" x2="326" y1="172.0" y2="172.0" stroke="var(--line)"/><text x="38" y="176.0" text-anchor="end" class="ax">0.4</text>
+<line x1="44" x2="326" y1="120.0" y2="120.0" stroke="var(--line)"/><text x="38" y="124.0" text-anchor="end" class="ax">0.6</text>
+<line x1="44" x2="326" y1="68.0" y2="68.0" stroke="var(--line)"/><text x="38" y="72.0" text-anchor="end" class="ax">0.8</text>
+<line x1="44" x2="326" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="38" y="20.0" text-anchor="end" class="ax">1.0</text>
+<text x="44.0" y="266" text-anchor="middle" class="ax">0</text>
+<text x="114.5" y="266" text-anchor="middle" class="ax">1.7</text>
+<text x="185.0" y="266" text-anchor="middle" class="ax">3.3</text>
+<text x="255.5" y="266" text-anchor="middle" class="ax">5</text>
+<text x="326.0" y="266" text-anchor="middle" class="ax">6.6</text>
+<line x1="44" x2="44" y1="16" y2="250" stroke="var(--ink-3)"/>
+<line x1="44" x2="326" y1="140.2" y2="140.2" stroke="var(--ink-3)" stroke-dasharray="5 4"/><text x="326" y="135.2" text-anchor="end" class="ax">no edit</text>
+<circle cx="45.7" cy="128.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.57, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.9" cy="139.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, increase in text prediction loss +0.04</title></circle>
+<circle cx="46.2" cy="147.9" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.49, increase in text prediction loss +0.05</title></circle>
+<circle cx="45.3" cy="132.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, increase in text prediction loss +0.03</title></circle>
+<circle cx="45.2" cy="144.2" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.51, increase in text prediction loss +0.03</title></circle>
+<circle cx="45.6" cy="143.8" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.51, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.5" cy="140.2" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.8" cy="138.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.4" cy="141.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, increase in text prediction loss +0.03</title></circle>
+<circle cx="45.8" cy="147.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.49, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.6" cy="142.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.9" cy="139.6" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.7" cy="138.3" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.7" cy="130.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.56, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.3" cy="126.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.58, increase in text prediction loss +0.03</title></circle>
+<circle cx="45.3" cy="138.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, increase in text prediction loss +0.03</title></circle>
+<circle cx="45.5" cy="132.9" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.7" cy="145.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.50, increase in text prediction loss +0.04</title></circle>
+<circle cx="45.6" cy="132.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, increase in text prediction loss +0.04</title></circle>
+<circle cx="111.4" cy="64.4" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.81, increase in text prediction loss +1.59</title></circle>
+<circle cx="100.3" cy="139.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.52, increase in text prediction loss +1.33</title></circle>
+<circle cx="111.1" cy="56.3" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.84, increase in text prediction loss +1.58</title></circle>
+<circle cx="108.2" cy="90.5" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.71, increase in text prediction loss +1.51</title></circle>
+<circle cx="114.8" cy="94.3" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.70, increase in text prediction loss +1.67</title></circle>
+<circle cx="106.1" cy="120.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.60, increase in text prediction loss +1.46</title></circle>
+<circle cx="111.0" cy="97.6" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.69, increase in text prediction loss +1.58</title></circle>
+<circle cx="110.9" cy="149.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.49, increase in text prediction loss +1.58</title></circle>
+<circle cx="107.2" cy="56.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.85, increase in text prediction loss +1.49</title></circle>
+<circle cx="130.2" cy="76.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.77, increase in text prediction loss +2.03</title></circle>
+<circle cx="108.7" cy="239.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.14, increase in text prediction loss +1.52</title></circle>
+<circle cx="127.9" cy="133.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.55, increase in text prediction loss +1.98</title></circle>
+<circle cx="129.3" cy="124.7" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.58, increase in text prediction loss +2.01</title></circle>
+<circle cx="106.7" cy="81.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.75, increase in text prediction loss +1.48</title></circle>
+<circle cx="122.7" cy="93.8" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.70, increase in text prediction loss +1.85</title></circle>
+<circle cx="115.6" cy="159.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.45, increase in text prediction loss +1.69</title></circle>
+<circle cx="109.7" cy="88.5" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.72, increase in text prediction loss +1.55</title></circle>
+<circle cx="142.2" cy="114.7" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.62, increase in text prediction loss +2.31</title></circle>
+<circle cx="113.7" cy="160.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.44, increase in text prediction loss +1.64</title></circle>
+<circle cx="243.4" cy="152.2" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.48, increase in text prediction loss +4.70</title></circle>
+<circle cx="261.2" cy="106.5" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.65, increase in text prediction loss +5.12</title></circle>
+<circle cx="295.1" cy="111.7" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.63, increase in text prediction loss +5.91</title></circle>
+<circle cx="243.6" cy="178.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.38, increase in text prediction loss +4.70</title></circle>
+<circle cx="222.1" cy="152.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.48, increase in text prediction loss +4.20</title></circle>
+<circle cx="284.0" cy="137.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.53, increase in text prediction loss +5.65</title></circle>
+<circle cx="309.0" cy="176.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.38, increase in text prediction loss +6.24</title></circle>
+<circle cx="264.9" cy="131.4" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.56, increase in text prediction loss +5.20</title></circle>
+<circle cx="247.0" cy="139.9" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.52, increase in text prediction loss +4.78</title></circle>
+<circle cx="216.0" cy="169.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.41, increase in text prediction loss +4.05</title></circle>
+<circle cx="312.6" cy="155.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, increase in text prediction loss +6.33</title></circle>
+<circle cx="242.4" cy="153.3" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.47, increase in text prediction loss +4.67</title></circle>
+<circle cx="239.1" cy="122.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.59, increase in text prediction loss +4.60</title></circle>
+<circle cx="307.9" cy="123.9" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.58, increase in text prediction loss +6.22</title></circle>
+<circle cx="262.7" cy="140.5" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.52, increase in text prediction loss +5.15</title></circle>
+<circle cx="232.7" cy="179.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.37, increase in text prediction loss +4.45</title></circle>
+<circle cx="281.0" cy="156.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, increase in text prediction loss +5.58</title></circle>
+<circle cx="273.6" cy="157.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, increase in text prediction loss +5.41</title></circle>
+<circle cx="242.5" cy="158.2" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.45, increase in text prediction loss +4.68</title></circle>
+<circle cx="114.8" cy="29.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +1.67</title></circle>
+<circle cx="96.3" cy="24.8" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.97, increase in text prediction loss +1.23</title></circle>
+<circle cx="111.8" cy="27.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, increase in text prediction loss +1.60</title></circle>
+<circle cx="138.7" cy="29.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +2.23</title></circle>
+<circle cx="149.1" cy="27.2" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, increase in text prediction loss +2.48</title></circle>
+<circle cx="160.1" cy="29.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +2.73</title></circle>
+<circle cx="100.9" cy="28.9" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +1.34</title></circle>
+<circle cx="122.3" cy="28.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +1.84</title></circle>
+<circle cx="134.8" cy="31.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, increase in text prediction loss +2.14</title></circle>
+<circle cx="122.2" cy="33.3" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.93, increase in text prediction loss +1.84</title></circle>
+<circle cx="135.8" cy="26.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, increase in text prediction loss +2.16</title></circle>
+<circle cx="127.3" cy="28.0" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +1.96</title></circle>
+<circle cx="134.4" cy="30.6" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, increase in text prediction loss +2.13</title></circle>
+<circle cx="137.7" cy="28.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +2.21</title></circle>
+<circle cx="104.2" cy="25.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, increase in text prediction loss +1.42</title></circle>
+<circle cx="74.9" cy="29.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +0.73</title></circle>
+<circle cx="104.7" cy="31.0" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, increase in text prediction loss +1.43</title></circle>
+<circle cx="113.9" cy="27.2" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, increase in text prediction loss +1.65</title></circle>
+<circle cx="101.0" cy="28.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, increase in text prediction loss +1.34</title></circle>
+<g><title>Layer 9: Safety 0.86, increase in text prediction loss +4.23</title><circle cx="223.6" cy="51.7" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/><text x="232.6" y="55.7" class="ax" style="fill:#1A7F7A;font-weight:600">L9</text></g>
+<g><title>Layer 13: Safety 0.93, increase in text prediction loss +1.47</title><circle cx="106.5" cy="33.4" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 16: Safety 0.97, increase in text prediction loss +1.21</title><circle cx="95.5" cy="24.8" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 20: Safety 0.95, increase in text prediction loss +1.20</title><circle cx="94.8" cy="28.8" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Real edit (layer 17): Safety 0.95, increase in text prediction loss +2.09</title><polygon points="132.9,21.0 135.3,26.8 141.5,27.3 136.8,31.3 138.2,37.3 132.9,34.1 127.6,37.3 129.1,31.3 124.4,27.3 130.5,26.8" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="185.0" y="294" text-anchor="middle" class="axl">increase in text prediction loss →</text>
+</svg></div>
+      <div><h3>Safety gain vs damage to finance grading</h3><svg class="chart" viewBox="0 0 340 300" role="img" aria-label="Safety AUROC versus drop in BFF AUROC">
+<line x1="44" x2="326" y1="224.0" y2="224.0" stroke="var(--line)"/><text x="38" y="228.0" text-anchor="end" class="ax">0.2</text>
+<line x1="44" x2="326" y1="172.0" y2="172.0" stroke="var(--line)"/><text x="38" y="176.0" text-anchor="end" class="ax">0.4</text>
+<line x1="44" x2="326" y1="120.0" y2="120.0" stroke="var(--line)"/><text x="38" y="124.0" text-anchor="end" class="ax">0.6</text>
+<line x1="44" x2="326" y1="68.0" y2="68.0" stroke="var(--line)"/><text x="38" y="72.0" text-anchor="end" class="ax">0.8</text>
+<line x1="44" x2="326" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="38" y="20.0" text-anchor="end" class="ax">1.0</text>
+<text x="44.0" y="266" text-anchor="middle" class="ax">0</text>
+<text x="114.5" y="266" text-anchor="middle" class="ax">0.14</text>
+<text x="185.0" y="266" text-anchor="middle" class="ax">0.27</text>
+<text x="255.5" y="266" text-anchor="middle" class="ax">0.41</text>
+<text x="326.0" y="266" text-anchor="middle" class="ax">0.55</text>
+<line x1="44" x2="44" y1="16" y2="250" stroke="var(--ink-3)"/>
+<line x1="44" x2="326" y1="140.2" y2="140.2" stroke="var(--ink-3)" stroke-dasharray="5 4"/><text x="326" y="135.2" text-anchor="end" class="ax">no edit</text>
+<circle cx="44.0" cy="128.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.57, drop in BFF AUROC -0.02</title></circle>
+<circle cx="45.4" cy="139.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, drop in BFF AUROC +0.00</title></circle>
+<circle cx="44.0" cy="147.9" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.49, drop in BFF AUROC -0.01</title></circle>
+<circle cx="49.1" cy="132.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, drop in BFF AUROC +0.01</title></circle>
+<circle cx="44.0" cy="144.2" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.51, drop in BFF AUROC -0.02</title></circle>
+<circle cx="47.3" cy="143.8" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.51, drop in BFF AUROC +0.01</title></circle>
+<circle cx="48.7" cy="140.2" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, drop in BFF AUROC +0.01</title></circle>
+<circle cx="44.0" cy="138.1" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, drop in BFF AUROC -0.03</title></circle>
+<circle cx="62.1" cy="141.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, drop in BFF AUROC +0.04</title></circle>
+<circle cx="44.0" cy="147.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.49, drop in BFF AUROC -0.02</title></circle>
+<circle cx="44.0" cy="142.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, drop in BFF AUROC -0.03</title></circle>
+<circle cx="44.0" cy="139.6" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.52, drop in BFF AUROC -0.00</title></circle>
+<circle cx="47.3" cy="138.3" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, drop in BFF AUROC +0.01</title></circle>
+<circle cx="51.2" cy="130.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.56, drop in BFF AUROC +0.01</title></circle>
+<circle cx="58.9" cy="126.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.58, drop in BFF AUROC +0.03</title></circle>
+<circle cx="44.0" cy="138.0" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.53, drop in BFF AUROC -0.02</title></circle>
+<circle cx="44.0" cy="132.9" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, drop in BFF AUROC -0.02</title></circle>
+<circle cx="44.0" cy="145.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.50, drop in BFF AUROC -0.01</title></circle>
+<circle cx="44.0" cy="132.5" r="4.5" fill="#6B4FA0" opacity=".8" stroke="#fff" stroke-width="1"><title>Random change: Safety 0.55, drop in BFF AUROC -0.01</title></circle>
+<circle cx="64.4" cy="64.4" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.81, drop in BFF AUROC +0.04</title></circle>
+<circle cx="44.0" cy="139.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.52, drop in BFF AUROC -0.05</title></circle>
+<circle cx="93.9" cy="56.3" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.84, drop in BFF AUROC +0.10</title></circle>
+<circle cx="44.0" cy="90.5" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.71, drop in BFF AUROC -0.02</title></circle>
+<circle cx="44.0" cy="94.3" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.70, drop in BFF AUROC -0.09</title></circle>
+<circle cx="44.0" cy="120.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.60, drop in BFF AUROC -0.04</title></circle>
+<circle cx="44.0" cy="97.6" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.69, drop in BFF AUROC -0.03</title></circle>
+<circle cx="83.0" cy="149.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.49, drop in BFF AUROC +0.08</title></circle>
+<circle cx="44.0" cy="56.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.85, drop in BFF AUROC -0.02</title></circle>
+<circle cx="44.0" cy="76.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.77, drop in BFF AUROC -0.06</title></circle>
+<circle cx="112.9" cy="239.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.14, drop in BFF AUROC +0.13</title></circle>
+<circle cx="44.0" cy="133.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.55, drop in BFF AUROC -0.05</title></circle>
+<circle cx="44.0" cy="124.7" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.58, drop in BFF AUROC -0.08</title></circle>
+<circle cx="68.6" cy="81.1" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.75, drop in BFF AUROC +0.05</title></circle>
+<circle cx="58.9" cy="93.8" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.70, drop in BFF AUROC +0.03</title></circle>
+<circle cx="44.0" cy="159.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.45, drop in BFF AUROC -0.01</title></circle>
+<circle cx="44.0" cy="88.5" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.72, drop in BFF AUROC -0.07</title></circle>
+<circle cx="72.1" cy="114.7" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.62, drop in BFF AUROC +0.05</title></circle>
+<circle cx="44.0" cy="160.9" r="4.5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random push: Safety 0.44, drop in BFF AUROC -0.08</title></circle>
+<circle cx="114.6" cy="152.2" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.48, drop in BFF AUROC +0.14</title></circle>
+<circle cx="207.9" cy="106.5" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.65, drop in BFF AUROC +0.32</title></circle>
+<circle cx="104.6" cy="111.7" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.63, drop in BFF AUROC +0.12</title></circle>
+<circle cx="133.9" cy="178.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.38, drop in BFF AUROC +0.17</title></circle>
+<circle cx="130.1" cy="152.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.48, drop in BFF AUROC +0.17</title></circle>
+<circle cx="212.7" cy="137.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.53, drop in BFF AUROC +0.33</title></circle>
+<circle cx="170.7" cy="176.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.38, drop in BFF AUROC +0.25</title></circle>
+<circle cx="166.1" cy="131.4" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.56, drop in BFF AUROC +0.24</title></circle>
+<circle cx="107.9" cy="139.9" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.52, drop in BFF AUROC +0.12</title></circle>
+<circle cx="312.6" cy="169.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.41, drop in BFF AUROC +0.52</title></circle>
+<circle cx="253.4" cy="155.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, drop in BFF AUROC +0.41</title></circle>
+<circle cx="44.0" cy="153.3" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.47, drop in BFF AUROC -0.11</title></circle>
+<circle cx="84.6" cy="122.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.59, drop in BFF AUROC +0.08</title></circle>
+<circle cx="112.0" cy="123.9" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.58, drop in BFF AUROC +0.13</title></circle>
+<circle cx="253.4" cy="140.5" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.52, drop in BFF AUROC +0.41</title></circle>
+<circle cx="225.3" cy="179.6" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.37, drop in BFF AUROC +0.35</title></circle>
+<circle cx="57.5" cy="156.1" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, drop in BFF AUROC +0.03</title></circle>
+<circle cx="252.4" cy="157.0" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.46, drop in BFF AUROC +0.40</title></circle>
+<circle cx="94.8" cy="158.2" r="4.5" fill="#C2550C" opacity=".8" stroke="#fff" stroke-width="1"><title>Shuffled labels: Safety 0.45, drop in BFF AUROC +0.10</title></circle>
+<circle cx="127.1" cy="29.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.16</title></circle>
+<circle cx="148.7" cy="24.8" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.97, drop in BFF AUROC +0.20</title></circle>
+<circle cx="44.0" cy="27.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, drop in BFF AUROC -0.09</title></circle>
+<circle cx="90.4" cy="29.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.09</title></circle>
+<circle cx="44.0" cy="27.2" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, drop in BFF AUROC -0.12</title></circle>
+<circle cx="73.5" cy="29.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.06</title></circle>
+<circle cx="44.0" cy="28.9" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC -0.10</title></circle>
+<circle cx="105.7" cy="28.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.12</title></circle>
+<circle cx="44.9" cy="31.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, drop in BFF AUROC +0.00</title></circle>
+<circle cx="104.6" cy="33.3" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.93, drop in BFF AUROC +0.12</title></circle>
+<circle cx="146.1" cy="26.1" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, drop in BFF AUROC +0.20</title></circle>
+<circle cx="44.0" cy="28.0" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC -0.01</title></circle>
+<circle cx="81.6" cy="30.6" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, drop in BFF AUROC +0.07</title></circle>
+<circle cx="47.3" cy="28.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.01</title></circle>
+<circle cx="89.1" cy="25.7" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, drop in BFF AUROC +0.09</title></circle>
+<circle cx="44.0" cy="29.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC -0.08</title></circle>
+<circle cx="98.1" cy="31.0" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.94, drop in BFF AUROC +0.10</title></circle>
+<circle cx="44.0" cy="27.2" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.96, drop in BFF AUROC -0.01</title></circle>
+<circle cx="164.7" cy="28.5" r="4.5" fill="#3B73C4" opacity=".8" stroke="#fff" stroke-width="1"><title>Random neurons: Safety 0.95, drop in BFF AUROC +0.23</title></circle>
+<g><title>Layer 9: Safety 0.86, drop in BFF AUROC +0.17</title><circle cx="134.1" cy="51.7" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/><text x="143.1" y="55.7" class="ax" style="fill:#1A7F7A;font-weight:600">L9</text></g>
+<g><title>Layer 13: Safety 0.93, drop in BFF AUROC +0.03</title><circle cx="60.9" cy="33.4" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 16: Safety 0.97, drop in BFF AUROC +0.03</title><circle cx="60.0" cy="24.8" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Layer 20: Safety 0.95, drop in BFF AUROC +0.01</title><circle cx="50.7" cy="28.8" r="6" fill="#fff" stroke="#1A7F7A" stroke-width="2.5"/></g>
+<g><title>Real edit (layer 17): Safety 0.95, drop in BFF AUROC +0.10</title><polygon points="98.1,21.0 100.5,26.8 106.7,27.3 101.9,31.3 103.4,37.3 98.1,34.1 92.8,37.3 94.2,31.3 89.5,27.3 95.7,26.8" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="185.0" y="294" text-anchor="middle" class="axl">drop in BFF AUROC →</text>
+</svg></div>
+    </div>
+    <p class="note">Teal circles: the same recipe in layers 9, 13, 16 and 20 (only layer 9 is labeled; 13, 16 and 20 sit beside the star at the top). Hover any dot for its numbers.</p>
+    <p>Best is <b>top left</b>: a big Safety gain with little damage. Three things stand out:</p>
+    <ul>
+      <li><b>Random changes are harmless</b> (text loss +0.04), even though they're the same size. The damage isn't from changing weights; it's from <b>what</b> the edit writes.</li>
+      <li><b>Shuffled-label edits are the most harmful</b> (text loss +5.1 on average) and gain nothing. A detector without real knowledge fires on everything.</li>
+      <li><b>Later layers are gentler.</b> Layers 16 and 20 match the real edit's Safety gain (0.97, 0.95) with about half the text damage (+1.2 vs +2.1) and almost no finance damage (BFF −0.03, −0.01 vs −0.10). Layer 9 is the worst on both.</li>
+    </ul>
+  </section>
+
+  <section class="rec">
+    <span class="tag">What it all means</span>
+    <h2>The edit is real, but it's a rewiring, not a precise fix</h2>
+    <ul>
+      <li><b>The weight edit is significant.</b> It beats shuffled labels, random directions and random changes 19 out of 19 times. The gain comes from the judge's real hidden knowledge being routed to its verdict.</li>
+      <li><b>Which neurons doesn't matter.</b> Random neurons in the same layer do just as well. This matches Part 1: the knowledge is readable almost everywhere after layer 6, so any reasonable set of neurons can serve as the detector.</li>
+      <li><b>Where matters for side effects.</b> Editing later (layers 16 or 20) keeps the Safety gain and cuts the damage, especially to finance grading. Our original layer 17 choice was optimized for Safety only and was not the best trade-off.</li>
+      <li><b>The remaining damage has one cause:</b> the edit is always on, so the detector also fires on finance questions and normal text. Making it fire only on safety grading, for example by adding "do nothing here" examples when fitting the detector, is the most direct next fix.</li>
+      <li><b>Connection to Part 1:</b> the parts that <b>build</b> the knowledge (layers 8 and 16 heads) are where a precise intervention would target. Switching them off to test that they cause it is the next step.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>Push = within-source difference in the cross-fitted probe score (good minus bad) contributed by each part, compared only between responses from the same source model with the same refusal status. Significance: 500 within-request label shuffles, family-wise 99th percentile of the largest shuffled push across all parts.</div>
+    <div>Part 2: each edit was scaled so the mean norm of what it adds to the residual on training items equals the real edit's (strength 0.2). Safety AUROC on 168 test items under the team safety prompt; BFF AUROC on 74 test items; loss on 20 WikiText-2 passages of 256 tokens.</div>
+    <div>Code: experiments/weight_space/module_map.py, edit_controls.py and build_module_report.py on branch ingrid/weight-space-judge. Data: results/module_map.json.</div>
+  </footer>
+</div>
