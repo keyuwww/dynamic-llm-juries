@@ -18,6 +18,7 @@ final answer are both right or both wrong), so this is largely question-level se
 """
 import collections
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -27,6 +28,9 @@ from belief_probe_grid import folds, ridge_fit_predict
 
 HERE = Path(__file__).resolve().parent
 CKS = ["A", "25", "50", "75", "C"]
+
+
+TAG = "_clean" if "--clean" in sys.argv else ""
 
 
 def auc(y, s):
@@ -67,7 +71,8 @@ def nested(X, y, g, cells):
 
 
 def main():
-    B = {(r["judge"], r["item"]): r for r in json.load(open(HERE / "out" / "belief_rows.json"))}
+    # --clean: rows from belief.py --clean (RB2-Math "wrong" answers that reach the right value left out)
+    B = {(r["judge"], r["item"]): r for r in json.load(open(HERE / "out" / f"belief_rows{TAG}.json"))}
     L = ["# Can the judge tell its wrong confident beliefs from its right ones?\n",
          "Candidates with belief >= 4/7 (the judge itself gives this answer in at least 4 of 7 tries). AUROC for "
          "right vs wrong on held-out questions (0.5 = chance). 95% intervals resample questions. 'Probe minus verdict' "
@@ -148,7 +153,7 @@ def main():
                                 f"{auc(ya, s_) - auc(ya, mC[A_]):+.2f} [{dl:+.2f}, {dh:+.2f}]") + " |")
                 L.append("")
             print(f"done {judge} {bench}", flush=True)
-    (HERE / "out" / "confident_probe.md").write_text("\n".join(L) + "\n")
+    (HERE / "out" / f"confident_probe{TAG}.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))
 
 

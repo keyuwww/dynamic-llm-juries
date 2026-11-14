@@ -11,7 +11,7 @@ The judge's own answer comes from a separate solve call (never shown to the judg
   JudgeBench  same, for each of the two responses; a pair counts only if exactly one response
               reaches the judge's own answer
 
-  python3 experiments/anchoring_early_answer/analyze.py [--pilot]
+  python3 experiments/anchoring_early_answer/analyze.py [--pilot] [--clean]   (--clean: clean_labels.py)
 """
 import collections
 import gzip
@@ -26,9 +26,13 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "tinker_pool"))
 from common import parse_pairwise_verdict, parse_verdict  # noqa: E402
 from data import _extract_answer  # noqa: E402
+sys.path.insert(0, str(HERE))
+from clean_labels import same_value_items  # noqa: E402
 
 CKPTS = ["A", "25", "50", "75", "C"]
 OUT = HERE / ("out_pilot" if "--pilot" in sys.argv else "out")
+CLEAN = "--clean" in sys.argv  # drop RB2-Math wrong answers that reach the right value; writes *_clean files
+TAG = "_clean" if CLEAN else ""
 
 
 def norm(ans):
@@ -216,6 +220,10 @@ def main():
                          spoken=spoken, **{f"acc_{c}": acc.get(c) for c in CKPTS},
                          **{f"m_{c}": (sign * ck[c] if c in ck else None) for c in CKPTS}))
 
+    if CLEAN:  # RB2-Math "wrong" answers that reach the right value are not wrong (clean_labels.py)
+        bad = same_value_items()
+        rows = [r for r in rows if not (r["target_ok"] == 0 and r["item"] in bad)]
+
     L = ["# Early answering: is own-answer anchoring already there before the judge reasons?\n",
          f"Source: `{OUT.name}/`, answer matcher: GLM-5.3-Flash. Judges: the three Qwen models of the Tinker pool, thinking off, their own "
          "pool transcripts. Each judgment is read at A (before any reasoning), 25/50/75% of the reasoning, "
@@ -285,9 +293,9 @@ def main():
                          f"{np.mean([r['acc_C'] for r in R]):.2f} |")
 
     L += pooled_and_controlled(rows)
-    (OUT / "rows.json").write_text(json.dumps(rows))
+    (OUT / f"rows{TAG}.json").write_text(json.dumps(rows))
     text = "\n".join(L) + "\n"
-    (OUT / "results.md").write_text(text)
+    (OUT / f"results{TAG}.md").write_text(text)
     print(text)
 
 

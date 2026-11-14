@@ -30,11 +30,13 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from analyze import MAIN, _cluster_boot, letter  # noqa: E402
+from clean_labels import same_value_items  # noqa: E402
 
 OPEN = next((a.split("=")[1] for a in sys.argv if a.startswith("--judge=")), "")
 SRC = HERE / ("out_pilot" if "--pilot" in sys.argv else "out_llama" if OPEN == "llama3.1-8b" else "out")
 DST = HERE / "out"
-TAG = f"_{OPEN}" if OPEN else ""
+CLEAN = "--clean" in sys.argv  # drop RB2-Math wrong answers that reach the right value (clean_labels.py)
+TAG = (f"_{OPEN}" if OPEN else "") + ("_clean" if CLEAN else "")
 NB = int(next((a.split("=")[1] for a in sys.argv if a.startswith("--nb=")), 2000))
 
 
@@ -133,11 +135,19 @@ CFE = (lambda r: f"{r['bench']}|{r['judge']}", lambda r: f"{r['bench']}|{r['item
 
 def main():
     R = build()
+    n_bad = 0
+    if CLEAN:
+        bad = same_value_items()
+        n_bad = sum(r["target_ok"] == 0 and r["item"] in bad for r in R)
+        R = [r for r in R if not (r["target_ok"] == 0 and r["item"] in bad)]
     L = ["# Belief strength: acceptance vs how often the judge itself reaches the candidate's answer\n",
          "belief = share of 7 fresh own answers (T=0.7, same prompt) that reach the candidate's final answer. "
          "Sample 0, which defined match/differ, is not part of it. Accepts at A = before reasoning; at C = at the "
          "verdict (readout). Effects in percentage points, 95% intervals resample whole questions.\n",
          f"Rows with a belief score: {len(R)} (of the main-set rows in rows.json).\n"]
+    if CLEAN:
+        L.append(f"Clean labels: {n_bad} rows dropped, RB2-Math 'wrong' answers that reach the right value "
+                 "(GLM audit, clean_labels.py).\n")
     W = [r for r in R if r["target_ok"] == 0]
     Cr = [r for r in R if r["target_ok"] == 1]
     sets = [("main", lambda r: True)] + [(b, lambda r, b=b: r["bench"] == b) for b in MAIN]

@@ -25,9 +25,17 @@ wrong answers the Qwens believe, so the "shared belief" from Experiment 1 is mos
 
 **Nov 9 additions (Experiments 5–8).**
 - **Belief strength.** Measured with 7 fresh own answers instead of one, the lean is graded. Wrong answers the
-  judge reaches 7/7 times are accepted 71% of the time at the verdict; those it never reaches, 18%. The old one-sample
-  match label adds nothing once belief is known. With this better measure there is a real **personal** part (+22
+  judge reaches 7/7 times are accepted 74% of the time at the verdict; those it never reaches, 18%. The old one-sample
+  match label adds nothing once belief is known. With this better measure there is a real **personal** part (+23
   points on the same wrong answer), not only a family belief.
+- **Label correction (Nov 13).** 61 of 549 RB2 Math answers labelled wrong reach the same value as the right answer,
+  written differently (476,000,000 vs 476,252,000 eV; 9 vs 9.02 L; 4.20 × 10¹¹ vs "420" in units of 10⁹). GLM-5.3-Flash
+  checked every wrong answer against the right one (`clean_labels.py`, $0.52). They were concentrated among the answers
+  the judges believe: 180 judge × answer rows dropped, more than half of the 7/7 bin. Every conclusion holds and the
+  belief effect gets slightly larger; the tables in Experiments 1 (main set) and 6 now use the clean labels.
+  RB2 Math now has only 10 wrong answers at 7/7, so the 7/7 bin rests mostly on BFF and JudgeBench. Those two were
+  not audited this way (no right candidate to compare with on most questions). Experiments 2, 3, 7 and 8 (probes and
+  steering) were run with the old labels and not redone.
 - **Thinking on.** The gap gets *larger* (about +58 points vs +37 with thinking off).
 - **Inside the model.** Belief is readable from the hidden state (held-out AUROC up to 0.86), better than an
   "is this right?" probe, and more readable as the judge writes.
@@ -74,7 +82,8 @@ and steering: Qwen3.5-4B, Qwen3.5-9B and Llama-3.1-8B on Modal GPUs. No gpt-oss 
   judge's actual spoken verdict 99.9% of the time.
 
 ### Result
-Wrong answers only, pooled over the three Qwens, with 95% intervals (questions resampled):
+Wrong answers only, pooled over the three Qwens, with 95% intervals (questions resampled). *Original set (BBEH, RB2
+Math, JudgeBench) with the old RB2 Math labels; superseded by the main-set tables below, which use clean labels.*
 
 | | Before reasoning (A) | At the verdict (C) | Reasoning rescues a wrong accept less often when it matches |
 |---|---|---|---|
@@ -100,12 +109,14 @@ BFF, each Qwen answered exactly the conversation the candidate answered (full 64
 judging transcripts that had hit the old 2,048-token cap were rerun from scratch, and GLM-5.3-Flash compared final
 answers (BFF answers are prose, so matching is fuzzier than on math; spot checks looked right).
 
-Wrong answers only, pooled over the three Qwens (95% intervals, questions resampled):
+Wrong answers only, pooled over the three Qwens (95% intervals, questions resampled). Clean labels (Nov 13): the
+RB2 Math wrong answers that reach the right value are left out (`analyze.py --clean`, `out/results_clean.md`). That
+leaves 12–17 matching wrong answers per judge on RB2 Math instead of 60–67.
 
 | Benchmark | Gap at A | Gap at C | Rescue gap |
 |---|---|---|---|
-| **Main set** | **+23** [+17, +30] | **+37** [+31, +43] | **+29** [+21, +37] |
-| RB2 Math | +18 [+6, +30] | +44 [+33, +53] | +39 [+30, +48] |
+| **Main set** | **+26** [+18, +33] | **+35** [+28, +41] | **+26** [+16, +35] |
+| RB2 Math | +20 [−2, +40] | +43 [+24, +61] | +41 [+21, +54] |
 | JudgeBench | +23 [+12, +34] | +21 [+10, +32] | +15 [−2, +32] |
 | BFF-Bench | +27 [+12, +38] | +41 [+27, +52] | +44 [+26, +62] |
 | BBEH (contrast) | +28 [+18, +39] | +29 [+21, +38] | +7 [−6, +18] |
@@ -114,8 +125,8 @@ Same wrong candidate, three Qwens, judge + candidate fixed effects (the "is it *
 
 | | at A | at 50% | at C |
 |---|---|---|---|
-| Main single-answer set (RB2 Math + BFF) | **+14** [+5, +23] | +4 [−6, +15] | +6 [−3, +15] |
-| RB2 Math | +9 [−6, +22] | −8 [−26, +11] | −2 [−19, +17] |
+| Main single-answer set (RB2 Math + BFF) | **+16** [+5, +27] | +9 [−3, +20] | +9 [−1, +18] |
+| RB2 Math | +11 [−1, +31] | −2 [−33, +22] | +2 [−27, +28] |
 | **BFF-Bench** | **+17** [+5, +31] | +12 [−1, +25] | **+11** [0, +23] |
 
 **Plain reading.**
@@ -141,7 +152,8 @@ only about half of BBEH themselves. Splitting BBEH by difficulty (share of the p
 
 **Plain reading:** the lean toward the judge's own answer is strongest exactly where the judge cannot verify the
 answer — it falls back on "does this match what I think?". It is not only a BBEH artefact, though: on RB2 Math, where
-the Qwens judge well, reasoning still rescues far fewer matching wrong answers (0–21%) than differing ones (28–77%).
+the Qwens judge well, reasoning still rescues far fewer matching wrong answers (0–29%, only 5–8 per judge with clean
+labels) than differing ones (29–79%).
 
 ### The control that matters
 A wrong answer the judge also gave may just be a *convincing* wrong answer to everyone. Comparing the three Qwens
@@ -327,31 +339,34 @@ These 7 are separate from the answer that defined match/differ, so the two measu
 compared answers; the 227 answers that ran out of room were regenerated from scratch. Thinking off, three Qwens, main
 set.
 
-**Wrong answers accepted, by belief** (main set):
+**Wrong answers accepted, by belief** (main set, clean labels: 180 rows whose RB2 Math "wrong" answer reaches the
+right value are left out; `belief.py --clean`, `out/belief_clean.md`):
 
 | | 0/7 | 1–3 of 7 | 4–6 of 7 | 7/7 | 7/7 minus 0/7 (judge FE) |
 |---|---|---|---|---|---|
-| before reasoning (A) | 25% (n=1,758) | 29% | 41% | 56% | **+28** [+19, +36] |
-| at the verdict (C) | 18% | 36% | 54% | 71% (n=211) | **+52** [+44, +59] |
+| before reasoning (A) | 25% (n=1,741) | 28% | 42% | 65% | **+35** [+25, +43] |
+| at the verdict (C) | 18% | 35% | 54% | 74% (n=101) | **+54** [+45, +63] |
 
-It rises steadily with belief on every benchmark (at C: RB2 Math +52, JudgeBench +44, BFF +56).
+It rises steadily with belief on every benchmark (at C: RB2 Math +71 but only 10 answers at 7/7, JudgeBench +44,
+BFF +56). With the old labels the 7/7 row was 56% / 71% (n=211) and the slopes +28 / +52: the dropped answers were
+accepted less often than really wrong ones.
 
 **Belief, not the single sample, carries the effect.** With both measures in one regression, at C:
 
 | | effect |
 |---|---|
-| old match label, belief held fixed | +1 [−7, +10] |
-| belief (7/7 vs 0/7), match label held fixed | **+50** [+39, +61] |
+| old match label, belief held fixed | +3 [−6, +12] |
+| belief (7/7 vs 0/7), match label held fixed | **+52** [+39, +63] |
 
 **Same wrong candidate, three Qwens** (judge + candidate fixed effects; does *this* judge's belief matter beyond
-what every Qwen believes?): +14 [+1, +27] at A, +22 [+6, +38] at C. So with a less noisy measure there **is** a
+what every Qwen believes?): +17 [+3, +31] at A, +23 [+6, +38] at C. So with a less noisy measure there **is** a
 personal part, about 40% of the full belief effect. The single-sample control in Experiment 1 (+3) understated it.
 
 **It cuts both ways.** Correct answers the judge never reaches itself (0/7) are accepted only 30% of the time at C, against
 91% at 7/7 (n=102 vs 1,723). The judge rejects right answers it can't reproduce.
 
 **Plain reading.** Anchoring is graded. The more consistently the judge produces an answer itself, the more likely it
-approves that answer, right or wrong. Reasoning nearly doubles that dependence (+28 → +52).
+approves that answer, right or wrong. Reasoning makes that dependence about half again as strong (+35 → +54).
 
 ---
 
@@ -447,7 +462,9 @@ accepting.
 1. **Anchoring is set at first read and amplified by reasoning, not created by it** — checkpoint readouts (A,
    50%, C) on three benchmarks × three Qwens, with the cut-off outputs fixed.
 2. **It is mostly a family-shared belief, not "my answer"** — the same-candidate control across judges, backed
-   inside the model by the absence of a causal own-answer direction.
+   inside the model by the absence of a causal own-answer direction. *Closest prior work (found Nov 12):* Goel et
+   al. 2025 (*Great Models Think Alike*) show at the model level that judges favour models that make the same
+   mistakes. Our addition is the per-question version and the inside-the-model control.
 3. **The verdict ignores what the model knows about difficulty** — the hidden state ranks hard vs easy questions
    well; the verdict does not use it. That points to a cheap fix: let a probe-based difficulty score make the
    judge stricter on hard questions (a *selective* leniency dial, which steering alone was not).
@@ -456,16 +473,22 @@ accepting.
    most of what the hidden state knows). A judge can look "unbiased" simply because its verdict is disconnected from
    what it knows.
 5. **Anchoring is graded by belief strength, and belief, not one sampled answer, is what matters.** Acceptance of
-   wrong answers rises from 18% to 71% across belief 0/7 → 7/7. Holding belief fixed, the usual match label adds
-   nothing. Correct answers the judge can't reproduce are rejected (30% accepted at 0/7).
+   wrong answers rises from 18% to 74% across belief 0/7 → 7/7 (clean labels). Holding belief fixed, the usual match label adds
+   nothing. Correct answers the judge can't reproduce are rejected (30% accepted at 0/7). *Closest prior work (found
+   Nov 12):* Wataoka et al. 2024 (judges favour text with low perplexity, i.e. text they find likely) and Zahraei et
+   al. 2026 (*Prior Prejudice*, ACL Findings: judges favour claims matching their prior beliefs, behavioural, yes/no
+   belief, persuasion tasks). Neither grades belief by sampling the judge's own answers on right vs wrong candidates,
+   or looks inside the model. Whether one-pass answer likelihood reproduces the 7-sample result is untested.
 6. **A readable signal is not a steerable fix.** Belief is linearly readable mid-network during reasoning, but pushing
    it during reasoning is a leniency dial, not a targeted correction.
 
 ## What is not new / weak spots
 
 - The probes reproduce INSPECTOR's general claim; our addition is the within-question control showing much of it is difficulty.
-- The personal own-answer effect is small with the one-sample label (+3), larger with belief strength (+22 at C,
+- The personal own-answer effect is small with the one-sample label (+3), larger with belief strength (+23 at C,
   interval +6 to +38). Both rest on the few candidates the three Qwens believe to different degrees.
+- RB2 Math labels: 61 of 549 "wrong" answers reach the right value (fixed Nov 13 in Experiments 1 and 6). BFF and
+  JudgeBench labels were not audited the same way; the probe and steering experiments still use the old labels.
 - Belief probes and steering were run on Qwen3.5-4B/9B with thinking off, on RB2 Math and BFF only. Their item groups
   were built before the 227 regenerated belief answers were merged; that moved only a handful of candidates between
   bins, and the belief tables above include them.

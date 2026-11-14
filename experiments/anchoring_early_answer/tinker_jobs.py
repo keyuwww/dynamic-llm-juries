@@ -191,6 +191,17 @@ async def match_one(chat, key, question, own, cand, cache, max_tokens):
     cache.put(dict(cache_key=key, verdict=v, raw=t[-200:], n_in=r["n_in"], n_out=r["n_out"]))
 
 
+def redo_cut(cache, mt, new_mt):
+    """Forget cached GLM outputs that used the whole max_tokens budget, so they are asked again with new_mt."""
+    # cut = used exactly a token cap (the default or an earlier, smaller redo budget); a finished redo is never 2^k
+    cut = [k for k, r in cache.rows.items()
+           if mt <= r.get("n_out", 0) < new_mt and r["n_out"] & (r["n_out"] - 1) == 0]
+    for k in cut:
+        del cache.rows[k]
+    print(f"{len(cut)} GLM outputs cut at {mt} tokens: asking again with {new_mt}", flush=True)
+    return new_mt
+
+
 def letter_of(text):
     """JudgeBench multiple-choice answers end with the letter written five times (same rule as analyze.letter)."""
     x = re.findall(r"\b([A-J])\1{4}\b", text or "")
@@ -231,7 +242,7 @@ async def extend_one(chat, job, cache):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief"], required=True)
+    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief", "audit"], required=True)
     ap.add_argument("--extended", action="store_true", help="match/readout: only items with extended text")
     ap.add_argument("--kinds", default="solve,judge", help="extend: which cut-off outputs to rerun")
     ap.add_argument("--open", default="", help="match/fill: an open judge outside Tinker, e.g. llama3.1-8b or "
@@ -243,6 +254,8 @@ def main():
     ap.add_argument("--concurrency", type=int, default=48)
     ap.add_argument("--ckpts", default="A,25,50,75,C", help="which checkpoints to read")
     ap.add_argument("--matcher", default="glm5.3-flash", choices=list(MATCHERS))
+    ap.add_argument("--redo-cut", type=int, default=0, help="fill/belief (open judges): GLM outputs that hit the "
+                    "matcher's max_tokens are asked again FROM SCRATCH with this many tokens (the newer row wins)")
     ap.add_argument("--samples", type=int, default=8, help="belief: own answers per question in total (sample 0 "
                     "is the existing solve)")
     a = ap.parse_args()
@@ -303,6 +316,8 @@ def main():
     if a.phase == "fill":  # open judges: GLM settles the answers / verdicts exact parsing could not (open_ingest.py)
         chat, mt = make_matcher(a.matcher), MATCHERS[a.matcher]["max_tokens"]
         cache = JsonlCache(out / f"fill_glm5.3-flash_{a.open}.jsonl")
+        if a.redo_cut:
+            mt = redo_cut(cache, mt, a.redo_cut)
         fill = [json.loads(l) for l in open(HERE / "inputs" / f"fill_jobs_{a.open}.jsonl")]
         jobs = [(lambda x=x: match_one(chat, x["key"], x["question"], x["own"], x["cand"], cache, mt))
                 if x["kind"] == "match" else
@@ -328,6 +343,26 @@ def main():
                 seen[k] = seen.get(k, 0) + 1
         readout = keep
 
+    if a.phase == "audit":
+        # Label audit (Nov 13): many RB2-Math "rejected" answers reach the same value as the "chosen" one, written
+        # differently (rounding, notation, units). GLM compares each wrong candidate's final answer with each right
+        # candidate's of the same question; candidate texts don't depend on the judge, so each pair is asked once.
+        chat, mt = make_matcher(a.matcher), MATCHERS[a.matcher]["max_tokens"]
+        cache = JsonlCache(out / "label_audit_glm5.3-flash.jsonl")
+        by_q = collections.defaultdict(dict)  # qid -> item_id -> (gold, candidate text, question)
+        for j in readout:
+            if j["bench"] == "rb2math" and not j["pairwise"]:
+                by_q[j["qid"]][j["item_id"]] = (j["gold"], j["candidates"][0], j["question"])
+        jobs = []
+        for qid, items in by_q.items():
+            for w, (gw, cw, q) in items.items():
+                for r, (gr, cr, _) in items.items():
+                    if gw == 0 and gr == 1:
+                        jobs.append(lambda key=f"audit|{w}|vs|{r}", q=q, cr=cr, cw=cw: match_one(chat, key, q, cr, cw, cache, mt))
+        print(f"{len(jobs)} wrong-vs-right pairs", flush=True)
+        asyncio.run(run_jobs(jobs, a.concurrency, "audit"))
+        return
+
     if a.phase == "belief":
         # Belief strength: each judge answers each question samples-1 more times (same prompt and settings as the
         # first solve: T=0.7, whole context as budget); every new answer is compared with every candidate.
@@ -345,10 +380,13 @@ def main():
             odir = HERE / ("out_llama" if a.open == "llama3.1-8b" else f"out_open/{a.open}")
             chats = {}
             solve_jobs = {(a.open, q): j for (_, q), j in solve_jobs.items()}
-            scache, mcache = JsonlCache(odir / "solves_k.jsonl"), JsonlCache(odir / "matches_glm5.3-flash_k.jsonl")
+            # matches go to the run's output dir (the Modal volume), not the container's copy of the repo
+            scache, mcache = JsonlCache(odir / "solves_k.jsonl"), JsonlCache(out / f"matches_glm5.3-flash_k_{a.open}.jsonl")
         else:
             chats = make_chats([POOL_BY_KEY[m] for m in models])
             scache, mcache = JsonlCache(out / "solves_k.jsonl"), JsonlCache(out / "matches_glm5.3-flash_k.jsonl")
+        if a.open and a.redo_cut:
+            mt = redo_cut(mcache, mt, a.redo_cut)
         redo = None
         if a.extended:  # answers that used the whole context without finishing: answer again FROM SCRATCH
             redo = {k for k, r in scache.rows.items() if r["termination"] != "stop_sequence"}
@@ -359,8 +397,8 @@ def main():
         async def belief_one(jm, qid, s):
             job = solve_jobs[(jm, qid)]
             key = f"{jm}|{qid}|s{s}"
-            if key not in scache and a.open:
-                return
+            if a.open and (key not in scache or not scache.rows[key]["clean"]):
+                return  # cut off at the context limit: rerun from scratch on GPU first, matched afterwards
             if key not in scache:
                 chat = chats[jm]
                 n = chat.renderer.build_generation_prompt(job["messages"]).length

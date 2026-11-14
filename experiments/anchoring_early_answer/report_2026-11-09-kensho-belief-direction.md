@@ -5,14 +5,18 @@ answer that is the same as what it would have answered itself. Three Qwen judges
 
 | Judging mistake | How many | Share involving the judge's own answer | Share expected by chance |
 |---|---|---|---|
-| Approved a **wrong** answer | 671 | **39%** were the same wrong answer the judge gave when it solved the question itself | 19% (share of all wrong answers that match) |
-| Rejected a **correct** answer | 334 | **28%** were answers that differ from the judge's own | 8% |
+| Approved a **wrong** answer | 566 | **31%** were the same wrong answer the judge gave when it solved the question itself | 14% (share of all wrong answers that match) |
+| Rejected a **correct** answer | 335 | **28%** were answers that differ from the judge's own | 8% |
 
 So a judging mistake is about **2 to 3.5 times more likely than chance** to involve the judge's own answer. It approves
 wrong answers it agrees with and rejects right answers it disagrees with. Measured more carefully with belief (section
-1), the picture is the same: 38% of approved wrong answers are ones the judge itself reaches in at least 4 of 7 tries,
-while only 17% of all wrong answers are. On single-answer benchmarks alone, 34% of approved wrong answers match the
-judge's own (RB2 Math 31%, BFF 42%).
+1), the picture is the same: 28% of approved wrong answers are ones the judge itself reaches in at least 4 of 7 tries,
+while only 11% of all wrong answers are. On single-answer benchmarks alone, 21% of approved wrong answers match the
+judge's own (RB2 Math 10%, BFF 42%).
+
+Labels: some RewardBench 2 Math answers labelled wrong reach the same value as the right answer, written differently
+(476,000,000 vs 476,252,000 eV; 9 vs 9.02 L). GLM-5.3-Flash compared every wrong answer with the right one; the 61 that
+match are left out of every table.
 
 **Question.** LLM judges approve wrong answers far more often when the wrong answer matches what they would have
 answered themselves ("anchoring"). Is there an internal *belief* signal behind this, can we read it, and can we turn
@@ -47,17 +51,19 @@ is the belief.**
 
 ### Result: acceptance follows belief
 
-Wrong answers only, all three Qwens, main set (2,440 wrong candidates):
+Wrong answers only, all three Qwens, main set (2,260 wrong candidates). Some RewardBench 2 Math answers labelled
+wrong reach the same value as the right answer, written differently (476,000,000 vs 476,252,000 eV; 9 vs 9.02 L).
+GLM-5.3-Flash compared every wrong answer with the right one, and the 61 that match are left out.
 
 | Belief | 0/7 | 1–3 of 7 | 4–6 of 7 | 7/7 |
 |---|---|---|---|---|
-| Accepted before reasoning (position A) | 25% | 29% | 41% | 56% |
-| Accepted at the verdict (position C) | 18% | 36% | 54% | 71% |
+| Accepted before reasoning (position A) | 25% | 28% | 42% | 65% |
+| Accepted at the verdict (position C) | 18% | 35% | 54% | 74% |
 
-- **Reasoning makes it stronger:** the 7/7-vs-0/7 difference is +28 points before reasoning and **+52** at the verdict.
-- **Belief, not one sampled answer, carries it:** with both in one model, belief 7/7 vs 0/7 = **+50 [+39, +61]**,
-  while the old one-sample "matches my answer" label adds +1 [−7, +10].
-- **There is a personal part:** on the *same* wrong answer, a Qwen's own belief adds **+22 [+6, +38]** at the verdict
+- **Reasoning makes it stronger:** the 7/7-vs-0/7 difference is +35 points before reasoning and **+54** at the verdict.
+- **Belief, not one sampled answer, carries it:** with both in one model, belief 7/7 vs 0/7 = **+52 [+39, +63]**,
+  while the old one-sample "matches my answer" label adds +3 [−6, +12].
+- **There is a personal part:** on the *same* wrong answer, a Qwen's own belief adds **+23 [+6, +38]** at the verdict
   beyond what all three Qwens share.
 - **It cuts both ways:** correct answers the judge never reaches itself are accepted only 30% of the time; at 7/7, 91%.
 
@@ -65,10 +71,10 @@ Wrong answers only, all three Qwens, main set (2,440 wrong candidates):
 
 | Belief | 0/7 | 1–3 of 7 | 4–6 of 7 | 7/7 |
 |---|---|---|---|---|
-| Share of candidates at this belief that are actually correct | 5% | 34% | 70% | **89%** |
+| Share of candidates at this belief that are actually correct | 6% | 35% | 75% | **94%** |
 
 So leaning on belief is close to the best a judge can do without other information. The damage is a narrow tail:
-across the three Qwens, about 150 wrong answers approved at 7/7, against about 1,570 correct ones.
+across the three Qwens, about 75 wrong answers approved at 7/7, against about 1,570 correct ones.
 
 ![Acceptance by belief, and how often belief is right](out/figs_belief/fig1_belief_acceptance.png)
 
@@ -236,35 +242,91 @@ believed answer is actually right, on held-out questions. Compare against two ba
 - **a question-only probe** that sees the average state over all of a question's candidates, so it carries no
   information about this particular answer.
 
-**Among confident answers the judge accepted** (the errors that matter). AUROC for ranking right above wrong:
+**Among confident answers the judge accepted** (the errors that matter). AUROC for ranking right above wrong, BFF:
 
 | | Hidden-state probe | Question-only probe | Judge's verdict confidence | Probe minus verdict |
 |---|---|---|---|---|
-| 9B, RB2 Math (42 wrong) | 0.69 | 0.73 | 0.65 | +0.03 [−0.09, +0.16] |
 | 9B, BFF (25 wrong) | **0.84** | 0.72 | 0.66 | **+0.18 [0.00, +0.34]** |
-| 4B, RB2 Math (43 wrong) | 0.62 | 0.69 | 0.63 | −0.01 |
 | 4B, BFF (23 wrong) | 0.81 | 0.82 | 0.74 | +0.07 |
+
+RB2 Math can't be tested this way: once answers that reach the right value are left out, only 7 (9B) and 8 (4B)
+confident accepted answers are really wrong.
 
 ![Confident beliefs: right vs wrong](out/figs_belief/fig4_confident.png)
 
-*Figure 4. Among confident answers the judge accepted, how well each signal ranks the right ones above the wrong ones.
-The hidden-state probe (orange) beats the judge's own confidence (blue) clearly only for Qwen-9B on BFF, and the
-question-only probe (green) is as good on RB2 Math.*
+*Figure 4. Among confident answers the judge accepted on BFF, how well each signal ranks the right ones above the
+wrong ones. The hidden-state probe (orange) beats the judge's own confidence (blue) clearly only for Qwen-9B; for
+Qwen-4B the question-only probe (green) does as well.*
 
 **What it means:**
-- **Confident errors are partly detectable** (0.62–0.84). The judge is not completely blind to them.
-- **The judge mostly already uses what it knows.** On RB2 Math the hidden state does no better than the judge's own
-  confidence. There is no clear "knows but doesn't say" gap, unlike Llama in the other session.
-- **On RB2 Math the signal is about the question, not the answer.** The question-only probe does as well as the
-  answer-specific one, i.e. "this is the kind of question I get wrong", which is self-knowledge about difficulty.
-- **One lead on BFF:** for Qwen-9B the probe beats its verdict by +0.18, but the interval touches zero and there are only
-  25 wrong answers. Worth replicating, not a finding yet.
-- **Belief level alone barely helps** on RB2 Math (0.57): "7/7 vs 4/7" doesn't tell you whether the belief is right.
+- **Confident errors are partly detectable** on BFF (0.81–0.84). The judge is not completely blind to them.
+- **The judge mostly already uses what it knows.** For Qwen-4B the hidden state adds little over its own confidence
+  (+0.07), and the question-only probe does as well as the answer-specific one, i.e. "this is the kind of question I
+  get wrong", which is self-knowledge about difficulty.
+- **One lead:** for Qwen-9B the probe beats its verdict by +0.18, but the interval touches zero and there are only 25
+  wrong answers. Worth replicating, not a finding yet.
+- **Too few confident errors on RB2 Math** (7–8 per judge) to say anything there.
 
 **Bottom line.** From the inside, the most you can do is roughly "flag confident answers on questions that look hard,
 and escalate them", and the judge's own confidence does nearly as well as a probe for that. Fixing confident errors needs
 **outside information**: a reference answer (0.55 → 0.95 on unsolved questions in the other session), or a judge that
 doesn't share the same blind spots.
+
+---
+
+## 7. Minimal pairs: same response, only the answer changes (Nov 10)
+
+**Why.** In the natural data, believed and unbelieved candidates differ in many ways (wording, length, question
+difficulty), so a probe can pick up any of these. A cleaner test fixes everything except belief.
+
+**Setup.**
+- We used JudgeBench multiple-choice questions (A–J): 245 questions for Qwen3.5-9B and 172 for Qwen3.5-4B.
+- Every option letter X became one judging item. The response is always exactly "The answer is (X). XXXXX".
+- Correctness of X is known. Belief in X is the share of the judge's own 7 solves that chose X.
+- Among the *wrong* letters of one question, nothing differs except how often the judge itself would pick that answer.
+- Read at "VERDICT:" with no written reasoning: the judge's lean toward CORRECT, and its hidden state at every layer.
+- Ran on Modal (2 × H100, about $5).
+
+**Result 1: strong belief bias, even with nothing else changing.**
+
+| Letter | Qwen-9B accepts | Qwen-4B accepts |
+|---|---|---|
+| wrong, judge never picks it (0/7) | 11% (n=1,866) | 3% (n=1,237) |
+| wrong, picks it 1–3/7 | 34% (n=123) | 8% (n=131) |
+| wrong, picks it 4–6/7 | 68% (n=41) | 19% (n=37) |
+| wrong, picks it 7/7 | **81%** (n=21) | 42% (n=12) |
+| correct, picks it ≥ 4/7 | 46% (n=168) | 25% (n=99) |
+
+- Within a question, at the same correctness and controlling for letter preferences, going from belief 0 to 1 raises acceptance of a wrong letter by **+82 points** [+71, +94] for 9B and **+31** [+18, +44] for 4B.
+- Odd detail: with no reasoning, Qwen-9B accepts the wrong answers it is sure of (81%) *more* than the correct answers it believes (46%). This is unexplained so far. The no-reasoning verdict is weak overall, so wait for the reasoning-first pass before reading much into it.
+
+**Result 2: the clean belief direction is mostly the "I'll say CORRECT" direction, and it is not the old probe.**
+- Direction = average state of believed wrong letters (≥ 4/7) minus never-reached wrong letters, within the same question. It is fitted on half the questions and scored on the other half.
+- It separates believed from never-reached wrong letters: AUROC 0.84–0.86 in late layers (24–32), 0.68–0.70 in middle layers (18–22).
+- But the judge's own verdict lean alone already does **0.88** (9B) and **0.84** (4B). The direction adds nothing beyond it.
+- It also ranks the *correct* letter above never-reached ones (0.73–0.75), so it is largely "lean toward accepting", not belief as such.
+- It is nearly unrelated to the ridge belief direction from RB2 Math / BFF: similarity +0.03 to +0.09.
+
+**What this means.**
+- When only the answer changes, there is no separate "this is my answer" signal in the state at the verdict. Belief turns straight into the verdict lean.
+- The old ridge probe (section 2) likely mixed belief with other differences between candidates. That fits removing it doing nothing (section 4).
+- Caveats: this is a different benchmark, and this pass reads the state *before* any written reasoning. A
+  reasoning-first pass (the judge writes its check, then the verdict) has been piloted but not run in full.
+
+**Two checks that needed no new runs (both null):**
+- **Does steering break the judge?** How well the verdict separates right from wrong answers (AUROC) on the steering items:
+
+  | Condition | AUROC |
+  |---|---|
+  | no edit | 0.73 |
+  | any steering condition | 0.69–0.72 |
+  | random −6 | 0.71 |
+
+  No belief steering improves judging. All cost a little, about as much as a random push.
+- **Effort justification ("IKEA effect"):** does the judge defend a wrong answer more when its own solves reaching it were longer? We compared 454 wrong candidates it reached at least once, at equal belief. A 1-sd longer path (×1.35 tokens) changes acceptance by **+0.3 points [−5.0, +4.3]**. No effect.
+
+Files: `minimal_pairs_prep.py`, `minimal_pairs_analysis.py` → `out/minimal_pairs.md`, `pairs_modal.py`,
+`cannon_belief/pairs_gen.py` (reasoning-first pass), `effort_split.py`.
 
 ---
 

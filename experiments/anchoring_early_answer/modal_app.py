@@ -48,7 +48,7 @@ def _env():
 @app.function(timeout=24 * 3600, secrets=[modal.Secret.from_dict(_env())], volumes={"/vol": vol})
 def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurrency: int = 48,
         ckpts: str = "", matcher: str = "", extended: bool = False, kinds: str = "",
-        open_key: str = "") -> str:
+        open_key: str = "", redo_cut: int = 0) -> str:
     if phase == "models":
         subprocess.run([sys.executable, f"{HERE}/list_models.py", *benches.split(",")], check=True, cwd=HERE)
         return "done: models"
@@ -71,6 +71,8 @@ def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurr
         cmd += ["--kinds", kinds]
     if open_key:
         cmd += ["--open", open_key]
+    if redo_cut:
+        cmd += ["--redo-cut", str(redo_cut)]
     stop = threading.Event()
 
     def committer():
@@ -96,9 +98,10 @@ def pull(pilot: bool = False) -> dict:
 @app.local_entrypoint()
 def main(phase: str = "readout", limit: int = 0, models: str = "", benches: str = "", concurrency: int = 48,
          pilot: bool = False, ckpts: str = "", matcher: str = "", extended: bool = False,
-         kinds: str = "", open_key: str = ""):
+         kinds: str = "", open_key: str = "", redo_cut: int = 0):
     if phase != "pull":
-        print(run.remote(phase, limit, models, benches, concurrency, ckpts, matcher, extended, kinds, open_key))
+        print(run.remote(phase, limit, models, benches, concurrency, ckpts, matcher, extended, kinds, open_key,
+                         redo_cut))
     if phase == "models":
         return
     files = pull.remote(pilot or bool(limit))

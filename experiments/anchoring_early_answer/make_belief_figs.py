@@ -6,7 +6,7 @@
   fig3_steering.png            change in acceptance per steering condition, by item group, 95% intervals
   fig4_confident.png           confident beliefs the judge accepted: right vs wrong AUROC, probe vs baselines
 
-Numbers come from out/belief_rows.json, out/belief_probe_grid.md, out/belief_steering.md and out/confident_probe.md.
+Numbers come from out/belief_rows_clean.json (fig1), out/confident_probe_clean.md (fig4), out/belief_probe_grid.md, out/belief_steering.md and out/confident_probe.md.
 
   python3 experiments/anchoring_early_answer/make_belief_figs.py
 """
@@ -42,7 +42,7 @@ def grid(ax, axis="y"):
 
 
 def fig1():
-    R = json.load(open(HERE / "out" / "belief_rows.json"))
+    R = json.load(open(HERE / "out" / "belief_rows_clean.json"))  # clean RB2-Math labels (clean_labels.py)
     q = np.array([f"{r['bench']}|{r['q'] or r['item'].rsplit('-', 1)[0]}" for r in R])
     b = np.array([binof(r["belief"]) for r in R])
     ok = np.array([r["target_ok"] for r in R])
@@ -171,19 +171,21 @@ def fig3():
 
 
 def fig4():
-    txt = (HERE / "out" / "confident_probe.md").read_text()
+    txt = (HERE / "out" / "confident_probe_clean.md").read_text()  # clean RB2-Math labels
     data = []
     for block in txt.split("\n## ")[1:]:
         judge, bench = re.match(r"(\S+), (\S+):", block).groups()
         acc = block.split("Among the")[1]
         nw = re.match(r" \d+ confident answers the judge accepted \((\d+) wrong\)", acc).group(1)
+        if int(nw) < 15:  # RB2 Math with clean labels: 7-8 truly wrong confident answers, too few to rank
+            continue
         vals = {}
         for name in ("probe on this answer's state", "question-only probe", "judge's verdict at C"):
             m = re.search(rf"\| {re.escape(name)} \| ([0-9.]+) \[([0-9.]+), ([0-9.]+)\]", acc)
             vals[name] = tuple(float(x) for x in m.groups())
         lab = {"qwen3.5-9b": "Qwen3.5-9B", "qwen3.5-4b": "Qwen3.5-4B"}[judge]
         data.append((f"{lab}, {'RB2 Math' if bench == 'rb2math' else 'BFF'}\n({nw} wrong accepted)", vals))
-    fig, ax = plt.subplots(figsize=(10, 4.4))
+    fig, ax = plt.subplots(figsize=(10, 3.4))
     sig = [("judge's verdict at C", "Judge's own verdict confidence", S1),
            ("question-only probe", "Question-only probe", S3),
            ("probe on this answer's state", "Probe on this answer", S2)]
@@ -197,7 +199,7 @@ def fig4():
     ax.set(yticks=range(len(data)), yticklabels=[d[0] for d in data], xlim=(0.4, 1.0),
            xlabel="AUROC: right vs wrong, among confident answers the judge accepted")
     ax.invert_yaxis()
-    ax.set_title("Confident wrong beliefs are partly visible, but mostly already in the verdict", loc="left")
+    ax.set_title("On BFF, confident wrong beliefs are partly visible from the inside", loc="left")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=3, fontsize=9, borderaxespad=1.8)
     grid(ax, "x")
     fig.text(0.01, 0.005, "Answers with belief ≥ 4/7 that the judge accepted. Held-out questions; whiskers: 95% "
