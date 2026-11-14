@@ -1,0 +1,44 @@
+{
+ "14": {
+  "n": {
+   "bbeh": 1324,
+   "rb2math": 732
+  },
+  "own|bbeh": 0.6064157927205429,
+  "ceiling|bbeh": 0.7318964004516602,
+  "own|rb2math": 0.7395264116575592,
+  "ceiling|rb2math": 0.8664200305938721,
+  "cos|bbeh|rb2math": 0.38901808857917786,
+  "transfer|bbeh->rb2math": 0.6466302367941712,
+  "cos|rb2math|bbeh": 0.38901808857917786,
+  "transfer|rb2math->bbeh": 0.5866748920419494
+ },
+ "16": {
+  "n": {
+   "bbeh": 1324,
+   "rb2math": 732
+  },
+  "own|bbeh": 0.649599012954966,
+  "ceiling|bbeh": 0.8184378147125244,
+  "own|rb2math": 0.7486338797814208,
+  "ceiling|rb2math": 0.9430371522903442,
+  "cos|bbeh|rb2math": 0.42266494035720825,
+  "transfer|bbeh->rb2math": 0.697632058287796,
+  "cos|rb2math|bbeh": 0.42266494035720825,
+  "transfer|rb2math->bbeh": 0.5706354102405923
+ },
+ "20": {
+  "n": {
+   "bbeh": 1324,
+   "rb2math": 732
+  },
+  "own|bbeh": 0.608266502159161,
+  "ceiling|bbeh": 0.8698577284812927,
+  "own|rb2math": 0.7340619307832422,
+  "ceiling|rb2math": 0.9766486883163452,
+  "cos|bbeh|rb2math": 0.5273171067237854,
+  "transfer|bbeh->rb2math": 0.7431693989071039,
+  "cos|rb2math|bbeh": 0.5273171067237854,
+  "transfer|rb2math->bbeh": 0.5638494756323257
+ }
+}

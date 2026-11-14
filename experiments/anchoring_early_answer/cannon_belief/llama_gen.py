@@ -9,6 +9,7 @@ Jobs come from llama_jobs.jsonl.gz (built locally); --shard i/n splits them acro
 out_llama/generations_<shard>.jsonl in chunks; resumes.
 
   python llama_gen.py --shard 0/2
+  python llama_gen.py --jobs llama_rerun_jobs.jsonl.gz --ctx 131072 --tag rerun_ --seed-offset 1000   # cut-offs, from scratch
 """
 import argparse
 import gzip
@@ -22,15 +23,19 @@ ap.add_argument("--model", default="meta-llama/Llama-3.1-8B-Instruct")
 ap.add_argument("--shard", default="0/1")
 ap.add_argument("--limit", type=int, default=0)
 ap.add_argument("--chunk", type=int, default=512)
+ap.add_argument("--jobs", default="llama_jobs.jsonl.gz")
+ap.add_argument("--ctx", type=int, default=65536)
+ap.add_argument("--tag", default="", help="output generations_<tag><shard>.jsonl (reruns: rerun_)")
+ap.add_argument("--seed-offset", type=int, default=0, help="reruns from scratch: a fresh sample, not a replay")
 a = ap.parse_args()
-CTX = 65536
+CTX = a.ctx
 i, n = map(int, a.shard.split("/"))
-jobs = [j for k, j in enumerate(map(json.loads, gzip.open("llama_jobs.jsonl.gz", "rt"))) if k % n == i]
+jobs = [j for k, j in enumerate(map(json.loads, gzip.open(a.jobs, "rt"))) if k % n == i]
 if a.limit:
     jobs = jobs[: a.limit]
 out = Path("out_llama")
 out.mkdir(exist_ok=True)
-path = out / f"generations_{i}.jsonl"
+path = out / f"generations_{a.tag}{i}.jsonl"
 done = {json.loads(l)["key"] for l in open(path)} if path.exists() else set()
 jobs = [j for j in jobs if j["key"] not in done]
 print(f"shard {a.shard}: {len(done)} done, {len(jobs)} to generate", flush=True)
@@ -41,7 +46,7 @@ for start in range(0, len(jobs), a.chunk):
     chunk = jobs[start:start + a.chunk]
     prompts = [tok.apply_chat_template(j["messages"], tokenize=False, add_generation_prompt=True) for j in chunk]
     lens = [len(tok(p, add_special_tokens=False).input_ids) for p in prompts]
-    params = [SamplingParams(temperature=0.7, max_tokens=max(16, CTX - m - 16), seed=j["seed"])
+    params = [SamplingParams(temperature=0.7, max_tokens=max(16, CTX - m - 16), seed=j["seed"] + a.seed_offset)
               for j, m in zip(chunk, lens)]
     res = llm.generate(prompts, params, use_tqdm=False)
     with open(path, "a") as f:

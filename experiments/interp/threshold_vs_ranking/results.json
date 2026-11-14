@@ -1,0 +1,3206 @@
+{
+ "n_splits": 200,
+ "seed": 0,
+ "gain_floor": 0.02,
+ "cutoff_share": 0.7,
+ "ranking_share": 0.3,
+ "results": [
+  {
+   "cell": "bff_rubric_gpt-oss-120b",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/gpt-oss-120b_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.8169934640522876,
+   "final_pred_vs_lens_agree": 0.9803921568627451,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 88.88888888888889,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9086178145560864,
+   "kappa_a_final": 0.04040505772193531,
+   "kappa_a_lens_final": 0.05117877143603494,
+   "kappa_b_recal": 0.09547326701472623,
+   "kappa_c_layer": 0.20753097403918858,
+   "gain": 0.16712591631725324,
+   "gain_pi95": [
+    0.03752137846388036,
+    0.26016627176890417
+   ],
+   "gain_mean_boot95": [
+    0.1592442377398731,
+    0.17490527810143397
+   ],
+   "recovered": 0.05506820929279093,
+   "recovered_pi95": [
+    -0.03567811280992066,
+    0.13261947838900767
+   ],
+   "share_recovered": 0.32950131557247875,
+   "share_boot95": [
+    0.2964518801271612,
+    0.36054533352678986
+   ],
+   "share_from_lens_readout": 0.06446465007646099,
+   "resid_after_recal": 0.11205770702446234,
+   "resid_pi95": [
+    0.01176730044397391,
+    0.20961181589975952
+   ],
+   "auroc_final": 0.5832409008059993,
+   "auroc_chosen": 0.6383275072312753,
+   "auroc_gain": 0.05508660642527612,
+   "auroc_gain_pi95": [
+    0.01630617693526632,
+    0.10278804166993499
+   ],
+   "frac_splits_auroc_gain_pos": 1.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "bff_standard_gpt-oss-120b",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.6492374727668845,
+   "final_pred_vs_lens_agree": 0.9673202614379085,
+   "modal_layer": 10,
+   "modal_layer_depth_pct": 27.77777777777778,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.19366492270201285,
+   "kappa_a_final": -0.0501009391579464,
+   "kappa_a_lens_final": -0.006028119773754072,
+   "kappa_b_recal": -0.024014966240586192,
+   "kappa_c_layer": 0.11061169143764377,
+   "gain": 0.16071263059559018,
+   "gain_pi95": [
+    0.0012931652954851678,
+    0.2876446445185447
+   ],
+   "gain_mean_boot95": [
+    0.15058585403319882,
+    0.17069829644966963
+   ],
+   "recovered": 0.026085972917360215,
+   "recovered_pi95": [
+    -0.06758282207047757,
+    0.1064883911900993
+   ],
+   "share_recovered": 0.16231439197210173,
+   "share_boot95": [
+    0.1251827811087694,
+    0.19850476375507417
+   ],
+   "share_from_lens_readout": 0.2742337003685487,
+   "resid_after_recal": 0.13462665767822996,
+   "resid_pi95": [
+    -0.03066242381574076,
+    0.2646673469200755
+   ],
+   "auroc_final": 0.4778064765943492,
+   "auroc_chosen": 0.599188813387991,
+   "auroc_gain": 0.12138233679364184,
+   "auroc_gain_pi95": [
+    -0.004031219862721635,
+    0.1886694124117618
+   ],
+   "frac_splits_auroc_gain_pos": 0.96,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly ranking"
+  },
+  {
+   "cell": "biggen_rubric_gpt-oss-120b",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/biggen_gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.9956427015250545,
+   "final_pred_vs_lens_agree": 0.9978213507625272,
+   "modal_layer": 4,
+   "modal_layer_depth_pct": 11.11111111111111,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9765606112953756,
+   "kappa_a_final": 0.0005524425751256669,
+   "kappa_a_lens_final": -0.004299929389765969,
+   "kappa_b_recal": 0.04093398387473412,
+   "kappa_c_layer": 0.10555134676926885,
+   "gain": 0.10499890419414319,
+   "gain_pi95": [
+    -0.03731886555991159,
+    0.19339606285766273
+   ],
+   "gain_mean_boot95": [
+    0.09642033170937138,
+    0.11307569117116728
+   ],
+   "recovered": 0.04038154129960845,
+   "recovered_pi95": [
+    -0.049731595453020375,
+    0.11852876707152415
+   ],
+   "share_recovered": 0.38459012129253173,
+   "share_boot95": [
+    0.32236710372747224,
+    0.4511967209126521
+   ],
+   "share_from_lens_readout": -0.046213548628275106,
+   "resid_after_recal": 0.06461736289453474,
+   "resid_pi95": [
+    -0.08506282589848213,
+    0.1803105248231714
+   ],
+   "auroc_final": 0.5261437784931917,
+   "auroc_chosen": 0.5821409103654771,
+   "auroc_gain": 0.055997131872285284,
+   "auroc_gain_pi95": [
+    -0.06122672776556218,
+    0.12907590635648575
+   ],
+   "frac_splits_auroc_gain_pos": 0.855,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "biggen_standard_gpt-oss-120b",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/biggen_gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.9455337690631809,
+   "final_pred_vs_lens_agree": 0.9956427015250545,
+   "modal_layer": 30,
+   "modal_layer_depth_pct": 83.33333333333333,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.943488246337895,
+   "kappa_a_final": 0.0005504534472871282,
+   "kappa_a_lens_final": 0.010241877594540543,
+   "kappa_b_recal": 0.05981912647465205,
+   "kappa_c_layer": 0.11169237496583935,
+   "gain": 0.11114192151855225,
+   "gain_pi95": [
+    -0.02306186383864799,
+    0.20422657013141193
+   ],
+   "gain_mean_boot95": [
+    0.10334812423435084,
+    0.11886301308272453
+   ],
+   "recovered": 0.05926867302736492,
+   "recovered_pi95": [
+    -0.04855391015495092,
+    0.14969209272669978
+   ],
+   "share_recovered": 0.5332701848012548,
+   "share_boot95": [
+    0.4696312890766307,
+    0.6004974958794032
+   ],
+   "share_from_lens_readout": 0.0871986376952794,
+   "resid_after_recal": 0.051873248491187324,
+   "resid_pi95": [
+    -0.09521695107790053,
+    0.18131408487699444
+   ],
+   "auroc_final": 0.5339996760696627,
+   "auroc_chosen": 0.5829493124274475,
+   "auroc_gain": 0.04894963635778478,
+   "auroc_gain_pi95": [
+    -0.02775501619397758,
+    0.10708390511351311
+   ],
+   "frac_splits_auroc_gain_pos": 0.89,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "healthbench_rubric_gpt-oss-120b",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/healthbench_gpt-oss-120b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 37,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 1.0,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 34,
+   "modal_layer_depth_pct": 94.44444444444444,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9227909530936209,
+   "kappa_a_final": 0.0,
+   "kappa_a_lens_final": 0.0,
+   "kappa_b_recal": 0.019006760800707255,
+   "kappa_c_layer": 0.02477353872694401,
+   "gain": 0.02477353872694401,
+   "gain_pi95": [
+    -0.00726518544233869,
+    0.05129169307440046
+   ],
+   "gain_mean_boot95": [
+    0.02268658728542152,
+    0.026851433794739886
+   ],
+   "recovered": 0.019006760800707255,
+   "recovered_pi95": [
+    -0.018853068984559414,
+    0.05315450829340645
+   ],
+   "share_recovered": 0.7672202590918215,
+   "share_boot95": [
+    0.6476023976886867,
+    0.9044389061857123
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": 0.005766777926236758,
+   "resid_pi95": [
+    -0.04620620310252711,
+    0.0498495794127606
+   ],
+   "auroc_final": 0.5196723397097515,
+   "auroc_chosen": 0.5302512426892645,
+   "auroc_gain": 0.010578902979513112,
+   "auroc_gain_pi95": [
+    -0.04797290643736813,
+    0.04312541658421763
+   ],
+   "frac_splits_auroc_gain_pos": 0.735,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "healthbench_standard_gpt-oss-120b",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/healthbench_gpt-oss-120b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 37,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.5244,
+   "final_pred_vs_lens_agree": 0.972,
+   "modal_layer": 36,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.545,
+   "median_cutoff": 0.06752728055288737,
+   "kappa_a_final": 0.05384768750581916,
+   "kappa_a_lens_final": 0.0556952874923093,
+   "kappa_b_recal": 0.07439431889736489,
+   "kappa_c_layer": 0.04256066808211025,
+   "gain": -0.011287019423708902,
+   "gain_pi95": [
+    -0.061465230692585617,
+    0.008739603734801945
+   ],
+   "gain_mean_boot95": [
+    -0.013926574057747857,
+    -0.008797595917781434
+   ],
+   "recovered": 0.020546631391545736,
+   "recovered_pi95": [
+    -0.020210207056972195,
+    0.05880803429841826
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.03183365081525465,
+   "resid_pi95": [
+    -0.08430678603210841,
+    0.015461641675115588
+   ],
+   "auroc_final": 0.5733965565856816,
+   "auroc_chosen": 0.5625657701321206,
+   "auroc_gain": -0.010830786453560875,
+   "auroc_gain_pi95": [
+    -0.059844116066390105,
+    2.1617695380737242e-05
+   ],
+   "frac_splits_auroc_gain_pos": 0.025,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_standard_gpt-oss-20b",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/gpt-oss-20b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 25,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.9978213507625272,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 0,
+   "modal_layer_depth_pct": 0.0,
+   "frac_splits_chose_final_layer": 0.48,
+   "median_cutoff": 0.9835893471161177,
+   "kappa_a_final": 0.00563930257452931,
+   "kappa_a_lens_final": 0.00563930257452931,
+   "kappa_b_recal": 0.13280573658379194,
+   "kappa_c_layer": 0.0,
+   "gain": -0.00563930257452931,
+   "gain_pi95": [
+    -0.012339953053387484,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.00639170401308643,
+    -0.004887865729627216
+   ],
+   "recovered": 0.1271664340092626,
+   "recovered_pi95": [
+    0.03845751759925334,
+    0.19708429906374625
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.13280573658379194,
+   "resid_pi95": [
+    -0.20769843002807645,
+    -0.04409352706791943
+   ],
+   "auroc_final": 0.5909302409939783,
+   "auroc_chosen": 0.5410235362807149,
+   "auroc_gain": -0.049906704713263306,
+   "auroc_gain_pi95": [
+    -0.1449769582967926,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_rubric_gpt-oss-20b",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/biggen_gpt-oss-20b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 25,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.9978213507625272,
+   "final_pred_vs_lens_agree": 0.9978213507625272,
+   "modal_layer": 0,
+   "modal_layer_depth_pct": 0.0,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9579122710402717,
+   "kappa_a_final": 0.0057200736764048635,
+   "kappa_a_lens_final": 0.0,
+   "kappa_b_recal": 0.16209647920789738,
+   "kappa_c_layer": 0.0,
+   "gain": -0.0057200736764048635,
+   "gain_pi95": [
+    -0.012556550641676508,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.0064789026471573285,
+    -0.004963008334485647
+   ],
+   "recovered": 0.15637640553149249,
+   "recovered_pi95": [
+    0.05972082677891354,
+    0.24707091108688647
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.16209647920789738,
+   "resid_pi95": [
+    -0.24973493871077784,
+    -0.06314856319660321
+   ],
+   "auroc_final": 0.6330695437050781,
+   "auroc_chosen": 0.5,
+   "auroc_gain": -0.13306954370507804,
+   "auroc_gain_pi95": [
+    -0.180211296767673,
+    -0.08686370895186679
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_standard_gpt-oss-20b",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/biggen_gpt-oss-20b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 25,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.9978213507625272,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 24,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.525,
+   "median_cutoff": 0.9990889154452927,
+   "kappa_a_final": 0.005072812096815689,
+   "kappa_a_lens_final": 0.005072812096815689,
+   "kappa_b_recal": 0.24798988536541025,
+   "kappa_c_layer": 0.0,
+   "gain": -0.005072812096815689,
+   "gain_pi95": [
+    -0.012334399269072382,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.005820900492585258,
+    -0.004328780032713151
+   ],
+   "recovered": 0.2429170732685946,
+   "recovered_pi95": [
+    0.16041269792009535,
+    0.3465707930742285
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.24798988536541025,
+   "resid_pi95": [
+    -0.35194244441489814,
+    -0.16512434404888768
+   ],
+   "auroc_final": 0.6543549279634626,
+   "auroc_chosen": 0.5805171158645023,
+   "auroc_gain": -0.07383781209896037,
+   "auroc_gain_pi95": [
+    -0.19548884670444078,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_rubric_gpt-oss-20b",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/healthbench_gpt-oss-20b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 25,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.9392,
+   "final_pred_vs_lens_agree": 0.978,
+   "modal_layer": 24,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.965,
+   "median_cutoff": 0.7772998649669818,
+   "kappa_a_final": 0.04381277530725388,
+   "kappa_a_lens_final": 0.04432972076845574,
+   "kappa_b_recal": 0.0908532972770994,
+   "kappa_c_layer": 0.04112028051312975,
+   "gain": -0.0026924947941241346,
+   "gain_pi95": [
+    -0.07520685980034579,
+    0.021137264792354653
+   ],
+   "gain_mean_boot95": [
+    -0.005686765770125739,
+    -6.773893704166004e-05
+   ],
+   "recovered": 0.04704052196984552,
+   "recovered_pi95": [
+    -0.001416125464756195,
+    0.10169088667632493
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.04973301676396966,
+   "resid_pi95": [
+    -0.1064223714969644,
+    0.0004233025814866124
+   ],
+   "auroc_final": 0.6105506188047962,
+   "auroc_chosen": 0.6061519312259775,
+   "auroc_gain": -0.004398687578818744,
+   "auroc_gain_pi95": [
+    -0.10925350245531759,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_gpt-oss-20b",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/healthbench_gpt-oss-20b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 25,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 1.0,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 0,
+   "modal_layer_depth_pct": 0.0,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9991959105132546,
+   "kappa_a_final": 0.0,
+   "kappa_a_lens_final": 0.0,
+   "kappa_b_recal": 0.05751058657904223,
+   "kappa_c_layer": 0.0,
+   "gain": 0.0,
+   "gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    0.0,
+    0.0
+   ],
+   "recovered": 0.05751058657904223,
+   "recovered_pi95": [
+    0.007991048775480469,
+    0.09284572461812769
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.05751058657904223,
+   "resid_pi95": [
+    -0.09284572461812769,
+    -0.00799104877548046
+   ],
+   "auroc_final": 0.5991410951003472,
+   "auroc_chosen": 0.5,
+   "auroc_gain": -0.09914109510034713,
+   "auroc_gain_pi95": [
+    -0.12670730685603815,
+    -0.06722374681948033
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_rubric_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/nvidia-nemotron-3-nano-30b-a3b-bf16_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.4989106753812636,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 52,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.4687906493641965,
+   "kappa_a_final": 0.2823964943486406,
+   "kappa_a_lens_final": 0.2823964943486406,
+   "kappa_b_recal": 0.2927285885230143,
+   "kappa_c_layer": 0.2823964943486406,
+   "gain": 0.0,
+   "gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    0.0,
+    0.0
+   ],
+   "recovered": 0.010332094174373696,
+   "recovered_pi95": [
+    -0.08141579645680097,
+    0.06774759230520211
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.010332094174373696,
+   "resid_pi95": [
+    -0.06774759230520211,
+    0.08141579645680104
+   ],
+   "auroc_final": 0.6929253939931769,
+   "auroc_chosen": 0.6929253939931769,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_standard_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.8344226579520697,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 41,
+   "modal_layer_depth_pct": 78.84615384615384,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.6513548532971002,
+   "kappa_a_final": 0.1001114397327722,
+   "kappa_a_lens_final": 0.1001114397327722,
+   "kappa_b_recal": 0.12451987022057569,
+   "kappa_c_layer": 0.32927954442558227,
+   "gain": 0.22916810469281007,
+   "gain_pi95": [
+    0.14406088778699924,
+    0.30380860318949887
+   ],
+   "gain_mean_boot95": [
+    0.22288133686863107,
+    0.2352966743899535
+   ],
+   "recovered": 0.024408430487803487,
+   "recovered_pi95": [
+    -0.058069986517959485,
+    0.1026065656708476
+   ],
+   "share_recovered": 0.10650884651038997,
+   "share_boot95": [
+    0.08234478496679817,
+    0.13002245891819983
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": 0.2047596742050066,
+   "resid_pi95": [
+    0.10827455462509772,
+    0.3039466610131525
+   ],
+   "auroc_final": 0.5789449249422379,
+   "auroc_chosen": 0.699151438874456,
+   "auroc_gain": 0.12020651393221787,
+   "auroc_gain_pi95": [
+    0.0673044173344321,
+    0.1714242599226068
+   ],
+   "frac_splits_auroc_gain_pos": 1.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly ranking"
+  },
+  {
+   "cell": "biggen_rubric_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/biggen_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.9891067538126361,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 44,
+   "modal_layer_depth_pct": 84.61538461538461,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.7981867778246128,
+   "kappa_a_final": 0.01613053898552301,
+   "kappa_a_lens_final": 0.01613053898552301,
+   "kappa_b_recal": 0.19278972342634224,
+   "kappa_c_layer": 0.2426088875695178,
+   "gain": 0.22647834858399485,
+   "gain_pi95": [
+    0.12558342591719474,
+    0.31861120965195683
+   ],
+   "gain_mean_boot95": [
+    0.2193162824874491,
+    0.2336554717653587
+   ],
+   "recovered": 0.1766591844408192,
+   "recovered_pi95": [
+    0.0987818982155527,
+    0.25694780074412854
+   ],
+   "share_recovered": 0.7800268129176197,
+   "share_boot95": [
+    0.7519412386221992,
+    0.8115673948299577
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": 0.049819164143175616,
+   "resid_pi95": [
+    -0.061960919380795586,
+    0.14081733604531974
+   ],
+   "auroc_final": 0.6664841984874184,
+   "auroc_chosen": 0.6471527095818559,
+   "auroc_gain": -0.019331488905562407,
+   "auroc_gain_pi95": [
+    -0.07958524030342412,
+    0.017490293552906506
+   ],
+   "frac_splits_auroc_gain_pos": 0.185,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "biggen_standard_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/biggen_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.5359477124183006,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 37,
+   "modal_layer_depth_pct": 71.15384615384616,
+   "frac_splits_chose_final_layer": 0.435,
+   "median_cutoff": 0.5312093560844318,
+   "kappa_a_final": 0.20663158752224284,
+   "kappa_a_lens_final": 0.20663158752224284,
+   "kappa_b_recal": 0.1718484588658252,
+   "kappa_c_layer": 0.19017798631511723,
+   "gain": -0.01645360120712558,
+   "gain_pi95": [
+    -0.10887808056527162,
+    0.01333132010383641
+   ],
+   "gain_mean_boot95": [
+    -0.02166926023169405,
+    -0.011749900342601816
+   ],
+   "recovered": -0.034783128656417646,
+   "recovered_pi95": [
+    -0.10670539814862294,
+    0.01166018542253093
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.018329527449292067,
+   "resid_pi95": [
+    -0.050792409140585866,
+    0.07905638397874314
+   ],
+   "auroc_final": 0.6495890528316423,
+   "auroc_chosen": 0.6451611786714417,
+   "auroc_gain": -0.004427874160200806,
+   "auroc_gain_pi95": [
+    -0.03801641148959179,
+    0.0255411698982698
+   ],
+   "frac_splits_auroc_gain_pos": 0.2,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_rubric_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/healthbench_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 53,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.8632,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 52,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.93,
+   "median_cutoff": 0.49999999999602684,
+   "kappa_a_final": 0.09216163710603849,
+   "kappa_a_lens_final": 0.09216163710603849,
+   "kappa_b_recal": 0.09739015908356324,
+   "kappa_c_layer": 0.08619696234528901,
+   "gain": -0.0059646747607494935,
+   "gain_pi95": [
+    -0.08454816511671744,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.009224308269224596,
+    -0.003149751773198908
+   ],
+   "recovered": 0.005228521977524744,
+   "recovered_pi95": [
+    -0.04137574416385441,
+    0.02678544942802062
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.011193196738274236,
+   "resid_pi95": [
+    -0.08353079708516022,
+    0.037169915747006614
+   ],
+   "auroc_final": 0.5789173478016363,
+   "auroc_chosen": 0.5760235244165425,
+   "auroc_gain": -0.0028938233850938065,
+   "auroc_gain_pi95": [
+    -0.041106588315217955,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/healthbench_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 53,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.6628,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 34,
+   "modal_layer_depth_pct": 65.38461538461539,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.37754065412634363,
+   "kappa_a_final": 0.17743733789628524,
+   "kappa_a_lens_final": 0.17743733789628524,
+   "kappa_b_recal": 0.2873697877087512,
+   "kappa_c_layer": 0.27345673150293026,
+   "gain": 0.09601939360664494,
+   "gain_pi95": [
+    0.047588994344159065,
+    0.13987003905899065
+   ],
+   "gain_mean_boot95": [
+    0.0926764519661163,
+    0.09923830747129048
+   ],
+   "recovered": 0.10993244981246594,
+   "recovered_pi95": [
+    0.048077513017146516,
+    0.1592286455804389
+   ],
+   "share_recovered": 1.1448983969094568,
+   "share_boot95": [
+    1.1097881100130802,
+    1.179896378707812
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": -0.013913056205821013,
+   "resid_pi95": [
+    -0.049889230502192655,
+    0.03484998570928186
+   ],
+   "auroc_final": 0.7117868448748337,
+   "auroc_chosen": 0.6956325104455111,
+   "auroc_gain": -0.016154334429322556,
+   "auroc_gain_pi95": [
+    -0.035725213806723284,
+    0.006617119597379154
+   ],
+   "frac_splits_auroc_gain_pos": 0.1,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "bff_rubric_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/nvidia-nemotron-3-super-120b-a12b-bf16_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.4095860566448802,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 88,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.49,
+   "median_cutoff": 0.4999999999994966,
+   "kappa_a_final": 0.48884780183067017,
+   "kappa_a_lens_final": 0.48884780183067017,
+   "kappa_b_recal": 0.46238170101204173,
+   "kappa_c_layer": 0.4662349830709722,
+   "gain": -0.022612818759697947,
+   "gain_pi95": [
+    -0.131157751744726,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.028138409368326484,
+    -0.017617946917845025
+   ],
+   "recovered": -0.02646610081862845,
+   "recovered_pi95": [
+    -0.11612609717104978,
+    0.009800795036162678
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.003853282058930497,
+   "resid_pi95": [
+    -0.12112781873514022,
+    0.07802769647723559
+   ],
+   "auroc_final": 0.8255774957874266,
+   "auroc_chosen": 0.82421992999476,
+   "auroc_gain": -0.0013575657926663642,
+   "auroc_gain_pi95": [
+    -0.02675061769734062,
+    0.013404419245828095
+   ],
+   "frac_splits_auroc_gain_pos": 0.34,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_standard_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.5577342047930284,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 82,
+   "modal_layer_depth_pct": 93.18181818181819,
+   "frac_splits_chose_final_layer": 0.03,
+   "median_cutoff": 0.4387703452719281,
+   "kappa_a_final": 0.4459001896554642,
+   "kappa_a_lens_final": 0.4459001896554642,
+   "kappa_b_recal": 0.4274270189310794,
+   "kappa_c_layer": 0.4708637675686789,
+   "gain": 0.024963577913214737,
+   "gain_pi95": [
+    -0.05613327584419334,
+    0.08372833192950922
+   ],
+   "gain_mean_boot95": [
+    0.019701347954339962,
+    0.030170222271543427
+   ],
+   "recovered": -0.01847317072438479,
+   "recovered_pi95": [
+    -0.10175709613880239,
+    0.031929977591778805
+   ],
+   "share_recovered": -0.7400049299265639,
+   "share_boot95": [
+    -1.0791592460816066,
+    -0.4955567942340866
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": 0.043436748637599526,
+   "resid_pi95": [
+    -0.032741761755141575,
+    0.13243621445380319
+   ],
+   "auroc_final": 0.8098291011610023,
+   "auroc_chosen": 0.8113011080639465,
+   "auroc_gain": 0.0014720069029443305,
+   "auroc_gain_pi95": [
+    -0.023526374541489054,
+    0.01843091837533354
+   ],
+   "frac_splits_auroc_gain_pos": 0.63,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "neither"
+  },
+  {
+   "cell": "biggen_rubric_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/biggen_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.3572984749455338,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 83,
+   "modal_layer_depth_pct": 94.31818181818181,
+   "frac_splits_chose_final_layer": 0.29,
+   "median_cutoff": 0.49999999999949507,
+   "kappa_a_final": 0.4688772491268982,
+   "kappa_a_lens_final": 0.4688772491268982,
+   "kappa_b_recal": 0.5058255868400572,
+   "kappa_c_layer": 0.44777501117241686,
+   "gain": -0.02110223795448136,
+   "gain_pi95": [
+    -0.07847226950976897,
+    0.0037906151733804044
+   ],
+   "gain_mean_boot95": [
+    -0.024527724505194585,
+    -0.017822663581176772
+   ],
+   "recovered": 0.03694833771315906,
+   "recovered_pi95": [
+    -0.03454231218910176,
+    0.08402488395275452
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.05805057566764041,
+   "resid_pi95": [
+    -0.11014545725755623,
+    -0.00829570000030044
+   ],
+   "auroc_final": 0.820948033252489,
+   "auroc_chosen": 0.8194224336137546,
+   "auroc_gain": -0.0015255996387346022,
+   "auroc_gain_pi95": [
+    -0.013339691309611122,
+    0.006104911137802394
+   ],
+   "frac_splits_auroc_gain_pos": 0.3,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_standard_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/biggen_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.5076252723311547,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 83,
+   "modal_layer_depth_pct": 94.31818181818181,
+   "frac_splits_chose_final_layer": 0.095,
+   "median_cutoff": 0.09753054991020679,
+   "kappa_a_final": 0.3423749300021899,
+   "kappa_a_lens_final": 0.3423749300021899,
+   "kappa_b_recal": 0.337534448004957,
+   "kappa_c_layer": 0.3394857758508089,
+   "gain": -0.0028891541513809908,
+   "gain_pi95": [
+    -0.06725280767177766,
+    0.03462220367009739
+   ],
+   "gain_mean_boot95": [
+    -0.008721030070022902,
+    0.001708479482492307
+   ],
+   "recovered": -0.004840481997232817,
+   "recovered_pi95": [
+    -0.08027336897052202,
+    0.05051907689186254
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    -88.11837640614145,
+    0.30109632301534656
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.0019513278458518262,
+   "resid_pi95": [
+    -0.07048436843865594,
+    0.06697945783224171
+   ],
+   "auroc_final": 0.7361903138073419,
+   "auroc_chosen": 0.7282339490661716,
+   "auroc_gain": -0.007956364741170317,
+   "auroc_gain_pi95": [
+    -0.026961682608740024,
+    0.008402493688879166
+   ],
+   "frac_splits_auroc_gain_pos": 0.2,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_rubric_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/healthbench_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 89,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.594,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 88,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.14804717933964584,
+   "kappa_a_final": 0.24677107277579743,
+   "kappa_a_lens_final": 0.24677107277579743,
+   "kappa_b_recal": 0.514148593169118,
+   "kappa_c_layer": 0.24677107277579743,
+   "gain": 0.0,
+   "gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    0.0,
+    0.0
+   ],
+   "recovered": 0.2673775203933206,
+   "recovered_pi95": [
+    0.21461185333855576,
+    0.3249345189997016
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.2673775203933206,
+   "resid_pi95": [
+    -0.3249345189997016,
+    -0.21461185333855573
+   ],
+   "auroc_final": 0.8302365034735996,
+   "auroc_chosen": 0.8302365034735996,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/healthbench_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 89,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.8852,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 88,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.605,
+   "median_cutoff": 0.49999999999949335,
+   "kappa_a_final": 0.3760053470042956,
+   "kappa_a_lens_final": 0.3760053470042956,
+   "kappa_b_recal": 0.36998403045870876,
+   "kappa_c_layer": 0.3687791545623646,
+   "gain": -0.007226192441931095,
+   "gain_pi95": [
+    -0.03022860113167583,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    -0.008626785346194045,
+    -0.005900385274065823
+   ],
+   "recovered": -0.006021316545586935,
+   "recovered_pi95": [
+    -0.055146345862681224,
+    0.01421409045046471
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.001204875896344161,
+   "resid_pi95": [
+    -0.030087470867634705,
+    0.038895010945551034
+   ],
+   "auroc_final": 0.7460329325398652,
+   "auroc_chosen": 0.7481168974760027,
+   "auroc_gain": 0.002083964936137526,
+   "auroc_gain_pi95": [
+    -0.00424230774335988,
+    0.014740018137810923
+   ],
+   "frac_splits_auroc_gain_pos": 0.33,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_rubric_qwen3.5-4b",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/qwen3.5-4b_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.9978213507625272,
+   "final_pred_vs_lens_agree": 0.9498910675381264,
+   "modal_layer": 25,
+   "modal_layer_depth_pct": 78.125,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.7310585864713355,
+   "kappa_a_final": 0.004612118164405749,
+   "kappa_a_lens_final": 0.10770807082523043,
+   "kappa_b_recal": 0.41433021135926046,
+   "kappa_c_layer": 0.3519405799732139,
+   "gain": 0.3473284618088081,
+   "gain_pi95": [
+    0.26411010159731496,
+    0.42865171152666
+   ],
+   "gain_mean_boot95": [
+    0.3408794401942643,
+    0.35366019947352356
+   ],
+   "recovered": 0.4097180931948548,
+   "recovered_pi95": [
+    0.3275154803178761,
+    0.491825311002904
+   ],
+   "share_recovered": 1.1796271778625214,
+   "share_boot95": [
+    1.158110239422124,
+    1.2015523341529153
+   ],
+   "share_from_lens_readout": 0.29682552395483014,
+   "resid_after_recal": -0.06238963138604664,
+   "resid_pi95": [
+    -0.16497148355109503,
+    0.01646876433796777
+   ],
+   "auroc_final": 0.7931773086747234,
+   "auroc_chosen": 0.7557243922227053,
+   "auroc_gain": -0.0374529164520179,
+   "auroc_gain_pi95": [
+    -0.08126852062913141,
+    0.015743893094420723
+   ],
+   "frac_splits_auroc_gain_pos": 0.17,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "bff_standard_qwen3.5-4b",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.8322440087145969,
+   "final_pred_vs_lens_agree": 0.8191721132897604,
+   "modal_layer": 26,
+   "modal_layer_depth_pct": 81.25,
+   "frac_splits_chose_final_layer": 0.12,
+   "median_cutoff": 0.5621765137959174,
+   "kappa_a_final": 0.29716862371157104,
+   "kappa_a_lens_final": 0.4426739496261392,
+   "kappa_b_recal": 0.48002572486147765,
+   "kappa_c_layer": 0.46877104094356936,
+   "gain": 0.17160241723199832,
+   "gain_pi95": [
+    0.07993980917698502,
+    0.26467525066817826
+   ],
+   "gain_mean_boot95": [
+    0.1645620524704071,
+    0.17845640992754802
+   ],
+   "recovered": 0.18285710114990658,
+   "recovered_pi95": [
+    0.076836751213335,
+    0.25709488823299276
+   ],
+   "share_recovered": 1.06558581224816,
+   "share_boot95": [
+    1.0298199775140813,
+    1.1024413406013602
+   ],
+   "share_from_lens_readout": 0.8479211905147692,
+   "resid_after_recal": -0.011254683917908266,
+   "resid_pi95": [
+    -0.0947269247801822,
+    0.06409958542363811
+   ],
+   "auroc_final": 0.8241263782883749,
+   "auroc_chosen": 0.829830059602183,
+   "auroc_gain": 0.005703681313808115,
+   "auroc_gain_pi95": [
+    -0.020688132800545402,
+    0.03271816721615961
+   ],
+   "frac_splits_auroc_gain_pos": 0.58,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "biggen_rubric_qwen3.5-4b",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/biggen_qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.7886710239651417,
+   "final_pred_vs_lens_agree": 0.9237472766884531,
+   "modal_layer": 31,
+   "modal_layer_depth_pct": 96.875,
+   "frac_splits_chose_final_layer": 0.005,
+   "median_cutoff": 0.6224593294320837,
+   "kappa_a_final": 0.28510843329617913,
+   "kappa_a_lens_final": 0.37468059447898183,
+   "kappa_b_recal": 0.4322021652840467,
+   "kappa_c_layer": 0.4189440587877526,
+   "gain": 0.13383562549157346,
+   "gain_pi95": [
+    0.0579862930860738,
+    0.22074661631572354
+   ],
+   "gain_mean_boot95": [
+    0.1281469414090162,
+    0.1395120418437553
+   ],
+   "recovered": 0.14709373198786757,
+   "recovered_pi95": [
+    0.06827512580382046,
+    0.22623190331744433
+   ],
+   "share_recovered": 1.0990626109273787,
+   "share_boot95": [
+    1.0571311812413395,
+    1.1446466220454903
+   ],
+   "share_from_lens_readout": 0.6692699410475152,
+   "resid_after_recal": -0.013258106496294102,
+   "resid_pi95": [
+    -0.1002397462744493,
+    0.05735065545328131
+   ],
+   "auroc_final": 0.7980819164960917,
+   "auroc_chosen": 0.7819856564498819,
+   "auroc_gain": -0.016096260046209822,
+   "auroc_gain_pi95": [
+    -0.04071730955744678,
+    -0.0014355670812238837
+   ],
+   "frac_splits_auroc_gain_pos": 0.005,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "biggen_standard_qwen3.5-4b",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/biggen_qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.8736383442265795,
+   "final_pred_vs_lens_agree": 0.9651416122004357,
+   "modal_layer": 25,
+   "modal_layer_depth_pct": 78.125,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9046505397894213,
+   "kappa_a_final": 0.19885796694126737,
+   "kappa_a_lens_final": 0.23188935671573366,
+   "kappa_b_recal": 0.3856063012365178,
+   "kappa_c_layer": 0.33911786593391696,
+   "gain": 0.14025989899264962,
+   "gain_pi95": [
+    0.05977281399714726,
+    0.2231853628515149
+   ],
+   "gain_mean_boot95": [
+    0.13406924580532478,
+    0.1462671049681083
+   ],
+   "recovered": 0.1867483342952504,
+   "recovered_pi95": [
+    0.09644314056495941,
+    0.2734438839943987
+   ],
+   "share_recovered": 1.33144495067002,
+   "share_boot95": [
+    1.2844529826460467,
+    1.384110137845902
+   ],
+   "share_from_lens_readout": 0.23550130872543487,
+   "resid_after_recal": -0.04648843530260081,
+   "resid_pi95": [
+    -0.14861661951388982,
+    0.022742218202565088
+   ],
+   "auroc_final": 0.7475173215474686,
+   "auroc_chosen": 0.7225885541421158,
+   "auroc_gain": -0.024928767405352673,
+   "auroc_gain_pi95": [
+    -0.05229361310115366,
+    -0.0003723173445352484
+   ],
+   "frac_splits_auroc_gain_pos": 0.02,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "healthbench_rubric_qwen3.5-4b",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/healthbench_qwen3.5-4b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 33,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.7764,
+   "final_pred_vs_lens_agree": 0.8848,
+   "modal_layer": 29,
+   "modal_layer_depth_pct": 90.625,
+   "frac_splits_chose_final_layer": 0.24,
+   "median_cutoff": 0.3486451268838258,
+   "kappa_a_final": 0.1994667233045665,
+   "kappa_a_lens_final": 0.19428960814635599,
+   "kappa_b_recal": 0.2692282809131138,
+   "kappa_c_layer": 0.19891854344798487,
+   "gain": -0.0005481798565816165,
+   "gain_pi95": [
+    -0.040208567135812466,
+    0.03901592036231276
+   ],
+   "gain_mean_boot95": [
+    -0.0034355258626042637,
+    0.002426588613864849
+   ],
+   "recovered": 0.06976155760854728,
+   "recovered_pi95": [
+    0.026528961907575057,
+    0.10970103256777967
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    24.41618515467883,
+    1413.2767213627405
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.0703097374651289,
+   "resid_pi95": [
+    -0.12154874450323609,
+    -0.026884308461317143
+   ],
+   "auroc_final": 0.7198675975081457,
+   "auroc_chosen": 0.7112121587371141,
+   "auroc_gain": -0.008655438771031554,
+   "auroc_gain_pi95": [
+    -0.020530529292839887,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.02,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_qwen3.5-4b",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/healthbench_qwen3.5-4b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 33,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.9516,
+   "final_pred_vs_lens_agree": 0.9776,
+   "modal_layer": 26,
+   "modal_layer_depth_pct": 81.25,
+   "frac_splits_chose_final_layer": 0.035,
+   "median_cutoff": 0.5621764984348214,
+   "kappa_a_final": 0.23261488291689006,
+   "kappa_a_lens_final": 0.26054947451309307,
+   "kappa_b_recal": 0.2566013219283538,
+   "kappa_c_layer": 0.26812490908534425,
+   "gain": 0.03551002616845423,
+   "gain_pi95": [
+    -0.0029677204695854617,
+    0.07273866907108943
+   ],
+   "gain_mean_boot95": [
+    0.032478816405418526,
+    0.03846691746934961
+   ],
+   "recovered": 0.02398643901146372,
+   "recovered_pi95": [
+    -0.019939615056988717,
+    0.06194387342785575
+   ],
+   "share_recovered": 0.675483563365334,
+   "share_boot95": [
+    0.6042994354068094,
+    0.7459309549932227
+   ],
+   "share_from_lens_readout": 0.7866677276914837,
+   "resid_after_recal": 0.011523587156990507,
+   "resid_pi95": [
+    -0.029090933889903307,
+    0.051688926084330344
+   ],
+   "auroc_final": 0.6858436086359313,
+   "auroc_chosen": 0.6636011491634534,
+   "auroc_gain": -0.022242459472478004,
+   "auroc_gain_pi95": [
+    -0.06142033450344936,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.015,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "bff_rubric_qwen3.5-9b",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/qwen3.5-9b_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.5642701525054467,
+   "final_pred_vs_lens_agree": 0.8954248366013072,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.43782352081727904,
+   "kappa_a_final": 0.5015020476339592,
+   "kappa_a_lens_final": 0.469872070623612,
+   "kappa_b_recal": 0.4579558099964916,
+   "kappa_c_layer": 0.469872070623612,
+   "gain": -0.03162997701034719,
+   "gain_pi95": [
+    -0.08280486578441053,
+    0.018434671228166048
+   ],
+   "gain_mean_boot95": [
+    -0.03527454587648995,
+    -0.027973006642812236
+   ],
+   "recovered": -0.04354623763746762,
+   "recovered_pi95": [
+    -0.12427304929961026,
+    0.0
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.011916260627120423,
+   "resid_pi95": [
+    -0.030458814535696634,
+    0.07098696008568756
+   ],
+   "auroc_final": 0.8197122852348758,
+   "auroc_chosen": 0.8197122852348758,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_standard_qwen3.5-9b",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.1655773420479303,
+   "final_pred_vs_lens_agree": 0.9520697167755992,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.91,
+   "median_cutoff": 0.22270014181176062,
+   "kappa_a_final": 0.2642177464816042,
+   "kappa_a_lens_final": 0.18362614438555777,
+   "kappa_b_recal": 0.4924977096857224,
+   "kappa_c_layer": 0.1688590886866087,
+   "gain": -0.09535865779499543,
+   "gain_pi95": [
+    -0.26405355115476276,
+    -0.0515670805365723
+   ],
+   "gain_mean_boot95": [
+    -0.10261508846354422,
+    -0.08860822323207257
+   ],
+   "recovered": 0.2282799632041182,
+   "recovered_pi95": [
+    0.15254611669448484,
+    0.29828639002601426
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.32363862099911367,
+   "resid_pi95": [
+    -0.4745333237415717,
+    -0.23406782892112768
+   ],
+   "auroc_final": 0.8352027339377149,
+   "auroc_chosen": 0.8062986324996466,
+   "auroc_gain": -0.028904101438068243,
+   "auroc_gain_pi95": [
+    -0.3482239475798211,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_rubric_qwen3.5-9b",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/biggen_qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.30501089324618735,
+   "final_pred_vs_lens_agree": 0.8779956427015251,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.2450850121818253,
+   "kappa_a_final": 0.3837995727973964,
+   "kappa_a_lens_final": 0.25250009857726463,
+   "kappa_b_recal": 0.41871670767286173,
+   "kappa_c_layer": 0.25250009857726463,
+   "gain": -0.13129947422013186,
+   "gain_pi95": [
+    -0.17999312966788034,
+    -0.0798755178436041
+   ],
+   "gain_mean_boot95": [
+    -0.13509310020454743,
+    -0.12762975052063802
+   ],
+   "recovered": 0.034917134875465265,
+   "recovered_pi95": [
+    -0.02482378973275841,
+    0.0980816418022983
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.16621660909559707,
+   "resid_pi95": [
+    -0.2477053115217169,
+    -0.08107666391923236
+   ],
+   "auroc_final": 0.8030338597948282,
+   "auroc_chosen": 0.8030338597948282,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_standard_qwen3.5-9b",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/biggen_qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.6535947712418301,
+   "final_pred_vs_lens_agree": 0.9520697167755992,
+   "modal_layer": 26,
+   "modal_layer_depth_pct": 81.25,
+   "frac_splits_chose_final_layer": 0.185,
+   "median_cutoff": 0.4533070709043423,
+   "kappa_a_final": 0.332756497831367,
+   "kappa_a_lens_final": 0.3313692799068309,
+   "kappa_b_recal": 0.3126775511912263,
+   "kappa_c_layer": 0.3304283622048358,
+   "gain": -0.0023281356265312577,
+   "gain_pi95": [
+    -0.08591144204086096,
+    0.05218747669138219
+   ],
+   "gain_mean_boot95": [
+    -0.007078081214438477,
+    0.002313626327484104
+   ],
+   "recovered": -0.02007894664014077,
+   "recovered_pi95": [
+    -0.11786894477134459,
+    0.03840276309749151
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    -442.5560403700276,
+    -4.463669937153465
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.017750811013609515,
+   "resid_pi95": [
+    -0.04784691357374962,
+    0.08435997579968253
+   ],
+   "auroc_final": 0.7262404039121461,
+   "auroc_chosen": 0.7237920825281472,
+   "auroc_gain": -0.0024483213839989176,
+   "auroc_gain_pi95": [
+    -0.015212430880141783,
+    0.008294915768803469
+   ],
+   "frac_splits_auroc_gain_pos": 0.31,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_rubric_qwen3.5-9b",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/healthbench_qwen3.5-9b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 33,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.664,
+   "final_pred_vs_lens_agree": 0.8864,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.14804719000666816,
+   "kappa_a_final": 0.28112836796408663,
+   "kappa_a_lens_final": 0.214134653213067,
+   "kappa_b_recal": 0.39811557732652053,
+   "kappa_c_layer": 0.214134653213067,
+   "gain": -0.06699371475101967,
+   "gain_pi95": [
+    -0.08470683836623188,
+    -0.046019537932494754
+   ],
+   "gain_mean_boot95": [
+    -0.06839548893228135,
+    -0.06560378752531573
+   ],
+   "recovered": 0.11698720936243392,
+   "recovered_pi95": [
+    0.07099556607534868,
+    0.15771443355928957
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.1839809241134536,
+   "resid_pi95": [
+    -0.22029622471410001,
+    -0.13650062358332818
+   ],
+   "auroc_final": 0.8063033376517795,
+   "auroc_chosen": 0.8063033376517795,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_qwen3.5-9b",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/healthbench_qwen3.5-9b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 33,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.888,
+   "final_pred_vs_lens_agree": 0.9552,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.34864513360620664,
+   "kappa_a_final": 0.34203214047764763,
+   "kappa_a_lens_final": 0.3272300052526227,
+   "kappa_b_recal": 0.33849830304175244,
+   "kappa_c_layer": 0.3272300052526227,
+   "gain": -0.014802135225024902,
+   "gain_pi95": [
+    -0.045441079692924144,
+    0.014507901096348735
+   ],
+   "gain_mean_boot95": [
+    -0.016915749053310388,
+    -0.012715902809127036
+   ],
+   "recovered": -0.0035338374358952294,
+   "recovered_pi95": [
+    -0.04106661728807825,
+    0.022343050244073626
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.011268297789129673,
+   "resid_pi95": [
+    -0.042473499151492344,
+    0.02300399888700335
+   ],
+   "auroc_final": 0.7410030321775711,
+   "auroc_chosen": 0.7410030321775711,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_rubric_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "bff_rubric",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/qwen3.6-35b-a3b_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.5359477124183006,
+   "final_pred_vs_lens_agree": 0.9281045751633987,
+   "modal_layer": 40,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.905,
+   "median_cutoff": 0.5312093746461745,
+   "kappa_a_final": 0.4931260755428814,
+   "kappa_a_lens_final": 0.5219556267852311,
+   "kappa_b_recal": 0.49424924914428414,
+   "kappa_c_layer": 0.5096333291390902,
+   "gain": 0.016507253596208783,
+   "gain_pi95": [
+    -0.09754184914200814,
+    0.07065373883799266
+   ],
+   "gain_mean_boot95": [
+    0.011118538362937462,
+    0.021759164191052192
+   ],
+   "recovered": 0.0011231736014027812,
+   "recovered_pi95": [
+    -0.05918400683527178,
+    0.04765513207198279
+   ],
+   "share_recovered": 0.06804121563024514,
+   "share_boot95": [
+    -0.1963970271370523,
+    0.2616167599635244
+   ],
+   "share_from_lens_readout": 1.7464777574490635,
+   "resid_after_recal": 0.015384079994806003,
+   "resid_pi95": [
+    -0.07222512532541105,
+    0.07086367131339474
+   ],
+   "auroc_final": 0.8454759658761484,
+   "auroc_chosen": 0.8445916887832314,
+   "auroc_gain": -0.0008842770929170168,
+   "auroc_gain_pi95": [
+    -0.011469443189848152,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "bff_standard_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "bff_standard",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/qwen3.6-35b-a3b_rules2/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.5577342047930284,
+   "final_pos_rate": 0.8453159041394336,
+   "final_pred_vs_lens_agree": 0.9586056644880174,
+   "modal_layer": 39,
+   "modal_layer_depth_pct": 97.5,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.8437181631857393,
+   "kappa_a_final": 0.2349595064471108,
+   "kappa_a_lens_final": 0.1726283135498062,
+   "kappa_b_recal": 0.43918635708472736,
+   "kappa_c_layer": 0.46315206494741984,
+   "gain": 0.22819255850030906,
+   "gain_pi95": [
+    0.14520234232961415,
+    0.31087706746012556
+   ],
+   "gain_mean_boot95": [
+    0.22215828301830054,
+    0.23411323024454103
+   ],
+   "recovered": 0.20422685063761656,
+   "recovered_pi95": [
+    0.10171795089046066,
+    0.2781405074755654
+   ],
+   "share_recovered": 0.8949759447889268,
+   "share_boot95": [
+    0.8713926040767521,
+    0.9174792481397855
+   ],
+   "share_from_lens_readout": -0.27315173337354987,
+   "resid_after_recal": 0.023965707862692507,
+   "resid_pi95": [
+    -0.03711336393126729,
+    0.10445707744094745
+   ],
+   "auroc_final": 0.7981588039805649,
+   "auroc_chosen": 0.7998882598134134,
+   "auroc_gain": 0.0017294558328484922,
+   "auroc_gain_pi95": [
+    -0.006889716917649138,
+    0.01023695081302147
+   ],
+   "frac_splits_auroc_gain_pos": 0.67,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "biggen_rubric_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "biggen_rubric",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/biggen_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.6209150326797386,
+   "final_pred_vs_lens_agree": 0.9607843137254902,
+   "modal_layer": 39,
+   "modal_layer_depth_pct": 97.5,
+   "frac_splits_chose_final_layer": 0.005,
+   "median_cutoff": 0.6924818644044357,
+   "kappa_a_final": 0.5017698951726584,
+   "kappa_a_lens_final": 0.454045667853706,
+   "kappa_b_recal": 0.5214327257905272,
+   "kappa_c_layer": 0.5156582453712882,
+   "gain": 0.013888350198629875,
+   "gain_pi95": [
+    -0.030360557279807868,
+    0.05572687071423863
+   ],
+   "gain_mean_boot95": [
+    0.010894979999659589,
+    0.016733240947908644
+   ],
+   "recovered": 0.019662830617868873,
+   "recovered_pi95": [
+    -0.06359572036451952,
+    0.07306744325538311
+   ],
+   "share_recovered": 1.415778716453209,
+   "share_boot95": [
+    1.0770978106862603,
+    1.7850801871829949
+   ],
+   "share_from_lens_readout": -3.4362776453937993,
+   "resid_after_recal": -0.005774480419238998,
+   "resid_pi95": [
+    -0.0462222509034133,
+    0.06800386288324473
+   ],
+   "auroc_final": 0.8369181633265602,
+   "auroc_chosen": 0.8279156018898134,
+   "auroc_gain": -0.009002561436746796,
+   "auroc_gain_pi95": [
+    -0.015445596464492358,
+    -0.001363827197857938
+   ],
+   "frac_splits_auroc_gain_pos": 0.005,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "biggen_standard_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "biggen_standard",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/biggen_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.5533769063180828,
+   "final_pos_rate": 0.5468409586056645,
+   "final_pred_vs_lens_agree": 0.9586056644880174,
+   "modal_layer": 40,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.705,
+   "median_cutoff": 0.5389511538431864,
+   "kappa_a_final": 0.3696809324658183,
+   "kappa_a_lens_final": 0.35786905319589224,
+   "kappa_b_recal": 0.34370472668356256,
+   "kappa_c_layer": 0.34604995244869796,
+   "gain": -0.023630980017120242,
+   "gain_pi95": [
+    -0.06870528313272331,
+    0.013856110579975333
+   ],
+   "gain_mean_boot95": [
+    -0.026769656781175384,
+    -0.020565155702209143
+   ],
+   "recovered": -0.025976205782255662,
+   "recovered_pi95": [
+    -0.0863190730005359,
+    0.016893313324467116
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.002345225765135416,
+   "resid_pi95": [
+    -0.04066745190057835,
+    0.04505911654455024
+   ],
+   "auroc_final": 0.740828002691845,
+   "auroc_chosen": 0.7417503545059929,
+   "auroc_gain": 0.0009223518141480585,
+   "auroc_gain_pi95": [
+    -0.001750465195877404,
+    0.007729628947148863
+   ],
+   "frac_splits_auroc_gain_pos": 0.235,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_rubric_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "healthbench_rubric",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/healthbench_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 41,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.7148,
+   "final_pred_vs_lens_agree": 0.9816,
+   "modal_layer": 40,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 1.0,
+   "median_cutoff": 0.20181321661109503,
+   "kappa_a_final": 0.3476430966232127,
+   "kappa_a_lens_final": 0.3583926781615221,
+   "kappa_b_recal": 0.4406287510778782,
+   "kappa_c_layer": 0.3583926781615221,
+   "gain": 0.010749581538309428,
+   "gain_pi95": [
+    -0.00016305476016619373,
+    0.021289731935900003
+   ],
+   "gain_mean_boot95": [
+    0.009937820170975803,
+    0.011543367830212347
+   ],
+   "recovered": 0.0929856544546656,
+   "recovered_pi95": [
+    0.048806504524474284,
+    0.1287846346741555
+   ],
+   "share_recovered": 8.650165043474736,
+   "share_boot95": [
+    8.058518745158091,
+    9.360503447979708
+   ],
+   "share_from_lens_readout": 0.9999999999999979,
+   "resid_after_recal": -0.08223607291635616,
+   "resid_pi95": [
+    -0.11799245872473944,
+    -0.04159001291804156
+   ],
+   "auroc_final": 0.8330759770756244,
+   "auroc_chosen": 0.8330759770756244,
+   "auroc_gain": 0.0,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "healthbench_standard_qwen3.6-35b-a3b",
+   "group": "main",
+   "bench": "healthbench_standard",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/healthbench_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 2500,
+   "n_layers": 41,
+   "gold_pos_rate": 0.8656,
+   "final_pos_rate": 0.9036,
+   "final_pred_vs_lens_agree": 0.9924,
+   "modal_layer": 40,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.905,
+   "median_cutoff": 0.6296832198625241,
+   "kappa_a_final": 0.38000085691469815,
+   "kappa_a_lens_final": 0.38122210018175445,
+   "kappa_b_recal": 0.3810702850324518,
+   "kappa_c_layer": 0.37677425028302275,
+   "gain": -0.003226606631675366,
+   "gain_pi95": [
+    -0.04788058633062827,
+    0.01393538457266324
+   ],
+   "gain_mean_boot95": [
+    -0.005333429941801999,
+    -0.0012890863592928518
+   ],
+   "recovered": 0.0010694281177537175,
+   "recovered_pi95": [
+    -0.023465282828880957,
+    0.019615143874630137
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.004296034749429084,
+   "resid_pi95": [
+    -0.0444731380155275,
+    0.020608783349920796
+   ],
+   "auroc_final": 0.7601862975088726,
+   "auroc_chosen": 0.7593935084910093,
+   "auroc_gain": -0.0007927890178631619,
+   "auroc_gain_pi95": [
+    -0.009833622602127872,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_rubric_gpt-oss-120b",
+   "group": "supplementary",
+   "bench": "rb2safety_rubric",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/rb2safety_rubric_gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.9956427015250545,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 18,
+   "modal_layer_depth_pct": 50.0,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9963682228210597,
+   "kappa_a_final": 0.0026968823946446354,
+   "kappa_a_lens_final": 0.0026968823946446354,
+   "kappa_b_recal": 0.47597119450891046,
+   "kappa_c_layer": 0.19965158086505283,
+   "gain": 0.1969546984704082,
+   "gain_pi95": [
+    0.08723169780650268,
+    0.3017800377217591
+   ],
+   "gain_mean_boot95": [
+    0.18895361924306678,
+    0.20527119508234015
+   ],
+   "recovered": 0.4732743121142658,
+   "recovered_pi95": [
+    0.39113838260411804,
+    0.5603422690576059
+   ],
+   "share_recovered": 2.4029602532451073,
+   "share_boot95": [
+    2.2977201380105035,
+    2.511772633284667
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": -0.2763196136438576,
+   "resid_pi95": [
+    -0.41737410888408827,
+    -0.13116735569990554
+   ],
+   "auroc_final": 0.8790184103397152,
+   "auroc_chosen": 0.6488514817465574,
+   "auroc_gain": -0.23016692859315782,
+   "auroc_gain_pi95": [
+    -0.29289258296157106,
+    -0.16936604557539744
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "rb2safety_standard_gpt-oss-120b",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/rb2safety_gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.9411764705882353,
+   "final_pred_vs_lens_agree": 0.9912854030501089,
+   "modal_layer": 28,
+   "modal_layer_depth_pct": 77.77777777777777,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9988290842094243,
+   "kappa_a_final": 0.01723090536602293,
+   "kappa_a_lens_final": 0.016545925665885874,
+   "kappa_b_recal": 0.130263127567284,
+   "kappa_c_layer": 0.22608618329558103,
+   "gain": 0.20885527792955813,
+   "gain_pi95": [
+    0.10126171047121774,
+    0.2974710603144917
+   ],
+   "gain_mean_boot95": [
+    0.20177661959659038,
+    0.21561957932333542
+   ],
+   "recovered": 0.11303222220126109,
+   "recovered_pi95": [
+    0.01944740329556455,
+    0.202199203248816
+   ],
+   "share_recovered": 0.5411987828212038,
+   "share_boot95": [
+    0.5088336712105002,
+    0.5733644898401696
+   ],
+   "share_from_lens_readout": -0.003279685851980633,
+   "resid_after_recal": 0.095823055728297,
+   "resid_pi95": [
+    -0.007966310917658504,
+    0.21458092284017988
+   ],
+   "auroc_final": 0.6255678632569635,
+   "auroc_chosen": 0.7023226082013064,
+   "auroc_gain": 0.07675474494434284,
+   "auroc_gain_pi95": [
+    0.0016317138795071196,
+    0.12773126997337683
+   ],
+   "frac_splits_auroc_gain_pos": 0.975,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "judgebench_gpt-oss-120b",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "gpt-oss-120b",
+   "pilot": "logit_lens_results/judgebench_gpt-oss-120b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 37,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.8322440087145969,
+   "final_pred_vs_lens_agree": 0.9738562091503268,
+   "modal_layer": 35,
+   "modal_layer_depth_pct": 97.22222222222223,
+   "frac_splits_chose_final_layer": 0.01,
+   "median_cutoff": 0.6791787128871898,
+   "kappa_a_final": 0.044177071325911046,
+   "kappa_a_lens_final": 0.05389354173832499,
+   "kappa_b_recal": 0.07438067323043804,
+   "kappa_c_layer": 0.09622987327620068,
+   "gain": 0.052052801950289634,
+   "gain_pi95": [
+    -0.16927098921660064,
+    0.13107636291155103
+   ],
+   "gain_mean_boot95": [
+    0.04142287181584779,
+    0.06207496275369262
+   ],
+   "recovered": 0.030203601904527,
+   "recovered_pi95": [
+    -0.06955826982397967,
+    0.11431450911405666
+   ],
+   "share_recovered": 0.5802493001889005,
+   "share_boot95": [
+    0.44299997451239753,
+    0.7605600103697746
+   ],
+   "share_from_lens_readout": 0.1866656558026052,
+   "resid_after_recal": 0.021849200045762643,
+   "resid_pi95": [
+    -0.21302794779003645,
+    0.14136393424507918
+   ],
+   "auroc_final": 0.5603192561557815,
+   "auroc_chosen": 0.5615624226330267,
+   "auroc_gain": 0.0012431664772451778,
+   "auroc_gain_pi95": [
+    -0.1300205179615706,
+    0.02650586194991312
+   ],
+   "frac_splits_auroc_gain_pos": 0.8,
+   "repro_max_abs_diff_vs_saved_gaps": 0.0,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "rb2safety_standard_gpt-oss-20b",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/rb2safety_gpt-oss-20b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 25,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 1.0,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 0,
+   "modal_layer_depth_pct": 0.0,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9993736658345704,
+   "kappa_a_final": 0.0,
+   "kappa_a_lens_final": 0.0,
+   "kappa_b_recal": 0.48852403465478106,
+   "kappa_c_layer": 0.0,
+   "gain": 0.0,
+   "gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "gain_mean_boot95": [
+    0.0,
+    0.0
+   ],
+   "recovered": 0.48852403465478106,
+   "recovered_pi95": [
+    0.36666539451386027,
+    0.5805557154903443
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.48852403465478106,
+   "resid_pi95": [
+    -0.5805557154903443,
+    -0.36666539451386027
+   ],
+   "auroc_final": 0.8362542610675792,
+   "auroc_chosen": 0.5,
+   "auroc_gain": -0.3362542610675793,
+   "auroc_gain_pi95": [
+    -0.3794604868913858,
+    -0.29466732962946757
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "judgebench_gpt-oss-20b",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "gpt-oss-20b",
+   "pilot": "logit_lens_results/judgebench_gpt-oss-20b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 25,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 1.0,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 11,
+   "modal_layer_depth_pct": 45.833333333333336,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.9902915237172669,
+   "kappa_a_final": 0.0,
+   "kappa_a_lens_final": 0.0,
+   "kappa_b_recal": 0.0686413686839022,
+   "kappa_c_layer": 0.016392096967147777,
+   "gain": 0.016392096967147777,
+   "gain_pi95": [
+    -0.04722936757617007,
+    0.05977382838263487
+   ],
+   "gain_mean_boot95": [
+    0.012168083929872859,
+    0.0204141609199177
+   ],
+   "recovered": 0.0686413686839022,
+   "recovered_pi95": [
+    -0.03246953478525502,
+    0.15030916458355348
+   ],
+   "share_recovered": 4.187467217981312,
+   "share_boot95": [
+    3.33638612289635,
+    5.515173753377178
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": -0.05224927171675441,
+   "resid_pi95": [
+    -0.14876087122619394,
+    0.03458313031345037
+   ],
+   "auroc_final": 0.5604505355569283,
+   "auroc_chosen": 0.5093199706911591,
+   "auroc_gain": -0.051130564865769196,
+   "auroc_gain_pi95": [
+    -0.1202302607316348,
+    0.012694485020335732
+   ],
+   "frac_splits_auroc_gain_pos": 0.06,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_standard_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/rb2safety_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.6666666666666666,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 34,
+   "modal_layer_depth_pct": 65.38461538461539,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.6513548814657941,
+   "kappa_a_final": 0.13828623141173035,
+   "kappa_a_lens_final": 0.13828623141173035,
+   "kappa_b_recal": 0.2612277253493157,
+   "kappa_c_layer": 0.3250344273845359,
+   "gain": 0.1867481959728056,
+   "gain_pi95": [
+    0.0839285569656324,
+    0.2809001839460704
+   ],
+   "gain_mean_boot95": [
+    0.1799081929070839,
+    0.19347088449724387
+   ],
+   "recovered": 0.12294149393758536,
+   "recovered_pi95": [
+    0.0009472418190874353,
+    0.22620837442442063
+   ],
+   "share_recovered": 0.6583276122008064,
+   "share_boot95": [
+    0.6154439188152367,
+    0.7006344549678787
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": 0.06380670203522021,
+   "resid_pi95": [
+    -0.08424947245964132,
+    0.1857304607096064
+   ],
+   "auroc_final": 0.7152468753450271,
+   "auroc_chosen": 0.7741748499707991,
+   "auroc_gain": 0.05892797462577212,
+   "auroc_gain_pi95": [
+    -0.03216068957590976,
+    0.11109241709765749
+   ],
+   "frac_splits_auroc_gain_pos": 0.965,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "mixed"
+  },
+  {
+   "cell": "judgebench_nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "nvidia-nemotron-3-nano-30b-a3b-bf16",
+   "pilot": "logit_lens_results/judgebench_nvidia-nemotron-3-nano-30b-a3b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 53,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.6557734204793029,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 51,
+   "modal_layer_depth_pct": 98.07692307692308,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.5926665916217155,
+   "kappa_a_final": 0.08173690073599658,
+   "kappa_a_lens_final": 0.08173690073599658,
+   "kappa_b_recal": 0.13030849366496627,
+   "kappa_c_layer": 0.09397256669523141,
+   "gain": 0.012235665959234842,
+   "gain_pi95": [
+    -0.10242397581566756,
+    0.06857884017079509
+   ],
+   "gain_mean_boot95": [
+    0.006033936707507849,
+    0.017978124980306855
+   ],
+   "recovered": 0.04857159292896972,
+   "recovered_pi95": [
+    -0.04175813312629836,
+    0.10697186515168094
+   ],
+   "share_recovered": 3.9696730109169427,
+   "share_boot95": [
+    2.794939954967037,
+    7.433029060119094
+   ],
+   "share_from_lens_readout": 0.0,
+   "resid_after_recal": -0.03633592696973487,
+   "resid_pi95": [
+    -0.1235381492186792,
+    0.023513687113068647
+   ],
+   "auroc_final": 0.6045581622233284,
+   "auroc_chosen": 0.5971848009231997,
+   "auroc_gain": -0.007373361300128734,
+   "auroc_gain_pi95": [
+    -0.12051487009779978,
+    0.017199114445045675
+   ],
+   "frac_splits_auroc_gain_pos": 0.48,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_standard_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/rb2safety_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.2570806100217865,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 86,
+   "modal_layer_depth_pct": 97.72727272727273,
+   "frac_splits_chose_final_layer": 0.06,
+   "median_cutoff": 0.7310585511646008,
+   "kappa_a_final": 0.9120408964647071,
+   "kappa_a_lens_final": 0.9120408964647071,
+   "kappa_b_recal": 0.9012149017000294,
+   "kappa_c_layer": 0.9120209422930461,
+   "gain": -1.995417166122504e-05,
+   "gain_pi95": [
+    -0.04184236653145473,
+    0.032396387563006016
+   ],
+   "gain_mean_boot95": [
+    -0.002864537050371975,
+    0.0027389382122248525
+   ],
+   "recovered": -0.010825994764677833,
+   "recovered_pi95": [
+    -0.06168227614984696,
+    0.018683564592893952
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    -291.79685988730716,
+    -2.88211046537156
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.010806040593016607,
+   "resid_pi95": [
+    -0.031710651016767594,
+    0.05587221598580875
+   ],
+   "auroc_final": 0.9960311347236026,
+   "auroc_chosen": 0.9961546420928533,
+   "auroc_gain": 0.0001235073692506866,
+   "auroc_gain_pi95": [
+    -0.0044682237369686765,
+    0.002737427849927818
+   ],
+   "frac_splits_auroc_gain_pos": 0.55,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "judgebench_nvidia-nemotron-3-super-120b-a12b-bf16",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "nvidia-nemotron-3-super-120b-a12b-bf16",
+   "pilot": "logit_lens_results/judgebench_nvidia-nemotron-3-super-120b-a12b-bf16/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 89,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.355119825708061,
+   "final_pred_vs_lens_agree": 1.0,
+   "modal_layer": 64,
+   "modal_layer_depth_pct": 72.72727272727273,
+   "frac_splits_chose_final_layer": 0.08,
+   "median_cutoff": 0.3775406633923781,
+   "kappa_a_final": 0.2677562909141164,
+   "kappa_a_lens_final": 0.2677562909141164,
+   "kappa_b_recal": 0.29031054308760523,
+   "kappa_c_layer": 0.24492861699847623,
+   "gain": -0.022827673915640164,
+   "gain_pi95": [
+    -0.13302958445569665,
+    0.022197207234382454
+   ],
+   "gain_mean_boot95": [
+    -0.02906866473452813,
+    -0.016877882487594625
+   ],
+   "recovered": 0.022554252173488845,
+   "recovered_pi95": [
+    -0.06612418230278878,
+    0.0871667743351682
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.04538192608912901,
+   "resid_pi95": [
+    -0.1508782856416638,
+    0.04893710039993294
+   ],
+   "auroc_final": 0.7160768466197043,
+   "auroc_chosen": 0.6874755493724447,
+   "auroc_gain": -0.02860129724725934,
+   "auroc_gain_pi95": [
+    -0.10100751790981881,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_rubric_qwen3.5-4b",
+   "group": "supplementary",
+   "bench": "rb2safety_rubric",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/rb2safety_rubric_qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.8366013071895425,
+   "final_pred_vs_lens_agree": 0.7843137254901961,
+   "modal_layer": 27,
+   "modal_layer_depth_pct": 84.375,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.851259652198713,
+   "kappa_a_final": 0.1222769432602965,
+   "kappa_a_lens_final": 0.3386502202802977,
+   "kappa_b_recal": 0.8852183653837971,
+   "kappa_c_layer": 0.8220430732553905,
+   "gain": 0.699766129995094,
+   "gain_pi95": [
+    0.6166668700937897,
+    0.7561809098721016
+   ],
+   "gain_mean_boot95": [
+    0.6949212253797284,
+    0.7047700804595101
+   ],
+   "recovered": 0.7629414221235006,
+   "recovered_pi95": [
+    0.6963466761636349,
+    0.823725624246731
+   ],
+   "share_recovered": 1.0902805800687287,
+   "share_boot95": [
+    1.0825246933055266,
+    1.0982243500292765
+   ],
+   "share_from_lens_readout": 0.30920798784805165,
+   "resid_after_recal": -0.06317529212840652,
+   "resid_pi95": [
+    -0.13971213750031775,
+    0.01233029052427625
+   ],
+   "auroc_final": 0.9865870901649607,
+   "auroc_chosen": 0.9760225749669854,
+   "auroc_gain": -0.010564515197975344,
+   "auroc_gain_pi95": [
+    -0.020081967213114733,
+    -0.0015165150219042347
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "rb2safety_standard_qwen3.5-4b",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/rb2safety_qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.8257080610021786,
+   "final_pred_vs_lens_agree": 0.7930283224400871,
+   "modal_layer": 30,
+   "modal_layer_depth_pct": 93.75,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.6791787034948928,
+   "kappa_a_final": 0.13249972183317202,
+   "kappa_a_lens_final": 0.34170239487728843,
+   "kappa_b_recal": 0.7386530437227359,
+   "kappa_c_layer": 0.7714510884579628,
+   "gain": 0.6389513666247908,
+   "gain_pi95": [
+    0.548485567236103,
+    0.702676746201724
+   ],
+   "gain_mean_boot95": [
+    0.6333277264332473,
+    0.644611421863186
+   ],
+   "recovered": 0.6061533218895637,
+   "recovered_pi95": [
+    0.5277883171685719,
+    0.6645502846097628
+   ],
+   "share_recovered": 0.9486689497066418,
+   "share_boot95": [
+    0.9403372805806802,
+    0.957234250448525
+   ],
+   "share_from_lens_readout": 0.3274156437746001,
+   "resid_after_recal": 0.03279804473522696,
+   "resid_pi95": [
+    -0.07348444631689532,
+    0.11197496973427955
+   ],
+   "auroc_final": 0.9530827894893862,
+   "auroc_chosen": 0.9629040941327482,
+   "auroc_gain": 0.00982130464336206,
+   "auroc_gain_pi95": [
+    -0.003418636044284803,
+    0.019837758354185706
+   ],
+   "frac_splits_auroc_gain_pos": 0.95,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "judgebench_qwen3.5-4b",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "qwen3.5-4b",
+   "pilot": "logit_lens_results/judgebench_qwen3.5-4b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.6928104575163399,
+   "final_pred_vs_lens_agree": 0.934640522875817,
+   "modal_layer": 30,
+   "modal_layer_depth_pct": 93.75,
+   "frac_splits_chose_final_layer": 0.035,
+   "median_cutoff": 0.6513548690854785,
+   "kappa_a_final": 0.21816285099926688,
+   "kappa_a_lens_final": 0.20032603148847478,
+   "kappa_b_recal": 0.1962551384398273,
+   "kappa_c_layer": 0.19614879573626612,
+   "gain": -0.022014055263000758,
+   "gain_pi95": [
+    -0.11448914145003777,
+    0.04974962238299573
+   ],
+   "gain_mean_boot95": [
+    -0.027565602278172372,
+    -0.01676123330397923
+   ],
+   "recovered": -0.02190771255943959,
+   "recovered_pi95": [
+    -0.11480540806815266,
+    0.02846727296110036
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    NaN,
+    NaN
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": -0.00010634270356116825,
+   "resid_pi95": [
+    -0.08130587106757424,
+    0.07734725990662261
+   ],
+   "auroc_final": 0.6725265764538433,
+   "auroc_chosen": 0.6647011315492037,
+   "auroc_gain": -0.007825444904639631,
+   "auroc_gain_pi95": [
+    -0.09153252747252744,
+    0.009081979114341037
+   ],
+   "frac_splits_auroc_gain_pos": 0.175,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_rubric_qwen3.5-9b",
+   "group": "supplementary",
+   "bench": "rb2safety_rubric",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/rb2safety_rubric_qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.29411764705882354,
+   "final_pred_vs_lens_agree": 0.9869281045751634,
+   "modal_layer": 27,
+   "modal_layer_depth_pct": 84.375,
+   "frac_splits_chose_final_layer": 0.075,
+   "median_cutoff": 0.7051186258823968,
+   "kappa_a_final": 0.8669193316925242,
+   "kappa_a_lens_final": 0.8880832526075554,
+   "kappa_b_recal": 0.905143085202522,
+   "kappa_c_layer": 0.8812850326474527,
+   "gain": 0.014365700954928557,
+   "gain_pi95": [
+    -0.04634993586623429,
+    0.05658304514889047
+   ],
+   "gain_mean_boot95": [
+    0.01055350434618278,
+    0.01819196623622973
+   ],
+   "recovered": 0.038223753509997745,
+   "recovered_pi95": [
+    -0.02763859770395308,
+    0.0833468092034989
+   ],
+   "share_recovered": 2.6607649449144364,
+   "share_boot95": [
+    2.197466622305542,
+    3.456850049227462
+   ],
+   "share_from_lens_readout": 1.4732257744631867,
+   "resid_after_recal": -0.023858052555069186,
+   "resid_pi95": [
+    -0.07351418745827164,
+    0.017909128350703934
+   ],
+   "auroc_final": 0.9950292866384624,
+   "auroc_chosen": 0.9940294449957444,
+   "auroc_gain": -0.0009998416427179618,
+   "auroc_gain_pi95": [
+    -0.0028259522655079165,
+    0.0002978111286820518
+   ],
+   "frac_splits_auroc_gain_pos": 0.09,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_standard_qwen3.5-9b",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/rb2safety_qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.30718954248366015,
+   "final_pred_vs_lens_agree": 0.9607843137254902,
+   "modal_layer": 32,
+   "modal_layer_depth_pct": 100.0,
+   "frac_splits_chose_final_layer": 0.99,
+   "median_cutoff": 0.4225784534828578,
+   "kappa_a_final": 0.8486356381413463,
+   "kappa_a_lens_final": 0.8526763179122332,
+   "kappa_b_recal": 0.8476811575523214,
+   "kappa_c_layer": 0.8510422619122069,
+   "gain": 0.002406623770860588,
+   "gain_pi95": [
+    -0.043267571694627915,
+    0.04603404137459837
+   ],
+   "gain_mean_boot95": [
+    -0.0017683396362140405,
+    0.006354528263409821
+   ],
+   "recovered": -0.0009544805890248797,
+   "recovered_pi95": [
+    -0.04371272054456269,
+    0.021861553384973188
+   ],
+   "share_recovered": -0.39660565169418466,
+   "share_boot95": [
+    -9.887239161800839,
+    0.39384964654275667
+   ],
+   "share_from_lens_readout": 1.6789827391432826,
+   "resid_after_recal": 0.003361104359885468,
+   "resid_pi95": [
+    -0.01924187047274624,
+    0.036516152317082995
+   ],
+   "auroc_final": 0.9833193324929743,
+   "auroc_chosen": 0.9833022585878974,
+   "auroc_gain": -1.7073905076773755e-05,
+   "auroc_gain_pi95": [
+    0.0,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "judgebench_qwen3.5-9b",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "qwen3.5-9b",
+   "pilot": "logit_lens_results/judgebench_qwen3.5-9b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 33,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.6427015250544662,
+   "final_pred_vs_lens_agree": 0.9455337690631809,
+   "modal_layer": 29,
+   "modal_layer_depth_pct": 90.625,
+   "frac_splits_chose_final_layer": 0.025,
+   "median_cutoff": 0.5926665944447003,
+   "kappa_a_final": 0.22162620578014233,
+   "kappa_a_lens_final": 0.21522729325725365,
+   "kappa_b_recal": 0.20957907888226984,
+   "kappa_c_layer": 0.2233504197211663,
+   "gain": 0.001724213941023905,
+   "gain_pi95": [
+    -0.07063130201494205,
+    0.06566328423279125
+   ],
+   "gain_mean_boot95": [
+    -0.003077179240626195,
+    0.006455934902230598
+   ],
+   "recovered": -0.012047126897872512,
+   "recovered_pi95": [
+    -0.0751299682255914,
+    0.055317895833892926
+   ],
+   "share_recovered": -6.987025572196953,
+   "share_boot95": [
+    -61.59635035978656,
+    -1.390984492425541
+   ],
+   "share_from_lens_readout": -3.71120565182808,
+   "resid_after_recal": 0.013771340838896418,
+   "resid_pi95": [
+    -0.047386282073227655,
+    0.08488656451900019
+   ],
+   "auroc_final": 0.6880606152466746,
+   "auroc_chosen": 0.68869798277683,
+   "auroc_gain": 0.0006373675301555932,
+   "auroc_gain_pi95": [
+    -0.014634745424581496,
+    0.01682744368897131
+   ],
+   "frac_splits_auroc_gain_pos": 0.545,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  },
+  {
+   "cell": "rb2safety_standard_qwen3.6-35b-a3b",
+   "group": "supplementary",
+   "bench": "rb2safety_standard",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/rb2safety_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.25054466230936817,
+   "final_pos_rate": 0.3224400871459695,
+   "final_pred_vs_lens_agree": 0.9869281045751634,
+   "modal_layer": 39,
+   "modal_layer_depth_pct": 97.5,
+   "frac_splits_chose_final_layer": 0.0,
+   "median_cutoff": 0.7772998558723487,
+   "kappa_a_final": 0.8253144063928258,
+   "kappa_a_lens_final": 0.7967619840103333,
+   "kappa_b_recal": 0.9223740064855872,
+   "kappa_c_layer": 0.9176909480024414,
+   "gain": 0.09237654160961568,
+   "gain_pi95": [
+    0.03677034563482344,
+    0.15030245592750868
+   ],
+   "gain_mean_boot95": [
+    0.08834800953939441,
+    0.09643947809259608
+   ],
+   "recovered": 0.09705960009276154,
+   "recovered_pi95": [
+    0.051373165726499685,
+    0.148724743070727
+   ],
+   "share_recovered": 1.0506953215778148,
+   "share_boot95": [
+    1.0262347356307286,
+    1.0754273362376552
+   ],
+   "share_from_lens_readout": -0.309087370938343,
+   "resid_after_recal": -0.004683058483145867,
+   "resid_pi95": [
+    -0.03291590407333069,
+    0.02384173103024348
+   ],
+   "auroc_final": 0.9885029176695724,
+   "auroc_chosen": 0.98878806195214,
+   "auroc_gain": 0.00028514428256756763,
+   "auroc_gain_pi95": [
+    -0.0012715973020167304,
+    0.0018469735182849204
+   ],
+   "frac_splits_auroc_gain_pos": 0.6,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "mostly cutoff"
+  },
+  {
+   "cell": "judgebench_qwen3.6-35b-a3b",
+   "group": "supplementary",
+   "bench": "judgebench",
+   "model": "qwen3.6-35b-a3b",
+   "pilot": "logit_lens_results/judgebench_qwen3.6-35b-a3b/pilot_results.json",
+   "n_items": 459,
+   "n_layers": 41,
+   "gold_pos_rate": 0.5446623093681917,
+   "final_pos_rate": 0.4008714596949891,
+   "final_pred_vs_lens_agree": 0.9629629629629629,
+   "modal_layer": 36,
+   "modal_layer_depth_pct": 90.0,
+   "frac_splits_chose_final_layer": 0.065,
+   "median_cutoff": 0.23389258744134234,
+   "kappa_a_final": 0.33315485504020337,
+   "kappa_a_lens_final": 0.3150918939044703,
+   "kappa_b_recal": 0.3311143675267482,
+   "kappa_c_layer": 0.332775231341474,
+   "gain": -0.0003796236987293441,
+   "gain_pi95": [
+    -0.055740695725608046,
+    0.05476567969546476
+   ],
+   "gain_mean_boot95": [
+    -0.004449998214147859,
+    0.0036032432069953053
+   ],
+   "recovered": -0.0020404875134551895,
+   "recovered_pi95": [
+    -0.07559317202455927,
+    0.05327067708818698
+   ],
+   "share_recovered": NaN,
+   "share_boot95": [
+    -33.2547967136901,
+    4.106570618005218
+   ],
+   "share_from_lens_readout": NaN,
+   "resid_after_recal": 0.0016608638147258452,
+   "resid_pi95": [
+    -0.06101264437703437,
+    0.05346590538168494
+   ],
+   "auroc_final": 0.756110871593025,
+   "auroc_chosen": 0.7477507327934073,
+   "auroc_gain": -0.008360138799617667,
+   "auroc_gain_pi95": [
+    -0.01744410889642032,
+    0.0
+   ],
+   "frac_splits_auroc_gain_pos": 0.0,
+   "repro_max_abs_diff_vs_saved_gaps": null,
+   "verdict": "no gain"
+  }
+ ],
+ "skipped": [
+  {
+   "cell": "bff_rubric_gpt-oss-20b",
+   "group": "main",
+   "reason": "no `pcn_rules` field in logit_lens_results/gpt-oss-20b_rules2/pilot_results.json (only ['critical_layer', 'ds_rules', 'ds_standard', 'gold', 'id', 'kl_at_critical', 'kl_per_layer', 'pred_rules', 'pred_standard'])"
+  }
+ ]
+}

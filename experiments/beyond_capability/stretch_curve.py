@@ -49,6 +49,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--bench", default="mmlu")
     ap.add_argument("--stem", default="mmlu_full")
+    ap.add_argument("--square", action="store_true", help="square figure: panels stacked")
+    ap.add_argument("--square-h", action="store_true", help="square figure: panels side by side")
+    ap.add_argument("--max-strength", type=float, default=None, help="only plot strengths up to this (e.g. 11)")
     a = ap.parse_args()
     bdir = HERE / f"out_{a.bench}"
     groups = ((1, "solved"), (0, "not solved"))
@@ -84,29 +87,40 @@ def main():
     print("\n".join(L))
     # ---- plot: one panel per solved group; judge direction solid with 95% band, random dashed
     plt.rcParams.update({"font.size": 10, "axes.edgecolor": INK2, "axes.labelcolor": INK2, "xtick.color": INK2, "ytick.color": INK2})
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4.6), sharey=True, facecolor="#fcfcfb")
+    if a.square_h:
+        fig, axes = plt.subplots(1, 2, figsize=(8, 8), sharey=True, facecolor="#fcfcfb")
+    elif a.square:
+        fig, axes = plt.subplots(2, 1, figsize=(7, 7), sharex=True, sharey=True, facecolor="#fcfcfb")
+    else:
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4.6), sharey=True, facecolor="#fcfcfb")
     for ax, (sv, nm) in zip(axes, groups):
         ax.set_facecolor("#fcfcfb")
         ax.axhline(0.5, color=INK2, lw=1, ls=(0, (3, 3)))
         ax.axvspan(11 / 1.18, 11 * 1.18, color="#e9e6dc", zorder=0)  # the strength used in the report
-        ax.text(11, 0.805, "×11 used\nin report", ha="center", va="top", fontsize=8.5, color=INK, fontweight="bold")
+        if a.square and sv == 1:  # top panel: Qwen sits near the top, so label the band at the bottom
+            ax.text(11, 0.405, "×11 used\nin report", ha="center", va="bottom", fontsize=8.5, color=INK, fontweight="bold")
+        else:
+            ax.text(11, 0.805, "×11 used\nin report", ha="center", va="top", fontsize=8.5, color=INK, fontweight="bold")
         ax.text(1.05, 0.503, "chance", color=INK2, fontsize=8.5, va="bottom")
         for model in ("qwen3.5-9b", "llama3.1-8b"):
             for dn in ("Jc", "Rc"):
                 d = res.get((model, dn, sv))
                 if not d:
                     continue
-                xs = sorted(d)
+                xs = sorted(x for x in d if a.max_strength is None or x <= a.max_strength)
                 ys = [d[x][0] for x in xs]
                 if dn == "Jc":
                     ax.fill_between(xs, [d[x][1] for x in xs], [d[x][2] for x in xs], color=COL[model], alpha=0.13, lw=0)
                     ax.plot(xs, ys, color=COL[model], lw=2, marker="o", ms=5, label=f"{NAMES[model]}: judge direction")
                     ax.annotate(f"{NAMES[model].split('-')[0].replace('3.5', '').replace('3.1', '')}", (xs[-1], ys[-1]),
-                                textcoords="offset points", xytext=(6, -3), fontsize=9, color=INK)
+                                textcoords="offset points", xytext=(6, -12 if ((a.square or a.square_h) and abs(ys[-1] - 0.5) < 0.015) else -3),
+                                fontsize=9, color=INK)
                 else:
                     ax.plot(xs, ys, color=COL[model], lw=1.2, ls=(0, (4, 3)), alpha=0.8, label=f"{NAMES[model]}: random direction")
         ax.set_xscale("log")
-        xt = sorted({x for k, d in res.items() for x in d})
+        xt = sorted({x for k, d in res.items() for x in d if a.max_strength is None or x <= a.max_strength})
+        if a.max_strength:
+            ax.set_xlim(0.85, a.max_strength * 1.6)
         ax.set_xticks(xt)
         ax.set_xticklabels([f"×{x:g}" for x in xt])
         for lab, x in zip(ax.get_xticklabels(), xt):
@@ -119,15 +133,18 @@ def main():
         for sp in ("top", "right"):
             ax.spines[sp].set_visible(False)
         ax.set_title(f"{nm} questions", loc="left", color=INK, fontsize=11)
-        ax.set_xlabel("stretch strength along the judge direction (log scale)")
-    axes[0].set_ylabel("ranking: right above wrong, same question\n(within-question AUROC)")
+        if not a.square or ax is axes[-1]:
+            ax.set_xlabel("stretch strength (log scale)" if a.square_h else "stretch strength along the judge direction (log scale)")
+    for ax in (axes if a.square else axes[:1]):
+        ax.set_ylabel("ranking: right above wrong, same question\n(within-question AUROC)" if not a.square else "ranking (within-question AUROC)")
     h, l = axes[1].get_legend_handles_labels()
-    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=4, labelcolor=INK)
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=2 if (a.square or a.square_h) else 4, labelcolor=INK)
     fig.suptitle(f"{'MMLU-Redux' if a.bench == 'mmlu' else a.bench.upper()}: judge ranking vs stretch strength "
                  "(band = 95% CI)", x=0.01, ha="left", color=INK, fontsize=12.5, fontweight="bold")
-    fig.tight_layout(rect=(0, 0.07, 1, 0.94))
-    fig.savefig(bdir / f"stretch_curve_{a.bench}.png", dpi=160, facecolor=fig.get_facecolor())
-    print(bdir / f"stretch_curve_{a.bench}.png")
+    fig.tight_layout(rect=(0, 0.07, 1, 0.97) if (a.square or a.square_h) else (0, 0.07, 1, 0.94))
+    out = bdir / f"stretch_curve_{a.bench}{f'_upto{a.max_strength:g}' if a.max_strength else ''}{'_square' if a.square else ''}{'_square_h' if a.square_h else ''}.png"
+    fig.savefig(out, dpi=160, facecolor=fig.get_facecolor())
+    print(out)
 
 
 if __name__ == "__main__":
