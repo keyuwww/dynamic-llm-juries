@@ -913,3 +913,161 @@ def patch_big(model: str = "openai/gpt-oss-120b", flip: str = "std_to_incorrect"
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(data)
     print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+def _run_probe_jacobian_impl(limit, model, rubric, out_name):
+    vol_dir = pathlib.Path(VOL_MOUNT) / "overnight_deepdive" / "probe_data"
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/overnight_deepdive")
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(pathlib.Path(VOL_MOUNT) / "overnight_deepdive")
+    cmd = [sys.executable, "/root/repo/experiments/interp/probe_jacobian.py",
+           "--limit", str(limit), "--model", model, "--rubric", rubric]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return "done: probe/jacobian capture"
+
+
+@app.function(timeout=5400, gpu="H100", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_probe_jacobian(limit: int = 40, model: str = "Qwen/Qwen3.5-4B", rubric: str = "rules") -> str:
+    # A10G (24GB) OOMs even for a 4B model: a backward-enabled forward (output_hidden_states=True,
+    # no torch.no_grad()) over a long multi-turn BFF conversation has to keep the full activation
+    # graph in memory for every layer, which dwarfs the ~8GB of bf16 weights. H100 (80GB) has room.
+    return _run_probe_jacobian_impl(limit, model, rubric, None)
+
+
+@app.function(timeout=7200, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_probe_jacobian_big(limit: int = 25, model: str = "openai/gpt-oss-120b", rubric: str = "rules") -> str:
+    return _run_probe_jacobian_impl(limit, model, rubric, None)
+
+
+def _run_mxfp4_check_impl(limit, model):
+    vol_dir = pathlib.Path(VOL_MOUNT) / "overnight_deepdive"
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/overnight_deepdive")
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/check_mxfp4_backward.py",
+           "--limit", str(limit), "--model", model]
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    _run_with_periodic_commit(cmd, "/root/repo/experiments/interp")
+    return "done: mxfp4 backward check"
+
+
+@app.function(timeout=5400, gpu="H100:4", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_mxfp4_check(limit: int = 3, model: str = "openai/gpt-oss-120b") -> str:
+    # Dequantized bf16 load of a ~120B model needs ~4x the native-MXFP4 memory footprint --
+    # H100:2 (160GB) isn't enough headroom alongside a backward-enabled forward pass; H100:4 (320GB) is.
+    return _run_mxfp4_check_impl(limit, model)
+
+
+def _run_patchscopes_impl(model, rubric, layer, ids, max_new_tokens):
+    vol_dir = pathlib.Path(VOL_MOUNT) / "overnight_deepdive"
+    vol_dir.mkdir(parents=True, exist_ok=True)
+    link = pathlib.Path("/root/repo/experiments/interp/overnight_deepdive")
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if link.is_symlink() or link.exists():
+        import shutil
+        if link.is_symlink():
+            link.unlink()
+        else:
+            shutil.rmtree(link)
+    link.symlink_to(vol_dir)
+    cmd = [sys.executable, "/root/repo/experiments/interp/patchscopes_quick.py",
+           "--model", model, "--rubric", rubric, "--layer", str(layer),
+           "--max-new-tokens", str(max_new_tokens), "--ids"] + ids
+    print(f"\n=== {' '.join(cmd)} ===\n", flush=True)
+    subprocess.run(cmd, check=True, cwd="/root/repo/experiments/interp")
+    vol.commit()
+    return "done: patchscopes"
+
+
+@app.function(timeout=2400, gpu="A10G", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_patchscopes(model: str = "Qwen/Qwen3.5-4B", rubric: str = "rules", layer: int = 25,
+                     ids: list = None, max_new_tokens: int = 12) -> str:
+    return _run_patchscopes_impl(model, rubric, layer, ids or [], max_new_tokens)
+
+
+@app.function(timeout=5400, gpu="H100:2", secrets=[modal.Secret.from_dict(_env())], volumes={VOL_MOUNT: vol})
+def run_patchscopes_big(model: str = "openai/gpt-oss-120b", rubric: str = "rules", layer: int = 10,
+                         ids: list = None, max_new_tokens: int = 12) -> str:
+    return _run_patchscopes_impl(model, rubric, layer, ids or [], max_new_tokens)
+
+
+@app.local_entrypoint()
+def patchscopes(model: str = "Qwen/Qwen3.5-4B", rubric: str = "rules", layer: int = 25,
+                 ids: str = "", max_new_tokens: int = 12, big: bool = False):
+    id_list = [s for s in ids.split(",") if s.strip()]
+    fn = run_patchscopes_big if big else run_patchscopes
+    msg = fn.remote(model=model, rubric=rubric, layer=layer, ids=id_list, max_new_tokens=max_new_tokens)
+    print(msg)
+    files = pull_deepdive.remote()
+    dest_dir = REPO / "experiments" / "interp" / "overnight_deepdive"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def mxfp4_check(limit: int = 3, model: str = "openai/gpt-oss-120b"):
+    msg = run_mxfp4_check.remote(limit=limit, model=model)
+    print(msg)
+    files = pull_deepdive.remote()
+    dest_dir = REPO / "experiments" / "interp" / "overnight_deepdive"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.function(volumes={VOL_MOUNT: vol})
+def pull_deepdive() -> dict:
+    vol.reload()
+    d = pathlib.Path(VOL_MOUNT) / "overnight_deepdive"
+    if not d.exists():
+        return {}
+    return {str(p.relative_to(d)): p.read_bytes() for p in d.rglob("*") if p.is_file()}
+
+
+@app.local_entrypoint()
+def just_pull_deepdive():
+    files = pull_deepdive.remote()
+    dest_dir = REPO / "experiments" / "interp" / "overnight_deepdive"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")
+
+
+@app.local_entrypoint()
+def probe_jacobian(model: str = "Qwen/Qwen3.5-4B", rubric: str = "rules", limit: int = 40, big: bool = False):
+    fn = run_probe_jacobian_big if big else run_probe_jacobian
+    msg = fn.remote(limit=limit, model=model, rubric=rubric)
+    print(msg)
+    files = pull_deepdive.remote()
+    dest_dir = REPO / "experiments" / "interp" / "overnight_deepdive"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for rel, data in files.items():
+        dest = dest_dir / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+    print(f"Wrote {len(files)} files to {dest_dir}")

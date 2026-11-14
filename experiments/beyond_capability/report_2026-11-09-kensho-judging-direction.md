@@ -1,6 +1,8 @@
-# Report — November 9, 2026 (for Kensho)
+# Does an LLM Judge Know More Than It Says? Stretching the Judge's Internal "Answer Is Right" Direction
 
-## Judging direction
+*Report for Kensho · November 9, 2026*
+
+## Background
 
 Inspired by an insight from Phaedrus on [*Inside the Unfair Judge: A Mechanistic Interpretability Account of LLM-as-Judge Bias*](https://arxiv.org/abs/2607.11871) (Xu et al., 2026, arXiv:2607.11871).
 
@@ -46,6 +48,14 @@ The 1,940 and 1,072 are answers, not questions. Each question has about 4 candid
 Step 5 uses the direction like a probe, a no-training one sometimes called a "mean-difference probe" (Marks & Tegmark 2023). But the main use is step 6.
 
 **Stretch strength:** we multiply how far the state sits from the average along the direction by ×2, ×4 or ×11, leaving everything else unchanged. The main results use ×11.
+
+**Where the direction lives.** How well each layer's direction ranks held-out answers. The circle marks the layer used; the dashed line is the judge's own verdict:
+
+![Judge direction strength by layer](out_mmlu/direction_layers.png)
+
+- **It peaks in the middle of the model:** layers 14–22 of 32. The early layers carry only a weaker signal, and it fades again toward the output.
+- **For Llama, every layer knows more than its verdict says.** Its whole curve sits above its dashed verdict line, especially on MMLU-Redux (0.51).
+- **For Qwen, the best layers only just match its verdict.** The information that reaches its output is about all there is.
 
 ### 3. Right and wrong answers
 
@@ -100,7 +110,7 @@ Above 0 means its verdict is CORRECT; the bigger the number, the more sure it is
 
 The wrong answer scored higher, so this pair gets 0 points.
 
-**Ranking against stretch strength** (×1 = no edit; solid = judge direction with 95% band, dashed = random direction):
+**Ranking against stretch strength** (×1 = no edit; solid = judge direction with 95% band, dashed = random direction; the shaded column marks ×11, the strength used for the results in this report):
 
 ![Ranking vs stretch strength, MMLU-Redux](out_mmlu/stretch_curve_mmlu.png)
 
@@ -114,10 +124,14 @@ The gap between knowing and saying predicts the gain, not how easy the benchmark
 
 All numbers are the **ranking** from section 5 (0.50 = chance). Only the score used to rank the answers differs:
 
-- **Knows:** the score is how far the judge's internal state points along the judge direction. The direction is learned on the other half of the questions.
-- **Says:** the score is the verdict score, log P(CORRECT) − log P(INCORRECT).
-- **Gap:** Knows − Says, in points. **Gain:** the verdict's ranking after ×11 minus before.
+| | Score per answer | Read from |
+|---|---|---|
+| **Knows (direction)** | Position along the judge direction (dot product) | A middle layer, e.g. Llama layer 16 |
+| **Says (verdict)** | log P(CORRECT) − log P(INCORRECT) | The model's final output |
 
+- **Knows:** the direction is learned on the other half of the questions, so every answer is scored by a direction that never saw its question.
+- **Gap:** Knows − Says, in points.
+- **Gain:** the verdict's ranking after ×11 minus before.
 
 | Case | Knows (direction) | Says (verdict) | Gap | Gain from ×11 [95% CI] |
 |---|---|---|---|---|
@@ -139,6 +153,14 @@ The last column is the correlation between the verdict score and the position al
 
 - **When the two match (Qwen):** the final verdict already reflects what's in that direction. Stretching only makes Qwen stricter.
 - **When "knows" is higher (Llama):** the information is present in the middle of the model but gets lost or drowned out before the verdict. Stretching the judge direction amplifies it so more of it reaches the verdict.
+
+**What "knows more than it says" looks like.** Right answers (green) and wrong answers (pink), positioned along the judge direction and along the verdict score. Each score is shown relative to its question's average:
+
+![Right vs wrong answers along the direction and the verdict](out_mmlu/direction_hist_mmlu.png)
+
+- **Llama, solved:** along the direction (first panel), right and wrong answers are clearly apart. Along its verdict (second panel), they almost completely overlap. The information is inside, but it doesn't reach the output.
+- **Qwen, solved:** both panels look alike. Its verdict already shows what its direction knows.
+- **Not solved, both models:** green and pink overlap almost entirely in every panel, with Llama's direction slightly apart. There's little left to recover.
 
 ### 7. Stricter, or better? Comparing at the same strictness
 
@@ -174,7 +196,43 @@ In the ROC figure above, this is the dotted vertical gap between the hollow dot 
 - **Qwen gets worse when over-stretched:** 0.76 → 0.67 on solved questions at ×101.
 - **The random direction stays flat at every strength.**
 
+### 8. Is the judge direction specific to each benchmark?
+
+We learn a separate direction per benchmark and model. As a **detector** (reading only, no steering), does one learned on MMLU-Redux also rank MATH answers, and the reverse?
+
+| Judge | Direction from → used on | Cosine between the two directions | Ranking with the borrowed direction | Ranking with the benchmark's own direction |
+|---|---|---|---|---|
+| Qwen-9B | MMLU-Redux → MATH | **0.88** | 0.72 | 0.71 |
+| Qwen-9B | MATH → MMLU-Redux | **0.92** | 0.68 | 0.68 |
+| Llama-8B | MMLU-Redux → MATH | 0.39 | 0.62 | 0.67 |
+| Llama-8B | MATH → MMLU-Redux | 0.34 | 0.57 | 0.60 |
+
+The cosine is 1 for the same direction and 0 for unrelated ones; both directions are compared at the same layer.
+
+- **Qwen has one shared "this answer is right" direction** across the two benchmarks. As a detector, the borrowed direction ranks answers as well as the benchmark's own. But stretching Qwen doesn't help on either benchmark, so this generality doesn't make Qwen steerable.
+- **Llama's directions are partly task-specific.** A borrowed direction still ranks answers above chance, but loses some. Llama is the one model where steering helps, so for steering it's safer to learn the direction per benchmark. Whether a borrowed direction steers Llama as well is untested.
+- **This fits the main result.** Qwen's verdict already follows a general correctness direction, so stretching adds little. Llama's signal is weaker, more task-specific, and less used by its verdict.
+
+### 9. Out-of-sample test: RewardBench 2 Safety
+
+To test whether the "gap + responds" rule predicts new cases, we wrote down predictions **before** analysing the stretches, on a non-math task neither judge had been tested on.
+
+- **Benchmark:** RB2 Safety has 450 human-labelled requests, each with 1 appropriate and 3 inappropriate responses (1,800 answers).
+- **What the judge decides:** whether the response complied with a fine request or refused a harmful one appropriately.
+- **No solved split:** "solved" doesn't apply to a safety request, so all answers are one group.
+
+| Judge | Knows | Says | Gap | Verdict responds to ±8 sd shift? | Predicted gain at ×11 | Measured gain [95% CI] | Prediction |
+|---|---|---|---|---|---|---|---|
+| Qwen-9B | 0.98 | 0.96 | +1 | **No** (38% → 37% accepted) | below 3, n.s. | +0.1 [−0.6, +0.7] | **held** |
+| Llama-8B | 0.99 | 0.96 | +3 | Yes, extremely (0% → 99%) | +1.4, n.s. | **−6.3 [−9.5, −3.5]** | **failed** |
+
+- **Both judges are already near the ceiling here** (ranking 0.96), so there was little to gain. This benchmark can't settle the math vs non-math question.
+- **Qwen:** predicted correctly. Its verdict doesn't respond to the layer, and stretching does nothing.
+- **Llama:** the prediction failed. Gentle stretches behave as predicted (×2 +0.6, ×4 +1.0, both n.s.), but ×11 *hurts* (−6.3). Llama's verdict is so sensitive to this layer on Safety that a strong stretch overshoots and distorts it.
+- **What this teaches:** the rule needs a third ingredient, the stretch strength. A fixed ×11 can be too strong for a judge whose verdict reacts very strongly. The strength should be tuned per judge and benchmark on held-out data, and the rule then predicts the best achievable gain, not the gain at ×11. This lesson is post hoc and still needs its own test.
+- **Full record:** predictions and outcome, with timestamps, are in `out_rb2safety/PREREGISTRATION.md`.
+
 **Caveats:**
 
 - These are 4 cases from one benchmark (MMLU-Redux).
-- On MATH, Llama's stretching gain does not replicate (+1, not significant).
+- On MATH, Llama's stretching gain does not replicate (+2 [−2, +5] on unsolved questions), even though its gap there is large (0.67 vs 0.53). Its MATH verdict barely responds to edits at that layer: shifting ±8 sd leaves acceptance at about 92–96%. So steering needs both a knows-vs-says gap and a verdict that responds to the edited layer.

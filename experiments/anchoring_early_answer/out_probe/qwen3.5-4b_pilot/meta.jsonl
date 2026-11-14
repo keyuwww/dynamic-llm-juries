@@ -1,0 +1,12 @@
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": 0.25, "n_tok": 1554, "pool_n_in": 1554}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": 3.5, "n_tok": 815, "pool_n_in": 815}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0011|qwen3.5-4b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": -0.75, "n_tok": 727, "pool_n_in": 727}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0015|nemotron3-nano-30b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": -0.25, "n_tok": 327, "pool_n_in": 327}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0012|gpt-oss-20b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": 0.5, "n_tok": 178, "pool_n_in": 178}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0003|qwen3.6-35b-a3b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": -2.5, "n_tok": 560, "pool_n_in": 560}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0014|qwen3.6-35b-a3b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": -0.75, "n_tok": 16909, "pool_n_in": 16909}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0011|nemotron3-super-120b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": 2.0, "n_tok": 345, "pool_n_in": 345}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0012|nemotron3-nano-30b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": 0.375, "n_tok": 162, "pool_n_in": 162}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0005|nemotron3-super-120b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": -1.75, "n_tok": 1043, "pool_n_in": 1043}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0010|qwen3.6-35b-a3b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": 1.25, "n_tok": 1787, "pool_n_in": 1787}
+{"judge": "qwen3.5-4b", "item_id": "bbeh-0009|qwen3.5-9b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": -0.875, "n_tok": 19734, "pool_n_in": 19734}

@@ -1,0 +1,13 @@
+{
+  "endpoint": "https://api.cthree.cloud",
+  "organization": "google-oauth2|102189775462995389835",
+  "project": "olmo3-think-stages",
+  "name": "think-dpo",
+  "resource_id": "rs_b26ddc85-833a-446c-ad8b-b632cfcdc85f",
+  "revision": 1,
+  "baseline": "19b82fd701acde465b17259934a9515bd211abaebc19c278d985099251d20946",
+  "last_upload": {
+    "principal": "google-oauth2|102189775462995389835",
+    "publication": "manifest_c529bf459befb78a75bf4b3646217dac3f9d6502a319e7d85faee85c36e36bec"
+  }
+}

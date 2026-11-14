@@ -101,7 +101,7 @@ def steer(a):
         rows = [r for r in rows if r["aid"] in want]
     dirs = json.loads(Path(a.directions).read_text())
     t1, t2 = verdict_ids(tok)
-    scales = {"add": [float(x) for x in a.alphas.split(",")], "amplify": [float(x) for x in a.betas.split(",")]}
+    scales = {"add": [float(x) for x in a.alphas.split(",") if x], "amplify": [float(x) for x in a.betas.split(",") if x]}
     out = Path(a.out)
     fh = open(out / f"steer_{a.tag}.jsonl", "w")
     for name, spec in dirs.items():

@@ -1,0 +1,124 @@
+{"cache_key": "qwen3.5-4b-think|bbeh-0098|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1917, "n_out": 39}
+{"cache_key": "qwen3.5-4b-think|bbeh-0069|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 605, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0006|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 669, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0093|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 631, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0072|qwen3.5-9b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1796, "n_out": 25}
+{"cache_key": "qwen3.5-4b-think|bbeh-0088|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 405, "n_out": 35}
+{"cache_key": "qwen3.5-4b-think|bbeh-0004|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1112, "n_out": 19}
+{"cache_key": "qwen3.5-4b-think|bbeh-0030|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 632, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0010|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1484, "n_out": 44}
+{"cache_key": "qwen3.5-4b-think|bbeh-0033|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 615, "n_out": 20}
+{"cache_key": "qwen3.5-4b-think|bbeh-0062|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1560, "n_out": 20}
+{"cache_key": "qwen3.5-4b-think|bbeh-0040|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1880, "n_out": 31}
+{"cache_key": "qwen3.5-4b-think|bbeh-0094|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1172, "n_out": 26}
+{"cache_key": "qwen3.5-4b-think|bbeh-0038|nemotron3-nano-30b|0", "verdict": "SAME", "raw": "SAME", "n_in": 2265, "n_out": 28}
+{"cache_key": "qwen3.5-4b-think|bbeh-0101|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1533, "n_out": 18}
+{"cache_key": "qwen3.5-4b-think|bbeh-0088|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1278, "n_out": 44}
+{"cache_key": "qwen3.5-4b-think|bbeh-0131|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1610, "n_out": 60}
+{"cache_key": "qwen3.5-4b-think|bbeh-0154|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2065, "n_out": 45}
+{"cache_key": "qwen3.5-4b-think|bbeh-0124|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1067, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0063|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2061, "n_out": 18}
+{"cache_key": "qwen3.5-4b-think|bbeh-0184|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 265, "n_out": 11}
+{"cache_key": "qwen3.5-4b-think|bbeh-0167|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 612, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0144|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 336, "n_out": 33}
+{"cache_key": "qwen3.5-4b-think|bbeh-0148|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1353, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0144|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 548, "n_out": 16}
+{"cache_key": "qwen3.5-4b-think|bbeh-0034|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 508, "n_out": 135}
+{"cache_key": "qwen3.5-4b-think|bbeh-0169|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1593, "n_out": 28}
+{"cache_key": "qwen3.5-4b-think|bbeh-0224|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1365, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0201|qwen3.5-9b|0", "verdict": "NONE", "raw": "NONE", "n_in": 525, "n_out": 17}
+{"cache_key": "qwen3.5-4b-think|bbeh-0140|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 628, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0234|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 809, "n_out": 17}
+{"cache_key": "qwen3.5-4b-think|bbeh-0225|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1120, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0201|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 376, "n_out": 26}
+{"cache_key": "qwen3.5-4b-think|bbeh-0195|qwen3.5-4b|0", "verdict": "DIFFERENT", "raw": "DIFFERENT", "n_in": 2371, "n_out": 37}
+{"cache_key": "qwen3.5-4b-think|bbeh-0164|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1013, "n_out": 146}
+{"cache_key": "qwen3.5-4b-think|bbeh-0235|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1669, "n_out": 28}
+{"cache_key": "qwen3.5-4b-think|bbeh-0205|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 2158, "n_out": 38}
+{"cache_key": "qwen3.5-4b-think|bbeh-0195|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1983, "n_out": 43}
+{"cache_key": "qwen3.5-4b-think|bbeh-0233|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1066, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0278|qwen3.5-4b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2096, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0215|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1430, "n_out": 137}
+{"cache_key": "qwen3.5-4b-think|bbeh-0287|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 974, "n_out": 28}
+{"cache_key": "qwen3.5-4b-think|bbeh-0191|qwen3.5-4b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1258, "n_out": 200}
+{"cache_key": "qwen3.5-4b-think|bbeh-0242|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1066, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0153|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 696, "n_out": 165}
+{"cache_key": "qwen3.5-4b-think|bbeh-0287|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 974, "n_out": 49}
+{"cache_key": "qwen3.5-4b-think|bbeh-0099|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 260, "n_out": 300}
+{"cache_key": "qwen3.5-4b-think|bbeh-0283|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 601, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0284|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1177, "n_out": 34}
+{"cache_key": "qwen3.5-4b-think|bbeh-0270|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1163, "n_out": 21}
+{"cache_key": "qwen3.5-4b-think|bbeh-0265|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 2145, "n_out": 17}
+{"cache_key": "qwen3.5-4b-think|bbeh-0282|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1128, "n_out": 14}
+{"cache_key": "qwen3.5-4b-think|bbeh-0153|gpt-oss-20b|0", "verdict": "NONE", "raw": "ADER. NEED BE CAREFUL MAYBE HIDDEN? THE PROMPT SHOWS \"[ANSWER 1 (END)]\" WITH NO CONTENT. SO REPLY NONE. BUT MAYBE THEY EXPECT COMPARE FINAL ANSWERS, ANSWER1 MISSING. NEED EXACTLY ONE WORD.</THINK>NONE", "n_in": 695, "n_out": 283}
+{"cache_key": "qwen3.5-4b-think|bbeh-0327|qwen3.5-4b|0", "verdict": "NONE", "raw": "NONE", "n_in": 4074, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0311|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 616, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0150|gpt-oss-20b|0", "verdict": "NONE", "raw": "PTY AFTER HEADER. SO REPLY NONE. BUT NEED BE CAREFUL MAYBE ANSWER1 OMITTED INTENTIONALLY? THE INSTRUCTION: IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. YES.\n\nFINAL EXACTLY ONE WORD.</THINK>NONE", "n_in": 1052, "n_out": 265}
+{"cache_key": "qwen3.5-4b-think|bbeh-0021|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1045, "n_out": 419}
+{"cache_key": "qwen3.5-4b-think|bbeh-0235|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 885, "n_out": 170}
+{"cache_key": "qwen3.5-4b-think|bbeh-0341|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1355, "n_out": 30}
+{"cache_key": "qwen3.5-4b-think|bbeh-0255|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 749, "n_out": 172}
+{"cache_key": "qwen3.5-4b-think|bbeh-0338|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1038, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0349|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1396, "n_out": 57}
+{"cache_key": "qwen3.5-4b-think|bbeh-0334|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 536, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0042|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1090, "n_out": 630}
+{"cache_key": "qwen3.5-4b-think|bbeh-0337|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 963, "n_out": 34}
+{"cache_key": "qwen3.5-4b-think|bbeh-0387|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 604, "n_out": 12}
+{"cache_key": "qwen3.5-4b-think|bbeh-0387|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 369, "n_out": 12}
+{"cache_key": "qwen3.5-4b-think|bbeh-0184|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 265, "n_out": 398}
+{"cache_key": "qwen3.5-4b-think|bbeh-0316|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1895, "n_out": 36}
+{"cache_key": "qwen3.5-4b-think|bbeh-0359|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 934, "n_out": 17}
+{"cache_key": "qwen3.5-4b-think|bbeh-0341|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 649, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0394|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 350, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0394|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 352, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0339|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1131, "n_out": 91}
+{"cache_key": "qwen3.5-4b-think|bbeh-0410|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2028, "n_out": 20}
+{"cache_key": "qwen3.5-4b-think|bbeh-0392|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1400, "n_out": 17}
+{"cache_key": "qwen3.5-4b-think|bbeh-0383|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2045, "n_out": 18}
+{"cache_key": "qwen3.5-4b-think|bbeh-0425|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 686, "n_out": 34}
+{"cache_key": "qwen3.5-4b-think|bbeh-0086|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1909, "n_out": 917}
+{"cache_key": "qwen3.5-4b-think|bbeh-0317|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1867, "n_out": 14}
+{"cache_key": "qwen3.5-4b-think|bbeh-0401|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1073, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0371|qwen3.5-9b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2088, "n_out": 81}
+{"cache_key": "qwen3.5-4b-think|bbeh-0425|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 442, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0143|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "EN \"[ANSWER 2 (END)]\" WITH FULL ANSWER BC. NEED DECIDE FINAL ANSWERS SAME. IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. ANSWER 1 HAS NO FINAL ANSWER. SO NONE. NEED EXACTLY ONE WORD.</THINK>NONE", "n_in": 1845, "n_out": 314}
+{"cache_key": "qwen3.5-4b-think|bbeh-0086|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1002, "n_out": 579}
+{"cache_key": "qwen3.5-4b-think|bbeh-0406|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1462, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0257|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE<|ASSISTANT|>NEED FINAL EXACTLY ONE WORD.</THINK>NONE", "n_in": 303, "n_out": 175}
+{"cache_key": "qwen3.5-4b-think|bbeh-0327|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2682, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0399|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1073, "n_out": 14}
+{"cache_key": "qwen3.5-4b-think|bbeh-0247|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1122, "n_out": 157}
+{"cache_key": "qwen3.5-4b-think|bbeh-0405|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 567, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0436|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 856, "n_out": 19}
+{"cache_key": "qwen3.5-4b-think|bbeh-0417|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1070, "n_out": 28}
+{"cache_key": "qwen3.5-4b-think|bbeh-0452|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 535, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0358|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1213, "n_out": 169}
+{"cache_key": "qwen3.5-4b-think|bbeh-0457|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 628, "n_out": 22}
+{"cache_key": "qwen3.5-4b-think|bbeh-0352|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1073, "n_out": 201}
+{"cache_key": "qwen3.5-4b-think|bbeh-0327|qwen3.5-4b", "verdict": "INCORRECT", "raw": "INCORRECT", "n_in": 530, "n_out": 5}
+{"cache_key": "qwen3.5-4b-think|bbeh-0174|gpt-oss-120b", "verdict": "NONE", "raw": "NONE", "n_in": 1732, "n_out": 20}
+{"cache_key": "qwen3.5-4b-think|bbeh-0449|qwen3.6-35b-a3b", "verdict": "INCORRECT", "raw": "INCORRECT", "n_in": 520, "n_out": 35}
+{"cache_key": "qwen3.5-4b-think|bbeh-0045|qwen3.6-35b-a3b", "verdict": "CORRECT", "raw": "CORRECT", "n_in": 106, "n_out": 10}
+{"cache_key": "qwen3.5-4b-think|bbeh-0376|gpt-oss-120b|0", "verdict": "NONE", "raw": "AYS [ANSWER 1 (END)] THEN BLANK THEN [ANSWER 2 (END)] THE ANSWER IS: G. WE NEED IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. ANSWER1 NO FINAL ANSWER. SO NONE. NEED EXACTLY ONE WORD.</THINK>NONE", "n_in": 772, "n_out": 259}
+{"cache_key": "qwen3.5-4b-think|bbeh-0433|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1006, "n_out": 24}
+{"cache_key": "qwen3.5-4b-think|bbeh-0366|qwen3.5-9b", "verdict": "CORRECT", "raw": "CORRECT", "n_in": 330, "n_out": 18}
+{"cache_key": "qwen3.5-4b-think|bbeh-0016|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 581, "n_out": 13}
+{"cache_key": "qwen3.5-4b-think|bbeh-0062|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 600, "n_out": 20}
+{"cache_key": "qwen3.5-4b-think|bbeh-0041|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1187, "n_out": 14}
+{"cache_key": "qwen3.5-4b-think|bbeh-0372|qwen3.5-4b", "verdict": "NONE", "raw": "NONE", "n_in": 1020, "n_out": 95}
+{"cache_key": "qwen3.5-4b-think|bbeh-0438|deepseek-v3.1|0", "verdict": "NONE", "raw": "E PROMPT SHOWS [ANSWER 1 (END)] WITH NOTHING AFTER. ANSWER2 HAS MOBY DICK. IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. NEED BE CAREFUL: MAYBE ANSWER1 OMITTED? IT IS EMPTY. SO NONE.</THINK>NONE", "n_in": 1120, "n_out": 201}
+{"cache_key": "qwen3.5-4b-think|bbeh-0167|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1242, "n_out": 29}
+{"cache_key": "qwen3.5-4b-think|bbeh-0386|gpt-oss-120b|0", "verdict": "NONE", "raw": " IT LITERALLY HAS NO FINAL ANSWER. NEED REPLY NONE. BUT LET'S BE CAREFUL: THEY ASK \"IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE.\" ANSWER 1 END BLANK. SO NONE. NEED EXACTLY ONE WORD.</THINK>NONE", "n_in": 1057, "n_out": 301}
+{"cache_key": "qwen3.5-4b-think|bbeh-0133|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 832, "n_out": 32}
+{"cache_key": "qwen3.5-4b-think|bbeh-0072|qwen3.6-35b-a3b", "verdict": "NONE", "raw": "NONE", "n_in": 1155, "n_out": 229}
+{"cache_key": "qwen3.5-4b-think|bbeh-0058|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1016, "n_out": 117}
+{"cache_key": "qwen3.5-4b-think|bbeh-0276|gpt-oss-120b|0", "verdict": "DIFFERENT", "raw": "DIFFERENT", "n_in": 1571, "n_out": 212}
+{"cache_key": "qwen3.5-4b-think|bbeh-0389|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 930, "n_out": 880}
+{"cache_key": "qwen3.5-4b-think|bbeh-0118|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 966, "n_out": 1448}
+{"cache_key": "qwen3.5-4b-think|bbeh-0267|qwen3.5-4b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1209, "n_out": 1758}
+{"cache_key": "qwen3.5-4b-think|bbeh-0255|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 748, "n_out": 3805}
+{"cache_key": "qwen3.5-4b-think|bbeh-0169|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1330, "n_out": 4436}
+{"cache_key": "qwen3.5-4b-think|bbeh-0118|gpt-oss-20b|0", "verdict": null, "raw": " < (\n\nWAIT, I KEEP GETTING 85 STEPS FROM 83 TOKENS. THAT'S IMPOSSIBLE. LET ME RECOUNT.\n\nOH WAIT, I THINK THE ISSUE IS THAT I'M MISCOUNTING THE TOKENS IN THE MIDDLE SECTION. LET ME RECOUNT TOKENS 23-31", "n_in": 966, "n_out": 8192}
+{"cache_key": "qwen3.5-4b-think|bbeh-0384|deepseek-v3.1|0", "verdict": null, "raw": " 7    | 1910 | 11   | 42    |\" \u2014 2.\n\n\"| 2025-01-03| ERROR| 71   | 65   | 435  | 23:54| 50   | 1    | ERROR| 946  | THU  | 788  | 5    | 24   | ERROR| 1643 | 26   | 37    |\" \u2014 3.\n\n\"| 2025-01-02| ERROR|", "n_in": 2044, "n_out": 8192}
+{"cache_key": "qwen3.5-4b-think|bbeh-0407|gpt-oss-120b|0", "verdict": null, "raw": "11),WED(12),THU(13),FRI(14),SAT(15),SUN(16),TUE(17),WED(18),THU(19),FRI(20),SAT(21),SUN(22),MON(23),TUE(24),WED(25),THU(26),FRI(27). 27.\n\nCALORIES_CONSUMED: \"644, 989, 487, 1593, 1889, 955, 360, 1175,", "n_in": 2489, "n_out": 8192}
+{"cache_key": "qwen3.5-4b-think|bbeh-0455|deepseek-v3.1|0", "verdict": "SAME", "raw": "(5.33334,11.34388). SIDE (0,0)\u2192(5.33333,11.34388) = (5.33333,11.34388). SAME! SO IT'S A PARALLELOGRAM TOO! THIRD PARALLELOGRAM.\n\nIS IT A RECTANGLE? (7.3639,-3.46214)\u00b7(5.33333,11.34388) = 39.27 - 38.87", "n_in": 1385, "n_out": 8192}

@@ -1,0 +1,145 @@
+<!-- design plan
+layout: single-column editorial report, generous measure, figure full-bleed within gutter, findings as numbered cards only where order is real (priority order)
+-->
+<title>Interior Layer vs. Final Answer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#faf8f3; --surface:#ffffff; --ink:#1c1a16; --ink-muted:#6b6457;
+  --accent:#2a5ea8; --accent-warm:#c0531f; --line:#e6e1d4;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  padding-left: max(16px, env(safe-area-inset-left,0px));
+  padding-right: max(16px, env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15130f; --surface:#1d1a15; --ink:#efe9dd; --ink-muted:#a39a87;
+    --accent:#6ea3e0; --accent-warm:#e08a52; --line:#312c22; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15130f; --surface:#1d1a15; --ink:#efe9dd; --ink-muted:#a39a87;
+  --accent:#6ea3e0; --accent-warm:#e08a52; --line:#312c22; color-scheme: dark;
+}
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif; margin:0; padding-block:56px; line-height:1.55;}
+.wrap{max-width:720px; margin:0 auto; min-width:0;}
+.eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 10px;}
+h1{font-family:'Newsreader',serif; font-weight:600; font-size:clamp(28px,5vw,40px); line-height:1.1; margin:0 0 14px; text-wrap:balance;}
+.dek{font-size:16px; color:var(--ink-muted); max-width:62ch; margin:0 0 36px;}
+h2{font-family:'Newsreader',serif; font-weight:600; font-size:22px; margin:44px 0 6px; text-wrap:balance;}
+h3{font-family:'Inter',sans-serif; font-weight:600; font-size:14px; margin:22px 0 8px; color:var(--ink);}
+p{max-width:68ch; margin:0 0 14px;}
+.lede{font-size:17px;}
+code{font-family:var(--mono); font-size:0.9em; background:var(--line); padding:1px 5px; border-radius:4px;}
+.callout{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:8px; padding:16px 18px; margin:16px 0; max-width:68ch;}
+.callout.warm{border-left-color:var(--accent-warm);}
+.callout p{margin:0;}
+.callout p + p{margin-top:8px;}
+figure{margin:20px 0 28px;}
+figure img{width:100%; height:auto; border-radius:10px; border:1px solid var(--line); display:block;}
+figcaption{font-size:12.5px; color:var(--ink-muted); margin-top:8px; max-width:68ch;}
+table{border-collapse:collapse; width:100%; margin:14px 0 20px; font-size:13.5px;}
+th,td{text-align:left; padding:7px 10px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums;}
+th{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); font-weight:500;}
+.tablewrap{overflow-x:auto;}
+.steps{list-style:none; margin:16px 0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.steps li{display:flex; gap:12px; align-items:baseline; max-width:68ch;}
+.steps .n{font-family:var(--mono); font-size:12px; color:var(--accent); flex-shrink:0; width:18px;}
+.pill{display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px; margin-right:6px; margin-bottom:6px;}
+.pill.done{background:rgba(42,94,168,.12); color:var(--accent);}
+.pill.open{background:rgba(192,83,31,.14); color:var(--accent-warm);}
+.pathbox{font-family:var(--mono); font-size:12.5px; background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:14px 16px; margin:14px 0; overflow-x:auto; max-width:68ch;}
+.pathbox div{padding:3px 0; color:var(--ink-muted);}
+.pathbox span{color:var(--ink);}
+hr{border:none; border-top:1px solid var(--line); margin:48px 0;}
+.foot{font-size:12.5px; color:var(--ink-muted); margin-top:8px;}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Dynamic LLM Juries &middot; mech-interp &middot; 2026-11-06</p>
+  <h1>Does the model know better than it says?</h1>
+  <p class="dek">Held-out validation across the full 7-model pool, plus an overnight deep-dive into why the effect is strong and stable in two models and absent or reversed in the rest.</p>
+
+  <p class="lede">Across 7 models &times; 3 benchmarks &times; standard/rubric, the "interior layer beats the model's own final answer" effect is <strong>real but not universal</strong>. It holds up consistently in exactly two models &mdash; everywhere else it's absent, flips with the rubric, or runs the other way.</p>
+
+  <figure>
+    <img src="slope.png" alt="Cross-model slope chart: standard vs. rubric held-out gap per model and benchmark">
+    <figcaption>Each line connects a (benchmark, model) pair's standard value to its rubric value. Dot color = which one wins (blue = interior layer, orange = final answer, gray = negligible). Line direction shows whether rubric helped or hurt.</figcaption>
+  </figure>
+
+  <div class="callout">
+    <p><strong>gpt-oss-120b</strong> and <strong>qwen3.5-4b</strong> are the two models where the effect is real and consistent &mdash; large gaps, p&lt;10<sup>-4</sup>, across almost every benchmark and condition.</p>
+    <p>Everywhere else (nemotron3-nano-30b, qwen3.6-35b-a3b, nemotron3-super-120b, gpt-oss-20b, qwen3.5-9b) it's inconsistent, negligible, or reversed &mdash; qwen3.5-9b is the clean opposite case: the final answer beats the interior layer almost everywhere.</p>
+  </div>
+
+  <p>Rubric doesn't systematically help or hurt either: even within just the two models that show the effect, rubric strengthens it in some benchmarks and weakens it in others. There's no clean "rubric worsens it" story to tell.</p>
+
+  <hr>
+
+  <p class="eyebrow">Overnight deep-dive</p>
+  <h2>Why is gpt-oss-120b's winning layer unstable?</h2>
+  <p>gpt-oss-120b's best-performing interior layer jumps between 11% and 94% of model depth depending on benchmark and condition. qwen3.5-4b's sits in a tight, stable 78&ndash;97% band every time. Two independent checks explain the difference.</p>
+
+  <h3>1. Confidence-gap check (existing pilot data, no new compute)</h3>
+  <p>Per item, the gap between the best layer's logit-lens confidence and the second-best layer's:</p>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Model</th><th>Cell</th><th>Top1&ndash;top2 gap</th></tr>
+    <tr><td>gpt-oss-120b</td><td>BFF-standard</td><td>0.0034</td></tr>
+    <tr><td>gpt-oss-120b</td><td>BFF-rubric</td><td>0.0044</td></tr>
+    <tr><td>gpt-oss-120b</td><td>BiGGen-standard</td><td>0.0027</td></tr>
+    <tr><td>qwen3.5-4b</td><td>BFF-standard</td><td>0.0213</td></tr>
+    <tr><td>qwen3.5-4b</td><td>BFF-rubric</td><td>0.0311</td></tr>
+  </table>
+  </div>
+  <p>gpt-oss-120b's gap is <strong>7&ndash;9&times; smaller</strong>. Its confidence is essentially flat across most of the network &mdash; there's no real single winner, so which exact layer gets crowned "modal winning layer" is highly sensitive to sampling noise. qwen3.5-4b has a genuine, well-separated peak, which is why its winning layer is stable.</p>
+
+  <h3>2. Jacobian lens (new GPU capture, 25&ndash;40 items/model, BFF-standard)</h3>
+  <ul style="max-width:68ch; padding-left:20px;">
+    <li><strong>qwen3.5-4b</strong>: clean gradient flow through all 33 layers, with a real mid-network sensitivity plateau (layers 6&ndash;19, ~19&ndash;59% depth) &mdash; matches the confidence-peak finding above. Two independent signals pointing at the same mechanism.</li>
+    <li><strong>qwen3.5-9b</strong> (the final-answer-wins model): smooth, monotonic decay, no mid-network feature anywhere.</li>
+    <li><strong>gpt-oss-120b</strong>: gradient flow breaks completely at layer 19 of 36, for every item tested &mdash; a tooling limitation (its MXFP4-quantized MoE kernels likely lack backward support past that depth), not a finding about its representations. Jacobian lens currently can't see the back half of this model.</li>
+  </ul>
+
+  <div class="callout warm">
+    <p>We are <em>not</em> claiming this is an MoE-architecture story &mdash; the kernel limitation means that attribution can't be confirmed yet. It stays an open question. The confirmed part is representational: gpt-oss-120b keeps a near-flat, undifferentiated confidence profile across most of its depth, where qwen3.5-4b has a real, sharp checkpoint.</p>
+  </div>
+
+  <h2>Is the interior-layer signal real hidden knowledge?</h2>
+  <p>On qwen3.5-9b's one large final-wins cell (BiGGen-rubric): the interior layer rescues only <strong>2.2%</strong> of items where it disagrees with the final answer, versus the final answer winning <strong>82%</strong> of disagreements. Close to a null result for "hidden knowledge" in this model &mdash; there's very little to rescue.</p>
+  <p class="foot">A naive "does the interior layer ever cross 0.5 on the correct side, at any layer" check was tried and discarded &mdash; with ~33 layers and a binary threshold, crossing 0.5 somewhere at least once is close to guaranteed by chance regardless of signal.</p>
+
+  <h2>What's done, what's open</h2>
+  <p>
+    <span class="pill done">done</span> confidence-gap / plateau check
+    <span class="pill done">done</span> Jacobian lens, 3 models
+    <span class="pill done">done</span> qwen3.5-9b null check
+    <span class="pill open">open</span> Tuned Lens
+    <span class="pill open">open</span> scale-up probes
+    <span class="pill open">open</span> lexical-shortcut check
+    <span class="pill open">open</span> Patchscopes
+  </p>
+
+  <h3>Recommended next steps, in order</h3>
+  <ol class="steps">
+    <li><span class="n">1</span><span><strong>Tuned Lens</strong> on gpt-oss-120b's two genuinely-early cells (BFF-standard L10/37, BiGGen-rubric L4/37). Needs a new capture of the full final-layer softmax, not just the 2-way slice already saved. This is the main way to tell whether the early-layer "interior wins" result is real or a raw-logit-lens artifact &mdash; exactly where the near-tie above means the pick is least meaningful.</span></li>
+    <li><span class="n">2</span><span>Scale the Jacobian/probe capture from 25&ndash;40 items to ~150&ndash;300 per model &mdash; enough to train a non-overfit linear probe and get a trustworthy accuracy curve.</span></li>
+    <li><span class="n">3</span><span>Investigate the gpt-oss-120b gradient break at layer 19/36 &mdash; check whether a dequantized load path restores backward support, which would let Jacobian lens cover the model's full depth.</span></li>
+    <li><span class="n">4</span><span>Lexical-shortcut check on the layer-rescues bucket &mdash; join prompt text to see if rescued items share a surface feature (length, specific keywords), to rule out pattern-matching rather than genuine reasoning.</span></li>
+    <li><span class="n">5</span><span>Patchscopes, scoped to 6&ndash;10 hand-picked qualitative examples for the write-up, not a large run.</span></li>
+  </ol>
+
+  <hr>
+  <h2>Where to look</h2>
+  <p>Everything below is committed to <code>keyu/mech-interp</code> (not pushed):</p>
+  <div class="pathbox">
+    <div>Full overnight write-up &rarr; <span>experiments/interp/overnight_deepdive/overnight_notes.md</span></div>
+    <div>Raw captures (3 models) &rarr; <span>experiments/interp/overnight_deepdive/probe_data/*.jsonl</span></div>
+    <div>42-cell significance results &rarr; <span>experiments/interp/significance_results/*.json</span></div>
+    <div>This chart's source &rarr; <span>experiments/interp/fig_cross_model_slope.png</span></div>
+    <div>Slack-ready cross-model summary &rarr; <span>cross_model_results_slack.md</span></div>
+  </div>
+  <p class="foot">Earlier exploratory work (DLA, activation patching, the grid heatmap, intermediate bar-chart variants) is superseded by the findings above and intentionally left out of this page.</p>
+</div>

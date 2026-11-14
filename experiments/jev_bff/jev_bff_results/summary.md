@@ -10,6 +10,7 @@ Verdict = yes if Jev's probability ≥ 0.5. κ = Cohen's kappa vs consensus huma
 |---|---|---|---|---|---|---|---|
 | noref | 459 | 0.760 | 0.505 | 0.848 | 0.365 | 0.141 | 0.641 |
 | ref | 456 | 0.928 | 0.856 | 0.985 | 0.005 | 0.125 | 0.491 |
+| rules | 459 | 0.769 | 0.527 | 0.853 | 0.315 | 0.164 | 0.606 |
 
 Human base rate (share labelled Correct): 0.558
 
@@ -59,7 +60,18 @@ confidence = |p − 0.5| × 2. This is the Trust-or-Escalate / Path C tier-0 que
 | 60% | 0.88 | 0.985 | 0.968 |
 | 50% | 0.92 | 0.987 | 0.969 |
 
+**rules**
+
+| Coverage | Min confidence | Accuracy | κ |
+|---|---|---|---|
+| 100% | 0.00 | 0.769 | 0.527 |
+| 90% | 0.14 | 0.797 | 0.582 |
+| 80% | 0.28 | 0.823 | 0.632 |
+| 70% | 0.42 | 0.847 | 0.680 |
+| 60% | 0.52 | 0.884 | 0.754 |
+| 50% | 0.62 | 0.904 | 0.794 |
+
 ## Cost & latency
 
-- Calls: 915; input tokens: 1,391,725; est. cost: $0.0585 (list price $0.042/1M input, output free)
-- Latency p50 0.219s, p95 12.695s (includes network)
+- Calls: 1374; input tokens: 2,140,014; est. cost: $0.0899 (list price $0.042/1M input, output free)
+- Latency p50 0.172s, p95 7.364s (includes network)

@@ -41,6 +41,71 @@ BFF_JUDGE = """You are grading an AI assistant's answer in a finance/accounting 
 Is the assistant's FINAL response a correct answer to the user's final question? The key facts, calculations, numbers and conclusions must be correct; minor wording or formatting issues do not matter, but a wrong number, wrong method or wrong conclusion makes it incorrect.
 Reason briefly, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT"."""
 
+# "rules" condition: a detailed, explicit expert grading rubric in place of BFF_JUDGE's one-line
+# instruction -- no reference answer, same information as "none", just spelled out as numbered
+# criteria. Researcher-constructed for this project; not a replication of any external rubric.
+BFF_JUDGE_RULES = """You are grading an AI assistant's answer in a finance/accounting conversation
+against the following expert grading rubric. Answer CORRECT only if ALL rules are satisfied.
+
+{conversation}
+
+RULE 1 (Numerical accuracy): Every final numeric answer must be correct to within normal rounding
+tolerance (about 1%). A value outside that tolerance is incorrect, even if the method was right.
+RULE 2 (Method validity): The formula, accounting treatment, or financial reasoning method used
+must be the standard correct one for this question type. A plausible-sounding but non-standard
+method is incorrect even if it happens to produce the right number.
+RULE 3 (Completeness): If the question has multiple parts, every part must be correctly answered.
+A response that correctly answers only some parts is incorrect overall.
+RULE 4 (No unsupported assumptions): The response must not introduce assumptions not stated or
+implied by the conversation that change the answer, unless it flags them as assumptions.
+RULE 5 (Units and sign): Units, currency, and sign (positive/negative, percentage vs. decimal)
+must be correct and consistent with the question.
+RULE 6 (No partial credit): A response with the right method but a wrong final number due to an
+arithmetic slip is still INCORRECT under this rubric -- do not give credit for "close enough"
+reasoning if Rule 1 is violated.
+
+Minor wording or formatting differences from an ideal answer do not matter on their own.
+Reason briefly against each rule, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT"."""
+
+# "rules2" condition: NOT researcher-constructed -- the actual human-annotator labeling guideline
+# BFF-Bench's own experts used to create the gold labels (recovered verbatim from a teammate's
+# findings page), reused as the LLM judge's grading instructions. Rule 2 (steps must match, not
+# just the final answer) is the one the teammate's own ablation flagged as the likely cause of
+# gpt-oss's drop in agreement under a rules prompt; "rules2_norule2" removes just that rule.
+BFF_JUDGE_RULES2 = """You are grading an AI assistant's answer in a finance/accounting conversation
+using the following grading rules -- the same rules used by the human experts who created the
+reference labels for this benchmark. Answer CORRECT only if the response is correct under ALL
+applicable rules below.
+
+{conversation}
+
+RULE 1: If the final answer disagrees with the reference answer, the response is INCORRECT.
+RULE 2: If the final answer agrees with the reference but the reasoning steps disagree, the
+response is INCORRECT.
+RULE 3: Extra information that is not obviously wrong does not make the response incorrect; it is
+still CORRECT.
+RULE 4: A final answer that is only slightly off due to rounding is still CORRECT.
+RULE 5: If the response is missing information, judge whether that missing information is
+crucial to the question; if unsure, treat the response as CORRECT.
+
+Reason briefly against each rule, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT"."""
+
+BFF_JUDGE_RULES2_NO_RULE2 = """You are grading an AI assistant's answer in a finance/accounting conversation
+using the following grading rules -- the same rules used by the human experts who created the
+reference labels for this benchmark (with the step-matching rule removed). Answer CORRECT only if
+the response is correct under ALL applicable rules below.
+
+{conversation}
+
+RULE 1: If the final answer disagrees with the reference answer, the response is INCORRECT.
+RULE 3: Extra information that is not obviously wrong does not make the response incorrect; it is
+still CORRECT.
+RULE 4: A final answer that is only slightly off due to rounding is still CORRECT.
+RULE 5: If the response is missing information, judge whether that missing information is
+crucial to the question; if unsure, treat the response as CORRECT.
+
+Reason briefly against each rule, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT"."""
+
 BBEH_JUDGE = """You are grading an AI assistant's answer to a reasoning question.
 
 [QUESTION]
@@ -176,6 +241,12 @@ def judgebench_items(a):
 def build_prompt(bench, it, cond, self_answer):
     if bench == "judgebench":
         return JUDGEBENCH_JUDGE.format(question=it["question"], response_a=it["response_a"], response_b=it["response_b"])
+    if bench == "bff" and cond == "rules":
+        return BFF_JUDGE_RULES.format(conversation=render_conv(it["conv"]))
+    if bench == "bff" and cond == "rules2":
+        return BFF_JUDGE_RULES2.format(conversation=render_conv(it["conv"]))
+    if bench == "bff" and cond == "rules2_norule2":
+        return BFF_JUDGE_RULES2_NO_RULE2.format(conversation=render_conv(it["conv"]))
     if cond == "none":
         ref = ""
     elif cond == "self":

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "10300984-t2",
+    "label": "layer_rescue",
+    "gold": 1,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  },
+  {
+    "id": "12fbe2bf-t1",
+    "label": "layer_rescue",
+    "gold": 1,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  },
+  {
+    "id": "84519055-t2",
+    "label": "final_better",
+    "gold": 1,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  },
+  {
+    "id": "5350169f-t1",
+    "label": "final_better",
+    "gold": 0,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  },
+  {
+    "id": "6565914e-t1",
+    "label": "both_wrong",
+    "gold": 0,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  },
+  {
+    "id": "9c9bb3a8-t1",
+    "label": "both_wrong",
+    "gold": 0,
+    "layer": 10,
+    "continuation": " B\n\nThe assistant's response is correct. The question asks"
+  }
+]

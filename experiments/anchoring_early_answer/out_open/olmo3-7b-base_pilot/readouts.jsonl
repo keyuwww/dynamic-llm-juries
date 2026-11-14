@@ -1,0 +1,2 @@
+{"judge": "olmo3-7b-base", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "A", "margin": 0.1875, "n_tok": 1441, "row": 0}
+{"judge": "olmo3-7b-base", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "A", "margin": 1.328125, "n_tok": 777, "row": 1}

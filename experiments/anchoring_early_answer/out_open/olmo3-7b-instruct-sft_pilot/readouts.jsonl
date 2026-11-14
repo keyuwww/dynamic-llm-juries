@@ -1,0 +1,10 @@
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "A", "margin": 3.25, "n_tok": 1477, "row": 0}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "25", "margin": 3.0, "n_tok": 1478, "row": 0}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "50", "margin": 3.0, "n_tok": 1478, "row": 0}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "75", "margin": 3.0, "n_tok": 1478, "row": 0}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "C", "margin": 3.25, "n_tok": 1477, "row": 0}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "A", "margin": 6.8125, "n_tok": 813, "row": 1}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "25", "margin": 6.8125, "n_tok": 814, "row": 1}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "50", "margin": 6.8125, "n_tok": 814, "row": 1}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "75", "margin": 6.8125, "n_tok": 814, "row": 1}
+{"judge": "olmo3-7b-instruct-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "C", "margin": 6.8125, "n_tok": 813, "row": 1}

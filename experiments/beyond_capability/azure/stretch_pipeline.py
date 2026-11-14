@@ -58,6 +58,8 @@ def main():
     ap.add_argument("--items", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--tag", required=True)
+    ap.add_argument("--alphas", default="-8,-4,0,4,8", help="shift strengths (sd)")
+    ap.add_argument("--betas", default="1,3,10", help="stretch strengths; empty = shift only")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -110,7 +112,7 @@ def main():
             continue
         run([py, str(HERE / "dir_capture.py"), "--phase", "steer", "--model", a.model, "--items", a.items, "--out", str(out),
              "--tag", f"{a.tag}_{apply_}", "--directions", str(out / f"dirs_{a.tag}_{apply_}.json"),
-             "--steer-ids", str(out / f"ids_{a.tag}_{apply_}.json"), "--alphas=-8,-4,0,4,8", "--betas=1,3,10"])  # "=" form: a value starting with "-" is not an option
+             "--steer-ids", str(out / f"ids_{a.tag}_{apply_}.json"), f"--alphas={a.alphas}", f"--betas={a.betas}"])  # "=" form: a value starting with "-" is not an option
     print("done: pipeline", flush=True)
 
 

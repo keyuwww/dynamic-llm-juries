@@ -6,22 +6,30 @@ Verdict = majority of the judge's votes; ties and unparseable outputs count as I
 
 | Judge | Tier | Condition | n | Parse rate | Accuracy | Cohen's κ | AUROC (vote share) |
 |---|---|---|---|---|---|---|---|
-| qwen3.5-4b | small | none | 459 | 0.893 | 0.745 | 0.481 | 0.739 |
-| qwen3.5-4b | small | human | 456 | 0.895 | 0.908 | 0.817 | 0.917 |
-| gpt-oss-20b | small | none | 459 | 0.721 | 0.826 | 0.653 | 0.833 |
-| gpt-oss-20b | small | human | 456 | 0.818 | 0.879 | 0.756 | 0.880 |
-| nemotron3-nano-30b | small | none | 459 | 1.000 | 0.667 | 0.325 | 0.663 |
-| nemotron3-nano-30b | small | human | 456 | 0.998 | 0.792 | 0.587 | 0.800 |
-| qwen3.5-9b | mid | none | 459 | 0.889 | 0.739 | 0.473 | 0.738 |
-| qwen3.5-9b | mid | human | 456 | 0.908 | 0.890 | 0.782 | 0.899 |
-| qwen3.6-35b-a3b | mid | none | 459 | 0.802 | 0.765 | 0.537 | 0.777 |
-| qwen3.6-35b-a3b | mid | human | 456 | 0.882 | 0.875 | 0.753 | 0.886 |
-| nemotron3-super-120b | mid | none | 459 | 0.943 | 0.741 | 0.459 | 0.723 |
-| nemotron3-super-120b | mid | human | 456 | 0.991 | 0.928 | 0.855 | 0.931 |
-| gpt-oss-120b | strong | none | 459 | 0.834 | 0.854 | 0.705 | 0.854 |
-| gpt-oss-120b | strong | human | 456 | 0.950 | 0.921 | 0.842 | 0.926 |
-| deepseek-v3.1 | strong | none | 459 | 0.993 | 0.806 | 0.603 | 0.799 |
-| deepseek-v3.1 | strong | human | 456 | 0.998 | 0.930 | 0.858 | 0.931 |
+| qwen3.5-4b | small | none | 459 | 0.959 | 0.741 | 0.472 | 0.734 |
+| qwen3.5-4b | small | rules2 | 459 | 0.946 | 0.739 | 0.460 | 0.725 |
+| qwen3.5-4b | small | rules2_norule2 | 459 | 0.952 | 0.741 | 0.465 | 0.729 |
+| gpt-oss-20b | small | none | 459 | 0.917 | 0.841 | 0.677 | 0.838 |
+| gpt-oss-20b | small | rules2 | 459 | 0.928 | 0.824 | 0.641 | 0.819 |
+| gpt-oss-20b | small | rules2_norule2 | 459 | 0.946 | 0.841 | 0.673 | 0.832 |
+| nemotron3-nano-30b | small | none | 459 | 1.000 | 0.675 | 0.348 | 0.676 |
+| nemotron3-nano-30b | small | rules2 | 459 | 0.993 | 0.662 | 0.304 | 0.650 |
+| nemotron3-nano-30b | small | rules2_norule2 | 459 | 0.996 | 0.695 | 0.356 | 0.671 |
+| qwen3.5-9b | mid | none | 459 | 0.961 | 0.784 | 0.564 | 0.783 |
+| qwen3.5-9b | mid | rules2 | 459 | 0.917 | 0.802 | 0.600 | 0.802 |
+| qwen3.5-9b | mid | rules2_norule2 | 459 | 0.939 | 0.804 | 0.597 | 0.795 |
+| qwen3.6-35b-a3b | mid | none | 459 | 0.946 | 0.769 | 0.542 | 0.777 |
+| qwen3.6-35b-a3b | mid | rules2 | 459 | 0.874 | 0.821 | 0.645 | 0.829 |
+| qwen3.6-35b-a3b | mid | rules2_norule2 | 459 | 0.908 | 0.806 | 0.610 | 0.808 |
+| nemotron3-super-120b | mid | none | 459 | 0.976 | 0.763 | 0.502 | 0.743 |
+| nemotron3-super-120b | mid | rules2 | 459 | 0.861 | 0.793 | 0.581 | 0.791 |
+| nemotron3-super-120b | mid | rules2_norule2 | 459 | 0.889 | 0.800 | 0.585 | 0.786 |
+| gpt-oss-120b | strong | none | 459 | 0.963 | 0.839 | 0.674 | 0.838 |
+| gpt-oss-120b | strong | rules2 | 459 | 0.980 | 0.841 | 0.678 | 0.840 |
+| gpt-oss-120b | strong | rules2_norule2 | 459 | 0.980 | 0.834 | 0.663 | 0.831 |
+| deepseek-v3.1 | strong | none | 459 | 1.000 | 0.800 | 0.589 | 0.791 |
+| deepseek-v3.1 | strong | rules2 | 459 | 1.000 | 0.800 | 0.586 | 0.787 |
+| deepseek-v3.1 | strong | rules2_norule2 | 459 | 1.000 | 0.745 | 0.461 | 0.721 |
 
 ## Judge-routing headroom (condition = none; 1 = verdict matched gold)
 
@@ -29,21 +37,21 @@ Items scored by every model: 459
 
 | Model | Tier | Accuracy | Only model correct (# items) |
 |---|---|---|---|
-| gpt-oss-120b | strong | 0.854 | 0 |
-| gpt-oss-20b | small | 0.826 | 1 |
-| deepseek-v3.1 | strong | 0.806 | 1 |
-| qwen3.6-35b-a3b | mid | 0.765 | 1 |
-| qwen3.5-4b | small | 0.745 | 0 |
-| nemotron3-super-120b | mid | 0.741 | 1 |
-| qwen3.5-9b | mid | 0.739 | 0 |
-| nemotron3-nano-30b | small | 0.667 | 8 |
+| gpt-oss-20b | small | 0.841 | 1 |
+| gpt-oss-120b | strong | 0.839 | 0 |
+| deepseek-v3.1 | strong | 0.800 | 1 |
+| qwen3.5-9b | mid | 0.784 | 1 |
+| qwen3.6-35b-a3b | mid | 0.769 | 1 |
+| nemotron3-super-120b | mid | 0.763 | 0 |
+| qwen3.5-4b | small | 0.741 | 2 |
+| nemotron3-nano-30b | small | 0.675 | 8 |
 
 | Headroom check | |
 |---|---|
-| Best single model | **gpt-oss-120b** (0.854) |
+| Best single model | **gpt-oss-20b** (0.841) |
 | Oracle (any model correct) | 0.974 |
-| **Oracle − best single** (room a router can win) | **0.120** |
-| Items the best model misses but another gets right | 55 (0.120) |
+| **Oracle − best single** (room a router can win) | **0.133** |
+| Items the best model misses but another gets right | 61 (0.133) |
 | Items no model gets right | 0.026 |
 
 Rule of thumb from the plan: keep a model in the routing pool if no single model wins almost everywhere and oracle − best is ≥ ~0.08 (BFF-Bench's original six models gave only ~0.04).
@@ -52,13 +60,13 @@ Rule of thumb from the plan: keep a model in the routing pool if no single model
 
 | Model | Calls | Avg input tok | Avg output tok | $ / call | Total $ |
 |---|---|---|---|---|---|
-| deepseek-v3.1 | 915 | 1,069 | 188 | $0.00261 | $2.385 |
-| gpt-oss-120b | 915 | 1,067 | 437 | $0.00072 | $0.658 |
-| gpt-oss-20b | 915 | 1,067 | 558 | $0.00044 | $0.406 |
-| nemotron3-nano-30b | 915 | 1,195 | 122 | $0.00029 | $0.268 |
-| nemotron3-super-120b | 915 | 1,195 | 190 | $0.00095 | $0.873 |
-| qwen3.5-4b | 915 | 1,209 | 327 | $0.00073 | $0.665 |
-| qwen3.5-9b | 915 | 1,209 | 323 | $0.00144 | $1.319 |
-| qwen3.6-35b-a3b | 915 | 1,209 | 448 | $0.00125 | $1.144 |
+| deepseek-v3.1 | 1836 | 1,076 | 294 | $0.00306 | $5.627 |
+| gpt-oss-120b | 1836 | 1,072 | 666 | $0.00091 | $1.676 |
+| gpt-oss-20b | 1836 | 1,072 | 800 | $0.00055 | $1.015 |
+| nemotron3-nano-30b | 1836 | 1,183 | 249 | $0.00035 | $0.650 |
+| nemotron3-super-120b | 1836 | 1,183 | 669 | $0.00164 | $3.006 |
+| qwen3.5-4b | 1836 | 1,197 | 513 | $0.00091 | $1.671 |
+| qwen3.5-9b | 1836 | 1,197 | 636 | $0.00206 | $3.781 |
+| qwen3.6-35b-a3b | 1836 | 1,197 | 834 | $0.00176 | $3.230 |
 
-**Total: $7.72** (Tinker list prices; cached-prefill discounts not counted, so this is an upper bound)
+**Total: $20.66** (Tinker list prices; cached-prefill discounts not counted, so this is an upper bound)

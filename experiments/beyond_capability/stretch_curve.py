@@ -88,6 +88,8 @@ def main():
     for ax, (sv, nm) in zip(axes, groups):
         ax.set_facecolor("#fcfcfb")
         ax.axhline(0.5, color=INK2, lw=1, ls=(0, (3, 3)))
+        ax.axvspan(11 / 1.18, 11 * 1.18, color="#e9e6dc", zorder=0)  # the strength used in the report
+        ax.text(11, 0.805, "×11 used\nin report", ha="center", va="top", fontsize=8.5, color=INK, fontweight="bold")
         ax.text(1.05, 0.503, "chance", color=INK2, fontsize=8.5, va="bottom")
         for model in ("qwen3.5-9b", "llama3.1-8b"):
             for dn in ("Jc", "Rc"):
@@ -107,6 +109,10 @@ def main():
         xt = sorted({x for k, d in res.items() for x in d})
         ax.set_xticks(xt)
         ax.set_xticklabels([f"×{x:g}" for x in xt])
+        for lab, x in zip(ax.get_xticklabels(), xt):
+            if x == 11:
+                lab.set_fontweight("bold")
+                lab.set_color(INK)
         ax.minorticks_off()
         ax.grid(color=GRID, lw=0.8)
         ax.set_axisbelow(True)
@@ -115,10 +121,11 @@ def main():
         ax.set_title(f"{nm} questions", loc="left", color=INK, fontsize=11)
         ax.set_xlabel("stretch strength along the judge direction (log scale)")
     axes[0].set_ylabel("ranking: right above wrong, same question\n(within-question AUROC)")
-    axes[1].legend(frameon=False, fontsize=8.5, loc="upper left", labelcolor=INK)
+    h, l = axes[1].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=4, labelcolor=INK)
     fig.suptitle(f"{'MMLU-Redux' if a.bench == 'mmlu' else a.bench.upper()}: judge ranking vs stretch strength "
                  "(band = 95% CI)", x=0.01, ha="left", color=INK, fontsize=12.5, fontweight="bold")
-    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    fig.tight_layout(rect=(0, 0.07, 1, 0.94))
     fig.savefig(bdir / f"stretch_curve_{a.bench}.png", dpi=160, facecolor=fig.get_facecolor())
     print(bdir / f"stretch_curve_{a.bench}.png")
 

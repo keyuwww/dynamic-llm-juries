@@ -1,0 +1,36 @@
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0265|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1210, "n_out": 17}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0033|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 615, "n_out": 20}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0278|qwen3.5-4b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2096, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0344|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1063, "n_out": 28}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0341|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 649, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0010|qwen3.6-35b-a3b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1484, "n_out": 44}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0316|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1895, "n_out": 36}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0292|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1043, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0140|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 628, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0148|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1353, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0152|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1189, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0097|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1055, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0060|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 640, "n_out": 38}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0030|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 632, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0155|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1132, "n_out": 30}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0020|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1862, "n_out": 14}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0283|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 601, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0094|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1172, "n_out": 26}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0311|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 616, "n_out": 13}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0261|deepseek-v3.1|0", "verdict": "NONE", "raw": "NONE", "n_in": 1416, "n_out": 17}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0155|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 354, "n_out": 36}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0341|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1355, "n_out": 30}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0254|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1506, "n_out": 44}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0154|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2065, "n_out": 45}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0432|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1113, "n_out": 14}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0417|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1070, "n_out": 28}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0164|nemotron3-nano-30b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1013, "n_out": 146}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0056|deepseek-v3.1|0", "verdict": "NONE", "raw": "SWER 1 (END)] THEN BLANK, THEN [ANSWER 2 (END)] THE ANSWER IS: YES, UNKNOWN, NO. IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. SO ANSWER1 NO FINAL ANSWER. NEED EXACTLY ONE WORD NONE.</THINK>NONE", "n_in": 792, "n_out": 215}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0392|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 1400, "n_out": 17}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0293|qwen3.5-4b", "verdict": "NONE", "raw": "NONE", "n_in": 1054, "n_out": 22}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0046|gpt-oss-20b|0", "verdict": "NONE", "raw": "AME/DIFFERENT/NONE.\n\nSO ANSWER 1 HAS NO FINAL ANSWER? IT APPEARS BLANK BETWEEN [ANSWER 1 (END)] AND [ANSWER 2 (END)]. NEED REPLY NONE IF EITHER ANSWER GIVES NO FINAL ANSWER. SO FINAL NONE.</THINK>NONE", "n_in": 1418, "n_out": 365}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0254|gpt-oss-120b|0", "verdict": "NONE", "raw": "ND)] THE ANSWER IS: NO, UNKNOWN, YES. IF EITHER ANSWER GIVES NO FINAL ANSWER, REPLY NONE. NEED DETERMINE IF ANSWER1 HAS NO FINAL ANSWER. IT IS BLANK INDEED. SO NONE. NEED EXACTLY ONE WORD.</THINK>NONE", "n_in": 712, "n_out": 264}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0282|gpt-oss-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 2092, "n_out": 273}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0005|gpt-oss-20b|0", "verdict": "NONE", "raw": "NONE", "n_in": 987, "n_out": 634}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0005|nemotron3-super-120b|0", "verdict": "NONE", "raw": "NONE", "n_in": 987, "n_out": 768}
+{"cache_key": "qwen3.6-35b-a3b-think|bbeh-0008|deepseek-v3.1|0", "verdict": "NONE", "raw": "IRED FORMAT.</THINK>NONE\n\nNEED PRODUCE FINAL WITH REQUIRED FORMAT.</THINK>NONE\n\nNEED PRODUCE FINAL WITH REQUIRED FORMAT.</THINK>NONE\n\nNEED PRODUCE FINAL WITH REQUIRED FORMAT.</THINK>NONE\n\nNEED PRODUCE", "n_in": 922, "n_out": 8192}

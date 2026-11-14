@@ -41,10 +41,12 @@ a judge's ability to solve, can it still tell right answers from wrong ones, and
    judge along the solving direction does nothing. Stretching along the judge's own direction gives Llama +7 points
    [+1, +14] on questions it cannot solve and Qwen nothing — so steering is not a route to a good judge.
 9. **Telling the judge an answer is its own does not help, and it shifts leniency** (Step 4). On BBEH, presenting
-   someone else's answer as the judge's own makes it accept more wrong answers (58% → 70% on unsolved questions):
-   claimed authorship alone is enough to trigger self-preference. On BFF-Bench the "own reply, then 'is your answer
-   correct?'" version makes the two small Qwens reject a third of the right answers instead, apparently the
-   "are you sure?" back-down effect; Qwen-35B is unaffected and Nemotron becomes more lenient there too.
+   someone else's answer as the judge's own reply makes it accept more wrong answers (58% → 70% on unsolved questions).
+   The same layout with the answer introduced as another AI's gives 52%: "yours" raises acceptance of wrong answers by
+   18 points [+15, +20], in all four judges. Stating "you gave this earlier" in one prompt barely matters, so it is the
+   answer sitting in the judge's own turn that does it (self-attribution bias, already reported by Khullar et al. 2026).
+   On BFF-Bench the own-reply version makes the two small Qwens reject a third of the right answers instead, and the
+   another-AI version does the same, so that is the "are you sure?" back-down effect, not ownership.
    Turning thinking on helps a little (Qwen-9B +5 points [+0, +10] on unsolved BBEH questions).
 
 ---
@@ -401,6 +403,7 @@ changes.
 | No framing (baseline) | "You are grading an AI assistant's answer…" |
 | Shown as its own reply | the question, the candidate as *its own* reply, then "Is your final answer above correct?" |
 | "Here is the answer you gave earlier" | one prompt saying the candidate is the answer it gave earlier |
+| Another AI's answer, same layout (control, added Nov 10) | as "shown as its own reply", but the reply starts "Here is the answer another AI assistant gave to your question:" and the follow-up asks "Is that assistant's final answer above correct?" |
 
 Cells: balanced accuracy (share of right answers accepted / share of wrong answers accepted). Δ vs the no-framing
 baseline with thinking off, same answers, 95% interval.
@@ -412,6 +415,18 @@ baseline with thinking off, same answers, 95% interval.
 | No framing | 0.71 (0.88 / 0.46) | 0.55 (0.68 / 0.58) | — |
 | Shown as its own reply | 0.61 (0.87 / **0.65**) | 0.52 (0.74 / **0.70**) | −3 [−5, −1] |
 | "The answer you gave earlier" | 0.69 (0.88 / 0.50) | 0.53 (0.68 / 0.61) | −2 [−4, 0] |
+| Another AI's answer, same layout | 0.68 (0.83 / 0.47) | 0.54 (0.60 / 0.52) | −1 [−3, +1] |
+
+**BBEH, own reply minus another AI's answer (same layout, same answers and judge).** Change in the share of answers
+accepted, ×100 [95% CI].
+
+| Judge | solved: wrong | solved: right | not solved: wrong | not solved: right |
+|---|---|---|---|---|
+| Qwen3.5-4B | +21 [+14, +29] | +10 [+5, +16] | +20 [+15, +24] | +17 [+11, +23] |
+| Qwen3.5-9B | +19 [+12, +25] | +6 [+3, +9] | +18 [+14, +23] | +14 [+6, +22] |
+| Qwen3.6-35B | +10 [+4, +17] | −2 [−5, 0] | +8 [+3, +13] | +3 [−7, +13] |
+| Nemotron-3-Super | +26 [+19, +35] | +5 [−1, +10] | +23 [+19, +26] | +15 [+11, +19] |
+| 4 judges pooled | +17 [+14, +21] | +4 [+2, +6] | +18 [+15, +20] | +14 [+11, +17] |
 
 **BBEH, Qwen3.5-9B with thinking on** (one sample each)
 
@@ -429,22 +444,34 @@ baseline with thinking off, same answers, 95% interval.
 | 4 judges, thinking off | No framing | 0.77 (0.85 / 0.30) | 0.69 (0.67 / 0.29) | — |
 | 4 judges, thinking off | Shown as its own reply | 0.78 (0.77 / 0.20) | 0.63 (**0.48** / 0.23) | −6 [−11, −1] |
 | 4 judges, thinking off | "The answer you gave earlier" | 0.78 (0.85 / 0.29) | 0.69 (0.68 / 0.30) | 0 [−4, +4] |
+| 4 judges, thinking off | Another AI's answer, same layout | 0.79 (0.75 / 0.17) | 0.65 (**0.50** / 0.20) | −4 [−8, 0] |
 | Qwen3.5-9B, thinking on | No framing | 0.86 (0.84 / 0.12) | 0.77 (0.68 / 0.15) | +4 [−4, +12] (vs thinking off) |
 
 **Plain reading:**
 - The framing never helps. The extra signal the self-check role carries inside the model does not reach the verdict
   through a prompt.
 - What the framing does change is **leniency**. On BBEH, calling someone else's answer "yours" makes the judge accept
-  far more wrong answers (58% → 70% on unsolved, 46% → 65% on solved questions). Self-preference does not need the
-  judge to recognise its own text: being *told* it wrote the answer is enough.
+  far more wrong answers (58% → 70% on unsolved, 46% → 65% on solved questions). The control with the same layout but
+  "another AI's answer" accepts 52% and 47%, so "yours" itself adds about 18 points [+15, +20], in every judge
+  (least in Qwen-35B, +8 to +10). Self-preference does not need the judge to recognise its own text.
+- **It is the position, not the statement.** "Here is the answer you gave earlier" in a single prompt barely moves the
+  judge (58% → 61%). Only an answer sitting in the judge's own turn triggers it. Khullar et al. (2026, "Self-Attribution
+  Bias: When AI Monitors Go Easy on Themselves") report the same split, so this replicates published work.
+- On unsolved questions it is mostly leniency: right answers rise almost as much as wrong ones (+14 vs +18). On solved
+  questions mostly wrong answers rise (+17 vs +4), so the judge also gets worse at telling them apart there.
+- Judge and answer are the same in both framings, so judge quality can't explain the difference. That is the
+  confound Roytburg et al. (ICML 2026) raise for self-preference measured on models' real outputs.
+- Open: the control names "another AI" explicitly. Against no framing, "yours" raises wrong-answer acceptance by 12 points
+  and "another AI's" lowers it by 6; a human-expert or unlabelled version would show which side carries it.
 - On BFF-Bench, the conversational version (its "own" reply followed by the user asking "Is your final response above
   correct?") makes **Qwen-4B and Qwen-9B much stricter**: they accept 58% and 66% of right answers instead of 82–83%.
   Qwen-35B is unchanged, Nemotron becomes *more* lenient (40% → 50% of wrong answers accepted), and the single-prompt
   "the answer you gave earlier" version causes no strictness for anyone. Reading Qwen-4B's 68 newly rejected right
   answers, it invents errors to correct ("double entries apply to entities, not individuals"; a made-up "step-up in
-  basis"; "Wait, let's re-verify the numbers"). This looks like the known "are you sure?" effect (models back down
-  when a user questions their answer; Sharma et al. 2023, Laban et al. 2023), not ownership itself. Separating the two
-  would need a framing that questions the answer without claiming it is the judge's own.
+  basis"; "Wait, let's re-verify the numbers"). This is the known "are you sure?" effect (models back down
+  when a user questions their answer; Sharma et al. 2023, Laban et al. 2023), not ownership itself: with the same
+  follow-up about another AI's answer, the judges accept 50% of right answers on unsolved questions vs 48% for "your"
+  answer (own minus another AI's: +2 [−2, +6] on wrong answers, about 0 on right ones).
 - Letting Qwen-9B think helps a little on questions it cannot solve (+5 on BBEH, +4 on BFF-Bench, the latter not
   significant), and the framing adds nothing on top.
 

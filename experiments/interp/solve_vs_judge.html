@@ -1,0 +1,332 @@
+<title>Solving Isn't Judging</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* layout: single reading column (~68ch) with full-column tables and one scatter; lab-notebook register, cool paper */
+:root{
+  --bg:#f5f7f6; --surface:#ffffff; --ink:#15211f; --muted:#56635f; --line:#d9e0dd;
+  --accent:#0d6e6a; --accent-soft:rgba(13,110,106,.10); --flag:#9a4b12; --flag-soft:rgba(154,75,18,.10);
+  --display:'Spectral', Georgia, serif;
+  --body:'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+  --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101716; --surface:#172120; --ink:#e4ecea; --muted:#9aaba7; --line:#2b3836;
+    --accent:#4fc1b9; --accent-soft:rgba(79,193,185,.14); --flag:#e39a5c; --flag-soft:rgba(227,154,92,.14);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101716; --surface:#172120; --ink:#e4ecea; --muted:#9aaba7; --line:#2b3836;
+  --accent:#4fc1b9; --accent-soft:rgba(79,193,185,.14); --flag:#e39a5c; --flag-soft:rgba(227,154,92,.14);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6;
+  margin:0; padding-block:48px 72px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));}
+.wrap{max-width:760px; margin:0 auto; display:flex; flex-direction:column; min-width:0;}
+.label{font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin:0 0 10px;}
+h1{font-family:var(--display); font-weight:600; font-size:clamp(32px,6vw,46px); line-height:1.08; margin:0 0 14px; text-wrap:balance;}
+.dek{font-size:18px; color:var(--muted); max-width:62ch; margin:0 0 32px;}
+h2{font-family:var(--display); font-weight:600; font-size:25px; line-height:1.2; margin:52px 0 10px; text-wrap:balance;}
+h3{font-size:15px; font-weight:700; margin:24px 0 8px;}
+p{max-width:68ch; margin:0 0 14px;}
+.muted{color:var(--muted);}
+code{font-family:var(--mono); font-size:.86em; background:var(--accent-soft); padding:1px 5px; border-radius:3px; word-break:break-word;}
+strong{font-weight:700;}
+
+.takeaways{list-style:none; margin:0; padding:0; display:grid; gap:0; border-top:1px solid var(--line);}
+.takeaways li{display:grid; grid-template-columns:118px 1fr; gap:16px; padding:14px 0; border-bottom:1px solid var(--line); align-items:baseline;}
+.takeaways .k{font-family:var(--mono); font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);}
+.takeaways li > span:last-child{min-width:0;}
+@media (max-width:520px){ .takeaways li{grid-template-columns:1fr; gap:4px;} }
+
+.tablewrap{overflow-x:auto; margin:12px 0 8px; min-width:0;}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:560px;}
+th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; vertical-align:top;}
+th{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); font-weight:500; border-bottom-color:var(--ink);}
+td.num{font-family:var(--mono); font-size:13px; white-space:nowrap;}
+td.model{font-family:var(--mono); font-size:13px; white-space:nowrap;}
+tr.hi td{background:var(--accent-soft);}
+tr.flag td{background:var(--flag-soft);}
+.n{color:var(--muted); font-size:11.5px;}
+.tcap{font-size:13px; color:var(--muted); max-width:68ch; margin:4px 0 0;}
+
+.note{border-left:2px solid var(--flag); padding:2px 0 2px 16px; margin:18px 0; max-width:68ch;}
+.note p{margin:0;} .note p + p{margin-top:8px;}
+.note .label{color:var(--flag); margin-bottom:6px;}
+
+figure{margin:16px 0 8px; min-width:0;}
+.chart{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:14px 10px 6px; overflow-x:auto;}
+.chart svg{display:block; width:100%; min-width:520px; height:auto;}
+.chart .grid{stroke:var(--line); stroke-width:1;}
+.chart .axis{fill:var(--muted); font-family:var(--mono); font-size:11px;}
+.chart .axtitle{fill:var(--muted); font-family:var(--body); font-size:12px;}
+.chart .pt{fill:var(--accent); stroke:var(--surface); stroke-width:2;}
+.chart .pt.on{r:7;}
+.chart .lbl{fill:var(--ink); font-family:var(--mono); font-size:11.5px;}
+.chart .hit{fill:transparent; cursor:default;}
+.tip{position:absolute; pointer-events:none; background:var(--ink); color:var(--bg); font-family:var(--mono); font-size:12px; line-height:1.45; padding:6px 9px; border-radius:4px; white-space:nowrap;}
+figcaption{font-size:13px; color:var(--muted); margin-top:8px; max-width:68ch;}
+
+.props{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden; margin:14px 0;}
+.prop{background:var(--surface); padding:16px 18px; min-width:0;}
+.prop h3{margin:0 0 6px; font-family:var(--display); font-size:19px; font-weight:600;}
+.prop p{font-size:14.5px; margin:0 0 8px;}
+.prop dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:4px 10px; font-size:13px;}
+.prop dt{font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); padding-top:2px;}
+.prop dd{margin:0; min-width:0;}
+@media (max-width:600px){ .props{grid-template-columns:1fr;} }
+
+.imp{list-style:none; padding:0; margin:12px 0; display:grid; gap:14px;}
+.imp li{max-width:68ch; padding-left:16px; border-left:2px solid var(--accent);}
+.imp b{display:block; margin-bottom:2px;}
+
+ol.next{margin:12px 0; padding-left:22px; display:grid; gap:10px; max-width:68ch;}
+ol.next li::marker{font-family:var(--mono); color:var(--accent); font-size:13px;}
+
+hr{border:none; border-top:1px solid var(--line); margin:56px 0 0;}
+.foot{font-size:13.5px; color:var(--muted);}
+.foot ul{padding-left:18px; margin:8px 0; max-width:68ch;}
+.foot li{margin-bottom:4px;}
+</style>
+
+<div class="wrap">
+  <p class="label">Dynamic LLM Juries · judge analysis · 2026-11-07</p>
+  <h1>Solving isn't judging</h1>
+  <p class="dek">Why some models are better judges than their problem-solving ability predicts, what separates them, and what that means for juries and debate. Built from data we already have: BBEH, where every pool model both answers and judges, plus the 42 interior-layer cells.</p>
+
+  <ul class="takeaways">
+    <li><span class="k">Ranks diverge</span><span>The best solver (deepseek-v3.1) is the 4th-best judge. qwen3.6-35b solves 5th and judges 2nd.</span></li>
+    <li><span class="k">Leniency</span><span>Most of the gap between judges comes from how often they say CORRECT, more than from what they know.</span></li>
+    <li><span class="k">Interior layer</span><span>For the qwen models, the "knows better than it says" effect is mostly a decision threshold set too leniently. The last layer already ranks answers as well as the winning layer. gpt-oss-120b shows a real ranking gain.</span></li>
+    <li><span class="k">Anchoring</span><span>Committing to a wrong answer hurts judging more than failing to solve. Judges approve wrong answers that match their own wrong answer more often.</span></li>
+    <li><span class="k">Reach</span><span>Judges accept 77% of correct answers from weaker examinees and 44% from stronger ones. This is the regime debate was designed for.</span></li>
+  </ul>
+
+  <h2>1. Solving and judging rank the models differently</h2>
+  <p>On BBEH every pool model answered all 460 questions itself, then judged 920 candidate answers written by the pool. Plotting solve accuracy against judge κ shows the two abilities are related but far from the same.</p>
+
+  <figure>
+    <div class="chart" id="scatter">
+      <svg viewBox="0 0 640 380" role="img" aria-labelledby="sc-t sc-d">
+        <title id="sc-t">Solve accuracy versus judge kappa on BBEH, 8 models</title>
+        <desc id="sc-d">gpt-oss-120b is high on both. deepseek-v3.1 has the highest solve accuracy but only 0.22 kappa. qwen3.6-35b and gpt-oss-20b solve near 0.25 but judge at 0.29 and 0.25. nemotron3-nano-30b judges at chance.</desc>
+        <g class="grid">
+          <line x1="56" x2="616" y1="317.8" y2="317.8"/><line x1="56" x2="616" y1="246.9" y2="246.9"/>
+          <line x1="56" x2="616" y1="176" y2="176"/><line x1="56" x2="616" y1="105.1" y2="105.1"/>
+          <line x1="56" x2="616" y1="34.2" y2="34.2"/>
+        </g>
+        <g class="axis" text-anchor="end">
+          <text x="48" y="321.8">0.0</text><text x="48" y="250.9">0.1</text><text x="48" y="180">0.2</text>
+          <text x="48" y="109.1">0.3</text><text x="48" y="38.2">0.4</text>
+        </g>
+        <g class="axis" text-anchor="middle">
+          <text x="96" y="352">0.20</text><text x="196" y="352">0.25</text><text x="296" y="352">0.30</text>
+          <text x="396" y="352">0.35</text><text x="496" y="352">0.40</text><text x="596" y="352">0.45</text>
+        </g>
+        <text class="axtitle" x="336" y="374" text-anchor="middle">Solve accuracy (own answer correct, 460 items)</text>
+        <text class="axtitle" x="14" y="176" text-anchor="middle" transform="rotate(-90 14 176)">Judge κ vs gold</text>
+        <g id="pts"></g>
+      </svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <figcaption>BBEH, no reference answer given to the judge, one sample per judgment. κ is computed on 920 judgments per judge. The table below has the same numbers.</figcaption>
+  </figure>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Judge</th><th>Solve acc</th><th>Judge κ</th><th>Accepts right answers</th><th>Rejects wrong answers</th><th>Says CORRECT</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td class="model">gpt-oss-120b</td><td class="num">0.407</td><td class="num">0.393</td><td class="num">0.64</td><td class="num">0.76</td><td class="num">0.38</td></tr>
+        <tr class="hi"><td class="model">qwen3.6-35b-a3b</td><td class="num">0.257</td><td class="num">0.288</td><td class="num">0.71</td><td class="num">0.61</td><td class="num">0.50</td></tr>
+        <tr><td class="model">gpt-oss-20b</td><td class="num">0.252</td><td class="num">0.252</td><td class="num">0.44</td><td class="num">0.80</td><td class="num">0.29</td></tr>
+        <tr class="flag"><td class="model">deepseek-v3.1</td><td class="num">0.439</td><td class="num">0.221</td><td class="num">0.78</td><td class="num">0.48</td><td class="num">0.61</td></tr>
+        <tr><td class="model">qwen3.5-9b</td><td class="num">0.272</td><td class="num">0.171</td><td class="num">0.72</td><td class="num">0.48</td><td class="num">0.59</td></tr>
+        <tr><td class="model">qwen3.5-4b</td><td class="num">0.233</td><td class="num">0.143</td><td class="num">0.63</td><td class="num">0.53</td><td class="num">0.52</td></tr>
+        <tr class="flag"><td class="model">nemotron3-super-120b</td><td class="num">0.276</td><td class="num">0.104</td><td class="num">0.54</td><td class="num">0.57</td><td class="num">0.47</td></tr>
+        <tr><td class="model">nemotron3-nano-30b</td><td class="num">0.207</td><td class="num">0.001</td><td class="num">0.30</td><td class="num">0.70</td><td class="num">0.30</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tcap">The true share of correct answers in this set is 0.35. Shaded green: judges well above their solve rank. Shaded orange: judges well below it. Accepts right answers = true-positive rate (324 gold-correct items); rejects wrong answers = true-negative rate (596 gold-wrong items).</p>
+
+  <p>deepseek-v3.1 is the clearest case. It solves best, but it says CORRECT 61% of the time when only 35% of answers are correct, so it rejects only 48% of wrong answers. Its judging outputs average 422 tokens against 1,747 for gpt-oss-120b, which suggests it checks less. gpt-oss-120b says CORRECT at nearly the true rate (0.38).</p>
+
+  <h2>2. The interior-layer result, revisited</h2>
+  <p>The headline mech-interp finding was that a model's best interior layer agrees with humans more than its own final verdict, robustly in gpt-oss-120b and qwen3.5-4b. Splitting each cell's rescues by direction shows they almost always run one way. Where the final verdict says CORRECT too often, nearly every rescue is a case the model should have rejected.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Cell</th><th>Final says CORRECT</th><th>Gold CORRECT</th><th>Rescues: should reject</th><th>Rescues: should accept</th></tr></thead>
+      <tbody>
+        <tr><td class="model">qwen3.5-4b · BFF rubric</td><td class="num">1.00</td><td class="num">0.56</td><td class="num">150</td><td class="num">0</td></tr>
+        <tr><td class="model">qwen3.5-4b · BFF standard</td><td class="num">0.83</td><td class="num">0.56</td><td class="num">105</td><td class="num">2</td></tr>
+        <tr><td class="model">qwen3.6-35b · BFF standard</td><td class="num">0.85</td><td class="num">0.56</td><td class="num">98</td><td class="num">0</td></tr>
+        <tr><td class="model">gpt-oss-120b · BiGGen standard</td><td class="num">0.95</td><td class="num">0.55</td><td class="num">132</td><td class="num">5</td></tr>
+        <tr><td class="model">gpt-oss-120b · RB2-safety standard</td><td class="num">0.00</td><td class="num">0.25</td><td class="num">0</td><td class="num">66</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tcap">Selected cells. A rescue is an item where the winning interior layer matches gold and the final verdict does not. The pattern holds across the other cells with a clear gap.</p>
+
+  <p>That raises a question: does the interior layer know more, or is the final verdict using a bad cutoff on information it already has? AUROC answers it, because it measures ranking without any cutoff. If the last layer's P(CORRECT) ranks right answers above wrong ones as well as the winning layer does, the knowledge is already at the output and only the threshold is off.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Cell</th><th>Held-out κ gap</th><th>AUROC last layer</th><th>AUROC winning layer</th><th>Δ</th></tr></thead>
+      <tbody>
+        <tr><td class="model">qwen3.5-4b · BFF rubric</td><td class="num">+0.347</td><td class="num">0.793</td><td class="num">0.747</td><td class="num">−0.046</td></tr>
+        <tr><td class="model">qwen3.5-4b · BFF standard</td><td class="num">+0.172</td><td class="num">0.824</td><td class="num">0.835</td><td class="num">+0.010</td></tr>
+        <tr><td class="model">qwen3.5-4b · BiGGen standard</td><td class="num">+0.140</td><td class="num">0.749</td><td class="num">0.726</td><td class="num">−0.022</td></tr>
+        <tr><td class="model">qwen3.6-35b · BFF standard</td><td class="num">+0.228</td><td class="num">0.798</td><td class="num">0.800</td><td class="num">+0.001</td></tr>
+        <tr class="hi"><td class="model">gpt-oss-120b · BFF standard</td><td class="num">+0.161</td><td class="num">0.477</td><td class="num">0.617</td><td class="num">+0.140</td></tr>
+        <tr class="hi"><td class="model">gpt-oss-120b · BiGGen standard</td><td class="num">+0.111</td><td class="num">0.534</td><td class="num">0.607</td><td class="num">+0.073</td></tr>
+        <tr class="hi"><td class="model">gpt-oss-120b · RB2-safety standard</td><td class="num">+0.209</td><td class="num">0.628</td><td class="num">0.720</td><td class="num">+0.092</td></tr>
+        <tr class="hi"><td class="model">nemotron3-nano · BFF standard</td><td class="num">+0.229</td><td class="num">0.575</td><td class="num">0.703</td><td class="num">+0.128</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tcap">Cells with |held-out gap| ≥ 0.05. The winning layer was chosen on the full sample, which flatters it slightly; that only strengthens the qwen result.</p>
+
+  <div class="note">
+    <p class="label">Changes the headline</p>
+    <p>For qwen3.5-4b and qwen3.6-35b, the interior-layer win reflects a final verdict that is too lenient. The model ranks answers well at its output; it just says CORRECT too easily. A per-model recalibrated threshold would likely recover most of the gap without reading any interior layer.</p>
+    <p>gpt-oss-120b and nemotron-nano (BFF standard) gain real ranking signal from the interior layer. gpt-oss-120b's last-layer AUROC sits near 0.5, which may be a readout-position issue caused by its reasoning channel. Check that before citing those cells.</p>
+  </div>
+
+  <h2>3. Being confidently wrong hurts more than not knowing</h2>
+  <p>No Free Labels found that judges do well mainly on items they can solve. On BBEH we can split "failed to solve" into two cases: the judge committed to a wrong answer, or it ran out of tokens before answering.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Judge</th><th>κ when it committed a wrong answer</th><th>κ when it never finished</th><th>Approves an examinee answer matching its own wrong one</th></tr></thead>
+      <tbody>
+        <tr class="hi"><td class="model">gpt-oss-120b</td><td class="num">0.179 <span class="n">(458)</span></td><td class="num">0.106 <span class="n">(88)</span></td><td class="num">0.56</td></tr>
+        <tr><td class="model">qwen3.6-35b-a3b</td><td class="num">−0.084 <span class="n">(228)</span></td><td class="num">0.256 <span class="n">(456)</span></td><td class="num">0.77</td></tr>
+        <tr><td class="model">gpt-oss-20b</td><td class="num">−0.003 <span class="n">(346)</span></td><td class="num">0.130 <span class="n">(342)</span></td><td class="num">0.65</td></tr>
+        <tr><td class="model">deepseek-v3.1</td><td class="num">−0.021 <span class="n">(298)</span></td><td class="num">0.116 <span class="n">(218)</span></td><td class="num">0.82</td></tr>
+        <tr><td class="model">qwen3.5-9b</td><td class="num">0.000 <span class="n">(202)</span></td><td class="num">0.084 <span class="n">(468)</span></td><td class="num">0.77</td></tr>
+        <tr><td class="model">qwen3.5-4b</td><td class="num">0.012 <span class="n">(210)</span></td><td class="num">0.044 <span class="n">(496)</span></td><td class="num">0.69</td></tr>
+        <tr><td class="model">nemotron3-super-120b</td><td class="num">−0.032 <span class="n">(218)</span></td><td class="num">−0.130 <span class="n">(448)</span></td><td class="num">0.80</td></tr>
+        <tr><td class="model">nemotron3-nano-30b</td><td class="num">0.017 <span class="n">(374)</span></td><td class="num">−0.101 <span class="n">(356)</span></td><td class="num">0.38</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tcap">Judgment counts in parentheses. "Never finished" means the judge's own answer was truncated with no committed final answer.</p>
+
+  <p>After committing to a wrong answer, 7 of 8 judges drop to chance. gpt-oss-120b keeps κ 0.18, the only real case of verifying without solving in this pool. Not finishing hurts much less: qwen3.6-35b still judges at κ 0.26 on items where it ran out of tokens.</p>
+  <p>The approval column could be inflated by attractive wrong answers that fool everyone. To control for that, I compared judges on the <em>same</em> wrong examinee answer (112 item–answer pairs). Judges who had given that same answer approved it <strong>71%</strong> of the time (301 judgments). Judges who had committed to a different answer approved it <strong>56%</strong> of the time (414 judgments). The anchoring is real, and on top of that most judges are lenient toward wrong answers in general.</p>
+
+  <h2>4. Reach: judges fail on examinees stronger than themselves</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Examinee vs judge (solve accuracy)</th><th>Judge accuracy</th><th>Accepts right answers</th><th>Rejects wrong answers</th><th>n</th></tr></thead>
+      <tbody>
+        <tr><td>Examinee weaker</td><td class="num">0.665</td><td class="num">0.77</td><td class="num">0.63</td><td class="num">2,467</td></tr>
+        <tr><td>Similar (±0.02)</td><td class="num">0.637</td><td class="num">0.74</td><td class="num">0.59</td><td class="num">1,226</td></tr>
+        <tr class="flag"><td>Examinee stronger</td><td class="num">0.546</td><td class="num">0.44</td><td class="num">0.64</td><td class="num">2,747</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tcap">All judges pooled, self-judging excluded.</p>
+  <p>Judges reject wrong answers at about the same rate regardless of who wrote them. What collapses is acceptance of correct answers from stronger models: a judge rejects a correct answer it cannot check. The earlier mech-interp confound points the same way. Interior-layer rescues were about 1.4× more common for weaker examinees (gemma-2-2b, yi-1.5-34b) than for gpt-4o and llama-3.3-70b.</p>
+
+  <h2>A general frame: four properties of a judge</h2>
+  <p>A single κ hides four separate things. Each one can be measured from outputs and from activations, which turns "why is model X a better judge" into four smaller questions.</p>
+
+  <div class="props">
+    <div class="prop">
+      <h3>Discrimination</h3>
+      <p>Can it rank right answers above wrong ones?</p>
+      <dl><dt>Outputs</dt><dd>AUROC of vote share or verdict logprob</dd><dt>Inside</dt><dd>AUROC per layer from logit lens or probes</dd></dl>
+    </div>
+    <div class="prop">
+      <h3>Threshold</h3>
+      <p>Where does it draw the line between CORRECT and INCORRECT?</p>
+      <dl><dt>Outputs</dt><dd>Says-CORRECT rate vs true rate</dd><dt>Inside</dt><dd>Shift in P(CORRECT) between the winning and last layer</dd></dl>
+    </div>
+    <div class="prop">
+      <h3>Independence</h3>
+      <p>Does it check the answer, or compare it to its own?</p>
+      <dl><dt>Outputs</dt><dd>Approval of answers matching its own wrong answer, within item</dd><dt>Inside</dt><dd>Does patching in its own-answer representation flip the verdict?</dd></dl>
+    </div>
+    <div class="prop">
+      <h3>Reach</h3>
+      <p>How strong is it relative to the examinee?</p>
+      <dl><dt>Outputs</dt><dd>Acceptance of right answers by relative strength</dd><dt>Inside</dt><dd>Rescue rate by examinee strength</dd></dl>
+    </div>
+  </div>
+
+  <p>On how these differences arise: eight models can't support causal claims about training. Two designs can give testable leads. Size ladders within a family (qwen 4b → 9b → 35b, gpt-oss 20b → 120b) separate scale from recipe. Base vs instruct pairs test whether preference tuning produces the leniency. We skipped that comparison earlier, but it now bears directly on the threshold property.</p>
+
+  <h2>What this means for juries and debate</h2>
+  <ul class="imp">
+    <li><b>Recalibrate each juror's threshold before voting.</b> Leniency is a per-model offset that a few labels can fix. A plain majority vote inherits it, and a Dawid–Skene-style weighted jury (B3) partly corrects for it.</li>
+    <li><b>Be careful with solve-then-judge.</b> Method B in the proposal has each judge answer first. The anchoring result says this helps when the judge solves the item and hurts when the judge is confidently wrong. Use it only for judges the certifier expects to solve the item.</li>
+    <li><b>Use debate where the examinee is stronger than the judge.</b> Debate is designed for a weak judge facing strong debaters, and that is the slice where acceptance of right answers falls to 44%. A dynamic mechanism can route weaker examinees to one calibrated judge and stronger examinees to debate, a reference answer, or escalation.</li>
+    <li><b>Pick jurors for complementary profiles, not rank.</b> gpt-oss-20b rejects 80% of wrong answers; qwen3.6-35b accepts 71% of right ones. Together they cover each other's weak side.</li>
+  </ul>
+
+  <h2>Next steps, in priority order</h2>
+  <ol class="next">
+    <li>Redo the 42-cell interior-layer analysis with AUROC and a per-model recalibrated threshold. This settles which models really carry hidden knowledge. No GPU needed.</li>
+    <li>Compare a threshold-calibrated jury with majority vote and the best single judge on BBEH.</li>
+    <li>Run the debate pilot (<code>experiments/debate</code>) only on items where the examinee is stronger than the judge.</li>
+    <li>Repeat the solve-vs-judge breakdown on BFF once its solve labels are available locally (<code>bff_results/grades.jsonl</code> is empty in this checkout).</li>
+    <li>Size ladders and base vs instruct pairs to trace where leniency comes from.</li>
+  </ol>
+
+  <hr>
+  <div class="foot">
+    <h3>Caveats</h3>
+    <ul>
+      <li>BBEH only for sections 1, 3 and 4; one sample per judgment; "strength" means BBEH solve accuracy.</li>
+      <li>About half of solve attempts are truncated. Section 3 separates truncated from wrong answers, but "failed" is still noisy.</li>
+      <li>The true-correct rate differs by examinee, so the acceptance and rejection columns are cleaner reads than overall accuracy.</li>
+    </ul>
+    <h3>Sources</h3>
+    <ul>
+      <li>Solve labels and verdicts: <code>experiments/tinker_pool/bbeh_results/answers.jsonl</code>, <code>judgments.jsonl</code> (condition = none; unparsed verdicts count as INCORRECT, matching <code>judges_summary.md</code>).</li>
+      <li>Interior-layer cells: <code>experiments/interp/significance_results/*.json</code> and the logit-lens pilot files they point to.</li>
+      <li>Examinee confound: <code>experiments/interp/overnight_deepdive/overnight_notes.md</code>.</li>
+      <li>The analysis scripts are not yet committed to the repo.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+(function(){
+  var data=[
+    ["gpt-oss-120b",.407,.393,"r"],["qwen3.6-35b-a3b",.257,.288,"r"],["gpt-oss-20b",.252,.252,"r"],
+    ["deepseek-v3.1",.439,.221,"l"],["qwen3.5-9b",.272,.171,"r"],["qwen3.5-4b",.233,.143,"l"],
+    ["nemotron3-super-120b",.276,.104,"r"],["nemotron3-nano-30b",.207,.001,"r"]
+  ];
+  var ns="http://www.w3.org/2000/svg", g=document.getElementById("pts");
+  var X=function(v){return 56+(v-.18)/.28*560;}, Y=function(v){return 20+(.42-v)/.44*312;};
+  var box=document.getElementById("scatter"), tip=document.getElementById("tip");
+  data.forEach(function(d){
+    var x=X(d[1]), y=Y(d[2]);
+    var c=document.createElementNS(ns,"circle"); c.setAttribute("cx",x); c.setAttribute("cy",y); c.setAttribute("r",5.5); c.setAttribute("class","pt"); g.appendChild(c);
+    var t=document.createElementNS(ns,"text"); t.setAttribute("class","lbl");
+    t.setAttribute("x", d[3]==="l"? x-10 : x+10); t.setAttribute("y", y+4);
+    t.setAttribute("text-anchor", d[3]==="l"?"end":"start"); t.textContent=d[0]; g.appendChild(t);
+    var h=document.createElementNS(ns,"circle"); h.setAttribute("cx",x); h.setAttribute("cy",y); h.setAttribute("r",14); h.setAttribute("class","hit"); g.appendChild(h);
+    function show(){
+      c.classList.add("on");
+      tip.innerHTML=d[0]+"<br>solve acc "+d[1].toFixed(3)+"<br>judge κ "+d[2].toFixed(3);
+      tip.hidden=false;
+      var svg=box.querySelector("svg"), r=svg.getBoundingClientRect(), b=box.getBoundingClientRect();
+      var px=r.left-b.left+box.scrollLeft+x/640*r.width, py=r.top-b.top+y/380*r.height;
+      var left=px+12; if(left+tip.offsetWidth>box.scrollWidth-4) left=px-12-tip.offsetWidth;
+      tip.style.left=left+"px"; tip.style.top=(py-tip.offsetHeight/2)+"px";
+    }
+    function hide(){ c.classList.remove("on"); tip.hidden=true; }
+    h.addEventListener("mouseenter",show); h.addEventListener("mouseleave",hide);
+    h.addEventListener("touchstart",show,{passive:true});
+  });
+})();
+</script>

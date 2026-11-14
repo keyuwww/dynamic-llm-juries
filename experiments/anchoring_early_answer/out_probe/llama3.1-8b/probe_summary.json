@@ -1,0 +1,60 @@
+{
+ "judge": "llama3.1-8b",
+ "ckpt": "A",
+ "BBEH": {
+  "n": 610,
+  "verdict_within": 0.572463768115942,
+  "spoken_within": 0.4915254237288136,
+  "probe_within": 0.6811594202898551,
+  "probe_all": 0.7396615729949063,
+  "layer": 29
+ },
+ "RB2 Math": {
+  "n": 732,
+  "verdict_within": 0.7377049180327869,
+  "spoken_within": 0.5789473684210527,
+  "probe_within": 0.7923497267759563,
+  "probe_all": 0.768819612410045,
+  "layer": 31
+ },
+ "BBEH + RB2 Math": {
+  "n": 1342,
+  "verdict_within": 0.7045123726346434,
+  "spoken_within": 0.5620915032679739,
+  "probe_within": 0.7860262008733624,
+  "probe_all": 0.7840720925013878,
+  "layer": 21
+ },
+ "JudgeBench (pairwise)": {
+  "n": 547,
+  "verdict_within": NaN,
+  "spoken_within": NaN,
+  "probe_within": NaN,
+  "probe_all": 0.5940226345785052,
+  "layer": 15
+ },
+ "same_leniency": {
+  "wrong, own answer matches": {
+   "n": 108,
+   "verdict": 0.6481481481481481,
+   "spoken": 0.6388888888888888,
+   "probe": 0.6111111111111112
+  },
+  "wrong, own answer differs": {
+   "n": 640,
+   "verdict": 0.621875,
+   "spoken": 0.6265625,
+   "probe": 0.478125
+  },
+  "correct (any)": {
+   "n": 459,
+   "verdict": 0.6514161220043573,
+   "spoken": 0.6361655773420479,
+   "probe": 0.8496732026143791
+  }
+ },
+ "agreement": {
+  "best": 0.6591189674523007,
+  "layer": 15
+ }
+}

@@ -1,0 +1,18 @@
+{
+  "label": "gptoss120b_bff_standard_L10",
+  "probe_jsonl": "overnight_deepdive/probe_data/gpt-oss-120b_rules.jsonl",
+  "layer": 10,
+  "n_items": 200,
+  "method": "ridge_cv_affine_margin_proxy (5-fold out-of-fold, alpha=50.0)",
+  "target_note": "proxy +-1 target from pred_standard (no true margin field in capture)",
+  "agree_tuned_full_sample": 0.605,
+  "agree_final_full_sample": 0.59,
+  "tuned_held_out_gap_mean": 0.030381746012675924,
+  "tuned_held_out_gap_ci95": [
+    -0.1467944487141089,
+    0.21105853690054163
+  ],
+  "tuned_held_out_gap_p": 0.38,
+  "n_splits": 200,
+  "raw_logit_lens_gap_on_file": 0.161
+}

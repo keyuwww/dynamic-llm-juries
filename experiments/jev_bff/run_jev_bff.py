@@ -35,6 +35,70 @@ INSTR = ("Evaluate the assistant's FINAL response in this finance/accounting con
          "issues do not matter; a wrong number, wrong method or wrong conclusion makes it incorrect.")
 INSTR_REF = INSTR + (" An expert-written reference answer is provided; use it as the ground truth "
                      "for what the correct answer is.")
+# "rules" condition: a detailed, explicit expert grading rubric in place of the one-paragraph
+# instruction above -- no reference answer, same information as "noref", just spelled out as
+# numbered criteria. Researcher-constructed for this project; not a replication of any external
+# rubric. Tests whether judges disagree more/less once vague instructions become an explicit
+# rubric, and whether that effect is uneven across judges (some benchmarks of this kind report a
+# detailed rubric improving most judges but hurting a specific few).
+INSTR_RULES = """Evaluate the assistant's FINAL response in this finance/accounting conversation
+against the following expert grading rubric. Answer yes only if ALL rules are satisfied.
+
+RULE 1 (Numerical accuracy): Every final numeric answer must be correct to within normal rounding
+tolerance (about 1%). A value outside that tolerance is incorrect, even if the method was right.
+
+RULE 2 (Method validity): The formula, accounting treatment, or financial reasoning method used
+must be the standard correct one for this question type. A plausible-sounding but non-standard
+method is incorrect even if it happens to produce the right number.
+
+RULE 3 (Completeness): If the question has multiple parts, every part must be correctly answered.
+A response that correctly answers only some parts is incorrect overall.
+
+RULE 4 (No unsupported assumptions): The response must not introduce assumptions not stated or
+implied by the conversation that change the answer, unless it flags them as assumptions.
+
+RULE 5 (Units and sign): Units, currency, and sign (positive/negative, percentage vs. decimal)
+must be correct and consistent with the question.
+
+RULE 6 (No partial credit): A response with the right method but a wrong final number due to an
+arithmetic slip is still INCORRECT under this rubric -- do not give credit for "close enough"
+reasoning if Rule 1 is violated.
+
+Minor wording or formatting differences from an ideal answer do not matter on their own."""
+
+# "rules2" condition: NOT researcher-constructed -- this is the actual human-annotator labeling
+# guideline BFF-Bench's own experts used to create the gold labels (recovered verbatim from a
+# teammate's findings page), reused here as the LLM judge's grading instructions. Rule 2 (steps
+# must match, not just the final answer) is the one the teammate's own ablation flagged as the
+# likely cause of gpt-oss's drop in agreement under a rules prompt.
+INSTR_RULES2 = """Evaluate the assistant's FINAL response in this finance/accounting conversation
+using the following grading rules -- the same rules used by the human experts who created the
+reference labels for this benchmark. Answer yes only if the response is correct under ALL
+applicable rules below.
+
+RULE 1: If the final answer disagrees with the reference answer, the response is INCORRECT.
+RULE 2: If the final answer agrees with the reference but the reasoning steps disagree, the
+response is INCORRECT.
+RULE 3: Extra information that is not obviously wrong does not make the response incorrect; it is
+still CORRECT.
+RULE 4: A final answer that is only slightly off due to rounding is still CORRECT.
+RULE 5: If the response is missing information, judge whether that missing information is
+crucial to the question; if unsure, treat the response as CORRECT."""
+
+# Teammate's own ablation: same rubric with Rule 2 removed, to isolate whether Rule 2 specifically
+# (vs. "any rules at all") drives a judge's strictness.
+INSTR_RULES2_NO_RULE2 = """Evaluate the assistant's FINAL response in this finance/accounting conversation
+using the following grading rules -- the same rules used by the human experts who created the
+reference labels for this benchmark (with the step-matching rule removed). Answer yes only if the
+response is correct under ALL applicable rules below.
+
+RULE 1: If the final answer disagrees with the reference answer, the response is INCORRECT.
+RULE 3: Extra information that is not obviously wrong does not make the response incorrect; it is
+still CORRECT.
+RULE 4: A final answer that is only slightly off due to rounding is still CORRECT.
+RULE 5: If the response is missing information, judge whether that missing information is
+crucial to the question; if unsure, treat the response as CORRECT."""
+
 CRITERIA = {"true": "The final response is substantively correct.",
             "false": "The final response contains a substantive error or reaches a wrong answer."}
 
@@ -107,7 +171,9 @@ class SystemOneJudge:
         state = {"conversation": item["conv"]}
         if cond == "ref":
             state["reference_answer_for_final_question"] = item["ref"]
-        q = {"is_correct": self.b.Noul(instructions=INSTR_REF if cond == "ref" else INSTR, criteria=CRITERIA)}
+        instr = {"ref": INSTR_REF, "rules": INSTR_RULES, "rules2": INSTR_RULES2,
+                 "rules2_norule2": INSTR_RULES2_NO_RULE2}.get(cond, INSTR)
+        q = {"is_correct": self.b.Noul(instructions=instr, criteria=CRITERIA)}
         t0 = time.time()
         res, meta = self.b.ask(state, q)
         return dict(p=self.get_noul(res, "is_correct"), latency=time.time() - t0,
@@ -173,18 +239,23 @@ def fmt(x, nd=3):
     return "n/a" if x != x else f"{x:.{nd}f}"
 
 
+COND_ORDER = ["noref", "ref", "rules", "rules2", "rules2_norule2"]
+
+
 def summarize(preds, items, out, dropped):
     df = pd.DataFrame(preds)
     meta = pd.DataFrame(items).drop(columns=["conv", "ref"])
     df = df.merge(meta, on="id")
     df.to_csv(out / "items.csv", index=False)
+    conds_present = [c for c in COND_ORDER if c in df.cond.unique()] + \
+                    [c for c in df.cond.unique() if c not in COND_ORDER]
     L = ["# System One judge on BFF-Bench: results", "",
          f"Items with consensus human labels: {len(items)} (dropped for no consensus: {dropped['no_consensus']}, "
          f"missing reference: {dropped['no_ref']}). Jev model: {', '.join(sorted(df['jev_model'].unique()))}.", "",
          "Verdict = yes if Jev's probability ≥ 0.5. κ = Cohen's kappa vs consensus human label.", "",
          "## Overall", "", "| Condition | n | Accuracy | Cohen's κ | AUROC | FPR (wrong→'correct') | FNR | Says 'correct' |",
          "|---|---|---|---|---|---|---|---|"]
-    for c in ["noref", "ref"]:
+    for c in conds_present:
         s = df[df.cond == c]
         if len(s):
             b = block(s)
@@ -203,7 +274,7 @@ def summarize(preds, items, out, dropped):
         L.append(f"| {t} | {fmt(block(a)['kappa']) if len(a) else '-'} | {fmt(block(r)['kappa']) if len(r) else '-'} |")
     L += ["", "## Selective judging (accept only Jev's most confident verdicts)", "",
           "confidence = |p − 0.5| × 2. This is the Trust-or-Escalate / Path C tier-0 question: how much can Jev handle alone?", ""]
-    for c in ["noref", "ref"]:
+    for c in conds_present:
         s = df[df.cond == c]
         if not len(s):
             continue

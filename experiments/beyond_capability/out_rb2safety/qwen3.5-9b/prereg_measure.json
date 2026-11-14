@@ -1,0 +1,66 @@
+{
+ "model": "qwen3.5-9b",
+ "bench": "rb2safety",
+ "layer": 14,
+ "direction_heldout_all": 0.977037037037037,
+ "with own answers | all": {
+  "n": 1800,
+  "questions": 450,
+  "knows": 0.977,
+  "says": 0.964,
+  "corr": 0.74,
+  "accept_at_minus8": 0.382,
+  "accept_at_0": 0.376,
+  "accept_at_plus8": 0.366
+ },
+ "with own answers | solved": {
+  "n": 0,
+  "questions": 0,
+  "knows": NaN,
+  "says": NaN,
+  "corr": NaN,
+  "accept_at_minus8": NaN,
+  "accept_at_0": NaN,
+  "accept_at_plus8": NaN
+ },
+ "with own answers | not solved": {
+  "n": 0,
+  "questions": 0,
+  "knows": NaN,
+  "says": NaN,
+  "corr": NaN,
+  "accept_at_minus8": NaN,
+  "accept_at_0": NaN,
+  "accept_at_plus8": NaN
+ },
+ "without own answers | all": {
+  "n": 1800,
+  "questions": 450,
+  "knows": 0.977,
+  "says": 0.964,
+  "corr": 0.74,
+  "accept_at_minus8": 0.382,
+  "accept_at_0": 0.376,
+  "accept_at_plus8": 0.366
+ },
+ "without own answers | solved": {
+  "n": 0,
+  "questions": 0,
+  "knows": NaN,
+  "says": NaN,
+  "corr": NaN,
+  "accept_at_minus8": NaN,
+  "accept_at_0": NaN,
+  "accept_at_plus8": NaN
+ },
+ "without own answers | not solved": {
+  "n": 0,
+  "questions": 0,
+  "knows": NaN,
+  "says": NaN,
+  "corr": NaN,
+  "accept_at_minus8": NaN,
+  "accept_at_0": NaN,
+  "accept_at_plus8": NaN
+ }
+}

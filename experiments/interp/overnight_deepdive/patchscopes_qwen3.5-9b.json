@@ -1,0 +1,23 @@
+[
+  {
+    "id": "10300984-t2",
+    "label": "final_better",
+    "gold": 1,
+    "layer": 32,
+    "continuation": " INCORRECT\nThe assistant's response is: INCOR"
+  },
+  {
+    "id": "4939ad4f-t1",
+    "label": "final_better",
+    "gold": 1,
+    "layer": 32,
+    "continuation": " INCORRECT\nThe assistant's response is: INCOR"
+  },
+  {
+    "id": "30671ba6-t1",
+    "label": "final_better",
+    "gold": 1,
+    "layer": 32,
+    "continuation": " INCORRECT\nThe assistant's response is: INCOR"
+  }
+]

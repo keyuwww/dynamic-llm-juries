@@ -1,0 +1,2 @@
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "gold": 1, "pairwise": false, "margin": 2.0, "n_tok": 1493, "pool_n_in": 1554}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "gold": 0, "pairwise": false, "margin": 4.6875, "n_tok": 829, "pool_n_in": 815}

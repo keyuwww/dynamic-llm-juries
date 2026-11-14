@@ -1,0 +1,12 @@
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "A", "margin": 2.0, "n_tok": 1500, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "25", "margin": 1.375, "n_tok": 3129, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "50", "margin": 2.375, "n_tok": 4587, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "75", "margin": -0.5, "n_tok": 6176, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "E", "margin": 5.625, "n_tok": 7719, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0001|gpt-oss-120b", "bench": "bbeh", "ckpt": "C", "margin": 5.625, "n_tok": 7719, "row": 0}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "A", "margin": 4.6875, "n_tok": 836, "row": 1}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "25", "margin": 4.3125, "n_tok": 881, "row": 1}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "50", "margin": 5.3125, "n_tok": 922, "row": 1}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "75", "margin": 5.875, "n_tok": 968, "row": 1}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "E", "margin": 7.3125, "n_tok": 1022, "row": 1}
+{"judge": "olmo3-7b-think-sft", "item_id": "bbeh-0015|qwen3.6-35b-a3b", "bench": "bbeh", "ckpt": "C", "margin": 6.6875, "n_tok": 1109, "row": 1}
