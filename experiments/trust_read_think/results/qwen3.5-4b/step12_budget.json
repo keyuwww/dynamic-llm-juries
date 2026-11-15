@@ -1,0 +1,223 @@
+{
+ "judge": "qwen3.5-4b",
+ "budget": 0.2,
+ "benches": {
+  "safety": {
+   "acc": {
+    "uniform": 0.889,
+    "pooled_conf": 0.915,
+    "format_predicted": 0.923,
+    "format_known": 0.923
+   },
+   "think_share": {
+    "uniform": 0.2,
+    "pooled_conf": 0.052,
+    "format_predicted": 0.0,
+    "format_known": 0.0
+   },
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": 0.026,
+     "ci": [
+      0.007,
+      0.045
+     ]
+    },
+    "format_predicted": {
+     "d": 0.034,
+     "ci": [
+      0.009,
+      0.061
+     ]
+    },
+    "format_known": {
+     "d": 0.034,
+     "ci": [
+      0.009,
+      0.061
+     ]
+    }
+   }
+  },
+  "focus": {
+   "acc": {
+    "uniform": 0.834,
+    "pooled_conf": 0.846,
+    "format_predicted": 0.844,
+    "format_known": 0.849
+   },
+   "think_share": {
+    "uniform": 0.2,
+    "pooled_conf": 0.086,
+    "format_predicted": 0.008,
+    "format_known": 0.0
+   },
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": 0.012,
+     "ci": [
+      0.0,
+      0.025
+     ]
+    },
+    "format_predicted": {
+     "d": 0.01,
+     "ci": [
+      -0.008,
+      0.029
+     ]
+    },
+    "format_known": {
+     "d": 0.015,
+     "ci": [
+      -0.003,
+      0.032
+     ]
+    }
+   }
+  },
+  "math": {
+   "acc": {
+    "uniform": 0.723,
+    "pooled_conf": 0.755,
+    "format_predicted": 0.704,
+    "format_known": 0.781
+   },
+   "think_share": {
+    "uniform": 0.2,
+    "pooled_conf": 0.382,
+    "format_predicted": 0.171,
+    "format_known": 0.51
+   },
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": 0.032,
+     "ci": [
+      0.021,
+      0.045
+     ]
+    },
+    "format_predicted": {
+     "d": -0.019,
+     "ci": [
+      -0.043,
+      0.007
+     ]
+    },
+    "format_known": {
+     "d": 0.058,
+     "ci": [
+      0.034,
+      0.082
+     ]
+    }
+   }
+  },
+  "bff": {
+   "acc": {
+    "uniform": 0.765,
+    "pooled_conf": 0.78,
+    "format_predicted": 0.833,
+    "format_known": 0.809
+   },
+   "think_share": {
+    "uniform": 0.2,
+    "pooled_conf": 0.256,
+    "format_predicted": 0.535,
+    "format_known": 0.363
+   },
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": 0.015,
+     "ci": [
+      0.007,
+      0.022
+     ]
+    },
+    "format_predicted": {
+     "d": 0.068,
+     "ci": [
+      0.038,
+      0.1
+     ]
+    },
+    "format_known": {
+     "d": 0.044,
+     "ci": [
+      0.018,
+      0.068
+     ]
+    }
+   }
+  },
+  "factuality": {
+   "acc": {
+    "uniform": 0.781,
+    "pooled_conf": 0.78,
+    "format_predicted": 0.761,
+    "format_known": 0.758
+   },
+   "think_share": {
+    "uniform": 0.2,
+    "pooled_conf": 0.18,
+    "format_predicted": 0.024,
+    "format_known": 0.0
+   },
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": -0.001,
+     "ci": [
+      -0.007,
+      0.006
+     ]
+    },
+    "format_predicted": {
+     "d": -0.02,
+     "ci": [
+      -0.038,
+      -0.002
+     ]
+    },
+    "format_known": {
+     "d": -0.023,
+     "ci": [
+      -0.04,
+      -0.005
+     ]
+    }
+   }
+  },
+  "all": {
+   "acc": {
+    "uniform": 0.798,
+    "pooled_conf": 0.815,
+    "format_predicted": 0.813,
+    "format_known": 0.824
+   },
+   "think_share": null,
+   "minus_uniform": {
+    "pooled_conf": {
+     "d": 0.017,
+     "ci": [
+      0.012,
+      0.023
+     ]
+    },
+    "format_predicted": {
+     "d": 0.015,
+     "ci": [
+      0.005,
+      0.026
+     ]
+    },
+    "format_known": {
+     "d": 0.026,
+     "ci": [
+      0.016,
+      0.036
+     ]
+    }
+   }
+  }
+ }
+}

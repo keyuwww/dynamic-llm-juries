@@ -1,0 +1,490 @@
+{
+ "50_5fold": {
+  "safety": {
+   "picks_read": 0.05,
+   "auc": {
+    "trust": 0.881,
+    "read": 0.904,
+    "route": 0.896,
+    "think": 0.937,
+    "recipe": 0.899
+   },
+   "acc": {
+    "trust": 0.876,
+    "read": 0.905,
+    "route": 0.859,
+    "think": 0.839,
+    "recipe": 0.862
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.28
+   }
+  },
+  "focus": {
+   "picks_read": 0.8,
+   "auc": {
+    "trust": 0.903,
+    "read": 0.955,
+    "route": 0.845,
+    "think": 0.895,
+    "recipe": 0.928
+   },
+   "acc": {
+    "trust": 0.697,
+    "read": 0.836,
+    "route": 0.728,
+    "think": 0.726,
+    "recipe": 0.813
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.06
+   }
+  },
+  "math": {
+   "picks_read": 0.3,
+   "auc": {
+    "trust": 0.777,
+    "read": 0.745,
+    "route": 0.803,
+    "think": 0.89,
+    "recipe": 0.775
+   },
+   "acc": {
+    "trust": 0.702,
+    "read": 0.678,
+    "route": 0.776,
+    "think": 0.811,
+    "recipe": 0.74
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.21
+   }
+  },
+  "bff": {
+   "picks_read": 0.15,
+   "auc": {
+    "trust": 0.83,
+    "read": 0.799,
+    "route": 0.847,
+    "think": 0.864,
+    "recipe": 0.834
+   },
+   "acc": {
+    "trust": 0.74,
+    "read": 0.716,
+    "route": 0.799,
+    "think": 0.819,
+    "recipe": 0.781
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.26
+   }
+  },
+  "factuality": {
+   "picks_read": 0.65,
+   "auc": {
+    "trust": 0.857,
+    "read": 0.896,
+    "route": 0.825,
+    "think": 0.858,
+    "recipe": 0.869
+   },
+   "acc": {
+    "trust": 0.65,
+    "read": 0.759,
+    "route": 0.729,
+    "think": 0.733,
+    "recipe": 0.751
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.1
+   }
+  }
+ },
+ "50_loqo": {
+  "safety": {
+   "picks_read": 0.1,
+   "auc": {
+    "trust": 0.881,
+    "read": 0.904,
+    "route": 0.896,
+    "think": 0.937,
+    "recipe": 0.898
+   },
+   "acc": {
+    "trust": 0.876,
+    "read": 0.905,
+    "route": 0.859,
+    "think": 0.839,
+    "recipe": 0.865
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.27
+   }
+  },
+  "focus": {
+   "picks_read": 0.8,
+   "auc": {
+    "trust": 0.903,
+    "read": 0.955,
+    "route": 0.845,
+    "think": 0.895,
+    "recipe": 0.928
+   },
+   "acc": {
+    "trust": 0.697,
+    "read": 0.836,
+    "route": 0.728,
+    "think": 0.726,
+    "recipe": 0.813
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.06
+   }
+  },
+  "math": {
+   "picks_read": 0.2,
+   "auc": {
+    "trust": 0.777,
+    "read": 0.745,
+    "route": 0.803,
+    "think": 0.89,
+    "recipe": 0.789
+   },
+   "acc": {
+    "trust": 0.702,
+    "read": 0.678,
+    "route": 0.776,
+    "think": 0.811,
+    "recipe": 0.755
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.24
+   }
+  },
+  "bff": {
+   "picks_read": 0.15,
+   "auc": {
+    "trust": 0.83,
+    "read": 0.799,
+    "route": 0.847,
+    "think": 0.864,
+    "recipe": 0.834
+   },
+   "acc": {
+    "trust": 0.74,
+    "read": 0.716,
+    "route": 0.799,
+    "think": 0.819,
+    "recipe": 0.781
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.26
+   }
+  },
+  "factuality": {
+   "picks_read": 0.65,
+   "auc": {
+    "trust": 0.857,
+    "read": 0.896,
+    "route": 0.825,
+    "think": 0.858,
+    "recipe": 0.868
+   },
+   "acc": {
+    "trust": 0.65,
+    "read": 0.759,
+    "route": 0.729,
+    "think": 0.733,
+    "recipe": 0.75
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.1
+   }
+  }
+ },
+ "100_5fold": {
+  "safety": {
+   "picks_read": 0.45,
+   "auc": {
+    "trust": 0.886,
+    "read": 0.94,
+    "route": 0.898,
+    "think": 0.937,
+    "recipe": 0.92
+   },
+   "acc": {
+    "trust": 0.876,
+    "read": 0.925,
+    "route": 0.862,
+    "think": 0.842,
+    "recipe": 0.89
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.17
+   }
+  },
+  "focus": {
+   "picks_read": 0.95,
+   "auc": {
+    "trust": 0.905,
+    "read": 0.96,
+    "route": 0.843,
+    "think": 0.897,
+    "recipe": 0.955
+   },
+   "acc": {
+    "trust": 0.7,
+    "read": 0.854,
+    "route": 0.731,
+    "think": 0.73,
+    "recipe": 0.847
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.02
+   }
+  },
+  "math": {
+   "picks_read": 0.45,
+   "auc": {
+    "trust": 0.782,
+    "read": 0.747,
+    "route": 0.806,
+    "think": 0.89,
+    "recipe": 0.778
+   },
+   "acc": {
+    "trust": 0.701,
+    "read": 0.69,
+    "route": 0.775,
+    "think": 0.811,
+    "recipe": 0.735
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.17
+   }
+  },
+  "bff": {
+   "picks_read": 0.25,
+   "auc": {
+    "trust": 0.83,
+    "read": 0.841,
+    "route": 0.847,
+    "think": 0.866,
+    "recipe": 0.849
+   },
+   "acc": {
+    "trust": 0.741,
+    "read": 0.746,
+    "route": 0.799,
+    "think": 0.82,
+    "recipe": 0.787
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.22
+   }
+  },
+  "factuality": {
+   "picks_read": 0.65,
+   "auc": {
+    "trust": 0.855,
+    "read": 0.889,
+    "route": 0.824,
+    "think": 0.859,
+    "recipe": 0.865
+   },
+   "acc": {
+    "trust": 0.647,
+    "read": 0.767,
+    "route": 0.728,
+    "think": 0.733,
+    "recipe": 0.753
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.1
+   }
+  }
+ },
+ "100_loqo": {
+  "safety": {
+   "picks_read": 0.55,
+   "auc": {
+    "trust": 0.886,
+    "read": 0.94,
+    "route": 0.898,
+    "think": 0.937,
+    "recipe": 0.924
+   },
+   "acc": {
+    "trust": 0.876,
+    "read": 0.925,
+    "route": 0.862,
+    "think": 0.842,
+    "recipe": 0.897
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.13
+   }
+  },
+  "focus": {
+   "picks_read": 0.95,
+   "auc": {
+    "trust": 0.905,
+    "read": 0.96,
+    "route": 0.843,
+    "think": 0.897,
+    "recipe": 0.955
+   },
+   "acc": {
+    "trust": 0.7,
+    "read": 0.854,
+    "route": 0.731,
+    "think": 0.73,
+    "recipe": 0.847
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.02
+   }
+  },
+  "math": {
+   "picks_read": 0.5,
+   "auc": {
+    "trust": 0.782,
+    "read": 0.747,
+    "route": 0.806,
+    "think": 0.89,
+    "recipe": 0.778
+   },
+   "acc": {
+    "trust": 0.701,
+    "read": 0.69,
+    "route": 0.775,
+    "think": 0.811,
+    "recipe": 0.733
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.15
+   }
+  },
+  "bff": {
+   "picks_read": 0.3,
+   "auc": {
+    "trust": 0.83,
+    "read": 0.841,
+    "route": 0.847,
+    "think": 0.866,
+    "recipe": 0.848
+   },
+   "acc": {
+    "trust": 0.741,
+    "read": 0.746,
+    "route": 0.799,
+    "think": 0.82,
+    "recipe": 0.782
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.21
+   }
+  },
+  "factuality": {
+   "picks_read": 0.75,
+   "auc": {
+    "trust": 0.855,
+    "read": 0.889,
+    "route": 0.824,
+    "think": 0.859,
+    "recipe": 0.872
+   },
+   "acc": {
+    "trust": 0.647,
+    "read": 0.767,
+    "route": 0.728,
+    "think": 0.733,
+    "recipe": 0.757
+   },
+   "think_share": {
+    "trust": 0,
+    "read": 0,
+    "route": 0.3,
+    "think": 1,
+    "recipe": 0.07
+   }
+  }
+ }
+}

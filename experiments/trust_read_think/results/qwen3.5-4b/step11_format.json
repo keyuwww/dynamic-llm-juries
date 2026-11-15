@@ -1,0 +1,309 @@
+{
+ "judge": "qwen3.5-4b",
+ "format": {
+  "safety": {
+   "true": "recognize",
+   "share_predicted_solve": 0.023
+  },
+  "focus": {
+   "true": "recognize",
+   "share_predicted_solve": 0.023
+  },
+  "math": {
+   "true": "solve",
+   "share_predicted_solve": 0.223
+  },
+  "bff": {
+   "true": "solve",
+   "share_predicted_solve": 0.691
+  },
+  "factuality": {
+   "true": "recognize",
+   "share_predicted_solve": 0.043
+  }
+ },
+ "benches": {
+  "safety": {
+   "acc": {
+    "format_aware": 0.889,
+    "oracle_format": 0.889,
+    "probe_think": 0.889,
+    "cascade_think": 0.884,
+    "gut_think": 0.869,
+    "think": 0.84
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ]
+    },
+    "probe_think": {
+     "d": 0.0,
+     "ci": [
+      0.0,
+      0.0
+     ]
+    },
+    "cascade_think": {
+     "d": 0.005,
+     "ci": [
+      -0.003,
+      0.012
+     ]
+    },
+    "gut_think": {
+     "d": 0.02,
+     "ci": [
+      0.001,
+      0.039
+     ]
+    },
+    "think": {
+     "d": 0.049,
+     "ci": [
+      0.026,
+      0.073
+     ]
+    }
+   }
+  },
+  "focus": {
+   "acc": {
+    "format_aware": 0.833,
+    "oracle_format": 0.834,
+    "probe_think": 0.834,
+    "cascade_think": 0.818,
+    "gut_think": 0.719,
+    "think": 0.723
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": -0.001,
+     "ci": [
+      -0.002,
+      0.001
+     ]
+    },
+    "probe_think": {
+     "d": -0.001,
+     "ci": [
+      -0.002,
+      0.001
+     ]
+    },
+    "cascade_think": {
+     "d": 0.015,
+     "ci": [
+      0.008,
+      0.022
+     ]
+    },
+    "gut_think": {
+     "d": 0.114,
+     "ci": [
+      0.081,
+      0.145
+     ]
+    },
+    "think": {
+     "d": 0.11,
+     "ci": [
+      0.074,
+      0.142
+     ]
+    }
+   }
+  },
+  "math": {
+   "acc": {
+    "format_aware": 0.732,
+    "oracle_format": 0.751,
+    "probe_think": 0.723,
+    "cascade_think": 0.751,
+    "gut_think": 0.757,
+    "think": 0.813
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": -0.019,
+     "ci": [
+      -0.035,
+      -0.002
+     ]
+    },
+    "probe_think": {
+     "d": 0.009,
+     "ci": [
+      -0.004,
+      0.022
+     ]
+    },
+    "cascade_think": {
+     "d": -0.019,
+     "ci": [
+      -0.035,
+      -0.002
+     ]
+    },
+    "gut_think": {
+     "d": -0.025,
+     "ci": [
+      -0.05,
+      0.0
+     ]
+    },
+    "think": {
+     "d": -0.081,
+     "ci": [
+      -0.115,
+      -0.047
+     ]
+    }
+   }
+  },
+  "bff": {
+   "acc": {
+    "format_aware": 0.788,
+    "oracle_format": 0.788,
+    "probe_think": 0.765,
+    "cascade_think": 0.788,
+    "gut_think": 0.769,
+    "think": 0.817
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": 0.0,
+     "ci": [
+      -0.008,
+      0.008
+     ]
+    },
+    "probe_think": {
+     "d": 0.023,
+     "ci": [
+      0.006,
+      0.038
+     ]
+    },
+    "cascade_think": {
+     "d": 0.0,
+     "ci": [
+      -0.008,
+      0.008
+     ]
+    },
+    "gut_think": {
+     "d": 0.019,
+     "ci": [
+      -0.002,
+      0.042
+     ]
+    },
+    "think": {
+     "d": -0.029,
+     "ci": [
+      -0.072,
+      0.013
+     ]
+    }
+   }
+  },
+  "factuality": {
+   "acc": {
+    "format_aware": 0.778,
+    "oracle_format": 0.781,
+    "probe_think": 0.781,
+    "cascade_think": 0.769,
+    "gut_think": 0.726,
+    "think": 0.733
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": -0.003,
+     "ci": [
+      -0.008,
+      0.0
+     ]
+    },
+    "probe_think": {
+     "d": -0.003,
+     "ci": [
+      -0.008,
+      0.0
+     ]
+    },
+    "cascade_think": {
+     "d": 0.009,
+     "ci": [
+      -0.007,
+      0.024
+     ]
+    },
+    "gut_think": {
+     "d": 0.052,
+     "ci": [
+      0.018,
+      0.087
+     ]
+    },
+    "think": {
+     "d": 0.045,
+     "ci": [
+      0.012,
+      0.077
+     ]
+    }
+   }
+  },
+  "all": {
+   "acc": {
+    "format_aware": 0.804,
+    "oracle_format": 0.808,
+    "probe_think": 0.798,
+    "cascade_think": 0.802,
+    "gut_think": 0.768,
+    "think": 0.785
+   },
+   "format_aware_minus": {
+    "oracle_format": {
+     "d": -0.004,
+     "ci": [
+      -0.008,
+      -0.001
+     ]
+    },
+    "probe_think": {
+     "d": 0.006,
+     "ci": [
+      0.001,
+      0.01
+     ]
+    },
+    "cascade_think": {
+     "d": 0.002,
+     "ci": [
+      -0.004,
+      0.007
+     ]
+    },
+    "gut_think": {
+     "d": 0.036,
+     "ci": [
+      0.023,
+      0.048
+     ]
+    },
+    "think": {
+     "d": 0.019,
+     "ci": [
+      0.003,
+      0.034
+     ]
+    }
+   }
+  }
+ }
+}

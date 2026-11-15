@@ -1,0 +1,974 @@
+{
+ "judges": [
+  "qwen3.5-4b",
+  "gpt-oss-20b",
+  "nvidia-nemotron-nano-9b-v2"
+ ],
+ "think_share": 0.2,
+ "cost": {
+  "gut majority": 0,
+  "free majority": 0,
+  "gut->think jury": 0.2,
+  "cascade jury": 0.2,
+  "dynamic jury": 0.2,
+  "think majority": 1,
+  "agreement jury (Isaac)": 1,
+  "best single judge (cascade)": 0.2
+ },
+ "benches": {
+  "safety": {
+   "acc": {
+    "gut majority": 0.895,
+    "free majority": 0.928,
+    "gut->think jury": 0.889,
+    "cascade jury": 0.911,
+    "dynamic jury": 0.905,
+    "think majority": 0.857,
+    "agreement jury (Isaac)": 0.883,
+    "best single judge (cascade)": 0.89,
+    "qwen3.5-4b cascade": 0.884,
+    "gpt-oss-20b cascade": 0.91,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.883
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.01,
+     "ci": [
+      -0.018,
+      0.037
+     ]
+    },
+    "free majority": {
+     "d": -0.023,
+     "ci": [
+      -0.05,
+      0.002
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.016,
+     "ci": [
+      -0.001,
+      0.035
+     ]
+    },
+    "cascade jury": {
+     "d": -0.006,
+     "ci": [
+      -0.015,
+      0.004
+     ]
+    },
+    "think majority": {
+     "d": 0.048,
+     "ci": [
+      0.026,
+      0.074
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.022,
+     "ci": [
+      -0.005,
+      0.048
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.015,
+     "ci": [
+      -0.003,
+      0.033
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.021,
+     "ci": [
+      -0.005,
+      0.049
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": -0.005,
+     "ci": [
+      -0.03,
+      0.019
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.022,
+     "ci": [
+      0.005,
+      0.041
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.016,
+     "ci": [
+      -0.011,
+      0.04
+     ]
+    },
+    "free majority": {
+     "d": -0.017,
+     "ci": [
+      -0.042,
+      0.005
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.022,
+     "ci": [
+      0.006,
+      0.039
+     ]
+    },
+    "dynamic jury": {
+     "d": 0.006,
+     "ci": [
+      -0.004,
+      0.015
+     ]
+    },
+    "think majority": {
+     "d": 0.054,
+     "ci": [
+      0.032,
+      0.078
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.028,
+     "ci": [
+      0.004,
+      0.051
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.021,
+     "ci": [
+      0.005,
+      0.037
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.027,
+     "ci": [
+      0.001,
+      0.053
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.001,
+     "ci": [
+      -0.022,
+      0.024
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.028,
+     "ci": [
+      0.011,
+      0.045
+     ]
+    }
+   }
+  },
+  "focus": {
+   "acc": {
+    "gut majority": 0.726,
+    "free majority": 0.867,
+    "gut->think jury": 0.738,
+    "cascade jury": 0.859,
+    "dynamic jury": 0.847,
+    "think majority": 0.763,
+    "agreement jury (Isaac)": 0.745,
+    "best single judge (cascade)": 0.838,
+    "qwen3.5-4b cascade": 0.818,
+    "gpt-oss-20b cascade": 0.848,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.828
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.121,
+     "ci": [
+      0.086,
+      0.156
+     ]
+    },
+    "free majority": {
+     "d": -0.02,
+     "ci": [
+      -0.042,
+      0.002
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.109,
+     "ci": [
+      0.075,
+      0.142
+     ]
+    },
+    "cascade jury": {
+     "d": -0.012,
+     "ci": [
+      -0.024,
+      -0.001
+     ]
+    },
+    "think majority": {
+     "d": 0.084,
+     "ci": [
+      0.052,
+      0.114
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.102,
+     "ci": [
+      0.07,
+      0.135
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.009,
+     "ci": [
+      -0.01,
+      0.026
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.029,
+     "ci": [
+      0.006,
+      0.052
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": -0.001,
+     "ci": [
+      -0.024,
+      0.019
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.019,
+     "ci": [
+      -0.009,
+      0.048
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.133,
+     "ci": [
+      0.098,
+      0.169
+     ]
+    },
+    "free majority": {
+     "d": -0.008,
+     "ci": [
+      -0.025,
+      0.009
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.121,
+     "ci": [
+      0.084,
+      0.155
+     ]
+    },
+    "dynamic jury": {
+     "d": 0.012,
+     "ci": [
+      0.001,
+      0.024
+     ]
+    },
+    "think majority": {
+     "d": 0.096,
+     "ci": [
+      0.061,
+      0.132
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.114,
+     "ci": [
+      0.079,
+      0.151
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.021,
+     "ci": [
+      0.004,
+      0.036
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.041,
+     "ci": [
+      0.018,
+      0.064
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.011,
+     "ci": [
+      -0.01,
+      0.03
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.031,
+     "ci": [
+      0.005,
+      0.057
+     ]
+    }
+   }
+  },
+  "math": {
+   "acc": {
+    "gut majority": 0.728,
+    "free majority": 0.744,
+    "gut->think jury": 0.765,
+    "cascade jury": 0.777,
+    "dynamic jury": 0.799,
+    "think majority": 0.867,
+    "agreement jury (Isaac)": 0.808,
+    "best single judge (cascade)": 0.754,
+    "qwen3.5-4b cascade": 0.754,
+    "gpt-oss-20b cascade": 0.782,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.739
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.071,
+     "ci": [
+      0.044,
+      0.098
+     ]
+    },
+    "free majority": {
+     "d": 0.055,
+     "ci": [
+      0.034,
+      0.076
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.034,
+     "ci": [
+      0.014,
+      0.054
+     ]
+    },
+    "cascade jury": {
+     "d": 0.022,
+     "ci": [
+      0.008,
+      0.035
+     ]
+    },
+    "think majority": {
+     "d": -0.068,
+     "ci": [
+      -0.098,
+      -0.036
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": -0.009,
+     "ci": [
+      -0.04,
+      0.021
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.045,
+     "ci": [
+      0.028,
+      0.064
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.045,
+     "ci": [
+      0.02,
+      0.07
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.017,
+     "ci": [
+      -0.006,
+      0.04
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.06,
+     "ci": [
+      0.035,
+      0.084
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.049,
+     "ci": [
+      0.025,
+      0.075
+     ]
+    },
+    "free majority": {
+     "d": 0.033,
+     "ci": [
+      0.018,
+      0.05
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.012,
+     "ci": [
+      -0.005,
+      0.03
+     ]
+    },
+    "dynamic jury": {
+     "d": -0.022,
+     "ci": [
+      -0.035,
+      -0.008
+     ]
+    },
+    "think majority": {
+     "d": -0.09,
+     "ci": [
+      -0.122,
+      -0.055
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": -0.031,
+     "ci": [
+      -0.065,
+      0.002
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.023,
+     "ci": [
+      0.009,
+      0.039
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.023,
+     "ci": [
+      0.001,
+      0.048
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": -0.005,
+     "ci": [
+      -0.027,
+      0.017
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.038,
+     "ci": [
+      0.016,
+      0.06
+     ]
+    }
+   }
+  },
+  "bff": {
+   "acc": {
+    "gut majority": 0.759,
+    "free majority": 0.759,
+    "gut->think jury": 0.791,
+    "cascade jury": 0.796,
+    "dynamic jury": 0.81,
+    "think majority": 0.847,
+    "agreement jury (Isaac)": 0.818,
+    "best single judge (cascade)": 0.792,
+    "qwen3.5-4b cascade": 0.791,
+    "gpt-oss-20b cascade": 0.802,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.767
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.051,
+     "ci": [
+      0.034,
+      0.07
+     ]
+    },
+    "free majority": {
+     "d": 0.051,
+     "ci": [
+      0.038,
+      0.065
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.019,
+     "ci": [
+      0.003,
+      0.035
+     ]
+    },
+    "cascade jury": {
+     "d": 0.014,
+     "ci": [
+      0.003,
+      0.025
+     ]
+    },
+    "think majority": {
+     "d": -0.037,
+     "ci": [
+      -0.065,
+      -0.012
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": -0.008,
+     "ci": [
+      -0.029,
+      0.011
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.018,
+     "ci": [
+      0.002,
+      0.032
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.019,
+     "ci": [
+      -0.001,
+      0.039
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.008,
+     "ci": [
+      -0.009,
+      0.024
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.043,
+     "ci": [
+      0.014,
+      0.07
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.037,
+     "ci": [
+      0.021,
+      0.055
+     ]
+    },
+    "free majority": {
+     "d": 0.037,
+     "ci": [
+      0.027,
+      0.048
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.005,
+     "ci": [
+      -0.008,
+      0.019
+     ]
+    },
+    "dynamic jury": {
+     "d": -0.014,
+     "ci": [
+      -0.025,
+      -0.003
+     ]
+    },
+    "think majority": {
+     "d": -0.051,
+     "ci": [
+      -0.082,
+      -0.022
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": -0.022,
+     "ci": [
+      -0.045,
+      0.0
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.004,
+     "ci": [
+      -0.01,
+      0.017
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.005,
+     "ci": [
+      -0.012,
+      0.024
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": -0.006,
+     "ci": [
+      -0.023,
+      0.011
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.029,
+     "ci": [
+      0.003,
+      0.053
+     ]
+    }
+   }
+  },
+  "factuality": {
+   "acc": {
+    "gut majority": 0.738,
+    "free majority": 0.807,
+    "gut->think jury": 0.752,
+    "cascade jury": 0.817,
+    "dynamic jury": 0.824,
+    "think majority": 0.763,
+    "agreement jury (Isaac)": 0.763,
+    "best single judge (cascade)": 0.767,
+    "qwen3.5-4b cascade": 0.769,
+    "gpt-oss-20b cascade": 0.794,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.747
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.086,
+     "ci": [
+      0.055,
+      0.118
+     ]
+    },
+    "free majority": {
+     "d": 0.017,
+     "ci": [
+      -0.006,
+      0.04
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.072,
+     "ci": [
+      0.044,
+      0.1
+     ]
+    },
+    "cascade jury": {
+     "d": 0.007,
+     "ci": [
+      -0.013,
+      0.027
+     ]
+    },
+    "think majority": {
+     "d": 0.061,
+     "ci": [
+      0.029,
+      0.095
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.061,
+     "ci": [
+      0.035,
+      0.089
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.057,
+     "ci": [
+      0.033,
+      0.079
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.055,
+     "ci": [
+      0.024,
+      0.083
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.03,
+     "ci": [
+      0.0,
+      0.06
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.077,
+     "ci": [
+      0.047,
+      0.11
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.079,
+     "ci": [
+      0.049,
+      0.11
+     ]
+    },
+    "free majority": {
+     "d": 0.01,
+     "ci": [
+      -0.007,
+      0.026
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.065,
+     "ci": [
+      0.038,
+      0.095
+     ]
+    },
+    "dynamic jury": {
+     "d": -0.007,
+     "ci": [
+      -0.027,
+      0.013
+     ]
+    },
+    "think majority": {
+     "d": 0.054,
+     "ci": [
+      0.017,
+      0.092
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.054,
+     "ci": [
+      0.023,
+      0.085
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.05,
+     "ci": [
+      0.03,
+      0.069
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.048,
+     "ci": [
+      0.02,
+      0.075
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.023,
+     "ci": [
+      -0.002,
+      0.049
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.07,
+     "ci": [
+      0.042,
+      0.099
+     ]
+    }
+   }
+  },
+  "all": {
+   "acc": {
+    "gut majority": 0.769,
+    "free majority": 0.821,
+    "gut->think jury": 0.787,
+    "cascade jury": 0.832,
+    "dynamic jury": 0.837,
+    "think majority": 0.819,
+    "agreement jury (Isaac)": 0.804,
+    "best single judge (cascade)": 0.808,
+    "qwen3.5-4b cascade": 0.803,
+    "gpt-oss-20b cascade": 0.827,
+    "nvidia-nemotron-nano-9b-v2 cascade": 0.793
+   },
+   "dynamic_minus": {
+    "gut majority": {
+     "d": 0.068,
+     "ci": [
+      0.055,
+      0.081
+     ]
+    },
+    "free majority": {
+     "d": 0.016,
+     "ci": [
+      0.006,
+      0.025
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.05,
+     "ci": [
+      0.039,
+      0.061
+     ]
+    },
+    "cascade jury": {
+     "d": 0.005,
+     "ci": [
+      -0.001,
+      0.011
+     ]
+    },
+    "think majority": {
+     "d": 0.018,
+     "ci": [
+      0.004,
+      0.031
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.033,
+     "ci": [
+      0.021,
+      0.046
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.029,
+     "ci": [
+      0.021,
+      0.036
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.034,
+     "ci": [
+      0.023,
+      0.045
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.01,
+     "ci": [
+      -0.001,
+      0.02
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.044,
+     "ci": [
+      0.032,
+      0.056
+     ]
+    }
+   },
+   "cascade_minus": {
+    "gut majority": {
+     "d": 0.063,
+     "ci": [
+      0.05,
+      0.075
+     ]
+    },
+    "free majority": {
+     "d": 0.011,
+     "ci": [
+      0.003,
+      0.018
+     ]
+    },
+    "gut->think jury": {
+     "d": 0.045,
+     "ci": [
+      0.034,
+      0.055
+     ]
+    },
+    "dynamic jury": {
+     "d": -0.005,
+     "ci": [
+      -0.011,
+      0.001
+     ]
+    },
+    "think majority": {
+     "d": 0.013,
+     "ci": [
+      -0.002,
+      0.027
+     ]
+    },
+    "agreement jury (Isaac)": {
+     "d": 0.028,
+     "ci": [
+      0.015,
+      0.042
+     ]
+    },
+    "best single judge (cascade)": {
+     "d": 0.024,
+     "ci": [
+      0.016,
+      0.031
+     ]
+    },
+    "qwen3.5-4b cascade": {
+     "d": 0.029,
+     "ci": [
+      0.018,
+      0.039
+     ]
+    },
+    "gpt-oss-20b cascade": {
+     "d": 0.005,
+     "ci": [
+      -0.005,
+      0.014
+     ]
+    },
+    "nvidia-nemotron-nano-9b-v2 cascade": {
+     "d": 0.039,
+     "ci": [
+      0.029,
+      0.05
+     ]
+    }
+   }
+  }
+ }
+}

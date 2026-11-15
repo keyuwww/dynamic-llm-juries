@@ -16,3 +16,5 @@ experiments/tinker_pool/mock_*_results/
 experiments/judge_confidence/results/raw/
 # weight-space smoke/experiment raw activations (on disk only)
 experiments/weight_space/results/raw/
+# trust/read/think raw generations and activations (on disk only)
+experiments/trust_read_think/results/raw/

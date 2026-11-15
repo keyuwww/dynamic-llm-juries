@@ -1,0 +1,742 @@
+{
+ "safety": {
+  "0.1": {
+   "cascade": {
+    "acc": 0.893,
+    "auc": 0.881,
+    "think_share": 0.09,
+    "steps": {
+     "gut": 0.713,
+     "read": 0.197,
+     "think": 0.09
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.897,
+    "auc": 0.911,
+    "steps": {
+     "gut": 0.15,
+     "read": 0.75,
+     "think": 0.1
+    }
+   },
+   "gut_think": {
+    "acc": 0.866,
+    "auc": 0.9
+   },
+   "probe_think": {
+    "acc": 0.907,
+    "auc": 0.896
+   },
+   "router_think": {
+    "acc": 0.879,
+    "auc": 0.881
+   }
+  },
+  "0.2": {
+   "cascade": {
+    "acc": 0.874,
+    "auc": 0.89,
+    "think_share": 0.165,
+    "steps": {
+     "gut": 0.713,
+     "read": 0.122,
+     "think": 0.165
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.884,
+    "auc": 0.891,
+    "steps": {
+     "gut": 0.126,
+     "read": 0.674,
+     "think": 0.2
+    }
+   },
+   "gut_think": {
+    "acc": 0.863,
+    "auc": 0.899
+   },
+   "probe_think": {
+    "acc": 0.889,
+    "auc": 0.877
+   },
+   "router_think": {
+    "acc": 0.877,
+    "auc": 0.885
+   }
+  },
+  "0.3": {
+   "cascade": {
+    "acc": 0.866,
+    "auc": 0.888,
+    "think_share": 0.199,
+    "steps": {
+     "gut": 0.713,
+     "read": 0.088,
+     "think": 0.199
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.87,
+    "auc": 0.876,
+    "steps": {
+     "gut": 0.098,
+     "read": 0.603,
+     "think": 0.3
+    }
+   },
+   "gut_think": {
+    "acc": 0.86,
+    "auc": 0.894
+   },
+   "probe_think": {
+    "acc": 0.875,
+    "auc": 0.875
+   },
+   "router_think": {
+    "acc": 0.873,
+    "auc": 0.887
+   }
+  },
+  "0.5": {
+   "cascade": {
+    "acc": 0.861,
+    "auc": 0.899,
+    "think_share": 0.238,
+    "steps": {
+     "gut": 0.713,
+     "read": 0.049,
+     "think": 0.238
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.855,
+    "auc": 0.905,
+    "steps": {
+     "gut": 0.06,
+     "read": 0.439,
+     "think": 0.5
+    }
+   },
+   "gut_think": {
+    "acc": 0.853,
+    "auc": 0.913
+   },
+   "probe_think": {
+    "acc": 0.858,
+    "auc": 0.904
+   },
+   "router_think": {
+    "acc": 0.867,
+    "auc": 0.89
+   }
+  },
+  "fixed": {
+   "gut": {
+    "acc": 0.877,
+    "auc": 0.881
+   },
+   "probe": {
+    "acc": 0.925,
+    "auc": 0.939
+   },
+   "think": {
+    "acc": 0.84,
+    "auc": 0.932
+   }
+  }
+ },
+ "focus": {
+  "0.1": {
+   "cascade": {
+    "acc": 0.834,
+    "auc": 0.881,
+    "think_share": 0.1,
+    "steps": {
+     "gut": 0.305,
+     "read": 0.595,
+     "think": 0.1
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.811,
+    "auc": 0.888,
+    "steps": {
+     "gut": 0.459,
+     "read": 0.442,
+     "think": 0.1
+    }
+   },
+   "gut_think": {
+    "acc": 0.715,
+    "auc": 0.875
+   },
+   "probe_think": {
+    "acc": 0.844,
+    "auc": 0.892
+   },
+   "router_think": {
+    "acc": 0.713,
+    "auc": 0.886
+   }
+  },
+  "0.2": {
+   "cascade": {
+    "acc": 0.825,
+    "auc": 0.846,
+    "think_share": 0.2,
+    "steps": {
+     "gut": 0.305,
+     "read": 0.495,
+     "think": 0.2
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.796,
+    "auc": 0.843,
+    "steps": {
+     "gut": 0.407,
+     "read": 0.394,
+     "think": 0.2
+    }
+   },
+   "gut_think": {
+    "acc": 0.727,
+    "auc": 0.861
+   },
+   "probe_think": {
+    "acc": 0.836,
+    "auc": 0.853
+   },
+   "router_think": {
+    "acc": 0.726,
+    "auc": 0.877
+   }
+  },
+  "0.3": {
+   "cascade": {
+    "acc": 0.81,
+    "auc": 0.822,
+    "think_share": 0.3,
+    "steps": {
+     "gut": 0.305,
+     "read": 0.395,
+     "think": 0.3
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.784,
+    "auc": 0.83,
+    "steps": {
+     "gut": 0.366,
+     "read": 0.334,
+     "think": 0.3
+    }
+   },
+   "gut_think": {
+    "acc": 0.73,
+    "auc": 0.839
+   },
+   "probe_think": {
+    "acc": 0.822,
+    "auc": 0.813
+   },
+   "router_think": {
+    "acc": 0.732,
+    "auc": 0.868
+   }
+  },
+  "0.5": {
+   "cascade": {
+    "acc": 0.764,
+    "auc": 0.821,
+    "think_share": 0.497,
+    "steps": {
+     "gut": 0.305,
+     "read": 0.197,
+     "think": 0.497
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.761,
+    "auc": 0.816,
+    "steps": {
+     "gut": 0.277,
+     "read": 0.223,
+     "think": 0.5
+    }
+   },
+   "gut_think": {
+    "acc": 0.727,
+    "auc": 0.796
+   },
+   "probe_think": {
+    "acc": 0.796,
+    "auc": 0.814
+   },
+   "router_think": {
+    "acc": 0.732,
+    "auc": 0.869
+   }
+  },
+  "fixed": {
+   "gut": {
+    "acc": 0.699,
+    "auc": 0.903
+   },
+   "probe": {
+    "acc": 0.853,
+    "auc": 0.962
+   },
+   "think": {
+    "acc": 0.732,
+    "auc": 0.899
+   }
+  }
+ },
+ "math": {
+  "0.1": {
+   "cascade": {
+    "acc": 0.711,
+    "auc": 0.785,
+    "think_share": 0.024,
+    "steps": {
+     "gut": 0.96,
+     "read": 0.017,
+     "think": 0.024
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.744,
+    "auc": 0.791,
+    "steps": {
+     "gut": 0.802,
+     "read": 0.098,
+     "think": 0.1
+    }
+   },
+   "gut_think": {
+    "acc": 0.744,
+    "auc": 0.789
+   },
+   "probe_think": {
+    "acc": 0.699,
+    "auc": 0.75
+   },
+   "router_think": {
+    "acc": 0.719,
+    "auc": 0.795
+   }
+  },
+  "0.2": {
+   "cascade": {
+    "acc": 0.713,
+    "auc": 0.786,
+    "think_share": 0.034,
+    "steps": {
+     "gut": 0.96,
+     "read": 0.007,
+     "think": 0.034
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.758,
+    "auc": 0.802,
+    "steps": {
+     "gut": 0.735,
+     "read": 0.065,
+     "think": 0.2
+    }
+   },
+   "gut_think": {
+    "acc": 0.763,
+    "auc": 0.799
+   },
+   "probe_think": {
+    "acc": 0.719,
+    "auc": 0.775
+   },
+   "router_think": {
+    "acc": 0.734,
+    "auc": 0.82
+   }
+  },
+  "0.3": {
+   "cascade": {
+    "acc": 0.714,
+    "auc": 0.789,
+    "think_share": 0.04,
+    "steps": {
+     "gut": 0.96,
+     "read": 0.0,
+     "think": 0.04
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.77,
+    "auc": 0.816,
+    "steps": {
+     "gut": 0.655,
+     "read": 0.044,
+     "think": 0.3
+    }
+   },
+   "gut_think": {
+    "acc": 0.773,
+    "auc": 0.814
+   },
+   "probe_think": {
+    "acc": 0.732,
+    "auc": 0.798
+   },
+   "router_think": {
+    "acc": 0.748,
+    "auc": 0.834
+   }
+  },
+  "0.5": {
+   "cascade": {
+    "acc": 0.714,
+    "auc": 0.789,
+    "think_share": 0.04,
+    "steps": {
+     "gut": 0.96,
+     "read": 0.0,
+     "think": 0.04
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.78,
+    "auc": 0.835,
+    "steps": {
+     "gut": 0.484,
+     "read": 0.016,
+     "think": 0.5
+    }
+   },
+   "gut_think": {
+    "acc": 0.777,
+    "auc": 0.834
+   },
+   "probe_think": {
+    "acc": 0.768,
+    "auc": 0.847
+   },
+   "router_think": {
+    "acc": 0.772,
+    "auc": 0.859
+   }
+  },
+  "fixed": {
+   "gut": {
+    "acc": 0.7,
+    "auc": 0.788
+   },
+   "probe": {
+    "acc": 0.68,
+    "auc": 0.733
+   },
+   "think": {
+    "acc": 0.807,
+    "auc": 0.889
+   }
+  }
+ },
+ "bff": {
+  "0.1": {
+   "cascade": {
+    "acc": 0.765,
+    "auc": 0.843,
+    "think_share": 0.052,
+    "steps": {
+     "gut": 0.737,
+     "read": 0.211,
+     "think": 0.052
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.791,
+    "auc": 0.85,
+    "steps": {
+     "gut": 0.661,
+     "read": 0.238,
+     "think": 0.101
+    }
+   },
+   "gut_think": {
+    "acc": 0.772,
+    "auc": 0.84
+   },
+   "probe_think": {
+    "acc": 0.739,
+    "auc": 0.844
+   },
+   "router_think": {
+    "acc": 0.76,
+    "auc": 0.843
+   }
+  },
+  "0.2": {
+   "cascade": {
+    "acc": 0.778,
+    "auc": 0.848,
+    "think_share": 0.102,
+    "steps": {
+     "gut": 0.737,
+     "read": 0.162,
+     "think": 0.102
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.803,
+    "auc": 0.852,
+    "steps": {
+     "gut": 0.608,
+     "read": 0.192,
+     "think": 0.2
+    }
+   },
+   "gut_think": {
+    "acc": 0.788,
+    "auc": 0.836
+   },
+   "probe_think": {
+    "acc": 0.767,
+    "auc": 0.839
+   },
+   "router_think": {
+    "acc": 0.773,
+    "auc": 0.85
+   }
+  },
+  "0.3": {
+   "cascade": {
+    "acc": 0.783,
+    "auc": 0.847,
+    "think_share": 0.151,
+    "steps": {
+     "gut": 0.737,
+     "read": 0.112,
+     "think": 0.151
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.813,
+    "auc": 0.86,
+    "steps": {
+     "gut": 0.546,
+     "read": 0.154,
+     "think": 0.3
+    }
+   },
+   "gut_think": {
+    "acc": 0.801,
+    "auc": 0.85
+   },
+   "probe_think": {
+    "acc": 0.794,
+    "auc": 0.844
+   },
+   "router_think": {
+    "acc": 0.783,
+    "auc": 0.852
+   }
+  },
+  "0.5": {
+   "cascade": {
+    "acc": 0.784,
+    "auc": 0.848,
+    "think_share": 0.232,
+    "steps": {
+     "gut": 0.737,
+     "read": 0.031,
+     "think": 0.232
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.825,
+    "auc": 0.867,
+    "steps": {
+     "gut": 0.416,
+     "read": 0.084,
+     "think": 0.501
+    }
+   },
+   "gut_think": {
+    "acc": 0.816,
+    "auc": 0.858
+   },
+   "probe_think": {
+    "acc": 0.824,
+    "auc": 0.842
+   },
+   "router_think": {
+    "acc": 0.791,
+    "auc": 0.852
+   }
+  },
+  "fixed": {
+   "gut": {
+    "acc": 0.742,
+    "auc": 0.833
+   },
+   "probe": {
+    "acc": 0.703,
+    "auc": 0.839
+   },
+   "think": {
+    "acc": 0.823,
+    "auc": 0.868
+   }
+  }
+ },
+ "factuality": {
+  "0.1": {
+   "cascade": {
+    "acc": 0.759,
+    "auc": 0.853,
+    "think_share": 0.1,
+    "steps": {
+     "gut": 0.382,
+     "read": 0.518,
+     "think": 0.1
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.746,
+    "auc": 0.869,
+    "steps": {
+     "gut": 0.594,
+     "read": 0.306,
+     "think": 0.1
+    }
+   },
+   "gut_think": {
+    "acc": 0.692,
+    "auc": 0.848
+   },
+   "probe_think": {
+    "acc": 0.773,
+    "auc": 0.87
+   },
+   "router_think": {
+    "acc": 0.678,
+    "auc": 0.851
+   }
+  },
+  "0.2": {
+   "cascade": {
+    "acc": 0.761,
+    "auc": 0.854,
+    "think_share": 0.2,
+    "steps": {
+     "gut": 0.382,
+     "read": 0.419,
+     "think": 0.2
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.745,
+    "auc": 0.852,
+    "steps": {
+     "gut": 0.54,
+     "read": 0.26,
+     "think": 0.2
+    }
+   },
+   "gut_think": {
+    "acc": 0.727,
+    "auc": 0.845
+   },
+   "probe_think": {
+    "acc": 0.778,
+    "auc": 0.846
+   },
+   "router_think": {
+    "acc": 0.699,
+    "auc": 0.846
+   }
+  },
+  "0.3": {
+   "cascade": {
+    "acc": 0.754,
+    "auc": 0.844,
+    "think_share": 0.282,
+    "steps": {
+     "gut": 0.382,
+     "read": 0.337,
+     "think": 0.282
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.75,
+    "auc": 0.865,
+    "steps": {
+     "gut": 0.487,
+     "read": 0.213,
+     "think": 0.3
+    }
+   },
+   "gut_think": {
+    "acc": 0.726,
+    "auc": 0.825
+   },
+   "probe_think": {
+    "acc": 0.77,
+    "auc": 0.827
+   },
+   "router_think": {
+    "acc": 0.714,
+    "auc": 0.845
+   }
+  },
+  "0.5": {
+   "cascade": {
+    "acc": 0.751,
+    "auc": 0.845,
+    "think_share": 0.43,
+    "steps": {
+     "gut": 0.382,
+     "read": 0.189,
+     "think": 0.43
+    }
+   },
+   "cascade_maxconf": {
+    "acc": 0.745,
+    "auc": 0.853,
+    "steps": {
+     "gut": 0.367,
+     "read": 0.133,
+     "think": 0.5
+    }
+   },
+   "gut_think": {
+    "acc": 0.731,
+    "auc": 0.856
+   },
+   "probe_think": {
+    "acc": 0.766,
+    "auc": 0.817
+   },
+   "router_think": {
+    "acc": 0.727,
+    "auc": 0.85
+   }
+  },
+  "fixed": {
+   "gut": {
+    "acc": 0.647,
+    "auc": 0.859
+   },
+   "probe": {
+    "acc": 0.758,
+    "auc": 0.894
+   },
+   "think": {
+    "acc": 0.73,
+    "auc": 0.857
+   }
+  }
+ }
+}
