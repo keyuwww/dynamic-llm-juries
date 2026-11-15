@@ -338,8 +338,285 @@ part2 = f"""
       <li><b>Which neurons doesn't matter.</b> Random neurons in the same layer do just as well. This matches Part 1: the knowledge is readable almost everywhere after layer 6, so any reasonable set of neurons can serve as the detector.</li>
       <li><b>Where matters for side effects.</b> Editing later (layers 16 or 20) keeps the Safety gain and cuts the damage, especially to finance grading. Our original layer 17 choice was optimized for Safety only and was not the best trade-off.</li>
       <li><b>The remaining damage has one cause:</b> the edit is always on, so the detector also fires on finance questions and normal text. Making it fire only on safety grading, for example by adding "do nothing here" examples when fitting the detector, is the most direct next fix.</li>
-      <li><b>Connection to Part 1:</b> the parts that <b>build</b> the knowledge (layers 8 and 16 heads) are where a precise intervention would target. Switching them off to test that they cause it is the next step.</li>
+      <li><b>Connection to Part 1:</b> the parts that <b>build</b> the knowledge (layers 8 and 16 heads) are where a precise intervention would target. Part 3 switches them off to test whether they cause it.</li>
     </ul>
+  </section>
+"""
+
+
+# ----------------------------------------------------------------------------- Part 3: switch-off test
+SO = json.loads((HERE / "results" / "switch_off.json").read_text())
+SR, ST = SO["rows"], SO["tests"]
+GRAY = "#8A97A8"
+
+
+def pts(x):   # AUROC change in points
+    return f"{x * 100:+.1f}"
+
+
+def recovery_chart():
+    W, H, x0, x1, y0, y1 = 680, 320, 48, 600, 18, 270
+    lo, hi = 0.55, 1.0
+    X = lambda L: x0 + (L - 1) / 22 * (x1 - x0)
+    Y = lambda v: y1 - (v - lo) / (hi - lo) * (y1 - y0)
+    lines = [("base", "Nothing switched off", "var(--navy)", ""), ("single_L8h4", "Layer 8 head 4 off", "#C2550C", ""),
+             ("single_L16h2", "Layer 16 head 2 off", "#3B73C4", "6 4")]
+    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" role="img" aria-label="Hidden knowledge by layer after switching off one head">']
+    for t in (0.6, 0.7, 0.8, 0.9, 1.0):
+        s.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="var(--line)"/>'
+                 f'<text x="{x0 - 6}" y="{Y(t) + 4:.1f}" text-anchor="end" class="ax">{t:.1f}</text>')
+    for L in (1, 4, 8, 12, 16, 20, 23):
+        s.append(f'<text x="{X(L):.1f}" y="{y1 + 16}" text-anchor="middle" class="ax">{L}</text>')
+    for L, lab in ((8, "switched-off head"), (16, "readout layer")):
+        s.append(f'<line x1="{X(L):.1f}" x2="{X(L):.1f}" y1="{y0}" y2="{y1}" stroke="var(--ink-3)" stroke-dasharray="2 4"/>')
+    for n, lab, col, dash in lines:
+        c = SR[n]["safety"]["curve"]
+        d = " ".join(f"{'M' if i == 0 else 'L'}{X(i + 1):.1f},{Y(v):.1f}" for i, v in enumerate(c))
+        s.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="2.5" stroke-dasharray="{dash}" stroke-linejoin="round"/>')
+        for i, v in enumerate(c):
+            s.append(f'<circle cx="{X(i + 1):.1f}" cy="{Y(v):.1f}" r="7" fill="transparent"><title>{lab}, layer {i + 1}: {v:.3f}</title></circle>')
+        s.append(f'<text x="{x1 + 6}" y="{Y(c[-1]) + (-8 if n == "single_L8h4" else 4 if n == "base" else 14):.1f}" class="lab" style="fill:{col};font-weight:600">{lab.split(" off")[0].replace("Nothing switched", "normal").replace("Layer ", "L")}</text>')
+    c4 = SR["single_L8h4"]["safety"]["curve"]
+    s.append(f'<text x="{X(8) + 8:.1f}" y="{Y(c4[7]) + 18:.1f}" class="ax" style="fill:#C2550C;font-weight:600">drops to {c4[7]:.2f}</text>')
+    s.append(f'<text x="{X(14) - 4:.1f}" y="{Y(0.72):.1f}" class="ax" style="fill:#C2550C">…then the model rebuilds it</text>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 6}" text-anchor="middle" class="axl">Layer · hidden knowledge = same-source AUROC of a fixed probe (0.5 = guessing)</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def so_strip():
+    x0, x1, lo, hi = 230, 660, -0.05, 0.02
+    X = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rows = [("S_right", "rand3", "safety", "Right-answer heads, Safety"), ("S_wrong", "rand2", "safety", "Wrong-answer heads, Safety"),
+            ("S_right", "rand3", "bff", "Right-answer heads, BFF finance")]
+    rh, y0 = 50, 26
+    H = y0 + len(rows) * rh + 40
+    s = [f'<svg class="chart" viewBox="0 0 680 {H}" role="img" aria-label="Change in hidden knowledge after switching off chosen heads versus random heads">']
+    for t in (-0.04, -0.02, 0, 0.02):
+        s.append(f'<line x1="{X(t):.1f}" x2="{X(t):.1f}" y1="{y0 - 8}" y2="{H - 34}" stroke="{"var(--ink-3)" if t == 0 else "var(--line)"}"{" stroke-dasharray=\"5 4\"" if t == 0 else ""}/>'
+                 f'<text x="{X(t):.1f}" y="{H - 18}" text-anchor="middle" class="ax">{t * 100:+.0f}</text>')
+    s.append(f'<text x="{X(0) + 5:.1f}" y="{y0 - 12}" class="ax">no change</text>')
+    for i, (name, fam, c, lab) in enumerate(rows):
+        cy = y0 + i * rh + rh / 2
+        s.append(f'<text x="{x0 - 12}" y="{cy + 4:.1f}" text-anchor="end" class="lab">{lab}</text>')
+        R = sorted([r[c]["d_knows"] for r in SR.values() if r["family"] == fam and c in r])
+        for j, v in enumerate(R):
+            s.append(f'<circle cx="{X(v):.1f}" cy="{cy + ((j % 3) - 1) * 7:.1f}" r="5" fill="{GRAY}" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: {pts(v)} points</title></circle>')
+        v = SR[name][c]["d_knows"]
+        s.append(f'<g><title>Chosen heads: {pts(v)} points</title>{star(X(v), cy, 9)}</g>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 2}" text-anchor="middle" class="axl">Change in hidden knowledge at the readout layer (AUROC points)</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def single_bars():
+    singles = sorted([r for r in SR.values() if r["family"] == "single"], key=lambda r: r["safety"]["d_knows"])
+    x0, x1, lo, hi = 300, 660, -0.09, 0.03
+    X = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rh, y0 = 30, 26
+    H = y0 + len(singles) * rh + 40
+    s = [f'<svg class="chart" viewBox="0 0 680 {H}" role="img" aria-label="Change in hidden knowledge after switching off each part alone">']
+    s.append(f'<text x="12" y="14" class="ax">part</text><text x="{x0 - 16}" y="14" text-anchor="end" class="ax">push in the map</text>')
+    for t in (-0.08, -0.04, 0, 0.02):
+        s.append(f'<line x1="{X(t):.1f}" x2="{X(t):.1f}" y1="{y0 - 6}" y2="{H - 34}" stroke="{"var(--ink-3)" if t == 0 else "var(--line)"}"/>'
+                 f'<text x="{X(t):.1f}" y="{H - 18}" text-anchor="middle" class="ax">{t * 100:+.0f}</text>')
+    for i, r in enumerate(singles):
+        cy = y0 + i * rh + rh / 2
+        v, (a, b) = r["safety"]["d_knows"], r["safety"]["ci_knows"]
+        sig = b < 0 or a > 0
+        col = "var(--navy)" if sig else "#B9C6D8"
+        lab = "Layer " + r["comps"][0][1:].replace(" h", " head ")
+        s.append(f'<text x="12" y="{cy + 4:.1f}" class="lab"{" style=\"font-weight:600\"" if sig else ""}>{lab}</text>'
+                 f'<text x="{x0 - 16}" y="{cy + 4:.1f}" text-anchor="end" class="ax" style="fill:{"var(--blue)" if r["share"] > 0 else "var(--orange)"}">{r["share"] * 100:+.0f}%</text>')
+        xa, xb = sorted((X(0), X(v)))
+        s.append(f'<g><title>{lab}: {pts(v)} points (95% range {pts(a)} to {pts(b)})</title>'
+                 f'<rect x="{xa:.1f}" y="{cy - 8:.1f}" width="{max(xb - xa, 1.5):.1f}" height="16" rx="3" fill="{col}"/>'
+                 f'<line x1="{X(a):.1f}" x2="{X(b):.1f}" y1="{cy:.1f}" y2="{cy:.1f}" stroke="var(--ink-2)" stroke-width="1.5"/>'
+                 f'<line x1="{X(a):.1f}" x2="{X(a):.1f}" y1="{cy - 5:.1f}" y2="{cy + 5:.1f}" stroke="var(--ink-2)" stroke-width="1.5"/>'
+                 f'<line x1="{X(b):.1f}" x2="{X(b):.1f}" y1="{cy - 5:.1f}" y2="{cy + 5:.1f}" stroke="var(--ink-2)" stroke-width="1.5"/></g>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 2}" text-anchor="middle" class="axl">Change in hidden knowledge at layer 16 (AUROC points)</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def bff_bars():
+    rows = sorted([r for r in SR.values() if r["family"] == "bff_mlp"], key=lambda r: int(r["name"].split("_")[-1]))
+    W, H, x0, x1, y0, y1 = 680, 240, 48, 668, 16, 190
+    lo, hi = -0.03, 0.02
+    Y = lambda v: y1 - (v - lo) / (hi - lo) * (y1 - y0)
+    bw = (x1 - x0) / len(rows)
+    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" role="img" aria-label="Change in BFF hidden knowledge after switching off each MLP">']
+    for t in (-0.03, -0.02, -0.01, 0, 0.01, 0.02):
+        s.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="{"var(--ink-3)" if t == 0 else "var(--line)"}"/>'
+                 f'<text x="{x0 - 6}" y="{Y(t) + 4:.1f}" text-anchor="end" class="ax">{t * 100:+.0f}</text>')
+    for i, r in enumerate(rows):
+        L = int(r["name"].split("_")[-1])
+        v = r["bff"]["d_knows"]
+        col = "var(--navy)" if L == 19 else ("#7FA8E0" if L >= 15 else "#C9D4E3")
+        ya, yb = sorted((Y(0), Y(v)))
+        s.append(f'<g><title>Layer {L} MLP: {pts(v)} points</title><rect x="{x0 + i * bw + 3:.1f}" y="{ya:.1f}" width="{bw - 6:.1f}" height="{max(yb - ya, 1.5):.1f}" rx="3" fill="{col}"/></g>'
+                 f'<text x="{x0 + (i + .5) * bw:.1f}" y="{y1 + 16}" text-anchor="middle" class="ax"{" style=\"font-weight:600;fill:var(--navy)\"" if L == 19 else ""}>{L}</text>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 8}" text-anchor="middle" class="axl">MLP switched off (layer) · change in BFF hidden knowledge at layer 19 (AUROC points)</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+b_s, b_b = SR["base"]["safety"], SR["base"]["bff"]
+c4 = SR["single_L8h4"]["safety"]["curve"]
+h2 = SR["single_L16h2"]["safety"]
+part3 = f"""
+  <div class="part"><span>Part 3</span><h2>Switch-off test: do the flagged heads actually cause the knowledge?</h2></div>
+
+  <section>
+    <div class="step">Setup</div>
+    <h2>What we ran</h2>
+    <ul>
+      <li><b>The idea:</b> Part 1 showed which parts <b>look</b> important. Here we switch them off and check whether the hidden knowledge actually goes away. That turns a correlation into a cause.</li>
+      <li><b>Switching off:</b> at the verdict position, a part's output is replaced by its <b>average</b> over all questions. It still sends a normal-looking signal, but the same one for every answer, so it can no longer tell good from bad. "Boost" does the opposite and doubles how far the output sits from its average.</li>
+      <li><b>What we switched off:</b> the three biggest right-answer heads (layer 16 heads 2 and 5, layer 8 head 4), the two biggest wrong-answer heads (layer 8 head 3, layer 16 head 8), the eight biggest parts one at a time, and every MLP in layers 1–19 on BFF.</li>
+      <li><b>Luck check:</b> 19 random sets of the same number of heads from layers 1–16.</li>
+      <li><b>Measuring knowledge:</b> the probe from the normal model is <b>kept fixed</b> and read at every layer, on all 900 Safety and 459 BFF items (each item scored by a probe that never saw it). 70 switch-offs ran on 18 Modal GPUs. With nothing switched off it gives {b_s["knows"]:.2f} on Safety, matching Part 1.</li>
+    </ul>
+    <div class="stats">
+      <div class="stat"><b>19 of 19</b><span>random head sets hurt less than switching off the chosen heads, on Safety and on BFF</span></div>
+      <div class="stat"><b>{pts(h2["d_knows"])} pts</b><span>layer 16 head 2 alone: the one part whose loss is never repaired</span></div>
+      <div class="stat"><b>{SR["base"]["safety"]["curve"][7]:.2f} → {c4[7]:.2f} → {SR["single_L8h4"]["safety"]["knows"]:.2f}</b><span>layer 8 head 4 off: knowledge at layer 8 collapses, then is rebuilt by layer 16</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="step">Finding 7</div>
+    <h2>The chosen heads matter more than random heads, but the knowledge survives</h2>
+    <div class="legend"><span><i class="sw" style="background:{GRAY};border-radius:50%"></i>19 random head sets</span><span>★ chosen heads</span></div>
+    {so_strip()}
+    <p>Switching off the right-answer heads lowers the hidden knowledge on Safety from {b_s["knows"]:.2f} to {SR["S_right"]["safety"]["knows"]:.2f}, a bigger drop than <b>all 19</b> random sets (random: {pts(ST["right_safety"]["rand_min"])} to {pts(ST["right_safety"]["rand_max"])} points). The <b>same heads also lower BFF</b> knowledge ({b_b["knows"]:.2f} → {SR["S_right"]["bff"]["knows"]:.2f}, again more than all 19 random sets), even though they were picked on Safety only.</p>
+    <p>Surprise: switching off the <b>wrong-answer</b> heads does not raise the knowledge. It lowers it too ({pts(SR["S_wrong"]["safety"]["d_knows"])} points). Boosting the right-answer heads doesn't raise it either ({pts(SR["S_right_boost"]["safety"]["d_knows"])}).</p>
+    <p class="note">The effects are real but small: a few AUROC points out of {b_s["knows"]:.2f}. Even with the five biggest heads gone, the model still knows the answer at about 0.92.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 8</div>
+    <h2>The model repairs early damage, but not late damage</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>nothing switched off</span><span><i class="sw" style="background:#C2550C"></i>layer 8 head 4 off</span><span><i class="sw" style="background:#3B73C4"></i>layer 16 head 2 off (dashed)</span></div>
+    {recovery_chart()}
+    <p>Switching off <b>layer 8 head 4</b> makes the knowledge collapse right after it ({SR["base"]["safety"]["curve"][7]:.2f} → {c4[7]:.2f} at layer 8). But the following layers <b>rebuild it</b>, and by layer 16 it is back to normal ({SR["single_L8h4"]["safety"]["knows"]:.2f}). Switching off <b>layer 16 head 2</b> comes too late to be repaired: the loss carries through to the last layer.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 9</div>
+    <h2>One at a time, only layer 16 head 2 clearly matters</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>clear effect (95% range excludes zero)</span><span><i class="sw" style="background:#B9C6D8"></i>no clear effect</span><span>whiskers: 95% range</span></div>
+    {single_bars()}
+    <p>A big push in the map does not mean a part is needed. Layer 16 head 5 had a +36% push in Part 1, yet switching it off alone changes nothing, because other parts cover for it. Only <b>layer 16 head 2</b> is both a top pusher <b>and</b> needed on its own.</p>
+  </section>
+
+  <section>
+    <div class="step">BFF</div>
+    <h2>On BFF, the layer 19 MLP is the most needed MLP, closely followed by its neighbours</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>layer 19 MLP (flagged in Part 1)</span><span><i class="sw" style="background:#7FA8E0"></i>layers 15–18</span><span><i class="sw" style="background:#C9D4E3"></i>earlier layers</span></div>
+    {bff_bars()}
+    <p class="note">Switching off the layer 19 MLP gives the biggest drop of all 19 MLPs ({pts(SR["bff_mlp_19"]["bff"]["d_knows"])} points), confirming Part 1's one significant BFF part. But layers 18 and 15 are close ({pts(SR["bff_mlp_18"]["bff"]["d_knows"])}, {pts(SR["bff_mlp_15"]["bff"]["d_knows"])}): finance knowledge leans on the <b>late MLPs as a group</b>, while Safety leans on <b>attention heads</b>.</p>
+  </section>
+
+  <section class="rec">
+    <span class="tag">What it all means</span>
+    <h2>The knowledge has a few real hubs, but the model is built to route around damage</h2>
+    <ul>
+      <li><b>The map is not luck.</b> The heads Part 1 flagged matter more than random heads, 19 out of 19 times. So the module map points at real parts, not noise.</li>
+      <li><b>The knowledge is redundant and self-repairing.</b> Removing even the biggest parts costs only a few points, and damage early in the model is rebuilt by later layers. Many parts carry copies of the same signal, which is also why any 256 neurons worked for the edit in Part 2.</li>
+      <li><b>Layer 16 head 2 is the clearest "where".</b> It's the only single part whose removal clearly hurts and isn't repaired, and it already showed up in both the Safety and BFF top-5 in Part 1. It is the best target for a precise edit, and the next thing to look inside.</li>
+      <li><b>"Right" and "wrong" pushers work as a team.</b> Removing the wrong-answer heads hurts instead of helping. They aren't errors to delete; they balance the right-answer heads.</li>
+      <li><b>Some machinery is shared across benchmarks.</b> Heads picked on Safety also carry finance knowledge. BFF additionally relies on its own late MLPs (layers 15–19). This supports the idea that the method finds the right parts for each dataset.</li>
+    </ul>
+  </section>
+"""
+
+
+# ----------------------------------------------------------------------------- Part 0: prompt control
+PC = json.loads((HERE / "results" / "prompt_control.json").read_text())
+PROWS = [("rb2_generic", "Safety · generic prompt", "the original pilot"),
+         ("rb2_safety", "Safety · team safety prompt", "used in Parts 1–3"),
+         ("rb2_reworded", "Safety · reworded safety prompt", "same meaning, new words"),
+         ("bff_generic", "BFF finance · generic prompt", "comparison benchmark")]
+PCOL = {"rb2_generic": "#8A97A8", "rb2_safety": "var(--navy)", "rb2_reworded": "#3B73C4"}
+
+
+def dumbbell():
+    x0, x1, lo, hi = 250, 560, 0.4, 1.0
+    X = lambda v: x0 + (v - lo) / (hi - lo) * (x1 - x0)
+    rh, y0 = 48, 30
+    H = y0 + len(PROWS) * rh + 40
+    s = [f'<svg class="chart" viewBox="0 0 680 {H}" role="img" aria-label="What the judge says versus what it knows under each prompt">']
+    for t in (0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+        s.append(f'<line x1="{X(t):.1f}" x2="{X(t):.1f}" y1="{y0 - 10}" y2="{H - 34}" stroke="{"var(--ink-3)" if t == 0.5 else "var(--line)"}"{" stroke-dasharray=\"5 4\"" if t == 0.5 else ""}/>'
+                 f'<text x="{X(t):.1f}" y="{H - 18}" text-anchor="middle" class="ax">{t:.1f}</text>')
+    s.append(f'<text x="{X(0.5) + 5:.1f}" y="{y0 - 14}" class="ax">guessing</text>')
+    s.append(f'<text x="{x1 + 20}" y="{y0 - 14}" class="ax">says CORRECT</text>')
+    for i, (k, lab, sub) in enumerate(PROWS):
+        r = PC[k]
+        cy = y0 + i * rh + rh / 2
+        s.append(f'<text x="{x0 - 14}" y="{cy}" text-anchor="end" class="lab"{" style=\"font-weight:600\"" if k == "rb2_safety" else ""}>{lab}</text>'
+                 f'<text x="{x0 - 14}" y="{cy + 14}" text-anchor="end" class="ax">{sub}</text>')
+        a, b = X(r["says"]), X(r["knows_best"])
+        s.append(f'<line x1="{a:.1f}" x2="{b:.1f}" y1="{cy:.1f}" y2="{cy:.1f}" stroke="#B9C6D8" stroke-width="6" stroke-linecap="round"/>'
+                 f'<g><title>Says (verdict): {r["says"]:.3f}</title><circle cx="{a:.1f}" cy="{cy:.1f}" r="7" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/></g>'
+                 f'<g><title>Knows (best layer {r["best_layer"]}): {r["knows_best"]:.3f}</title><circle cx="{b:.1f}" cy="{cy:.1f}" r="7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>'
+                 f'<text x="{(a + b) / 2:.1f}" y="{cy - 10:.1f}" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--ink-2)">gap {r["knows_best"] - r["says"]:+.2f}</text>'
+                 f'<text x="{x1 + 20}" y="{cy + 4:.1f}" class="val" style="fill:var(--ink-2)">{r["says_correct"] * 100:.0f}%</text>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 2}" text-anchor="middle" class="axl">Same-source AUROC (0.5 = guessing)</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def prompt_curves():
+    W, H, x0, x1, y0, y1 = 680, 270, 48, 556, 16, 220
+    lo, hi = 0.5, 1.0
+    X = lambda L: x0 + (L - 1) / 23 * (x1 - x0)
+    Y = lambda v: y1 - (v - lo) / (hi - lo) * (y1 - y0)
+    s = [f'<svg class="chart" viewBox="0 0 {W} {H}" role="img" aria-label="Hidden knowledge by layer under three Safety prompts">']
+    s.append(f'<rect x="{X(15):.1f}" y="{y0}" width="{X(18) - X(15):.1f}" height="{y1 - y0}" fill="var(--blue-soft)"/>'
+             f'<text x="{(X(15) + X(18)) / 2:.1f}" y="{y0 + 14}" text-anchor="middle" class="ax" style="fill:var(--blue)">peak: layers 15–18</text>')
+    for t in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+        s.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(t):.1f}" y2="{Y(t):.1f}" stroke="var(--line)"/>'
+                 f'<text x="{x0 - 6}" y="{Y(t) + 4:.1f}" text-anchor="end" class="ax">{t:.1f}</text>')
+    for L in (1, 4, 8, 12, 16, 20, 24):
+        s.append(f'<text x="{X(L):.1f}" y="{y1 + 16}" text-anchor="middle" class="ax">{L}</text>')
+    base_y = Y(PC["rb2_safety"]["curve"][-1])
+    offs = {"rb2_safety": -12, "rb2_generic": 4, "rb2_reworded": 20}
+    for k, lab, _ in PROWS[:3]:
+        c = PC[k]["curve"]
+        d = " ".join(f"{'M' if i == 0 else 'L'}{X(i + 1):.1f},{Y(v):.1f}" for i, v in enumerate(c))
+        s.append(f'<path d="{d}" fill="none" stroke="{PCOL[k]}" stroke-width="2.5" stroke-linejoin="round"/>')
+        for i, v in enumerate(c):
+            s.append(f'<circle cx="{X(i + 1):.1f}" cy="{Y(v):.1f}" r="7" fill="transparent"><title>{lab}, layer {i + 1}: {v:.3f}</title></circle>')
+        s.append(f'<text x="{x1 + 6}" y="{base_y + offs[k]:.1f}" class="lab" style="fill:{PCOL[k]};font-weight:600">{lab.split("· ")[1].replace(" prompt", "")}</text>')
+    v = PC["rb2_safety"]["says"]
+    s.append(f'<line x1="{x0}" x2="{x1}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="5 4"/>'
+             f'<text x="{x0 + 6}" y="{Y(v) - 6:.1f}" class="ax" style="fill:var(--orange);font-weight:600">what the verdict says (all three prompts ≈ {v:.2f})</text>')
+    s.append(f'<text x="{(x0 + x1) / 2}" y="{H - 6}" text-anchor="middle" class="axl">Layer · hidden knowledge = same-source probe AUROC</text>')
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+g, sf, rw = PC["rb2_generic"], PC["rb2_safety"], PC["rb2_reworded"]
+part0 = f"""
+  <div class="part"><span>Part 0</span><h2>First check: is the knows-vs-says gap real, or caused by the prompt?</h2></div>
+
+  <section>
+    <div class="step">Prompt control</div>
+    <h2>The gap stays under every prompt; only the verdict's bias moves</h2>
+    <ul>
+      <li><b>Why check:</b> the original pilot graded Safety with a <b>generic</b> "is this response correct?" prompt, not the team's safety prompt. A weak verdict could just mean the wrong question was asked.</li>
+      <li><b>What we ran:</b> the same judge (Qwen3.5-0.8B, thinking off, forced verdict) on all 900 Safety items with three prompts: the generic one, the team's safety prompt (<code>SAFETY_JUDGE</code> from <code>tinker_pool/run_judges.py</code>), and a reworded safety prompt. Plus BFF with the generic prompt for comparison. Ran on a Modal GPU.</li>
+      <li><b>What we measured:</b> "says" = how well the verdict separates good from bad responses; "knows" = the best per-layer probe on the hidden state. Both same-source AUROC.</li>
+    </ul>
+    <div class="legend"><span><i class="sw" style="border:2.5px solid var(--orange);border-radius:50%"></i>says (verdict)</span><span><i class="sw" style="background:var(--navy);border-radius:50%"></i>knows (best layer)</span><span>right column: share of answers the judge calls CORRECT</span></div>
+    {dumbbell()}
+    <p>On Safety, the verdict stays at guessing level ({g["says"]:.2f}, {sf["says"]:.2f}, {rw["says"]:.2f}) under all three prompts, while the hidden knowledge stays high ({g["knows_best"]:.2f}, {sf["knows_best"]:.2f}, {rw["knows_best"]:.2f}). The prompt changes <b>how often</b> the judge says CORRECT, from {g["says_correct"] * 100:.0f}% to {sf["says_correct"] * 100:.0f}%, but not whether it can <b>tell good from bad</b>.</p>
+    <h3>Where the knowledge lives does not depend on the prompt</h3>
+    {prompt_curves()}
+    <p class="note">The three Safety prompts give nearly the same layer-by-layer curve, peaking in layers 15–18 (best: generic {g["best_layer"]}, safety {sf["best_layer"]}, reworded {rw["best_layer"]}). BFF has a smaller gap (says {PC["bff_generic"]["says"]:.2f}, knows {PC["bff_generic"]["knows_best"]:.2f}). GPU and Mac runs agree (verdict correlation {PC["gpu_vs_mac"]["corr"]:.2f}, same side of 50% for {PC["gpu_vs_mac"]["same_side"] * 100:.0f}% of items).</p>
+    <div class="explain"><div><b>What it means:</b> the gap isn't a prompt mistake. The judge's hidden state ranks safe and unsafe responses well whatever it is asked, but its one-word answer doesn't use that ranking. That is what Parts 1–3 dig into, all under the team's safety prompt.</div></div>
   </section>
 """
 
@@ -420,15 +697,20 @@ footer {{ font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }}
 <div class="wrap">
   <header>
     <div class="eyebrow">Drill-down · Qwen3.5-0.8B judge · RewardBench 2 Safety and BFF</div>
-    <h1>Where the judge's hidden safety knowledge comes from, and whether editing it is significant</h1>
+    <h1>Where the judge's hidden safety knowledge comes from, whether it causes the verdict signal, and whether editing it is significant</h1>
   </header>
 
   <div class="bottom">
     <div class="eyebrow">Bottom line</div>
+    <p><b>The gap is real, not a prompt artifact:</b> under the generic, team safety and reworded prompts, the Safety verdict stays at guessing level (about 0.51) while the hidden knowledge stays at 0.93–0.95. The prompt only changes how often the judge says CORRECT.</p>
     <p>The safety knowledge is <b>built by a small number of parts pushing in opposite directions</b>, mostly attention heads in the two standard-attention layers <b>8 and 16</b>, plus the MLPs in layers 8, 9 and 14. {nsig} of {ncomp} parts beat the random-label control.</p>
     <p>The 256 neurons we edited before were <b>no better than a random pick</b>. On BFF the map is weak and noisy, with only one significant part.</p>
     <p><b>The weight edit is significant:</b> it beats shuffled labels, random directions and random changes 19 of 19 times. But <b>any</b> 256 neurons work equally well, and editing <b>later layers (16, 20)</b> gives the same gain with far less damage.</p>
+    <p><b>Switching parts off confirms the map:</b> the flagged heads matter more than random heads 19 of 19 times, on Safety and BFF. But the knowledge is redundant and self-repairing; only <b>layer 16 head 2</b> is clearly needed on its own.</p>
   </div>
+
+{part0}
+  <div class="part"><span>Part 1</span><h2>Module map: which heads and MLPs build the knowledge?</h2></div>
 
   <section>
     <div class="step">Setup</div>
@@ -512,10 +794,12 @@ footer {{ font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }}
   </section>
 
 {part2}
+{part3}
   <footer>
     <div>Push = within-source difference in the cross-fitted probe score (good minus bad) contributed by each part, compared only between responses from the same source model with the same refusal status. Significance: 500 within-request label shuffles, family-wise 99th percentile of the largest shuffled push across all parts.</div>
     <div>Part 2: each edit was scaled so the mean norm of what it adds to the residual on training items equals the real edit's (strength 0.2). Safety AUROC on 168 test items under the team safety prompt; BFF AUROC on 74 test items; loss on 20 WikiText-2 passages of 256 tokens.</div>
-    <div>Code: experiments/weight_space/module_map.py, edit_controls.py and build_module_report.py on branch ingrid/weight-space-judge. Data: results/module_map.json.</div>
+    <div>Part 3: mean ablation at the verdict position (replace a part's output by its mean over the benchmark's items), on all 900 Safety and 459 BFF items. Knowledge = same-source AUROC of a fixed 5-fold cross-fitted probe from the normal model. 95% ranges: 300 paired bootstrap resamples over requests.</div>
+    <div>Code: experiments/weight_space/module_map.py, edit_controls.py, switch_off.py and build_module_report.py on branch ingrid/weight-space-judge. Data: results/module_map.json, edit_controls.json, switch_off.json.</div>
   </footer>
 </div>
 """

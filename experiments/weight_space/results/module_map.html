@@ -65,15 +65,153 @@ footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
 <div class="wrap">
   <header>
     <div class="eyebrow">Drill-down · Qwen3.5-0.8B judge · RewardBench 2 Safety and BFF</div>
-    <h1>Where the judge's hidden safety knowledge comes from, and whether editing it is significant</h1>
+    <h1>Where the judge's hidden safety knowledge comes from, whether it causes the verdict signal, and whether editing it is significant</h1>
   </header>
 
   <div class="bottom">
     <div class="eyebrow">Bottom line</div>
+    <p><b>The gap is real, not a prompt artifact:</b> under the generic, team safety and reworded prompts, the Safety verdict stays at guessing level (about 0.51) while the hidden knowledge stays at 0.93–0.95. The prompt only changes how often the judge says CORRECT.</p>
     <p>The safety knowledge is <b>built by a small number of parts pushing in opposite directions</b>, mostly attention heads in the two standard-attention layers <b>8 and 16</b>, plus the MLPs in layers 8, 9 and 14. 36 of 240 parts beat the random-label control.</p>
     <p>The 256 neurons we edited before were <b>no better than a random pick</b>. On BFF the map is weak and noisy, with only one significant part.</p>
     <p><b>The weight edit is significant:</b> it beats shuffled labels, random directions and random changes 19 of 19 times. But <b>any</b> 256 neurons work equally well, and editing <b>later layers (16, 20)</b> gives the same gain with far less damage.</p>
+    <p><b>Switching parts off confirms the map:</b> the flagged heads matter more than random heads 19 of 19 times, on Safety and BFF. But the knowledge is redundant and self-repairing; only <b>layer 16 head 2</b> is clearly needed on its own.</p>
   </div>
+
+
+  <div class="part"><span>Part 0</span><h2>First check: is the knows-vs-says gap real, or caused by the prompt?</h2></div>
+
+  <section>
+    <div class="step">Prompt control</div>
+    <h2>The gap stays under every prompt; only the verdict's bias moves</h2>
+    <ul>
+      <li><b>Why check:</b> the original pilot graded Safety with a <b>generic</b> "is this response correct?" prompt, not the team's safety prompt. A weak verdict could just mean the wrong question was asked.</li>
+      <li><b>What we ran:</b> the same judge (Qwen3.5-0.8B, thinking off, forced verdict) on all 900 Safety items with three prompts: the generic one, the team's safety prompt (<code>SAFETY_JUDGE</code> from <code>tinker_pool/run_judges.py</code>), and a reworded safety prompt. Plus BFF with the generic prompt for comparison. Ran on a Modal GPU.</li>
+      <li><b>What we measured:</b> "says" = how well the verdict separates good from bad responses; "knows" = the best per-layer probe on the hidden state. Both same-source AUROC.</li>
+    </ul>
+    <div class="legend"><span><i class="sw" style="border:2.5px solid var(--orange);border-radius:50%"></i>says (verdict)</span><span><i class="sw" style="background:var(--navy);border-radius:50%"></i>knows (best layer)</span><span>right column: share of answers the judge calls CORRECT</span></div>
+    <svg class="chart" viewBox="0 0 680 262" role="img" aria-label="What the judge says versus what it knows under each prompt">
+<line x1="250.0" x2="250.0" y1="20" y2="228" stroke="var(--line)"/><text x="250.0" y="244" text-anchor="middle" class="ax">0.4</text>
+<line x1="301.7" x2="301.7" y1="20" y2="228" stroke="var(--ink-3)" stroke-dasharray="5 4"/><text x="301.7" y="244" text-anchor="middle" class="ax">0.5</text>
+<line x1="353.3" x2="353.3" y1="20" y2="228" stroke="var(--line)"/><text x="353.3" y="244" text-anchor="middle" class="ax">0.6</text>
+<line x1="405.0" x2="405.0" y1="20" y2="228" stroke="var(--line)"/><text x="405.0" y="244" text-anchor="middle" class="ax">0.7</text>
+<line x1="456.7" x2="456.7" y1="20" y2="228" stroke="var(--line)"/><text x="456.7" y="244" text-anchor="middle" class="ax">0.8</text>
+<line x1="508.3" x2="508.3" y1="20" y2="228" stroke="var(--line)"/><text x="508.3" y="244" text-anchor="middle" class="ax">0.9</text>
+<line x1="560.0" x2="560.0" y1="20" y2="228" stroke="var(--line)"/><text x="560.0" y="244" text-anchor="middle" class="ax">1.0</text>
+<text x="306.7" y="16" class="ax">guessing</text>
+<text x="580" y="16" class="ax">says CORRECT</text>
+<text x="236" y="54.0" text-anchor="end" class="lab">Safety · generic prompt</text><text x="236" y="68.0" text-anchor="end" class="ax">the original pilot</text>
+<line x1="306.3" x2="524.4" y1="54.0" y2="54.0" stroke="#B9C6D8" stroke-width="6" stroke-linecap="round"/><g><title>Says (verdict): 0.509</title><circle cx="306.3" cy="54.0" r="7" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/></g><g><title>Knows (best layer 17): 0.931</title><circle cx="524.4" cy="54.0" r="7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g><text x="415.3" y="44.0" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--ink-2)">gap +0.42</text><text x="580" y="58.0" class="val" style="fill:var(--ink-2)">7%</text>
+<text x="236" y="102.0" text-anchor="end" class="lab" style="font-weight:600">Safety · team safety prompt</text><text x="236" y="116.0" text-anchor="end" class="ax">used in Parts 1–3</text>
+<line x1="308.9" x2="533.6" y1="102.0" y2="102.0" stroke="#B9C6D8" stroke-width="6" stroke-linecap="round"/><g><title>Says (verdict): 0.514</title><circle cx="308.9" cy="102.0" r="7" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/></g><g><title>Knows (best layer 16): 0.949</title><circle cx="533.6" cy="102.0" r="7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g><text x="421.3" y="92.0" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--ink-2)">gap +0.43</text><text x="580" y="106.0" class="val" style="fill:var(--ink-2)">90%</text>
+<text x="236" y="150.0" text-anchor="end" class="lab">Safety · reworded safety prompt</text><text x="236" y="164.0" text-anchor="end" class="ax">same meaning, new words</text>
+<line x1="299.1" x2="524.4" y1="150.0" y2="150.0" stroke="#B9C6D8" stroke-width="6" stroke-linecap="round"/><g><title>Says (verdict): 0.495</title><circle cx="299.1" cy="150.0" r="7" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/></g><g><title>Knows (best layer 15): 0.931</title><circle cx="524.4" cy="150.0" r="7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g><text x="411.7" y="140.0" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--ink-2)">gap +0.44</text><text x="580" y="154.0" class="val" style="fill:var(--ink-2)">40%</text>
+<text x="236" y="198.0" text-anchor="end" class="lab">BFF finance · generic prompt</text><text x="236" y="212.0" text-anchor="end" class="ax">comparison benchmark</text>
+<line x1="373.5" x2="486.1" y1="198.0" y2="198.0" stroke="#B9C6D8" stroke-width="6" stroke-linecap="round"/><g><title>Says (verdict): 0.639</title><circle cx="373.5" cy="198.0" r="7" fill="#fff" stroke="var(--orange)" stroke-width="2.5"/></g><g><title>Knows (best layer 12): 0.857</title><circle cx="486.1" cy="198.0" r="7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g><text x="429.8" y="188.0" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--ink-2)">gap +0.22</text><text x="580" y="202.0" class="val" style="fill:var(--ink-2)">24%</text>
+<text x="405.0" y="260" text-anchor="middle" class="axl">Same-source AUROC (0.5 = guessing)</text>
+</svg>
+    <p>On Safety, the verdict stays at guessing level (0.51, 0.51, 0.49) under all three prompts, while the hidden knowledge stays high (0.93, 0.95, 0.93). The prompt changes <b>how often</b> the judge says CORRECT, from 7% to 90%, but not whether it can <b>tell good from bad</b>.</p>
+    <h3>Where the knowledge lives does not depend on the prompt</h3>
+    <svg class="chart" viewBox="0 0 680 270" role="img" aria-label="Hidden knowledge by layer under three Safety prompts">
+<rect x="357.2" y="16" width="66.3" height="204" fill="var(--blue-soft)"/><text x="390.3" y="30" text-anchor="middle" class="ax" style="fill:var(--blue)">peak: layers 15–18</text>
+<line x1="48" x2="556" y1="220.0" y2="220.0" stroke="var(--line)"/><text x="42" y="224.0" text-anchor="end" class="ax">0.5</text>
+<line x1="48" x2="556" y1="179.2" y2="179.2" stroke="var(--line)"/><text x="42" y="183.2" text-anchor="end" class="ax">0.6</text>
+<line x1="48" x2="556" y1="138.4" y2="138.4" stroke="var(--line)"/><text x="42" y="142.4" text-anchor="end" class="ax">0.7</text>
+<line x1="48" x2="556" y1="97.6" y2="97.6" stroke="var(--line)"/><text x="42" y="101.6" text-anchor="end" class="ax">0.8</text>
+<line x1="48" x2="556" y1="56.8" y2="56.8" stroke="var(--line)"/><text x="42" y="60.8" text-anchor="end" class="ax">0.9</text>
+<line x1="48" x2="556" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="42" y="20.0" text-anchor="end" class="ax">1.0</text>
+<text x="48.0" y="236" text-anchor="middle" class="ax">1</text>
+<text x="114.3" y="236" text-anchor="middle" class="ax">4</text>
+<text x="202.6" y="236" text-anchor="middle" class="ax">8</text>
+<text x="291.0" y="236" text-anchor="middle" class="ax">12</text>
+<text x="379.3" y="236" text-anchor="middle" class="ax">16</text>
+<text x="467.7" y="236" text-anchor="middle" class="ax">20</text>
+<text x="556.0" y="236" text-anchor="middle" class="ax">24</text>
+<path d="M48.0,159.2 L70.1,156.8 L92.2,174.7 L114.3,114.3 L136.3,87.0 L158.4,83.3 L180.5,72.3 L202.6,51.5 L224.7,62.1 L246.8,58.4 L268.9,57.6 L291.0,58.8 L313.0,79.2 L335.1,52.3 L357.2,46.2 L379.3,49.5 L401.4,44.2 L423.5,44.2 L445.6,49.0 L467.7,53.1 L489.7,58.0 L511.8,56.8 L533.9,51.5 L556.0,52.3" fill="none" stroke="#8A97A8" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="48.0" cy="159.2" r="7" fill="transparent"><title>Safety · generic prompt, layer 1: 0.649</title></circle>
+<circle cx="70.1" cy="156.8" r="7" fill="transparent"><title>Safety · generic prompt, layer 2: 0.655</title></circle>
+<circle cx="92.2" cy="174.7" r="7" fill="transparent"><title>Safety · generic prompt, layer 3: 0.611</title></circle>
+<circle cx="114.3" cy="114.3" r="7" fill="transparent"><title>Safety · generic prompt, layer 4: 0.759</title></circle>
+<circle cx="136.3" cy="87.0" r="7" fill="transparent"><title>Safety · generic prompt, layer 5: 0.826</title></circle>
+<circle cx="158.4" cy="83.3" r="7" fill="transparent"><title>Safety · generic prompt, layer 6: 0.835</title></circle>
+<circle cx="180.5" cy="72.3" r="7" fill="transparent"><title>Safety · generic prompt, layer 7: 0.862</title></circle>
+<circle cx="202.6" cy="51.5" r="7" fill="transparent"><title>Safety · generic prompt, layer 8: 0.913</title></circle>
+<circle cx="224.7" cy="62.1" r="7" fill="transparent"><title>Safety · generic prompt, layer 9: 0.887</title></circle>
+<circle cx="246.8" cy="58.4" r="7" fill="transparent"><title>Safety · generic prompt, layer 10: 0.896</title></circle>
+<circle cx="268.9" cy="57.6" r="7" fill="transparent"><title>Safety · generic prompt, layer 11: 0.898</title></circle>
+<circle cx="291.0" cy="58.8" r="7" fill="transparent"><title>Safety · generic prompt, layer 12: 0.895</title></circle>
+<circle cx="313.0" cy="79.2" r="7" fill="transparent"><title>Safety · generic prompt, layer 13: 0.845</title></circle>
+<circle cx="335.1" cy="52.3" r="7" fill="transparent"><title>Safety · generic prompt, layer 14: 0.911</title></circle>
+<circle cx="357.2" cy="46.2" r="7" fill="transparent"><title>Safety · generic prompt, layer 15: 0.926</title></circle>
+<circle cx="379.3" cy="49.5" r="7" fill="transparent"><title>Safety · generic prompt, layer 16: 0.918</title></circle>
+<circle cx="401.4" cy="44.2" r="7" fill="transparent"><title>Safety · generic prompt, layer 17: 0.931</title></circle>
+<circle cx="423.5" cy="44.2" r="7" fill="transparent"><title>Safety · generic prompt, layer 18: 0.931</title></circle>
+<circle cx="445.6" cy="49.0" r="7" fill="transparent"><title>Safety · generic prompt, layer 19: 0.919</title></circle>
+<circle cx="467.7" cy="53.1" r="7" fill="transparent"><title>Safety · generic prompt, layer 20: 0.909</title></circle>
+<circle cx="489.7" cy="58.0" r="7" fill="transparent"><title>Safety · generic prompt, layer 21: 0.897</title></circle>
+<circle cx="511.8" cy="56.8" r="7" fill="transparent"><title>Safety · generic prompt, layer 22: 0.900</title></circle>
+<circle cx="533.9" cy="51.5" r="7" fill="transparent"><title>Safety · generic prompt, layer 23: 0.913</title></circle>
+<circle cx="556.0" cy="52.3" r="7" fill="transparent"><title>Safety · generic prompt, layer 24: 0.911</title></circle>
+<text x="562" y="53.5" class="lab" style="fill:#8A97A8;font-weight:600">generic</text>
+<path d="M48.0,177.2 L70.1,149.4 L92.2,159.2 L114.3,155.1 L136.3,100.9 L158.4,81.3 L180.5,73.5 L202.6,55.6 L224.7,69.9 L246.8,62.5 L268.9,92.7 L291.0,76.0 L313.0,57.6 L335.1,49.5 L357.2,44.2 L379.3,36.8 L401.4,39.3 L423.5,43.3 L445.6,42.1 L467.7,44.6 L489.7,50.7 L511.8,49.5 L533.9,49.0 L556.0,49.5" fill="none" stroke="var(--navy)" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="48.0" cy="177.2" r="7" fill="transparent"><title>Safety · team safety prompt, layer 1: 0.605</title></circle>
+<circle cx="70.1" cy="149.4" r="7" fill="transparent"><title>Safety · team safety prompt, layer 2: 0.673</title></circle>
+<circle cx="92.2" cy="159.2" r="7" fill="transparent"><title>Safety · team safety prompt, layer 3: 0.649</title></circle>
+<circle cx="114.3" cy="155.1" r="7" fill="transparent"><title>Safety · team safety prompt, layer 4: 0.659</title></circle>
+<circle cx="136.3" cy="100.9" r="7" fill="transparent"><title>Safety · team safety prompt, layer 5: 0.792</title></circle>
+<circle cx="158.4" cy="81.3" r="7" fill="transparent"><title>Safety · team safety prompt, layer 6: 0.840</title></circle>
+<circle cx="180.5" cy="73.5" r="7" fill="transparent"><title>Safety · team safety prompt, layer 7: 0.859</title></circle>
+<circle cx="202.6" cy="55.6" r="7" fill="transparent"><title>Safety · team safety prompt, layer 8: 0.903</title></circle>
+<circle cx="224.7" cy="69.9" r="7" fill="transparent"><title>Safety · team safety prompt, layer 9: 0.868</title></circle>
+<circle cx="246.8" cy="62.5" r="7" fill="transparent"><title>Safety · team safety prompt, layer 10: 0.886</title></circle>
+<circle cx="268.9" cy="92.7" r="7" fill="transparent"><title>Safety · team safety prompt, layer 11: 0.812</title></circle>
+<circle cx="291.0" cy="76.0" r="7" fill="transparent"><title>Safety · team safety prompt, layer 12: 0.853</title></circle>
+<circle cx="313.0" cy="57.6" r="7" fill="transparent"><title>Safety · team safety prompt, layer 13: 0.898</title></circle>
+<circle cx="335.1" cy="49.5" r="7" fill="transparent"><title>Safety · team safety prompt, layer 14: 0.918</title></circle>
+<circle cx="357.2" cy="44.2" r="7" fill="transparent"><title>Safety · team safety prompt, layer 15: 0.931</title></circle>
+<circle cx="379.3" cy="36.8" r="7" fill="transparent"><title>Safety · team safety prompt, layer 16: 0.949</title></circle>
+<circle cx="401.4" cy="39.3" r="7" fill="transparent"><title>Safety · team safety prompt, layer 17: 0.943</title></circle>
+<circle cx="423.5" cy="43.3" r="7" fill="transparent"><title>Safety · team safety prompt, layer 18: 0.933</title></circle>
+<circle cx="445.6" cy="42.1" r="7" fill="transparent"><title>Safety · team safety prompt, layer 19: 0.936</title></circle>
+<circle cx="467.7" cy="44.6" r="7" fill="transparent"><title>Safety · team safety prompt, layer 20: 0.930</title></circle>
+<circle cx="489.7" cy="50.7" r="7" fill="transparent"><title>Safety · team safety prompt, layer 21: 0.915</title></circle>
+<circle cx="511.8" cy="49.5" r="7" fill="transparent"><title>Safety · team safety prompt, layer 22: 0.918</title></circle>
+<circle cx="533.9" cy="49.0" r="7" fill="transparent"><title>Safety · team safety prompt, layer 23: 0.919</title></circle>
+<circle cx="556.0" cy="49.5" r="7" fill="transparent"><title>Safety · team safety prompt, layer 24: 0.918</title></circle>
+<text x="562" y="37.5" class="lab" style="fill:var(--navy);font-weight:600">team safety</text>
+<path d="M48.0,151.0 L70.1,174.3 L92.2,204.1 L114.3,149.4 L136.3,104.5 L158.4,94.7 L180.5,82.5 L202.6,72.3 L224.7,89.8 L246.8,62.1 L268.9,86.2 L291.0,58.4 L313.0,56.8 L335.1,51.1 L357.2,44.2 L379.3,49.5 L401.4,52.7 L423.5,53.5 L445.6,56.4 L467.7,69.0 L489.7,64.6 L511.8,54.4 L533.9,52.3 L556.0,54.8" fill="none" stroke="#3B73C4" stroke-width="2.5" stroke-linejoin="round"/>
+<circle cx="48.0" cy="151.0" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 1: 0.669</title></circle>
+<circle cx="70.1" cy="174.3" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 2: 0.612</title></circle>
+<circle cx="92.2" cy="204.1" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 3: 0.539</title></circle>
+<circle cx="114.3" cy="149.4" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 4: 0.673</title></circle>
+<circle cx="136.3" cy="104.5" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 5: 0.783</title></circle>
+<circle cx="158.4" cy="94.7" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 6: 0.807</title></circle>
+<circle cx="180.5" cy="82.5" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 7: 0.837</title></circle>
+<circle cx="202.6" cy="72.3" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 8: 0.862</title></circle>
+<circle cx="224.7" cy="89.8" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 9: 0.819</title></circle>
+<circle cx="246.8" cy="62.1" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 10: 0.887</title></circle>
+<circle cx="268.9" cy="86.2" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 11: 0.828</title></circle>
+<circle cx="291.0" cy="58.4" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 12: 0.896</title></circle>
+<circle cx="313.0" cy="56.8" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 13: 0.900</title></circle>
+<circle cx="335.1" cy="51.1" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 14: 0.914</title></circle>
+<circle cx="357.2" cy="44.2" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 15: 0.931</title></circle>
+<circle cx="379.3" cy="49.5" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 16: 0.918</title></circle>
+<circle cx="401.4" cy="52.7" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 17: 0.910</title></circle>
+<circle cx="423.5" cy="53.5" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 18: 0.908</title></circle>
+<circle cx="445.6" cy="56.4" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 19: 0.901</title></circle>
+<circle cx="467.7" cy="69.0" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 20: 0.870</title></circle>
+<circle cx="489.7" cy="64.6" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 21: 0.881</title></circle>
+<circle cx="511.8" cy="54.4" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 22: 0.906</title></circle>
+<circle cx="533.9" cy="52.3" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 23: 0.911</title></circle>
+<circle cx="556.0" cy="54.8" r="7" fill="transparent"><title>Safety · reworded safety prompt, layer 24: 0.905</title></circle>
+<text x="562" y="69.5" class="lab" style="fill:#3B73C4;font-weight:600">reworded safety</text>
+<line x1="48" x2="556" y1="214.3" y2="214.3" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="54" y="208.3" class="ax" style="fill:var(--orange);font-weight:600">what the verdict says (all three prompts ≈ 0.51)</text>
+<text x="302.0" y="264" text-anchor="middle" class="axl">Layer · hidden knowledge = same-source probe AUROC</text>
+</svg>
+    <p class="note">The three Safety prompts give nearly the same layer-by-layer curve, peaking in layers 15–18 (best: generic 17, safety 16, reworded 15). BFF has a smaller gap (says 0.64, knows 0.86). GPU and Mac runs agree (verdict correlation 0.95, same side of 50% for 97% of items).</p>
+    <div class="explain"><div><b>What it means:</b> the gap isn't a prompt mistake. The judge's hidden state ranks safe and unsafe responses well whatever it is asked, but its one-word answer doesn't use that ranking. That is what Parts 1–3 dig into, all under the team's safety prompt.</div></div>
+  </section>
+
+  <div class="part"><span>Part 1</span><h2>Module map: which heads and MLPs build the knowledge?</h2></div>
 
   <section>
     <div class="step">Setup</div>
@@ -1155,13 +1293,293 @@ footer { font-size: 13px; color: var(--ink-3); display: grid; gap: 6px; }
       <li><b>Which neurons doesn't matter.</b> Random neurons in the same layer do just as well. This matches Part 1: the knowledge is readable almost everywhere after layer 6, so any reasonable set of neurons can serve as the detector.</li>
       <li><b>Where matters for side effects.</b> Editing later (layers 16 or 20) keeps the Safety gain and cuts the damage, especially to finance grading. Our original layer 17 choice was optimized for Safety only and was not the best trade-off.</li>
       <li><b>The remaining damage has one cause:</b> the edit is always on, so the detector also fires on finance questions and normal text. Making it fire only on safety grading, for example by adding "do nothing here" examples when fitting the detector, is the most direct next fix.</li>
-      <li><b>Connection to Part 1:</b> the parts that <b>build</b> the knowledge (layers 8 and 16 heads) are where a precise intervention would target. Switching them off to test that they cause it is the next step.</li>
+      <li><b>Connection to Part 1:</b> the parts that <b>build</b> the knowledge (layers 8 and 16 heads) are where a precise intervention would target. Part 3 switches them off to test whether they cause it.</li>
+    </ul>
+  </section>
+
+
+  <div class="part"><span>Part 3</span><h2>Switch-off test: do the flagged heads actually cause the knowledge?</h2></div>
+
+  <section>
+    <div class="step">Setup</div>
+    <h2>What we ran</h2>
+    <ul>
+      <li><b>The idea:</b> Part 1 showed which parts <b>look</b> important. Here we switch them off and check whether the hidden knowledge actually goes away. That turns a correlation into a cause.</li>
+      <li><b>Switching off:</b> at the verdict position, a part's output is replaced by its <b>average</b> over all questions. It still sends a normal-looking signal, but the same one for every answer, so it can no longer tell good from bad. "Boost" does the opposite and doubles how far the output sits from its average.</li>
+      <li><b>What we switched off:</b> the three biggest right-answer heads (layer 16 heads 2 and 5, layer 8 head 4), the two biggest wrong-answer heads (layer 8 head 3, layer 16 head 8), the eight biggest parts one at a time, and every MLP in layers 1–19 on BFF.</li>
+      <li><b>Luck check:</b> 19 random sets of the same number of heads from layers 1–16.</li>
+      <li><b>Measuring knowledge:</b> the probe from the normal model is <b>kept fixed</b> and read at every layer, on all 900 Safety and 459 BFF items (each item scored by a probe that never saw it). 70 switch-offs ran on 18 Modal GPUs. With nothing switched off it gives 0.95 on Safety, matching Part 1.</li>
+    </ul>
+    <div class="stats">
+      <div class="stat"><b>19 of 19</b><span>random head sets hurt less than switching off the chosen heads, on Safety and on BFF</span></div>
+      <div class="stat"><b>-4.1 pts</b><span>layer 16 head 2 alone: the one part whose loss is never repaired</span></div>
+      <div class="stat"><b>0.89 → 0.61 → 0.95</b><span>layer 8 head 4 off: knowledge at layer 8 collapses, then is rebuilt by layer 16</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="step">Finding 7</div>
+    <h2>The chosen heads matter more than random heads, but the knowledge survives</h2>
+    <div class="legend"><span><i class="sw" style="background:#8A97A8;border-radius:50%"></i>19 random head sets</span><span>★ chosen heads</span></div>
+    <svg class="chart" viewBox="0 0 680 216" role="img" aria-label="Change in hidden knowledge after switching off chosen heads versus random heads">
+<line x1="291.4" x2="291.4" y1="18" y2="182" stroke="var(--line)"/><text x="291.4" y="198" text-anchor="middle" class="ax">-4</text>
+<line x1="414.3" x2="414.3" y1="18" y2="182" stroke="var(--line)"/><text x="414.3" y="198" text-anchor="middle" class="ax">-2</text>
+<line x1="537.1" x2="537.1" y1="18" y2="182" stroke="var(--ink-3)" stroke-dasharray="5 4"/><text x="537.1" y="198" text-anchor="middle" class="ax">+0</text>
+<line x1="660.0" x2="660.0" y1="18" y2="182" stroke="var(--line)"/><text x="660.0" y="198" text-anchor="middle" class="ax">+2</text>
+<text x="542.1" y="14" class="ax">no change</text>
+<text x="218" y="55.0" text-anchor="end" class="lab">Right-answer heads, Safety</text>
+<circle cx="461.0" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -1.2 points</title></circle>
+<circle cx="522.4" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.2 points</title></circle>
+<circle cx="523.6" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.2 points</title></circle>
+<circle cx="538.4" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.0 points</title></circle>
+<circle cx="543.9" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.1 points</title></circle>
+<circle cx="544.5" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.1 points</title></circle>
+<circle cx="544.5" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.1 points</title></circle>
+<circle cx="547.0" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="552.5" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="553.1" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.3 points</title></circle>
+<circle cx="554.3" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.3 points</title></circle>
+<circle cx="555.6" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.3 points</title></circle>
+<circle cx="558.6" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="559.3" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="559.3" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="559.3" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="559.9" cy="51.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="566.6" cy="58.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="585.1" cy="44.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.8 points</title></circle>
+<g><title>Chosen heads: -2.5 points</title><polygon points="382.3,42.0 384.7,47.7 390.9,48.2 386.2,52.3 387.6,58.3 382.3,55.0 377.1,58.3 378.5,52.3 373.8,48.2 380.0,47.7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="218" y="105.0" text-anchor="end" class="lab">Wrong-answer heads, Safety</text>
+<circle cx="507.0" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.5 points</title></circle>
+<circle cx="515.0" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.4 points</title></circle>
+<circle cx="520.6" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.3 points</title></circle>
+<circle cx="524.9" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.2 points</title></circle>
+<circle cx="528.5" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.1 points</title></circle>
+<circle cx="531.0" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.1 points</title></circle>
+<circle cx="537.1" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.0 points</title></circle>
+<circle cx="537.8" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.0 points</title></circle>
+<circle cx="548.2" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="548.8" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="552.5" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="554.3" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.3 points</title></circle>
+<circle cx="560.5" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="561.1" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="563.6" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="570.3" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="570.9" cy="101.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="572.8" cy="108.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.6 points</title></circle>
+<circle cx="577.1" cy="94.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.7 points</title></circle>
+<g><title>Chosen heads: -2.5 points</title><polygon points="386.0,92.0 388.4,97.7 394.6,98.2 389.9,102.3 391.3,108.3 386.0,105.0 380.7,108.3 382.2,102.3 377.5,98.2 383.6,97.7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="218" y="155.0" text-anchor="end" class="lab">Right-answer heads, BFF finance</text>
+<circle cx="515.0" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.4 points</title></circle>
+<circle cx="516.3" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.3 points</title></circle>
+<circle cx="517.5" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.3 points</title></circle>
+<circle cx="521.8" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: -0.2 points</title></circle>
+<circle cx="542.7" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.1 points</title></circle>
+<circle cx="545.1" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.1 points</title></circle>
+<circle cx="550.7" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="551.3" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="551.9" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.2 points</title></circle>
+<circle cx="553.1" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.3 points</title></circle>
+<circle cx="559.3" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="560.5" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="563.6" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.4 points</title></circle>
+<circle cx="567.2" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="567.9" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="570.9" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.5 points</title></circle>
+<circle cx="575.2" cy="151.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.6 points</title></circle>
+<circle cx="575.8" cy="158.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.6 points</title></circle>
+<circle cx="584.4" cy="144.0" r="5" fill="#8A97A8" opacity=".8" stroke="#fff" stroke-width="1"><title>Random heads: +0.8 points</title></circle>
+<g><title>Chosen heads: -2.1 points</title><polygon points="406.9,142.0 409.3,147.7 415.5,148.2 410.8,152.3 412.2,158.3 406.9,155.1 401.6,158.3 403.1,152.3 398.4,148.2 404.5,147.7" fill="var(--navy)" stroke="#fff" stroke-width="1.5"/></g>
+<text x="445.0" y="214" text-anchor="middle" class="axl">Change in hidden knowledge at the readout layer (AUROC points)</text>
+</svg>
+    <p>Switching off the right-answer heads lowers the hidden knowledge on Safety from 0.95 to 0.92, a bigger drop than <b>all 19</b> random sets (random: -1.2 to +0.8 points). The <b>same heads also lower BFF</b> knowledge (0.86 → 0.84, again more than all 19 random sets), even though they were picked on Safety only.</p>
+    <p>Surprise: switching off the <b>wrong-answer</b> heads does not raise the knowledge. It lowers it too (-2.5 points). Boosting the right-answer heads doesn't raise it either (-1.4).</p>
+    <p class="note">The effects are real but small: a few AUROC points out of 0.95. Even with the five biggest heads gone, the model still knows the answer at about 0.92.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 8</div>
+    <h2>The model repairs early damage, but not late damage</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>nothing switched off</span><span><i class="sw" style="background:#C2550C"></i>layer 8 head 4 off</span><span><i class="sw" style="background:#3B73C4"></i>layer 16 head 2 off (dashed)</span></div>
+    <svg class="chart" viewBox="0 0 680 320" role="img" aria-label="Hidden knowledge by layer after switching off one head">
+<line x1="48" x2="600" y1="242.0" y2="242.0" stroke="var(--line)"/><text x="42" y="246.0" text-anchor="end" class="ax">0.6</text>
+<line x1="48" x2="600" y1="186.0" y2="186.0" stroke="var(--line)"/><text x="42" y="190.0" text-anchor="end" class="ax">0.7</text>
+<line x1="48" x2="600" y1="130.0" y2="130.0" stroke="var(--line)"/><text x="42" y="134.0" text-anchor="end" class="ax">0.8</text>
+<line x1="48" x2="600" y1="74.0" y2="74.0" stroke="var(--line)"/><text x="42" y="78.0" text-anchor="end" class="ax">0.9</text>
+<line x1="48" x2="600" y1="18.0" y2="18.0" stroke="var(--line)"/><text x="42" y="22.0" text-anchor="end" class="ax">1.0</text>
+<text x="48.0" y="286" text-anchor="middle" class="ax">1</text>
+<text x="123.3" y="286" text-anchor="middle" class="ax">4</text>
+<text x="223.6" y="286" text-anchor="middle" class="ax">8</text>
+<text x="324.0" y="286" text-anchor="middle" class="ax">12</text>
+<text x="424.4" y="286" text-anchor="middle" class="ax">16</text>
+<text x="524.7" y="286" text-anchor="middle" class="ax">20</text>
+<text x="600.0" y="286" text-anchor="middle" class="ax">23</text>
+<line x1="223.6" x2="223.6" y1="18" y2="270" stroke="var(--ink-3)" stroke-dasharray="2 4"/>
+<line x1="424.4" x2="424.4" y1="18" y2="270" stroke="var(--ink-3)" stroke-dasharray="2 4"/>
+<path d="M48.0,229.7 L73.1,183.0 L98.2,230.4 L123.3,210.4 L148.4,147.0 L173.5,115.6 L198.5,111.2 L223.6,80.8 L248.7,89.8 L273.8,85.7 L298.9,126.0 L324.0,91.5 L349.1,73.4 L374.2,62.1 L399.3,60.3 L424.4,47.7 L449.5,56.6 L474.5,57.9 L499.6,55.6 L524.7,58.3 L549.8,64.6 L574.9,61.8 L600.0,61.2" fill="none" stroke="var(--navy)" stroke-width="2.5" stroke-dasharray="" stroke-linejoin="round"/>
+<circle cx="48.0" cy="229.7" r="7" fill="transparent"><title>Nothing switched off, layer 1: 0.622</title></circle>
+<circle cx="73.1" cy="183.0" r="7" fill="transparent"><title>Nothing switched off, layer 2: 0.705</title></circle>
+<circle cx="98.2" cy="230.4" r="7" fill="transparent"><title>Nothing switched off, layer 3: 0.621</title></circle>
+<circle cx="123.3" cy="210.4" r="7" fill="transparent"><title>Nothing switched off, layer 4: 0.656</title></circle>
+<circle cx="148.4" cy="147.0" r="7" fill="transparent"><title>Nothing switched off, layer 5: 0.770</title></circle>
+<circle cx="173.5" cy="115.6" r="7" fill="transparent"><title>Nothing switched off, layer 6: 0.826</title></circle>
+<circle cx="198.5" cy="111.2" r="7" fill="transparent"><title>Nothing switched off, layer 7: 0.834</title></circle>
+<circle cx="223.6" cy="80.8" r="7" fill="transparent"><title>Nothing switched off, layer 8: 0.888</title></circle>
+<circle cx="248.7" cy="89.8" r="7" fill="transparent"><title>Nothing switched off, layer 9: 0.872</title></circle>
+<circle cx="273.8" cy="85.7" r="7" fill="transparent"><title>Nothing switched off, layer 10: 0.879</title></circle>
+<circle cx="298.9" cy="126.0" r="7" fill="transparent"><title>Nothing switched off, layer 11: 0.807</title></circle>
+<circle cx="324.0" cy="91.5" r="7" fill="transparent"><title>Nothing switched off, layer 12: 0.869</title></circle>
+<circle cx="349.1" cy="73.4" r="7" fill="transparent"><title>Nothing switched off, layer 13: 0.901</title></circle>
+<circle cx="374.2" cy="62.1" r="7" fill="transparent"><title>Nothing switched off, layer 14: 0.921</title></circle>
+<circle cx="399.3" cy="60.3" r="7" fill="transparent"><title>Nothing switched off, layer 15: 0.924</title></circle>
+<circle cx="424.4" cy="47.7" r="7" fill="transparent"><title>Nothing switched off, layer 16: 0.947</title></circle>
+<circle cx="449.5" cy="56.6" r="7" fill="transparent"><title>Nothing switched off, layer 17: 0.931</title></circle>
+<circle cx="474.5" cy="57.9" r="7" fill="transparent"><title>Nothing switched off, layer 18: 0.929</title></circle>
+<circle cx="499.6" cy="55.6" r="7" fill="transparent"><title>Nothing switched off, layer 19: 0.933</title></circle>
+<circle cx="524.7" cy="58.3" r="7" fill="transparent"><title>Nothing switched off, layer 20: 0.928</title></circle>
+<circle cx="549.8" cy="64.6" r="7" fill="transparent"><title>Nothing switched off, layer 21: 0.917</title></circle>
+<circle cx="574.9" cy="61.8" r="7" fill="transparent"><title>Nothing switched off, layer 22: 0.922</title></circle>
+<circle cx="600.0" cy="61.2" r="7" fill="transparent"><title>Nothing switched off, layer 23: 0.923</title></circle>
+<text x="606" y="65.2" class="lab" style="fill:var(--navy);font-weight:600">normal</text>
+<path d="M48.0,229.7 L73.1,183.0 L98.2,230.4 L123.3,210.4 L148.4,147.0 L173.5,115.6 L198.5,111.2 L223.6,236.9 L248.7,230.4 L273.8,165.4 L298.9,180.3 L324.0,142.0 L349.1,73.6 L374.2,59.2 L399.3,53.4 L424.4,46.7 L449.5,51.3 L474.5,57.0 L499.6,56.0 L524.7,58.3 L549.8,62.4 L574.9,57.5 L600.0,57.3" fill="none" stroke="#C2550C" stroke-width="2.5" stroke-dasharray="" stroke-linejoin="round"/>
+<circle cx="48.0" cy="229.7" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 1: 0.622</title></circle>
+<circle cx="73.1" cy="183.0" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 2: 0.705</title></circle>
+<circle cx="98.2" cy="230.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 3: 0.621</title></circle>
+<circle cx="123.3" cy="210.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 4: 0.656</title></circle>
+<circle cx="148.4" cy="147.0" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 5: 0.770</title></circle>
+<circle cx="173.5" cy="115.6" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 6: 0.826</title></circle>
+<circle cx="198.5" cy="111.2" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 7: 0.834</title></circle>
+<circle cx="223.6" cy="236.9" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 8: 0.609</title></circle>
+<circle cx="248.7" cy="230.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 9: 0.621</title></circle>
+<circle cx="273.8" cy="165.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 10: 0.737</title></circle>
+<circle cx="298.9" cy="180.3" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 11: 0.710</title></circle>
+<circle cx="324.0" cy="142.0" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 12: 0.778</title></circle>
+<circle cx="349.1" cy="73.6" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 13: 0.901</title></circle>
+<circle cx="374.2" cy="59.2" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 14: 0.926</title></circle>
+<circle cx="399.3" cy="53.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 15: 0.937</title></circle>
+<circle cx="424.4" cy="46.7" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 16: 0.949</title></circle>
+<circle cx="449.5" cy="51.3" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 17: 0.941</title></circle>
+<circle cx="474.5" cy="57.0" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 18: 0.930</title></circle>
+<circle cx="499.6" cy="56.0" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 19: 0.932</title></circle>
+<circle cx="524.7" cy="58.3" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 20: 0.928</title></circle>
+<circle cx="549.8" cy="62.4" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 21: 0.921</title></circle>
+<circle cx="574.9" cy="57.5" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 22: 0.929</title></circle>
+<circle cx="600.0" cy="57.3" r="7" fill="transparent"><title>Layer 8 head 4 off, layer 23: 0.930</title></circle>
+<text x="606" y="49.3" class="lab" style="fill:#C2550C;font-weight:600">L8 head 4</text>
+<path d="M48.0,229.7 L73.1,183.0 L98.2,230.4 L123.3,210.4 L148.4,147.0 L173.5,115.6 L198.5,111.2 L223.6,80.8 L248.7,89.8 L273.8,85.7 L298.9,126.0 L324.0,91.5 L349.1,73.4 L374.2,62.1 L399.3,60.3 L424.4,70.9 L449.5,76.0 L474.5,82.8 L499.6,73.8 L524.7,73.7 L549.8,88.3 L574.9,72.2 L600.0,73.3" fill="none" stroke="#3B73C4" stroke-width="2.5" stroke-dasharray="6 4" stroke-linejoin="round"/>
+<circle cx="48.0" cy="229.7" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 1: 0.622</title></circle>
+<circle cx="73.1" cy="183.0" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 2: 0.705</title></circle>
+<circle cx="98.2" cy="230.4" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 3: 0.621</title></circle>
+<circle cx="123.3" cy="210.4" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 4: 0.656</title></circle>
+<circle cx="148.4" cy="147.0" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 5: 0.770</title></circle>
+<circle cx="173.5" cy="115.6" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 6: 0.826</title></circle>
+<circle cx="198.5" cy="111.2" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 7: 0.834</title></circle>
+<circle cx="223.6" cy="80.8" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 8: 0.888</title></circle>
+<circle cx="248.7" cy="89.8" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 9: 0.872</title></circle>
+<circle cx="273.8" cy="85.7" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 10: 0.879</title></circle>
+<circle cx="298.9" cy="126.0" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 11: 0.807</title></circle>
+<circle cx="324.0" cy="91.5" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 12: 0.869</title></circle>
+<circle cx="349.1" cy="73.4" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 13: 0.901</title></circle>
+<circle cx="374.2" cy="62.1" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 14: 0.921</title></circle>
+<circle cx="399.3" cy="60.3" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 15: 0.924</title></circle>
+<circle cx="424.4" cy="70.9" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 16: 0.905</title></circle>
+<circle cx="449.5" cy="76.0" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 17: 0.896</title></circle>
+<circle cx="474.5" cy="82.8" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 18: 0.884</title></circle>
+<circle cx="499.6" cy="73.8" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 19: 0.900</title></circle>
+<circle cx="524.7" cy="73.7" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 20: 0.900</title></circle>
+<circle cx="549.8" cy="88.3" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 21: 0.874</title></circle>
+<circle cx="574.9" cy="72.2" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 22: 0.903</title></circle>
+<circle cx="600.0" cy="73.3" r="7" fill="transparent"><title>Layer 16 head 2 off, layer 23: 0.901</title></circle>
+<text x="606" y="87.3" class="lab" style="fill:#3B73C4;font-weight:600">L16 head 2</text>
+<text x="231.6" y="254.9" class="ax" style="fill:#C2550C;font-weight:600">drops to 0.61</text>
+<text x="370.2" y="174.8" class="ax" style="fill:#C2550C">…then the model rebuilds it</text>
+<text x="324.0" y="314" text-anchor="middle" class="axl">Layer · hidden knowledge = same-source AUROC of a fixed probe (0.5 = guessing)</text>
+</svg>
+    <p>Switching off <b>layer 8 head 4</b> makes the knowledge collapse right after it (0.89 → 0.61 at layer 8). But the following layers <b>rebuild it</b>, and by layer 16 it is back to normal (0.95). Switching off <b>layer 16 head 2</b> comes too late to be repaired: the loss carries through to the last layer.</p>
+  </section>
+
+  <section>
+    <div class="step">Finding 9</div>
+    <h2>One at a time, only layer 16 head 2 clearly matters</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>clear effect (95% range excludes zero)</span><span><i class="sw" style="background:#B9C6D8"></i>no clear effect</span><span>whiskers: 95% range</span></div>
+    <svg class="chart" viewBox="0 0 680 306" role="img" aria-label="Change in hidden knowledge after switching off each part alone">
+<text x="12" y="14" class="ax">part</text><text x="284" y="14" text-anchor="end" class="ax">push in the map</text>
+<line x1="330.0" x2="330.0" y1="20" y2="272" stroke="var(--line)"/><text x="330.0" y="288" text-anchor="middle" class="ax">-8</text>
+<line x1="450.0" x2="450.0" y1="20" y2="272" stroke="var(--line)"/><text x="450.0" y="288" text-anchor="middle" class="ax">-4</text>
+<line x1="570.0" x2="570.0" y1="20" y2="272" stroke="var(--ink-3)"/><text x="570.0" y="288" text-anchor="middle" class="ax">+0</text>
+<line x1="630.0" x2="630.0" y1="20" y2="272" stroke="var(--line)"/><text x="630.0" y="288" text-anchor="middle" class="ax">+2</text>
+<text x="12" y="45.0" class="lab" style="font-weight:600">Layer 16 head 2</text><text x="284" y="45.0" text-anchor="end" class="ax" style="fill:var(--blue)">+41%</text>
+<g><title>Layer 16 head 2: -4.1 points (95% range -8.1 to -2.0)</title><rect x="445.8" y="33.0" width="124.2" height="16" rx="3" fill="var(--navy)"/><line x1="327.0" x2="510.3" y1="41.0" y2="41.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="327.0" x2="327.0" y1="36.0" y2="46.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="510.3" x2="510.3" y1="36.0" y2="46.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="75.0" class="lab">Layer 16 head 8</text><text x="284" y="75.0" text-anchor="end" class="ax" style="fill:var(--orange)">-19%</text>
+<g><title>Layer 16 head 8: -1.4 points (95% range -3.4 to +1.0)</title><rect x="527.7" y="63.0" width="42.3" height="16" rx="3" fill="#B9C6D8"/><line x1="469.2" x2="601.2" y1="71.0" y2="71.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="469.2" x2="469.2" y1="66.0" y2="76.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="601.2" x2="601.2" y1="66.0" y2="76.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="105.0" class="lab">Layer 8 head 3</text><text x="284" y="105.0" text-anchor="end" class="ax" style="fill:var(--orange)">-43%</text>
+<g><title>Layer 8 head 3: -0.8 points (95% range -2.1 to +0.2)</title><rect x="544.8" y="93.0" width="25.2" height="16" rx="3" fill="#B9C6D8"/><line x1="507.0" x2="575.4" y1="101.0" y2="101.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="507.0" x2="507.0" y1="96.0" y2="106.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="575.4" x2="575.4" y1="96.0" y2="106.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="135.0" class="lab">Layer 9 MLP</text><text x="284" y="135.0" text-anchor="end" class="ax" style="fill:var(--blue)">+17%</text>
+<g><title>Layer 9 MLP: -0.2 points (95% range -1.5 to +0.7)</title><rect x="563.4" y="123.0" width="6.6" height="16" rx="3" fill="#B9C6D8"/><line x1="524.4" x2="592.2" y1="131.0" y2="131.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="524.4" x2="524.4" y1="126.0" y2="136.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="592.2" x2="592.2" y1="126.0" y2="136.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="165.0" class="lab">Layer 8 MLP</text><text x="284" y="165.0" text-anchor="end" class="ax" style="fill:var(--orange)">-28%</text>
+<g><title>Layer 8 MLP: -0.0 points (95% range -1.5 to +1.2)</title><rect x="569.1" y="153.0" width="1.5" height="16" rx="3" fill="#B9C6D8"/><line x1="525.6" x2="605.4" y1="161.0" y2="161.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="525.6" x2="525.6" y1="156.0" y2="166.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="605.4" x2="605.4" y1="156.0" y2="166.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="195.0" class="lab">Layer 8 head 4</text><text x="284" y="195.0" text-anchor="end" class="ax" style="fill:var(--blue)">+30%</text>
+<g><title>Layer 8 head 4: +0.2 points (95% range -0.9 to +1.4)</title><rect x="570.0" y="183.0" width="5.7" height="16" rx="3" fill="#B9C6D8"/><line x1="543.9" x2="611.7" y1="191.0" y2="191.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="543.9" x2="543.9" y1="186.0" y2="196.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="611.7" x2="611.7" y1="186.0" y2="196.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="225.0" class="lab">Layer 14 MLP</text><text x="284" y="225.0" text-anchor="end" class="ax" style="fill:var(--orange)">-33%</text>
+<g><title>Layer 14 MLP: +0.3 points (95% range -0.9 to +1.8)</title><rect x="570.0" y="213.0" width="9.0" height="16" rx="3" fill="#B9C6D8"/><line x1="542.7" x2="624.3" y1="221.0" y2="221.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="542.7" x2="542.7" y1="216.0" y2="226.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="624.3" x2="624.3" y1="216.0" y2="226.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="12" y="255.0" class="lab">Layer 16 head 5</text><text x="284" y="255.0" text-anchor="end" class="ax" style="fill:var(--blue)">+36%</text>
+<g><title>Layer 16 head 5: +0.3 points (95% range -1.1 to +1.8)</title><rect x="570.0" y="243.0" width="9.3" height="16" rx="3" fill="#B9C6D8"/><line x1="536.4" x2="624.3" y1="251.0" y2="251.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="536.4" x2="536.4" y1="246.0" y2="256.0" stroke="var(--ink-2)" stroke-width="1.5"/><line x1="624.3" x2="624.3" y1="246.0" y2="256.0" stroke="var(--ink-2)" stroke-width="1.5"/></g>
+<text x="480.0" y="304" text-anchor="middle" class="axl">Change in hidden knowledge at layer 16 (AUROC points)</text>
+</svg>
+    <p>A big push in the map does not mean a part is needed. Layer 16 head 5 had a +36% push in Part 1, yet switching it off alone changes nothing, because other parts cover for it. Only <b>layer 16 head 2</b> is both a top pusher <b>and</b> needed on its own.</p>
+  </section>
+
+  <section>
+    <div class="step">BFF</div>
+    <h2>On BFF, the layer 19 MLP is the most needed MLP, closely followed by its neighbours</h2>
+    <div class="legend"><span><i class="sw" style="background:var(--navy)"></i>layer 19 MLP (flagged in Part 1)</span><span><i class="sw" style="background:#7FA8E0"></i>layers 15–18</span><span><i class="sw" style="background:#C9D4E3"></i>earlier layers</span></div>
+    <svg class="chart" viewBox="0 0 680 240" role="img" aria-label="Change in BFF hidden knowledge after switching off each MLP">
+<line x1="48" x2="668" y1="190.0" y2="190.0" stroke="var(--line)"/><text x="42" y="194.0" text-anchor="end" class="ax">-3</text>
+<line x1="48" x2="668" y1="155.2" y2="155.2" stroke="var(--line)"/><text x="42" y="159.2" text-anchor="end" class="ax">-2</text>
+<line x1="48" x2="668" y1="120.4" y2="120.4" stroke="var(--line)"/><text x="42" y="124.4" text-anchor="end" class="ax">-1</text>
+<line x1="48" x2="668" y1="85.6" y2="85.6" stroke="var(--ink-3)"/><text x="42" y="89.6" text-anchor="end" class="ax">+0</text>
+<line x1="48" x2="668" y1="50.8" y2="50.8" stroke="var(--line)"/><text x="42" y="54.8" text-anchor="end" class="ax">+1</text>
+<line x1="48" x2="668" y1="16.0" y2="16.0" stroke="var(--line)"/><text x="42" y="20.0" text-anchor="end" class="ax">+2</text>
+<g><title>Layer 1 MLP: +0.3 points</title><rect x="51.0" y="74.1" width="26.6" height="11.5" rx="3" fill="#C9D4E3"/></g><text x="64.3" y="206" text-anchor="middle" class="ax">1</text>
+<g><title>Layer 2 MLP: +0.5 points</title><rect x="83.6" y="66.8" width="26.6" height="18.8" rx="3" fill="#C9D4E3"/></g><text x="96.9" y="206" text-anchor="middle" class="ax">2</text>
+<g><title>Layer 3 MLP: +1.2 points</title><rect x="116.3" y="45.2" width="26.6" height="40.4" rx="3" fill="#C9D4E3"/></g><text x="129.6" y="206" text-anchor="middle" class="ax">3</text>
+<g><title>Layer 4 MLP: -0.7 points</title><rect x="148.9" y="85.6" width="26.6" height="24.0" rx="3" fill="#C9D4E3"/></g><text x="162.2" y="206" text-anchor="middle" class="ax">4</text>
+<g><title>Layer 5 MLP: +1.0 points</title><rect x="181.5" y="49.4" width="26.6" height="36.2" rx="3" fill="#C9D4E3"/></g><text x="194.8" y="206" text-anchor="middle" class="ax">5</text>
+<g><title>Layer 6 MLP: +0.7 points</title><rect x="214.2" y="61.9" width="26.6" height="23.7" rx="3" fill="#C9D4E3"/></g><text x="227.5" y="206" text-anchor="middle" class="ax">6</text>
+<g><title>Layer 7 MLP: -1.1 points</title><rect x="246.8" y="85.6" width="26.6" height="37.6" rx="3" fill="#C9D4E3"/></g><text x="260.1" y="206" text-anchor="middle" class="ax">7</text>
+<g><title>Layer 8 MLP: -1.3 points</title><rect x="279.4" y="85.6" width="26.6" height="45.9" rx="3" fill="#C9D4E3"/></g><text x="292.7" y="206" text-anchor="middle" class="ax">8</text>
+<g><title>Layer 9 MLP: -0.5 points</title><rect x="312.1" y="85.6" width="26.6" height="17.1" rx="3" fill="#C9D4E3"/></g><text x="325.4" y="206" text-anchor="middle" class="ax">9</text>
+<g><title>Layer 10 MLP: +0.5 points</title><rect x="344.7" y="67.9" width="26.6" height="17.7" rx="3" fill="#C9D4E3"/></g><text x="358.0" y="206" text-anchor="middle" class="ax">10</text>
+<g><title>Layer 11 MLP: +0.2 points</title><rect x="377.3" y="79.0" width="26.6" height="6.6" rx="3" fill="#C9D4E3"/></g><text x="390.6" y="206" text-anchor="middle" class="ax">11</text>
+<g><title>Layer 12 MLP: +0.9 points</title><rect x="409.9" y="55.0" width="26.6" height="30.6" rx="3" fill="#C9D4E3"/></g><text x="423.3" y="206" text-anchor="middle" class="ax">12</text>
+<g><title>Layer 13 MLP: -0.4 points</title><rect x="442.6" y="85.6" width="26.6" height="12.9" rx="3" fill="#C9D4E3"/></g><text x="455.9" y="206" text-anchor="middle" class="ax">13</text>
+<g><title>Layer 14 MLP: -0.2 points</title><rect x="475.2" y="85.6" width="26.6" height="8.0" rx="3" fill="#C9D4E3"/></g><text x="488.5" y="206" text-anchor="middle" class="ax">14</text>
+<g><title>Layer 15 MLP: -2.2 points</title><rect x="507.8" y="85.6" width="26.6" height="77.3" rx="3" fill="#7FA8E0"/></g><text x="521.2" y="206" text-anchor="middle" class="ax">15</text>
+<g><title>Layer 16 MLP: -1.5 points</title><rect x="540.5" y="85.6" width="26.6" height="53.6" rx="3" fill="#7FA8E0"/></g><text x="553.8" y="206" text-anchor="middle" class="ax">16</text>
+<g><title>Layer 17 MLP: +1.5 points</title><rect x="573.1" y="34.1" width="26.6" height="51.5" rx="3" fill="#7FA8E0"/></g><text x="586.4" y="206" text-anchor="middle" class="ax">17</text>
+<g><title>Layer 18 MLP: -2.4 points</title><rect x="605.7" y="85.6" width="26.6" height="83.5" rx="3" fill="#7FA8E0"/></g><text x="619.1" y="206" text-anchor="middle" class="ax">18</text>
+<g><title>Layer 19 MLP: -2.7 points</title><rect x="638.4" y="85.6" width="26.6" height="93.6" rx="3" fill="var(--navy)"/></g><text x="651.7" y="206" text-anchor="middle" class="ax" style="font-weight:600;fill:var(--navy)">19</text>
+<text x="358.0" y="232" text-anchor="middle" class="axl">MLP switched off (layer) · change in BFF hidden knowledge at layer 19 (AUROC points)</text>
+</svg>
+    <p class="note">Switching off the layer 19 MLP gives the biggest drop of all 19 MLPs (-2.7 points), confirming Part 1's one significant BFF part. But layers 18 and 15 are close (-2.4, -2.2): finance knowledge leans on the <b>late MLPs as a group</b>, while Safety leans on <b>attention heads</b>.</p>
+  </section>
+
+  <section class="rec">
+    <span class="tag">What it all means</span>
+    <h2>The knowledge has a few real hubs, but the model is built to route around damage</h2>
+    <ul>
+      <li><b>The map is not luck.</b> The heads Part 1 flagged matter more than random heads, 19 out of 19 times. So the module map points at real parts, not noise.</li>
+      <li><b>The knowledge is redundant and self-repairing.</b> Removing even the biggest parts costs only a few points, and damage early in the model is rebuilt by later layers. Many parts carry copies of the same signal, which is also why any 256 neurons worked for the edit in Part 2.</li>
+      <li><b>Layer 16 head 2 is the clearest "where".</b> It's the only single part whose removal clearly hurts and isn't repaired, and it already showed up in both the Safety and BFF top-5 in Part 1. It is the best target for a precise edit, and the next thing to look inside.</li>
+      <li><b>"Right" and "wrong" pushers work as a team.</b> Removing the wrong-answer heads hurts instead of helping. They aren't errors to delete; they balance the right-answer heads.</li>
+      <li><b>Some machinery is shared across benchmarks.</b> Heads picked on Safety also carry finance knowledge. BFF additionally relies on its own late MLPs (layers 15–19). This supports the idea that the method finds the right parts for each dataset.</li>
     </ul>
   </section>
 
   <footer>
     <div>Push = within-source difference in the cross-fitted probe score (good minus bad) contributed by each part, compared only between responses from the same source model with the same refusal status. Significance: 500 within-request label shuffles, family-wise 99th percentile of the largest shuffled push across all parts.</div>
     <div>Part 2: each edit was scaled so the mean norm of what it adds to the residual on training items equals the real edit's (strength 0.2). Safety AUROC on 168 test items under the team safety prompt; BFF AUROC on 74 test items; loss on 20 WikiText-2 passages of 256 tokens.</div>
-    <div>Code: experiments/weight_space/module_map.py, edit_controls.py and build_module_report.py on branch ingrid/weight-space-judge. Data: results/module_map.json.</div>
+    <div>Part 3: mean ablation at the verdict position (replace a part's output by its mean over the benchmark's items), on all 900 Safety and 459 BFF items. Knowledge = same-source AUROC of a fixed 5-fold cross-fitted probe from the normal model. 95% ranges: 300 paired bootstrap resamples over requests.</div>
+    <div>Code: experiments/weight_space/module_map.py, edit_controls.py, switch_off.py and build_module_report.py on branch ingrid/weight-space-judge. Data: results/module_map.json, edit_controls.json, switch_off.json.</div>
   </footer>
 </div>
