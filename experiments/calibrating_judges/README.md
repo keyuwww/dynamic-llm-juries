@@ -1,14 +1,205 @@
-# Can a judge's activations tell us when to escalate its verdict?
+# Escalation signals for a cheap LLM judge
 
-Replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Uncertainty Estimation* (arXiv 2512.22245), applied to the question behind our dynamic jury.
+A cheap judge grades every answer. A **signal** gives each grade a trust score, and the 20% least-trusted grades are sent to a stronger judge, whose grade replaces the cheap one. The question: which signal picks the right 20%?
 
-## The question
+This folder starts as a replication of *Calibrating LLM Judges: Linear Probes for Fast and Reliable Uncertainty Estimation* (arXiv 2512.22245) and then adds two signals that work better: an **all-layer probe** and the **belief rule**.
 
-A dynamic jury should not call every judge on every item. A cheap judge grades first, and only the verdicts it is probably **wrong** about go to a stronger judge. This is called **escalation**. It only works if we can tell which of the cheap judge's verdicts to doubt.
+The full report with plots is `escalation_signals.html` (download it and open in a browser; GitHub shows HTML as code).
 
-The paper's idea: when a judge writes its reasoning and verdict, its **activations** at the last token already hint at whether the verdict is right. Activations are the vectors the model computes inside itself as it reads and writes. A **probe**, a tiny trained scorer, reads that hint. We test whether it is a good way to choose what to escalate, compared with the other ways we could choose.
+## Summary
 
-## The short answer
+- **All-layer probe:** logistic regression on the judge's activations at every saved layer, guesses averaged. It beats the "correct"-first rule (defined below) in 5 of 6 BFF/Safety settings and the paper's probe in 4 of 6 (significant). It costs nothing extra. On Safety it beats 10 reruns for both Qwen judges; on BFF it is 1–2 points behind them.
+- **Belief rule:** the judge answers the question itself; a grade that contradicts the judge's own answer is escalated first. No training, no labels, no activations. On RB2 Math it beats the judge's own confidence by 8.3 and 10.6 points (significant), and Qwen 9B with the rule (escalating 20%) beats the 35B judge grading everything (92.3 vs 90.9). On BFF it scores above every cheap signal, including the all-layer probe.
+- **Works on a new benchmark without its labels:** the belief rule needs no human marks, and a trained belief model moved from one benchmark to the other loses nothing (3 of 4 settings significant). The probe trained on other benchmarks gets worse, and on Safety falls below the "correct"-first rule.
+- **Flip on math:** reversing the grades that contradict the judge's own answer reaches 92.5 and 93.9 on RB2 Math with no stronger judge. It does not work on BFF.
+- **Limits:** the belief rule only helps when the question has a checkable answer (finance, math). No gain on JudgeBench or Safety.
+
+## Terms
+
+- **Accuracy at 20%:** share of final grades that match the human label after the 20% least-trusted grades are escalated. Unfinished answers are always escalated first.
+- **Significant:** the 95% interval of the difference, resampling whole questions, lies above zero. Each test's pass rule was fixed before running it.
+- **"Correct"-first rule:** uses nothing but the grade. Every answer the judge called "correct" is escalated before any it called "incorrect" (random order inside each group). The judge is wrong more often when it says "correct", so this already beats random; a signal must beat it to be worth anything.
+- **Judge's own confidence:** the probability the judge itself puts on its verdict word ("correct" / "incorrect") when it writes it. Read from the same run, no extra cost.
+- **Stated confidence:** the judge writes a confidence number 0–100 in a second prompt.
+- **10 reruns:** the judge grades the same answer 10 more times with randomness on (temperature 0.7); grades it keeps changing are escalated first. About 10× the cost.
+- **Labels:** the human right/wrong mark for each answer.
+
+## Setup
+
+- **Cheap judges:** Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b (belief tests use the two Qwen judges).
+- **Stronger judge:** BFF and Safety: majority vote of the 3 best other judges in the 8-judge pool (never the cheap judge's own model). RB2 Math: Qwen3.6-35B. JudgeBench: another judge run here.
+- **Benchmarks:** BFF (459 finance answers), RewardBench 2 Safety (1,800), RB2 Math (about 630 answers, cleaned labels), JudgeBench (620 pairs).
+
+## 1. All-layer probe
+
+- Input: the cheap judge's activations at the last token, right after it writes its verdict, at every second layer.
+- Probe: logistic regression on standardised activations at each layer (regularisation C = 0.01), probabilities averaged over layers. No layer is chosen.
+- Trained on the three benchmarks pooled; 5-fold splits by question (a question is never scored by a probe that saw it); 5 seeds.
+- Compared with the paper's probe (linear, one fixed middle layer: 16 for Qwen, 8 for gpt-oss, the paper's training settings).
+- Found by testing the probe types from the literature on the same data (`probe_zoo.py`): MLP, difference of means, best layer picked on a validation split, PCA over all layers, and others. Averaging logistic regressions over layers was best and was then re-run with 5 new seeds (`confirm_probe.py`).
+- Caveat: C = 0.01 was picked by comparing variants on the same benchmarks, so the gain over the paper's probe may be slightly overstated.
+
+Accuracy at 20% (mean of 5 seeds):
+
+| Setting | "Correct"-first | Paper's probe | **All-layer probe** | 10 reruns |
+|---|---|---|---|---|
+| Qwen 4B, BFF | 79.7 | 81.5 | **82.0** | 84.1 |
+| Qwen 9B, BFF | 82.2 | 82.3 | **84.1** | 85.4 |
+| gpt-oss-20b, BFF | 82.6 | 82.2 | **84.6** | 83.9 |
+| Qwen 4B, Safety | 84.7 | 85.8 | **87.7** | 84.6 |
+| Qwen 9B, Safety | 86.9 | 88.7 | **89.0** | 86.1 |
+| gpt-oss-20b, Safety | 89.4 | 88.6 | **89.7** | 88.8 |
+
+Differences (points, 95% interval; bold = significant):
+
+| Setting | − "correct"-first | − paper's probe | − 10 reruns |
+|---|---|---|---|
+| Qwen 4B, BFF | **+2.4 [+0.3, +4.6]** | +0.5 [−1.7, +2.4] | −2.0 [−3.8, +0.1] |
+| Qwen 9B, BFF | **+2.0 [+0.5, +3.9]** | **+1.8 [+0.2, +3.6]** | −1.3 [−3.5, +0.7] |
+| gpt-oss-20b, BFF | **+2.0 [+0.6, +3.7]** | **+2.4 [+1.0, +3.9]** | +0.7 [−1.2, +2.8] |
+| Qwen 4B, Safety | **+3.0 [+2.2, +3.6]** | **+1.9 [+1.1, +2.6]** | **+3.1 [+2.0, +4.1]** |
+| Qwen 9B, Safety | **+2.1 [+1.4, +2.9]** | +0.3 [+0.0, +0.7] | **+2.9 [+1.9, +4.0]** |
+| gpt-oss-20b, Safety | +0.3 [−0.5, +1.0] | **+1.1 [+0.5, +1.6]** | +0.9 [−0.2, +2.2] |
+
+JudgeBench: all signals tie, because 13–26% of answers are cut off and escalated first.
+
+## 2. Belief rule
+
+Based on the team's anchoring finding: judges approve answers that match their own answer, even when the answer is wrong.
+
+1. Separately, the cheap judge answers the question itself, without seeing the candidate answer.
+2. Another model (GLM-5.3-Flash) checks whether the judge's answer matches the candidate's.
+3. If the grade contradicts the judge's own answer (it says "correct" but its answer differs, or "incorrect" but its answer matches), that grade is escalated first; the rest follow in random order.
+
+Example: the judge's own answer is 12, the candidate says 15, and the judge still grades it "correct". That grade is escalated first.
+
+```mermaid
+flowchart TD
+    Q["Question + candidate answer"] --> S["Judge answers the question itself<br/>(without seeing the candidate)"]
+    Q --> G["Judge grades the candidate<br/>(correct / incorrect)"]
+    S --> M{"Does the judge's own answer<br/>match the candidate's?"}
+    G --> M
+    M -->|"Same answer"| Y{"Judge's grade?"}
+    M -->|"Different answer"| N{"Judge's grade?"}
+    Y -->|"correct"| K1["Consistent: keep"]
+    Y -->|"incorrect"| E1["Contradiction: escalate first"]
+    N -->|"incorrect"| K2["Consistent: keep"]
+    N -->|"correct"| E2["Contradiction: escalate first"]
+```
+
+When is it a contradiction? Only when the grade goes against the judge's own answer:
+
+| | Judge grades "correct" | Judge grades "incorrect" |
+|---|---|---|
+| **Judge's own answer = candidate's** (e.g. both 12) | consistent → keep | **contradiction → escalate** |
+| **Judge's own answer ≠ candidate's** (judge 12, candidate 15) | **contradiction → escalate** | consistent → keep |
+
+If fewer contradictions than 20% exist, the rest of the 20% is filled at random.
+
+Data: the judge's own answers (7 per question) and the matching come from the team's anchoring experiments (`experiments/anchoring_early_answer`). The rule uses 1 of the 7. A second version uses all 7: belief is then the share of the 7 that match the candidate, and a small logistic regression on 4 inputs (the share, its distance from 0.5, whether the grade agrees with it, the grade) turns that into a trust score.
+
+Accuracy at 20%:
+
+| Signal | Extra cost | BFF 4B | BFF 9B | RB2 Math 4B | RB2 Math 9B |
+|---|---|---|---|---|---|
+| Random | none | 78.3 | 79.7 | 78.7 | 82.8 |
+| "Correct"-first rule | none | 79.7 | 82.2 | — | — |
+| Stated confidence | second prompt | 79.7 | 83.2 | — | — |
+| Token log-prob | none | 81.3 | 83.2 | — | — |
+| Judge's own confidence | none | 79.7 | 85.0 | 82.3 | 81.7 |
+| All-layer probe | none (needs activations) | 82.0 | 84.1 | — | — |
+| **Belief rule, 1 own answer, no training** | 1 generation per question | **83.3** | **86.5** | **88.1** | **92.3** |
+| Belief, 7 own answers, small trained model | 7 generations per question | 84.8 | 87.1 | 90.6 | 92.3 |
+| 10 reruns | 10 generations per item | 84.1 | 85.8 | — | — |
+| Other judges' disagreement | 7 other judges per item | 85.2 | 86.3 | — | — |
+| Stronger judge grading everything | — | 87.4 | 87.4 | 90.9 | 90.9 |
+
+- **Significant:** RB2 Math, belief rule over the judge's own confidence: +8.3 [+5.9, +10.2] (4B), +10.6 [+7.7, +13.2] (9B).
+- **Significant:** BFF, 7-answer belief over the all-layer probe: +3.0 [+0.0, +5.6] (4B), +3.1 [+1.0, +4.9] (9B). The 1-answer rule also scores above the probe, but that gap was not tested for significance.
+- Cost on BFF: about 160 extra generations (one per question, shared by all answers to it), against about 4,590 for 10 reruns.
+- It beats the judge's own confidence and random at every budget tested (10%, 20%, 30%, 50%).
+- On RB2 Math only random and the judge's own confidence exist as baselines (no reruns, activations or other-judge grades were run there).
+
+## 3. Works on a new benchmark without its labels
+
+- The probe learns from labels, so every new benchmark needs human marks. The belief rule learns nothing, so it needs none.
+- Test: the 7-answer belief model learned on RB2 Math and used on BFF, and the reverse. It scores about the same as when learned on the same benchmark.
+
+| Accuracy at 20% | Judge's own confidence | Belief, learned on same benchmark | **Belief, learned on other benchmark** | Belief rule, no training |
+|---|---|---|---|---|
+| BFF 4B | 79.7 | 82.9 | **83.9** | 83.3 |
+| BFF 9B | 85.0 | 86.3 | **86.3** | 86.5 |
+| RB2 Math 4B | 82.3 | 89.2 | **87.1** | 88.1 |
+| RB2 Math 9B | 81.7 | 92.3 | **92.2** | 92.3 |
+
+Learned on the other benchmark vs baselines (bold = significant):
+
+| Setting | − confidence | − "correct"-first |
+|---|---|---|
+| BFF 4B (learned on RB2 Math) | **+4.1 [+1.7, +6.1]** | **+4.2 [+2.1, +6.3]** |
+| BFF 9B (learned on RB2 Math) | +1.3 [−1.1, +3.5] | **+4.1 [+2.0, +5.9]** |
+| RB2 Math 4B (learned on BFF) | **+4.8 [+2.4, +7.4]** | **+5.1 [+3.4, +7.3]** |
+| RB2 Math 9B (learned on BFF) | **+10.5 [+7.7, +12.1]** | **+6.3 [+4.2, +7.4]** |
+
+Probe vs belief on BFF without BFF labels:
+
+| Accuracy at 20%, BFF | Qwen 4B | Qwen 9B |
+|---|---|---|
+| "Correct"-first rule | 79.7 | 82.2 |
+| Probe trained on the other two benchmarks | 81.1 | 81.7 |
+| Same, with the verdict direction removed | 81.7 | 83.2 |
+| Probe trained on BFF itself (needs BFF labels) | 82.4 | 85.4 |
+| Belief model learned on RB2 Math | **83.9** | 86.3 |
+| Belief rule, no training | 83.3 | **86.5** |
+
+On Safety, the probe trained on other benchmarks falls below the "correct"-first rule (81.9 vs 84.7 for 4B, 84.2 vs 86.9 for 9B).
+
+## 4. Flip on math
+
+Instead of escalating, a grade whose belief says it is more likely wrong is reversed, with no stronger judge.
+
+| Accuracy | Cheap judge alone | Escalate 20% (belief) | **Flip, no stronger judge** | Qwen3.6-35B on everything |
+|---|---|---|---|---|
+| RB2 Math 4B | 75.6 | 89.2 | **92.5** | 90.9 |
+| RB2 Math 9B | 80.7 | 92.3 | **93.9** | 90.9 |
+
+On BFF flipping gives 79.6 (4B, from 76.0) and 78.4 (9B, from 77.8), so escalation is still needed there. The pre-set test (escalate and flip vs escalate only) passed in 1 of 4 settings, so this is a math-only result.
+
+## 5. Where the belief rule does not work
+
+Own answers for these were generated here (`belief_solve.py`). No gain in 0 of 4 settings.
+
+| Accuracy at 20% | Belief rule | Confidence | "Correct"-first | 10 reruns | All-layer probe |
+|---|---|---|---|---|---|
+| JudgeBench 4B | 76.6 | 76.6 | 76.4 | 79.2 | 77.2 |
+| JudgeBench 9B | 79.8 | 79.5 | 78.6 | 78.7 | 79.2 |
+| Safety 4B | 80.6 | 80.6 | 84.7 | 84.8 | 87.7 |
+| Safety 9B | 83.2 | 83.1 | 86.9 | 86.2 | 89.0 |
+
+- JudgeBench: the judge produced a final answer for only 66–69% of questions (long coding and reasoning items), so the rule applied to about 60% of pairs.
+- Safety: there is no single right answer. The judge's own "comply or refuse" decision disagreed with the candidate on about half of all items, but only 8–11% of those were real mistakes.
+
+## 6. Tried, no significant gain
+
+| Tried | Result |
+|---|---|
+| Probing bigger judges (gpt-oss-120b, Qwen3.8-27B) | No better: BFF AUROC 0.68 (120b) vs 0.67 (20b); 0.78 (27B) vs 0.83 (9B) |
+| Reading the probe partway through the reasoning | Weaker; the signal becomes strong only once the verdict is written |
+| Escalating where the stronger judge would fix the grade | Activations predict the stronger judge at chance (AUROC 0.46–0.54) |
+| Probe + token probabilities + question wording | No gain over the probe alone (1 of 6 settings) |
+| Probe trained on correctness and belief together | −0.4 / −0.5 vs the probe |
+| Belief read from the activations instead of solved | +0.7 / +1.4 over the probe, not significant (about 350 training examples) |
+| One-pass belief (how likely the judge finds the candidate's text) | Worse than the probe; correlation with solved belief about 0 |
+| Juries of judges with different mistakes; other systems' answers as references | No gain; judges share blind spots (error correlation 0.36–0.46) |
+| Stricter grading on hard questions (Project 6) | 0 of 9 settings |
+
+---
+
+# Replication of the paper's probe
+
+The sections below are the original replication. "Probe" here means the paper's probe (one fixed middle layer), not the all-layer probe above.
+
+## Replication: short answer
 
 Every number is for one cheap judge on one benchmark; nothing is averaged.
 
@@ -150,15 +341,24 @@ Generation uses vLLM and the activations come from a separate full pass. Against
 
 | File | What it does |
 |---|---|
-| `modal_generate.py` | runs generation, activations and token statistics on Modal GPUs |
-| `vllm_generate.py`, `acts_from_gen.py`, `token_stats.py` | fast generation; the judge's activations; token-probability signals |
+| `escalation_signals.html` | full report with plots (current results) |
+| `nov13_probe_results.html` | earlier report (replication and first checks) |
+| `modal_generate.py` | all Modal entrypoints: generation, activations, own-answer solves, and CPU analysis (`script`) |
+| `vllm_generate.py`, `acts_from_gen.py`, `token_stats.py`, `cand_logprob.py` | fast generation; activations; token-probability signals; candidate log-prob |
 | `generate_judge.py` | single-script Hugging Face version (reference for the check) |
-| `judge_data.py`, `prompts.py` | the benchmarks and the paper's prompts |
-| `evaluate.py`, `metrics.py` | probe training and the calibration table |
+| `judge_data.py`, `prompts.py` | the benchmarks and the prompts |
+| `evaluate.py`, `metrics.py` | the paper's probe training and the calibration table |
 | `cascade_eval.py`, `summarize_cascade.py` | the escalation experiment, including the unseen-benchmark test |
-| `layer_sweep.py` | trains the probe at every layer |
-| `make_figures.py`, `figures/` | the plots |
+| `layer_sweep.py`, `multilayer_probe.py` | probe at every layer; multi-layer probes |
+| `probe_zoo.py`, `confirm_probe.py` | probe types from the literature; 5-seed confirmation of the all-layer probe |
+| `combo_probe.py`, `transfer_probe.py`, `multitask_probe.py` | probe plus other signals; probe on unseen benchmarks; two-target probe |
+| `belief_combo.py`, `belief_variants.py`, `belief_transfer.py`, `belief_more.py` | belief rule: main test, budgets and flip, transfer, extra baselines |
+| `belief_solve.py`, `belief_jb_safety_eval.py` | own-answer solves on JudgeBench and Safety, and their evaluation |
+| `belief_probe_esc.py` | belief read from activations |
+| `flip_check.py`, `flip_rule.py`, `verdict_confound.py` | flip tests; verdict-confound check |
+| `strong_probe.py`, `gain_probe.py`, `early_probe.py`, `dayone_check.py` | bigger judges; predicting where the stronger judge helps; early reads |
+| `peers_eval.py`, `err_eval.py`, `err_control.py`, `project6_bar.py` | other systems' answers as references; error-question wording; Project 6 |
+| `make_figures.py`, `figures/` | the replication plots |
 | `check_equivalence.py`, `check_greedy.py` | the equivalence checks |
 
-Generated outputs (verdicts, activations) are not in the repo. `modal_generate.py` reads the saved 8-judge verdict files and the cached VERDICTS and RewardBench-2 tables from paths set at the top of the file. `cascade_eval.py` imports `data.py` and `audit.py` from `../role_conditioned_panels`.
-
+Generated outputs (grades, activations, results) are not in the repo. `modal_generate.py` reads the saved 8-judge verdict files and the cached VERDICTS and RewardBench-2 tables from paths set at the top of the file. `cascade_eval.py` imports `data.py` and `audit.py` from `../role_conditioned_panels`. The belief scripts read `targets/belief_rows_clean.json` (from `experiments/anchoring_early_answer/out/`) and `targets/strong_judge_correct.json` (stronger-judge grades exported from the 8-judge pool).
