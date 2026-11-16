@@ -1,5 +1,5 @@
 ---
-title: "Rubrics Change What LLM Judges Know, Not Just What They Say: A Logit-Lens and Causal Study Across Five Benchmarks"
+title: "Rubrics Change What LLM Judges Know, Not Just What They Say: A Logit-Lens Study Across Five Benchmarks"
 author: "Team 10 (Kensho / AC297r, Harvard SEAS)"
 date: "October 2026"
 ---
@@ -9,26 +9,28 @@ date: "October 2026"
 We study a specific failure mode in LLM-as-judge pipelines: a judge model's own interior
 representations can already agree with human gold labels better than the verdict it actually
 outputs. Using logit-lens probing (reading each transformer layer's hidden state through the
-model's own final norm and unembedding) and same-pass causal activation patching on gpt-oss-120b,
-we show this "best-layer-beats-final" effect is (1) real and reproducible across five
-benchmarks of unrelated format and domain — BFF-Bench (finance/accounting correctness),
-JudgeBench (pairwise response comparison), RewardBench2-Safety (binary appropriateness),
-BiGGen Bench (multi-capability instance-level rubrics), and HealthBench (physician-written
-medical-response rubrics) — with every held-out gap significant at p < 1e-5 across 200
-random splits; (2) causally real, not an artifact of logit-lens readout, confirmed by
-same-pass activation patching that recovers the gold verdict in 98-100% of flip items on
-every benchmark tested; (3) model-specific rather than a property of the probing method,
-since Qwen3.5-9B shows zero or negative gaps on all five benchmarks and gpt-oss-20b shows
-a degenerate, content-blind pattern on three; and (4) sharpened or qualitatively changed by
-a genuine, human-authored, benchmark-specific grading rubric on three of three benchmarks
-where one exists (BFF, BiGGen, HealthBench), including one case where a rubric flips a
-*significant null* (HealthBench standard) into a *significant positive* effect. A direct
-logit attribution (DLA) analysis finds the degradation is driven roughly 2-4x more by MLP
-writes than attention writes across every benchmark, but that naive per-layer attribution is
-an unreliable localizer of the true causal layer specifically under BiGGen's per-instance
-rubric condition (median mislocalization: 17 layers), where head-level ablation shows neither
-candidate layer has a single responsible component — a genuinely diffuse, non-head-localized
-mechanism, unlike BFF's locally recoverable "active override" pattern.
+model's own final norm and unembedding) on gpt-oss-120b, we show this "best-layer-beats-final"
+effect is (1) real and reproducible across five benchmarks of unrelated format and domain —
+BFF-Bench (finance/accounting correctness), JudgeBench (pairwise response comparison),
+RewardBench2-Safety (binary appropriateness), BiGGen Bench (multi-capability instance-level
+rubrics), and HealthBench (physician-written medical-response rubrics) — with every held-out
+gap significant at p < 1e-5 across 200 random splits; (2) model-specific rather than a
+property of the probing method, since Qwen3.5-9B shows zero or negative gaps on all five
+benchmarks and gpt-oss-20b shows a degenerate, content-blind pattern on three; and (3)
+sharpened or qualitatively changed by a genuine, human-authored, benchmark-specific grading
+rubric on three of three benchmarks where one exists (BFF, BiGGen, HealthBench), including one
+case where a rubric flips a *significant null* (HealthBench standard) into a *significant
+positive* effect. These are correlational findings: an interior layer's readout agrees with
+human labels more often than the final answer does, which does not show that the interior
+signal causally drives, or is overridden by, later computation. A same-pass activation-patching
+test we first ran as causal confirmation turns out to succeed by construction (Section 3.3), so
+we make no causal claim about the gap. Zero-ablating a single attention or MLP sublayer — a
+genuine intervention — switches the answer to the gold verdict in 75-87% of "flip" items on
+three benchmark/condition pairs (BFF in both conditions, JudgeBench) but in only 1.5-11% on
+three others (Section 5.3). A direct logit attribution (DLA) analysis finds the push toward
+the wrong verdict is carried roughly 2-4x more by MLP writes than attention writes across every
+benchmark, and that DLA's peak layer sits in a nearly fixed late band (layers 30-36) whatever
+the benchmark and wherever the best logit-lens layer is (Section 5.4).
 
 # 1. Introduction
 
@@ -39,8 +41,8 @@ narrower, mechanistic question: does the model's own internal computation actual
 that stated verdict, or does the final output discard information that an earlier layer already
 had right?
 
-We build on activation-patching methodology from Wang et al. (2025), "When Truth Is Overridden:
-Internal Origins of Sycophancy" (arXiv:2508.02087), which shows that a truthful internal
+We build on Wang et al. (2025), "When Truth Is Overridden: Internal Origins of Sycophancy"
+(arXiv:2508.02087), which uses activation patching to show that a truthful internal
 representation can be causally overridden by later computation under social pressure. We ask an
 analogous question under a different pressure: a *grading rubric*. Does giving a judge model an
 explicit, detailed rubric to follow change whether its final verdict reflects what it "knows"
@@ -48,8 +50,10 @@ internally?
 
 **Contributions.**
 
-1. A reusable logit-lens-plus-causal-patching pipeline, applied to five benchmarks spanning
-   finance, safety, general capability, and medicine.
+1. A reusable logit-lens pipeline with held-out layer selection, plus sublayer- and head-level
+   ablation follow-ups, applied to five benchmarks spanning finance, safety, general
+   capability, and medicine. We also document why a same-pass patching test we first used as
+   causal confirmation cannot serve that role (Section 3.3).
 2. A policy for what counts as a legitimate "rubric" condition: we require the rubric text to be
    verbatim (or a documented, clearly-labeled derivation) from a human-authored source tied to
    that benchmark's own annotation process — never researcher-invented. This ruled out one
@@ -58,11 +62,12 @@ internally?
 3. Formal significance testing (200-split bootstrap confidence intervals, sign-permutation
    p-values) for every benchmark/condition pair, and cross-model replication establishing the
    phenomenon is specific to gpt-oss-120b rather than an artifact of the probing method.
-4. A novel application of direct logit attribution (DLA) to this setting, which (a) replicates
-   the ablation-based active-override/passive-forgetting distinction via an independent,
-   non-interventional method, and (b) uncovers and fully dissects — down to the individual
-   attention head — a case where naive attribution is a reliable localizer everywhere except one
-   specific benchmark/condition.
+4. A direct logit attribution (DLA) analysis in this setting, showing that DLA's peak layer
+   stays in a nearly fixed late band across benchmarks even as the best logit-lens layer moves
+   from layer 4 to layer 35, together with head-level ablations showing that, on BiGGen's
+   rubric condition, no single attention head at either the DLA peak or the layers the patching
+   scan pointed to is needed for the wrong verdict. Whether DLA mislocalizes the cause in our
+   setting remains open, because we lack a valid causal yardstick (Section 5.4).
 
 # 2. Related Work
 
@@ -71,25 +76,24 @@ can have the correct answer latent in an earlier layer, which is then causally o
 Halawi et al. (2024, arXiv:2307.09476), "Overthinking the Truth," find an analogous late-layer
 degradation under false few-shot demonstrations driven by a small number of attention heads
 that actively reintroduce the wrong answer — a localized, head-level mechanism. Our setting
-differs from both: we use a single forward pass per condition (no need for a paired
-clean/corrupted run), and rather than a social or demonstration-based pressure, our manipulation
-is the presence or absence of a rubric.
+differs from both: our logit-lens analysis reads a single forward pass per condition, and
+rather than a social or demonstration-based pressure, our manipulation is the presence or
+absence of a rubric. Both of those papers support their causal claims with a paired
+clean/corrupted contrast; we have not run such a contrast, which is why we make no causal claim
+about the layer-vs-final gap (Section 3.3).
 
 **Attribution reliability.** "Opening LLM Judges: Recovering Preference Signals Beyond the Final
-Verdict" (arXiv:2609.32407) independently runs the same comparison we do — DLA vs. a true causal
-ranking (via activation knockout, their method; same-pass activation patching, ours) — across 41
-judge models. They report DLA correlates with the causal-knockout ranking at only ρ=0.31 (CI
-[0.30, 0.33], below 0.5 for 95% of judges), with their peak-attribution layer sitting at ~layer 30
-against a peak-cause layer at ~layer 18 — DLA late, true cause earlier, the same direction and a
-comparable magnitude of error we find in Section 5.4, replicated across a completely different set
-of judge models and task. They also attribute the gap to mediation: 82% of the causal effect is
-indirect (routed through components DLA's direct-path projection does not see), with MLP-mediated
-contributions (0.63) exceeding attention-mediated ones (0.39) — consistent with, though not
-identical to, our own (later-superseded) MLP-dominance observation. This gives our best-layer-depth
-finding (Section 5.4) external support beyond our own 8 benchmark/condition pairs: an independent,
-much larger-scale study finds the same late-attribution/early-cause pattern, which is evidence the
-phenomenon is a property of DLA itself rather than an artifact specific to our benchmarks or to
-gpt-oss-120b.
+Verdict" (arXiv:2609.32407) compares DLA against a causal ranking obtained by activation
+knockout (removing a component and measuring the change in output) across 41 judge models. They
+report DLA correlates with the knockout ranking at only ρ=0.31 (CI [0.30, 0.33], below 0.5 for
+95% of judges), with their peak-attribution layer sitting at ~layer 30 against a peak-cause layer
+at ~layer 18 — DLA late, causal effect earlier. They attribute the gap to mediation: 82% of the
+causal effect is indirect (routed through components DLA's direct-path projection does not see),
+with MLP-mediated contributions (0.63) exceeding attention-mediated ones (0.39) — consistent
+with, though not identical to, our own (later-superseded) MLP-dominance observation. Our DLA peak
+also sits late (Section 5.4), in line with their finding. But we have no validated causal
+yardstick of our own to measure DLA's error against (Section 3.3), so we cite their result as
+the evidence that late DLA peaks can mislead, not as a replication of a finding of ours.
 
 **Benchmarks and rubrics.** BFF-Bench's rubric is reused verbatim from Setlur et al.'s "No Free
 Labels" (arXiv:2503.05061, Appendix A.4), originally written for human annotators. BiGGen Bench
@@ -121,23 +125,42 @@ p-value (100,000 permutations, H0: each split's gap sign is a fair coin flip), a
 stability" statistic — the fraction of the 200 splits whose winning layer falls within ±2 of the
 modal winner.
 
-## 3.3 Causal confirmation: same-pass activation patching
+## 3.3 A same-pass patching test, and why it cannot confirm causality
 
-Correlation between an interior layer and gold is not causation. For every "flip" item (an
-interior layer agrees with gold at layer L but the model's spoken answer does not), we run a
-*second* forward pass, hook the fixed layer L to capture its hidden state during a first pass,
-then overwrite a later candidate layer K's output with that captured value (last token only),
-scanning K from L+1 to the final layer. The earliest K that recovers the gold verdict is the
-item's causal rescue layer. This requires no paired clean/corrupted prompt, since the correct
-signal is already present earlier in the same prompt.
+Correlation between an interior layer and gold is not causation. For every "flip" item (the
+logit-lens readout at the best layer L agrees with gold but the model's spoken answer does not),
+we captured layer L's hidden state at the last token and, in a second forward pass on the same
+prompt, overwrote a later layer K's output with it, scanning K from L+1 up to the final layer
+and recording the earliest K at which the model's answer matched gold.
 
-## 3.4 Mechanism classification: active override vs. passive forgetting
+An earlier version of this draft reported the resulting "rescue rate" (98-100% of flip items) as
+causal confirmation. It is not. At K = the final layer, the overwritten state passes straight
+into the final norm and unembedding, which is exactly how the logit lens read layer L in the
+first place. Flip items were selected *because* that readout is correct, so every item is
+guaranteed to be "rescued" by the end of the scan (up to numerical noise), and the rate carries
+no evidence either way. In our data, all 23 JudgeBench flip items and 131 of 181
+HealthBench-rubric flip items are first rescued only at the final layer.
 
-At the causal rescue layer, we zero-ablate the *whole* attention-sublayer or MLP-sublayer
-output (no patched-in value). If ablation alone recovers the verdict, that computation is
-actively overriding a correct signal ("active override" — a "false induction head"-style
-mechanism). If ablation does not help, but the self-patch does, the later computation is merely
-failing to preserve, rather than actively erasing, the earlier signal ("passive forgetting").
+What the earliest K does measure is narrower: the earliest layer from which the remaining
+layers, when handed layer L's state in place of their real input, no longer turn the answer
+wrong. That describes how later layers respond to a substituted input, not what produces the
+wrong verdict in the model's real forward pass. Below we call it the *replay layer* and use it
+only as a place to look, not as a causal layer. A genuine causal test of the layer-vs-final gap
+would need a controlled contrast the same-pass design lacks — for example, patching between the
+rubric and no-rubric runs of the same item, with a scan that stops before the final layer and
+matched controls — and we have not run one.
+
+## 3.4 Single-sublayer ablation
+
+At each flip item's replay layer, we zero-ablate the *whole* attention-sublayer or MLP-sublayer
+output at the last token (setting it to zero, with nothing patched in) and check whether the
+model's answer switches to gold. This is a genuine intervention on the model's real forward
+pass: if it recovers the verdict, that sublayer's output is needed for the wrong answer. An
+earlier draft labelled pairs where ablation usually recovers the verdict "active override" and
+pairs where it does not (but the self-patch does) "passive forgetting." Because the self-patch
+always succeeds by construction, the second label rested on nothing; a failed ablation shows
+only that removing one sublayer at that one layer was not enough. We drop both labels and report
+the ablation outcome directly.
 
 ## 3.5 Direct logit attribution (DLA)
 
@@ -147,15 +170,16 @@ at the last token. Each write is projected onto the forced-choice unembedding di
 W_U[\text{tok}_\text{pos}] - W_U[\text{tok}_\text{neg}]$, scaled by the final RMSNorm's learned
 gain and divided by the final residual's RMS norm — the standard linear approximation used
 throughout the attribution literature to rank per-sublayer contributions to the output logit
-difference. This gives a cheap, continuous, per-layer, per-item signal generalizing the binary
-ablation test, letting us compare the *loudest* layer under naive attribution against the *true*
-causal rescue layer from Section 3.3, and slice by item subject/category.
+difference. This gives a cheap, continuous, per-layer, per-item signal (it involves no
+intervention, so it is descriptive), letting us compare the *loudest* layer under naive
+attribution with the best logit-lens layer L and with the replay layer from Section 3.3, and
+slice by item subject/category.
 
-## 3.6 Head-level dissection
+## 3.6 Head-level ablation
 
-Where DLA and the true causal layer disagree, we zero-ablate one attention head at a time (of
-64) at both the DLA-flagged layer and the true causal-layer cluster, to test whether either
-location has a single, dominant responsible head.
+Where the DLA peak and the replay layer are far apart, we zero-ablate one attention head at a
+time (of 64) at both the DLA-peak layer and the replay-layer cluster, to test whether either
+location has a single head whose removal recovers the gold verdict.
 
 # 4. Benchmarks and the rubric-provenance policy
 
@@ -205,7 +229,7 @@ p-values.
 | RewardBench2-Safety | standard | +0.209 | [0.202, 0.216] | <1e-5 | 78% | 99.5% |
 | RewardBench2-Safety | CoCoNot rubric* | +0.197 | [0.189, 0.205] | <1e-5 | 50% | 83.5% |
 
-\* Not a strict pair; retained for the broader causal-replication question only.
+\* Not a strict pair; retained for the broader replication question only.
 
 Every row is significant at p < 1e-5 with ≥73% layer stability. HealthBench-standard is the
 single case in this entire study with a significant, negative gap — its own final layer
@@ -240,98 +264,98 @@ benchmarks tested in this project. This cross-model evidence supports treating t
 best-layer-beats-final phenomenon as a genuine property of gpt-oss-120b's computation, not an
 artifact that any forced-choice logit-lens probe would find in any sufficiently large model.
 
-## 5.3 The effect is causally real, and its mechanism bifurcates into two types
+## 5.3 Single-sublayer ablation: a large effect on some benchmarks, almost none on others
 
-Same-pass activation patching recovers the gold verdict in 98-100% of flip items on every
-benchmark/condition tested (BFF: 100%, 137/137; RewardBench2-Safety: 100%, 245/245; BiGGen-
-rubric: 98.5%; HealthBench-rubric: 100%, 181/181) — whenever a correlational gap exists, it is
-essentially always causally confirmed.
+We do not report the same-pass patching "rescue rate" as evidence, because it is guaranteed by
+construction (Section 3.3).
 
-Whole-sublayer ablation at the causal layer classifies each benchmark/condition into one of two
-mechanisms:
+Zero-ablating one whole sublayer (attention or MLP) at each flip item's replay layer separates
+the benchmark/condition pairs into two groups:
 
-- **Active override** (BFF, JudgeBench): deleting the sublayer's output alone recovers the
-  verdict in 83-87% of items — a small number of computations are actively reintroducing the
-  wrong answer.
-- **Passive forgetting** (RewardBench2-Safety-rubric, BiGGen-rubric, HealthBench-rubric):
-  deletion alone recovers almost nothing (89%, 98.5%, and 89.5% of items respectively require
-  the actual earlier hidden state to be restored) — later computation is not actively erasing
-  the signal, merely failing to carry it forward.
+- **Ablation usually recovers the verdict** (BFF-rules: 84/101, 83%; BFF-standard: 70/93, 75%;
+  JudgeBench: 20/23, 87%): removing one sublayer's output at one layer is enough to switch the
+  answer to gold in most flip items. This is a genuine interventional result: on these items the
+  wrong verdict depends on that sublayer's output.
+- **Ablation rarely recovers the verdict** (RewardBench2-Safety-standard: 25/227, 11%;
+  BiGGen-rubric: 1/68, 1.5%; HealthBench-rubric: 19/181, 10.5%): removing one sublayer at the
+  replay layer is not enough.
 
-## 5.4 Direct logit attribution: MLP-dominant, and usually (but not always) a reliable localizer
+Two cautions. First, an earlier draft called the second group "passive forgetting" (later layers
+failing to carry the correct signal forward rather than actively erasing it). That label relied
+on the self-patch succeeding, which it always does, so it is withdrawn: a failed single-sublayer
+ablation is equally consistent with the wrong push being spread across several sublayers or
+layers, or sitting at a layer we did not ablate. Second, flip items sit near the decision
+boundary, and zeroing a sublayer pushes activations outside their normal range, so some
+recoveries may reflect general fragility rather than a specific mechanism. We have no matched
+control for sublayer ablation. A head-level control on BFF-rules (single-head ablation at layers
+32 and 35 on 30 items the model already answers correctly) broke the correct answer on 9/30 and
+6/30 items, against 27/30 and 23/30 flip items recovered at the same layers — so on BFF the
+ablation effect is well above baseline fragility, but not free of it.
+
+## 5.4 Direct logit attribution: MLP-dominant, with a peak layer that barely moves
 
 Across every benchmark tested, MLP sublayer writes dominate attention writes in pushing toward
 the incorrect verdict (ratio 1.4-3.8x), and this dominance is uniform across all eight of
 BiGGen's capability categories even though *flip frequency* varies sharply by category
 (reasoning/tool-use/refinement: 23-26% of items flip; safety: 1.8%; instruction-following: 5%).
 
-**Table 3. DLA peak-push layer vs. true causal layer, across all eight pairs run.**
+**Table 3. DLA peak-push layer vs. the best logit-lens layer L and the replay layer, across all
+eight pairs run.**
 
-| Benchmark/condition | Best layer L (of 37) | MLP-dominant items | Median (DLA peak − causal layer) | Attribution reliable? |
-|---|---|---|---|---|
-| JudgeBench (no rubric) | 35 | 17% | 0 | Yes |
-| HealthBench (rubric) | 34 | 76% | -1 | Yes |
-| BFF (rules) | 31 | 55% | +1 | Yes |
-| BiGGen (standard) | 30 | 80% | 0 | Yes |
-| RewardBench2-Safety (standard) | 28 | 40% | -3 | Yes |
-| **RewardBench2-Safety (CoCoNot rubric)** | **18** | **95%** | **+12** | **No** |
-| **BFF (standard)** | **10** | **23%** | **+21** | **No** |
-| **BiGGen (rubric)** | **4** | **96%** | **+17** | **No** |
+| Benchmark/condition | Best layer L (of 37) | MLP-dominant items | Median (DLA peak − replay layer) |
+|---|---|---|---|
+| JudgeBench (no rubric) | 35 | 17% | 0 |
+| HealthBench (rubric) | 34 | 76% | -1 |
+| BFF (rules) | 31 | 55% | +1 |
+| BiGGen (standard) | 30 | 80% | 0 |
+| RewardBench2-Safety (standard) | 28 | 40% | -3 |
+| **RewardBench2-Safety (CoCoNot rubric)** | **18** | **95%** | **+12** |
+| **BFF (standard)** | **10** | **23%** | **+21** |
+| **BiGGen (rubric)** | **4** | **96%** | **+17** |
 
-This table went through two working hypotheses before this one. The first (Section 6)
-was that mislocalization tracks *per-instance* rubrics specifically; it was rejected once
-RewardBench2-Safety's reused, non-per-instance CoCoNot rubric also mislocalized. The second
-was that mislocalization tracks >90% MLP dominance — true of both mislocalizing cases known at
-the time, with all five accurate cases below 80%. Adding the eighth pair, BFF's standard
-(no-rubric) condition, rejected this too: BFF-standard is only 23% MLP-dominant (mostly
-attn-dominant, the *opposite* of the signature) yet mislocalizes worse than anything else in the
-project (median +21 layers). Across all eight pairs, MLP-dominance and attribution error are
-essentially uncorrelated (Pearson r=0.13, R²=0.02).
+An earlier draft read the last column as DLA's localization error measured against the "true
+causal layer," and tested two hypotheses for what predicts it: per-instance rubrics (rejected
+when RewardBench2-Safety's reused CoCoNot rubric also showed a large gap) and >90% MLP dominance
+(rejected when BFF-standard, only 23% MLP-dominant, showed the largest gap). That reading does
+not hold, because the replay layer is not a validated causal layer (Section 3.3). The column has
+a simpler explanation. The replay layer always lies after L and often just after it
+(BFF-standard: 57/93 items at L+1 = 11; BiGGen-rubric: 52/68 items at layers 13-15, with L = 4).
+DLA's own peak-push layer, by contrast, clusters in a narrow, nearly fixed late band (30-36 of
+37) regardless of benchmark — including BFF-standard (70/93 flip items peak at layer 32) and
+BiGGen-rubric (64/68 at layer 31). The difference between a fixed late number and a number tied
+to L will largely track L, which is what we see: r(L, median difference) = -0.93 (R²=0.87)
+across the eight pairs, while MLP dominance is essentially unrelated to it (Pearson r=0.13,
+R²=0.02).
 
-What predicts it instead is **how early the true best layer L is**: r(L, median diff)=-0.93,
-R²=0.87. DLA's own peak-push layer clusters in a narrow, nearly fixed late band (30-36 of 37)
-regardless of benchmark — including BFF-standard (70/93 flip items peak at layer 32) and
-BiGGen-rubric (64/68 at layer 31) — while the true causal layer tracks L itself (BFF-standard's
-causal layer clusters at 11-13, just after its L=10; BiGGen-rubric's at 13-15, just after its
-L=4). When L is already late (L≥28 here), DLA's fixed late-band bias happens to land near the
-true cause and attribution looks reliable; when L is early, the same bias overshoots by however
-far L is from that band. This reads as a genuine DLA artifact — raw per-layer writes project more
-strongly onto the readout direction merely by being closer to the final unembedding, independent
-of which layer's computation is actually causally responsible — now pinned to a concrete,
-falsifiable predictor (L) rather than a mechanism-type guess that didn't survive an eighth data
-point.
+What survives is a descriptive result about DLA itself: its peak layer barely moves even though
+the best logit-lens layer L ranges from 4 to 35 across these pairs. Within benchmarks it also
+does not move with the per-item replay layer: across the seven pairs whose replay layer varies
+from item to item, the mean item-level correlation between an item's replay layer and its
+DLA-peak layer is r = 0.055 (BiGGen-rubric: replay-layer variance 13.4 vs. peak-layer variance
+0.9). One exception, BFF-rules (r=0.815), remains unexplained and is reported rather than
+excluded. A plausible reason for a fixed late peak is that writes closer to the unembedding
+project more strongly onto the readout direction. Whether this means DLA mislocalizes the cause
+here, as arXiv:2609.32407 finds using causal knockout, we cannot say from our own data without a
+valid causal test.
 
-This correlation is between benchmarks and is consistent with a weaker alternative: that DLA
-genuinely tracks the true cause but is miscalibrated per-benchmark in some other way. We ruled
-this out with a sharper, item-level test using data already on hand (no new inference runs):
-within a single benchmark, individual items' causal layer varies from item to item (found by
-self-patch), so if DLA's peak is pinned to a fixed network depth rather than reading the cause,
-an item's own causal layer should not predict that item's own DLA-peak layer. It doesn't: across
-the seven benchmark/conditions with within-benchmark causal-layer variance, mean
-r(item's own causal layer, item's own DLA-peak layer) = 0.055 — essentially zero — even where the
-causal layer itself varies substantially (BiGGen-rubric: causal-layer variance 13.4 vs. peak-layer
-variance 0.9; the true cause moves by up to a dozen layers while the peak barely moves). One
-exception, BFF-rules (r=0.815), remains unexplained and is reported rather than excluded. This
-item-level result is what the fixed-late-band artifact account predicts and the
-miscalibrated-but-genuine-tracking alternative does not.
+## 5.5 Head-level ablation on BiGGen-rubric: no single head at either location
 
-## 5.5 Head-level dissection: neither candidate layer has a single responsible head
+Zero-ablating one attention head at a time (of 64) at the DLA peak layer and at the replay-layer
+cluster:
 
-Zero-ablating one attention head at a time (of 64) at both candidate layers:
-
-| Layer(s) | Role | Items with any single head recovering the verdict |
+| Layer(s) | Why this layer | Items where removing some single head recovers the verdict |
 |---|---|---|
-| Layer 31 | DLA's (false) peak | 1 / 70 (1.4%) |
-| Layers 13, 14, 15 | True causal cluster | 2-6 / 70 per layer (3-9%), no head repeats more than 3× |
+| Layer 31 | DLA peak | 1 / 70 (1.4%) |
+| Layers 13, 14, 15 | Replay-layer cluster | 2-6 / 70 per layer (3-9%), no head repeats more than 3× |
 
-Layer 31 is a red herring: it dominates naive attribution but zero-ablating any single head
-there recovers almost nothing, confirming it is downstream noise rather than the mechanism —
-exactly the failure mode arXiv:2609.32407 describes. Layers 13-15 are causally real (same-pass
-patching rescues ~100% of items there) but have no dominant head either. Combined with the
-passive-forgetting result (Section 5.3), this rules out a Halawi-et-al-style "a few heads
-actively reintroduce the wrong answer" mechanism for BiGGen's rubric condition specifically: the
-effect is genuinely diffuse, distributed across many heads/dimensions, and recoverable only by
-literally replaying the earlier computation forward.
+At neither location does removing any single head recover the gold verdict for more than a
+handful of items. This rules out a Halawi-et-al-style mechanism in which a few heads *at these
+layers* actively reintroduce the wrong answer on BiGGen's rubric condition. It does not show
+where the mechanism is: layers 13-15 were picked by the patching scan, which does not localize
+causes, and whole-sublayer ablation at the replay layer also recovered only 1 of 68 items
+(Section 5.3). The most we can say is that the wrong verdict here does not depend on any single
+head or single sublayer we tested; it may be spread across many components, or sit at layers we
+did not ablate.
 
 # 6. Discussion
 
@@ -345,51 +369,48 @@ own final token would simultaneously reduce inference cost and increase agreemen
 labels on at least seven of nine tested benchmark/condition pairs — though the right layer is
 benchmark- and model-specific and would need held-out calibration before any deployment use.
 
-The dissociation between "active override vs. passive forgetting" (an ablation property) and
-"is naive attribution a reliable localizer" (a DLA property) is, to our knowledge, a novel
-observation: these are not two readings of the same underlying fact. RewardBench2-Safety-standard
-and HealthBench-rubric are both passive-forgetting (89%, 89.5%) *and* attribution-accurate, while
-BiGGen-rubric and RewardBench2-Safety-rubric are both passive-forgetting (98.5%, 89%) *and*
-attribution-inaccurate, and BFF-standard (mostly active-override, 75%) is *also*
-attribution-inaccurate — confirming the two axes are genuinely orthogonal rather than a
-coincidence of the first seven points. What actually predicts attribution-inaccuracy went through
-two rejected guesses before the current one (Section 5.4): *per-instance rubrics* (falsified by
-RewardBench2-Safety's reused CoCoNot rubric mislocalizing), then *>90% MLP dominance* (falsified
-by BFF-standard mislocalizing worst of all at only 23% MLP-dominant). The current best-supported
-predictor — how early the true best layer L sits (r=-0.93, R²=0.87 across all eight pairs) — is a
-depth artifact of DLA itself, not a property of the benchmark's rubric or mechanism type. We
-report this trajectory explicitly, including the two rejected hypotheses, because each one looked
-well-supported on five-to-seven points and broke on the next; the current account should be read
-as hypothesis-generating, not confirmed, and we would not be surprised if a ninth pair breaks it
-too.
+An earlier draft argued that "active override vs. passive forgetting" (an ablation property)
+and "is naive attribution a reliable localizer" (a DLA property) are independent axes. Both
+axes leaned on the same-pass patching test — the first for the "passive forgetting" label, the
+second as the yardstick for attribution error — and that test cannot carry causal weight
+(Section 3.3), so we withdraw the claim. What remains is narrower. Single-sublayer ablation
+separates the pairs into ones where removing one sublayer usually recovers the gold verdict (BFF
+in both conditions, JudgeBench) and ones where it rarely does (RewardBench2-Safety-standard,
+BiGGen-rubric, HealthBench-rubric); and DLA's peak layer sits in a nearly fixed late band
+whatever the benchmark. The second fact agrees with arXiv:2609.32407's finding that DLA peaks
+late, but whether DLA mislocalizes the cause in our setting needs a causal test we have not run.
+We also record that two hypotheses for what predicts DLA's "error" (per-instance rubrics, then
+>90% MLP dominance) were each rejected as more pairs arrived; in hindsight both were explaining a
+quantity that largely tracks L by the way it is built (Section 5.4).
 
 # 7. Limitations and future work
 
-- All causal and mechanistic results (Sections 5.3-5.5) are reported for gpt-oss-120b only;
+- **No causal test of the layer-vs-final gap.** The same-pass patching test (Section 3.3)
+  recovers the gold verdict by construction: its scan ends at the final layer, where patching in
+  layer L's state reproduces layer L's logit-lens readout, and flip items were chosen because
+  that readout is correct. We therefore make no claim that the interior signal causes the
+  verdict or is overridden by later computation. A real test needs a controlled contrast (e.g.
+  patching between the rubric and no-rubric runs of the same item), a scan that stops before the
+  final layer, and matched controls (e.g. the same patch on items the model already gets right).
+- All ablation and DLA results (Sections 5.3-5.5) are reported for gpt-oss-120b only;
   cross-model evidence (Section 5.2) establishes that the *size and direction* of the
-  correlational effect is model-specific, but we have not run the causal/mechanistic pipeline on
+  correlational effect is model-specific, but we have not run the ablation/DLA pipeline on
   a second model that *does* show the effect. Checked concretely rather than assumed:
   gpt-oss-20b produces zero flip items on both BiGGen conditions (its logit-lens verdict is
   degenerate — the "best layer" is literally layer 0 or the final layer), and Qwen3.5-9B produces
   only 10-35 flip items per condition (vs. 70-245 for gpt-oss-120b), too few to fit a stable
-  causal-layer distribution for self-patch/ablate/DLA.
-- Both the per-instance-rubric hypothesis and the >90%-MLP-dominance hypothesis for attribution
-  mislocalization (Section 6) were tested and rejected in sequence as more data arrived. The
-  current best-layer-depth account (Section 5.4) is drawn from only eight benchmark/condition
-  pairs on one model, and the between-benchmark correlation alone would leave open a
-  miscalibration-rather-than-artifact alternative; we closed that with a within-benchmark,
-  item-level test (mean r=0.055 between an item's own causal layer and its own DLA-peak layer)
-  using data already collected, which supports the fixed-depth-artifact account specifically.
-  What we have *not* done is manipulate L directly (e.g. a model or prompt engineered to move L to
-  a different depth) to confirm the relationship is causal rather than merely well-predicted by
-  two independent lines of correlational evidence within our own data. On generalization beyond
-  our own benchmarks, we have independent (not self-collected) support: arXiv:2609.32407 reports
-  the same late-attribution/early-cause pattern (peak-attribution layer ~30 vs. peak-cause layer
-  ~18, ρ=0.31) across 41 different judge models, which is evidence this is a property of DLA
-  itself rather than specific to gpt-oss-120b or our eight pairs — though their method (causal
-  knockout) and ours (same-pass activation patching) are related but not identical, and a ninth
-  benchmark/condition pair in our own data could still complicate the exact depth-vs-error
-  relationship we report.
+  replay-layer distribution for ablation/DLA.
+- Single-sublayer and single-head ablations zero out activations, which pushes the model
+  outside its normal operating range, and flip items sit near the decision boundary. Only the
+  BFF head-level ablation has a matched control on already-correct items (Section 5.3); the
+  sublayer ablations have none.
+- The per-instance-rubric and >90%-MLP-dominance hypotheses (Section 6), and the L-based account
+  in Section 5.4, all describe the gap between DLA's peak and the replay layer. Because the
+  replay layer is not a causal measure, none of them says how accurately DLA localizes the cause,
+  and the item-level result (mean r=0.055) shows only that DLA's peak does not move with the
+  replay layer. Our evidence that late DLA peaks can mislead is external: arXiv:2609.32407
+  reports a peak-attribution layer of ~30 vs. a peak-cause layer of ~18 (ρ=0.31) across 41 judge
+  models, using causal knockout, which does not share the circularity of our same-pass test.
 - The DLA approximation treats RMSNorm's denominator as a near-constant scalar, a standard but
   imperfect linearization; it is used here only to rank and localize contributions, not to
   reconstruct exact logit values.
