@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escalation Signals for LLM Judges</title>
+<style>
+:root{
+  --bg:#f7f8fa; --panel:#fff; --fg:#1b2230; --muted:#5d6676; --line:#dfe3ea; --soft:#eef1f6;
+  --a1:#2f5bd3; --a2:#a9bdf2; --a3:#e08a2c; --a4:#1f8a5b; --grey:#b8bfcc; --good:#1f8a5b; --bad:#c0392b; --warn:#b7791f;
+  --display:"Avenir Next","Segoe UI",system-ui,sans-serif; --body:-apple-system,"Segoe UI",Roboto,system-ui,sans-serif; --mono:ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#12161d; --panel:#1a2029; --fg:#e7ebf2; --muted:#a3acbb; --line:#2c3440; --soft:#222a35;
+  --a1:#7d9cf0; --a2:#3f5590; --a3:#f0a85a; --a4:#4cc38a; --grey:#4c5566; --good:#4cc38a; --bad:#ef6b5b; --warn:#e0a84a; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:1050px;margin:0 auto;padding:36px 24px 70px;display:grid;gap:26px}
+h1{font-family:var(--display);font-weight:700;font-size:34px;margin:0}
+h2{font-family:var(--display);font-weight:650;font-size:23px;margin:0}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:6px 0 0}
+p{margin:0}
+.muted{color:var(--muted)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 26px;display:grid;gap:14px;min-width:0}
+.status{font-family:var(--mono);font-size:14px;font-weight:600}
+.status.yes{color:var(--good)} .status.no{color:var(--bad)} .status.mixed{color:var(--warn)}
+ul,ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.chart{overflow-x:auto} .chart svg{display:block;width:100%;height:auto;min-width:560px}
+.legend{display:grid;gap:4px;font-size:15px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:8px} .legend i{width:13px;height:13px;border-radius:50%;display:inline-block;flex:none}
+.legend .dash{width:22px;height:0;border-top:2px dashed var(--muted);border-radius:0}
+.tl{font-size:13px;fill:var(--muted)} .tv{font-family:var(--mono);font-size:12px;fill:var(--fg)} .ax{stroke:var(--line)} .ref{stroke:var(--muted);stroke-dasharray:5 4;stroke-width:1.5}
+.tbl{overflow-x:auto} table{border-collapse:collapse;font-size:15.5px;min-width:100%}
+th,td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:14px}
+td.n{text-align:right} th.n{text-align:right}
+.sig{color:var(--good);font-weight:700} .ns{color:var(--muted)} b.best{color:var(--a1)}
+.small{font-size:14.5px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header style="display:grid;gap:12px">
+  <h1>Escalation Signals for LLM Judges</h1>
+  <p class="muted">A cheap judge grades every answer. A signal gives each verdict a trust score, and the 20% least-trusted verdicts are sent to a stronger judge, whose verdict replaces the cheap one. This page compares signals by how accurate the final verdicts are.</p>
+</header>
+
+<section class="card">
+  <h2>Setup</h2>
+  <ul>
+    <li><b>Cheap judges:</b> Qwen3.5-4B, Qwen3.5-9B, gpt-oss-20b. Belief tests use the two Qwen judges.</li>
+    <li><b>Stronger judge:</b> majority vote of the 3 best other judges in the 8-judge pool (BFF, Safety); Qwen3.6-35B (RB2 Math); another hosted judge (JudgeBench).</li>
+    <li><b>Benchmarks:</b> BFF (459 finance answers), RewardBench 2 Safety (1,800), RB2 Math (about 630 answers, clean labels), JudgeBench (620 pairs).</li>
+    <li><b>Main number:</b> accuracy at 20% = share of final verdicts that match the human label after escalating the 20% least-trusted. Answers the judge did not finish are always escalated first.</li>
+    <li><b>Significant:</b> the 95% confidence interval of a difference, resampling whole questions, lies entirely above zero. Each test's pass/fail rule was written down before running it.</li>
+    <li><b>Baselines:</b> random escalation; <b>“correct”-first rule</b>: uses only the verdict, no signal: every answer the judge called “correct” is escalated before any it called “incorrect” (order within each group random). The judge is wrong more often when it says “correct”, so this already beats random and is the bar a signal must clear; the judge's own confidence (probability of its verdict word); 10 reruns at temperature 0.7 (about 10 times the cost).</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Summary of results</h2>
+  <ol>
+    <li><b>Activation probe:</b> the all-layer probe (logistic regression on each layer of the judge’s activations, averaged) beats the “correct”-first rule by 2.0 to 3.0 points in 5 of 6 BFF/Safety settings (significant). It needs no extra generation. It beats 10 reruns on Safety but not on BFF.</li>
+    <li><b>Belief rule:</b> the judge answers the question once itself; verdicts that disagree with its own answer are escalated first. On RB2 Math it beats the judge's confidence by 8.3 and 10.6 points (significant); on BFF it beats the probe by 3.0 and 3.1 points (significant, 7 solves).</li>
+    <li><b>Zero labels:</b> the belief rule works without any training and transfers between BFF and RB2 Math (3 of 4 settings significant).</li>
+    <li><b>Scope:</b> the belief rule works only when the question has a checkable answer (finance, math). On JudgeBench and Safety it gives no gain; the probe is the better signal there.</li>
+  </ol>
+</section>
+
+<section class="card">
+  <h2>1 · Activation probe</h2>
+  <p class="status yes">Significant over the “correct”-first rule (5 of 6)</p>
+  <h3>Method</h3>
+  <ul>
+    <li>Input: the cheap judge's activations at the last token, right after it writes its verdict, at every second layer.</li>
+    <li><b>All-layer probe</b> (the name used on this page): logistic regression on standardised activations at each layer (regularisation C = 0.01), probabilities averaged over layers.</li>
+    <li>Compared with the probe from <i>Calibrating LLM Judges</i> (one fixed middle layer, linear regression with the paper's training settings).</li>
+    <li>Trained on all three benchmarks pooled; 5-fold splits by question; 5 seeds.</li>
+  </ul>
+  <div class="chart" id="c_probe"></div>
+  <div class="chart" id="c_probe_bff"></div>
+  <div class="chart" id="c_probe_safety"></div>
+  <div class="legend"><span><i style="background:var(--grey)"></i>“Correct”-first rule</span><span><i style="background:var(--a2)"></i>Paper's probe</span><span><i style="background:var(--a1)"></i>All-layer probe</span><span><i style="background:var(--a3)"></i>10 reruns (about 10× the cost)</span></div>
+  <div class="tbl"><table>
+    <tr><th>Setting</th><th class="n">All-layer probe − “correct”-first</th><th class="n">All-layer probe − paper's probe</th><th class="n">All-layer probe − 10 reruns</th></tr>
+    <tr><td>Qwen 4B, BFF</td><td class="n sig">+2.4 [+0.3, +4.6]</td><td class="n">+0.5 <span class="ns">[−1.7, +2.4]</span></td><td class="n">−2.0 <span class="ns">[−3.8, +0.1]</span></td></tr>
+    <tr><td>Qwen 9B, BFF</td><td class="n sig">+2.0 [+0.5, +3.9]</td><td class="n sig">+1.8 [+0.2, +3.6]</td><td class="n">−1.3 <span class="ns">[−3.5, +0.7]</span></td></tr>
+    <tr><td>gpt-oss-20b, BFF</td><td class="n sig">+2.0 [+0.6, +3.7]</td><td class="n sig">+2.4 [+1.0, +3.9]</td><td class="n">+0.7 <span class="ns">[−1.2, +2.8]</span></td></tr>
+    <tr><td>Qwen 4B, Safety</td><td class="n sig">+3.0 [+2.2, +3.6]</td><td class="n sig">+1.9 [+1.1, +2.6]</td><td class="n sig">+3.1 [+2.0, +4.1]</td></tr>
+    <tr><td>Qwen 9B, Safety</td><td class="n sig">+2.1 [+1.4, +2.9]</td><td class="n">+0.3 <span class="ns">[+0.0, +0.7]</span></td><td class="n sig">+2.9 [+1.9, +4.0]</td></tr>
+    <tr><td>gpt-oss-20b, Safety</td><td class="n">+0.3 <span class="ns">[−0.5, +1.0]</span></td><td class="n sig">+1.1 [+0.5, +1.6]</td><td class="n">+0.9 <span class="ns">[−0.2, +2.2]</span></td></tr>
+  </table></div>
+  <p class="small">Points of accuracy at 20%, 95% interval in brackets; green = significant. JudgeBench: all signals tie, because 13–26% of answers are cut off and escalated first.</p>
+</section>
+
+<section class="card">
+  <h2>2 · Belief rule</h2>
+  <p class="status yes">Significant on BFF and RB2 Math</p>
+  <h3>Method</h3>
+  <ol>
+    <li>The cheap judge answers the question itself once, without seeing the candidate answer.</li>
+    <li>It grades the candidate as usual.</li>
+    <li>Disagreement: it says "correct" but its own answer differs from the candidate's, or it says "incorrect" but its own answer matches.</li>
+    <li>Disagreeing verdicts are escalated first, then the rest in random order. No labels, no training, no activations.</li>
+  </ol>
+  <p class="small">Answer matching uses GLM-5.3-Flash. The rule follows the team's finding that judges approve answers that match their own guess, even when the answer is wrong.</p>
+  <h3>RB2 Math: escalating with belief vs with the judge's own confidence</h3>
+  <div class="chart" id="c_rb2"></div>
+  <div class="legend"><span><i style="background:var(--grey)"></i>Cheap judge alone (no escalation)</span><span><i style="background:var(--a2)"></i>Escalate 20%, chosen by the judge's own confidence</span><span><i style="background:var(--a1)"></i>Escalate 20%, chosen by the belief rule</span><span><i style="background:var(--a3)"></i>Stronger judge (Qwen3.6-35B) grading every answer</span></div>
+  <div class="tbl"><table>
+    <tr><th>Accuracy at 20%</th><th class="n">BFF 4B</th><th class="n">BFF 9B</th><th class="n">RB2 Math 4B</th><th class="n">RB2 Math 9B</th></tr>
+    <tr><td>Random escalation</td><td class="n">78.3</td><td class="n">79.7</td><td class="n">78.7</td><td class="n">82.8</td></tr>
+    <tr><td>Judge's own confidence</td><td class="n">79.7</td><td class="n">85.0</td><td class="n">82.3</td><td class="n">81.7</td></tr>
+    <tr><td>All-layer probe</td><td class="n">81.8</td><td class="n">84.0</td><td class="n">—</td><td class="n">—</td></tr>
+    <tr><td>10 reruns</td><td class="n">84.1</td><td class="n">85.4</td><td class="n">—</td><td class="n">—</td></tr>
+    <tr><td>Belief rule, 1 own solve</td><td class="n"><b class="best">83.3</b></td><td class="n"><b class="best">86.5</b></td><td class="n"><b class="best">88.1</b></td><td class="n"><b class="best">92.3</b></td></tr>
+    <tr><td>Belief, 7 own solves (trained combiner)</td><td class="n">84.8</td><td class="n">87.1</td><td class="n">90.6</td><td class="n">92.3</td></tr>
+    <tr><td>Stronger judge grading everything</td><td class="n">87.4</td><td class="n">87.4</td><td class="n">90.9</td><td class="n">90.9</td></tr>
+  </table></div>
+  <ul>
+    <li><span class="sig">Significant:</span> RB2 Math, belief over the judge's confidence: +8.3 [+5.9, +10.2] (4B), +10.6 [+7.7, +13.2] (9B).</li>
+    <li><span class="sig">Significant:</span> BFF, belief (7 solves) over the all-layer probe: +3.0 [+0.0, +5.6] (4B), +3.1 [+1.0, +4.9] (9B).</li>
+    <li>Qwen 9B with belief, escalating only 20%, scores higher than the 35B judge grading every answer (92.3 vs 90.9).</li>
+    <li>Cost: one own solve per question, shared by all answers to that question. On BFF this is about 160 generations, against about 4,590 for 10 reruns.</li>
+    <li>It works at every budget tested (10%, 20%, 30%, 50%), see below.</li>
+  </ul>
+  <h3>All baselines on BFF (accuracy at 20%)</h3>
+  <div class="tbl"><table>
+    <tr><th>Signal</th><th>Extra cost per item</th><th class="n">Qwen 4B</th><th class="n">Qwen 9B</th></tr>
+    <tr><td>Random escalation</td><td>none</td><td class="n">78.3</td><td class="n">79.7</td></tr>
+    <tr><td>“Correct”-first rule</td><td>none</td><td class="n">79.7</td><td class="n">82.2</td></tr>
+    <tr><td>Stated confidence (judge writes 0–100)</td><td>none (second prompt)</td><td class="n">79.7</td><td class="n">83.2</td></tr>
+    <tr><td>Token log-prob of the judge's output</td><td>none</td><td class="n">81.3</td><td class="n">83.2</td></tr>
+    <tr><td>Verdict-word probability (judge's own confidence)</td><td>none</td><td class="n">79.7</td><td class="n">85.0</td></tr>
+    <tr><td>All-layer probe</td><td>none (needs activations)</td><td class="n">82.0</td><td class="n">84.1</td></tr>
+    <tr><td><b>Belief rule (1 own solve)</b></td><td>1 generation per question (≈ 0.35 per item)</td><td class="n"><b class="best">83.3</b></td><td class="n"><b class="best">86.5</b></td></tr>
+    <tr><td>10 reruns of the judge</td><td>10 generations per item</td><td class="n">84.1</td><td class="n">85.8</td></tr>
+    <tr><td>Other judges' disagreement</td><td>7 other judges per item</td><td class="n"><b class="best">85.2</b></td><td class="n">86.3</td></tr>
+  </table></div>
+  <p class="small">On BFF, only the two expensive signals come close: 10 reruns, and 7 other judges grading every item (which beats belief for Qwen 4B). Rows for stated confidence, token log-prob, reruns and other judges are from the README run. On RB2 Math only random, the “correct”-first rule and the judge's own confidence exist (no reruns, activations or other-judge verdicts were run there).</p>
+  <h3>All BFF baselines as bars</h3>
+  <div class="chart" id="c_bars4"></div>
+  <div class="chart" id="c_bars9"></div>
+  <div class="legend"><span><i style="background:var(--grey)"></i>No extra cost</span><span><i style="background:var(--a1)"></i>Belief rule (1 solve per question)</span><span><i style="background:var(--a3)"></i>Many extra calls per item (10 reruns, 7 other judges)</span></div>
+  <h3>Accuracy by share escalated</h3>
+  <div class="chart" id="c_budget"></div>
+  <div class="legend"><span><i style="background:var(--a1)"></i>Belief rule (1 solve)</span><span><i style="background:var(--grey)"></i>Judge's own confidence</span><span><i class="dash"></i>Random escalation</span></div>
+</section>
+
+<section class="card">
+  <h2>3 · Belief works on a new benchmark without its labels</h2>
+  <p class="status yes">Significant in 3 of 4 settings</p>
+  <ul>
+    <li><b>Labels:</b> the human's right/wrong mark for each answer. A method that must learn from labels needs them collected for every new benchmark, which is costly.</li>
+    <li><b>The question:</b> if a method is set up on one benchmark, does it still work on a different one, with none of that benchmark's labels?</li>
+    <li>Three versions of belief are compared. Each one sorts the grades using the match between the judge's own answer and the candidate's answer:
+      <ul>
+        <li><b>Learned on the same benchmark:</b> a small logistic regression learns from that benchmark's labels how much to trust each grade.</li>
+        <li><b>Learned on the other benchmark:</b> the same model, learned on RB2 Math and used on BFF (or the reverse). No labels from the benchmark it is used on.</li>
+        <li><b>Fixed rule:</b> nothing learned; grades that disagree with the judge's own answer go first (section 2).</li>
+      </ul></li>
+    <li><b>Result:</b> all three score about the same, so belief carries over to a new benchmark. The probe does not: learned on other benchmarks, it drops toward or below the “correct”-first rule (table below).</li>
+  </ul>
+  <div class="chart" id="c_transfer_dots"></div>
+  <div class="chart" id="c_transfer"></div>
+  <div class="legend"><span><i style="background:var(--grey)"></i>Judge's own confidence (no training)</span><span><i style="background:var(--a2)"></i>Belief, trained on the same benchmark</span><span><i style="background:var(--a1)"></i>Belief, trained on the other benchmark</span><span><i style="background:var(--a4)"></i>Belief zero-label rule (no training)</span></div>
+  <div class="tbl"><table>
+    <tr><th>Trained on the other benchmark</th><th class="n">− confidence</th><th class="n">− “correct”-first rule</th></tr>
+    <tr><td>BFF 4B (trained on RB2 Math)</td><td class="n sig">+4.1 [+1.7, +6.1]</td><td class="n sig">+4.2 [+2.1, +6.3]</td></tr>
+    <tr><td>BFF 9B (trained on RB2 Math)</td><td class="n">+1.3 <span class="ns">[−1.1, +3.5]</span></td><td class="n sig">+4.1 [+2.0, +5.9]</td></tr>
+    <tr><td>RB2 Math 4B (trained on BFF)</td><td class="n sig">+4.8 [+2.4, +7.4]</td><td class="n sig">+5.1 [+3.4, +7.3]</td></tr>
+    <tr><td>RB2 Math 9B (trained on BFF)</td><td class="n sig">+10.5 [+7.7, +12.1]</td><td class="n sig">+6.3 [+4.2, +7.4]</td></tr>
+  </table></div>
+  <h3>Probe vs belief when trained on other benchmarks (tested on BFF)</h3>
+  <div class="tbl"><table>
+    <tr><th>Accuracy at 20%, BFF</th><th class="n">Qwen 4B</th><th class="n">Qwen 9B</th></tr>
+    <tr><td>“Correct”-first rule (zero labels)</td><td class="n">79.7</td><td class="n">82.2</td></tr>
+    <tr><td>Probe trained on the other two benchmarks</td><td class="n">81.1</td><td class="n">81.7</td></tr>
+    <tr><td>Probe trained on the other two benchmarks, verdict direction removed</td><td class="n">81.7</td><td class="n">83.2</td></tr>
+    <tr><td>Probe trained on BFF itself (needs BFF labels)</td><td class="n">82.4</td><td class="n">85.4</td></tr>
+    <tr><td><b>Belief combiner trained on RB2 Math</b></td><td class="n"><b class="best">83.9</b></td><td class="n"><b class="best">86.3</b></td></tr>
+    <tr><td><b>Belief zero-label rule</b></td><td class="n">83.3</td><td class="n"><b class="best">86.5</b></td></tr>
+  </table></div>
+  <p class="small">Without BFF labels, belief beats every probe variant and matches or beats the probe trained on BFF itself. On Safety, the probe trained on other benchmarks fell below the “correct”-first rule (81.9 vs 84.7 for 4B, 84.2 vs 86.9 for 9B), so the probe needs labels from each new task; the belief rule does not.</p>
+</section>
+
+<section class="card">
+  <h2>4 · On math, flipping can replace the stronger judge</h2>
+  <p class="status mixed">Math only</p>
+  <p>Flip: a verdict whose belief score says it is more likely wrong than right is reversed, with no call to a stronger judge.</p>
+  <div class="chart" id="c_flip"></div>
+  <div class="legend"><span><i style="background:var(--grey)"></i>Cheap judge alone</span><span><i style="background:var(--a2)"></i>Escalate 20% to the stronger judge</span><span><i style="background:var(--a1)"></i>Flip, no stronger judge</span><span><i style="background:var(--a3)"></i>Qwen3.6-35B grading every answer</span></div>
+  <ul>
+    <li>RB2 Math: flipping alone gives 92.5 (4B) and 93.9 (9B), above escalating 20% and above the 35B judge.</li>
+    <li>BFF: flipping alone gives only 79.6 (4B, from 76.0) and 78.4 (9B, from 77.8); escalation is still needed.</li>
+    <li>Pre-set test (escalate and flip vs escalate only) passed in 1 of 4 settings, so this is not a general result.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>5 · Where the belief rule does not work</h2>
+  <p class="status no">No gain on JudgeBench and Safety (0 of 4)</p>
+  <div class="tbl"><table>
+    <tr><th>Accuracy at 20%</th><th class="n">Belief rule</th><th class="n">Confidence</th><th class="n">“Correct”-first</th><th class="n">10 reruns</th><th class="n">All-layer probe</th></tr>
+    <tr><td>JudgeBench 4B</td><td class="n">76.6</td><td class="n">76.6</td><td class="n">76.4</td><td class="n"><b class="best">79.2</b></td><td class="n">77.2</td></tr>
+    <tr><td>JudgeBench 9B</td><td class="n"><b class="best">79.8</b></td><td class="n">79.5</td><td class="n">78.6</td><td class="n">78.7</td><td class="n">79.2</td></tr>
+    <tr><td>Safety 4B</td><td class="n">80.6</td><td class="n">80.6</td><td class="n">84.7</td><td class="n">84.8</td><td class="n"><b class="best">87.7</b></td></tr>
+    <tr><td>Safety 9B</td><td class="n">83.2</td><td class="n">83.1</td><td class="n">86.9</td><td class="n">86.2</td><td class="n"><b class="best">89.0</b></td></tr>
+  </table></div>
+  <ul>
+    <li>JudgeBench: the judge produced a final answer for only 66–69% of questions (long coding and reasoning items), so the rule applied to about 60% of pairs.</li>
+    <li>Safety: the judge's own "comply or refuse" decision disagreed with the candidate on about half of all items, but only 8–11% of those were real mistakes.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>6 · Other things tried, with no significant gain</h2>
+  <div class="tbl"><table>
+    <tr><th>Tried</th><th>Result</th></tr>
+    <tr><td>Probing bigger judges (gpt-oss-120b, Qwen3.8-27B)</td><td>No better: BFF AUROC 0.68 (120b) vs 0.67 (20b); 0.78 (27B) vs 0.83 (9B).</td></tr>
+    <tr><td>Reading the probe partway through the reasoning</td><td>Weaker: the signal only becomes strong once the verdict is written.</td></tr>
+    <tr><td>Escalating where the stronger judge would fix the verdict</td><td>No gain: the cheap judge's activations predict the stronger judge at chance (AUROC 0.46–0.54).</td></tr>
+    <tr><td>Combining the probe with token probabilities and question wording</td><td>No gain over the probe alone (1 of 6 settings).</td></tr>
+    <tr><td>Belief read from the activations instead of solved</td><td>+0.7 and +1.4 over the probe, not significant (about 350 training examples).</td></tr>
+    <tr><td>One-pass belief: how likely the judge finds the candidate's text</td><td>Worse than the probe; correlation with solve-based belief about 0.</td></tr>
+    <tr><td>Juries of judges with different mistakes; other systems' answers as references</td><td>No gain: judges share blind spots (error correlation 0.36–0.46).</td></tr>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>Data sources</h2>
+  <ul>
+    <li>Belief data for BFF and RB2 Math (7 own solves per question and answer matching): the team's anchoring experiments.</li>
+    <li>Belief runs for JudgeBench and Safety, all probes, and all escalation tests: new for this work.</li>
+  </ul>
+</section>
+
+</div>
+<script>
+const NS="http://www.w3.org/2000/svg";
+/* vertical bars: at most 4 bars per group, wide groups, value on top */
+function vbars(id,groups,series,o){
+  const W=820,H=o.h||300,L=46,R=12,T=24,B=48,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const y=v=>T+(H-T-B)*(1-(v-o.min)/(o.max-o.min)),gw=(W-L-R)/groups.length,bw=Math.min(62,(gw-40)/series.length);
+  o.ticks.forEach(tk=>{svg.append(el("line",{x1:L,x2:W-R,y1:y(tk),y2:y(tk),class:"ax"}));svg.append(el("text",{x:L-8,y:y(tk)+4,"text-anchor":"end",class:"tl"},tk+"%"))});
+  groups.forEach((g,i)=>{const x0=L+i*gw+(gw-bw*series.length)/2;
+    series.forEach((s,k)=>{const v=s.v[i];if(v==null)return;const x=x0+k*bw,yy=y(v);
+      svg.append(el("rect",{x:x+3,y:yy,width:bw-6,height:y(o.min)-yy,rx:3,style:`fill:${s.c}`}));svg.append(el("text",{x:x+bw/2,y:yy-6,"text-anchor":"middle",class:"tv",style:"font-size:13px"},v.toFixed(1)))});
+    svg.append(el("text",{x:L+i*gw+gw/2,y:H-B+22,"text-anchor":"middle",class:"tl",style:"font-size:14px;fill:var(--fg)"},g))});
+  document.getElementById(id).append(svg)}
+
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+/* dot plot: one row per setting, one marker per method; values are in the tables, so no labels on marks */
+function dots(id,rows,series,o){
+  const W=820,RH=o.rh||44,L=150,R=24,T=14,B=40,H=T+B+RH*rows.length,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const x=v=>L+(W-L-R)*(v-o.min)/(o.max-o.min);
+  o.ticks.forEach(tk=>{svg.append(el("line",{x1:x(tk),x2:x(tk),y1:T,y2:H-B,class:"ax"}));svg.append(el("text",{x:x(tk),y:H-B+20,"text-anchor":"middle",class:"tl"},tk+"%"))});
+  svg.append(el("text",{x:(L+W-R)/2,y:H-6,"text-anchor":"middle",class:"tl"},o.xlabel||"accuracy at 20% escalated"));
+  rows.forEach((r,i)=>{const yc=T+RH*i+RH/2;svg.append(el("line",{x1:L,x2:W-R,y1:yc,y2:yc,style:"stroke:var(--line);stroke-dasharray:2 4"}));
+    svg.append(el("text",{x:L-12,y:yc+5,"text-anchor":"end",class:"tl",style:"font-size:14px;fill:var(--fg)"},r));
+    if(o.refs&&o.refs[i]!=null){svg.append(el("line",{x1:x(o.refs[i]),x2:x(o.refs[i]),y1:yc-RH/2+5,y2:yc+RH/2-5,class:"ref"}))}
+    series.forEach((s,k)=>{const v=s.v[i];if(v==null)return;const dy=(k-(series.length-1)/2)*7;
+      svg.append(el("circle",{cx:x(v),cy:yc+dy,r:6.5,style:`fill:${s.c};stroke:var(--panel);stroke-width:1.5`}))})});
+  document.getElementById(id).append(svg)}
+vbars("c_probe_bff",["Qwen 4B · BFF","Qwen 9B · BFF","gpt-oss-20b · BFF"],[{c:"var(--grey)",v:[79.7,82.2,82.6]},{c:"var(--a2)",v:[81.5,82.3,82.2]},{c:"var(--a1)",v:[82.0,84.1,84.6]},{c:"var(--a3)",v:[84.1,85.4,83.9]}],{min:76,max:88,ticks:[76,78,80,82,84,86,88],h:280});
+vbars("c_probe_safety",["Qwen 4B · Safety","Qwen 9B · Safety","gpt-oss-20b · Safety"],[{c:"var(--grey)",v:[84.7,86.9,89.4]},{c:"var(--a2)",v:[85.8,88.7,88.6]},{c:"var(--a1)",v:[87.7,89.0,89.7]},{c:"var(--a3)",v:[84.6,86.1,88.8]}],{min:80,max:92,ticks:[80,82,84,86,88,90,92],h:280});
+dots("c_probe",["Qwen 4B · BFF","Qwen 9B · BFF","gpt-oss · BFF","Qwen 4B · Safety","Qwen 9B · Safety","gpt-oss · Safety"],
+  [{c:"var(--grey)",v:[79.7,82.2,82.6,84.7,86.9,89.4]},{c:"var(--a2)",v:[81.5,82.3,82.2,85.8,88.7,88.6]},{c:"var(--a1)",v:[82.0,84.1,84.6,87.7,89.0,89.7]},{c:"var(--a3)",v:[84.1,85.4,83.9,84.6,86.1,88.8]}],
+  {min:78,max:91,ticks:[78,80,82,84,86,88,90]});
+vbars("c_rb2",["Qwen 4B","Qwen 9B"],[{c:"var(--grey)",v:[75.6,80.7]},{c:"var(--a2)",v:[82.3,81.7]},{c:"var(--a1)",v:[88.1,92.3]},{c:"var(--a3)",v:[90.9,90.9]}],{min:70,max:95,ticks:[70,75,80,85,90,95]});
+if(0)dots("c_belief",["Qwen 4B · BFF","Qwen 9B · BFF","Qwen 4B · RB2 Math","Qwen 9B · RB2 Math"],
+  [{c:"var(--grey)",v:[79.7,85.0,82.3,81.7]},{c:"var(--a2)",v:[82.0,84.1,null,null]},{c:"var(--a1)",v:[83.3,86.5,88.1,92.3]}],
+  {min:78,max:94,ticks:[78,80,82,84,86,88,90,92,94],refs:[87.4,87.4,90.9,90.9]});
+vbars("c_transfer",["Qwen 4B · BFF","Qwen 9B · BFF","Qwen 4B · RB2 Math","Qwen 9B · RB2 Math"],[{c:"var(--grey)",v:[79.7,85.0,82.3,81.7]},{c:"var(--a2)",v:[82.9,86.3,89.2,92.3]},{c:"var(--a1)",v:[83.9,86.3,87.1,92.2]},{c:"var(--a4)",v:[83.3,86.5,88.1,92.3]}],{min:76,max:94,ticks:[76,80,84,88,92]});
+dots("c_transfer_dots",["Qwen 4B · BFF","Qwen 9B · BFF","Qwen 4B · RB2 Math","Qwen 9B · RB2 Math"],
+  [{c:"var(--grey)",v:[79.7,85.0,82.3,81.7]},{c:"var(--a2)",v:[82.9,86.3,89.2,92.3]},{c:"var(--a1)",v:[83.9,86.3,87.1,92.2]},{c:"var(--a4)",v:[83.3,86.5,88.1,92.3]}],
+  {min:78,max:94,ticks:[78,80,82,84,86,88,90,92,94]});
+vbars("c_flip",["Qwen 4B · RB2 Math","Qwen 9B · RB2 Math"],[{c:"var(--grey)",v:[75.6,80.7]},{c:"var(--a2)",v:[89.2,92.3]},{c:"var(--a1)",v:[92.5,93.9]},{c:"var(--a3)",v:[90.9,90.9]}],{min:70,max:96,ticks:[70,75,80,85,90,95]});
+if(0)dots("c_flip",["Qwen 4B · RB2 Math","Qwen 9B · RB2 Math"],
+  [{c:"var(--grey)",v:[75.6,80.7]},{c:"var(--a2)",v:[89.2,92.3]},{c:"var(--a1)",v:[92.5,93.9]}],
+  {min:74,max:96,ticks:[74,78,82,86,90,94],refs:[90.9,90.9],xlabel:"accuracy",rh:54});
+/* horizontal bars, value at the end of each bar */
+function hbars(id,title,items,o){
+  const W=820,RH=30,L=330,R=60,T=30,B=10,H=T+B+RH*items.length,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"}),x=v=>L+(W-L-R)*(v-o.min)/(o.max-o.min);
+  svg.append(el("text",{x:0,y:18,class:"tl",style:"font-size:14.5px;font-weight:600;fill:var(--fg)"},title));
+  items.forEach(([lab,v,c],i)=>{const y=T+RH*i;svg.append(el("text",{x:L-10,y:y+RH/2+5,"text-anchor":"end",class:"tl",style:"font-size:14px;fill:var(--fg)"},lab));
+    svg.append(el("rect",{x:L,y:y+5,width:x(v)-L,height:RH-10,rx:3,style:`fill:${c}`}));svg.append(el("text",{x:x(v)+7,y:y+RH/2+5,class:"tv",style:"font-size:13px"},v.toFixed(1)))});
+  document.getElementById(id).append(svg)}
+const G="var(--grey)",A1="var(--a1)",A3="var(--a3)";
+hbars("c_bars4","Qwen 4B · BFF · accuracy at 20% escalated",[["Random",78.3,G],["“Correct”-first rule",79.7,G],["Stated confidence",79.7,G],["Judge's own confidence",79.7,G],["Token log-prob",81.3,G],["All-layer probe",82.0,G],["Belief rule (1 solve)",83.3,A1],["10 reruns",84.1,A3],["Other judges' disagreement (7 judges)",85.2,A3]],{min:76,max:88});
+hbars("c_bars9","Qwen 9B · BFF · accuracy at 20% escalated",[["Random",79.7,G],["“Correct”-first rule",82.2,G],["Stated confidence",83.2,G],["Token log-prob",83.2,G],["All-layer probe",84.1,G],["Judge's own confidence",85.0,G],["10 reruns",85.8,A3],["Other judges' disagreement (7 judges)",86.3,A3],["Belief rule (1 solve)",86.5,A1]],{min:76,max:88});
+/* budget small multiples: accuracy vs share escalated */
+(function(){const P=[["Qwen 4B · BFF",{b1:[79.7,82.9,84.5,84.7],b7:[80.4,84.0,85.3,85.3],cf:[78.6,79.7,80.4,83.0],vo:[78.7,79.7,80.6,82.6],rd:[77.2,78.3,79.4,81.7]}],
+  ["Qwen 9B · BFF",{b1:[82.7,86.3,86.7,86.9],b7:[83.2,86.9,87.4,87.4],cf:[84.1,85.0,85.0,85.8],vo:[81.9,82.2,82.4,83.0],rd:[78.7,79.7,80.7,82.6]}],
+  ["Qwen 4B · RB2 Math",{b1:[81.8,89.2,92.3,91.4],b7:[82.8,90.3,92.5,91.9],cf:[78.5,82.3,84.1,86.9],vo:[78.9,82.0,85.5,90.9],rd:[77.1,78.7,80.2,83.3]}],
+  ["Qwen 9B · RB2 Math",{b1:[86.2,92.3,92.2,91.6],b7:[86.8,92.3,92.1,91.8],cf:[81.8,81.7,81.7,81.2],vo:[83.1,85.9,88.3,91.1],rd:[81.8,82.8,83.8,85.8]}]];
+  const xs=[10,20,30,50],W=820,H=330,PW=180,G=22,L=44,T=26,B=40,min=76,max=94,svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+  const col={b1:"var(--a1)",cf:"var(--grey)",rd:"var(--muted)"};P.forEach(([,d])=>{delete d.b7;delete d.vo});
+  P.forEach(([name,d],p)=>{const x0=L+p*(PW+G),x=v=>x0+PW*(v-10)/40,y=v=>T+(H-T-B)*(1-(v-min)/(max-min));
+    svg.append(el("text",{x:x0+PW/2,y:16,"text-anchor":"middle",class:"tl",style:"font-size:13.5px;fill:var(--fg)"},name));
+    [76,80,84,88,92].forEach(tk=>{svg.append(el("line",{x1:x0,x2:x0+PW,y1:y(tk),y2:y(tk),class:"ax"}));if(p===0)svg.append(el("text",{x:x0-7,y:y(tk)+4,"text-anchor":"end",class:"tl"},tk+"%"))});
+    xs.forEach(v=>svg.append(el("text",{x:x(v),y:H-B+18,"text-anchor":"middle",class:"tl"},v+"%")));
+    Object.entries(d).forEach(([k,vals])=>{svg.append(el("polyline",{points:vals.map((v,i)=>`${x(xs[i])},${y(v)}`).join(" "),style:`fill:none;stroke:${col[k]};stroke-width:${k==="b1"?3:2};${k==="rd"?"stroke-dasharray:5 4":""}`}));
+      if(k!=="rd")vals.forEach((v,i)=>svg.append(el("circle",{cx:x(xs[i]),cy:y(v),r:k==="b1"?4.5:3.5,style:`fill:${col[k]}`})))})});
+  svg.append(el("text",{x:W/2,y:H-6,"text-anchor":"middle",class:"tl"},"share of items escalated"));
+  document.getElementById("c_budget").append(svg)})();
+</script>
+</body>
+</html>
