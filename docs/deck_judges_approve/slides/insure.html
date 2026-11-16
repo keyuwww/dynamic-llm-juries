@@ -1,0 +1,21 @@
+<section id="insure">
+<p class="secno">3.4 · INSIDE THE MODEL · HOW SURE</p>
+<h2>How sure are we? Likely, with one caveat</h2>
+<div class="row">
+<div class="card cyan"><p class="label">CHECKS IT PASSES</p>
+<p>Arrows built on separate questions, so no shared answers</p>
+<p>Both roles read at a matching cue word</p>
+<p>Holds in 2 models × 2 benchmarks</p></div>
+<div class="card butter"><p class="label">CAVEAT: THE “SAY CORRECT” LEAN</p>
+<p>Both arrows partly just mean “about to say CORRECT”.</p>
+<p>Removing that lean: 3 of 4 cases barely change; Qwen-35B on BFF drops 0.72 → 0.23 (all-data cosines).</p></div>
+<div class="card"><p class="label">LIMITS</p>
+<p>BFF: only 32–39 believed wrong answers</p>
+<p>RB2 Math: too few (9) to test</p>
+<p>Qwen only: no second family inside</p></div>
+</div>
+<div class="card peri">
+<p><b>Side finding (appendix A.3):</b> the judge’s correctness arrow is <b>unrelated</b> to the solver’s (cosine 0.0–0.3). The judge doesn’t reuse a ready-made “this is right” signal; it re-solves and checks for a match (§4).</p>
+</div>
+<aside>The lean is the model's own CORRECT-vs-INCORRECT verdict direction; we project it out of both arrows and recompute the cosine (full data, best layer): Qwen-9B BFF 0.93 to 0.86, Qwen-9B BBEH 0.77 to 0.77, Qwen-35B BBEH 0.77 to 0.76, Qwen-35B BFF 0.72 to 0.23. Details for every role and the solving-vs-judging test are in appendix A.2 to A.5.</aside>
+</section>

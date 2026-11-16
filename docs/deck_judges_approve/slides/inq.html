@@ -1,0 +1,22 @@
+<section id="inq">
+<p class="secno">3.1 · INSIDE THE MODEL · QUESTION AND METHOD</p>
+<h2>Inside the judge, does “I’d say this” look like “this is right”?</h2>
+<div class="row">
+<div class="card cyan" style="flex:0.9;">
+<p class="label">WHY ASK</p>
+<p>Judges approve wrong answers they believe (§2).</p>
+<p>If, while grading, a believed answer <b>looks</b> like a right answer inside the model, that would explain the approvals.</p>
+</div>
+<div class="card peri" style="flex:1.1;">
+<p class="label">TWO ARROWS IN THE MODEL’S HIDDEN STATE</p>
+<p><b>Correctness:</b> truly right answers minus truly wrong ones (benchmark label).</p>
+<p><b>Belief:</b> wrong answers it believes (≥ 4/7) minus wrong answers it never reaches (0/7).</p>
+<p>Compare them with a cosine: <b>1</b> = same direction, <b>0</b> = unrelated.</p>
+</div>
+</div>
+<div class="card butter">
+<p class="label">THE TEST</p>
+<p>Measure that cosine in two roles: <b>judging</b> the answer, and <b>solving</b> (the same answer in its own voice). If belief drives approval, the arrows should line up more when judging.</p>
+</div>
+<aside>An arrow is a difference of means: the average hidden state of one group of answers minus the other's, with each question's average removed first so question difficulty can't leak in. Qwen3.5-9B and Qwen3.6-35B-A3B, thinking off, on BFF (459 answers) and BBEH (about 2,000). RB2 Math has only 9 believed wrong answers per model, too few. On BBEH, belief comes from 5 solo tries (believed = at least half).</aside>
+</section>

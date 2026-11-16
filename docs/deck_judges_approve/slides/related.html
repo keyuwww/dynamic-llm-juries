@@ -1,12 +1,13 @@
-<section id="related">
-<p class="secno">1.2 · INTRODUCTION · PRIOR WORK</p>
-<h2>What is already known, and how we differ</h2>
-<div class="row">
-<div class="card"><p class="label">PANICKSSERY 2024</p><p>Judges rate their <b>own</b> outputs higher (“self-preference”).</p></div>
-<div class="card"><p class="label">ROYTBURG 2026 (ICML)</p><p>Much of that is the judge simply being wrong on the question, not vanity.</p></div>
-<div class="card"><p class="label">GOEL 2025</p><p>Judges favour models that make the <b>same mistakes</b> as they do.</p></div>
-<div class="card"><p class="label">LIN 2025 (EMNLP)</p><p>Giving the judge its own answer helps only when that answer is right.</p></div>
-</div>
+<section id="related" style="gap:34px;">
+<p class="secno">1.2 · INTRODUCTION · PRIOR WORK ON JUDGE BEHAVIOUR</p>
+<h2>Prior work on judges, and how we differ</h2>
+<table style="font-size:26px; line-height:1.3;">
+<tr class="thead"><th style="width:24%;">Paper</th><th style="width:40%;">What they found</th><th style="width:36%;">How it relates to us</th></tr>
+<tr class="r3"><td><b>Panickssery et al. 2024</b></td><td>Judges rate their <b>own</b> outputs higher (“self-preference”)</td><td>We remove authorship: the judge never wrote any candidate</td></tr>
+<tr class="r3"><td><b>Roytburg et al. 2026</b> (ICML)</td><td>Much self-preference is the judge simply being wrong on the question</td><td>We test this directly: belief per answer predicts approval</td></tr>
+<tr class="r3"><td><b>Goel et al. 2025</b></td><td>Judges favour models that make the <b>same mistakes</b></td><td>The model-level version; we measure it per answer</td></tr>
+<tr class="r3"><td><b>Lin et al. 2025</b> (EMNLP Findings)</td><td>Judging with its own answer as reference helps only when that answer is right</td><td>Our commit-first test (§5): +5 balanced accuracy, at a cost on right answers it can’t reach</td></tr>
+</table>
 <div class="card peri">
 <p class="label">WHAT WE ADD</p>
 <div class="row" style="gap:40px;">
@@ -15,5 +16,5 @@
 <p style="flex:1;"><b>Inside the model.</b> Hidden states and transcripts show the mechanism.</p>
 </div>
 </div>
-<aside>Our setup directly tests Roytburg's alternative: if the judge favours answers it would give itself, whoever wrote them, then "self-preference" is largely belief. Goel's effect is the model-level version of ours; we measure it per answer.</aside>
+<aside>Our setup directly tests Roytburg's alternative: if the judge favours answers it would give itself, whoever wrote them, then "self-preference" is largely belief. Goel's effect is the model-level version of ours; we measure it per answer. Prior work on what happens inside the model is on the next slide.</aside>
 </section>

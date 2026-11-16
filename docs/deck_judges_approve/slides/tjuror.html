@@ -1,0 +1,18 @@
+<section id="tjuror" style="gap:30px;">
+<p class="secno">TALK · 8 / 9 · A FIX THAT FAILS</p>
+<h2>A second judge from another family doesn’t help</h2>
+<div class="row" style="gap:48px;">
+<div style="flex:1; display:flex; flex-direction:column; gap:26px;">
+<p style="font-size:26px; color:#1E2A3B;">When a Qwen believes an answer (≥ 4/7), hand the verdict to Nemotron instead.</p>
+<div style="display:flex; gap:36px; align-items:center;"><p style="font-size:24px; color:#1E2A3B;"><span style="display:inline-block; width:26px; height:26px; background:#B8BFCC; border-radius:6px; vertical-align:-4px; margin-right:10px;"></span>Qwen alone</p><p style="font-size:24px; color:#1E2A3B;"><span style="display:inline-block; width:26px; height:26px; background:#4B44C2; border-radius:6px; vertical-align:-4px; margin-right:10px;"></span>believed items handed to Nemotron</p><p style="font-size:24px; color:#6B7280;">balanced accuracy</p></div>
+<div style="display:flex; align-items:center; gap:24px;"><p style="width:250px; font-size:26px; font-weight:700; color:#1E2A3B; line-height:1.25;">Qwen3.5-4B</p><div style="display:flex; flex-direction:column; gap:8px;"><div style="display:flex; align-items:center; gap:14px;"><div style="width:532px; height:36px; background:#B8BFCC; border-radius:8px;"></div><p style="font-size:28px; font-weight:700; color:#4A5568;">76%</p></div><div style="display:flex; align-items:center; gap:14px;"><div style="width:518px; height:36px; background:#4B44C2; border-radius:8px;"></div><p style="font-size:28px; font-weight:800; color:#4B44C2;">74%</p></div></div></div>
+<div style="display:flex; align-items:center; gap:24px;"><p style="width:250px; font-size:26px; font-weight:700; color:#1E2A3B; line-height:1.25;">Qwen3.5-9B</p><div style="display:flex; flex-direction:column; gap:8px;"><div style="display:flex; align-items:center; gap:14px;"><div style="width:560px; height:36px; background:#B8BFCC; border-radius:8px;"></div><p style="font-size:28px; font-weight:700; color:#4A5568;">80%</p></div><div style="display:flex; align-items:center; gap:14px;"><div style="width:539px; height:36px; background:#4B44C2; border-radius:8px;"></div><p style="font-size:28px; font-weight:800; color:#4B44C2;">77%</p></div></div></div>
+<div style="display:flex; align-items:center; gap:24px;"><p style="width:250px; font-size:26px; font-weight:700; color:#1E2A3B; line-height:1.25;">Qwen3.6-35B</p><div style="display:flex; flex-direction:column; gap:8px;"><div style="display:flex; align-items:center; gap:14px;"><div style="width:602px; height:36px; background:#B8BFCC; border-radius:8px;"></div><p style="font-size:28px; font-weight:700; color:#4A5568;">86%</p></div><div style="display:flex; align-items:center; gap:14px;"><div style="width:574px; height:36px; background:#4B44C2; border-radius:8px;"></div><p style="font-size:28px; font-weight:800; color:#4B44C2;">82%</p></div></div></div>
+</div>
+<div class="side" style="width:520px;">
+<div class="card butter"><p class="label">WHY</p><p class="big" style="font-size:72px;">77–81%</p><p>of the wrong answers a Qwen confidently believes, Nemotron believes too.</p></div>
+<div class="card"><p class="label">SO</p><p>Confident errors are shared. They need a much stronger reference, not a peer.</p></div>
+</div>
+</div>
+<aside>About 45 seconds. This used existing data: Nemotron-3-Super judged the same items. Even routing only when Nemotron's own belief differs is worse (86 to 84 percent for Qwen-35B); when it disagrees it rejects only about half. "Pick jurors whose beliefs differ" does not work with these models. A frontier model or expert answer is untested. Backup: 5.7.</aside>
+</section>

@@ -1,0 +1,17 @@
+<section id="inex" style="gap:28px;">
+<p class="secno">3.2 · INSIDE THE MODEL · EXAMPLE</p>
+<h2 style="font-size:58px;">Example: the same answer in the two roles</h2>
+<div class="chat" style="padding:16px 24px;">
+<p class="msg"><b>Question (BBEH):</b> Sam throws a poisonous test tube towards Agent X, who, after seeing it, ducks. The test tube misses Agent X and he survives. Is Sam throwing the poisonous test tube a necessary cause for Agent X’s survival? … <b>Answer:</b> “The answer is: No”</p>
+</div>
+<div class="row" style="gap:24px;">
+<div class="chat" style="flex:1;"><p class="label">JUDGING</p><p class="who">USER</p><p class="add">You are grading an AI assistant’s answer to a reasoning question.</p><p class="msg">[QUESTION] … [ASSISTANT’S ANSWER] The answer is: No</p><p class="add">Is the assistant’s final answer correct? … end with “VERDICT: …”</p><p class="who">ASSISTANT</p><p class="add">VERDICT:</p><p class="readat">read the hidden state here</p></div>
+<div class="chat" style="flex:1;"><p class="label">SOLVING (ANSWER IN ITS OWN VOICE)</p><p class="who">USER</p><p class="msg">Question: Sam throws … Think step by step … use the prefix “The answer is:”</p><p class="who">ASSISTANT</p><p class="msg">The answer is: No</p><p class="who">USER</p><p class="add">Restate your final answer in one line, starting with “FINAL:”.</p><p class="who">ASSISTANT</p><p class="add">FINAL:</p><p class="readat">read the hidden state here</p></div>
+<div class="stack" style="flex:0.75;">
+<div class="card peri"><p class="label">ONLY THE ROLE CHANGES</p><p>Same answer text. Both read right after a cue word, so position isn’t the difference.</p></div>
+<div class="card cyan"><p class="label">THEN</p><p>Repeat for every answer and build both arrows in each role.</p></div>
+</div>
+</div>
+<p class="cap">Real BBEH item; the answer was written by Nemotron-3-Super. Yellow = our prompt text; white = the question and answer.</p>
+<aside>The model generates nothing here: we place the text and read the hidden state at the last token. "Solving" puts the answer in the assistant's own turn, as if it had just written it, then asks a neutral follow-up with no verdict, so it matches the judge's layout without asking for a judgement.</aside>
+</section>
