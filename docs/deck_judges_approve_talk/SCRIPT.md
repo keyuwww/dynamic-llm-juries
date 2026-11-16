@@ -176,6 +176,17 @@ No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 
 ---
 
+## 11 · Takeaways (0:30) · closing
+
+1. **Judges approve what they believe:** wrong answers approved 18% → 74% as belief rises (4 judges, 2 families)
+2. **They check for a match, not for truth:** re-solve, agree when they land on the same answer
+3. **Low-belief errors are fixable:** commit first, 18% → 1%, +5 balanced accuracy
+4. **High-belief errors are not, by peers:** shared across families (~80%), second judge doesn't help
+- **Next:** a stronger reference (frontier model, expert answer, tool) for exactly the items the judge believes
+- If asked "is it solved?": low-belief yes, high-belief not yet
+
+---
+
 ## Likely questions → where to look in the backup
 
 - **"Isn't this just self-preference?"** → no, candidates written by other models; same-answer test (+23) · backup 2.10
