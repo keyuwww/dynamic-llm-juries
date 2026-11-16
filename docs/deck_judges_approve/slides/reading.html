@@ -9,8 +9,8 @@
 </div>
 <div class="stack" style="flex:1;">
 <div class="card peri"><p class="label">LOW BELIEF</p><p>Errors come from the grading frame. Committing its own answer first removes them: +5 balanced accuracy.</p></div>
-<div class="card butter"><p class="label">HIGH BELIEF</p><p>Errors are shared across families (~80%). Neither prompts nor a second Qwen-size juror fix them.</p></div>
+<div class="card butter"><p class="label">HIGH BELIEF</p><p>Errors are shared across families (~80%). Prompts and a second juror don’t fix them; an expert reference does (62 → 12%, BFF).</p></div>
 </div>
 </div>
-<aside>For a jury: confidently wrong items need a reference outside these models (an expert answer, a much stronger model, a tool or a calculation), not another juror of similar strength. That is reasoning from the juror test, not yet tested with a stronger model.</aside>
+<aside>For a jury: confidently wrong items need a reference outside these models (an expert answer, a much stronger model, a tool or a calculation), not another juror of similar strength. On BFF an expert reference answer confirms this: strong-belief wrong approvals fall from 62 to 12 percent (REPORT.md Experiment 10). A stronger model as the reference is not yet tested.</aside>
 </section>

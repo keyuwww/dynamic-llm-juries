@@ -160,7 +160,19 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 ---
 
-## 10 · Takeaways (1:00) · total 10:00
+## 10 · A fix for strong belief: expert reference (1:00) · total 10:00
+
+- BFF only, thinking off; same 1,294 judgments under four prompts
+- **Strong-belief wrong answers approved (≥ 4/7):** usual **62%** · commit first 56% · **+ expert reference 12%** · both 18%
+- **Balanced accuracy:** 74.6 → **89.6%** with the reference (+15); commit first alone 77.8; both 87.0
+- Right answers are approved **more** with the reference, not less
+- **Don't stack:** commit first + reference is 2.6 points worse than the reference alone; its own wrong answer competes with the reference (7/7: 19 → 31%)
+- Caveats: one benchmark; BFF labels were made by the same experts who wrote the references; someone has to write the reference
+- → bridge: "So confident errors need an outside reference. Peers don't work; an expert answer does."
+
+---
+
+## 11 · What it means for juries (1:00) · total 11:00
 
 - Flow: wrong answer arrives → judge **re-solves and checks for a match**
   - **low belief (0/7):** still approves 18%, the grading frame → **fixed** by commit first (18 → 1%, +5)
@@ -176,14 +188,14 @@ No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 
 ---
 
-## 11 · Takeaways (0:30) · closing
+## 12 · Takeaways (0:30) · closing
 
 1. **Judges approve what they believe:** wrong answers approved 18% → 74% as belief rises (4 judges, 2 families)
 2. **They check for a match, not for truth:** re-solve, agree when they land on the same answer
 3. **Low-belief errors are fixable:** commit first, 18% → 1%, +5 balanced accuracy
-4. **High-belief errors are not, by peers:** shared across families (~80%), second judge doesn't help
-- **Next:** a stronger reference (frontier model, expert answer, tool) for exactly the items the judge believes
-- If asked "is it solved?": low-belief yes, high-belief not yet
+4. **High-belief errors need an outside reference:** a second judge shares them; an expert answer cuts them 62% → 12% (BFF)
+- **Next:** can a strong model's answer replace the expert, as a free reference?
+- If asked "is it solved?": low-belief by committing first; high-belief by an expert reference (BFF), not by peers; a free (model) reference is open
 
 ---
 

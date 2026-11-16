@@ -572,6 +572,44 @@ the grading frame adds approvals that committing its own answer first removes.
 
 ---
 
+## Experiment 10 — Does an expert reference answer remove the strong-belief errors? (Nov 16)
+
+**Setup (`reference_test.py`).** Three Qwens, thinking off, BFF-Bench. The usual judge prompt plus BFF-Bench's own
+expert-written reference answer for that question, with "use it as the ground truth" (the No Free Labels setting).
+1,295 judgments (3 BFF items have no reference in the release), each paired with the same item's usual verdict from
+the main runs. 95% intervals resample questions. Output: `out/reference_test.md`.
+
+| Wrong answers approved | 0/7 | 1–3 | 4–6 | 7/7 |
+|---|---|---|---|---|
+| Usual judge prompt | 15% (n=337) | 36% (n=89) | 54% (n=56) | 71% (n=52) |
+| **+ expert reference** | **1%** | **1%** | **5%** | **19%** |
+| Change (points) | −14 [−19, −9] | −35 [−45, −24] | −48 [−62, −34] | −52 [−67, −32] |
+
+- **The strong-belief errors mostly go away.** Wrong answers the judge believes (≥ 4/7, n=108): 62% approved
+  normally, 12% with the reference (−50 [−61, −37]). This is what neither "don't re-solve", committing first, nor a
+  second family (Nemotron) could do.
+- **No cost on right answers; they gain.** Right answers approved rise at every belief level (e.g. 0/7: 20% → 41%).
+- **Balanced accuracy 74.6% → 89.6% (+15.0 [+11.8, +18.2])**: 4B +18, 9B +14, 35B +12.
+- **Not eliminated:** 7/7 still 19% (10 of 52 judgments).
+- **Caveats.** One benchmark (finance), Qwens only, thinking off. The BFF labels were made by experts who also wrote
+  these references, so a judge that follows the reference will agree with the labels more by construction; the
+  reference is the realistic "human grounding" fix, not a free one (someone has to write it). Whether a much stronger
+  model's answer works as well (no human cost) is the next test (Kimi answers exist for BFF).
+
+**Commit first + reference (`reference_test.py --four`, `out/reference_four.md`).** Same 1,294 BFF items under four
+prompts:
+
+| Prompt | Strong-belief wrong approved (≥ 4/7, n=108) | 7/7 wrong approved | Balanced accuracy (vs usual) |
+|---|---|---|---|
+| Usual | 62% | 71% | 74.6% |
+| Commit first | 56% | 63% | 77.8% (+3.2 [+0.5, +6.0]) |
+| **+ Expert reference** | **12%** | **19%** | **89.6% (+15.0 [+11.9, +18.2])** |
+| Commit first + reference | 18% | 31% | 87.0% (+12.4 [+9.2, +15.7]) |
+
+Stacking does not help: commit first + reference is 2.6 points [−4.6, −0.7] below the reference alone. Its own (often
+wrong) committed answer competes with the reference at 7/7 (19% → 31%) and costs right answers it can't reach
+(0/7: 41% → 30%). The best single fix is the reference.
+
 ## Feasibility verdict on the two papers' ideas
 
 | Idea | Works here? | What we learned |
