@@ -11,7 +11,10 @@ Each job keeps the text written so far ("prefix"); the extend phase continues th
 Writes inputs/extend_jobs.jsonl.gz.
 
   python3 experiments/anchoring_early_answer/build_extend.py
+  python3 experiments/anchoring_early_answer/build_extend.py --set nemotron --judges nemotron3-super-120b
+      (another job set: its cut-off judging transcripts only -> inputs/extend_jobs_nemotron.jsonl.gz)
 """
+import argparse
 import collections
 import gzip
 import json
@@ -27,14 +30,21 @@ QWENS = ["qwen3.5-4b", "qwen3.5-9b", "qwen3.6-35b-a3b"]
 
 
 def main():
+    global QWENS
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--set", default="")
+    ap.add_argument("--judges", default=",".join(QWENS))
+    a = ap.parse_args()
+    QWENS = a.judges.split(",")
+    sfx = f"_{a.set}" if a.set else ""
     jobs = []
-    for line in open(POOL / "bbeh_results" / "answers.jsonl"):
+    for line in (open(POOL / "bbeh_results" / "answers.jsonl") if not sfx else []):
         r = json.loads(line)
         if r["model"] in QWENS and r["n_out"] >= 16384:
             jobs.append(dict(kind="solve", bench="bbeh", model=r["model"], qid=r["item"], messages=r["messages"],
                              prefix=r["answer"] or "", used=r["n_out"]))
     solve_msgs = {(j["model"], j["qid"]): j["messages"] for j in map(json.loads, open(HERE / "inputs" / "solve_jobs.jsonl"))}
-    for r in map(json.loads, open(HERE / "out" / "solves.jsonl")):
+    for r in (map(json.loads, open(HERE / "out" / "solves.jsonl")) if not sfx else []):
         # RB2/JB solves had a 4,096 cap; BFF solves already get the whole context, so only unclean ones count
         if not r["clean"] or (r["n_out"] >= 4096 and r["bench"] != "bff"):
             jobs.append(dict(kind="solve", bench=r["bench"], model=r["model"], qid=r["qid"],
@@ -47,7 +57,7 @@ def main():
             if r["judge"] in QWENS and r["condition"] == "none":
                 pool_nout[(r["judge"], r["item_id"])] = r["n_out"]
     cap = collections.defaultdict(int)
-    with gzip.open(HERE / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
+    with gzip.open(HERE / "inputs" / f"readout_jobs{sfx}.jsonl.gz", "rt") as f:
         readout = [json.loads(l) for l in f]
     for j in readout:
         cap[j["bench"]] = max(cap[j["bench"]], pool_nout.get((j["judge"], j["item_id"]), 0))
@@ -58,7 +68,7 @@ def main():
             jobs.append(dict(kind="judge", bench=j["bench"], model=j["judge"], qid=j["item_id"], messages=j["messages"],
                              prefix=j["transcript"], used=used))
 
-    with gzip.open(HERE / "inputs" / "extend_jobs.jsonl.gz", "wt") as f:
+    with gzip.open(HERE / "inputs" / f"extend_jobs{sfx}.jsonl.gz", "wt") as f:
         for j in jobs:
             f.write(json.dumps(j) + "\n")
     c = collections.Counter((j["kind"], j["bench"], j["model"]) for j in jobs)

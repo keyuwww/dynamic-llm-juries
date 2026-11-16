@@ -1,6 +1,6 @@
 """Does pushing the judge's belief direction while it reasons change its spoken verdicts, selectively?
 
-Reads cannon_belief/out_steer/<cond>_L14-26.jsonl (cannon_belief/steer.py: Qwen3.5-9B, thinking off, greedy, push at
+Reads cannon_belief/out_steer/<cond>_L14-26.jsonl (and <cond>_L21.jsonl for the "@21" single-layer rows) (cannon_belief/steer.py: Qwen3.5-9B, thinking off, greedy, push at
 layers 14-26 on every token, each item with a direction fitted on the other half of its benchmark's questions).
 
 For each condition and item group (wrong & believed >= 4/7, wrong & never reached, correct):
@@ -22,13 +22,16 @@ HERE = Path(__file__).resolve().parent
 SRC = HERE / "cannon_belief" / "out_steer"
 CONDS = ["none", "belief:-4", "belief:-6", "belief_orth:-6", "correct:-6", "random:-6", "belief:4",
          # SCALE: each item's own position along the direction (around the fitting half's mean) times lam
-         "belief*0", "belief*-2", "belief*-5", "belief*5", "belief_orth*-5", "correct*-5", "random*-5"]
+         "belief*0", "belief*-2", "belief*-5", "belief*5", "belief_orth*-5", "correct*-5", "random*-5",
+         # the same scaling at ONE layer (21) only: scaling at 13 layers in a row compounds (~5^13) and broke every run
+         "belief*0@21", "belief*-1@21", "belief*-3@21", "belief*3@21", "correct*-3@21", "random*-3@21"]
 GROUPS = ["wrong_believed", "wrong_never", "correct"]
 NAMES = {"wrong_believed": "wrong, believed", "wrong_never": "wrong, never reached", "correct": "correct"}
 
 
 def load(cond):
-    p = SRC / f"{cond.replace(':', '_').replace('*', '_x')}_L14-26.jsonl"
+    cond, _, layers = cond.partition("@")  # no "@": layers 14-26; 'none' has no push, so its layers do not matter
+    p = SRC / f"{cond.replace(':', '_').replace('*', '_x')}_L{layers or '14-26'}.jsonl"
     return {r["aid"]: r for r in map(json.loads, open(p))} if p.exists() else {}
 
 

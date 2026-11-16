@@ -32,7 +32,7 @@ def main():
     margin = collections.defaultdict(dict)
     for r in rr:
         margin[r["item_id"]][r["ckpt"]] = r["margin"]
-    rows, *_ = build_rows(LLAMA)
+    rows, *_ = build_rows(LLAMA, need_a=False)  # BFF has no A readout: its rows keep the spoken verdict only
     out = []
     for r in rows:
         if r["bench"] not in MAIN:

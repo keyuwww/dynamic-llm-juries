@@ -5,6 +5,7 @@
   fig2_probe_by_position.png   held-out readability of belief by reasoning position (best layer), per judge and benchmark
   fig3_steering.png            change in acceptance per steering condition, by item group, 95% intervals
   fig4_confident.png           confident beliefs the judge accepted: right vs wrong AUROC, probe vs baselines
+  fig5_scaling.png             scaling each item's own belief position at layer 21: change in acceptance by factor
 
 Numbers come from out/belief_rows_clean.json (fig1), out/confident_probe_clean.md (fig4), out/belief_probe_grid.md, out/belief_steering.md and out/confident_probe.md.
 
@@ -205,11 +206,61 @@ def fig4():
     fig.text(0.01, 0.005, "Answers with belief ≥ 4/7 that the judge accepted. Held-out questions; whiskers: 95% "
              "intervals, questions resampled. Dotted line: chance.\nQuestion-only probe = average state over "
              "all the question's candidates (no answer-specific information).", color=INK2, fontsize=8.5)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout(rect=(0, 0.09, 1, 1))
     fig.savefig(OUT / "fig4_confident.png", dpi=180)
 
 
+def steer_rows():
+    """{condition: [(change, lo, hi) for wrong-believed, wrong-never, correct]} from belief_steering.md, both benchmarks."""
+    txt = (HERE / "out" / "belief_steering.md").read_text().split("## both")[1]
+    rows = {}
+    for line in txt.splitlines():
+        m = re.match(r"\| (\S+) \| (.*) \|$", line)
+        if not m or m.group(1) in ("condition", "none", "---") or "not run" in line:
+            continue
+        vals = [tuple(int(x) for x in re.search(r"\(([+-]\d+) \[([+-]\d+), ([+-]\d+)\]\)", c).groups())
+                for c in m.group(2).split(" | ")[:3]]
+        rows[m.group(1)] = vals
+    return rows
+
+
+def fig5():
+    rows = steer_rows()
+    lams = [-3, -1, 0, 1, 3]  # 1 = no edit
+    groups = [("Wrong, believed (68% accepted)", S2), ("Wrong, never reached (21%)", S1), ("Correct (85%)", S3)]
+    fig, ax = plt.subplots(figsize=(10, 4.9))
+    for gi, (gname, c) in enumerate(groups):
+        off = (gi - 1) * 0.07
+        pts = [(0, 0, 0) if lam == 1 else rows[f"belief*{lam}@21"][gi] for lam in lams]
+        x = np.array(lams) + off
+        e = np.array([p[0] for p in pts])
+        ax.plot(x, e, color=c, lw=2, label=gname)
+        ax.errorbar(x, e, yerr=[e - np.array([p[1] for p in pts]), np.array([p[2] for p in pts]) - e], fmt="none",
+                    ecolor=c, capsize=2.5, lw=1.4)
+        ax.plot(x, e, "o", color=c, ms=8, mec=SURF, mew=1.5)
+        for k, (cond, mk) in enumerate((("random*-3@21", "s"), ("correct*-3@21", "D"))):
+            v, lo, hi = rows[cond][gi]
+            xx = 4.3 + 0.9 * k + off
+            ax.errorbar(xx, v, yerr=[[v - lo], [hi - v]], color=c, marker=mk, ms=7, capsize=2.5, lw=1.4, mec=SURF,
+                        mew=1.5)
+    ax.axhline(0, color=INK2, lw=1)
+    ax.axvline(3.75, color=GRID, lw=1)
+    ax.set_xticks(lams + [4.3, 5.2])
+    ax.set_xticklabels(["×−3\n(flipped,\nstretched)", "×−1\n(flipped)", "×0\n(removed)", "×1\n(no edit)",
+                        "×3\n(amplified)", "random\n×−3", "\"is this\nright?\" ×−3"])
+    ax.set_ylim(-20, 20)
+    ax.set_ylabel("Change in acceptance vs no edit\n(percentage points)")
+    ax.set_title("Removing, flipping or amplifying belief at layer 21 leaves the verdicts unchanged", loc="left")
+    ax.legend(loc="upper left", ncol=3, fontsize=9.5)
+    grid(ax, "y")
+    fig.text(0.01, 0.015, "Qwen3.5-9B, thinking off, RB2 Math + BFF (418 items). Each item's own position along the "
+             "held-out belief direction is multiplied by the factor at layer 21, on every token the judge writes (not on "
+             "the question and answer it reads). No output broke. Whiskers: 95% intervals, questions resampled.", color=INK2, fontsize=8.5, wrap=True)
+    fig.tight_layout(rect=(0, 0.09, 1, 1))
+    fig.savefig(OUT / "fig5_scaling.png", dpi=180)
+
+
 if __name__ == "__main__":
-    for f in (fig1, fig2, fig3, fig4):
+    for f in (fig1, fig2, fig3, fig4, fig5):
         f()
         print("wrote", f.__name__)

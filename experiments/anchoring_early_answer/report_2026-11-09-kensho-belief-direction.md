@@ -22,7 +22,8 @@ match are left out of every table.
 answered themselves ("anchoring"). Is there an internal *belief* signal behind this, can we read it, and can we turn
 it down?
 
-**Setup.** Judges: Qwen3.5-4B, Qwen3.5-9B, Qwen3.6-35B (thinking off). Benchmarks: RB2 Math (RewardBench 2 math
+**Setup.** Judges: Qwen3.5-4B, Qwen3.5-9B, Qwen3.6-35B (thinking off); section 1 adds Nemotron-3-Super-120B
+(NVIDIA, thinking off) as a judge from another family. Benchmarks: RB2 Math (RewardBench 2 math
 problems), JudgeBench (pairwise, no coding) and BFF-Bench (finance, answers labelled by unanimous experts). Each item is
 a question plus a candidate answer written by **another** model, with a label saying whether it is right. The judge never
 wrote the candidates and is not told who did.
@@ -66,6 +67,31 @@ GLM-5.3-Flash compared every wrong answer with the right one, and the 61 that ma
 - **There is a personal part:** on the *same* wrong answer, a Qwen's own belief adds **+23 [+6, +38]** at the verdict
   beyond what all three Qwens share.
 - **It cuts both ways:** correct answers the judge never reaches itself are accepted only 30% of the time; at 7/7, 91%.
+
+### The same in another family: Nemotron
+
+To check that this is not a Qwen quirk, we repeated the whole measurement with Nemotron-3-Super-120B (NVIDIA; 120B
+parameters, about 12B used per token) on the same candidates and prompts. Wrong answers accepted at the verdict:
+
+| Judge | 0/7 | 1–3 of 7 | 4–6 of 7 | 7/7 |
+|---|---|---|---|---|
+| Qwen3.5-4B | 27% | 39% | 57% | 64% (n=28) |
+| Qwen3.5-9B | 20% | 35% | 48% | 83% (n=36) |
+| Qwen3.6-35B | 8% | 27% | 62% | 75% (n=36) |
+| **Nemotron-3-Super** | **26%** | **50%** | **57%** | **85%** (n=41) |
+
+- **Nemotron shows the same rise:** 7/7 vs 0/7 = **+51 [+39, +61]** at the verdict, +42 before reasoning.
+- **Belief again carries it:** the one-sample "matches my answer" label adds +2 once belief is known; belief adds +48.
+- **It holds on each benchmark:** RB2 Math +77 (only 5 answers at 7/7), BFF +55, JudgeBench +27.
+- **Stronger Qwens are stricter only on answers they don't believe** (27% → 8% at 0/7). At 7/7 all four judges
+  approve 64–85% of wrong answers.
+- **Llama-3.1-8B is not included:** only 5 of its wrong answers reach 7/7, too few to place the top of its curve. Its
+  7 own answers rarely agree, and at lower belief it approves about 54% of wrong answers at every level.
+
+![Acceptance of wrong answers by belief, one line per judge](out/figs_belief/fig6_belief_by_judge.png)
+
+*Figure 1b. Wrong answers accepted at the verdict, by belief, for each judge (RB2 Math + JudgeBench + BFF). Whiskers:
+95% intervals, questions resampled.*
 
 ### Belief is usually right
 
@@ -203,15 +229,62 @@ Acceptance, both benchmarks; the believed wrong answers are split by how strongl
 - **So the direction is readable but not what drives the verdict.** The judge's tendency to accept its own answer
   survives with the belief direction projected out of the middle layers. The decision probably uses belief information
   stored elsewhere or spread across many directions. The probe finds one readable copy of it.
-- **Bug, now being rerun:** the larger factors (×−5, ×5) broke every run, including the random control: 100% of
-  outputs looped into junk text. Multiplying at 13 layers in a row compounds (roughly 5¹³), and ×−2 already garbled
-  about 3% of outputs. ×0 is safe because removing something twice is the same as removing it once. The rerun scales at
-  **one layer (21)**, with ×−1, ×−3 and ×3 plus random and correctness controls.
+- **Bug, fixed by rerunning at one layer:** the larger factors (×−5, ×5) broke every run, including the random
+  control: 100% of outputs looped into junk text. Multiplying at 13 layers in a row compounds (roughly 5¹³), and ×−2
+  already garbled about 3% of outputs. ×0 is safe because removing something twice is the same as removing it once.
+
+**Done: scaling at one layer (21) only.** Same edit, applied at layer 21 alone, so nothing compounds. Change in
+acceptance vs no edit, both benchmarks (418 items):
+
+| Factor at layer 21 | Wrong, believed (68%) | Wrong, never reached (21%) | Correct (85%) | Broke |
+|---|---|---|---|---|
+| belief ×−3 (flipped, stretched) | +3 [−1, +7] | +2 [−3, +7] | 0 [−3, +4] | 0% |
+| belief ×−1 (flipped) | +3 [−1, +7] | +3 [0, +7] | −1 [−4, +3] | 0% |
+| belief ×0 (removed) | +1 [−3, +5] | +1 [−2, +4] | 0 [−2, +3] | 0% |
+| belief ×3 (amplified) | +1 [−4, +6] | +1 [−1, +3] | −2 [−5, +1] | 0% |
+| random ×−3 (control) | +3 [0, +7] | +1 [−2, +5] | 0 [−4, +3] | 0% |
+| "is this right?" ×−3 | +5 [0, +11] | +2 [−1, +6] | −1 [−4, +2] | 0% |
+
+- **Nothing moves.** Removing, flipping or tripling belief at layer 21 changes acceptance by at most 3 points in any
+  group. That is no more than the random control, and every interval includes zero or barely excludes it. No output broke.
+- This confirms the ×0 result above with no garbling to explain it away: the belief direction at layer 21 is readable
+  but not what the verdict depends on.
+- **Caveat that matters:** every edit here (layer 21 and layers 14–26) changes only the token being processed at each
+  step. That covers everything the judge *writes*, but not the question and candidate answer it *reads*. The judge can
+  still attend to the unedited belief signal stored at those prompt positions. Editing every position, prompt included,
+  is the natural next test and has not been run.
+
+![Scaling belief at layer 21](out/figs_belief/fig5_scaling.png)
+
+*Figure 5. Change in acceptance when each item's own position along the belief direction is multiplied by a factor at
+layer 21 (×1 = no edit). Every factor stays near zero for all three groups, like the random and "is this right?"
+controls on the right.*
+
+**Push while solving (Qwen3.5-9B, RB2 Math).** We pushed the belief direction while the judge *solved* the question
+with no candidate shown, then recomputed belief from 7 new answers per question. Belief in a candidate is the share of
+those answers that reach the candidate's answer, matched by GLM-5.3-Flash. This tests whether the direction changes
+what the judge actually believes, not just its verdict. The table shows each group's belief with no push, then the
+change in points with each push (95% intervals resample questions).
+
+| push while solving | wrong answers it already believed (n=83) | wrong answers it never reached (n=421) | correct answers (n=181) |
+|---|---|---|---|
+| none | 70% | 1% | 84% |
+| belief −6 sd (down) | −1 [−5, +3] | 0 [−1, +1] | −2 [−6, +1] |
+| belief +6 sd (up) | −5 [−9, −2] | +1 [0, +2] | −7 [−10, −4] |
+| random −6 sd (control) | −10 [−17, −2] | +1 [0, +2] | −11 [−16, −7] |
+
+- **Pushing belief down does nothing.** The judge keeps reaching the same answers, right or wrong.
+- **Pushing belief up does not raise belief. It lowers it,** by 5 points on believed wrong answers and 7 on correct
+  ones, and creates no new belief in wrong answers the judge never reached (+1 point at most).
+- **That drop looks like disruption, not belief.** A random push of the same size does the same thing, about twice as
+  strongly: answers get longer and scatter across more different final answers, so fewer of them land on any one
+  candidate. The belief direction is less disruptive than a random one, but it does not steer the judge toward or
+  away from an answer.
+- **Cut-off answers:** answers that hit the 8,192-token cap (2–10%, most with belief −6) were rerun from scratch with
+  32,768 tokens and are included. The 6–21 per condition that still did not finish are repetition loops (the same line
+  written over and over), so a larger budget would not help; they are left out.
 
 **Still running on Harvard's Cannon GPUs (free):**
-- **Push while solving:** push the belief direction while the judge *solves* the question (no candidate shown), then
-  recompute belief. This tests whether the direction changes actual belief, not just verdicts. A null result would be
-  ambiguous, since the other session found solving and judging use unrelated directions.
 - **Llama-3.1-8B:** the whole pipeline again (7 extra own answers, probes, steering), including BFF, which Llama never
   had.
 
@@ -337,5 +410,5 @@ Files: `minimal_pairs_prep.py`, `minimal_pairs_analysis.py` → `out/minimal_pai
 - Steering: `belief_steer_prep.py`, `cannon_belief/steer.py` → `belief_steer_analysis.py` → `out/belief_steering.md`
 - Figures: `make_belief_figs.py` → `out/figs_belief/` (needs matplotlib, e.g.
   `uv run --no-project --with matplotlib --with numpy python make_belief_figs.py`)
-- Queued: `cannon_belief/solve_steer.py` (push while solving), `cannon_belief/llama_gen.py` + `capture.py` (Llama)
+- Push while solving: `cannon_belief/solve_steer.py` (GPU), `solve_steer_analysis.py` (scoring; new answers matched via `tinker_jobs.py --phase pairs --pairs solvesteer`). Queued: `cannon_belief/llama_gen.py` + `capture.py` (Llama)
 - Full write-up: `REPORT.md`, Experiments 5–8

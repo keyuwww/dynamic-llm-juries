@@ -14,6 +14,7 @@ JudgeBench is pairwise: the row's target (as in analyze.py) is the response that
 (match) or the wrong response (differ); "accepts" = prefers the target, belief = belief in the target.
 
   python3 experiments/anchoring_early_answer/belief.py [--pilot]   (needs out/rows.json from analyze.py)
+  python3 experiments/anchoring_early_answer/belief.py --set=nemotron [--clean]   (Nemotron-3-Super job set: out_nemotron/)
   python3 experiments/anchoring_early_answer/belief.py --judge=llama3.1-8b
       Llama-3.1-8B (open judge): rows from out_llama/belief_base_rows.json (llama_belief_rows.py), own answers and
       matches from out_llama/; writes out/belief_llama3.1-8b.md + out/belief_rows_llama3.1-8b.json. For Llama
@@ -33,8 +34,10 @@ from analyze import MAIN, _cluster_boot, letter  # noqa: E402
 from clean_labels import same_value_items  # noqa: E402
 
 OPEN = next((a.split("=")[1] for a in sys.argv if a.startswith("--judge=")), "")
-SRC = HERE / ("out_pilot" if "--pilot" in sys.argv else "out_llama" if OPEN == "llama3.1-8b" else "out")
-DST = HERE / "out"
+SET = next((a.split("=")[1] for a in sys.argv if a.startswith("--set=")), "")  # another job set, e.g. nemotron
+SFX = f"_{SET}" if SET else ""
+SRC = HERE / ("out_pilot" if "--pilot" in sys.argv else "out_llama" if OPEN == "llama3.1-8b" else f"out{SFX}")
+DST = HERE / f"out{SFX}"
 CLEAN = "--clean" in sys.argv  # drop RB2-Math wrong answers that reach the right value (clean_labels.py)
 TAG = (f"_{OPEN}" if OPEN else "") + ("_clean" if CLEAN else "")
 NB = int(next((a.split("=")[1] for a in sys.argv if a.startswith("--nb=")), 2000))
@@ -46,7 +49,7 @@ def load(p):
 
 def build():
     rows = [r for r in json.load(open(SRC / "belief_base_rows.json" if OPEN else DST / "rows.json")) if r["bench"] in MAIN]
-    with gzip.open(HERE / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
+    with gzip.open(HERE / "inputs" / f"readout_jobs{SFX}.jsonl.gz", "rt") as f:
         if OPEN:  # judge prompts are judge-independent: qwen3.5-4b's, relabelled
             jobs = {(OPEN, j["item_id"]): j for j in map(json.loads, f) if j["bench"] in MAIN and j["judge"] == "qwen3.5-4b"}
         else:

@@ -8,6 +8,7 @@ same held-out rule: an RB2 Math question in half h is pushed with the direction 
 
   python solve_steer.py --cond none
   python solve_steer.py --cond belief:-6
+  python solve_steer.py --cond belief:-6 --redo-cut 32768    # answers that hit the 8192 cap, from scratch
 Writes out_solve_steer/<cond>.jsonl (qid, sample, boxed answer, ...); resumes.
 """
 import argparse
@@ -26,6 +27,10 @@ ap.add_argument("--qbatch", type=int, default=4, help="questions per generate ca
 ap.add_argument("--layers", default="14-26")
 ap.add_argument("--max-new", type=int, default=8192)
 ap.add_argument("--limit", type=int, default=0)
+ap.add_argument("--redo-cut", type=int, default=0,
+                help="regenerate, from scratch with this many new tokens, the answers in <cond>.jsonl that hit the cap; "
+                     "writes <cond>_redo.jsonl (the analysis prefers it)")
+ap.add_argument("--redo-batch", type=int, default=8)
 a = ap.parse_args()
 
 tok = AutoTokenizer.from_pretrained(a.model)
@@ -60,10 +65,18 @@ handles = [layers[l - 1].register_forward_hook(make_hook(l)) for l in LAYERS]
 out = Path("out_solve_steer")
 out.mkdir(exist_ok=True)
 path = out / f"{a.cond.replace(':', '_')}.jsonl"
-done = {json.loads(l)["qid"] for l in open(path)} if path.exists() else set()
-todo = [q for q in qs if q["qid"] in half and q["qid"] not in done]
-todo.sort(key=lambda q: half[q["qid"]])  # one direction half per batch
-print(f"{a.cond}: {len(todo)} questions to do ({len(done)} done)", flush=True)
+if a.redo_cut:
+    cut = {(r["qid"], r["sample"]) for r in map(json.loads, open(path)) if not r["clean"]}
+    path = out / f"{a.cond.replace(':', '_')}_redo.jsonl"
+    done = {(r["qid"], r["sample"]) for r in map(json.loads, open(path))} if path.exists() else set()
+    units = [(q, s) for q in qs for s in range(1, a.samples + 1) if (q["qid"], s) in cut - done]
+    a.max_new, per_batch = a.redo_cut, a.redo_batch
+else:
+    done = {json.loads(l)["qid"] for l in open(path)} if path.exists() else set()
+    units = [(q, s) for q in qs if q["qid"] in half and q["qid"] not in done for s in range(1, a.samples + 1)]
+    per_batch = a.qbatch * a.samples
+units.sort(key=lambda u: half[u[0]["qid"]])  # one direction half per batch
+print(f"{a.cond}: {len(units)} answers to do ({len(done)} done), max {a.max_new} new tokens", flush=True)
 
 
 def boxed(t):
@@ -81,12 +94,12 @@ def boxed(t):
 stops = {tok.eos_token_id} | {tok.convert_tokens_to_ids(t) for t in ("<|im_end|>",) if t in tok.get_vocab()}
 fh = open(path, "a")
 i = 0
-torch.manual_seed(0)
-while i < len(todo):
-    dh = 1 - half[todo[i]["qid"]]
-    batch = [todo[i]]
-    while i + len(batch) < len(todo) and len(batch) < a.qbatch and 1 - half[todo[i + len(batch)]["qid"]] == dh:
-        batch.append(todo[i + len(batch)])
+torch.manual_seed(a.redo_cut)
+while i < len(units):
+    dh = 1 - half[units[i][0]["qid"]]
+    batch = [units[i]]
+    while i + len(batch) < len(units) and len(batch) < per_batch and 1 - half[units[i + len(batch)][0]["qid"]] == dh:
+        batch.append(units[i + len(batch)])
     i += len(batch)
     state["push"] = {}
     if name != "none":
@@ -94,10 +107,8 @@ while i < len(todo):
             d = dirs[f"rb2math|{name}|h{dh}|L{l}"]
             sd = dirs[f"rb2math|belief|h{dh}|L{l}"]["sd"]
             state["push"][l] = alpha * sd * torch.tensor(d["vec"], dtype=torch.float32, device="cuda")
-    enc = []
-    for q in batch:
-        t = tok.apply_chat_template(q["messages"], tokenize=False, add_generation_prompt=True, enable_thinking=False)
-        enc += [tok(t, add_special_tokens=False).input_ids] * a.samples
+    enc = [tok(tok.apply_chat_template(q["messages"], tokenize=False, add_generation_prompt=True,
+                                       enable_thinking=False), add_special_tokens=False).input_ids for q, _ in batch]
     n = max(map(len, enc))
     ids = torch.full((len(enc), n), tok.pad_token_id, dtype=torch.long)
     att = torch.zeros((len(enc), n), dtype=torch.long)
@@ -107,14 +118,13 @@ while i < len(todo):
     with torch.no_grad():
         g = model.generate(input_ids=ids.cuda(), attention_mask=att.cuda(), do_sample=True, temperature=0.7,
                            top_p=1.0, top_k=0, max_new_tokens=a.max_new, pad_token_id=tok.pad_token_id)
-    for k in range(len(enc)):
-        q = batch[k // a.samples]
+    for k, (q, smp) in enumerate(batch):
         new = g[k, n:].tolist()
         end = next((j for j, t in enumerate(new) if t in stops), None)
         new = new[: end + 1] if end is not None else new
         text = tok.decode(new, skip_special_tokens=True)
-        fh.write(json.dumps(dict(qid=q["qid"], sample=k % a.samples + 1, cond=a.cond, boxed=boxed(text),
+        fh.write(json.dumps(dict(qid=q["qid"], sample=smp, cond=a.cond, boxed=boxed(text),
                                  n_out=len(new), clean=end is not None, text=text[-3000:])) + "\n")
     fh.flush()
-    print(f"  {a.cond}: {i}/{len(todo)}", flush=True)
+    print(f"  {a.cond}: {i}/{len(units)}", flush=True)
 print(f"SOLVE_STEER_DONE {a.cond}", flush=True)

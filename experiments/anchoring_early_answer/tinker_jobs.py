@@ -18,6 +18,8 @@ Phases (each resumes from its cache; rerunning only pays for what is missing):
            judging transcript at A, 25/50/75% of the thinking, E (end of thinking) and C (verdict); see ckpts.py.
            A is the same text as the thinking-off A (empty think block + "VERDICT:").
                                                          -> out/think_gen.jsonl, out/think_readouts.jsonl
+  pairs    GLM-5.3-Flash matches a prepared list of answer pairs (inputs/pairs_<name>.jsonl.gz, --pairs <name>)
+                                                         -> out/matches_glm5.3-flash_<name>.jsonl
   --extended  (match, readout) redo only the items whose own answer / transcript was extended, using the
            finished text                                  -> out/matches_glm5.3-flash_ext.jsonl, out/readouts_ext.jsonl
 
@@ -45,6 +47,8 @@ MATCHERS = {
     "glm5.3-flash": dict(spec=dict(key="glm5.3-flash", model="zai-org/GLM-5.3-Flash:peft:262144", price_in=0.84, price_out=2.11),
                          renderer="glm5_3_high_reasoning", max_tokens=8192, file="matches_glm5.3-flash.jsonl"),
 }
+SOLVE_JOBS = HERE / "inputs" / "solve_jobs.jsonl"  # --set replaces these
+READOUT_JOBS = HERE / "inputs" / "readout_jobs.jsonl.gz"
 CTX = 65536  # context window of the Qwen3.5/3.6 ids used here; an extension may fill all of it
 
 MATCH_PROMPT = """Two people answered the same question. Decide whether their FINAL answers are the same.
@@ -242,12 +246,14 @@ async def extend_one(chat, job, cache):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief", "audit"], required=True)
+    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief", "audit", "pairs"], required=True)
     ap.add_argument("--extended", action="store_true", help="match/readout: only items with extended text")
     ap.add_argument("--kinds", default="solve,judge", help="extend: which cut-off outputs to rerun")
     ap.add_argument("--open", default="", help="match/fill: an open judge outside Tinker, e.g. llama3.1-8b or "
                     "olmo3-7b-instruct (its own answers from open_ingest.py)")
     ap.add_argument("--out", default=str(HERE / "out"))
+    ap.add_argument("--set", default="", help="job set: inputs/solve_jobs_<set>.jsonl + readout_jobs_<set>.jsonl.gz "
+                    "(build_jobs.py --tag _<set>), e.g. nemotron; default: the Qwen set")
     ap.add_argument("--models", default=",".join(QWENS))
     ap.add_argument("--benches", default="bbeh,rb2math,judgebench")
     ap.add_argument("--limit", type=int, default=0, help="per (bench, judge) for a pilot")
@@ -258,7 +264,12 @@ def main():
                     "matcher's max_tokens are asked again FROM SCRATCH with this many tokens (the newer row wins)")
     ap.add_argument("--samples", type=int, default=8, help="belief: own answers per question in total (sample 0 "
                     "is the existing solve)")
+    ap.add_argument("--pairs", default="", help="pairs: name N of inputs/pairs_N.jsonl.gz (cache_key, question, a, b), "
+                    "matched by GLM into <out>/matches_glm5.3-flash_N.jsonl")
     a = ap.parse_args()
+    global SOLVE_JOBS, READOUT_JOBS
+    sfx = f"_{a.set}" if a.set else ""
+    SOLVE_JOBS, READOUT_JOBS = HERE / "inputs" / f"solve_jobs{sfx}.jsonl", HERE / "inputs" / f"readout_jobs{sfx}.jsonl.gz"
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     models = [m for m in a.models.split(",") if m]
@@ -266,7 +277,7 @@ def main():
 
     if a.phase == "solve":
         chats = make_chats([POOL_BY_KEY[m] for m in models])
-        jobs = [j for j in map(json.loads, open(HERE / "inputs" / "solve_jobs.jsonl"))
+        jobs = [j for j in map(json.loads, open(SOLVE_JOBS))
                 if j["model"] in models and j["bench"] in benches]
         if a.limit:
             jobs = [j for j in jobs if sum(1 for k in jobs[:jobs.index(j)] if k["model"] == j["model"]
@@ -276,8 +287,19 @@ def main():
                              a.concurrency, "solves"))
         return
 
+    if a.phase == "pairs":  # any prepared list of (answer, answer) pairs, e.g. solve_steer_analysis.py --glm-jobs
+        chat, mt = make_matcher(a.matcher), MATCHERS[a.matcher]["max_tokens"]
+        cache = JsonlCache(out / f"matches_glm5.3-flash_{a.pairs}.jsonl")
+        if a.redo_cut:
+            mt = redo_cut(cache, mt, a.redo_cut)
+        pj = load_gz(HERE / "inputs" / f"pairs_{a.pairs}.jsonl.gz")
+        print(f"{len(pj)} pairs ({sum(j['cache_key'] in cache for j in pj)} cached)", flush=True)
+        asyncio.run(run_jobs([lambda j=j: match_one(chat, j["cache_key"], j["question"], j["a"], j["b"], cache, mt)
+                              for j in pj], a.concurrency, "pairs"))
+        return
+
     if a.phase == "extend":
-        jobs = [j for j in load_gz(HERE / "inputs" / "extend_jobs.jsonl.gz")
+        jobs = [j for j in load_gz(HERE / "inputs" / f"extend_jobs{sfx}.jsonl.gz")
                 if j["model"] in models and j["bench"] in benches and j["kind"] in a.kinds.split(",")]
         if a.limit:
             jobs = jobs[: a.limit]
@@ -294,7 +316,7 @@ def main():
         gjobs = build_jobs()
         if a.limit:
             gjobs = pilot(gjobs, a.limit)
-        with gzip.open(HERE / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
+        with gzip.open(READOUT_JOBS, "rt") as f:
             jj = {f"judge|{j['bench']}|{j['item_id']}": j for j in map(json.loads, f) if j["judge"] == "qwen3.5-4b"}
         gcache, rcache = JsonlCache(out / "think_gen.jsonl"), JsonlCache(out / "think_readouts.jsonl")
         cut = None
@@ -329,10 +351,10 @@ def main():
     if a.extended:
         for f in sorted(out.glob("extended*.jsonl")):
             ext.update({r["cache_key"]: r["text"] for r in map(json.loads, open(f))})
-    readout = [j for j in load_gz(HERE / "inputs" / "readout_jobs.jsonl.gz")
+    readout = [j for j in load_gz(READOUT_JOBS)
                if j["judge"] in models and j["bench"] in benches]
     if a.open:  # judge prompts/candidates are judge-independent: reuse qwen3.5-4b's, relabelled
-        readout = [dict(j, judge=a.open) for j in load_gz(HERE / "inputs" / "readout_jobs.jsonl.gz")
+        readout = [dict(j, judge=a.open) for j in load_gz(READOUT_JOBS)
                    if j["judge"] == "qwen3.5-4b" and j["bench"] in benches]
     if a.limit:
         seen, keep = {}, []
@@ -367,7 +389,7 @@ def main():
         # Belief strength: each judge answers each question samples-1 more times (same prompt and settings as the
         # first solve: T=0.7, whole context as budget); every new answer is compared with every candidate.
         # JudgeBench answers ending in a 5x letter are compared exactly in the analysis, so GLM sees only the rest.
-        solve_jobs = {(j["model"], j["qid"]): j for j in map(json.loads, open(HERE / "inputs" / "solve_jobs.jsonl"))}
+        solve_jobs = {(j["model"], j["qid"]): j for j in map(json.loads, open(SOLVE_JOBS))}
         cands = collections.defaultdict(list)  # (judge, qid) -> [(match key stem, question, candidate)]
         for j in readout:
             if j["bench"] == "bbeh":

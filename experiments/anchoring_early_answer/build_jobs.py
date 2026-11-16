@@ -18,6 +18,8 @@ Writes inputs/ (read by tinker_jobs.py on Modal):
                         own transcript from the pool run, and the gold label
 
   python3 experiments/anchoring_early_answer/build_jobs.py
+  python3 experiments/anchoring_early_answer/build_jobs.py --judges nemotron3-super-120b --tag _nemotron
+      (a non-Qwen pool judge as its own job set; tinker_jobs.py / analyze.py / belief.py --set nemotron)
 """
 import argparse
 import gzip
@@ -32,6 +34,7 @@ import run_judges  # noqa: E402
 from data import load_judgebench, load_rb2_domain  # noqa: E402
 
 QWENS = ["qwen3.5-4b", "qwen3.5-9b", "qwen3.6-35b-a3b"]
+JUDGES = list(QWENS)  # --judges: another pool judge as its own job set (--tag), e.g. nemotron3-super-120b
 RB2_SOLVE_SUFFIX = "\n\nSolve the problem. End with your final answer in \\boxed{}."
 OUT = HERE / "inputs"
 
@@ -40,12 +43,18 @@ def pool_judgments(bench, keep):
     rows = {}
     for line in open(POOL / f"{bench}_results" / "judgments.jsonl"):
         r = json.loads(line)
-        if r["judge"] in QWENS and r["condition"] == "none" and keep(r["item_id"]):
+        if r["judge"] in JUDGES and r["condition"] == "none" and keep(r["item_id"]):
             rows[(r["judge"], r["item_id"])] = r
     return rows
 
 
 def main():
+    global JUDGES
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--judges", default=",".join(QWENS))
+    ap.add_argument("--tag", default="", help="suffix of the written files, e.g. _nemotron (default: the Qwen set)")
+    a = ap.parse_args()
+    JUDGES = a.judges.split(",")
     OUT.mkdir(exist_ok=True)
     solve, readout = [], []
 
@@ -69,7 +78,7 @@ def main():
                             candidates=[it["response"]], qid=iid.rsplit("-", 1)[0], question=it["prompt"]))
     for q in sorted({it["prompt"] for it in rb2.values()}):
         qid = next(i.rsplit("-", 1)[0] for i, it in rb2.items() if it["prompt"] == q)  # rb2math-<id>
-        for m in QWENS:
+        for m in JUDGES:
             solve.append(dict(bench="rb2math", model=m, qid=qid,
                               messages=[{"role": "user", "content": q + RB2_SOLVE_SUFFIX}]))
 
@@ -89,7 +98,7 @@ def main():
         if r["bench"] == "judgebench":
             r["qid"] = "jbq-" + seen[r["question"]]
     for q, iid in seen.items():
-        for m in QWENS:  # JudgeBench questions already say how to format the final answer
+        for m in JUDGES:  # JudgeBench questions already say how to format the final answer
             solve.append(dict(bench="judgebench", model=m, qid="jbq-" + iid,
                               messages=[{"role": "user", "content": q}]))
 
@@ -108,13 +117,13 @@ def main():
                             candidates=[it["conv"][-1]["content"]], qid=qid, uid=it["uid"],
                             question=run_judges.render_conv(ctx)))
     for qid, ctx in sorted(bff_solve.items()):
-        for m in QWENS:
+        for m in JUDGES:
             solve.append(dict(bench="bff", model=m, qid=qid, messages=ctx))
 
-    with open(OUT / "solve_jobs.jsonl", "w") as f:
+    with open(OUT / f"solve_jobs{a.tag}.jsonl", "w") as f:
         for s in solve:
             f.write(json.dumps(s) + "\n")
-    with gzip.open(OUT / "readout_jobs.jsonl.gz", "wt") as f:
+    with gzip.open(OUT / f"readout_jobs{a.tag}.jsonl.gz", "wt") as f:
         for r in readout:
             f.write(json.dumps(r) + "\n")
     by = {}
@@ -124,7 +133,7 @@ def main():
     for k, v in sorted(by.items()):
         print(f"  {k[0]:11s} {k[1]:16s} {v}")
     # map JudgeBench pair -> question key, so the analysis can find each judge's own answer
-    (OUT / "judgebench_qkey.json").write_text(json.dumps({iid: "jbq-" + seen[it["question"]] for iid, it in jb.items()}))
+    (OUT / f"judgebench_qkey{a.tag}.json").write_text(json.dumps({iid: "jbq-" + seen[it["question"]] for iid, it in jb.items()}))
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ image = (
     .add_local_dir(REPO / "experiments" / "llama_bbeh", "/root/repo/experiments/llama_bbeh",
                    ignore=["**/*results*/**", "**/__pycache__/**"])
     .add_local_dir(REPO / "experiments" / "anchoring_early_answer", HERE,
-                   ignore=["out/**", "out_pilot/**", "out_probe/**", "**/*.npy", "**/generations*.jsonl", "**/__pycache__/**"])
+                   ignore=["out/**", "out_pilot/**", "out_nemotron/**", "out_probe/**", "**/*.npy", "**/generations*.jsonl", "**/__pycache__/**"])
 )
 app = modal.App("dynamic-llm-juries-anchoring", image=image)
 vol = modal.Volume.from_name("dynamic-llm-juries-results", create_if_missing=True)
@@ -48,11 +48,11 @@ def _env():
 @app.function(timeout=24 * 3600, secrets=[modal.Secret.from_dict(_env())], volumes={"/vol": vol})
 def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurrency: int = 48,
         ckpts: str = "", matcher: str = "", extended: bool = False, kinds: str = "",
-        open_key: str = "", redo_cut: int = 0) -> str:
+        open_key: str = "", redo_cut: int = 0, pairs: str = "", jobset: str = "") -> str:
     if phase == "models":
         subprocess.run([sys.executable, f"{HERE}/list_models.py", *benches.split(",")], check=True, cwd=HERE)
         return "done: models"
-    out = VOL_OUT + ("_pilot" if limit else "")
+    out = VOL_OUT + (f"_{jobset}" if jobset else "") + ("_pilot" if limit else "")
     cmd = [sys.executable, f"{HERE}/tinker_jobs.py", "--phase", phase, "--out", out,
            "--concurrency", str(concurrency)]
     if limit:
@@ -73,6 +73,10 @@ def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurr
         cmd += ["--open", open_key]
     if redo_cut:
         cmd += ["--redo-cut", str(redo_cut)]
+    if jobset:
+        cmd += ["--set", jobset]
+    if pairs:
+        cmd += ["--pairs", pairs]
     stop = threading.Event()
 
     def committer():
@@ -98,10 +102,10 @@ def pull(pilot: bool = False) -> dict:
 @app.local_entrypoint()
 def main(phase: str = "readout", limit: int = 0, models: str = "", benches: str = "", concurrency: int = 48,
          pilot: bool = False, ckpts: str = "", matcher: str = "", extended: bool = False,
-         kinds: str = "", open_key: str = "", redo_cut: int = 0):
+         kinds: str = "", open_key: str = "", redo_cut: int = 0, pairs: str = ""):
     if phase != "pull":
         print(run.remote(phase, limit, models, benches, concurrency, ckpts, matcher, extended, kinds, open_key,
-                         redo_cut))
+                         redo_cut, pairs))
     if phase == "models":
         return
     files = pull.remote(pilot or bool(limit))

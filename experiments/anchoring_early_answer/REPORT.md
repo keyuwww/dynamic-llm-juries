@@ -27,7 +27,8 @@ wrong answers the Qwens believe, so the "shared belief" from Experiment 1 is mos
 - **Belief strength.** Measured with 7 fresh own answers instead of one, the lean is graded. Wrong answers the
   judge reaches 7/7 times are accepted 74% of the time at the verdict; those it never reaches, 18%. The old one-sample
   match label adds nothing once belief is known. With this better measure there is a real **personal** part (+23
-  points on the same wrong answer), not only a family belief.
+  points on the same wrong answer), not only a family belief. **Nov 15:** Nemotron-3-Super (NVIDIA) shows the same
+  graded effect (26% → 85%, +51 points); Llama-3.1-8B has too few answers at 7/7 (5) to test.
 - **Label correction (Nov 13).** 61 of 549 RB2 Math answers labelled wrong reach the same value as the right answer,
   written differently (476,000,000 vs 476,252,000 eV; 9 vs 9.02 L; 4.20 × 10¹¹ vs "420" in units of 10⁹). GLM-5.3-Flash
   checked every wrong answer against the right one (`clean_labels.py`, $0.52). They were concentrated among the answers
@@ -368,6 +369,37 @@ personal part, about 40% of the full belief effect. The single-sample control in
 **Plain reading.** Anchoring is graded. The more consistently the judge produces an answer itself, the more likely it
 approves that answer, right or wrong. Reasoning makes that dependence about half again as strong (+35 → +54).
 
+### Update (Nov 15): another family — Nemotron-3-Super-120B
+
+**What ran (Tinker, `--set nemotron`).** Nemotron-3-Super-120B (NVIDIA, 12B active, thinking off) judged every main-set
+candidate in the original pool run, with the Qwens' exact prompts (0 mismatches over 2,658 items). New: its own answer
+per question, 7 more own answers (6,573 of 6,580 finished), GLM matching, the A/25/50/75/C readouts, and its 57
+cut-off judging transcripts regenerated from scratch (as for the Qwens). C readout = spoken verdict in 97% of
+judgments. Files: `inputs/*_nemotron*`, `out_nemotron/` (`results_clean.md`, `belief_clean.md`).
+
+**Wrong answers accepted at C, by belief** (clean labels; `make_judge_lines.py` → `out/figs_belief/fig6_belief_by_judge.png`):
+
+| Judge | 0/7 | 1–3 of 7 | 4–6 of 7 | 7/7 |
+|---|---|---|---|---|
+| Qwen3.5-4B | 27% (n=567) | 39% | 57% | 64% (n=28) |
+| Qwen3.5-9B | 20% (n=565) | 35% | 48% | 83% (n=36) |
+| Qwen3.6-35B | 8% (n=580) | 27% | 62% | 75% (n=36) |
+| Nemotron-3-Super | 26% (n=587) | 50% | 57% | 85% (n=41) |
+
+- **Same graded effect:** 7/7 vs 0/7 = +42 [+30, +53] at A, **+51 [+39, +61]** at C. Per benchmark at C: RB2 Math +77
+  (n=5 at 7/7), BFF +55, JudgeBench +27.
+- **Belief explains away the one-sample label again:** old label with belief held fixed +2 [−14, +18]; belief with the
+  label held fixed +48 [+30, +67].
+- **Match / differ (one sample) also leans hard:** accepted at C, match vs differ: BFF 82% vs 38%, RB2 Math 88% vs 25%,
+  JudgeBench 43% vs 34%.
+- **Cuts both ways:** correct answers at 0/7 accepted 53%, at 7/7 87%.
+- **Llama-3.1-8B is left out of the figure and the table:** only 5 of its wrong answers (of about 820 with a belief
+  score) reach 7/7, too few to place the top of its curve. Below that it is flat: 54% / 54% / 57% at 0/7, 1–3 and 4–6
+  (all three benchmarks; `out/belief_llama3.1-8b_clean.md`, now including BFF, spoken verdict only there). Its 7 own
+  answers rarely agree, and it accepts most answers whatever it believes (Experiment 4, Finding 1).
+
+**Plain reading.** The belief effect is not a Qwen quirk: a strong judge from another family shows it at the same size.
+
 ---
 
 ## Experiment 7 — Where is belief readable inside the judge? (probes, all positions × all layers)
@@ -495,9 +527,9 @@ accepting.
 - Steering during reasoning used one way of pushing (the same push at every token, layers 14–26). A push only at
   the moment the judge checks the candidate's answer, or a fix to the re-derivation itself, is untested.
 - Thinking-on results (Experiment 5) do not yet include the ~630 regenerated cut-off outputs.
-- Tinker judges are one family (Qwen). Llama is the only other family, and it is a weak judge, so the cross-family
-  test can't fully separate "family-specific belief" from "Llama ignores everything". A stronger non-Qwen judge
-  (e.g. Llama-3.3-70B or Gemma) would settle it.
+- Most experiments use one family (Qwen). The belief-strength result (Experiment 6) now also holds for
+  Nemotron-3-Super (NVIDIA, Nov 15 update); Llama is too weak a judge to test it (5 wrong answers at 7/7). The
+  probes and steering (Experiments 2, 3, 7, 8) are still Qwen-only.
 - Llama's verdicts and some of its BBEH answers were read by GLM because Llama ignored the format; the Qwens' were
   parsed exactly.
 

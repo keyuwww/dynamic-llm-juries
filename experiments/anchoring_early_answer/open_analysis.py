@@ -34,7 +34,8 @@ def load(p):
     return [json.loads(l) for l in open(p)] if p.exists() else []
 
 
-def build_rows(KEY):
+def build_rows(KEY, need_a=True):
+    """need_a=False keeps judgments with no position-A readout (acc_A = None), e.g. Llama on BFF, never captured."""
     _, O = paths(KEY)
     with gzip.open(HERE / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
         jobs = {j["item_id"]: j for j in map(json.loads, f) if j["judge"] == "qwen3.5-4b"}
@@ -57,7 +58,7 @@ def build_rows(KEY):
 
     rows, n_fill_v = [], 0
     for iid, j in jobs.items():
-        if iid not in judg or "A" not in margin.get(iid, {}):
+        if iid not in judg or (need_a and "A" not in margin.get(iid, {})):
             continue
         sp = judg[iid]["spoken"]
         if sp is None:  # no "VERDICT:" line: the verdict GLM read from the transcript (None if it found none)

@@ -30,7 +30,9 @@ sys.path.insert(0, str(HERE))
 from clean_labels import same_value_items  # noqa: E402
 
 CKPTS = ["A", "25", "50", "75", "C"]
-OUT = HERE / ("out_pilot" if "--pilot" in sys.argv else "out")
+SET = next((a.split("=")[1] for a in sys.argv if a.startswith("--set=")), "")  # another job set, e.g. nemotron
+SFX = f"_{SET}" if SET else ""
+OUT = HERE / ("out_pilot" if "--pilot" in sys.argv else f"out{SFX}")
 CLEAN = "--clean" in sys.argv  # drop RB2-Math wrong answers that reach the right value; writes *_clean files
 TAG = "_clean" if CLEAN else ""
 
@@ -138,7 +140,7 @@ def pooled_and_controlled(rows):
 
 
 def main():
-    with gzip.open(HERE / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
+    with gzip.open(HERE / "inputs" / f"readout_jobs{SFX}.jsonl.gz", "rt") as f:
         jobs = {(j["judge"], j["item_id"]): j for j in map(json.loads, f)}
     reads = collections.defaultdict(dict)
     meta = {}
