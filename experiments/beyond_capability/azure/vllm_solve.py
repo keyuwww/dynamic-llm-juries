@@ -36,8 +36,8 @@ def main():
     print(f"{len(todo)} to answer ({len(done)} done)", flush=True)
     llm = LLM(model=a.model, max_model_len=a.ctx, gpu_memory_utilization=0.92, enable_prefix_caching=True)
     tok = llm.get_tokenizer()
-    prompts = {q["id"]: tok.apply_chat_template([{"role": "user", "content": q["prompt"]}], tokenize=False,
-                                                add_generation_prompt=True) for q in todo}
+    prompts = {q["id"]: tok.apply_chat_template(q.get("messages") or [{"role": "user", "content": q["prompt"]}],
+                                                tokenize=False, add_generation_prompt=True) for q in todo}
 
     def budget(k):
         room = a.ctx - len(tok(prompts[k]).input_ids) - 16

@@ -191,19 +191,30 @@ def run_pair(a):
     # ---- 3. push test (no labels)
     sub = sorted(np.random.default_rng(1).choice(len(meta), min(400, len(meta)), replace=False).tolist())
     acc = {L: [0, 0] for L in cand}
+    dm = {L: 0.0 for L in cand}  # summed verdict-score change from -8 to +8 sd
     for j, i in enumerate(sub):
         cache = J.prepare(ids_all[i])
         for L in cand:
+            ms = []
             for k, s in ((0, -8.0), (1, 8.0)):
                 m, _ = J.read(ids_all[i], cache, edit(L, "Jc", half_of(i), "add", s))
                 acc[L][k] += m > 0
+                ms.append(m)
+            dm[L] += ms[1] - ms[0]
         del cache
         if (j + 1) % 100 == 0:
             print(f"  push {a.tag}: {j + 1}/{len(sub)}", flush=True)
-    push = {L: dict(minus8=100 * acc[L][0] / len(sub), plus8=100 * acc[L][1] / len(sub)) for L in cand}
-    resp = [L for L in cand if push[L]["plus8"] - push[L]["minus8"] >= 10]
+    marg = np.array([m["margin"] for m in meta])
+    wsd = float(np.sqrt(np.mean([np.var(marg[q == g]) for g in uq if (q == g).sum() > 1])))
+    push = {L: dict(minus8=100 * acc[L][0] / len(sub), plus8=100 * acc[L][1] / len(sub),
+                    sensitivity=dm[L] / len(sub) / 16 / wsd) for L in cand}
+    resp_acc = [L for L in cand if push[L]["plus8"] - push[L]["minus8"] >= 10]
+    resp_score = [L for L in cand if push[L]["sensitivity"] >= 0.05]
+    resp = resp_score if a.rule == "v2" else resp_acc
     chosen = max(resp, key=knows.get) if resp else Lmax
-    choice.update(push=push, responding_layers=resp, chosen_layer=chosen, rule="responds" if resp else "no layer responds")
+    choice.update(push=push, responding_layers=resp, chosen_layer=chosen, rule="responds" if resp else "no layer responds",
+                  rule_version=a.rule, responding_accept=resp_acc, responding_score=resp_score,
+                  chosen_v1=max(resp_acc, key=knows.get) if resp_acc else Lmax)
     print(f"  {a.tag}: responding layers {resp}; chosen layer {chosen}", flush=True)
     json.dump(choice, open(out / f"choice_{a.tag}.json", "w"), indent=1)
     a.commit()
@@ -358,6 +369,59 @@ def extra(a):
     print("done: extra", flush=True)
 
 
+def sweep(a):
+    """Exploratory: every candidate layer, all answers: unedited, add -8 / +8 sd, x11 along the judge direction and a
+    random direction (directions rebuilt from the pair's capture, each half from the other). -> sweep_<tag>.jsonl"""
+    torch = __import__("torch")
+    out = Path(a.out)
+    H = np.load(out / f"hidden_{a.tag}.npy", mmap_mode="r")
+    meta = [json.loads(l) for l in open(out / f"meta_{a.tag}.jsonl")]
+    J = Judge(a.model, use_cache=not a.no_cache)
+    n = len(J.layers)
+    kept = sorted(set(range(0, n + 1, 2)) | {n})
+    cand = [L for L in kept if 0 < L < n]
+    rows = load_items(a.items)
+    ids_all = [build_ids(J.tok, r) for r in rows]
+    ids_all = [x for x in ids_all if len(x) < J.ctx - 8]
+    assert len(ids_all) == len(meta)
+    y = np.array([m["gold"] for m in meta])
+    q = np.array([m["qid"] for m in meta])
+    uq = sorted(set(q))
+    h1q = set(np.random.default_rng(0).permutation(uq)[: len(uq) // 2])
+    h1 = np.array([x in h1q for x in q])
+    dirs = {}
+    for L in cand:
+        X = np.asarray(H[:, kept.index(L)], np.float32)
+        Xc = X.copy()
+        for g in uq:
+            k = q == g
+            Xc[k] -= X[k].mean(0)
+        for learn, mask in (("h1", h1), ("h2", ~h1)):
+            v = Xc[mask][y[mask] == 1].mean(0) - Xc[mask][y[mask] == 0].mean(0)
+            v /= np.linalg.norm(v) + 1e-9
+            r = np.random.default_rng(1000 + L + (learn == "h2")).normal(size=v.shape[0])
+            r /= np.linalg.norm(r)
+            for name, dv in (("Jc", v), ("Rc", r)):
+                p_ = X[mask] @ dv
+                dirs[(L, name, "h2" if learn == "h1" else "h1")] = (
+                    torch.tensor(dv, dtype=torch.float32, device="cuda"), float(p_.mean()), float(p_.std()))
+    edits = [("Jc", "add", -8.0), ("Jc", "add", 8.0), ("Jc", "amplify", 10.0), ("Rc", "amplify", 10.0)]
+    with open(out / f"sweep_{a.tag}.jsonl", "w") as fh:
+        for i, (m0, ids) in enumerate(zip(meta, ids_all)):
+            half = "h1" if h1[i] else "h2"
+            cache = J.prepare(ids)
+            for L in cand:
+                res = {"none": m0["margin"]}
+                for name, kind, s in edits:
+                    v, mu, sd = dirs[(L, name, half)]
+                    res[f"{name}:{kind}:{s}"] = J.read(ids, cache, dict(L=L, kind=kind, s=s, v=v, mu=mu, sd=sd))[0]
+                fh.write(json.dumps({k: m0[k] for k in ("qid", "aid", "gold", "src")} | dict(layer=L, margins=res)) + "\n")
+            del cache
+            if (i + 1) % 200 == 0:
+                print(f"  sweep {a.tag}: {i + 1}/{len(meta)}", flush=True)
+    print("done: sweep", flush=True)
+
+
 def solve(a):
     """the judge answers questions itself: --qfile rows with id + messages (or prompt)."""
     torch = __import__("torch")
@@ -407,7 +471,7 @@ def solve(a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", choices=["pair", "solve", "diagnose", "extra"], required=True)
+    ap.add_argument("--phase", choices=["pair", "solve", "diagnose", "extra", "sweep"], required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--items", default="")
     ap.add_argument("--qfile", default="")
@@ -420,12 +484,13 @@ def main():
     ap.add_argument("--max-new", type=int, default=8192)
     ap.add_argument("--n-push", type=int, default=200)
     ap.add_argument("--capture-only", action="store_true")
+    ap.add_argument("--rule", default="v1", choices=["v1", "v2"])
     ap.add_argument("--extra-items", default="")
     ap.add_argument("--layer", type=int, default=0)
     ap.add_argument("--n-layers", type=int, default=32)
     a = ap.parse_args()
     a.commit = lambda: None
-    {"pair": run_pair, "solve": solve, "diagnose": diagnose, "extra": extra}[a.phase](a)
+    {"pair": run_pair, "solve": solve, "diagnose": diagnose, "extra": extra, "sweep": sweep}[a.phase](a)
 
 
 if __name__ == "__main__":

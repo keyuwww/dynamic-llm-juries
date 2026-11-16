@@ -1,0 +1,9 @@
+body { font-size: 9.5pt; }
+table { font-size: 7.6pt; table-layout: auto !important; width: 100%; break-inside: auto; }
+colgroup, col { width: auto !important; }
+th, td { padding: 1.5pt 3pt; white-space: nowrap; }
+td:first-child, th:first-child { white-space: normal; }
+h2 { break-after: avoid; margin-top: 11pt; }
+ol { break-inside: avoid; }
+img { max-width: 60%; }
+p:has(> img) { margin: 2pt 0; }

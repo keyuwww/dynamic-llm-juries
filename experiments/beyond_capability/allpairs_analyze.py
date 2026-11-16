@@ -27,9 +27,11 @@ from data import bbeh_correct  # noqa: E402
 from stretch_analyze import solve_labels  # noqa: E402
 
 D = HERE / "out_allpairs"
-JUDGES = ["llama3.1-8b", "llama3.2-3b", "qwen3.5-9b", "qwen3.5-4b", "phi4-mini", "mistral-7b", "granite3.3-8b"]
+FRESH = ["llama3.2-1b", "qwen2.5-7b"]  # fresh test of the score-based rule (RULE_v2.md)
+JUDGES = ["llama3.1-8b", "llama3.2-3b", "qwen3.5-9b", "qwen3.5-4b", "phi4-mini", "mistral-7b", "granite3.3-8b"] + FRESH
 NAME = {"llama3.1-8b": "Llama-3.1-8B", "llama3.2-3b": "Llama-3.2-3B", "qwen3.5-9b": "Qwen3.5-9B",
-        "qwen3.5-4b": "Qwen3.5-4B", "phi4-mini": "Phi-4-mini", "mistral-7b": "Mistral-7B", "granite3.3-8b": "Granite-3.3-8B"}
+        "qwen3.5-4b": "Qwen3.5-4B", "phi4-mini": "Phi-4-mini", "mistral-7b": "Mistral-7B", "granite3.3-8b": "Granite-3.3-8B",
+        "llama3.2-1b": "Llama-3.2-1B", "qwen2.5-7b": "Qwen2.5-7B"}
 BENCHES = ["mmlu", "math", "bbeh"]
 BNAME = {"mmlu": "MMLU-Redux", "math": "MATH", "bbeh": "BBEH"}
 KNOWN_SMALL = {("qwen3.5-9b", "mmlu"): 0.8, ("qwen3.5-9b", "math"): 4.9, ("qwen3.5-9b", "bbeh"): -1.5,
@@ -40,6 +42,25 @@ J11, J4, J21, R11, M8, P8 = ("Jc:amplify:10.0", "Jc:amplify:3.0", "Jc:amplify:20
 
 def labels(judge, bench):
     """qid -> 1 if the judge solved the question itself (thinking off), else 0."""
+    if judge in FRESH:  # one vLLM answer per question (solve_vllm_modal.py)
+        f = D / f"{judge}_{bench}" / f"esolves_{bench}_{judge}.jsonl"
+        if not f.exists():
+            return {}
+        rows = list(jl(f))
+        if bench == "mmlu":
+            from stretch_analyze import letter
+            gold = {q["id"]: q["gold"] for q in jl(HERE / "inputs" / "mmlu_full.jsonl")}
+            return {r["qid"]: 0 if r.get("capped") else int(letter(r["text"]) == gold[r["qid"]]) for r in rows}
+        if bench == "math":
+            g = {r["cache_key"]: r["verdict"] for r in jl(OUT / "egrades_math_full.jsonl")}
+            out = {}
+            for r in rows:
+                v = 0 if r.get("capped") else g.get(f"esolves_math_full_{judge}|{r['qid']}|0")
+                if v is not None:
+                    out[r["qid"]] = int(v)
+            return out
+        qs = questions()
+        return {r["qid"]: 0 if r.get("capped") else int(bbeh_correct(r["text"], qs[r["qid"]]["target"])) for r in rows}
     if bench == "mmlu":
         return solve_labels("mmlu_full", judge, HERE / "out_mmlu")
     if bench == "math":
@@ -63,8 +84,9 @@ def place_solves():
         bench, judge = f.stem.split("_", 2)[1:]
         dest = {"mmlu": HERE / "out_mmlu" / f"esolves_mmlu_full_{judge}.jsonl",
                 "math": OUT / f"esolves_math_full_{judge}.jsonl"}.get(bench)
-        if dest is not None and (not dest.exists() or dest.stat().st_size != f.stat().st_size):
-            shutil.copy(f, dest)
+        n_src = sum(1 for _ in open(f))
+        if dest is not None and n_src and (not dest.exists() or sum(1 for _ in open(dest)) < n_src):
+            shutil.copy(f, dest)  # only ever replace a shorter file with a longer one
 
 
 def pooled(xs):
@@ -172,11 +194,17 @@ def main():
             sol = labels(judge, bench)
             L = choice["chosen_layer"]
             out.update(status=choice["rule"], layer=L, n_layers=choice.get("n_layers"), knows_at_layer=choice["knows"][L],
+                       chosen_v1=choice.get("chosen_v1"),
                        responding=choice["responding_layers"], push_at_layer=choice["push"][L],
                        n_answers=len(final), n_solve_labels=len(sol),
                        accept_m8=100 * np.mean([r["margins"][M8] > 0 for r in final]),
                        accept_p8=100 * np.mean([r["margins"][P8] > 0 for r in final]),
                        accept_none=100 * np.mean([r["margins"]["none"] > 0 for r in final]))
+            byq = defaultdict(list)
+            for r in final:
+                byq[r["qid"]].append(r["margins"]["none"])
+            wsd = np.sqrt(np.mean([np.var(v) for v in byq.values() if len(v) > 1]))
+            out["sensitivity"] = float(np.mean([(r["margins"][P8] - r["margins"][M8]) / 16 for r in final]) / wsd)
             groups = {"all": final, "solved": [r for r in final if sol.get(r["qid"]) == 1],
                       "not solved": [r for r in final if sol.get(r["qid"]) == 0]}
             for gname, R in groups.items():
@@ -223,12 +251,86 @@ def main():
                   "| Pair | Layer | Questions | Answers | Verdict ranking before | ×4 | ×11 | ×21 | Random ×11 |",
                   "|---|---|---|---|---|---|---|---|---|"]
         for f in ext:
-            R = [json.loads(l) for l in open(f)]
-            g = {t: gain(R, k) for t, k in (("x4", J4), ("x11", J11), ("x21", J21), ("r", R11))}
-            res[f"extra|{f.parent.name}"] = g
-            lines.append(f"| {f.parent.name} | {R[0]['layer']} | {g['x11']['nq']} | {len(R)} | {g['x11']['says']:.3f} | "
-                         f"{fmt(g['x4'])} | {fmt(g['x11'])} | {fmt(g['x21'])} | {g['r']['g']:+.1f} |")
+            R0 = [json.loads(l) for l in open(f)]
+            judge, bench = f.parent.name.rsplit("_", 1)
+            # MMLU / MATH items are questions Llama-3.1-8B can't solve; BBEH items cover all questions
+            subsets = [("all questions" if bench == "bbeh" else "Llama-3.1-8B can't solve", R0)]
+            if judge != "llama3.1-8b" or bench == "bbeh":  # also: questions this judge itself can't solve
+                own = labels(judge, bench)
+                if own:
+                    subsets.append(("judge itself can't solve", [r for r in R0 if own.get(r["qid"]) == 0]))
+            for sname, R in subsets:
+                g = {t: gain(R, k, same_src=True) for t, k in (("x4", J4), ("x11", J11), ("x21", J21), ("r", R11))}
+                if not g["x11"]:
+                    continue
+                res[f"extra|{f.parent.name}|{sname}"] = g
+                lines.append(f"| {NAME[judge]} {BNAME[bench]} ({sname}) | {R[0]['layer']} | {g['x11']['nq']} | {len(R)} | "
+                             f"{g['x11']['says']:.3f} | {fmt(g['x4'])} | {fmt(g['x11'])} | {fmt(g['x21'])} | {g['r']['g']:+.1f} |")
+        g8f = OUT / "egrades_sm_math_q8.jsonl"
+        mf = D / "llama3.1-8b_math" / "extra_math.jsonl"
+        if g8f.exists() and mf.exists():  # strict "can't solve": Llama's 8 extra answers to the question
+            k8 = defaultdict(list)
+            for r in jl(g8f):
+                qk = r["cache_key"].split("|")[1]
+                if r["verdict"] is not None:
+                    k8[qk.split("#")[0]].append(int(r["verdict"]))
+            R = [json.loads(l) for l in open(mf)]
+            lines += ["", "**MATH, by how often Llama-3.1-8B solves the question in 8 more tries** (same-model pairs, ×11):", "",
+                      "| Llama solves | Questions | Verdict ranking before | ×4 | ×11 | ×21 | Random ×11 |", "|---|---|---|---|---|---|---|"]
+            for name, f in (("0 of 8 (strict)", lambda c: c == 0), ("1–2 of 8", lambda c: 1 <= c <= 2),
+                            ("3+ of 8", lambda c: c >= 3)):
+                S = [r for r in R if r["qid"] in k8 and len(k8[r["qid"]]) >= 6 and f(sum(k8[r["qid"]]))]
+                g = {t: gain(S, k) for t, k in (("x4", J4), ("x11", J11), ("x21", J21), ("r", R11))}
+                if g["x11"]:
+                    res[f"extra strict|{name}"] = g
+                    lines.append(f"| {name} | {g['x11']['nq']} | {g['x11']['says']:.3f} | {fmt(g['x4'])} | {fmt(g['x11'])} | "
+                                 f"{fmt(g['x21'])} | {g['r']['g']:+.1f} |")
         json.dump(res, open(D / "allpairs.json", "w"), indent=1)
+    # exploratory: full sweeps, and the score-based layer rule (response measured on the verdict score, not accept rate)
+    sweeps = [("Mistral-7B MMLU-Redux", D / "mistral-7b_mmlu" / "sweep_mmlu.jsonl", D / "mistral-7b_mmlu" / "choice_mmlu.json", ""),
+              ("Llama-3.1-8B MATH", HERE / "out_math/layer_sweep", HERE / "out_math/layer_sweep/sweep_dirs_math.json", "math"),
+              ("Llama-3.2-3B MMLU-Redux", HERE / "out_mmlu/layer_sweep_llama3.2-3b",
+               HERE / "out_mmlu/layer_sweep_llama3.2-3b/sweep_dirs_mmlu.json", "mmlu")]
+    lines += ["", "## Exploratory: full layer sweeps and a score-based layer rule", "",
+              "Sensitivity = how far the verdict score moves per 1 sd pushed (from ±8 sd), in units of the score's spread "
+              "within a question. Score-based rule (found after seeing Mistral fail; untested on fresh pairs): among layers "
+              "with sensitivity ≥ 0.05, the one whose direction ranks best.", ""]
+    for name, src, chf, tag in sweeps:
+        if not src.exists():
+            continue
+        if tag:  # layer_sweep.py format
+            meta = {json.loads(l)["aid"]: json.loads(l)["src"] for l in open(src / f"meta_{tag}.jsonl")}
+            R = []
+            for f in sorted(src.glob(f"sweep_{tag}_L*.jsonl")):
+                for l in open(f):
+                    r = json.loads(l)
+                    if r["dir"] != "Jc":
+                        continue
+                    R.append(dict(qid=r["qid"], gold=r["gold"], src=meta[r["aid"]], layer=r["layer"],
+                                  margins={"none": r["margins"]["none"], M8: r["margins"]["add:-8.0"], P8: r["margins"]["add:8.0"],
+                                           J11: r["margins"]["amplify:10.0"]}))
+            knows = {int(L): v["knows"] for L, v in json.load(open(chf))["layers"].items()}
+        else:
+            R = [json.loads(l) for l in open(src)]
+            knows = {int(k): v for k, v in json.load(open(chf))["knows"].items()}
+        lines += [f"### {name}", "", "| Layer | Knows | Accept −8 → +8 sd | Sensitivity | Gain ×11, all | Same-model |",
+                  "|---|---|---|---|---|---|"]
+        sens = {}
+        for L in sorted({r["layer"] for r in R}):
+            S = [r for r in R if r["layer"] == L]
+            m = lambda k: np.array([r["margins"][k] for r in S])  # noqa: E731
+            byq = defaultdict(list)
+            for r in S:
+                byq[r["qid"]].append(r["margins"]["none"])
+            wsd = np.sqrt(np.mean([np.var(v) for v in byq.values() if len(v) > 1]))
+            sens[L] = float(np.mean((m(P8) - m(M8)) / 16) / wsd)
+            lines.append(f"| {L} | {knows.get(L, float('nan')):.3f} | {100 * np.mean(m(M8) > 0):.0f}% → {100 * np.mean(m(P8) > 0):.0f}% | "
+                         f"{sens[L]:+.3f} | {fmt(gain(S, J11, n=300))} | {fmt(gain(S, J11, same_src=True, n=300))} |")
+        ok_ = [L for L in sens if sens[L] >= 0.05 and L in knows]
+        pick = max(ok_, key=knows.get) if ok_ else None
+        lines += ["", f"Score-based rule picks layer **{pick}**." if pick else "Score-based rule: no layer qualifies.", ""]
+        res[f"sweep|{name}"] = dict(sens=sens, pick=pick)
+    json.dump(res, open(D / "allpairs.json", "w"), indent=1)
     diag = sorted(D.glob("*/diag_*.json"))
     if diag:
         lines += ["", "## Why a verdict does or doesn't respond (diagnostics)", "",
