@@ -1,16 +1,17 @@
 # Recovering What an LLM Judge Knows but Doesn't Say
 
-*November 9, 2026*
+*November 15, 2026*
 
 ::: summary
 ## Summary
 
 - **Question.** Inside an LLM judge, is there a direction that tracks whether a candidate answer is actually right? Does stretching along it help the judge, especially on questions the judge cannot solve itself? Judges: Llama-3.1-8B and Qwen3.5-9B on MMLU-Redux.
+- **Bottom line: stretching makes a judge better within its ability, not beyond it.**
 - **Llama knows more than it says, on questions it can solve.** Its internal judge direction ranks right above wrong answers at 0.70, but its verdict only at 0.55.
 - **Stretching recovers part of that gap.** Llama's ranking rises by +8 points [+4, +13]. The gain holds (+6 [+2, +10]) when we compare only answers written by the same model, so it is not explained by the judge recognising which model wrote the answer. A random direction does nothing.
-- **No real gain on questions the judge can't solve.** An apparent +6 there disappears (+0.3 [−4, +5]) once we compare only answers from the same model. It came from the judge sensing which model wrote the answer, not whether the answer was right.
+- **No real gain on questions the judge can't solve.** An apparent +6 there disappears (+0.3 [−4, +5]) once we compare only answers from the same model. It came from the judge sensing which model wrote the answer, not whether the answer was right. Two other directions, one learned only on MATH and one learned only from same-model pairs, give the same pattern.
 - **No gain for Qwen.** Its verdict already follows the direction (correlation 0.9), so stretching only makes it stricter. The gap between what the judge knows and what it says predicts the gain.
-- **A preregistered test on a third judge agrees.** Before stretching Qwen3.5-4B, we wrote down that its small gap (1–3 points) means no gain. The measured gains were −0.4 to −3 points, all within range, in 6 of 6 groups.
+- **Preregistered tests on three new judges: two of three held.** Qwen3.5-4B (small gap) and Phi-4-mini gained nothing, as predicted. Llama-3.2-3B gained +4 where we predicted under 3: our check of whether the verdict responds to the direction was the wrong one.
 :::
 
 ## 1. Motivation and setup
@@ -59,11 +60,11 @@
 - **Llama, questions it can't solve:** with the same-model control, the direction barely knows more than the verdict (0.56 vs 0.53) and stretching adds nothing. The earlier gain came from the answering model's identity.
 - **Strength:** gains peak at ×11–×21 and never exceed what the direction knows. Much stronger stretches (×101) start to hurt. The random direction stays flat.
 
-![Ranking vs stretch strength, all answer pairs (shaded: ×11)](out_mmlu/stretch_curve_mmlu.png){width=92%}
+![Ranking vs stretch strength, all answer pairs (shaded: ×11)](out_mmlu/stretch_curve_mmlu.png){width=80%}
 
 **Where right and wrong answers sit.** For Llama on solved questions, right (green) and wrong (pink) answers are clearly apart along the direction but almost overlap along the verdict. For Qwen, both look alike:
 
-![Right vs wrong answers along the direction (knows) and the verdict (says)](out_mmlu/direction_hist_mmlu.png){width=100%}
+![Right vs wrong answers along the direction (knows) and the verdict (says)](out_mmlu/direction_hist_mmlu.png){width=78%}
 
 ## 5. Better, or just stricter?
 
@@ -80,28 +81,39 @@ Stretching makes both judges reject more answers, right and wrong. To separate "
 - **Llama:** on all answers, stretched Llama accepts 7–8 points more right answers than an equally strict unedited judge. With one answering model, the solved-question advantage shrinks to +2 and is no longer clear.
 - **Llama, questions it can't solve:** the advantage stays (+7) with one answering model, but the same-model ranking test above finds no gain within questions. The advantage therefore comes from treating whole questions differently, not from telling a right answer from a wrong one to the same question. We do not count it as better judging.
 
-## 6. A preregistered test on a third judge
+## 6. Preregistered tests on three new judges
 
-The gap rule was found by looking at the results above, so we tested it on a judge it had not seen: Qwen3.5-4B (thinking off) on the same MMLU-Redux answers. We wrote the predictions down before any stretch was run.
+The gap rule was found from the results above, so we tested it on unseen judges (same answers, thinking off), writing the predictions down before any stretch was run.
 
-- **The rule:** if the verdict responds to pushes along the direction, the gain from stretching ×11 ≈ half the gap between *knows* and *says*. Qwen3.5-4B's verdict responds, but its gap is small (−3 to +1 points), so the rule predicts no gain.
-- **What counts as passing:** in each group the gain lands within ±4 points of the prediction, and its 95% interval includes 0.
-- **Own answers:** Qwen3.5-4B wrote some of the candidate answers, so we score each group with and without them.
+- **The rule:** if the verdict responds to pushes along the direction (its accept rate changes by at least 10 points between pushes of −8 and +8 standard deviations), the gain at ×11 is about half the gap between *knows* and *says* (±4 points). Otherwise it is under 3.
+- **Predictions:** Qwen3.5-4B responds but has a small gap: no gain. Llama-3.2-3B and Phi-4-mini have large gaps but barely respond: under 3, where ignoring responsiveness would predict +6 and +4.
 
-| Questions | Answers judged | Knows | Says | Predicted gain | Measured gain [95% CI] |
+| Judge | Gap | Predicted | Gain at ×11, all [95% CI] | Not solved | Same-model pairs | Rule holds |
+|---|---|---|---|---|---|---|
+| Qwen3.5-4B | +1 | +0.6 | −0.4 [−1.5, +0.8] | −0.4 [−2.1, +1.2] | −1.3 [−3.1, +0.5] | yes (6 of 6 groups) |
+| Phi-4-mini | +7 | < 3 | +1.2 [−0.2, +2.7] | +0.9 [−1.1, +3.0] | −1.0 [−3.7, +1.5] | yes |
+| Llama-3.2-3B | +11 | < 3 | +4.1 [+2.4, +5.9] | +4.4 [+2.1, +6.6] | +3.0 [−0.5, +6.5] | **no** |
+
+- **Why it failed on Llama-3.2-3B:** it accepts about 92% of all answers, so its accept rate has no room to move, yet its verdict scores still reorder under a push. How far the verdict *score* moves per push would have separated the two judges (0.068 for Llama-3.2-3B, 0.013 for Phi-4-mini), but we found that after scoring, so it needs a test of its own.
+- **Most of the gap is the "which model wrote it" clue.** We also screened Mistral-7B and Granite-8B without stretching them. Measured only on pairs from the same answering model, the gap shrinks for every judge: Llama-3.1-8B +12 → +6, Llama-3.2-3B +11 → +3, Phi-4-mini +7 → +1, Mistral-7B +8 → +2, Granite-8B +6 → +2. Only Llama-3.1-8B keeps a sizeable gap.
+
+## 7. Does the gain need MMLU's own direction?
+
+MMLU's own direction could carry MMLU-specific clues. We stretched Llama-3.1-8B (layer 16, ×11) along two directions that cannot carry them: one learned only on MATH answers, and one learned on MMLU but only from answers to the same question by the same model, which cannot see who wrote an answer. Intervals here keep each question's before and after scores paired, so they are narrower than in section 4; the point estimates agree.
+
+| Direction | Knows | Gain, solved | Gain, not solved | Same-model pairs, solved | Same-model pairs, not solved |
 |---|---|---|---|---|---|
-| all | including its own | 0.62 | 0.61 | +0.6 | −0.4 [−1.5, +0.8] |
-| solved | including its own | 0.72 | 0.70 | +0.6 | −0.4 [−1.9, +1.2] |
-| not solved | including its own | 0.53 | 0.52 | +0.6 | −0.4 [−2.1, +1.2] |
-| all | other models' only | 0.55 | 0.58 | −1.3 | −2.5 [−5.6, +0.5] |
-| solved | other models' only | 0.67 | 0.70 | −1.7 | −3.1 [−7.5, +1.2] |
-| not solved | other models' only | 0.43 | 0.44 | −0.6 | −1.7 [−6.2, +2.8] |
+| MMLU's own | 0.64 | +8.3 [+5.6, +11.0] | +6.0 [+3.5, +8.6] | +5.9 [+1.6, +10.2] | +0.3 [−4.5, +5.0] |
+| Borrowed from MATH | 0.57 | +3.8 [+1.4, +6.3] | +4.0 [+2.0, +6.1] | +5.2 [+1.1, +9.4] | −0.7 [−5.0, +3.5] |
+| Same-model pairs only | 0.57 | +4.4 [+2.0, +6.9] | +4.1 [+1.9, +6.4] | +4.6 [+0.5, +8.5] | +1.2 [−3.3, +5.7] |
+| Random | – | +0.1 | +0.3 | +0.2 | +0.3 |
 
-- **The rule passes in all 6 groups.** Stretching only makes Qwen3.5-4B stricter: at ×11 it accepts 71% of right and 57% of wrong answers, down from 84% and 74%, while its ranking stays at 0.61.
-- **Same-model control:** using only pairs from the same answering model also gives no gain (−1.3 [−3.1, +0.5]).
-- **Caveat:** predicting "no gain" is an easier test than predicting a specific gain. We also preregistered a formula for the best stretch strength (1 + 1/sensitivity, which picked ×9). It passed, but since no strength moved the ranking by more than 0.4 points, any choice would have passed.
+- **All three directions help on questions the judge can solve, even within same-model pairs (+5 to +6).** None helps on questions it can't solve once the authorship clue is removed.
+- **MMLU's own direction is strongest (+7 vs +4 overall).** The extra is most likely authorship, since the direction that can't see it gains no more than the MATH one.
+- **Directions differ across benchmarks.** For Llama-3.1-8B, the directions learned on MMLU, MATH, BBEH and the two RewardBench 2 sets have cosine 0.2–0.6 with each other (1 = same direction), against 0.75–1.0 between the two halves of one benchmark. For Qwen3.5-9B, MMLU and MATH share nearly one direction (0.88–0.94).
 
 ## Limitations
 
-- The gain does not carry over to other benchmarks. On MATH, neither judge gains clearly from stretching (Llama +1 [−5, +7] on solved questions and +2 [−2, +5] on unsolved; Qwen +2 [−2, +5] and +7 [−1, +15]), because Llama's verdict barely responds to pushes at that layer. On RewardBench 2 Safety, a preregistered test, Qwen gains nothing as predicted, and ×11 makes Llama worse (−6 [−9.5, −3.5]) because its verdict responds so strongly that the stretch overshoots.
-- The gap rule has passed one fresh test, and only for a judge where it predicts no gain. It has not yet been tested on a new judge where it predicts a gain.
+- The gain does not carry over to other benchmarks. On MATH neither judge gains clearly (Llama's verdict barely responds at that layer). On RewardBench 2 Safety Qwen gains nothing, as preregistered, and ×11 makes Llama worse (−6 [−9.5, −3.5]) by overshooting.
+- The gap rule failed one of three preregistered tests. The score-based check that fixes it has not been tested on fresh judges.
+- The direction test in section 7 covers one judge on one benchmark. On questions the judge can't solve, the same-model intervals span about ±5 points, so they rule out a large gain there, not a small one.

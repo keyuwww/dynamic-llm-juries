@@ -66,3 +66,32 @@ as x11 (within 1 point). As with Qwen3.5-4B, if no strength moves the ranking th
   Llama-3.1-8B), final letter vs the key. Run in parallel with the stretch; used only for the secondary groups.
 - Secondary (reported, not scored): the same gains using only same-model pairs, and the random-direction control.
 - These judges wrote none of the candidate answers, so there is no own-answers split.
+
+## Outcome (added 2026-11-14 after scoring; nothing above was changed)
+
+Scored with azure/prereg_score_gnr.py; full tables in out_mmlu/prereg_gap_no_response_outcome.md. Solve labels:
+Llama-3.2-3B solves 62% of questions, Phi-4-mini 73% (one answer each).
+
+| Judge | Group | Rule predicts | Naive predicts | Measured gain at x11 [95% CI] | Rule holds | Naive holds | Random direction |
+|---|---|---|---|---|---|---|---|
+| Llama-3.2-3B | all (primary) | < 3 | +5.7 | +4.1 [+2.4, +5.9] | **no** | yes | +0.4 |
+| Llama-3.2-3B | solved | < 3 | +4.2 | +3.7 [+0.7, +6.7] | no | yes | +0.5 |
+| Llama-3.2-3B | not solved | < 3 | +6.5 | +4.4 [+2.1, +6.6] | no | yes | +0.3 |
+| Phi-4-mini | all (primary) | < 3 | +3.6 | +1.2 [-0.2, +2.7] | **yes** | yes | -0.1 |
+| Phi-4-mini | solved | < 3 | +2.8 | +1.5 [-0.7, +3.6] | yes | yes | -0.1 |
+| Phi-4-mini | not solved | < 3 | +4.2 | +0.9 [-1.1, +3.0] | yes | yes | -0.1 |
+
+**The rule failed on Llama-3.2-3B, the judge that separates the two rules; the naive rule held.** On Phi-4-mini both
+rules held (their ranges overlap, as noted in advance), so Phi-4-mini doesn't decide between them.
+
+Strength formula: holds for Llama-3.2-3B (x16 ranks 55.2 vs best x11 55.9); fails for Phi-4-mini (x81 ranks 54.5,
+below unedited 55.2; x11 best at 56.4).
+
+Same-model pairs (secondary): Llama-3.2-3B +3.0 [-0.5, +6.5]; Phi-4-mini -1.0 [-3.7, +1.5]. Too wide to say whether
+the Llama-3.2-3B gain survives removing the "which model wrote it" clue.
+
+Reading (after the fact, not part of the test): RESPONDS, measured as the change in the share of answers accepted,
+saturates for a judge that accepts about 90% of everything. Llama-3.2-3B's accept rates barely move (92%/95% right/wrong
+unedited, 89%/92% at x11) but its verdict scores reorder enough to gain 4 points. Its margin sensitivity (0.068) was
+clearly non-zero, while Phi-4-mini's (0.013) was near zero. A responsiveness measure based on the verdict score rather
+than the accept rate would have called both judges correctly; that fix is post hoc and would need its own test.
