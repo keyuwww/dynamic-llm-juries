@@ -554,6 +554,19 @@ from a general pull on its solving.
 silently without) and approves when its result agrees. Belief predicts where that re-derivation lands. At low belief,
 the grading frame adds approvals that committing its own answer first removes.
 
+**Rigor checks (`rigor_checks.py` → `out/rigor_checks.md`; 95% intervals resample questions).**
+- *Commit first, paired on the same 3,087 items:* wrong answers at 0/7 approved 18% → 1% (−17 [−20, −14]); at 7/7
+  74% → 69% (−5 [−19, +13], not clearly changed). Right answers at 1–3 of 7: 73% → 36%. Overall balanced accuracy
+  80% → **85% (+5 [+3, +6])**: a net gain on this data. (The table above uses all items; paired numbers differ by ≤1.)
+- *Shown the answer, asked to solve:* landing on a wrong candidate minus the rate expected from belief: +2 [+2, +3] at
+  0/7, +12 [+4, +19] at 1–3, −11 [−24, −4] at 7/7 (the "may be right or wrong" warning pushes away from the answer).
+- *Different-belief juror (existing data):* when a Qwen believes a wrong answer (≥ 4/7), Nemotron-3-Super also
+  believes it 77–81% of the time. Handing those verdicts to Nemotron lowers balanced accuracy (Qwen3.5-4B 76 → 74%,
+  9B 80 → 77%, 35B 86 → 82%) and rejects fewer of the believed wrong answers (e.g. 9B 32% → 22%). Routing only when
+  Nemotron's own belief is ≤ 3/7 is still worse (35B 86 → 84%); there Nemotron rejects 46–52%, no better than the
+  Qwen. **Confident wrong beliefs are shared across these families; a peer juror does not fix them.** A much stronger
+  reference (expert answer, frontier model) is the untested alternative.
+
 ---
 
 ## Feasibility verdict on the two papers' ideas

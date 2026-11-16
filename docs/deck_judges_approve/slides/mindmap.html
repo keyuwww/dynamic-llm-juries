@@ -1,14 +1,14 @@
 <section id="mindmap">
-<p class="secno">7.2 · CONCLUSIONS</p>
+<p class="secno">6.2 · CONCLUSIONS · MAP</p>
 <h2>What we concluded</h2>
-<x-connector x1="760" y1="590" x2="664" y2="410" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
-<x-connector x1="760" y1="590" x2="664" y2="790" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
-<x-connector x1="1160" y1="590" x2="1256" y2="410" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
-<x-connector x1="1160" y1="590" x2="1256" y2="790" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
-<div class="mm" style="left:104px; top:230px; background:#E2F7FC;"><p class="label">BEHAVIOUR</p><p>Approval rises with belief, 18% → 74%</p><p>Same in a second family; not authorship</p><p class="src">Belief runs · Nemotron · same-answer test</p></div>
-<div class="mm" style="left:104px; top:640px; background:#F3F3ED;"><p class="label">LIMITS</p><p>Weak judges (Llama) don’t show it</p><p>BFF, JudgeBench labels unaudited · small 7/7 groups</p><p class="src">Llama run · label audit</p></div>
-<div class="mm" style="left:1256px; top:230px; background:#C6D4FB;"><p class="label">MECHANISM</p><p>It re-solves and checks for a match</p><p>At the verdict, a match reads as “right”</p><p class="src">Transcripts · directions · commit-first</p></div>
-<div class="mm" style="left:1256px; top:640px; background:#FDF1C7;"><p class="label">FOR JURIES</p><p>Prompting can’t fix high belief</p><p>Use jurors whose beliefs differ</p><p class="src">“Don’t re-solve” · commit-first (to test)</p></div>
-<div style="position:absolute; left:760px; top:510px; width:400px; height:160px; box-sizing:border-box; background:#1E2A3B; border-radius:80px; display:flex; align-items:center; justify-content:center; padding:20px 36px;"><p style="font-family:'Plus Jakarta Sans',Arial,sans-serif; font-size:34px; font-weight:800; color:#FDFDFB; text-align:center; line-height:1.2;">Judges approve what they believe</p></div>
-<aside>Grey text under each branch names the experiments that support it. "For juries" is partly untested: commit-first is measured, but routing to a different-belief juror is the next test.</aside>
+<x-connector x1="760" y1="610" x2="664" y2="430" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
+<x-connector x1="760" y1="610" x2="664" y2="810" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
+<x-connector x1="1160" y1="610" x2="1256" y2="430" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
+<x-connector x1="1160" y1="610" x2="1256" y2="810" head="none" style="color:#9AA3B2; border-width:4px;"></x-connector>
+<div class="mm" style="left:104px; top:260px; background:#E2F7FC;"><p class="label">BEHAVIOUR · SETTLED</p><p>Approval rises with belief, 18% → 74%</p><p>Same in Nemotron; not authorship</p><p class="src">§2 belief runs · Nemotron · same-answer test</p></div>
+<div class="mm" style="left:104px; top:660px; background:#F3F3ED;"><p class="label">LIMITS</p><p>Weak judges (Llama) don’t show it</p><p>BFF, JudgeBench labels unaudited · 7/7 groups small</p><p class="src">§2 Llama run · label audit</p></div>
+<div class="mm" style="left:1256px; top:260px; background:#C6D4FB;"><p class="label">MECHANISM · LIKELY</p><p>It re-solves and checks for a match</p><p>Solving and judging encode “right” differently</p><p class="src">§3 directions · §4 transcripts · §5 commit-first</p></div>
+<div class="mm" style="left:1256px; top:660px; background:#FDF1C7;"><p class="label">FOR JURIES</p><p>Commit first: +5 balanced accuracy</p><p>High-belief errors are shared across families</p><p class="src">§5 commit-first · second juror</p></div>
+<div style="position:absolute; left:760px; top:530px; width:400px; height:160px; box-sizing:border-box; background:#1E2A3B; border-radius:80px; display:flex; align-items:center; justify-content:center; padding:20px 36px;"><p style="font-family:'Plus Jakarta Sans',Arial,sans-serif; font-size:34px; font-weight:800; color:#FDFDFB; text-align:center; line-height:1.2;">Judges approve what they believe</p></div>
+<aside>Each branch names the sections whose experiments support it. "Mechanism" is likely rather than settled: the behavioural tests are strong, while the inside-the-model alignment of belief and correctness is partly the lean toward saying CORRECT.</aside>
 </section>

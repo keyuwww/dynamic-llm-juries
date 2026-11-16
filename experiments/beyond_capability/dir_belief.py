@@ -143,6 +143,37 @@ def run_bench(key, bench, parts):
         cj = cos(dom(center(np.stack([rows[r][x][0][rows[r][x][1], best["J"][0]] for x in aids]).astype(np.float32), q)[sel],
                      bel[sel]), dom(XJ, y)) if XJ is not None else float("nan")
         L.append(f"| {r} {NAMES[r]} | {layers[li]} | {auc(bel[sel][ok], p[ok]):.2f} | {cos(bdir, dom(Xc, y)):+.2f} | {cj:+.2f} |")
+
+    # 3. (Nov 16 rigor check) noise ceilings, and a control for a general "lean toward CORRECT": in the verdict roles,
+    # the lean direction = answers the model's own verdict leans CORRECT on minus INCORRECT (margin sign). Project it
+    # out of the states, then recompute belief and correctness directions and their cosine.
+    L += ["", "## 3. Ceilings and the verdict-lean control (each role's best layer)\n",
+          "Ceiling = cosine of the same direction built on two random halves of the questions. Lean = the model's own "
+          "verdict lean (CORRECT minus INCORRECT by its margin); only roles that give a verdict have one.\n",
+          "Disjoint = belief direction from one half of the questions vs correctness direction from the other half (and "
+          "the reverse, averaged): no answers shared, so shared never-reached answers cannot inflate it.\n",
+          "| role | cos(belief, correctness) | **disjoint halves** | ceiling belief | ceiling correctness | cos(belief, lean) | "
+          "cos(correctness, lean) | cos(belief, correctness) with lean removed |", "|---|---|---|---|---|---|---|---|"]
+    for r in have:
+        li = best[r][0]
+        Xc = center(np.stack([rows[r][x][0][rows[r][x][1], li] for x in aids]).astype(np.float32), q)
+        bdir, cdir = dom(Xc[sel], bel[sel]), dom(Xc, y)
+        hs = halves(q[sel], seed=1)
+        cb = cos(dom(Xc[sel][hs], bel[sel][hs]), dom(Xc[sel][~hs], bel[sel][~hs]))
+        hc = halves(q, seed=1)
+        cc = cos(dom(Xc[hc], y[hc]), dom(Xc[~hc], y[~hc]))
+        sa, sb = sel & hc, sel & ~hc
+        dj = np.mean([cos(dom(Xc[sa], bel[sa]), dom(Xc[~hc], y[~hc])), cos(dom(Xc[sb], bel[sb]), dom(Xc[hc], y[hc]))])
+        m = np.array([rows[r][x][2].get("margin") if rows[r][x][2].get("margin") is not None else np.nan for x in aids], float)
+        if np.isfinite(m).sum() > 50:
+            ok = np.isfinite(m)
+            lean = dom(Xc[ok], (m[ok] > 0).astype(int))
+            Xr = Xc - np.outer(Xc @ lean, lean)
+            rest = cos(dom(Xr[sel], bel[sel]), dom(Xr, y))
+            L.append(f"| {r} {NAMES[r]} | {cos(bdir, cdir):+.2f} | **{dj:+.2f}** | {cb:.2f} | {cc:.2f} | {cos(bdir, lean):+.2f} | "
+                     f"{cos(cdir, lean):+.2f} | {rest:+.2f} |")
+        else:
+            L.append(f"| {r} {NAMES[r]} | {cos(bdir, cdir):+.2f} | **{dj:+.2f}** | {cb:.2f} | {cc:.2f} | – | – | – |")
     return L + [""]
 
 

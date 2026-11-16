@@ -35,6 +35,19 @@ AUROC of the projection on the role's own right-minus-wrong direction (learned o
 | S self-check (VERDICT:) | 32 | 0.71 | +0.94 | +0.76 |
 | N neutral (FINAL:) | 20 | 0.63 | +0.45 | -0.00 |
 
+## 3. Ceilings and the verdict-lean control (each role's best layer)
+
+Ceiling = cosine of the same direction built on two random halves of the questions. Lean = the model's own verdict lean (CORRECT minus INCORRECT by its margin); only roles that give a verdict have one.
+
+Disjoint = belief direction from one half of the questions vs correctness direction from the other half (and the reverse, averaged): no answers shared, so shared never-reached answers cannot inflate it.
+
+| role | cos(belief, correctness) | **disjoint halves** | ceiling belief | ceiling correctness | cos(belief, lean) | cos(correctness, lean) | cos(belief, correctness) with lean removed |
+|---|---|---|---|---|---|---|---|
+| J judge (VERDICT:) | +0.68 | **+0.55** | 0.26 | 0.95 | +0.68 | +0.99 | +0.09 |
+| G generate (end of answer) | +0.26 | **+0.12** | 0.04 | 0.87 | – | – | – |
+| S self-check (VERDICT:) | +0.94 | **+0.63** | -0.18 | 0.99 | +0.93 | +0.99 | +0.33 |
+| N neutral (FINAL:) | +0.45 | **+0.23** | 0.05 | 0.94 | – | – | – |
+
 # Belief vs correctness axes: qwen3.5-9b, bff
 
 459 answers (256 right). Wrong answers with a belief score: 179; believed (>= 0.57): 39, never reached (0): 112.
@@ -72,6 +85,19 @@ AUROC of the projection on the role's own right-minus-wrong direction (learned o
 | S self-check (VERDICT:) | 26 | 0.74 | +0.90 | +0.70 |
 | N neutral (FINAL:) | 24 | 0.79 | +0.71 | +0.02 |
 
+## 3. Ceilings and the verdict-lean control (each role's best layer)
+
+Ceiling = cosine of the same direction built on two random halves of the questions. Lean = the model's own verdict lean (CORRECT minus INCORRECT by its margin); only roles that give a verdict have one.
+
+Disjoint = belief direction from one half of the questions vs correctness direction from the other half (and the reverse, averaged): no answers shared, so shared never-reached answers cannot inflate it.
+
+| role | cos(belief, correctness) | **disjoint halves** | ceiling belief | ceiling correctness | cos(belief, lean) | cos(correctness, lean) | cos(belief, correctness) with lean removed |
+|---|---|---|---|---|---|---|---|
+| J judge (VERDICT:) | +0.93 | **+0.80** | 0.86 | 0.74 | +0.81 | +0.70 | +0.86 |
+| G generate (end of answer) | +0.58 | **+0.24** | -0.15 | 0.24 | – | – | – |
+| S self-check (VERDICT:) | +0.90 | **+0.70** | 0.73 | 0.69 | +0.92 | +0.91 | +0.39 |
+| N neutral (FINAL:) | +0.71 | **+0.46** | 0.37 | 0.61 | – | – | – |
+
 # Belief vs correctness axes: qwen3.5-9b, bbeh
 
 2018 answers (952 right). Wrong answers with a belief score: 1066; believed (>= 0.50): 255, never reached (0): 583.
@@ -108,4 +134,17 @@ AUROC of the projection on the role's own right-minus-wrong direction (learned o
 | G generate (end of answer) | 10 | 0.79 | +0.66 | +0.05 |
 | S self-check (VERDICT:) | 16 | 0.79 | +0.76 | +0.58 |
 | N neutral (FINAL:) | 32 | 0.83 | +0.65 | +0.07 |
+
+## 3. Ceilings and the verdict-lean control (each role's best layer)
+
+Ceiling = cosine of the same direction built on two random halves of the questions. Lean = the model's own verdict lean (CORRECT minus INCORRECT by its margin); only roles that give a verdict have one.
+
+Disjoint = belief direction from one half of the questions vs correctness direction from the other half (and the reverse, averaged): no answers shared, so shared never-reached answers cannot inflate it.
+
+| role | cos(belief, correctness) | **disjoint halves** | ceiling belief | ceiling correctness | cos(belief, lean) | cos(correctness, lean) | cos(belief, correctness) with lean removed |
+|---|---|---|---|---|---|---|---|
+| J judge (VERDICT:) | +0.77 | **+0.63** | 0.68 | 0.69 | +0.11 | +0.09 | +0.77 |
+| G generate (end of answer) | +0.66 | **+0.51** | 0.59 | 0.62 | – | – | – |
+| S self-check (VERDICT:) | +0.76 | **+0.63** | 0.75 | 0.75 | -0.13 | +0.01 | +0.76 |
+| N neutral (FINAL:) | +0.65 | **+0.54** | 0.58 | 0.76 | – | – | – |
 

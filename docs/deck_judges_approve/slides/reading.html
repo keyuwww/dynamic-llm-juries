@@ -1,5 +1,5 @@
 <section id="reading">
-<p class="secno">7.1 · CONCLUSIONS</p>
+<p class="secno">6.1 · CONCLUSIONS · CURRENT READING</p>
 <h2>Current reading</h2>
 <div class="row">
 <div class="card cyan" style="flex:1.2;">
@@ -8,9 +8,9 @@
 <p>It re-derives the answer, out loud when thinking, silently when not. Belief predicts where that lands, so it predicts the verdict.</p>
 </div>
 <div class="stack" style="flex:1;">
-<div class="card peri"><p class="label">INSIDE</p><p>Solving and judging encode “right” differently; at the verdict, a match reads as “right”.</p></div>
-<div class="card butter"><p class="label">THE 18% FLOOR</p><p>Comes from the judge frame: judging, it follows the candidate’s path. Solving (2%) or committing first (1%) removes it.</p></div>
+<div class="card peri"><p class="label">LOW BELIEF</p><p>Errors come from the grading frame. Committing its own answer first removes them: +5 balanced accuracy.</p></div>
+<div class="card butter"><p class="label">HIGH BELIEF</p><p>Errors are shared across families (~80%). Neither prompts nor a second Qwen-size juror fix them.</p></div>
 </div>
 </div>
-<aside>For a jury: when a judge strongly believes an answer, asking it to check harder won't help, since its own derivation agrees. A model with different beliefs is needed (still to test). Committing the judge's own answer first removes the low-belief floor, but also rejects more right answers it doesn't reach.</aside>
+<aside>For a jury: confidently wrong items need a reference outside these models (an expert answer, a much stronger model, a tool or a calculation), not another juror of similar strength. That is reasoning from the juror test, not yet tested with a stronger model.</aside>
 </section>

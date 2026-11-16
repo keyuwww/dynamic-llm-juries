@@ -1,0 +1,19 @@
+<section id="juror">
+<p class="secno">5.7 · INTERVENTIONS · RESULT</p>
+<h2>A second juror from another family doesn’t fix it</h2>
+<div class="row">
+<div class="stack" style="flex:1.1;">
+<div class="card cyan"><p class="label">WHAT WE TRIED (EXISTING DATA)</p><p>When a Qwen believes an answer (≥ 4/7), hand the verdict to Nemotron-3-Super (NVIDIA), which judged the same items.</p></div>
+<div class="card butter"><p class="label">WHY IT FAILS</p><p class="big" style="font-size:80px; line-height:1;">77–81%</p><p>of the wrong answers a Qwen confidently believes, Nemotron believes too.</p></div>
+</div>
+<table style="flex:1;">
+<tr class="thead"><th style="width:40%;">Balanced accuracy</th><th style="width:30%;">Qwen alone</th><th style="width:30%;">+ hand to Nemotron</th></tr>
+<tr class="r1"><td>Qwen3.5-4B</td><td>76%</td><td>74%</td></tr>
+<tr class="r1"><td>Qwen3.5-9B</td><td>80%</td><td>77%</td></tr>
+<tr class="r1"><td>Qwen3.6-35B</td><td>86%</td><td>82%</td></tr>
+<tr class="r3"><td>Only when beliefs differ</td><td colspan="2">still worse: 86% → 84% (35B)</td></tr>
+</table>
+</div>
+<p class="cap">Confident wrong beliefs are shared across these families, and a disagreeing juror rejects only about half of them.</p>
+<aside>Main set, verdicts at C, same items in every column; 95% intervals in out/rigor_checks.md. Believed wrong answers rejected: e.g. Qwen-9B 32% alone, 22% after handing to Nemotron. When Nemotron's own belief is 3/7 or less (13 to 21 items per Qwen), it rejects 46 to 52%, no better than the Qwen. This undercuts the "pick jurors whose beliefs differ" idea for these models: such jurors are rare and not more accurate. A stronger reference (expert answer or a much stronger model) is the likelier fix.</aside>
+</section>
