@@ -490,9 +490,12 @@ Nemotron) and 3,189 thinking-on transcripts (three Qwens, Experiment 5's generat
 
 | Wrong answers the judge approved (Qwens) | Thinking off | Thinking on |
 |---|---|---|
-| Re-solves the problem itself | 15–44% | **92–100%** |
-| ...and lands on the same wrong answer | 15–43% | **86–96%** |
-| Only walks through the given steps | 67–87% | 18–22% |
+| Re-solves the problem itself | 26–44% | **92–100%** |
+| ...and lands on the same wrong answer | 23–43% | **86–96%** |
+| Only walks through the given steps | 67–86% | 18–22% |
+
+Ranges are over the four belief levels (Qwens pooled). The rows are separate labels and can overlap ("only walks through
+the steps" is the main style). Nemotron, thinking off: 15% re-solve, 81% step check.
 
 - **With the reasoning written out, approvals of wrong answers are re-solves that land on the same wrong answer**, at
   every belief level. Rejections come with a re-solve that reaches a different answer, in both modes.
