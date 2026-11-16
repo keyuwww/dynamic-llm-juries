@@ -1,12 +1,13 @@
 <section id="related" style="gap:34px;">
 <p class="secno">1.2 · INTRODUCTION · PRIOR WORK ON JUDGE BEHAVIOUR</p>
 <h2>Prior work on judges, and how we differ</h2>
-<table style="font-size:26px; line-height:1.3;">
+<table style="font-size:24px; line-height:1.28;">
 <tr class="thead"><th style="width:24%;">Paper</th><th style="width:40%;">What they found</th><th style="width:36%;">How it relates to us</th></tr>
 <tr class="r3"><td><b>Panickssery et al. 2024</b></td><td>Judges rate their <b>own</b> outputs higher (“self-preference”)</td><td>We remove authorship: the judge never wrote any candidate</td></tr>
 <tr class="r3"><td><b>Roytburg et al. 2026</b> (ICML)</td><td>Much self-preference is the judge simply being wrong on the question</td><td>We test this directly: belief per answer predicts approval</td></tr>
+<tr class="r3"><td><b>Krumdick et al. 2025</b> (No Free Labels)</td><td>Without a correct reference, judges agree with experts mainly on questions they can answer themselves; expert references largely fix it</td><td>The coarse version of our result; we grade it per answer as belief 0–7. Source of BFF-Bench</td></tr>
 <tr class="r3"><td><b>Goel et al. 2025</b></td><td>Judges favour models that make the <b>same mistakes</b></td><td>The model-level version; we measure it per answer</td></tr>
-<tr class="r3"><td><b>Lin et al. 2025</b> (EMNLP Findings)</td><td>Judging with its own answer as reference helps only when that answer is right</td><td>Our commit-first test (§5): +5 balanced accuracy, at a cost on right answers it can’t reach</td></tr>
+<tr class="r3"><td><b>Lin et al. 2025</b> (EMNLP Findings)</td><td>Solving and judging are only weakly correlated; using its own answer as a reference strengthens the link</td><td>Our commit-first test (§5): +5 balanced accuracy, at a cost on right answers it can’t reach</td></tr>
 </table>
 <div class="card peri">
 <p class="label">WHAT WE ADD</p>

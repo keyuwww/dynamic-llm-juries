@@ -5,6 +5,17 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 ---
 
+## 0 · Team teaser (before the talk, ~0:20)
+
+- Presenting order:
+  1. **Janys:** judge prompt evolution through learning from its errors
+  2. **Keyu (me):** do LLM judges approve wrong answers they would give themselves?
+  3. **Minh:** belief-based judge escalation through self-contradiction checks
+  4. **Ingrid:** quick gut, cheap read, careful thought: one judge policy
+  5. **Andrew:** judges debate before voting: does arguing beat a simple majority?
+
+---
+
 ## 1 · Cover (0:30) · total 0:30
 
 - Hook: LLM judge waves through wrong answers **it would give itself**
@@ -25,8 +36,9 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 - Behaviour:
   - **Panickssery 2024:** judges rate their **own** outputs higher → ours never wrote any candidate
   - **Roytburg 2026:** much of that is the judge simply being wrong → we measure that belief **per answer**
+  - **Krumdick 2025, No Free Labels:** judges agree with experts mainly where they can answer themselves; expert references fix it → we grade that per answer (belief 0–7); also where BFF-Bench comes from
   - **Goel 2025:** judges favour models with the **same mistakes** → theirs per model, ours per answer
-  - **Lin 2025:** judging with its own answer helps only when it's right → we test "commit first" by belief level
+  - **Lin 2025:** solving and judging only weakly linked; its own answer as reference strengthens the link → we test "commit first" by belief level
 - Inside the model:
   - **Marks & Tegmark 2023:** "true vs false" direction inside → method behind our arrows
   - **Gulati & Wunder 2026:** on judges, correctness labels can't separate truth from the judge's belief → we build a **separate belief arrow**
@@ -172,5 +184,5 @@ No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 - **"How do you know GLM's labels are right?"** → different family from every judge; 8 hand-checked, all agree · backup 4.1
 - **"Is the inside result just 'about to say CORRECT'?"** → partly; removing that lean leaves 3 of 4 cases, cuts Qwen-35B BFF 0.72 → 0.23 · backup 3.4
 - **"Why not Llama?"** → too weak a judge, ~54% at every belief level, only 5 answers at 7/7 · backup 2.9
-- **"Prior work?"** → Panickssery, Roytburg, Goel, Lin (behaviour); Marks & Tegmark, Yang & Jia, Gulati & Wunder (inside) · backup 1.2, 1.3
+- **"Prior work?"** → Panickssery, Roytburg, No Free Labels, Goel, Lin (behaviour); Marks & Tegmark, Yang & Jia, Gulati & Wunder (inside) · backup 1.2, 1.3
 - **"Compute?"** → Tinker (judging, GLM), Modal GPUs (hidden states), Harvard Cannon (Llama) · backup A.1
