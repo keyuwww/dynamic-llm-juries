@@ -1,0 +1,16 @@
+<section id="modes" style="gap:34px;">
+<p class="secno">A.6 · APPENDIX · THINKING ON, OFF, NO GENERATION</p>
+<h2>Three settings: how much the judge writes first</h2>
+<table style="font-size:27px; line-height:1.3;">
+<tr class="thead"><th style="width:22%;">Setting</th><th style="width:44%;">What the judge writes before “VERDICT:”</th><th style="width:34%;">Used in</th></tr>
+<tr class="r2"><td><b>Thinking on</b></td><td>A long hidden reasoning trace, then its answer</td><td>Transcripts (blue bars)</td></tr>
+<tr class="r1"><td><b>Thinking off</b></td><td>No thinking block, but still a short written explanation: “The steps look correct… VERDICT: CORRECT”</td><td>Main belief result, transcripts (grey bars), the fixes</td></tr>
+<tr class="r3"><td><b>No generation</b></td><td>Nothing at all: we place the answer, add “VERDICT:” ourselves, and read the model’s state right there</td><td>Inside the model (four arrows)</td></tr>
+</table>
+<div class="row">
+<div class="card peri"><p class="label">THINKING OFF ≠ SILENT</p><p>It still writes a short explanation; it just doesn’t think at length.</p></div>
+<div class="card butter"><p class="label">NO GENERATION = SNAP JUDGMENT</p><p>The judge’s state before it has written or thought anything.</p></div>
+<div class="card cyan"><p class="label">THE SAME MOMENT, IN BEHAVIOUR</p><p>The verdict read before any explanation already shows +35 points of belief effect (+54 at the final verdict).</p></div>
+</div>
+<aside>Use if someone asks what "thinking off" means, or why the inside-the-model result needs no generated text. The inside-the-model states were never captured after a thinking-on trace, so whether the belief-correctness overlap changes with long reasoning is untested.</aside>
+</section>
