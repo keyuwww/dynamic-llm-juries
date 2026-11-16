@@ -1,0 +1,16 @@
+<section id="matched">
+<p class="secno">4.5 · INSIDE THE MODEL</p>
+<h2>Read at a matched spot: still unrelated</h2>
+<table>
+<tr class="thead"><th style="width:52%;">Where the answer is read (cosine with the judge)</th><th style="width:24%;">Qwen-9B</th><th style="width:24%;">Qwen-35B</th></tr>
+<tr class="r3"><td><b>Self-check</b> · “Is your answer correct? VERDICT:”</td><td>0.61 – 0.94</td><td>0.43 – 0.89</td></tr>
+<tr class="rb"><td><b>New: neutral</b> · “Restate your answer. FINAL:”</td><td><b>0.05 – 0.29</b></td><td><b>0.00 – 0.28</b></td></tr>
+<tr class="r1"><td><b>Writing</b> · end of the answer (original)</td><td>≈ 0</td><td>≈ 0.1</td></tr>
+</table>
+<div class="row">
+<div class="card peri"><h3>What drives the match</h3><p>Being asked for a verdict, not where we read.</p></div>
+<div class="card cyan"><h3>So the split is real</h3><p>Solving and judging encode correctness differently, in both models.</p></div>
+<div class="card"><h3>One nuance</h3><p>Qwen-35B: a writing-trained probe still transfers to its judge (0.72).</p></div>
+</div>
+<aside>Settled for Qwen-9B and Qwen-35B on RB2 Math and BBEH, layers 14 to 40. The neutral role uses the same layout as the self-check but asks no verdict. Captured on Modal GPUs tonight.</aside>
+</section>

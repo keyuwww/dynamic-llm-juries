@@ -1,0 +1,22 @@
+<section id="twocomp">
+<p class="secno">4.8 · INSIDE THE MODEL</p>
+<h2>Correlated or not? Two different comparisons</h2>
+<div class="row">
+<div class="card cyan">
+<p class="label">COMPARISON 1 · ACROSS ROLES</p>
+<h3>“Right” while solving vs “right” while judging</h3>
+<p class="big" style="font-family:'Plus Jakarta Sans',Arial,sans-serif; font-size:72px; font-weight:800; color:#1E2A3B;">≈ 0</p>
+<p><b>Not correlated</b>, even at a matched spot. The verdict does not reuse the solver’s sense of “correct”.</p>
+</div>
+<div class="card butter">
+<p class="label">COMPARISON 2 · INSIDE THE JUDGE</p>
+<h3>“I’d give this answer” vs “this is right”</h3>
+<p class="big" style="font-family:'Plus Jakarta Sans',Arial,sans-serif; font-size:72px; font-weight:800; color:#4B44C2;">0.72 – 0.93</p>
+<p><b>Strongly correlated.</b> At the verdict, agreeing with it reads as it being right.</p>
+</div>
+</div>
+<div class="card peri">
+<p><b>So the tension resolves:</b> the judge doesn’t borrow the solver’s signal. It re-solves, checks for a match, and treats a match as “correct”. Solving and judging are linked through the <b>answer</b>, not a shared sense of rightness.</p>
+</div>
+<aside>Comparison 1 numbers: cosine 0.00 to 0.29 for the neutral FINAL: role vs the judge, Qwen-9B and Qwen-35B, RB2 Math and BBEH. Comparison 2: belief direction vs the judge's correctness direction, 0.72 to 0.93 on BFF and 0.77 on BBEH. Supporting behaviour: with thinking on, approvals of wrong answers come with a re-solve landing on that answer (86 to 96 percent); with its own answer committed first, approval almost entirely tracks whether its answer matches.</aside>
+</section>

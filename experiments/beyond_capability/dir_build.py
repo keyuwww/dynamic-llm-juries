@@ -6,6 +6,10 @@ Modes (one row per answer x mode; the hidden state is taken at the last token):
   G  generate:   [user: the question] [assistant: the answer ...]                    (as if the model wrote it)
   S  self-check: [user: question] [assistant: answer] [user: "is your answer correct?"] + "VERDICT:"
   P  pre-solve:  [user: the question] at the start of the assistant turn (one row per question; "will I solve it")
+  N  neutral:    [user: question] [assistant: answer] [user: "restate your final answer"] + "FINAL:"
+                 (Nov 16) the answer as the model's own, read at the same kind of position as S (a follow-up turn plus a
+                 fixed suffix) but with no verdict asked: tells "generate vs judge" apart from "end of answer vs
+                 verdict prompt" -> inputs/dir_items_neutral.jsonl.gz (N only) and dir_items_roles4.jsonl.gz (J, G, S, N)
 
 Benchmarks: BBEH (the 2,244 pool candidates) and RB2 Math (the anchoring study's 732 responses).
 Qwen3.5-9B also gets its own 5 thinking-off BBEH answers per question (from bc_jobs solve) in modes G and S.
@@ -23,6 +27,7 @@ sys.path.insert(0, str(HERE))
 from bc_common import BBEH_SUFFIX, judge_prompt  # noqa: E402
 from bc_load import OUT, candidates, jl, questions  # noqa: E402
 
+NEUTRAL = "Restate your final answer in one line, starting with \"FINAL:\"."
 SELF_CHECK = ("Is your final answer above correct? Check it, then end with exactly one line: "
               "\"VERDICT: CORRECT\" or \"VERDICT: INCORRECT\".")
 
@@ -34,6 +39,8 @@ def rows_for(bench, qid, aid, question_msg, judge_msg, answer, gold, src):
         dict(base, mode="G", messages=[{"role": "user", "content": question_msg}], suffix=answer.rstrip()),
         dict(base, mode="S", messages=[{"role": "user", "content": question_msg}, {"role": "assistant", "content": answer.rstrip()},
                                        {"role": "user", "content": SELF_CHECK}], suffix="VERDICT:"),
+        dict(base, mode="N", messages=[{"role": "user", "content": question_msg}, {"role": "assistant", "content": answer.rstrip()},
+                                       {"role": "user", "content": NEUTRAL}], suffix="FINAL:"),
     ]
 
 
@@ -49,6 +56,16 @@ def main():
     for j in rb:
         rows += rows_for("rb2math", j["qid"], j["item_id"], j["question"], j["messages"][0]["content"],
                          j["candidates"][0], int(j["gold"]), "rb2")
+    # BFF (Nov 16, for the belief-vs-correctness analysis: the anchoring study's belief scores exist for these): the
+    # question is the conversation the candidate answered, rendered as one user message; own file, all four roles
+    bff = []
+    with gzip.open(ANC / "inputs" / "readout_jobs.jsonl.gz", "rt") as f:
+        for j in (j for j in map(json.loads, f) if j["judge"] == "qwen3.5-9b" and j["bench"] == "bff"):
+            bff += rows_for("bff", j["qid"], j["item_id"], j["question"], j["messages"][0]["content"],
+                            j["candidates"][0], int(j["gold"]), "bff")
+    with gzip.open(HERE / "inputs" / "dir_items_bff4.jsonl.gz", "wt") as f:
+        for r in bff:
+            f.write(json.dumps(r) + "\n")
     seen = set()
     for r in list(rows):
         if r["qid"] not in seen:
@@ -71,12 +88,21 @@ def main():
                 continue
             g = int(bbeh_correct(s["text"], q["target"]))
             for x in rows_for("bbeh", r["qid"], f"{r['qid']}|own{i}", q["input"] + BBEH_SUFFIX, "", s["text"], g, "own"):
-                if x["mode"] != "J":
+                if x["mode"] in ("G", "S"):
                     own.append(x)
     (HERE / "inputs").mkdir(exist_ok=True)
     with gzip.open(HERE / "inputs" / "dir_items.jsonl.gz", "wt") as f:
         for r in rows:
-            f.write(json.dumps(r) + "\n")
+            if r["mode"] != "N":
+                f.write(json.dumps(r) + "\n")
+    with gzip.open(HERE / "inputs" / "dir_items_neutral.jsonl.gz", "wt") as f:
+        for r in rows:
+            if r["mode"] == "N":
+                f.write(json.dumps(r) + "\n")
+    with gzip.open(HERE / "inputs" / "dir_items_roles4.jsonl.gz", "wt") as f:
+        for r in rows:
+            if r["mode"] in ("J", "G", "S", "N"):
+                f.write(json.dumps(r) + "\n")
     with gzip.open(HERE / "inputs" / "dir_items_own_qwen3.5-9b.jsonl.gz", "wt") as f:
         for r in own:
             f.write(json.dumps(r) + "\n")

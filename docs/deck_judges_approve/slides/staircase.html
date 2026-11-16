@@ -1,0 +1,16 @@
+<section id="staircase">
+<p class="secno">3.1 · BEHAVIOUR</p>
+<h2>The more a judge believes a wrong answer, the more it approves it</h2>
+<div class="row" style="flex:1;">
+<div class="figwrap">
+<img class="fig" src="/_blob/cb9019bc878c419fdd5704b63c6b079c" alt="Line chart of wrong answers approved at the verdict by belief level, one line per judge: Qwen3.5-4B 27 to 64 percent, Qwen3.5-9B 20 to 83, Qwen3.6-35B 8 to 75, Nemotron-3-Super 26 to 85." style="width:1120px; height:580px;">
+<p class="cap">Wrong answers approved at the verdict, by belief; RB2 Math + JudgeBench + BFF; whiskers 95% CI.</p>
+</div>
+<div class="side">
+<div class="card peri fade" style="--i:0;"><h3>Three Qwens</h3><p>18% → 74% from belief 0/7 to 7/7: +54 points.</p></div>
+<div class="card cyan fade" style="--i:1;"><h3>Nemotron (NVIDIA)</h3><p>26% → 85%: +51 points. Not a Qwen quirk.</p></div>
+<div class="card butter fade" style="--i:2;"><h3>Llama left out</h3><p>Too weak a judge: ~54% at every level, 5 answers at 7/7.</p></div>
+</div>
+</div>
+<aside>Settled for four judges in two families. Bigger Qwens are stricter on answers they don't believe (27% to 8% at 0/7) but just as trusting of answers they do believe. Belief is usually right (94% of 7/7 answers are correct), so the damage is the confident-wrong tail. Reasoning amplifies the effect: +35 before reasoning, +54 at the verdict.</aside>
+</section>

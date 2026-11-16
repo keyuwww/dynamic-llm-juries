@@ -6,8 +6,9 @@ Per layer, for the judge direction and a random direction, on all / solved / not
   responds     accept rate at a -8 sd push vs a +8 sd push along the direction
   sensitivity  (verdict change per 1 sd pushed, from +-8) / (verdict's within-question sd); stretch_pipeline used +-4
   gain x11/x21 ranking after stretching minus unedited, x100, 95% CI resampling questions (paired)
+  same-model   the x11 gain counting only right-vs-wrong pairs written by the same answering model
 
-  python3 experiments/beyond_capability/layer_sweep_analyze.py -> out_math/layer_sweep/layer_sweep.md
+  python3 experiments/beyond_capability/layer_sweep_analyze.py [math|mmlu3b] -> <run folder>/layer_sweep.md
 """
 import json
 import sys
@@ -20,7 +21,11 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from stretch_analyze import solve_labels  # noqa: E402
 
-D = HERE / "out_math" / "layer_sweep"
+RUNS = {  # run -> (folder, tag, solve-label stem, judge key, folder holding the judge's solve file, title)
+    "math": ("out_math/layer_sweep", "math", "math_full", "llama3.1-8b", "out_math", "MATH, Llama-3.1-8B"),
+    "mmlu3b": ("out_mmlu/layer_sweep_llama3.2-3b", "mmlu", "mmlu_full", "llama3.2-3b", "out_mmlu", "MMLU-Redux, Llama-3.2-3B"),
+}
+D = HERE / RUNS["math"][0]
 
 
 def pairs_by_q(rows, key):
@@ -62,11 +67,14 @@ def accept(rows, key):
 
 
 def main():
-    rows = [json.loads(l) for f in sorted(D.glob("sweep_math_L*.jsonl")) for l in open(f)]
-    knows = {int(L): v["knows"] for L, v in json.load(open(D / "sweep_dirs_math.json"))["layers"].items()}
-    sol = solve_labels("math_full", "llama3.1-8b", HERE / "out_math")
+    run = sys.argv[1] if len(sys.argv) > 1 else "math"
+    folder, tag, stem, judge, sdir, title = RUNS[run]
+    D = HERE / folder
+    rows = [json.loads(l) for f in sorted(D.glob(f"sweep_{tag}_L*.jsonl")) for l in open(f)]
+    knows = {int(L): v["knows"] for L, v in json.load(open(D / f"sweep_dirs_{tag}.json"))["layers"].items()}
+    sol = solve_labels(stem, judge, HERE / sdir)
     groups = {"all": lambda q: True, "solved": lambda q: sol.get(q) == 1, "not solved": lambda q: sol.get(q) == 0}
-    lines = ["# MATH, Llama-3.1-8B: stretching at every other layer", "",
+    lines = [f"# {title}: stretching at every other layer", "",
              f"{len({r['aid'] for r in rows})} answers. Ranking = within-question AUROC (0.50 = coin flip). "
              "Gain = ranking change x100 after stretching, 95% CI resampling questions. "
              "Accept rates are the share of all answers the verdict calls CORRECT.", ""]
@@ -85,6 +93,18 @@ def main():
                          f"{sensitivity(J):+.2f} | {g11:+.1f} [{l11:+.1f}, {h11:+.1f}] | {g21:+.1f} [{l21:+.1f}, {h21:+.1f}] | "
                          f"{r11:+.1f} |")
         lines.append("")
+    # same-model pairs: compare right vs wrong answers only within one answering model (removes "who wrote it")
+    sm = [dict(r, qid=r["qid"] + "|" + r["src"], q0=r["qid"]) for r in rows]
+    lines += ["## Same-model pairs only (right vs wrong answers from the same answering model to the same question)", "",
+              "| Layer | Questions | Says | Gain ×11 [95% CI] | Random ×11 |", "|---|---|---|---|---|"]
+    for L in sorted({r["layer"] for r in rows}):
+        for gname in ("solved", "not solved"):
+            gf = groups[gname]
+            J = [r for r in sm if r["layer"] == L and r["dir"] == "Jc" and gf(r["q0"])]
+            R = [r for r in sm if r["layer"] == L and r["dir"] == "Rc" and gf(r["q0"])]
+            g, lo, hi, says = gain(J, "amplify:10.0")
+            lines.append(f"| {L} | {gname} | {says:.3f} | {g:+.1f} [{lo:+.1f}, {hi:+.1f}] | {gain(R, 'amplify:10.0', n=1)[0]:+.1f} |")
+    lines.append("")
     (D / "layer_sweep.md").write_text("\n".join(lines))
     print("\n".join(lines))
 

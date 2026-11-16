@@ -1,0 +1,16 @@
+<section id="merge">
+<p class="secno">4.7 · INSIDE THE MODEL</p>
+<h2>At the verdict, “I’d say this” reads as “this is right”</h2>
+<table>
+<tr class="thead"><th style="width:40%;">Belief vs correctness, within a role</th><th style="width:20%;">Judge</th><th style="width:20%;">Self-check</th><th style="width:20%;">Writing</th></tr>
+<tr class="r2"><td>Qwen-9B · BFF (39 believed)</td><td><b>0.93</b></td><td>0.90</td><td>0.58</td></tr>
+<tr class="r2"><td>Qwen-35B · BFF (32)</td><td><b>0.72</b></td><td>0.95</td><td>0.22</td></tr>
+<tr class="r1"><td>Qwen-9B · BBEH (255)</td><td><b>0.77</b></td><td>0.76</td><td>0.66</td></tr>
+<tr class="r1"><td>Qwen-35B · BBEH (250)</td><td><b>0.77</b></td><td>0.74</td><td>0.60</td></tr>
+</table>
+<div class="row">
+<div class="card peri"><h3>Merged at the verdict</h3><p>Believing a wrong answer pushes the gauge toward “right”.</p></div>
+<div class="card butter"><h3>Likely, not settled</h3><p>Small BFF samples; writing also aligns on BBEH.</p></div>
+</div>
+<aside>Belief direction = believed wrong answers minus never-reached wrong answers. Merging is stronger at the verdict, not exclusive to it. Part of the alignment may be a general lean toward CORRECT. RB2 Math has only 9 believed wrong answers per model, so it is left out.</aside>
+</section>

@@ -1,0 +1,13 @@
+<section id="compute">
+<p class="secno">A.1 · APPENDIX</p>
+<h2>Appendix: where everything ran</h2>
+<table>
+<tr class="thead"><th style="width:28%;">What</th><th style="width:30%;">Where</th><th style="width:42%;">Notes</th></tr>
+<tr class="r1"><td>Qwen and Nemotron judging, solving, readouts</td><td>Tinker</td><td>Nemotron belief run ≈ $50–80</td></tr>
+<tr class="r1"><td>Answer matching, label audit, transcript labels</td><td>Tinker (GLM-5.3-Flash)</td><td>Label audit $0.52</td></tr>
+<tr class="r2"><td>Hidden-state captures</td><td>Modal GPUs</td><td>1× H100 (Qwen-9B), 2× H200 (Qwen-35B)</td></tr>
+<tr class="r3"><td>Llama-3.1-8B generations</td><td>Harvard Cannon</td><td>Free</td></tr>
+</table>
+<p class="cap">Code: experiments/anchoring_early_answer and experiments/beyond_capability. Write-ups: REPORT.md (Experiments 1–9) and report_2026-11-09.md (sections 7 and 10).</p>
+<aside>Key scripts: belief.py (belief tables), make_judge_lines.py (per-judge figure), transcript_check.py, causal_prep.py, dir_build.py / dir_modal.py / dir_matched.py / dir_belief.py (inside-the-model work).</aside>
+</section>

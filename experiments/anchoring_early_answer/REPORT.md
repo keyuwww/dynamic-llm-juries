@@ -29,6 +29,9 @@ wrong answers the Qwens believe, so the "shared belief" from Experiment 1 is mos
   match label adds nothing once belief is known. With this better measure there is a real **personal** part (+23
   points on the same wrong answer), not only a family belief. **Nov 15:** Nemotron-3-Super (NVIDIA) shows the same
   graded effect (26% → 85%, +51 points); Llama-3.1-8B has too few answers at 7/7 (5) to test.
+- **How judges approve (Nov 16, Experiment 9).** With thinking on, 86–96% of approved wrong answers come with a re-solve
+  that lands on the same wrong answer; thinking-off transcripts hide this. A "don't re-solve" prompt leaves believed
+  answers nearly untouched.
 - **Label correction (Nov 13).** 61 of 549 RB2 Math answers labelled wrong reach the same value as the right answer,
   written differently (476,000,000 vs 476,252,000 eV; 9 vs 9.02 L; 4.20 × 10¹¹ vs "420" in units of 10⁹). GLM-5.3-Flash
   checked every wrong answer against the right one (`clean_labels.py`, $0.52). They were concentrated among the answers
@@ -475,6 +478,81 @@ accepting.
   answer in its written reasoning**. A nudge along "belief" doesn't change that computation; it only shifts how
   willing the judge is to say CORRECT overall. This matches Experiment 3 (correctness = leniency dial) and the missing
   "my answer" direction at A, now tested during reasoning too.
+
+---
+
+## Experiment 9 — How do judges approve the wrong answers they believe? (Nov 16)
+
+**Transcript check (`transcript_check.py`).** GLM-5.3-Flash read each judging transcript with the question and the
+graded answer and labelled: did the grader work out its own result (re-solve)? Did that result equal the graded answer?
+Or did it only walk through the given steps? RB2 Math + BFF, clean labels; 4,254 thinking-off transcripts (three Qwens +
+Nemotron) and 3,189 thinking-on transcripts (three Qwens, Experiment 5's generations). 8 labels checked by hand: all agree.
+
+| Wrong answers the judge approved (Qwens) | Thinking off | Thinking on |
+|---|---|---|
+| Re-solves the problem itself | 15–44% | **92–100%** |
+| ...and lands on the same wrong answer | 15–43% | **86–96%** |
+| Only walks through the given steps | 67–87% | 18–22% |
+
+- **With the reasoning written out, approvals of wrong answers are re-solves that land on the same wrong answer**, at
+  every belief level. Rejections come with a re-solve that reaches a different answer, in both modes.
+- **Thinking-off approvals only look like rubber stamps** ("the arithmetic is sound"): the short transcripts hide the
+  work. An earlier reading tonight ("belief decides whether the judge bothers to check") was this artefact; withdrawn.
+- **Thinking-on staircase is steeper:** wrong answers approved 3% / 24% / 50% / 79% at belief 0/7, 1–3, 4–6, 7/7
+  (from the labelled set, spoken verdict after `</think>`).
+- **Open:** at belief 0/7, the 44 approved wrong answers still come with a re-solve that lands on the candidate (89%),
+  though the model never reaches that answer in 7 solo tries. Seeing the candidate may pull the re-solve.
+
+**"Don't re-solve" prompt (free; beyond_capability's verify condition on the same 459 BFF items, 3 samples each).**
+
+| Wrong BFF answers approved | 0/7 | 1–3 | 4–6 | 7/7 |
+|---|---|---|---|---|
+| Qwens, normal prompt | 15% | 43% | 55% | 74% |
+| Qwens, "Do NOT solve the question yourself; verify the work" | 3% | 28% | 45% | 69% |
+| Nemotron, normal | 35% | 62% | 83% | 85% |
+| Nemotron, verify | 15% | 50% | 56% | 83% |
+
+The prompt makes judges stricter on answers they don't believe but leaves believed ones nearly untouched: a prompt
+cannot stop the model computing its own answer.
+
+**Inside the model** (beyond_capability report, section 10): solving and judging encode correctness differently even
+at a matched read position (Qwen-9B and Qwen-35B), and at the verdict the belief direction lines up with the
+correctness direction (0.72–0.93 on BFF).
+
+**Two causal tests (`causal_prep.py` → `out/causal.md`; three Qwens, thinking off, RB2 Math + BFF, every candidate,
+on Tinker via the new `gen` phase of `tinker_jobs.py`).**
+
+*Commit first:* the model's own first answer (generated earlier without any candidate, not one of the 7 belief tries)
+is placed in the chat before the usual judge prompt ("Now grade another AI assistant's answer to the same question.").
+
+| Wrong answers approved | 0/7 | 1–3 | 4–6 | 7/7 |
+|---|---|---|---|---|
+| Usual judge prompt | 17% (n=1,588) | 36% | 58% | 74% (n=62) |
+| Own answer first | **1%** (n=1,528) | 22% | 51% | **69%** (n=61) |
+| ...own answer differed from the candidate | 1% | 10% | 19% | (3) |
+| ...own answer matched the candidate | (5) | 70% | 65% | 71% |
+
+Correct answers it never reaches: 31% → 14% approved. Committing first turns the judge into an agreement checker: the
+low-belief floor disappears, believed wrong answers still pass, and more unreached right answers are rejected (Lin et
+al.'s self-reference trade-off, measured by belief).
+
+*Shown the candidate, asked to solve:* the solve prompt plus "For reference, here is another AI assistant's answer …
+That answer may be right or wrong. Work out the answer yourself." Share of solves whose final answer equals the
+candidate's (GLM-5.3-Flash, 3,169 solves):
+
+| Candidate | 0/7 | 1–3 | 4–6 | 7/7 |
+|---|---|---|---|---|
+| Wrong | **2%** | 35% | 63% | 89% |
+| Right | 18% | 62% | 83% | 97% |
+| Expected from belief alone | 0% | ≈ 29% | ≈ 71% | 100% |
+
+Seeing a wrong answer barely moves what the model solves (2% at 0/7); seeing a right one helps (18%). So the 17%
+approval of never-reached wrong answers comes from the grading frame (it checks along the candidate's own path), not
+from a general pull on its solving.
+
+**Plain reading.** A judge mostly asks "does this match what I get?": it re-derives the answer (visibly with thinking,
+silently without) and approves when its result agrees. Belief predicts where that re-derivation lands. At low belief,
+the grading frame adds approvals that committing its own answer first removes.
 
 ---
 

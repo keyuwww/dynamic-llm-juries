@@ -1,0 +1,19 @@
+<section id="beliefm">
+<p class="secno">2.4 · METHOD</p>
+<h2>Measuring belief, step by step</h2>
+<div class="card sand">
+<div class="steps">
+<div class="step"><p class="label">1 · SOLVE ALONE, 7 TIMES</p><p>Only the question. Temperature 0.7, so tries can differ. The candidate is never shown.</p></div>
+<div class="arrowline"></div>
+<div class="step"><p class="label">2 · COMPARE</p><p>GLM-5.3-Flash: does each try reach the candidate’s final answer? JudgeBench letters: exact match.</p></div>
+<div class="arrowline"></div>
+<div class="step hl"><p class="label">3 · BELIEF = COUNT</p><p>0/7 never reaches it · 3/7 torn · 7/7 always.</p></div>
+</div>
+</div>
+<div class="row">
+<div class="card peri"><h3>Why 7, not 1?</h3><p>One own answer is a noisy yes/no. Seven give a graded score.</p></div>
+<div class="card cyan"><h3>Why GLM to match?</h3><p>A different family from every judge, so no judge’s family decides what counts as “same”.</p></div>
+<div class="card butter"><h3>Why separate calls?</h3><p>The judge never sees its own tries while grading.</p></div>
+</div>
+<aside>Example: question "3x + 7 = 31". The candidate says 9. The judge's 7 tries give 8, 8, 9, 8, 8, 8, 8, so belief in 9 is 1/7. The earlier one-sample "matches my answer" label used a single extra try, independent of these 7.</aside>
+</section>

@@ -1,0 +1,32 @@
+<section id="causalex" style="gap:26px;">
+<p class="secno">6.2 · CAUSAL TESTS</p>
+<h2 style="font-size:58px;">Example inputs for the three prompt tests</h2>
+<div class="row" style="gap:24px;">
+<div class="chat" style="flex:1;">
+<p class="label">“DON’T RE-SOLVE” (GRADING)</p>
+<p class="who">USER</p>
+<p class="msg">You are checking an AI assistant’s answer … [QUESTION] … [ASSISTANT’S ANSWER] …</p>
+<p class="add">Do NOT solve the question yourself from scratch. Verify the assistant’s work instead: 1. list the conditions … 2. go through the reasoning step by step … 3. check the final answer follows.</p>
+<p class="msg">… end with “VERDICT: CORRECT” or “VERDICT: INCORRECT”.</p>
+</div>
+<div class="chat" style="flex:1;">
+<p class="label">COMMIT FIRST (GRADING)</p>
+<p class="who">USER</p>
+<p class="msg">A study … exponential distribution with a mean of 3 seconds. (a) … (b) … Solve the problem. End with your final answer in \boxed{}.</p>
+<p class="who">ASSISTANT · ITS OWN EARLIER ANSWER</p>
+<p class="add">… (b) The conditional probability is also e^(−5/3) ≈ 0.1889. \boxed{0.1889}</p>
+<p class="who">USER</p>
+<p class="add">Now grade another AI assistant’s answer to the same question.</p>
+<p class="msg">+ the usual grading prompt with the candidate</p>
+</div>
+<div class="chat" style="flex:1;">
+<p class="label">SHOWN THE ANSWER (SOLVING)</p>
+<p class="who">USER</p>
+<p class="msg">A study … exponential distribution with a mean of 3 seconds. (a) … (b) … Solve the problem. End with your final answer in \boxed{}.</p>
+<p class="add">For reference, here is another AI assistant’s answer to this question: [OTHER ANSWER] … [END] That answer may be right or wrong. Work out the answer yourself.</p>
+<p class="readat">Read: does its \boxed{} answer = the candidate’s?</p>
+</div>
+</div>
+<p class="cap">Real RB2 Math question and Qwen3.5-9B’s real earlier answer. Yellow = what we add; white = the benchmark’s own text.</p>
+<aside>"Don't re-solve" came from the Nov 8 to 9 study and used BFF items; the other two ran tonight on RB2 Math and BFF for the three Qwens. In commit-first, the inserted answer is the model's own first solve, generated earlier without any candidate and separate from the 7 belief tries.</aside>
+</section>

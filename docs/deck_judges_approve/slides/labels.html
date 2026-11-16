@@ -1,0 +1,19 @@
+<section id="labels">
+<p class="secno">2.3 · METHOD</p>
+<h2>First, fix the labels</h2>
+<div class="row">
+<div class="card cyan" style="flex:1.2;">
+<p class="label">THE PROBLEM</p>
+<p>Some RB2 Math answers marked “wrong” reach the right value, written differently.</p>
+<p class="quoteb">9 L vs 9.02 L</p>
+<p class="quoteb">476,000,000 vs 476,252,000 eV</p>
+<p>A judge that “believes” these is just right, so they inflate the top belief group.</p>
+</div>
+<div class="stack" style="flex:1;">
+<div class="card peri"><p class="label">HOW</p><p>GLM-5.3-Flash compared every wrong answer’s final value with each right answer to the same question: 549 pairs, $0.52.</p></div>
+<div class="card butter"><p class="label">RESULT</p><p>61 mislabelled answers (180 rows) removed. The main effect got slightly <b>stronger</b>: +52 → +54.</p></div>
+</div>
+</div>
+<p class="cap">Not audited this way: BFF and JudgeBench labels (free-form or pairwise; need hand checks).</p>
+<aside>The mislabelled answers were concentrated among answers the judges believe 7/7, so removing them more than halved that group on RB2 Math (now 10 answers). One earlier probe result (confident-belief probe on RB2 Math) turned out to be this artefact and was dropped.</aside>
+</section>

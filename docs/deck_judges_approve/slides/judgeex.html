@@ -1,0 +1,24 @@
+<section id="judgeex" style="gap:30px;">
+<p class="secno">2.7 · METHOD</p>
+<h2 style="font-size:60px;">Example: the judging call, and where we read it</h2>
+<div class="row">
+<div class="chat" style="flex:1.35;">
+<p class="who">USER · JUDGE PROMPT</p>
+<p class="add">You are comparing two AI assistant responses to the same question. Decide which response is better.</p>
+<p class="msg">[QUESTION] Paley maintains that … the latter is _____. (A) … (J)</p>
+<p class="msg">[RESPONSE A] … the one that best fits Paley’s argument is (F) “greater and grander”. <span style="font-weight:700;">FFFFF</span></p>
+<p class="msg">[RESPONSE B] … the option that most directly contrasts with the human-made watch is “not created by human hands”. <span style="font-weight:700;">HHHHH</span></p>
+<p class="add">Which response is better — more correct, more complete, more rigorous? Judge substance, not style or length. Reason briefly, then end with exactly one line: “VERDICT: A” or “VERDICT: B”.</p>
+<p class="who">ASSISTANT · QWEN3.5-9B</p>
+<p class="readat">A · read here, before any reasoning</p>
+<p class="amsg">“… Option (H) ‘not created by human hands’ directly addresses the premise of the analogy … Response B correctly identifies that the contrast is about the agent of creation.”</p>
+<p class="amsg"><b>VERDICT: B</b></p>
+<p class="readat">C · read at the verdict</p>
+</div>
+<div class="stack" style="flex:1;">
+<div class="card butter"><p class="label">WHAT HAPPENED</p><p>It argues its own answer (H) and picks B: the wrong answer it gives itself 7/7.</p></div>
+<div class="card peri"><p class="label">HOW WE READ IT</p><p>Cut the reply at A or C, add “VERDICT:”, compare the probability of “ A” vs “ B” (or CORRECT vs INCORRECT).</p></div>
+</div>
+</div>
+<aside>A real judgment from our data; responses shortened with an ellipsis. On RB2 Math and BFF there is one response, and the verdict is CORRECT or INCORRECT. The 25, 50 and 75 percent checkpoints cut the reasoning in between.</aside>
+</section>

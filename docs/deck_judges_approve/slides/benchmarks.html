@@ -1,0 +1,16 @@
+<section id="benchmarks">
+<p class="secno">2.2 · METHOD</p>
+<h2>Benchmarks, and why each one</h2>
+<table>
+<tr class="thead"><th style="width:22%;">Benchmark</th><th style="width:40%;">What the judge sees</th><th style="width:38%;">Why we use it</th></tr>
+<tr class="r1"><td><b>RB2 Math</b></td><td>A math question + one answer (RewardBench 2)</td><td>Short final answer: easy to match</td></tr>
+<tr class="r2"><td><b>JudgeBench</b></td><td>A question + two answers, pick the right one</td><td>Letter answers: matched exactly</td></tr>
+<tr class="r3"><td><b>BFF-Bench</b></td><td>A finance conversation + one answer</td><td>Labels from unanimous human experts</td></tr>
+<tr class="rb"><td><b>BBEH</b></td><td>Hard reasoning puzzles + one answer</td><td>Inside-the-model work; mostly beyond the judges</td></tr>
+</table>
+<div class="card peri">
+<p class="label">EVERY ITEM</p>
+<p>A question · a candidate answer written by <b>another</b> model · a right/wrong label. The judge grades it. About 2,300 wrong candidates per judge on the main set (RB2 Math + JudgeBench + BFF).</p>
+</div>
+<aside>JudgeBench coding pairs are dropped because they have no short final answer to compare. BBEH is not in the main set because the judges rarely solve it, so belief is mostly zero there.</aside>
+</section>

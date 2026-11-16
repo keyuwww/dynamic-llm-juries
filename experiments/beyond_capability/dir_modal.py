@@ -3,7 +3,12 @@
   .venv/bin/modal run experiments/beyond_capability/dir_modal.py --phase capture --key qwen3.5-9b --items dir_items.jsonl.gz --tag main --limit 3
   .venv/bin/modal run --detach experiments/beyond_capability/dir_modal.py --phase capture --key qwen3.5-9b --items dir_items.jsonl.gz --tag main
   .venv/bin/modal run experiments/beyond_capability/dir_modal.py --phase pull --key qwen3.5-9b
+
+Env (read when the app is built, on this machine):
+  DLJ_GPU=H200          GPU type (default H100); Qwen3.6-35B-A3B (~70 GB in bf16) needs an H200
+  DLJ_HF_SECRET=0       no "huggingface" Modal secret (an account without one; Qwen weights are public)
 """
+import os
 import pathlib
 import subprocess
 import sys
@@ -12,11 +17,15 @@ import modal
 
 _here = pathlib.Path(__file__).resolve()
 HERE = "/root/bc"
-MODELS = {"qwen3.5-9b": "Qwen/Qwen3.5-9B", "llama3.1-8b": "meta-llama/Llama-3.1-8B-Instruct"}
+MODELS = {"qwen3.5-9b": "Qwen/Qwen3.5-9B", "llama3.1-8b": "meta-llama/Llama-3.1-8B-Instruct",
+          "qwen3.6-35b-a3b": "Qwen/Qwen3.6-35B-A3B"}
+GPU = os.environ.get("DLJ_GPU", "H100")
+SECRETS = [modal.Secret.from_name("huggingface")] if os.environ.get("DLJ_HF_SECRET", "1") == "1" else []
 
 image = (
     modal.Image.debian_slim(python_version="3.11")
     .pip_install("torch>=2.5", "transformers>=4.57", "accelerate>=0.34", "numpy", "huggingface_hub", "flash-linear-attention")
+    .env({"DLJ_GPU": os.environ.get("DLJ_GPU", "H100"), "DLJ_HF_SECRET": os.environ.get("DLJ_HF_SECRET", "1")})  # same choice inside the container
     .add_local_file(_here.parent / "dir_capture.py", f"{HERE}/dir_capture.py")
     .add_local_dir(_here.parent / "inputs", f"{HERE}/inputs")
 )
@@ -25,8 +34,8 @@ vol = modal.Volume.from_name("dynamic-llm-juries-results", create_if_missing=Tru
 hf_cache = modal.Volume.from_name("hf-cache", create_if_missing=True)
 
 
-@app.function(gpu="H100", timeout=12 * 3600, volumes={"/vol": vol, "/root/.cache/huggingface": hf_cache},
-              secrets=[modal.Secret.from_name("huggingface")])
+@app.function(gpu=GPU, timeout=12 * 3600, volumes={"/vol": vol, "/root/.cache/huggingface": hf_cache},
+              secrets=SECRETS)
 def run(phase: str, key: str, items: str, tag: str, limit: int = 0, extra: dict | None = None, flags: str = "") -> str:
     out = f"/vol/beyond_capability_dirs/{key}" + ("_pilot" if limit else "")
     cmd = [sys.executable, f"{HERE}/dir_capture.py", "--phase", phase, "--model", MODELS[key],

@@ -1,0 +1,17 @@
+<section id="setup">
+<p class="secno">2.1 · METHOD</p>
+<h2>Judges, and why each one</h2>
+<table>
+<tr class="thead"><th style="width:28%;">Judge</th><th style="width:22%;">Size</th><th style="width:50%;">Why it is here</th></tr>
+<tr class="r1"><td><b>Qwen3.5-4B</b></td><td>4B</td><td>Small end of one family</td></tr>
+<tr class="r1"><td><b>Qwen3.5-9B</b></td><td>9B</td><td>Main model for the inside-the-model work</td></tr>
+<tr class="r1"><td><b>Qwen3.6-35B-A3B</b></td><td>35B (3B active)</td><td>Strongest Qwen; same family, bigger</td></tr>
+<tr class="r2"><td><b>Nemotron-3-Super</b></td><td>120B (12B active)</td><td>Strong judge from a different family (NVIDIA)</td></tr>
+<tr class="r3"><td><b>Llama-3.1-8B</b></td><td>8B</td><td>Different family; turned out too weak a judge</td></tr>
+</table>
+<div class="row">
+<div class="card cyan"><h3>Thinking off by default</h3><p>One short evaluation, then “VERDICT: CORRECT / INCORRECT”. Cheap and easy to read.</p></div>
+<div class="card butter"><h3>Thinking on for one check</h3><p>The Qwens again with full reasoning, to see what thinking-off hides.</p></div>
+</div>
+<aside>Qwens and Nemotron ran on Tinker. Llama ran on Harvard's Cannon GPUs. Three Qwen sizes let us ask whether size changes the effect; Nemotron asks whether it is a Qwen quirk.</aside>
+</section>

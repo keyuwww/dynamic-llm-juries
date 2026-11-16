@@ -1,0 +1,19 @@
+<section id="tcex" style="gap:26px;">
+<p class="secno">5.2 · HOW JUDGES APPROVE</p>
+<h2 style="font-size:58px;">Example: one transcript, as GLM labels it</h2>
+<div class="row" style="gap:24px;">
+<div class="chat" style="flex:1.4;">
+<p class="who">WHAT GLM IS GIVEN</p>
+<p class="msg"><b>Question (BFF):</b> … asset impairment … discount rate 2.5% … fair value $386,000, selling cost $2,550. What is the impact of the impairment under IFRS?</p>
+<p class="msg"><b>Answer graded (wrong):</b> … Impairment loss = $500,000 − $383,450 = $116,550.</p>
+<p class="amsg"><b>Grader (Qwen3.5-4B):</b> “1. Carrying Amount: The calculation is correct … 2. Fair Value Less Costs of Disposal: The calculation is correct ($386,000 − $2,550 = $383,450) … VERDICT: CORRECT”</p>
+<p class="add">Did the grader work out its own result? Is it the graded answer’s? Or only check the given steps? End with RESOLVE / OWN / STYLE.</p>
+</div>
+<div class="stack" style="flex:1;">
+<div class="card butter"><p class="label">GLM’S LABEL</p><p class="mono" style="font-size:28px;">RESOLVE: NO<br>OWN: NONE<br>STYLE: STEPS</p></div>
+<div class="card peri"><p class="label">WHY</p><p>“It only validates the answer’s stated steps and numbers.”</p></div>
+</div>
+</div>
+<p class="cap">A real thinking-off approval of a wrong answer the judge believes. With thinking on, approvals like this show a full re-solve that lands on the same number.</p>
+<aside>GLM-5.3-Flash is told to describe only what the grader did, not to judge the answer itself. Each transcript gets the three labels; we then group by belief and by verdict.</aside>
+</section>

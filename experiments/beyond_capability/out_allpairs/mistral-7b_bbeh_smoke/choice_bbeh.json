@@ -1,0 +1,90 @@
+{
+ "n_answers": 60,
+ "skipped_too_long": 0,
+ "n_layers": 32,
+ "knows": {
+  "2": NaN,
+  "4": NaN,
+  "6": NaN,
+  "8": NaN,
+  "10": NaN,
+  "12": NaN,
+  "14": NaN,
+  "16": NaN,
+  "18": NaN,
+  "20": NaN,
+  "22": NaN,
+  "24": NaN,
+  "26": NaN,
+  "28": NaN,
+  "30": NaN
+ },
+ "says": NaN,
+ "gap": NaN,
+ "best_knows_layer": 2,
+ "push": {
+  "2": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "4": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "6": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "8": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "10": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "12": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "14": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "16": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "18": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "20": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "22": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "24": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "26": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "28": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  },
+  "30": {
+   "minus8": 95.0,
+   "plus8": 95.0
+  }
+ },
+ "responding_layers": [],
+ "chosen_layer": 2,
+ "rule": "no layer responds"
+}

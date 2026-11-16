@@ -1,0 +1,13 @@
+<section id="interp">
+<p class="secno">4.2 · INSIDE THE MODEL</p>
+<h2>Looking inside: the tools</h2>
+<div class="row">
+<div class="card peri"><p class="label">HIDDEN STATE</p><p>The model’s internal vector at one token, one per layer. We save it at a chosen token, every 2nd layer.</p></div>
+<div class="card cyan"><p class="label">DIRECTION</p><p>Average state of right answers minus wrong answers. Each question’s average is subtracted first, so “hard question” can’t leak in.</p></div>
+</div>
+<div class="row">
+<div class="card butter"><p class="label">COSINE + CEILING</p><p>Compare two directions: 1 = same, 0 = unrelated. Ceiling: the same direction from two halves of the questions, the most noise allows.</p></div>
+<div class="card"><p class="label">PROBE TRANSFER</p><p>Train a reader in one setting, test it in another, whole questions held out. Catches a shared signal a low cosine can hide.</p></div>
+</div>
+<aside>The difference-of-means direction is the standard method (Marks and Tegmark 2023; Arditi et al. 2024; Rimsky et al. 2024). Two random directions in this space have a cosine of about 0.016. Probes are logistic regressions scored by within-question AUROC (0.5 = chance).</aside>
+</section>

@@ -1,0 +1,19 @@
+<section id="beliefex" style="gap:30px;">
+<p class="secno">2.5 · METHOD</p>
+<h2 style="font-size:60px;">Example: belief on one MMLU-Pro question</h2>
+<div class="row">
+<div class="chat" style="flex:1.35;">
+<p class="who">USER · SOLVE PROMPT (JUDGEBENCH, FROM MMLU-PRO)</p>
+<p class="msg">Paley maintains that the key difference between the “contrivance” of a watch and that of nature is that the latter is _____.</p>
+<p class="msg">(A) dependent on human intervention · (B) more natural · … · <b>(F) greater and grander</b> · … · <b>(H) not created by human hands</b> · (I) subject to change over time · (J) older</p>
+<p class="msg" style="color:#6B7280;">If you cannot determine the correct multiple-choice answer, take your best guess. … duplicate that letter five times … Let’s think step by step.</p>
+<p class="who">ASSISTANT · QWEN3.5-9B, 7 SEPARATE TRIES</p>
+<p class="amsg mono" style="font-size:30px;">HHHHH · HHHHH · HHHHH · HHHHH · HHHHH · HHHHH · HHHHH</p>
+</div>
+<div class="stack" style="flex:1;">
+<div class="card butter"><p class="label">BELIEF</p><p><b>H: 7/7</b> (wrong answer)</p><p><b>F: 0/7</b> (right answer)</p></div>
+<div class="card peri"><p class="label">NOTHING ADDED</p><p>The solve prompt is the benchmark’s own question. The candidate answers are never shown here.</p></div>
+</div>
+</div>
+<aside>A real item from our data (JudgeBench, MMLU-Pro philosophy). The right answer is F. Qwen3.5-9B answers H in all seven of its own tries at temperature 0.7, so its belief in H is 7/7. Letters are matched exactly; on RB2 Math and BFF, GLM-5.3-Flash compares final answers.</aside>
+</section>

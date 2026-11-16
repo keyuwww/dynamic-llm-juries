@@ -1,0 +1,13 @@
+<section id="stats">
+<p class="secno">2.8 · METHOD</p>
+<h2>How we count an effect</h2>
+<div class="row">
+<div class="card cyan"><p class="label">WITHIN EACH JUDGE</p><p>Compare belief groups inside one judge, so a lenient judge doesn’t inflate the gap (judge fixed effects).</p></div>
+<div class="card peri"><p class="label">BELIEF VS ONE SAMPLE</p><p>Put both measures in one regression, to see which one carries the effect.</p></div>
+</div>
+<div class="row">
+<div class="card butter"><p class="label">SAME ANSWER, DIFFERENT JUDGES</p><p>One wrong answer, graded by three Qwens that believe it differently. The text is fixed, so answer quality can’t explain the gap.</p></div>
+<div class="card"><p class="label">UNCERTAINTY</p><p>95% intervals by resampling whole questions, since answers to one question aren’t independent.</p></div>
+</div>
+<aside>The headline "+54" is the 7/7 minus 0/7 difference in approval of wrong answers, from a regression with judge fixed effects. The same-answer comparison adds candidate fixed effects and works only where the judges disagree in belief.</aside>
+</section>

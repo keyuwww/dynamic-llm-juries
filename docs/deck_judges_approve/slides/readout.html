@@ -1,0 +1,22 @@
+<section id="readout">
+<p class="secno">2.6 · METHOD</p>
+<h2>Reading the verdict before and after reasoning</h2>
+<div class="card sand">
+<p class="label">WHERE WE READ THE JUDGE’S LEAN</p>
+<div class="row" style="gap:16px; align-items:center;">
+<p class="chip" style="background:#FFFFFF;">grade this answer…</p>
+<p class="chip" style="background:#FCE9BC;">A</p>
+<p class="chip" style="background:#FFFFFF;">reasoning 25%</p>
+<p class="chip" style="background:#FFFFFF;">50%</p>
+<p class="chip" style="background:#FFFFFF;">75%</p>
+<p class="chip" style="background:#FCE9BC;">C · VERDICT</p>
+</div>
+<p>At each point: cut the transcript, add “VERDICT:”, compare the model’s probability of “ CORRECT” vs “ INCORRECT”.</p>
+</div>
+<div class="row">
+<div class="card peri"><h3>A = before any reasoning</h3><p>Is the lean already there when it first reads the answer?</p></div>
+<div class="card cyan"><h3>C = at the real verdict</h3><p>Where it ends up after reasoning.</p></div>
+<div class="card butter"><h3>What it showed</h3><p>Belief effect +35 at A, +54 at C: present early, amplified by reasoning.</p></div>
+</div>
+<aside>The readout at C agrees with the judge's spoken verdict in about 97% of judgments, so it measures what the judge actually says. Readouts were run on Tinker with compute_logprobs.</aside>
+</section>

@@ -195,6 +195,14 @@ async def match_one(chat, key, question, own, cand, cache, max_tokens):
     cache.put(dict(cache_key=key, verdict=v, raw=t[-200:], n_in=r["n_in"], n_out=r["n_out"]))
 
 
+async def ask_one(chat, key, prompt, cache, max_tokens):
+    """One free-form GLM question; the answer's tail is kept for parsing (labels are asked for at the end)."""
+    if key in cache:
+        return
+    r = await chat.chat([{"role": "user", "content": prompt}], max_tokens=max_tokens, temperature=0.0)
+    cache.put(dict(cache_key=key, text=r["outputs"][0]["text"][-1500:], n_in=r["n_in"], n_out=r["n_out"]))
+
+
 def redo_cut(cache, mt, new_mt):
     """Forget cached GLM outputs that used the whole max_tokens budget, so they are asked again with new_mt."""
     # cut = used exactly a token cap (the default or an earlier, smaller redo budget); a finished redo is never 2^k
@@ -246,7 +254,7 @@ async def extend_one(chat, job, cache):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief", "audit", "pairs"], required=True)
+    ap.add_argument("--phase", choices=["solve", "match", "readout", "extend", "fill", "think", "belief", "audit", "pairs", "ask", "gen"], required=True)
     ap.add_argument("--extended", action="store_true", help="match/readout: only items with extended text")
     ap.add_argument("--kinds", default="solve,judge", help="extend: which cut-off outputs to rerun")
     ap.add_argument("--open", default="", help="match/fill: an open judge outside Tinker, e.g. llama3.1-8b or "
@@ -296,6 +304,37 @@ def main():
         print(f"{len(pj)} pairs ({sum(j['cache_key'] in cache for j in pj)} cached)", flush=True)
         asyncio.run(run_jobs([lambda j=j: match_one(chat, j["cache_key"], j["question"], j["a"], j["b"], cache, mt)
                               for j in pj], a.concurrency, "pairs"))
+        return
+
+    if a.phase == "gen":  # judge-model generations from a prepared list: inputs/gen_<name>.jsonl.gz (cache_key, model,
+        # messages), --pairs <name>; thinking off, T=0.7, whole context as budget -> <out>/gen_<name>.jsonl
+        gj = load_gz(HERE / "inputs" / f"gen_{a.pairs}.jsonl.gz")
+        chats = make_chats([POOL_BY_KEY[m] for m in sorted({j["model"] for j in gj})])
+        cache = JsonlCache(out / f"gen_{a.pairs}.jsonl")
+        print(f"{len(gj)} generations ({sum(j['cache_key'] in cache for j in gj)} cached)", flush=True)
+
+        async def gen_one(j):
+            if j["cache_key"] in cache:
+                return
+            chat = chats[j["model"]]
+            n = chat.renderer.build_generation_prompt(j["messages"]).length
+            n = n() if callable(n) else n
+            r = await chat.chat(j["messages"], max_tokens=CTX - n - 16, temperature=0.7)
+            o = r["outputs"][0]
+            cache.put(dict(cache_key=j["cache_key"], model=j["model"], text=o["text"], n_out=o["n_out"],
+                           clean=o["clean"], termination=o["termination"]))
+        asyncio.run(run_jobs([lambda j=j: gen_one(j) for j in gj], a.concurrency, "gen"))
+        return
+
+    if a.phase == "ask":  # free-form GLM questions: inputs/ask_<name>.jsonl.gz (cache_key, prompt), --pairs <name>
+        chat, mt = make_matcher(a.matcher), MATCHERS[a.matcher]["max_tokens"]
+        cache = JsonlCache(out / f"ask_glm5.3-flash_{a.pairs}.jsonl")
+        if a.redo_cut:
+            mt = redo_cut(cache, mt, a.redo_cut)
+        aj = load_gz(HERE / "inputs" / f"ask_{a.pairs}.jsonl.gz")
+        print(f"{len(aj)} questions ({sum(j['cache_key'] in cache for j in aj)} cached)", flush=True)
+        asyncio.run(run_jobs([lambda j=j: ask_one(chat, j["cache_key"], j["prompt"], cache, mt) for j in aj],
+                             a.concurrency, "ask"))
         return
 
     if a.phase == "extend":
