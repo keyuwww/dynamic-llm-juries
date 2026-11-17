@@ -25,6 +25,7 @@ image = (
                    ignore=["**/*_results/**", "**/__pycache__/**", "**/data_cache/**"])
     .add_local_dir(REPO / "experiments" / "llama_bbeh", "/root/repo/experiments/llama_bbeh",
                    ignore=["**/*results*/**", "**/__pycache__/**"])
+    .add_local_file(REPO / "experiments" / "jev_bff" / "run_jev_bff.py", "/root/repo/experiments/jev_bff/run_jev_bff.py")
     .add_local_dir(REPO / "experiments" / "anchoring_early_answer", HERE,
                    ignore=["out/**", "out_pilot/**", "out_nemotron/**", "out_probe/**", "**/*.npy", "**/generations*.jsonl", "**/__pycache__/**"])
 )
@@ -52,6 +53,24 @@ def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurr
     if phase == "models":
         subprocess.run([sys.executable, f"{HERE}/list_models.py", *benches.split(",")], check=True, cwd=HERE)
         return "done: models"
+    if phase == "pooljudge":  # a new judge's pool verdicts (tinker_pool/run_judges.py, condition none) for the main set;
+        # results live on the volume under pool_<bench>_results/judgments.jsonl (Nov 16: extra judge families)
+        pool = pathlib.Path("/root/repo/experiments/tinker_pool")
+        for b in benches.split(","):
+            vd = pathlib.Path(f"/vol/pool_{b}_results")
+            vd.mkdir(parents=True, exist_ok=True)
+            link = pool / f"{b}_results"
+            if link.is_symlink() or link.exists():
+                link.unlink() if link.is_symlink() else __import__("shutil").rmtree(link)
+            link.symlink_to(vd)
+            cmd = [sys.executable, str(pool / "run_judges.py"), "--bench", b, "--models", models, "--conditions", "none",
+                   "--concurrency", str(concurrency), "--max-tokens", "8192"] + (["--rb2-domains", "Math"] if b == "rb2" else []) \
+                + (["--limit", str(limit)] if limit else [])
+            try:
+                subprocess.run(cmd, check=False, cwd=str(pool))  # the summary step may lack Phase 1 files
+            finally:
+                vol.commit()
+        return "done: pooljudge"
     out = VOL_OUT + (f"_{jobset}" if jobset else "") + ("_pilot" if limit else "")
     cmd = [sys.executable, f"{HERE}/tinker_jobs.py", "--phase", phase, "--out", out,
            "--concurrency", str(concurrency)]

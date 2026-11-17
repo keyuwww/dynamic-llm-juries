@@ -38,6 +38,11 @@ POOL = [
          params="117B", active="5B", price_in=0.33, price_out=0.84),
     dict(key="deepseek-v3.1", model="deepseek-ai/DeepSeek-V3.1", tier="strong", family="deepseek",
          params="671B", active="37B", price_in=1.695, price_out=4.215),
+    # --- extra judge families for the belief study (Nov 16); tier "extra" keeps them out of "all" ----
+    dict(key="deepseek-v4.1-flash", model="deepseek-ai/DeepSeek-V4.1-Flash:peft:262144", tier="extra",
+         family="deepseek", params="?", active="?", price_in=0.60, price_out=3.60),
+    dict(key="kimi-k2.6", model="moonshotai/Kimi-K2.6", tier="extra", family="moonshot",
+         params="?", active="?", price_in=2.205, price_out=5.49),
 ]
 POOL_BY_KEY = {m["key"]: m for m in POOL}
 
@@ -45,7 +50,7 @@ POOL_BY_KEY = {m["key"]: m for m in POOL}
 def select_models(arg):
     """'all' | 'routing' (small+mid) | 'strong' | comma-separated keys."""
     if arg in (None, "", "all"):
-        return list(POOL)
+        return [m for m in POOL if m["tier"] != "extra"]
     if arg == "routing":
         return [m for m in POOL if m["tier"] in ("small", "mid")]
     if arg == "strong":

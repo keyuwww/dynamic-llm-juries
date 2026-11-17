@@ -64,6 +64,35 @@ def prep():
     print(len(out), collections.Counter(x["model"] for x in out))
 
 
+KREF = ("[REFERENCE ANSWER FROM A STRONG AI MODEL]\n{ref}\n[END OF REFERENCE ANSWER]\n\n"
+        "A reference answer to the user's final question, written by a strong AI model, is given above; use it as the "
+        "reference for what the correct answer is.\n\n")
+
+
+def kimi_refs():
+    """BFF question key 'uid|turn' -> Kimi-K3.1-Pro's own answer (Nov 8-9 runs; 141/160 agree with the expert)."""
+    L = map(json.loads, open(HERE.parent / "beyond_capability" / "out" / "bff_solves_kimi-k3.1-pro.jsonl"))
+    return {x["qid"]: x["samples"][0]["text"] for x in L if x["samples"] and x["samples"][0]["clean"]}
+
+
+def prep_kimi():
+    jobs, refs, rows = load()
+    kr = kimi_refs()
+    out = []
+    for (judge, iid) in rows:
+        j = jobs[(judge, iid)]
+        if not refs.get(iid):  # same 1,295 items as the expert-reference run
+            continue
+        k = kr.get(f"{j['uid']}|{j['qid'].rsplit('-t', 1)[1]}")
+        if not k:
+            continue
+        msg = j["messages"][0]["content"].replace(ANCHOR, KREF.format(ref=k) + ANCHOR, 1)
+        out.append(dict(cache_key=f"bffkimi|{judge}|{iid}", model=judge, messages=[{"role": "user", "content": msg}]))
+    with gzip.open(HERE / "inputs" / "gen_bffkimi.jsonl.gz", "wt") as f:
+        f.write("".join(json.dumps(x) + "\n" for x in out))
+    print(len(out), collections.Counter(x["model"] for x in out))
+
+
 def prep_both():
     """Commit first AND the expert reference: own earlier solve as an assistant turn, then the reference judge prompt."""
     jobs, refs, rows = load()
@@ -209,5 +238,59 @@ def analyze_four():
     print("\n".join(L))
 
 
+def analyze_kimi():
+    """Usual vs expert reference vs Kimi-K3.1-Pro reference, same BFF items; split by whether Kimi was right."""
+    jobs, _, rows = load()
+    def verdicts(fname, prefix):
+        g = {r["cache_key"]: r for r in map(json.loads, open(HERE / "out" / fname))}
+        return {k: parse_verdict(v["text"]) for k, v in g.items() if k.startswith(prefix)}
+    rf, kf = verdicts("gen_bffref.jsonl", "bffref|"), verdicts("gen_bffkimi.jsonl", "bffkimi|")
+    kok = {}
+    for x in map(json.loads, open(HERE.parent / "beyond_capability" / "out" / "bff_grades_glm.jsonl")):
+        m, uid, turn, si = x["cache_key"].split("|")
+        if m == "kimi-k3.1-pro" and si == "0":
+            kok[f"{uid}|{turn}"] = int(x["verdict"])
+    P = []  # (qid, usual, expert, kimi, ok, judge, bin, kimi_right)
+    for (judge, iid), r in rows.items():
+        k = f"{judge}|{iid}"; j = jobs[(judge, iid)]
+        v = (r.get("spoken"), rf.get("bffref|" + k), kf.get("bffkimi|" + k))
+        if any(x is None for x in v):
+            continue
+        kq = f"{j['uid']}|{j['qid'].rsplit('-t', 1)[1]}"
+        P.append((j["qid"], *[int(x) for x in v], int(r["target_ok"]), judge, binof(r["belief"]), kok.get(kq)))
+    names = ["usual judge prompt", "+ expert reference", "+ Kimi-K3.1-Pro reference"]
+    def ba(s, i):
+        pos = [p[i] for p in s if p[4] == 1]; neg = [1 - p[i] for p in s if p[4] == 0]
+        return None if not pos or not neg else 100 * (np.mean(pos) + np.mean(neg)) / 2
+    def table(S, title):
+        L = [f"## {title} ({len(S)} judgments)\n", "Wrong answers approved:\n",
+             "| prompt | " + " | ".join(BINS) + " | strong belief (4/7+) | right answers approved | balanced accuracy (vs usual) |",
+             "|---|---|---|---|---|---|---|---|"]
+        for i, nm in enumerate(names, start=1):
+            cells = []
+            for b in BINS:
+                v = [p[i] for p in S if p[4] == 0 and p[6] == b]
+                cells.append(f"{100 * np.mean(v):.0f}% (n={len(v)})" if v else "–")
+            st = [p[i] for p in S if p[4] == 0 and p[6] in ("4-6", "7/7")]
+            rt = [p[i] for p in S if p[4] == 1]
+            if i == 1:
+                bc = f"{ba(S, 1):.1f}%"
+            else:
+                d = boot(S, lambda s, i=i: (ba(s, i) - ba(s, 1)) if ba(s, i) is not None and ba(s, 1) is not None else None)
+                bc = f"{ba(S, i):.1f}% ({d[0]:+.1f} [{d[1]:+.1f}, {d[2]:+.1f}])"
+            L.append(f"| {nm} | " + " | ".join(cells) + f" | {100 * np.mean(st):.0f}% (n={len(st)}) | {100 * np.mean(rt):.0f}% | {bc} |")
+        return L + [""]
+    L = ["# Strong-model reference on BFF (three Qwens, thinking off)\n",
+         "Kimi-K3.1-Pro's own answer (one sample, no expert involved) replaces the expert reference. 95% intervals resample questions.\n"]
+    L += table(P, "All items")
+    L += table([p for p in P if p[7] == 1], "Kimi's reference right")
+    L += table([p for p in P if p[7] == 0], "Kimi's reference wrong")
+    d = boot(P, lambda s: (ba(s, 3) - ba(s, 2)) if ba(s, 3) is not None and ba(s, 2) is not None else None)
+    L += [f"Kimi reference vs expert reference: {d[0]:+.1f} [{d[1]:+.1f}, {d[2]:+.1f}] balanced accuracy.",
+          f"Kimi right on {sum(p[7] == 1 for p in P)} of {len(P)} judgments ({100 * np.mean([p[7] == 1 for p in P]):.0f}%)."]
+    (HERE / "out" / "reference_kimi.md").write_text("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
-    prep() if "--prep" in sys.argv else prep_both() if "--prep-both" in sys.argv else analyze_four() if "--four" in sys.argv else analyze()
+    prep() if "--prep" in sys.argv else prep_both() if "--prep-both" in sys.argv else prep_kimi() if "--prep-kimi" in sys.argv else analyze_kimi() if "--kimi" in sys.argv else analyze_four() if "--four" in sys.argv else analyze()

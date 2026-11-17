@@ -46,6 +46,9 @@ QWENS = ["qwen3.5-4b", "qwen3.5-9b", "qwen3.6-35b-a3b"]
 MATCHERS = {
     "glm5.3-flash": dict(spec=dict(key="glm5.3-flash", model="zai-org/GLM-5.3-Flash:peft:262144", price_in=0.84, price_out=2.11),
                          renderer="glm5_3_high_reasoning", max_tokens=8192, file="matches_glm5.3-flash.jsonl"),
+    # full GLM-5.3 for the label audit (Nov 16): harder reading, longer reasoning budget
+    "glm5.3": dict(spec=dict(key="glm5.3", model="zai-org/GLM-5.3:peft:262144", price_in=0.0, price_out=0.0),
+                   renderer="glm5_3_high_reasoning", max_tokens=32768, file="matches_glm5.3.jsonl"),
 }
 SOLVE_JOBS = HERE / "inputs" / "solve_jobs.jsonl"  # --set replaces these
 READOUT_JOBS = HERE / "inputs" / "readout_jobs.jsonl.gz"
@@ -328,7 +331,7 @@ def main():
 
     if a.phase == "ask":  # free-form GLM questions: inputs/ask_<name>.jsonl.gz (cache_key, prompt), --pairs <name>
         chat, mt = make_matcher(a.matcher), MATCHERS[a.matcher]["max_tokens"]
-        cache = JsonlCache(out / f"ask_glm5.3-flash_{a.pairs}.jsonl")
+        cache = JsonlCache(out / f"ask_{a.matcher}_{a.pairs}.jsonl")
         if a.redo_cut:
             mt = redo_cut(cache, mt, a.redo_cut)
         aj = load_gz(HERE / "inputs" / f"ask_{a.pairs}.jsonl.gz")

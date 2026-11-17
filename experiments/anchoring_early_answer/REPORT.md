@@ -610,6 +610,121 @@ Stacking does not help: commit first + reference is 2.6 points [−4.6, −0.7] 
 wrong) committed answer competes with the reference at 7/7 (19% → 31%) and costs right answers it can't reach
 (0/7: 41% → 30%). The best single fix is the reference.
 
+**A strong model's answer as the reference (`reference_test.py --kimi`, `out/reference_kimi.md`).** Kimi-K3.1-Pro's own
+answer (one sample, no expert) in place of the expert reference, same 1,295 judgments. Strong-belief wrong answers
+approved 62% → 34%; balanced accuracy 74.6 → 82.8% (+8.2 [+5.0, +11.4]), about half the expert's gain. Where Kimi is
+right (85% of judgments) it is nearly as good as the expert (14% vs 12%); where Kimi is wrong the judge follows it
+(right answers approved 19%, balanced accuracy 49.8%). About half of the strong-belief wrong answers (51 of 108) are on
+questions Kimi also gets wrong.
+
+**Rechecked on audited labels (Experiment 11).** Some BFF expert references are themselves wrong, so part of the
+"fix" above was the judge rejecting answers that are actually right. Keeping only wrong answers that GLM-5.3 audits as
+clearly wrong: strong-belief approvals (n=52) usual 44%, commit first 44%, **expert reference 0%**, Kimi reference 13%;
+balanced accuracy 78.7 / 81.6 / 90.9 / 86.1%. On the 68 "wrong" answers GLM-5.3 audits as actually correct, approval
+falls from 74% to 22% with the expert reference: the judge follows the reference, right or wrong.
+
+---
+
+## Experiment 11 — Are the measurements sound? Matcher check and label audit (Nov 16)
+
+Two checks a reviewer will ask for first. Files in `validation/`. Both second readers are AI models (Claude, GLM-5.3),
+not human experts.
+
+**1. The answer matcher (GLM-5.3-Flash).** Claude re-read 50 SAME/DIFFERENT decisions (RB2 Math 20, BFF 30,
+oversampling wrong answers the judge believes), deciding before looking at GLM's call (`matcher_check.md`).
+- Agreement 42/47 (89%) leaving out 3 ambiguous cases; 42/50 (84%) counting them as disagreements.
+- RB2 Math 19/20; BFF 23/27.
+- **GLM never said SAME wrongly (24/24).** All 5 disagreements are GLM saying DIFFERENT on near-matches (4 BFF, e.g.
+  WACC 5.95% vs 5.93%, or the same recommendation with one figure missing; 1 math rounding case).
+- So belief is, if anything, **understated** on BFF, and the staircase is not produced by loose matching.
+
+**2. The labels.** Claude audited all 55 wrong-labelled answers some Qwen believes 7/7 (BFF 29, JudgeBench 26;
+`label_audit_7of7.md`); GLM-5.3 then audited every wrong-labelled BFF and JudgeBench answer at every belief level
+(397 answers; `build_glm_audit.py`). They agree on 89% of the 7/7 "clearly wrong or not" calls.
+- **Label errors pile up where judges believe the answer.** Unique wrong-labelled answers, GLM-5.3:
+
+| Belief | Clearly wrong | Actually correct | Contested |
+|---|---|---|---|
+| 0/7 | 231 | 2 | 9 |
+| 1–3 | 120 | 15 | 18 |
+| 4–6 | 56 | 22 | 21 |
+| 7/7 | 23 | 22 | 9 |
+
+- Examples: four BFF impairment items whose expert reference copies the question's $386,000 fair value as $368,000
+  (checked by hand); a portfolio return the reference weights equally when the holdings are one share each; a
+  JudgeBench answer that is right but typed the letter 7 times instead of 5. Many contested JudgeBench items have a
+  second defensible option among MMLU-Pro's added choices.
+- Judges approve the "actually correct" ones 59–82% of the time, so the released labels inflate the top of the
+  staircase.
+
+**The staircase survives cleaning** (`clean_staircase.py`, `validation/clean_staircase.md`). Wrong answers approved,
+three Qwens, thinking off; RB2 Math keeps its earlier value-match cleaning in every row:
+
+| Labels | 0/7 | 1–3 | 4–6 | 7/7 | Gap 7/7 − 0/7 |
+|---|---|---|---|---|---|
+| As released | 18% (n=1,741) | 35% | 54% | 74% (n=101) | +56 [+45, +66] |
+| Drop GLM-5.3 "actually correct" | 18% | 33% | 53% | 68% (n=56) | +50 [+36, +62] |
+| Only GLM-5.3 "clearly wrong" | 17% | 30% | 48% | 65% (n=40) | +48 [+29, +63] |
+| GLM-5.3 and Claude both "clearly wrong" | 17% | 30% | 48% | 63% (n=35) | +46 [+28, +63] |
+
+- The rise is a little smaller and the 7/7 group is smaller, but the effect holds in every version, for every Qwen,
+  and on every benchmark (cleaned 7/7: RB2 Math 90%, JudgeBench 69%, BFF 43% with n=14).
+- **For the paper:** report the cleaned staircase as the main number, and the label-error pattern as a finding of
+  its own: on these benchmarks, a "wrong" answer that judges strongly believe is often a label error.
+- **Nemotron-3-Super survives too, and is steeper:** 25% → 51% → 61% → 88% (n=17 at 7/7) keeping only GLM-5.3
+  "clearly wrong" answers (45 of its 320 BFF/JudgeBench wrong answers were not in the Qwen audit set; kept as
+  released here).
+
+**3. Inside the model, on clean labels** (`beyond_capability/dir_belief.py --audited`,
+`out_dirs/belief_dirs_<key>_audited.md`). The belief arrow is built from "believed wrong minus never-reached wrong"
+answers, so believed answers that are actually right would pull it toward the correctness arrow by construction.
+GLM-5.3 also audited the believed wrong BBEH answers (auto-grader labels; 365 answers): 191 clearly wrong, 84 actually
+correct (mostly grader misses on equivalent answers), 83 contested. Cosine of the belief and correctness arrows,
+disjoint halves of the questions, best layer per role:
+
+| Case | Believed n (released → clean) | Judging, released | **Judging, clean** | Solving (end of answer), clean |
+|---|---|---|---|---|
+| Qwen-9B · BBEH | 255 → 122 | 0.63 | **0.70** | 0.52 |
+| Qwen-35B · BBEH | 250 → 122 | 0.62 | **0.80** | 0.31 |
+| Qwen-9B · BFF | 39 → 20 | 0.80 | 0.43 | 0.07 |
+| Qwen-35B · BFF | 32 → 12 | 0.49 | 0.11 | −0.03 |
+
+- **BBEH, the biggest case, holds and gets stronger:** while judging, a believed wrong answer looks like a right one
+  (0.70, 0.80), more than while solving (0.52, 0.31). Removing the verdict-lean direction leaves it (0.84, 0.93).
+- **The BFF numbers were mostly label errors** and now rest on 12–20 believed answers; drop them from the headline.
+  RB2 Math has only 9 believed wrong answers per judge (unchanged).
+- New headline for the inside-the-model slide: BBEH only, clean labels, 0.70–0.80 judging vs 0.31–0.52 solving.
+
+---
+
+## Experiment 12 — A third judge family: DeepSeek-V4.1-Flash (Nov 16)
+
+**Setup.** Same pipeline as the Nemotron replication, as its own job set (`--set deepseek`, `out_deepseek/`):
+- pool verdicts on the main set (RB2 Math 732, JudgeBench 620, BFF 459; `modal_app.py --phase pooljudge`, thinking
+  off, 8,192-token cap, 1 of 1,811 hit it);
+- one own answer per question plus 7 more (T=0.7), GLM-5.3-Flash matching, verdict readouts at A and C;
+- 14 of 6,580 extra own answers ran to the context limit (kept as is).
+- Cost ≈ $28 at list prices (own answers $23, verdicts $3, readouts $2).
+
+**Result: the staircase holds in a third family** (`out_deepseek/belief_clean.md`, `validation/clean_staircase.md`).
+Wrong answers approved, by belief:
+
+| Judge | Labels | 0/7 | 1–3 | 4–6 | 7/7 | Gap 7/7 − 0/7 |
+|---|---|---|---|---|---|---|
+| 3 Qwens (Alibaba) | as released | 18% | 35% | 54% | 74% (n=101) | +56 [+46, +66] |
+| 3 Qwens | clean | 17% | 30% | 49% | 65% (n=40) | +48 [+30, +63] |
+| Nemotron-3-Super (NVIDIA) | as released | 26% | 50% | 58% | 83% (n=42) | +57 [+45, +68] |
+| Nemotron-3-Super | clean | 26% | 55% | 62% | 88% (n=17) | +62 [+45, +76] |
+| **DeepSeek-V4.1-Flash** | as released | 13% | 45% | 55% | 68% (n=50) | +55 [+41, +67] |
+| **DeepSeek-V4.1-Flash** | clean | 13% | 42% | 43% | 55% (n=20) | +42 [+20, +65] |
+
+"Clean" = only wrong answers GLM-5.3 audits as clearly wrong (Experiment 11). Nemotron and DeepSeek rows use the C
+readout, which equals the spoken verdict in every judgment checked.
+- Belief again beats the one-sample "matches my answer" label: holding belief fixed, the old label adds −14
+  [−33, +5]; holding the label fixed, belief adds +69 [+46, +90] (at C).
+- Three families, three different makers, same pattern. Kimi-K2.6 (Moonshot) would be a fourth at an estimated
+  ~$45 (not run; needs a go-ahead).
+
 ## Feasibility verdict on the two papers' ideas
 
 | Idea | Works here? | What we learned |

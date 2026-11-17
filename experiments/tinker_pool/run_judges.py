@@ -218,7 +218,8 @@ def rb2_items(a):
     """All RewardBench 2 domains EXCEPT Safety (which has its own --bench safety, already run).
     Only Safety is human-annotated; these are LLM-judged/algorithmic gold -- capability checks, not
     human-preference ones."""
-    items = [it for it in load_rb2_all(a.rb2_path) if it["domain"] != "Safety"]
+    items = [it for it in load_rb2_all(a.rb2_path) if it["domain"] != "Safety"
+             and (not a.rb2_domains or it["domain"] in a.rb2_domains.split(","))]
     for it in items:
         it["uid"], it["turn"], it["examinee"], it["gold"] = it["id"], 1, "unknown", it["human"]
     by_domain = defaultdict(int)
@@ -378,6 +379,7 @@ def main():
     ap.add_argument("--mock", action="store_true")
     ap.add_argument("--bff-path"), ap.add_argument("--verdicts-path"), ap.add_argument("--bbeh-path")
     ap.add_argument("--rb2-path")
+    ap.add_argument("--rb2-domains", default="", help="rb2: only these domains, e.g. Math (default: all non-Safety)")
     a = ap.parse_args()
     default_conds = {"bff": "none,self,human", "bbeh": "none,self", "safety": "none",
                       "rb2": "none", "judgebench": "none"}[a.bench]

@@ -71,17 +71,41 @@ def beliefs(key, bench):
     return out, 0.5
 
 
+AUDIT = False
+
+
+def audited_bad(bench):
+    """Wrong-labelled answers that are not clearly wrong: GLM-5.3 audit (BFF) or the value-match cleaning (RB2 Math)."""
+    import re
+    if bench in ("bff", "bbeh"):  # bbeh: only believed wrong answers were audited (labelauditbbeh)
+        bad = set()
+        for l in open(ANC / "out" / ("ask_glm5.3_labelaudit.jsonl" if bench == "bff" else "ask_glm5.3_labelauditbbeh.jsonl")):
+            r = json.loads(l)
+            m = re.findall(r"AUDIT:\s*(LABEL_OK|LABEL_WRONG|CONTESTED)", r["text"])
+            if not m or m[-1] != "LABEL_OK":
+                bad.add(r["cache_key"].split("|", 2)[2])
+        return bad
+    if bench == "rb2math":
+        sys.path.insert(0, str(ANC))
+        from clean_labels import same_value_items
+        return set(same_value_items())
+    return set()
+
+
 def main():
+    global AUDIT
     ap = argparse.ArgumentParser()
     ap.add_argument("--key", required=True)
     ap.add_argument("--tags", required=True)
+    ap.add_argument("--audited", action="store_true", help="drop wrong-labelled answers the label audit rejects")
     a = ap.parse_args()
+    AUDIT = a.audited
     parts = [load(a.key, t) for t in a.tags.split(",")]
     L = []
     for bench in ("rb2math", "bff", "bbeh"):
         if any(m["bench"] == bench for _, meta, _ in parts for m in meta):
             L += run_bench(a.key, bench, parts)
-    out = HERE / "out_dirs" / f"belief_dirs_{a.key}.md"
+    out = HERE / "out_dirs" / f"belief_dirs_{a.key}{'_audited' if AUDIT else ''}.md"
     out.write_text("\n".join(L) + "\n")
     print("\n".join(L))
     print("wrote", out)
@@ -97,6 +121,9 @@ def run_bench(key, bench, parts):
                 rows.setdefault(m["mode"], {})[m["aid"]] = (H, i, m)
     have = [r for r in ROLES if r in rows]
     aids = sorted(set.intersection(*[set(rows[r]) for r in have]))
+    if AUDIT:  # Nov 16: drop wrong-labelled answers an audit says are not clearly wrong (validation/, Experiment 11)
+        bad = audited_bad(bench)
+        aids = [x for x in aids if not (rows[have[0]][x][2]["gold"] == 0 and x in bad)]
     y = np.array([rows[have[0]][x][2]["gold"] for x in aids])
     q = np.array([rows[have[0]][x][2]["qid"] for x in aids])
     b = np.array([belief.get(x, np.nan) for x in aids], float)
