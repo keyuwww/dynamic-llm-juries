@@ -23,7 +23,8 @@ def setup(model_name):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
     tok = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch.bfloat16, device_map="cuda")
+    multi = torch.cuda.device_count() > 1  # e.g. a 70B judge split over 2 GPUs (layers in order; inputs go to cuda:0)
+    model = AutoModelForCausalLM.from_pretrained(model_name, dtype=torch.bfloat16, device_map="auto" if multi else "cuda")
     model.eval()
     layers = model.model.layers if hasattr(model.model, "layers") else model.model.language_model.layers
     return tok, model, layers

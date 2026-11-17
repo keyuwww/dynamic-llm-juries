@@ -1,0 +1,15 @@
+\begin{tabular}{llr r rrrr}
+\toprule
+& & & & \multicolumn{4}{c}{Gain over the verdict} \\ \cmidrule(l){5-8}
+Benchmark & Answers by & Judges & Verdict & Reason & Stretch & Direction & Verdict \\
+& & & & first & $\times$11 & & + dir. \\
+\midrule
+MATH & Qwen3.5-4B & 5 & 57.3 & $-$1.6 & \textbf{+1.7} & \textbf{+2.9} & \textbf{+2.9} \\
+MATH & OLMo-2-7B & 5 & 59.9 & $-$2.4 & $-$1.0 & $-$2.3 & $-$0.7 \\
+BBEH & Qwen3.5-4B & 6 & 53.6 & $-$0.5 & +0.8 & \textbf{+3.1} & \textbf{+2.1} \\
+MMLU-Redux & Qwen3.5-4B & 4 & 46.5 & +1.5 & +0.2 & \textbf{+2.2} & +0.7 \\
+MMLU-Redux & OLMo-2-7B & 4 & 50.8 & \textbf{+2.1} & +0.5 & +1.0 & +0.9 \\
+\midrule
+MATH, failed 9/9$^\dagger$ & Qwen3.5-4B & 1 & 56.8 & $-$0.3 & \textbf{+5.0} & +3.1 & \textbf{+4.7} \\
+\bottomrule
+\end{tabular}

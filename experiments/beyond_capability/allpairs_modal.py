@@ -49,7 +49,8 @@ def make_image(transformers_spec, extra=()):
     for b in BENCH.values():
         for f in b[:2]:
             img = img.add_local_file(_here.parent / "inputs" / f, f"{HERE}/inputs/{f}")
-    for f in ("sm_mmlu_items.jsonl.gz", "sm_math_items.jsonl.gz", "sm_bbeh_items.jsonl.gz"):  # same-model test items
+    for f in ("sm_mmlu_items.jsonl.gz", "sm_math_items.jsonl.gz", "sm_bbeh_items.jsonl.gz",  # same-model test items
+              "sm2_mmlu_items.jsonl.gz", "sm2_math_items.jsonl.gz"):
         if (_here.parent / "inputs" / f).exists():
             img = img.add_local_file(_here.parent / "inputs" / f, f"{HERE}/inputs/{f}")
     return img
@@ -145,24 +146,26 @@ def diagnose_v5(judge: str, bench: str) -> str:
 N_LAYERS = {"llama3.2-1b": 16, "qwen2.5-7b": 28, "llama3.1-8b": 32, "llama3.2-3b": 28, "qwen3.5-4b": 32, "phi4-mini": 32, "mistral-7b": 32, "granite3.3-8b": 40}
 
 
-def _extra(judge, bench, layer):
-    """judge the same-model test items (inputs/sm_<bench>_items.jsonl.gz) at a fixed layer with the pair's directions."""
+def _extra(judge, bench, layer, items="sm"):
+    """judge the same-model test items (inputs/<items>_<bench>_items.jsonl.gz) at a fixed layer with the pair's
+    directions. items="sm2": second answering model -> sm2extra_<bench>.jsonl, with the direction position."""
     vol.reload()
     out = f"{ROOT}/{judge}_{bench}"
     sh(["--phase", "extra", "--model", MODELS[judge], "--out", out, "--tag", bench, "--layer", str(layer),
-        "--n-layers", str(N_LAYERS[judge]), "--extra-items", f"{HERE}/inputs/sm_{bench}_items.jsonl.gz"]
+        "--n-layers", str(N_LAYERS[judge]), "--extra-items", f"{HERE}/inputs/{items}_{bench}_items.jsonl.gz"]
+       + (["--prefix", "sm2extra", "--with-proj"] if items == "sm2" else [])
        + (["--no-cache"] if judge in NO_CACHE else []))
     return f"extra done: {judge} {bench} layer {layer}"
 
 
 @app.function(**GPU)
-def extra(judge: str, bench: str, layer: int) -> str:
-    return _extra(judge, bench, layer)
+def extra(judge: str, bench: str, layer: int, items: str = "sm") -> str:
+    return _extra(judge, bench, layer, items)
 
 
 @app.function(image=image_v5, **GPU)
-def extra_v5(judge: str, bench: str, layer: int) -> str:
-    return _extra(judge, bench, layer)
+def extra_v5(judge: str, bench: str, layer: int, items: str = "sm") -> str:
+    return _extra(judge, bench, layer, items)
 
 
 def _extra_direct(judge, bench, layer):
@@ -248,7 +251,7 @@ def knows_splits(judge: str, bench: str, layer: int, n: int = 20) -> dict:
 def pull() -> dict:
     vol.reload()
     root = pathlib.Path(ROOT)
-    keep = ("choice_", "final_", "meta_", "diag_", "extra_", "sweep_", "xdirect_")  # solve files are fetched by solve_vllm_modal.py
+    keep = ("choice_", "final_", "meta_", "diag_", "extra_", "sweep_", "xdirect_", "sm2extra_")  # solve files are fetched by solve_vllm_modal.py
     return {f"{p.parent.name}/{p.name}": p.read_bytes() for p in root.glob("*/*") if p.name.startswith(keep)} \
         if root.exists() else {}
 
@@ -308,9 +311,10 @@ def main(phase: str = "run", pairs: str = ""):
                 print(c.get(), flush=True)
             except Exception as e:
                 print(f"FAILED {type(e).__name__}: {str(e)[:300]}", flush=True)
-    if phase == "extra":  # pairs given as judge:bench:layer,...
+    if phase in ("extra", "sm2"):  # pairs given as judge:bench:layer,...
         todo = [x.split(":") for x in pairs.split(",")]
-        calls = [(extra_v5 if j in NO_CACHE else extra).spawn(j, b, int(L)) for j, b, L in todo]
+        items = "sm2" if phase == "sm2" else "sm"
+        calls = [(extra_v5 if j in NO_CACHE else extra).spawn(j, b, int(L), items) for j, b, L in todo]
         for c in calls:
             try:
                 print(c.get(), flush=True)

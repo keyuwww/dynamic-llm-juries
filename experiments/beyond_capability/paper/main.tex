@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xspace}
+\input{numbers.tex}
+
+\title{Small LLM Judges Know More Than They Say,\\Mostly About Who Wrote the Answer}
+
+\author{Anonymous}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Small open LLM judges are cheap, but on hard benchmarks their verdicts rank a right answer above a wrong one barely more often than chance. A linear direction in the judge's hidden state does much better: across nine judges (1--9B parameters) and three benchmarks (MMLU-Redux, MATH, BBEH), it ranks right above wrong answers to the same question \R{gap.lo}--\R{gap.hi} points of AUROC better than the verdict in \R{pool.npairs} of \R{pairs.all} judge--benchmark pairs. We show that most of this hidden knowledge is about who wrote the answer: within a question, \R{auth.dir.lo}--\R{auth.dir.hi}\% of the direction's variation, and as much of the verdict's, lies between answering models. To isolate checking, we compare right and wrong answers written by the same model to questions the judge cannot solve itself. There, the judges' verdicts are above chance on MATH (\R{sm.math.qwen.verdict.rank} and \R{sm.math.olmo.verdict.rank} for two unrelated answering models) and BBEH (\R{sm.bbeh.qwen.verdict.rank}) but not on MMLU-Redux (\R{sm.mmlu.qwen.verdict.rank}, \R{sm.mmlu.olmo.verdict.rank}): small judges can partly check reasoning they cannot reproduce, but not facts they do not know. The hidden direction adds a few points for an answering model represented in the data it was learned from, but lowers the ranking for an unseen one (\R{sm.math.olmo.direct.rank} on MATH). Of four inference-time readouts---reasoning before the verdict, reading the direction, adding it to the verdict, and amplifying it at a layer the verdict reads---none improves checking beyond the judge's ability consistently across answering models, and reasoning first does not help small judges except slightly on recall questions, where their forced verdicts are at chance. A 70B judge from the same family closes most of the gap by saying more of what it knows, but checks same-model answers to questions it cannot solve no better than the small judges, and not at all on MMLU-Redux (\R{big.mmlu.sm.qwen.verdict.rank}).
+\end{abstract}
+
+\section{Introduction}
+
+LLM judges grade the outputs of other models in evaluation pipelines, data filtering, and reward modelling \citep{zheng2023judging}. Large proprietary judges are expensive, so small open models are attractive, but on hard questions their verdicts are weak: on the benchmarks we study, a judge's verdict ranks a right answer above a wrong answer to the same question only slightly more often than a coin flip. A natural hypothesis, supported by work on truthfulness probes \citep{azaria-mitchell-2023-internal,marks2024geometry,orgad2025llms} and by recent probes on judges \citep{radharapu-etal-2026-calibrating,gulati2026auditing}, is that the judge represents more than its verdict reveals.
+
+We test this hypothesis for LLM judges and find that it holds, but for an uncomfortable reason. A simple linear direction in the judge's residual stream---the difference between the average state of right and wrong answers to the same question, learned on half the questions and tested on the other half---ranks answers far better than the verdict (Figure~\ref{fig:gap}). Yet the direction, and the verdict too, spend most of their within-question variation on \emph{which model wrote the answer}. When stronger answering models are more often right, recognising their style is a shortcut that looks like correctness checking on a mixed answer pool.
+
+To separate checking from recognising the author, we build test sets in which every compared pair of a right and a wrong answer comes from the same answering model, and restrict them to questions the judge itself answers incorrectly. There, the only way to rank well is to check an answer the judge could not have produced. Small judges' verdicts can partly do this on competition mathematics and hard reasoning, for two unrelated answering models, but not on factual multiple-choice questions. The hidden direction's extra knowledge, in contrast, is tied to the answering models it was learned from: it helps for one that appears in its training pool and hurts for one that does not.
+
+\paragraph{Contributions.}
+(1)~A measurement of the hidden-knowledge gap in small LLM judges with a within-question ranking that no rescaling of scores can improve, across nine judges and three benchmarks and robust over 20 random splits, consistent with concurrent probe results (\S\ref{sec:gap}).
+(2)~Evidence that most of the gap, and most of the verdict's own variation, is authorship recognition (\S\ref{sec:author}).
+(3)~A same-model, judge-cannot-solve test, replicated with two unrelated answering models, showing that small judges check beyond their own ability on reasoning but not on fact recall, and that the hidden direction's advantage there does not transfer to an unseen answering model (\S\ref{sec:beyond}).
+(4)~A comparison of four inference-time readouts, including reasoning before the verdict and residual-stream amplification at a layer chosen by a label-free test, with a diagnosis of when amplification fails (\S\ref{sec:readout}).
+(5)~A scale check with Llama-3.1-70B: the gap shrinks, checking beyond the judge's own ability does not grow (\S\ref{sec:scale}).
+
+\section{Related Work}
+\label{sec:related}
+\input{related.tex}
+
+\section{Setup}
+\label{sec:setup}
+
+\paragraph{Judges.} Nine instruction-tuned models with thinking disabled: Llama-3.1-8B, Llama-3.2-3B and Llama-3.2-1B \citep{grattafiori2024llama3}, Qwen3.5-9B, Qwen3.5-4B and Qwen2.5-7B, Phi-4-mini, Mistral-7B-v0.3, and Granite-3.3-8B. Llama-3.1-70B serves as a scale check; it goes through every step but is reported separately (\S\ref{sec:scale}) and never pooled with the small judges. The judge sees one question and one answer and is asked whether the final answer is correct; the prompt asks it to reason briefly and end with \texttt{VERDICT: CORRECT} or \texttt{VERDICT: INCORRECT} (Appendix~\ref{app:prompts}). Except in the reasoning baseline (\S\ref{sec:readout}), we append \texttt{VERDICT:} to the prompt and read the next token. The \emph{verdict score} is $\log P(\text{CORRECT}) - \log P(\text{INCORRECT})$ at that position.
+
+\paragraph{Benchmarks and answers.} MMLU-Redux \citep{gema-etal-2025-done} (922 questions with expert-checked keys; 3,496 answers), MATH \citep{hendrycks2021math} (602 problems; 2,384 answers, graded against the reference by GLM-5.3-Flash with exact-match shortcuts), and BBEH \citep{kazemi-etal-2025-big} (447 questions; 2,244 answers). Answers come from several, mostly stronger, models whose accuracies differ widely (e.g.\ 43\% to 81\% on MMLU-Redux); Appendix~\ref{app:data} lists them.
+
+\paragraph{Ranking.} For every pair of one right and one wrong answer to the same question we score 1 if the right one gets the higher score, $\frac12$ for a tie and 0 otherwise, and average over pairs (a within-question AUROC, $\times$100; 50 is chance). Unlike accuracy, ranking is unchanged when a judge becomes uniformly stricter or more lenient. 95\% intervals resample questions; differences between methods are paired.
+
+\paragraph{Solved and not solved.} A question is \emph{solved} by a judge if the judge's own answer to it (thinking off, $T{=}0.7$, up to 8,192 tokens) is correct.
+
+\paragraph{The correctness direction.} We record the residual stream at the last prompt token (after \texttt{VERDICT:}) at every second layer. At each layer we subtract each question's mean state, take the difference between the mean of right and of wrong answers, normalise it, and project answers onto it. The direction is learned on a random half of the questions and applied to the other half, and vice versa, so every reported score is out-of-sample. Its ranking is what the judge \emph{knows}; the verdict's ranking is what it \emph{says}; the \emph{gap} is the best layer's \emph{knows} minus \emph{says}.
+
+\section{Judges Know More Than They Say}
+\label{sec:gap}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_gap.pdf}
+\caption{Ranking of right above wrong answers to the same question by the judge's verdict and by a linear direction in its hidden state (same answers, out-of-sample direction), for the \R{pool.npairs} judge--benchmark pairs with a gap above 5 points. Not shown (gap $\le 5$): Qwen3.5-9B on all three benchmarks, Qwen3.5-4B on MMLU-Redux and MATH, Granite-3.3-8B and Qwen2.5-7B on MATH, Mistral-7B on BBEH.}
+\label{fig:gap}
+\end{figure}
+
+The verdicts of small judges rank answers barely above chance: averaged over the \R{pool.npairs} pairs in Figure~\ref{fig:gap}, the verdict's ranking is \R{pool.verdict.rank}. In \R{pool.npairs} of the \R{pairs.all} judge--benchmark pairs the best layer's direction ranks \R{gap.lo} to \R{gap.hi} points higher. The gap is stable: over 20 random splits of the questions its standard deviation is \R{split.sd.lo}--\R{split.sd.hi} points (largest on BBEH, which has about 230 usable questions per half), and the 20-split mean gap is positive for every pair (Appendix Table~\ref{tab:pairs}). The pairs without a gap are mostly the strongest judges: Qwen3.5-9B's verdict already ranks as well as its best direction. The direction peaks in the middle layers (Figure~\ref{fig:layers}, left) and is learned from a few hundred questions with a class-mean difference, so it is not a high-capacity probe that could memorise the answering pool.
+
+\section{Most of It Is Who Wrote the Answer}
+\label{sec:author}
+
+Answering models differ in accuracy, so a judge that recognises which model wrote an answer can rank answers well without checking them. We measure how much of a score's variation within a question lies between answering models: the between-model sum of squares divided by the total, within each question, on MMLU-Redux and MATH (BBEH has one answer per model and question). For the direction this share is \R{auth.dir.lo}--\R{auth.dir.hi}\% (median \R{auth.dir.med}\%); for the verdict it is \R{auth.ver.lo}--\R{auth.ver.hi}\%. Both the verdict and the hidden state therefore spend most of their within-question variation telling answering models apart, and much of the gap in Figure~\ref{fig:gap} is the direction separating the more accurate models from the less accurate ones better than the verdict does. In some judges the two disagree in sign: on MMLU-Redux, Llama-3.2-3B accepts only 79\% of Nemotron-3-Super's answers (72\% right) but 98--99\% of Qwen3.5-4B's (43\% right), while its direction ranks Nemotron's answers higher (\S\ref{sec:readout}).
+
+This shortcut is not specific to our setup: any evaluation pool mixing answers from models of different strength rewards it, and self-preference results \citep{panickssery2024llm} show that judges represent authorship. It means that pooled probe accuracies overstate what a judge can check.
+
+\section{Checking Beyond the Judge's Own Ability}
+\label{sec:beyond}
+
+\paragraph{Same-model test sets.} For MMLU-Redux and MATH we take the questions Llama-3.1-8B cannot solve and let Qwen3.5-4B answer each 12 more times; we keep questions with at least one right and one wrong answer and up to three of each per question (MMLU-Redux: 2,195 answers to 401 questions; MATH: 1,849 answers to 351 questions). To check that results do not depend on one answering model, OLMo-2-7B-Instruct \citep{olmo2025olmo2}, from a family unrelated to every judge and to Qwen, answers the same questions in the same way. For BBEH, four answering models each contribute up to two right and two wrong of their existing samples per question (2,831 answers to 374 questions). Every compared pair is a right and a wrong answer by the same model to the same question, and each judge is evaluated only on questions it cannot solve itself. The direction is the one learned on the original answer pool (other half of the questions), so nothing is fitted on these sets.
+
+\begin{table*}[t]
+\centering
+\small
+\input{tab_sm.tex}
+\caption{Same-model pairs on questions the judge cannot solve: verdict ranking (mean over judges, 50 = chance) and pooled gains of each readout over the verdict. Bold: 95\% interval above 0. $^\dagger$Llama-3.1-8B on the \R{strict.nq} MATH questions it failed in all 9 of its own attempts. Per-judge numbers: Appendix Table~\ref{tab:smpairs}.}
+\label{tab:sm}
+\end{table*}
+
+\paragraph{Results.} Table~\ref{tab:sm} and Figure~\ref{fig:sm} show three things.
+
+\emph{Verdicts check beyond the judge's ability on reasoning, not on recall.} On MATH questions they cannot solve, the judges rank same-model pairs at \R{sm.math.qwen.verdict.rank} on average for Qwen3.5-4B's answers and \R{sm.math.olmo.verdict.rank} for OLMo-2's, and at \R{sm.bbeh.qwen.verdict.rank} on BBEH. On MMLU-Redux they are at or below chance (\R{sm.mmlu.qwen.verdict.rank} and \R{sm.mmlu.olmo.verdict.rank}). The strongest single case is Llama-3.1-8B on the \R{strict.nq} MATH problems it failed in all nine of its own attempts, where its verdict ranks same-model pairs at \R{strict.verdict.rank}. Checking a worked solution step by step is easier than producing one; recognising a correct multiple-choice letter requires knowing the fact.
+
+\emph{The direction's extra knowledge does not transfer to an unseen answering model.} For Qwen3.5-4B, whose answers are part of the pool the direction is learned from (on other questions), the direction adds to the verdict on all three benchmarks (\R{sm.math.qwen.direct.rank.ci} on MATH, \R{sm.bbeh.qwen.direct.rank.ci} on BBEH, \R{sm.mmlu.qwen.direct.rank.ci} on MMLU-Redux, the last only moving a below-chance ranking toward chance). For OLMo-2, which the direction has never seen, it ranks below the verdict on MATH (\R{sm.math.olmo.direct.rank.ci}) and adds nothing reliable on MMLU-Redux (\R{sm.mmlu.olmo.direct.rank.ci}). Even on same-model pairs, then, part of what the direction encodes is specific to the answering models it was fitted on, consistent with the poor cross-dataset transfer of correctness probes \citep{orgad2025llms,gulati2026auditing}.
+
+\emph{No readout improves checking beyond ability consistently.} Stretching gains on MATH for Qwen's answers (\R{sm.math.qwen.x11.rank.ci}; \R{strict.x11.rank.ci} for Llama-3.1-8B's strict set) but not for OLMo-2's (\R{sm.math.olmo.x11.rank.ci}), and reasoning before the verdict lowers MATH ranking for both answering models (\R{sm.math.qwen.cot.rank.ci} and \R{sm.math.olmo.cot.rank.ci}).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_sm.pdf}
+\caption{Same-model pairs on questions the judge cannot solve: ranking by each readout (mean over judges; bars: standard error over judges).}
+\label{fig:sm}
+\end{figure}
+
+\section{Getting the Knowledge Out}
+\label{sec:readout}
+
+We compare four inference-time readouts with the forced verdict, on the same answers.
+
+\textbf{Reason first.} The judge generates its brief reasoning as the prompt asks (greedy; at most 8,192 tokens on BBEH and 1,536 elsewhere, which \R{cot.reached}\% of runs finish within), and we read the verdict score after its own \texttt{VERDICT:}, appended if it never writes one. \textbf{Direction.} The answer's position along the correctness direction. \textbf{Verdict + direction.} The sum of the verdict score and the direction position, each divided by its within-question standard deviation (no fitted weights). \textbf{Stretch.} We amplify each answer's deviation from the mean along the direction at a single layer, $h \leftarrow h + \beta\,(h^\top v - \mu)\,v$ with $\beta=10$ (``$\times$11''), an activation-steering edit \citep{turner2023steering,li2023iti} that changes the judge's own verdict and output, and read the verdict again.
+
+\paragraph{Choosing the layer for the stretch.} Stretching at the layer where the direction ranks best often fails, because the verdict does not read that layer. A label-free \emph{push test} fixes this: on 400 answers, add $\pm8$ standard deviations of the direction at each layer and measure how far the verdict score moves (its \emph{sensitivity}, in units of the verdict score's within-question spread). Among layers with sensitivity $\ge 0.05$ we stretch the one whose direction ranks best. For Llama-3.1-8B on MATH the best-ranking layer (14) has sensitivity $-0.02$ and stretching there gains $+1.5$; the rule moves to layer 16, where the verdict responds ($+0.26$) and the gain is $+8.2$ (Figure~\ref{fig:layers}). Before running two judges new to the study (Llama-3.2-1B, Qwen2.5-7B) we wrote down this rule and the prediction that every pair with a responding layer gains; it held in 2 of 4 pairs (Appendix~\ref{app:rule}). Overall the stretch gain is significantly positive in \R{pairs.respond.sig} of the \R{pairs.respond} pairs where a layer responds, and a random direction stays within $\pm1$.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_layers.pdf}
+\caption{Llama-3.1-8B on MATH. Left: ranking by the direction learned at each layer, and by the verdict. Right: ranking gain from stretching ($\times$11) at each layer; numbers are the verdict's sensitivity to a push along the direction, and grey bars mark layers below the 0.05 threshold. The best-ranking layer (14) is one the verdict does not read.}
+\label{fig:layers}
+\end{figure*}
+
+\paragraph{Why the stretch fails when it fails.} Three causes account for the failures among the original judges; the two misses in the fresh test come from choosing among layers whose rankings differ by less than split noise (Appendix~\ref{app:rule}). \emph{Layer too early}: at Llama-3.1-8B's layers $\le 14$ on MATH, pushing the last token moves the accept rate by $\le$2 points, but the same push at every token moves it by up to 16; later layers rebuild the decision from the answer tokens and overwrite a last-token edit. \emph{Verdict reads the direction backwards}: Llama-3.2-3B and Qwen2.5-7B on MMLU-Redux, whose verdicts are negatively correlated with the direction within questions at most layers (the authorship disagreement of \S\ref{sec:author}); no layer responds, and pushing toward ``right'' makes them reject. \emph{Saturated verdict}: Mistral-7B accepts 99\% of MMLU-Redux answers at an average verdict score of $+16.5$, so pushes move the score but never the decision; measuring sensitivity on the score rather than the accept rate fixes this case.
+
+\begin{table*}[t]
+\centering
+\small
+\input{tab_readout.tex}
+\caption{Gains over the forced verdict on the full answer pools (\R{pool.npairs} judge--benchmark pairs, pooled; bold: 95\% interval above 0). Rank: ranking ($\times$100). BoN: best-of-$n$ accuracy, the share of questions (with at least one right and one wrong answer) where the top-scored answer is right; random choice gives \R{pool.random.bon} on all questions.}
+\label{tab:readout}
+\end{table*}
+
+\paragraph{Comparison.} Table~\ref{tab:readout} compares the readouts on the full answer pools. Reading the direction ranks best (\R{pool.direct.rank.ci} over the verdict) and also picks the right answer more often in best-of-$n$ selection (\R{pool.direct.bon} points); adding it to the verdict comes second, and the stretch recovers only a fraction of the direction's advantage, because only the part of the direction the verdict reads at one layer is amplified. Letting the judge reason before its verdict does not help small judges: it changes ranking by \R{pool.cot.rank.ci} on the full pools and by \R{sm.math.qwen.cot.rank} on same-model MATH pairs. The judges write short justifications (median \R{cot.tok.median} tokens) before committing; the exception is MMLU-Redux, where the forced verdict is at or below chance on same-model pairs and reasoning helps slightly (\R{sm.mmlu.qwen.cot.rank} and \R{sm.mmlu.olmo.cot.rank}). On same-model pairs, ranking gains translate into best-of-$n$ gains only weakly (Appendix~\ref{app:bon}): with three right and three wrong answers from one model, a few points of ranking rarely change which answer is on top.
+
+\section{Does a Larger Judge Close the Gap?}
+\label{sec:scale}
+
+\begin{table*}[t]
+\centering
+\small
+\input{tab_scale.tex}
+\caption{Llama judges by size, on the main answer pools. Solves: share of the pool's questions the judge answers correctly itself (\%). Verdict: the verdict's ranking ($\times$100). Gap: the best layer's direction ranking minus the verdict's. Same model: the verdict's ranking on same-model pairs (Qwen3.5-4B answers) on questions the judge cannot solve; Llama-3.2-3B has no MMLU-Redux same-model run.}
+\label{tab:scale}
+\end{table*}
+
+We ran Llama-3.1-70B-Instruct through the same pipeline: the same answers, prompts, layer rule and same-model sets (Table~\ref{tab:scale}). Its MMLU-Redux and MATH gaps are below the 5-point threshold, but we ran every step for comparison.
+
+\emph{The verdict improves and the gap shrinks.} The 70B solves \R{scale.70b.mmlu.solved}\% of the MMLU-Redux and \R{scale.70b.math.solved}\% of the MATH questions (Llama-3.1-8B: \R{scale.8b.mmlu.solved}\% and \R{scale.8b.math.solved}\%), and its verdict ranks at \R{scale.70b.mmlu.says}, \R{scale.70b.math.says} and \R{scale.70b.bbeh.says} on the three benchmarks, against \R{scale.8b.mmlu.says}--\R{scale.8b.bbeh.says} for the 8B. Its direction adds only \R{scale.70b.mmlu.gap}, \R{scale.70b.math.gap} and \R{scale.70b.bbeh.gap}, compared with \R{scale.3b.mmlu.gap} to \R{scale.8b.math.gap} for the smaller Llamas on MMLU-Redux and MATH. The larger judge says most of what its hidden state knows. Authorship still accounts for most of both scores' within-question variation (MATH: \R{big.math.auth.dir}\% for the direction, \R{big.math.auth.ver}\% for the verdict).
+
+\emph{Checking beyond the judge's own ability does not grow with size.} On same-model MATH pairs from questions it cannot solve, the 70B's verdict ranks at \R{big.math.sm.qwen.verdict.rank} (Qwen3.5-4B's answers) and \R{big.math.sm.olmo.verdict.rank} (OLMo-2's), within the range of the smaller Llamas (\R{scale.1b.sm.math}--\R{scale.3b.sm.math}). On MMLU-Redux it stays at chance (\R{big.mmlu.sm.qwen.verdict.rank} and \R{big.mmlu.sm.olmo.verdict.rank}), like the 1B (\R{scale.1b.sm.mmlu}). Scale lets a judge check more answers because it knows more answers, not because it gets better at checking the ones it does not know. (Its cannot-solve questions are a harder subset than the small judges', which works against it.)
+
+\emph{The readouts matter less.} On the full pools reading the direction still gains on MATH (\R{big.math.pool.direct.rank.ci}) and BBEH (\R{big.bbeh.pool.direct.rank.ci}). On same-model pairs it neither helps for Qwen's answers (\R{big.math.sm.qwen.direct.rank.ci} on MATH) nor hurts for OLMo-2's (\R{big.math.sm.olmo.direct.rank.ci}); adding it to the verdict gives small gains (\R{big.math.sm.qwen.sum.rank.ci} on MATH, \R{big.bbeh.sm.qwen.sum.rank.ci} on BBEH); stretching does not help and lowers OLMo-2's MATH ranking (\R{big.math.sm.olmo.x11.rank.ci}); reasoning first lowers the pooled MMLU-Redux ranking (\R{big.mmlu.pool.cot.rank.ci}).
+
+\section{Discussion}
+
+\paragraph{What small judges can check.} On reasoning benchmarks, small judges rank same-model answers to problems they cannot solve above chance, for both answering models we tried. This supports the intuition that verification can be easier than generation \citep{cobbe2021training,song2025mind}, and refines the finding that judges agree with experts mainly where they can solve the question \citep{krumdick2026nofreelabels,tan2025judgebench}: the dependence is strong for recall and weaker for worked reasoning. The effect is a few points of AUROC, far smaller than the gaps that pooled evaluations of judges or probes suggest. On recall-heavy questions there is nothing to check without the fact.
+
+\paragraph{Evaluating judges and probes.} A judge, or a probe on a judge, evaluated on answers from models of different strength can score well by recognising authorship, and a probe can keep part of that shortcut even on same-model pairs, as long as the answering model appeared in its training data. Whenever the claim is about checking, we recommend within-question rankings on same-model pairs, on questions the judge cannot solve, from an answering model held out from any fitting.
+
+\paragraph{Using the signal.} On a mixed answer pool, reading the direction or adding it to the verdict is simpler and stronger than amplifying it, and amplifying it at a layer the verdict reads (found by a label-free push test) is the only option that changes the judge's own output. None of these, nor letting the judge reason first, improves checking beyond the judge's own ability consistently across answering models, which is what a weak judge would need most.
+
+\section{Conclusion}
+
+Small LLM judges know more than they say, but most of what they know beyond their verdict is who wrote the answer. Removing authorship and the judge's own ability leaves a smaller, real capacity to check reasoning the judge cannot reproduce, carried by the verdict itself, and none for facts it does not know; the extra knowledge in the hidden state does not survive a change of answering model. A 70B judge says more of what it knows, but is no better at checking what it does not know.
+
+\section*{Limitations}
+
+The main judges have at most 9B parameters and the scale check uses one larger judge (Llama-3.1-70B), whose gap is much smaller, so the readout results matter mainly for small judges; all judges run with thinking disabled, and a reasoning judge may check differently. The same-model sets use questions selected by one judge (Llama-3.1-8B) for MMLU-Redux and MATH, and answers from two answering models; the OLMo-2 MATH set is small (OLMo-2 solves few of these problems: 742 answers to 154 questions). BBEH uses four answering models, all of which also appear in the pool the direction is learned from. Solve labels come from one sample of the judge's own answer, which overstates how often a judge cannot solve a question, except in the strict nine-attempt MATH set. Pooled intervals treat judges as independent although they share questions and answers. The direction needs labelled answers and access to hidden states, which a deployed black-box judge does not offer. Ranking ignores the threshold a deployed judge needs, which stretching shifts. MATH answers are graded by an LLM against reference answers. The layer rule for stretching was revised once after a failure (Mistral-7B) and held in two of four pairs in a fresh test.
+
+\section*{Ethics Statement}
+
+We study open models on public benchmarks and release no new model. Better-calibrated small judges could reduce evaluation costs; the authorship shortcut we document is a risk for any evaluation that relies on LLM judges, and we recommend same-model controls.
+
+\bibliography{refs}
+
+\appendix
+\input{appendix.tex}
+
+\end{document}

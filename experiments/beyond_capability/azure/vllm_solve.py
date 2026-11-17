@@ -24,6 +24,7 @@ def main():
     ap.add_argument("--redraws", type=int, default=3)
     ap.add_argument("--chunk", type=int, default=500, help="prompts per write")
     ap.add_argument("--shard", default="0/1", help="i/n: answer every n-th question starting at i (parallel jobs)")
+    ap.add_argument("--tp", type=int, default=1, help="tensor-parallel GPUs (e.g. 2 for a 70B model)")
     a = ap.parse_args()
     from vllm import LLM, SamplingParams
     si, sn = map(int, a.shard.split("/"))
@@ -34,7 +35,8 @@ def main():
     done = {json.loads(l)["qid"] for l in open(fpath)} if fpath.exists() else set()
     todo = [q for q in qs if q["id"] not in done]
     print(f"{len(todo)} to answer ({len(done)} done)", flush=True)
-    llm = LLM(model=a.model, max_model_len=a.ctx, gpu_memory_utilization=0.92, enable_prefix_caching=True)
+    llm = LLM(model=a.model, max_model_len=a.ctx, gpu_memory_utilization=0.92, enable_prefix_caching=True,
+              tensor_parallel_size=a.tp)
     tok = llm.get_tokenizer()
     prompts = {q["id"]: tok.apply_chat_template(q.get("messages") or [{"role": "user", "content": q["prompt"]}],
                                                 tokenize=False, add_generation_prompt=True) for q in todo}

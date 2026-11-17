@@ -27,11 +27,11 @@ from data import bbeh_correct  # noqa: E402
 from stretch_analyze import solve_labels  # noqa: E402
 
 D = HERE / "out_allpairs"
-FRESH = ["llama3.2-1b", "qwen2.5-7b"]  # fresh test of the score-based rule (RULE_v2.md)
+FRESH = ["llama3.2-1b", "qwen2.5-7b", "llama3.1-70b"]  # judges run with the score-based rule (RULE_v2.md); 70B on Cannon
 JUDGES = ["llama3.1-8b", "llama3.2-3b", "qwen3.5-9b", "qwen3.5-4b", "phi4-mini", "mistral-7b", "granite3.3-8b"] + FRESH
 NAME = {"llama3.1-8b": "Llama-3.1-8B", "llama3.2-3b": "Llama-3.2-3B", "qwen3.5-9b": "Qwen3.5-9B",
         "qwen3.5-4b": "Qwen3.5-4B", "phi4-mini": "Phi-4-mini", "mistral-7b": "Mistral-7B", "granite3.3-8b": "Granite-3.3-8B",
-        "llama3.2-1b": "Llama-3.2-1B", "qwen2.5-7b": "Qwen2.5-7B"}
+        "llama3.2-1b": "Llama-3.2-1B", "qwen2.5-7b": "Qwen2.5-7B", "llama3.1-70b": "Llama-3.1-70B"}
 BENCHES = ["mmlu", "math", "bbeh"]
 BNAME = {"mmlu": "MMLU-Redux", "math": "MATH", "bbeh": "BBEH"}
 KNOWN_SMALL = {("qwen3.5-9b", "mmlu"): 0.8, ("qwen3.5-9b", "math"): 4.9, ("qwen3.5-9b", "bbeh"): -1.5,

@@ -21,9 +21,13 @@ from bc_load import OUT, jl  # noqa: E402
 from mmlu_build_items import MATH_JUDGE, MC_JUDGE, letter, math_final  # noqa: E402
 
 M = "qwen3.5-4b"
+PREFIX = "sm"  # second answering model: python3 sm_build_items.py olmo2-7b sm2 -> inputs/sm2_{mmlu,math}_items.jsonl.gz
 
 
 def main():
+    global M, PREFIX
+    if len(sys.argv) == 3:
+        M, PREFIX = sys.argv[1], sys.argv[2]
     for bench in ("mmlu", "math"):
         stem = f"sm_{bench}_q"
         f = OUT / f"esolves_{stem}_{M}.jsonl"
@@ -66,7 +70,7 @@ def main():
                                  messages=[{"role": "user", "content": tmpl.format(question=qtext, answer=text)}],
                                  suffix="VERDICT:", letter=fa))
             stat["mixed"] += 1
-        with gzip.open(HERE / "inputs" / f"sm_{bench}_items.jsonl.gz", "wt") as fh:
+        with gzip.open(HERE / "inputs" / f"{PREFIX}_{bench}_items.jsonl.gz", "wt") as fh:
             for x in rows:
                 fh.write(json.dumps(x) + "\n")
         pairs = collections.defaultdict(lambda: [0, 0])

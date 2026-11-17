@@ -60,13 +60,14 @@ class Judge:
             h = o[0] if isinstance(o, tuple) else o
             h = h.clone()
             if st.get("allpos"):  # diagnostic: the same push at every token position
-                h[0] = (h[0].float() + st["s"] * st["sd"] * st["v"]).to(h.dtype)
+                h[0] = (h[0].float() + st["s"] * st["sd"] * st["v"].to(h.device)).to(h.dtype)
                 return (h,) + tuple(o[1:]) if isinstance(o, tuple) else h
             x = h[0, -1].float()
+            v = st["v"].to(x.device)  # the edited layer may sit on another GPU when the judge is split
             if st["kind"] == "add":
-                x = x + st["s"] * st["sd"] * st["v"]
+                x = x + st["s"] * st["sd"] * v
             else:
-                x = x + st["s"] * ((x @ st["v"]) - st["mu"]) * st["v"]
+                x = x + st["s"] * ((x @ v) - st["mu"]) * v
             h[0, -1] = x.to(h.dtype)
             return (h,) + tuple(o[1:]) if isinstance(o, tuple) else h
         return hook
@@ -351,18 +352,24 @@ def extra(a):
     rows = load_items(a.extra_items)
     edits = [("Jc", "add", -8.0), ("Jc", "add", 8.0), ("Jc", "amplify", 10.0), ("Rc", "amplify", 10.0),
              ("Jc", "amplify", 3.0), ("Jc", "amplify", 20.0)]
-    with open(out / f"extra_{a.tag}.jsonl", "w") as fh:
+    with open(out / f"{a.prefix}_{a.tag}.jsonl", "w") as fh:
         for i, r in enumerate(rows):
             ids = build_ids(J.tok, r)
             if len(ids) >= J.ctx - 8:
                 continue
             half = "h1" if r["qid"] in h1q else "h2"  # direction from the other half
             cache = J.prepare(ids)
-            res = {"none": J.read(ids, cache)[0]}
+            m0, hs = J.read(ids, cache, hidden=a.with_proj)
+            res = {"none": m0}
+            extra_fields = {}
+            if a.with_proj:  # position along the direction, unedited (same precision as the capture)
+                h = hs[L][0, -1].float().cpu().numpy().astype(np.float16).astype(np.float32)
+                extra_fields["proj"] = float(h @ dirs[("Jc", half)][0].cpu().numpy())
+                del hs
             for name, kind, s in edits:
                 v, mu, sd = dirs[(name, half)]  # keyed by the half it is applied to (learned on the other)
                 res[f"{name}:{kind}:{s}"] = J.read(ids, cache, dict(L=L, kind=kind, s=s, v=v, mu=mu, sd=sd))[0]
-            fh.write(json.dumps({k: r[k] for k in ("qid", "aid", "gold", "src")} | dict(layer=L, margins=res)) + "\n")
+            fh.write(json.dumps({k: r[k] for k in ("qid", "aid", "gold", "src")} | dict(layer=L, margins=res) | extra_fields) + "\n")
             del cache
             if (i + 1) % 200 == 0:
                 print(f"  extra {a.tag}: {i + 1}/{len(rows)}", flush=True)
@@ -529,6 +536,8 @@ def main():
     ap.add_argument("--extra-items", default="")
     ap.add_argument("--layer", type=int, default=0)
     ap.add_argument("--n-layers", type=int, default=32)
+    ap.add_argument("--prefix", default="extra", help="extra: output file prefix (sm2extra for the second answering model)")
+    ap.add_argument("--with-proj", action="store_true", help="extra: also record the unedited position along the direction")
     a = ap.parse_args()
     a.commit = lambda: None
     {"pair": run_pair, "solve": solve, "diagnose": diagnose, "extra": extra, "extra_direct": extra_direct, "sweep": sweep}[a.phase](a)

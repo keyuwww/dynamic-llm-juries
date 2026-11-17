@@ -1,0 +1,83 @@
+\section{Answer Pools}
+\label{app:data}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{llrr}
+\toprule
+Benchmark & Answering model & Answers & Right \\
+\midrule
+MMLU-Redux & Qwen3.5-4B & 1,652 & 43\% \\
+ & Qwen3.6-35B-A3B & 922 & 81\% \\
+ & Nemotron-3-Super-120B & 922 & 72\% \\
+\midrule
+MATH & Qwen3.5-4B & 1,194 & 50\% \\
+ & Qwen3.6-35B-A3B & 602 & 86\% \\
+ & Nemotron-3-Super-120B & 588 & 75\% \\
+\midrule
+BBEH & 8 models & 2,244 & 34--58\% \\
+\bottomrule
+\end{tabular}
+\caption{Main answer pools. BBEH answers come from Qwen3.5-4B, Qwen3.5-9B, Qwen3.6-35B-A3B, Nemotron-3-Nano-30B, Nemotron-3-Super-120B, DeepSeek-V3.1, gpt-oss-20b and gpt-oss-120b. All answers end with a final answer line; MMLU-Redux answers are graded by their final letter against the expert key, MATH answers by GLM-5.3-Flash against the reference (exact matches skip the grader), BBEH answers by the benchmark's matching rule.}
+\label{tab:data}
+\end{table}
+
+\section{Judge Prompts}
+\label{app:prompts}
+
+All judges see one user turn. For MMLU-Redux (MATH and BBEH differ only in the first line: ``a math problem'', ``a reasoning question'', with \texttt{[PROBLEM]} for MATH):
+
+\begin{quote}\small\ttfamily
+You are grading an AI assistant's answer to a multiple-choice question.\\[2pt]
+[QUESTION]\\ \{question\}\\[2pt]
+[ASSISTANT'S ANSWER]\\ \{answer\}\\[2pt]
+Is the assistant's final answer correct? Only the final answer matters, not the style of the reasoning. Reason briefly, then end with exactly one line: "VERDICT: CORRECT" or "VERDICT: INCORRECT".
+\end{quote}
+
+For the forced verdict and all hidden-state measurements, the assistant turn starts with \texttt{VERDICT:} and we read the next token. For the reasoning baseline, the judge generates freely (greedy, stopping at \texttt{VERDICT:}; at most 8,192 tokens in a 32K window for BBEH and for Llama-3.1-8B on MATH, 1,536 tokens in a 16K window otherwise) and we read the next token after appending \texttt{VERDICT:} to its reasoning. Runs that never write a verdict within the budget (mostly Qwen3.5-4B and Llama-3.1-8B on BBEH, 2--8\% of their answers) are repetitive loops; they are scored the same way. The verdict score uses the first tokens of `` CORRECT'' and `` INCORRECT''.
+
+\section{Layer Rule and Fresh Test}
+\label{app:rule}
+
+\paragraph{Rule, fixed before the main run.} Gap check: stop if the gap is $\le 5$. Push test: on 400 random answers, the accept rate at $-8$ and $+8$ standard deviations along the direction at every second layer; a layer responds if the accept rate rises by at least 10 points. Layer: the best-ranking responding layer; if none responds, the best-ranking layer. Stretch: $\times$11 at that layer only, along the direction and along a random direction; $\times$4 and $\times$21 are recorded as secondary readouts.
+
+\paragraph{Revision after a failure.} Mistral-7B on MMLU-Redux accepts 99\% of answers, so no push changes its decision, although the verdict score follows the direction (within-question correlation $+0.54$ to $+0.85$ from layer 18). We therefore measure the response on the verdict score: sensitivity is the mean change in verdict score per standard deviation pushed, divided by the verdict score's within-question standard deviation, and a layer responds if its sensitivity is at least 0.05. This picks the same layer as the original rule wherever the original worked, and layer 16 for Mistral-7B on MMLU-Redux ($+2.3$ [$+0.5$, $+3.7$]).
+
+\paragraph{Fresh test.} Before running Llama-3.2-1B and Qwen2.5-7B, new to the study, we wrote down the revised rule and the prediction that every pair with a gap and a responding layer gains with $\times$11 (interval above 0) and that the random direction stays within $\pm1$. It held for Llama-3.2-1B on MMLU-Redux ($+5.4$) and MATH ($+7.9$), and the random direction stayed within $\pm1$ throughout. It failed on BBEH for both judges ($-1.5$ and $+1.0$). In both, the direction's ranking is flat across the responding layers to within split noise, and the rule took the layer where the verdict only begins to respond; a neighbouring layer with a stronger response gains $+6.4$ [$+3.3$, $+10.3$] (Llama-3.2-1B, layer 14) and $+4.6$ [$+1.2$, $+8.2$] (Qwen2.5-7B, layer 22). Qwen2.5-7B on MMLU-Redux has no responding layer (the backwards-reading failure of \S\ref{sec:readout}).
+
+\paragraph{Strength.} Judges whose verdict responds strongly (sensitivity $\ge 0.2$) do best at $\times$4--$\times$11; weakly responding ones (sensitivity $< 0.08$, mostly BBEH) at $\times$11--$\times$21. $\times$11 is within about two points of the best tested strength for most pairs.
+
+\section{Every Judge and Benchmark}
+\label{app:pairs}
+
+\begin{table*}[h]
+\centering
+\small
+\input{tab_pairs.tex}
+\caption{Every judge--benchmark pair. Gap: best layer's direction ranking minus the verdict's, on the split used for the layer rule; 20 splits: mean $\pm$ standard deviation over 20 random half-splits of the questions (at the best layer). Layer: the layer the rule stretches ($^*$: no layer responds; best-ranking layer). Sens.: the verdict's sensitivity there. Llama-3.1-70B is the scale check of \S\ref{sec:scale}. Last four columns: ranking ($\times$100) of the forced verdict, the verdict after reasoning, the verdict after stretching $\times$11, and the direction, on the main answer pool.}
+\label{tab:pairs}
+\end{table*}
+
+\begin{table*}[h]
+\centering
+\small
+\input{tab_sm_pairs.tex}
+\caption{Same-model pairs on questions the judge cannot solve, per judge: ranking ($\times$100) by each readout. Groups: questions with at least one right and one wrong answer from the same answering model.}
+\label{tab:smpairs}
+\end{table*}
+
+\section{Best-of-$n$ Selection}
+\label{app:bon}
+
+\begin{table*}[h]
+\centering
+\small
+\input{tab_bon.tex}
+\caption{Best-of-$n$ accuracy: the share of groups (questions; question $\times$ answering model for same-model sets; only groups with at least one right and one wrong answer) in which the top-scored answer is right, for random choice and the forced verdict, and the gain of each readout over the verdict (pooled over judges; bold: 95\% interval above 0).}
+\label{tab:bon}
+\end{table*}
+
+\section{Compute}
+
+Hidden-state capture, push tests and stretching ran on single H100 GPUs with Hugging Face Transformers (one forward pass per answer, plus a few edited re-reads of the last token, which can reuse the key-value cache); about one GPU-hour per judge--benchmark pair. Llama-3.1-70B ran on two H200 GPUs on a university cluster (2--3 hours per benchmark for capture, push test and stretching; about 4 hours of vLLM for its own answers and the reasoning baseline). Reasoning judgments and OLMo-2 answers used vLLM. Directions and readouts are computed on CPU from stored hidden states.
