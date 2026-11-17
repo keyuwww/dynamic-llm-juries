@@ -682,18 +682,18 @@ GLM-5.3 also audited the believed wrong BBEH answers (auto-grader labels; 365 an
 correct (mostly grader misses on equivalent answers), 83 contested. Cosine of the belief and correctness arrows,
 disjoint halves of the questions, best layer per role:
 
-| Case | Believed n (released → clean) | Judging, released | **Judging, clean** | Solving (end of answer), clean |
-|---|---|---|---|---|
-| Qwen-9B · BBEH | 255 → 122 | 0.63 | **0.70** | 0.52 |
-| Qwen-35B · BBEH | 250 → 122 | 0.62 | **0.80** | 0.31 |
-| Qwen-9B · BFF | 39 → 20 | 0.80 | 0.43 | 0.07 |
-| Qwen-35B · BFF | 32 → 12 | 0.49 | 0.11 | −0.03 |
+| Case | Believed n (released → clean) | Judging, released | **Judging, clean** | Solving after "FINAL:", clean | Solving, end of answer, clean |
+|---|---|---|---|---|---|
+| Qwen-9B · BBEH | 255 → 122 | 0.63 | **0.70** | 0.36 | 0.52 |
+| Qwen-35B · BBEH | 250 → 122 | 0.62 | **0.80** | 0.25 | 0.31 |
+| Qwen-9B · BFF | 39 → 20 | 0.80 | 0.43 | 0.10 | 0.07 |
+| Qwen-35B · BFF | 32 → 12 | 0.49 | 0.11 | −0.15 | −0.03 |
 
 - **BBEH, the biggest case, holds and gets stronger:** while judging, a believed wrong answer looks like a right one
-  (0.70, 0.80), more than while solving (0.52, 0.31). Removing the verdict-lean direction leaves it (0.84, 0.93).
+  (0.70, 0.80), more than while solving (0.36, 0.25 after "FINAL:"; 0.52, 0.31 at the end of the answer). Removing the verdict-lean direction leaves it (0.84, 0.93).
 - **The BFF numbers were mostly label errors** and now rest on 12–20 believed answers; drop them from the headline.
   RB2 Math has only 9 believed wrong answers per judge (unchanged).
-- New headline for the inside-the-model slide: BBEH only, clean labels, 0.70–0.80 judging vs 0.31–0.52 solving.
+- New headline for the inside-the-model slide: BBEH only, clean labels, 0.70–0.80 judging vs 0.25–0.36 solving (after "FINAL:", as in appendix A.5).
 
 ---
 

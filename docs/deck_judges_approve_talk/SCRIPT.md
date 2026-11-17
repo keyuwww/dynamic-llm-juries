@@ -53,7 +53,7 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 - Four steps, each is one later slide
   1. **Measured belief** → clean linear rise, in **3 model families** (audited labels)
   2. **Read transcripts** → **92–100%** of approved wrong answers come with a re-solve (thinking on)
-  3. **Looked inside** → belief–correctness overlap **0.7–0.8 when judging** vs 0.3–0.5 solving (BBEH)
+  3. **Looked inside** → belief–correctness overlap **0.7–0.8 when judging** vs 0.2–0.4 solving (BBEH)
   4. **Tried fixes** → commit-first **+5**, second family **−3**, expert reference **+15** (balanced accuracy)
 - So: judge asks **"does this match what I get?"**
   - errors on answers it doesn't believe → fixable
@@ -123,7 +123,7 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 - **B vs D: 0.7–0.8, overlap** (holds on BBEH, audited labels)
   - while grading, "I'd say this" **looks like** "this is right"
   - Qwen-9B 0.70, Qwen-35B 0.80; survives removing the lean toward saying CORRECT (0.84, 0.93)
-- **A vs C: 0.3–0.5**, less overlap when solving (0.52, 0.31)
+- **A vs C: 0.2–0.4**, less overlap when solving (0.36, 0.25 after “FINAL:”; 0.52, 0.31 at the end of the answer)
 - If asked about BFF: its earlier numbers (0.80, 0.49) were mostly label errors; audited they fall to 0.43, 0.11 on 12–20 answers, so it's dropped
 - So: they connect through the **answer**, not a shared sense of right
 - Careful wording: consistent with a silent match, **not proof** of a hidden re-solve
