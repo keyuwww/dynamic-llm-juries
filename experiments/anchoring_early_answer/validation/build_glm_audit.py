@@ -36,7 +36,7 @@ Solve the question yourself carefully. Then decide whether Response {bad}'s fina
 End with exactly one line: "AUDIT: LABEL_OK", "AUDIT: LABEL_WRONG" or "AUDIT: CONTESTED"."""
 
 # job sets: the Qwens, plus any other judge whose belief rows exist (Nemotron, DeepSeek); same items share one audit
-SETS = [("", "out"), ("_nemotron", "out_nemotron"), ("_deepseek", "out_deepseek")]
+SETS = [("", "out"), ("_nemotron", "out_nemotron"), ("_deepseek", "out_deepseek"), ("_kimi", "out_kimi")]
 jobs, rows = {}, []
 for sfx, od in SETS:
     if not (HERE / od / "belief_rows_clean.json").exists():

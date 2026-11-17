@@ -88,7 +88,7 @@ print("\n".join(L))
 
 # ---- every judge family (Nov 16): Qwens, Nemotron-3-Super, DeepSeek-V4.1-Flash; C readout = spoken verdict
 FAM = [("Qwen3.5-4B / 9B / Qwen3.6-35B (Alibaba)", "out"), ("Nemotron-3-Super-120B (NVIDIA)", "out_nemotron"),
-       ("DeepSeek-V4.1-Flash (DeepSeek)", "out_deepseek")]
+       ("DeepSeek-V4.1-Flash (DeepSeek)", "out_deepseek"), ("Kimi-K2.6 (Moonshot)", "out_kimi")]
 L2 = ["", "## Every judge family: as released vs only GLM-5.3 'clearly wrong'\n",
       "Answers not in the audit are kept as released. Gap = 7/7 minus 0/7 with a 95% interval resampling answers.\n",
       "| judge | labels | 0/7 | 1-3 | 4-6 | 7/7 | gap |", "|---|---|---|---|---|---|---|"]

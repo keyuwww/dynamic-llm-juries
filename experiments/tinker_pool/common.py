@@ -41,7 +41,7 @@ POOL = [
     # --- extra judge families for the belief study (Nov 16); tier "extra" keeps them out of "all" ----
     dict(key="deepseek-v4.1-flash", model="deepseek-ai/DeepSeek-V4.1-Flash:peft:262144", tier="extra",
          family="deepseek", params="?", active="?", price_in=0.60, price_out=3.60),
-    dict(key="kimi-k2.6", model="moonshotai/Kimi-K2.6", tier="extra", family="moonshot",
+    dict(key="kimi-k2.6", model="moonshotai/Kimi-K2.6:peft:131072", tier="extra", family="moonshot",
          params="?", active="?", price_in=2.205, price_out=5.49),
 ]
 POOL_BY_KEY = {m["key"]: m for m in POOL}

@@ -51,7 +51,7 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 ## 3 · The story (1:00) · total 2:15
 
 - Four steps, each is one later slide
-  1. **Measured belief** → clean linear rise, in **3 model families** (audited labels)
+  1. **Measured belief** → clean linear rise, in **4 model families** (audited labels)
   2. **Read transcripts** → **92–100%** of approved wrong answers come with a re-solve (thinking on)
   3. **Looked inside** → belief–correctness overlap **0.7–0.8 when judging** vs 0.2–0.4 solving (BBEH)
   4. **Tried fixes** → commit-first **+5**, second family **−3**, expert reference **+15** (balanced accuracy)
@@ -80,7 +80,7 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 - Chart: wrong answers approved, by belief, one line per judge, **audited labels**
 - **Three Qwens: 17% → 65%** (+48 points [+30, +63], 0/7 → 7/7)
-- **Two more families:** Nemotron (NVIDIA) **26% → 88%** · DeepSeek-V4.1-Flash **13% → 55%** → not a Qwen quirk
+- **Three more families:** Nemotron (NVIDIA) **26% → 88%** · DeepSeek-V4.1-Flash **13% → 55%** · Kimi-K2.6 (Moonshot) **2% → 65%** → not a Qwen quirk
 - **Labels audited:** GLM-5.3 checked every wrong-labelled BFF and JudgeBench answer (Claude also read the 7/7 ones)
   - at 7/7, **23 of 55** "wrong" answers were actually right (e.g. a BFF reference copies $386,000 as $368,000); at 0/7 only 2 of 245
   - as released the Qwens go 18 → 74%; removing the label errors keeps the rise
@@ -182,7 +182,7 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 - Flow: wrong answer arrives → judge **re-solves and checks for a match**
   - **low belief (0/7):** still approves 18%, the grading frame → **fixed** by commit first (18 → 1%, +5)
-  - **high belief (7/7):** approves 55–88% (3 families, audited labels) → shared across families; an expert reference fixes it (BFF 44 → 0%)
+  - **high belief (7/7):** approves 55–88% (4 families, audited labels) → shared across families; an expert reference fixes it (BFF 44 → 0%)
 - One sentence: **a judge's belief predicts its verdict**
 - Also: "wrong" answers judges strongly believe are often **label errors** (7/7: 23 of 55 actually right)
 - Next:
@@ -196,7 +196,7 @@ No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 
 ## 12 · Takeaways (0:30) · closing
 
-1. **Judges approve what they believe:** wrong answers approved 17% → 65% as belief rises (Qwens, audited labels); same in Nemotron and DeepSeek (5 judges, 3 families)
+1. **Judges approve what they believe:** wrong answers approved 17% → 65% as belief rises (Qwens, audited labels); same in Nemotron, DeepSeek and Kimi (6 judges, 4 families)
 2. **They check for a match, not for truth:** re-solve, agree when they land on the same answer
 3. **Low-belief errors are fixable:** commit first, 18% → 1%, +5 balanced accuracy
 4. **High-belief errors need an outside reference:** a second judge shares them; an expert answer cuts them 44% → 0% on audited errors (BFF)

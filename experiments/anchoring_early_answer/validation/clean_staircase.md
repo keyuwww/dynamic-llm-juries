@@ -48,3 +48,5 @@ Answers not in the audit are kept as released. Gap = 7/7 minus 0/7 with a 95% in
 | Nemotron-3-Super-120B (NVIDIA) | clean | 26% (n=588) | 55% (n=66) | 62% (n=34) | 88% (n=17) | +62 [+45, +76] |
 | DeepSeek-V4.1-Flash (DeepSeek) | as released | 13% (n=580) | 45% (n=53) | 55% (n=31) | 68% (n=50) | +55 [+41, +67] |
 | DeepSeek-V4.1-Flash (DeepSeek) | clean | 13% (n=572) | 42% (n=45) | 43% (n=23) | 55% (n=20) | +42 [+20, +65] |
+| Kimi-K2.6 (Moonshot) | as released | 2% (n=580) | 31% (n=45) | 48% (n=44) | 67% (n=43) | +66 [+52, +80] |
+| Kimi-K2.6 (Moonshot) | clean | 2% (n=576) | 21% (n=34) | 34% (n=29) | 65% (n=17) | +63 [+40, +85] |

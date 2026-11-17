@@ -30,7 +30,8 @@ JUDGES = [("qwen3.5-4b", "Qwen3.5-4B", "#9cc3f0", "out/belief_rows_clean.json"),
           ("qwen3.6-35b-a3b", "Qwen3.6-35B-A3B", "#0d3d7a", "out/belief_rows_clean.json"),
           ("llama3.1-8b", "Llama-3.1-8B", "#eb6834", "out/belief_rows_llama3.1-8b_clean.json"),
           ("nemotron3-super-120b", "Nemotron-3-Super-120B", "#1baf7a", "out_nemotron/belief_rows_clean.json"),
-          ("deepseek-v4.1-flash", "DeepSeek-V4.1-Flash", "#c23b8a", "out_deepseek/belief_rows_clean.json")]
+          ("deepseek-v4.1-flash", "DeepSeek-V4.1-Flash", "#c23b8a", "out_deepseek/belief_rows_clean.json"),
+          ("kimi-k2.6", "Kimi-K2.6", "#e8832f", "out_kimi/belief_rows_clean.json")]
 BINS = ["0/7", "1–3", "4–6", "7/7"]
 
 
@@ -64,7 +65,7 @@ def main():
     ap.add_argument("--benches", default="rb2math,judgebench,bff")
     ap.add_argument("--audited", action="store_true", help="drop BFF / JudgeBench wrong answers the GLM-5.3 label audit "
                     "does not call clearly wrong (validation/, Experiment 11) -> fig7_belief_by_judge_clean.png")
-    ap.add_argument("--judges", default="qwen3.5-4b,qwen3.5-9b,qwen3.6-35b-a3b,nemotron3-super-120b,deepseek-v4.1-flash",
+    ap.add_argument("--judges", default="qwen3.5-4b,qwen3.5-9b,qwen3.6-35b-a3b,nemotron3-super-120b,deepseek-v4.1-flash,kimi-k2.6",
                     help="judges to draw; Llama-3.1-8B (llama3.1-8b) is left out by default: only 5 of its wrong "
                     "answers reach 7/7, too few to place the top of its curve")
     ap.add_argument("--min-n", type=int, default=10, help="bins with fewer rows are drawn hollow and not joined")
@@ -117,7 +118,7 @@ def main():
     ax.set_xlabel("Belief: how many of the judge's 7 own answers reach this (wrong) answer")
     ax.set_ylabel("Wrong answers approved at the verdict (%)")
     names = {"rb2math": "RB2 Math", "judgebench": "JudgeBench", "bff": "BFF"}
-    ax.set_title("Judges from three families approve the wrong answers they believe")
+    ax.set_title("Judges from four families approve the wrong answers they believe")
     ax.legend(frameon=False, loc="upper left", fontsize=10)
     fig.text(0.01, 0.01, f"Benchmarks: {' + '.join(names[b] for b in ['rb2math', 'judgebench', 'bff'] if b in benches)}. "
              f"Thinking off. {'Audited labels. ' if a.audited else ''}"

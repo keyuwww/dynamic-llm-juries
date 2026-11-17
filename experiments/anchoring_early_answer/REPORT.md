@@ -697,7 +697,7 @@ disjoint halves of the questions, best layer per role:
 
 ---
 
-## Experiment 12 — A third judge family: DeepSeek-V4.1-Flash (Nov 16)
+## Experiment 12 — More judge families: DeepSeek-V4.1-Flash and Kimi-K2.6 (Nov 16–17)
 
 **Setup.** Same pipeline as the Nemotron replication, as its own job set (`--set deepseek`, `out_deepseek/`):
 - pool verdicts on the main set (RB2 Math 732, JudgeBench 620, BFF 459; `modal_app.py --phase pooljudge`, thinking
@@ -706,7 +706,7 @@ disjoint halves of the questions, best layer per role:
 - 14 of 6,580 extra own answers ran to the context limit (kept as is).
 - Cost ≈ $28 at list prices (own answers $23, verdicts $3, readouts $2).
 
-**Result: the staircase holds in a third family** (`out_deepseek/belief_clean.md`, `validation/clean_staircase.md`).
+**Result: the staircase holds in a third and a fourth family** (`out_deepseek/belief_clean.md`, `validation/clean_staircase.md`).
 Wrong answers approved, by belief:
 
 | Judge | Labels | 0/7 | 1–3 | 4–6 | 7/7 | Gap 7/7 − 0/7 |
@@ -717,13 +717,19 @@ Wrong answers approved, by belief:
 | Nemotron-3-Super | clean | 26% | 55% | 62% | 88% (n=17) | +62 [+45, +76] |
 | **DeepSeek-V4.1-Flash** | as released | 13% | 45% | 55% | 68% (n=50) | +55 [+41, +67] |
 | **DeepSeek-V4.1-Flash** | clean | 13% | 42% | 43% | 55% (n=20) | +42 [+20, +65] |
+| **Kimi-K2.6** (Moonshot) | as released | 2% | 31% | 48% | 67% (n=43) | +66 [+52, +80] |
+| **Kimi-K2.6** | clean | 2% | 21% | 34% | 65% (n=17) | +63 [+40, +85] |
 
 "Clean" = only wrong answers GLM-5.3 audits as clearly wrong (Experiment 11). Nemotron and DeepSeek rows use the C
 readout, which equals the spoken verdict in every judgment checked.
 - Belief again beats the one-sample "matches my answer" label: holding belief fixed, the old label adds −14
   [−33, +5]; holding the label fixed, belief adds +69 [+46, +90] (at C).
-- Three families, three different makers, same pattern. Kimi-K2.6 (Moonshot) would be a fourth at an estimated
-  ~$45 (not run; needs a go-ahead).
+- **Kimi-K2.6 (Moonshot), a fourth family (Nov 17, `out_kimi/`):** same pipeline (`--set kimi`, model
+  `moonshotai/Kimi-K2.6:peft:131072`, thinking off). Strictest at 0/7 (2%) and the steepest rise. Belief again
+  beats the one-sample label (label adds −0 [−21, +21] with belief held fixed; belief adds +57 [+32, +81]).
+  18 of 1,811 verdicts hit the 8,192-token cap (17 unparsed, dropped); 4 of 6,580 extra own answers ran to the
+  context limit. Cost ≈ $80 at list prices (own answers ≈ $52 + their prompts, verdicts $13, readouts $7).
+- Four families, four different makers, same pattern.
 
 ## Feasibility verdict on the two papers' ideas
 
