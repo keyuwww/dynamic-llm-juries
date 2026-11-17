@@ -51,10 +51,10 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 ## 3 · The story (1:00) · total 2:15
 
 - Four steps, each is one later slide
-  1. **Measured belief** → wrong answers approved **18% → 74%**
+  1. **Measured belief** → clean linear rise, in **3 model families** (audited labels)
   2. **Read transcripts** → **92–100%** of approved wrong answers come with a re-solve (thinking on)
-  3. **Looked inside** → belief and correctness closer **when judging**, all 4 cases
-  4. **Tried fixes** → commit-first **+5**, second family **−3** (balanced accuracy)
+  3. **Looked inside** → belief–correctness overlap **0.7–0.8 when judging** vs 0.3–0.5 solving (BBEH)
+  4. **Tried fixes** → commit-first **+5**, second family **−3**, expert reference **+15** (balanced accuracy)
 - So: judge asks **"does this match what I get?"**
   - errors on answers it doesn't believe → fixable
   - errors it believes → need a stronger reference
@@ -78,9 +78,12 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 ## 5 · Main result (1:30) · total 4:45
 
-- Chart: wrong answers approved, by belief, one line per judge
-- **Three Qwens: 18% → 74%** (+54 points, 0/7 → 7/7)
-- **Nemotron (NVIDIA): 26% → 85%** → not a Qwen quirk
+- Chart: wrong answers approved, by belief, one line per judge, **audited labels**
+- **Three Qwens: 17% → 65%** (+48 points [+30, +63], 0/7 → 7/7)
+- **Two more families:** Nemotron (NVIDIA) **26% → 88%** · DeepSeek-V4.1-Flash **13% → 55%** → not a Qwen quirk
+- **Labels audited:** GLM-5.3 checked every wrong-labelled BFF and JudgeBench answer (Claude also read the 7/7 ones)
+  - at 7/7, **23 of 55** "wrong" answers were actually right (e.g. a BFF reference copies $386,000 as $368,000); at 0/7 only 2 of 245
+  - as released the Qwens go 18 → 74%; removing the label errors keeps the rise
 - **Not authorship:** same wrong answer, the Qwen that believes it more approves it more (+23)
 - Bigger Qwens: stricter at 0/7 (27% → 8%), **just as trusting** at 7/7
 - Belief beats a one-sample "matches my answer" label (it adds nothing once belief is in)
@@ -117,12 +120,14 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 - Cosine: 1 = same direction, 0 = unrelated
 - **A vs B: 0.0–0.3, unrelated** (settled)
   - the judge does **not** reuse the solver's sense of "correct"
-- **B vs D: 0.5–0.8, overlap** (likely)
+- **B vs D: 0.7–0.8, overlap** (holds on BBEH, audited labels)
   - while grading, "I'd say this" **looks like** "this is right"
-- **A vs C: 0.3–0.5**, less overlap when solving
+  - Qwen-9B 0.70, Qwen-35B 0.80; survives removing the lean toward saying CORRECT (0.84, 0.93)
+- **A vs C: 0.3–0.5**, less overlap when solving (0.52, 0.31)
+- If asked about BFF: its earlier numbers (0.80, 0.49) were mostly label errors; audited they fall to 0.43, 0.11 on 12–20 answers, so it's dropped
 - So: they connect through the **answer**, not a shared sense of right
 - Careful wording: consistent with a silent match, **not proof** of a hidden re-solve
-- Caveat: partly the lean toward saying CORRECT; Qwen only
+- Caveat: Qwen only; BBEH only after the audit
 
 → next: "Can we fix it?"
 
@@ -163,11 +168,12 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 ## 10 · A fix for strong belief: expert reference (1:00) · total 10:00
 
 - BFF only, thinking off; same 1,294 judgments under four prompts
-- **Strong-belief wrong answers approved (≥ 4/7):** usual **62%** · commit first 56% · **+ expert reference 12%** · both 18%
-- **Balanced accuracy:** 74.6 → **89.6%** with the reference (+15); commit first alone 77.8; both 87.0
-- Right answers are approved **more** with the reference, not less
-- **Don't stack:** commit first + reference is 2.6 points worse than the reference alone; its own wrong answer competes with the reference (7/7: 19 → 31%)
-- Caveats: one benchmark; BFF labels were made by the same experts who wrote the references; someone has to write the reference
+- **Audited errors only (clearly wrong), strong belief ≥ 4/7:** usual **44%** → **+ expert reference 0%**
+- As released: 62% → 12%; balanced accuracy 74.6 → **89.6%** (+15); commit first alone 77.8; both 87.0
+- **It follows the reference, right or wrong:** where the BFF reference itself is wrong, right answers drop 74% → 22% approved
+- **Strong model as reference (Kimi-K3.1-Pro):** about half the gain (62 → 34%, +8); as good as the expert where Kimi is right, harmful where it's wrong
+- **Don't stack:** commit first + reference is 2.6 points worse than the reference alone
+- Caveats: one benchmark; someone has to write the reference
 - → bridge: "So confident errors need an outside reference. Peers don't work; an expert answer does."
 
 ---
@@ -176,13 +182,13 @@ Backup (full deck, for questions): https://claude.ai/artifact/HYTsJ53h9u9UxaaHyd
 
 - Flow: wrong answer arrives → judge **re-solves and checks for a match**
   - **low belief (0/7):** still approves 18%, the grading frame → **fixed** by commit first (18 → 1%, +5)
-  - **high belief (7/7):** approves 70–75%, even when told not to re-solve → **open**, shared across families
+  - **high belief (7/7):** approves 55–88% (3 families, audited labels) → shared across families; an expert reference fixes it (BFF 44 → 0%)
 - One sentence: **a judge's belief predicts its verdict**
+- Also: "wrong" answers judges strongly believe are often **label errors** (7/7: 23 of 55 actually right)
 - Next:
-  - frontier model or expert answer as the reference for believed items
+  - human check of those label errors
   - the fixes with thinking on
-  - hand-check BFF and JudgeBench labels
-- Limits to say out loud: 7/7 groups small (28–41 per judge) · inside-the-model is Qwen only · fixes ran thinking off
+- Limits to say out loud: after the audit 7/7 groups are small (12–20 per judge) · the audit is by AI models (GLM-5.3, Claude) · inside-the-model is Qwen only · fixes ran thinking off
 
 No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 
@@ -190,22 +196,22 @@ No buffer at 10:00: if short on time, cut slide 9 (second judge) to one sentence
 
 ## 12 · Takeaways (0:30) · closing
 
-1. **Judges approve what they believe:** wrong answers approved 18% → 74% as belief rises (4 judges, 2 families)
+1. **Judges approve what they believe:** wrong answers approved 17% → 65% as belief rises (Qwens, audited labels); same in Nemotron and DeepSeek (5 judges, 3 families)
 2. **They check for a match, not for truth:** re-solve, agree when they land on the same answer
 3. **Low-belief errors are fixable:** commit first, 18% → 1%, +5 balanced accuracy
-4. **High-belief errors need an outside reference:** a second judge shares them; an expert answer cuts them 62% → 12% (BFF)
-- **Next:** can a strong model's answer replace the expert, as a free reference?
-- If asked "is it solved?": low-belief by committing first; high-belief by an expert reference (BFF), not by peers; a free (model) reference is open
+4. **High-belief errors need an outside reference:** a second judge shares them; an expert answer cuts them 44% → 0% on audited errors (BFF)
+- **Also:** a "wrong" answer judges strongly believe is often a label error
+- If asked "is it solved?": low-belief by committing first; high-belief by an expert reference (BFF), not by peers; a strong model's answer gives about half the gain
 
 ---
 
 ## Likely questions → where to look in the backup
 
 - **"Isn't this just self-preference?"** → no, candidates written by other models; same-answer test (+23) · backup 2.10
-- **"Are the labels right?"** → RB2 Math audited (61 mislabelled answers removed, effect got stronger); BFF and JudgeBench not yet · backup 2.3
+- **"Are the labels right?"** → all audited: RB2 Math by value match (61 removed); BFF, JudgeBench, believed BBEH by GLM-5.3, 7/7 also by Claude (87% agreement); the rise survives in every family · REPORT.md Experiment 11
 - **"Why 7 tries?"** → one try is a noisy yes/no; 7 gives a graded score · backup 2.4
-- **"How do you know GLM's labels are right?"** → different family from every judge; 8 hand-checked, all agree · backup 4.1
-- **"Is the inside result just 'about to say CORRECT'?"** → partly; removing that lean leaves 3 of 4 cases, cuts Qwen-35B BFF 0.72 → 0.23 · backup 3.4
+- **"How do you know GLM's matches are right?"** → different family from every judge; Claude re-read 50, agrees on 42/47 (89%); GLM never says SAME wrongly, so belief is if anything understated · backup 4.1
+- **"Is the inside result just 'about to say CORRECT'?"** → no on BBEH: removing that lean leaves 0.84 / 0.93 · backup 3.4
 - **"Why not Llama?"** → too weak a judge, ~54% at every belief level, only 5 answers at 7/7 · backup 2.9
 - **"Prior work?"** → Panickssery, Roytburg, No Free Labels, Goel, Lin (behaviour); Marks & Tegmark, Yang & Jia, Gulati & Wunder (inside) · backup 1.2, 1.3
 - **"Compute?"** → Tinker (judging, GLM), Modal GPUs (hidden states), Harvard Cannon (Llama) · backup A.1
