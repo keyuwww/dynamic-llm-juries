@@ -11,6 +11,7 @@
 - **Why it fails when it fails, three causes:** (a) the layer is too early (the verdict rebuilds its decision from later layers and ignores an edit there); (b) the verdict reads the direction backwards (Llama-3.2-3B and, in the fresh test, Qwen2.5-7B distrust the most accurate answering model on MMLU); (c) the verdict is saturated (Mistral says CORRECT to 99% of answers, so pushes move its score but never its decision). The push test fixes (a); measuring the response on the verdict score instead of the accept rate fixes (c); (b) has no fix at those layers.
 - **Most of the hidden gap is "which model wrote this answer"** (75–88% of the direction's spread within a question), which is why gains shrink on same-model pairs.
 - **Strength:** ×11 is a safe default; judges whose verdict score responds strongly need a gentler stretch (×4), weakly responding ones a stronger one (×21).
+- **Baseline: read the direction directly.** It ranks better than the stretch on the full pool (+5) and on same-model pairs the judge cannot solve (+1 to +2); adding it to the verdict score does about as well. Exception: Llama-3.1-8B on MATH, where the stretch is best. The stretch is one way, not the best way, to use the signal.
 - **Fresh preregistered test on two new judges: half held.** Llama-3.2-1B gains +5.4 (MMLU) and +7.9 (MATH), and on MATH questions it cannot solve (it solves 16 of 602) its same-model gain is +2 to +4 at every strength. Both misses are on BBEH (in both, the rule picked between layers whose *knows* differ by less than split noise, and a neighbouring layer the verdict reads more strongly gains +4.6 and +6.4).
 :::
 
@@ -77,10 +78,20 @@ FRESH_TABLE
 - **Qwen2.5-7B on MMLU: no layer responds** (best sensitivity 0.047), with the same signature as Llama-3.2-3B: it accepts 63% of Nemotron's answers against 90–95% of the Qwens', and its verdict runs against the direction at layers 2–18 (correlation −0.4 to −0.5). Stretching at the fallback layer still gains +2.5. Its MATH gap is +5.0, so MATH was not stretched.
 - **Both misses are on BBEH.** The 1B's gap is +7.9 on the rule's split but +5.9 averaged over 20 splits (*knows* 0.55): little to recover. Qwen2.5-7B has a real gap (+8.5 over 20 splits). In both, *knows* is flat across the responding layers to within split noise, and the rule took the layer where the verdict only starts to respond. A full sweep shows a neighbouring layer the verdict reads more strongly does gain: +6.4 [+3.3, +10.3] for the 1B (layer 14) and +4.6 [+1.2, +8.2] for Qwen2.5-7B (layer 22). *Lesson (not yet tested):* average *knows* over several splits and, among near-ties, prefer the layer with the stronger response.
 
+## 8. Baseline: read the direction directly
+
+With labels and hidden states in hand, one can skip the stretch and rank answers by their position along the direction, or add that position to the verdict score (each scaled by its spread within a question; nothing tuned).
+
+TABLE_DIRECT
+
+- **Full answer pool: the direction alone beats the stretch by about 5 points;** the stretch passes on about 40% of the gap. Most of that lead is who wrote the answer: on same-model pairs it shrinks to +1 to +2.
+- **Same-model pairs the judge cannot solve: the direction beats the verdict on MATH and BBEH, by more than the stretch does.** The checking signal is real; the stretch carries part of it. On MMLU every method stays at or below chance (rankings 44–51).
+- **Exception, the strongest case:** Llama-3.1-8B on MATH questions it failed 9 of 9 times, where the stretch (+5.0) and the sum (+4.7) beat the direction (+3.1); its verdict holds checking information the direction lacks. For ranking alone, the direction or the sum is simpler; the stretch is the option that changes the judge's own verdict.
+
 ## Limitations
 
 - The layer rule's accept-rate check failed on one judge (Mistral); the score-based fix was found after that failure, and on two fresh judges it held in 2 of the 4 pairs with a responding layer (section 7).
 - The beyond-ability gains are clear on MATH (Llama-3.1-8B, and the fresh Llama-3.2-1B) and small elsewhere; MMLU and MATH same-model answers come from one answering model (Qwen3.5-4B). The pooled rows treat judges as independent, which they are not (same questions and answers).
-- The gap is measured on one split of the questions; on BBEH (about 230 usable questions) it varies by ±0.01–0.04 across splits, enough to push a borderline pair over the bar (Llama-3.2-1B: +7.9 on the rule's split, +5.9 averaged over 20).
+- The gap is measured on one split of the questions; on BBEH it varies by ±1–4 points across splits, enough to push a borderline pair over the bar (section 7).
 - "Not solved" uses one sample of the judge's own answer, except the strict MATH test (9 samples); one sample overstates how often a judge truly cannot solve a question.
-- Ranking measures whether right answers score above wrong ones to the same question; a deployed judge also needs a threshold, which stretching shifts.
+- Ranking ignores the accept threshold a deployed judge needs, which stretching shifts.

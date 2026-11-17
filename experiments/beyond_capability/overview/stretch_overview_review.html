@@ -1,0 +1,248 @@
+<title>Judge Stretch Recipe</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,700;0,800;1,800&display=swap">
+<style>
+/* Layout: one research poster in three bands (recipe strip, result chart + beyond-ability column, failures + fresh test); tokens follow the project's slide deck. */
+:root {
+  --paper: #FDFDFB;
+  --sand: #F3F3ED;
+  --ink: #1E2A3B;
+  --soft: #4A5568;
+  --muted: #6B7280;
+  --line: #DCDDD6;
+  --indigo: #4B44C2;
+  --indigo-soft: #DCDAF7;
+  --orange: #C9661A;
+  --peri: #E3E9FD;
+  --butter: #FDF1C7;
+  --cyan: #E2F7FC;
+  --neutral-mark: #A9ABB3;
+  --bad: #C8423F;
+  --display: 'Plus Jakarta Sans', 'Inter', Arial, sans-serif;
+  --body: 'Inter', -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14171F; --sand: #1D212B; --ink: #E8EAF0; --soft: #B4BAC6; --muted: #8C93A1; --line: #303643;
+    --indigo: #9D97F5; --indigo-soft: #2B2A55; --orange: #F0A25E; --peri: #222A44; --butter: #3A321A; --cyan: #17323A;
+    --neutral-mark: #6B7180; --bad: #F07A76; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14171F; --sand: #1D212B; --ink: #E8EAF0; --soft: #B4BAC6; --muted: #8C93A1; --line: #303643;
+  --indigo: #9D97F5; --indigo-soft: #2B2A55; --orange: #F0A25E; --peri: #222A44; --butter: #3A321A; --cyan: #17323A;
+  --neutral-mark: #6B7180; --bad: #F07A76; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 22px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; font-style: italic; letter-spacing: -0.8px; line-height: 1.08; }
+h2 { font-size: 19px; font-weight: 800; letter-spacing: -0.2px; }
+h3 { font-size: 15px; font-weight: 700; }
+p { margin: 0; }
+.eyebrow { font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--indigo); }
+.lead { font-size: 16.5px; color: var(--soft); max-width: 78ch; }
+.lead b { color: var(--ink); }
+header { display: flex; flex-direction: column; gap: 8px; }
+
+/* recipe strip */
+.recipe { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.step { background: var(--sand); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.step .n { font-family: var(--display); font-weight: 800; font-size: 13px; color: var(--indigo); }
+.step p { font-size: 13.5px; color: var(--soft); }
+.step.key { background: var(--peri); }
+.setup { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+.setup b { color: var(--ink); font-weight: 600; }
+
+/* main band */
+.band { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.panel { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.sub { font-size: 13.5px; color: var(--soft); }
+.chartbox { position: relative; }
+svg text { font-family: var(--body); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; color: var(--soft); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .lk { font-weight: 700; color: var(--ink); min-width: 40px; }
+.dot { width: 12px; height: 10px; border-radius: 3px; display: inline-block; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper); font-size: 12.5px; line-height: 1.4;
+  padding: 7px 10px; border-radius: 8px; max-width: 260px; font-variant-numeric: tabular-nums; z-index: 5; }
+
+.beyond { display: flex; flex-direction: column; gap: 10px; }
+.stat { border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 2px 14px; align-items: baseline; }
+.stat .bench { font-family: var(--display); font-weight: 800; font-size: 13px; letter-spacing: 1px; color: var(--soft); grid-column: 1; }
+.stat .num { font-family: var(--display); font-weight: 800; font-size: 34px; line-height: 1; letter-spacing: -0.5px; grid-column: 1; grid-row: 2; font-variant-numeric: tabular-nums; }
+.stat .what { grid-column: 2; grid-row: 1 / span 2; font-size: 13.5px; color: var(--soft); }
+.stat .what b { color: var(--ink); }
+.stat.yes { background: var(--peri); } .stat.yes .num { color: var(--indigo); }
+.stat.some { background: var(--cyan); }
+.stat.no { background: var(--sand); } .stat.no .num { color: var(--muted); }
+.why-line { font-size: 13.5px; color: var(--soft); border-left: 3px solid var(--orange); padding-left: 12px; }
+
+/* bottom band */
+.bottom { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1.25fr); gap: 22px; }
+.fails { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fail { background: var(--sand); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fail p { font-size: 13.5px; color: var(--soft); }
+.fail .fix { font-size: 12.5px; color: var(--ink); font-weight: 600; margin-top: auto; }
+.fail .who { font-size: 12px; color: var(--muted); }
+.fresh { background: var(--butter); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.fresh p { font-size: 13.5px; color: var(--soft); }
+.fresh .score { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.1; color: var(--ink); }
+.foot { font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+
+@media (max-width: 900px) {
+  .band, .bottom { grid-template-columns: minmax(0, 1fr); }
+  .recipe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fails { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) { .recipe { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Small LLM judges · inference-time edit · Nov 16, 2026</div>
+    <h1>Small judges know more than they say. Stretch it out of them.</h1>
+    <p class="lead">A judge reads a question and one answer, then says CORRECT or INCORRECT. Inside the model there is a direction that tracks whether the answer is <b>actually right</b>, and it often ranks answers better than the verdict does. We find that direction, pick the layer the verdict actually reads, and stretch answers apart along it.</p>
+  </header>
+
+  <section class="panel" aria-label="The recipe">
+    <div class="recipe">
+      <div class="step"><span class="n">1 · Find the direction</span><p>At each layer: average state of right answers minus wrong ones, per question. Learned on half the questions, tested on the other half.</p></div>
+      <div class="step"><span class="n">2 · Check the gap</span><p>How much better does the direction rank answers than the verdict? Stop if 5 points or less: nothing to recover.</p></div>
+      <div class="step key"><span class="n">3 · Pick the layer the verdict reads</span><p>Push answers ±8 sd along the direction. Keep layers where the verdict moves; take the one whose direction ranks best. No labels needed.</p></div>
+      <div class="step"><span class="n">4 · Stretch</span><p>At that one layer, multiply each answer's distance along the direction (×11). Everything else stays unchanged.</p></div>
+    </div>
+    <div class="setup">
+      <span><b>9 judges</b>, 1B to 9B (Llama, Qwen, Phi, Mistral, Granite)</span>
+      <span><b>3 benchmarks</b>: MMLU-Redux (facts), MATH (worked math), BBEH (hard reasoning)</span>
+      <span><b>Score</b>: ranking = how often a right answer scores above a wrong one to the same question</span>
+    </div>
+  </section>
+
+  <div class="band">
+    <section class="panel" aria-label="Gains across judges">
+      <h2>It works across judges: +2 to +8 points of ranking</h2>
+      <p class="sub">Gain from stretching ×11 at the rule's layer, every judge × benchmark pair with a gap. Hover a row for its 95% interval. The layer rule was written down before the run. A random direction does nothing. Not shown: Qwen3.5-9B (its verdict already matches what the direction knows, no gap on any benchmark) and Mistral-7B (no reliable gain anywhere; see "Verdict saturated" below).</p>
+      <div class="legend">
+        <span class="lk">Color</span>
+        <span><i class="dot" style="background:var(--indigo)"></i>reliable gain (interval above 0)</span>
+        <span><i class="dot" style="background:var(--neutral-mark)"></i>could be zero</span>
+      </div>
+      <div class="legend">
+        <span class="lk">Mark</span>
+        <span><i>fallback</i> = no layer passed the push test; stretched at the best-ranking layer</span>
+        <span><svg width="10" height="10" aria-hidden="true"><path d="M1 1L9 9M9 1L1 9" stroke="var(--muted)" stroke-width="1.6"/></svg>random direction</span>
+      </div>
+      <div class="chartbox" id="chartbox"><svg id="chart" role="img" aria-label="Ranking gain per judge and benchmark"></svg><div class="tip" id="tip" hidden></div></div>
+    </section>
+
+    <section class="panel beyond" aria-label="Beyond the judge's ability">
+      <h2>Does it help on questions the judge can't solve?</h2>
+      <p class="sub">Only right vs wrong answers written by the <b>same</b> model, on questions the judge itself gets wrong. That removes the easy clue "this came from the stronger model".</p>
+      <div class="stat yes"><span class="bench">MATH</span><span class="num">+5.0</span><span class="what"><b>Yes.</b> Llama-3.1-8B, on 256 problems it failed in all 9 of its own tries (95%: +1.8 to +8.5). Even Llama-3.2-1B, which solves 16 of 602, gains +3.7.</span></div>
+      <div class="stat some"><span class="bench">BBEH</span><span class="num">+1.3</span><span class="what"><b>A little.</b> Pooled over 5 judges (+0.3 to +2.2). Granite-3.3-8B is clearest at +3.3.</span></div>
+      <div class="stat no"><span class="bench">MMLU</span><span class="num">≈ 0</span><span class="what"><b>No.</b> Pooled +0.8, interval includes 0.</span></div>
+      <p class="why-line">A worked solution can be checked step by step without solving the problem. A recalled fact can't be checked if you don't know it.</p>
+    </section>
+  </div>
+
+  <div class="bottom">
+    <section class="panel" aria-label="Why it fails">
+      <h2>When it fails, we can say why</h2>
+      <div class="fails">
+        <div class="fail"><h3>Layer too early</h3><p>The verdict rebuilds its decision from the answer text in later layers and overwrites the edit. Llama-3.1-8B on MATH: +1.5 at layer 14, <b>+8.2</b> at layer 16.</p><span class="fix">Fixed by the push test (step 3).</span></div>
+        <div class="fail"><h3>Verdict reads it backwards</h3><p>Llama-3.2-3B and Qwen2.5-7B distrust the most accurate answering model on MMLU, so their verdict runs against the correctness signal.</p><span class="fix">No fix at those layers.</span></div>
+        <div class="fail"><h3>Verdict saturated</h3><p>Mistral-7B says CORRECT to 99% of MMLU answers. Pushes move its score but never flip its decision.</p><span class="fix">Fixed by measuring the score, not the yes/no.</span></div>
+      </div>
+      <p class="sub">Most of the hidden signal (75–88%) is really "which model wrote this answer". That is why gains shrink on same-model pairs.</p>
+    </section>
+    <section class="fresh" aria-label="Fresh test">
+      <div class="eyebrow">Fresh test, rule written first</div>
+      <div class="score">Held in 2 of 4</div>
+      <p>Two new judges, Llama-3.2-1B and Qwen2.5-7B. The 1B gains +5.4 on MMLU and +7.9 on MATH. Both misses are on BBEH, where several layers tie; the neighbouring layer gains +6.4 and +4.6.</p>
+      <p><b>Next:</b> average over splits and prefer the layer the verdict reads most strongly.</p>
+    </section>
+  </div>
+
+  <p class="foot">Ranking gain = (share of right-over-wrong pairs ranked correctly after − before) × 100; 50% is chance. Intervals from resampling questions. Full write-up: report_2026-11-16-stretch-recipe.pdf.</p>
+</div>
+
+<script>
+(function () {
+  // [group, label, layer, responded, gain, lo, hi, random]
+  const F = "FRESH TEST · 2 NEW JUDGES";
+  const D = [
+    ["MMLU","Llama-3.1-8B",16,1,6.8,5.0,8.7,-0.2],
+    ["MMLU","Llama-3.2-3B",12,0,4.0,2.1,5.6,0.3],
+    ["MMLU","Phi-4-mini",16,1,3.8,2.2,5.5,-0.2],
+    ["MMLU","Granite-3.3-8B",20,1,1.7,0.2,3.3,0.2],
+    ["MATH","Llama-3.1-8B",16,1,8.2,6.0,10.3,-0.6],
+    ["MATH","Llama-3.2-3B",14,1,6.4,3.8,9.2,0.2],
+    ["MATH","Phi-4-mini",14,1,6.5,3.7,9.4,-0.2],
+    ["BBEH","Llama-3.1-8B",14,1,6.8,3.7,10.0,0.6],
+    ["BBEH","Llama-3.2-3B",14,1,4.7,1.7,7.7,-0.3],
+    ["BBEH","Qwen3.5-4B",20,1,5.2,3.1,7.2,0.7],
+    ["BBEH","Phi-4-mini",20,1,4.0,1.0,7.0,0.3],
+    ["BBEH","Granite-3.3-8B",22,1,6.3,1.8,10.3,0.1],
+    [F,"Llama-3.2-1B, MMLU",10,1,5.4,2.8,7.7,-0.1],
+    [F,"Qwen2.5-7B, MMLU",20,0,2.5,1.1,4.0,-0.2],
+    [F,"Llama-3.2-1B, MATH",14,1,7.9,5.4,10.1,-0.8],
+    [F,"Llama-3.2-1B, BBEH",10,1,-1.5,-5.1,2.0,-0.8],
+    [F,"Qwen2.5-7B, BBEH",20,1,1.0,-1.5,3.4,0.1],
+  ];
+  const svg = document.getElementById("chart"), tip = document.getElementById("tip"), box = document.getElementById("chartbox");
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 700, LEFT = 200, RIGHT = 14, ROW = 19, HEAD = 20, GAPB = 8, TOP = 4, AXIS = 30;
+  const xmin = -4, xmax = 10, x = v => LEFT + (v - xmin) / (xmax - xmin) * (W - LEFT - RIGHT);
+  const el = (n, a, p = svg) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+  let y = TOP, last = null; const ys = [], heads = [];
+  D.forEach(d => {
+    if (d[0] !== last) { if (last) y += GAPB; heads.push([d[0], y + HEAD - 6]); y += HEAD; last = d[0]; }
+    ys.push(y + ROW / 2); y += ROW;
+  });
+  const H = y + AXIS;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("width", "100%");
+  for (let t = -4; t <= 8; t += 4) {
+    el("line", { x1: x(t), x2: x(t), y1: TOP, y2: y, stroke: t === 0 ? "var(--soft)" : "var(--line)", "stroke-width": t === 0 ? 1.2 : 1 });
+    const tx = el("text", { x: x(t), y: y + 16, "text-anchor": "middle", "font-size": 11, fill: "var(--muted)" }); tx.textContent = (t > 0 ? "+" : "") + t;
+  }
+  const xl = el("text", { x: x(3), y: y + 29, "text-anchor": "middle", "font-size": 11, fill: "var(--muted)" }); xl.textContent = "ranking gain (points)";
+  heads.forEach(([g, hy]) => { const t = el("text", { x: 0, y: hy, "font-size": 11, "font-weight": 700, fill: "var(--indigo)", "letter-spacing": 1 }); t.textContent = g; });
+  D.forEach((d, i) => {
+    const [b, j, L, st, g, lo, hi, r] = d, yy = ys[i];
+    const col = lo > 0 ? "var(--indigo)" : hi < 0 ? "var(--bad)" : "var(--neutral-mark)";
+    const name = b === F ? j : `${j} on ${b}`;
+    const grp = el("g", { tabindex: 0, role: "img", "aria-label": `${name}: ${g > 0 ? "+" : ""}${g}` });
+    el("rect", { x: 0, y: yy - ROW / 2, width: W, height: ROW, fill: "transparent" }, grp);
+    const lab = el("text", { x: 10, y: yy + 4, "font-size": 12, fill: "var(--ink)" }, grp); lab.textContent = j;
+    if (!st) { const fb = el("tspan", { dx: 6, "font-size": 10.5, "font-style": "italic", fill: "var(--muted)" }, lab); fb.textContent = "fallback"; }
+    { // bar from 0 to the gain, rounded only at the data end
+      const x0 = x(0), x1 = x(g), h = 11, t = yy - h / 2, rr = Math.min(4, Math.abs(x1 - x0));
+      const d = g >= 0
+        ? `M${x0} ${t}H${x1 - rr}Q${x1} ${t} ${x1} ${t + rr}V${t + h - rr}Q${x1} ${t + h} ${x1 - rr} ${t + h}H${x0}Z`
+        : `M${x0} ${t}H${x1 + rr}Q${x1} ${t} ${x1} ${t + rr}V${t + h - rr}Q${x1} ${t + h} ${x1 + rr} ${t + h}H${x0}Z`;
+      el("path", { d, fill: col }, grp);
+    }
+    el("path", { d: `M${x(r) - 3.5} ${yy - 3.5}L${x(r) + 3.5} ${yy + 3.5}M${x(r) + 3.5} ${yy - 3.5}L${x(r) - 3.5} ${yy + 3.5}`, stroke: "var(--ink)", "stroke-width": 1.4 }, grp);
+
+    const vt = el("text", { x: g < 0 ? x(g) - 6 : x(g) + 6, "text-anchor": g < 0 ? "end" : "start", y: yy + 4, "font-size": 11, fill: "var(--soft)", "font-variant-numeric": "tabular-nums" }, grp);
+    vt.textContent = (g > 0 ? "+" : "") + g.toFixed(1);
+    const show = () => {
+      const s = v => (v > 0 ? "+" : "") + v.toFixed(1);
+      tip.innerHTML = `<b>${name}</b><br>Gain ${s(g)} [${s(lo)}, ${s(hi)}]<br>Layer ${L}${st ? "" : " (no layer passed the push test; fallback)"}<br>Random direction ${s(r)}`;
+      tip.hidden = false;
+      const bb = box.getBoundingClientRect(), sc = bb.width / W;
+      let left = x(g) * sc + 12; const top = yy * sc - 10;
+      if (left + 240 > bb.width) left = x(g) * sc - 250;
+      tip.style.left = Math.max(0, left) + "px"; tip.style.top = top + "px";
+    };
+    grp.addEventListener("mouseenter", show); grp.addEventListener("focus", show);
+    grp.addEventListener("mouseleave", () => tip.hidden = true); grp.addEventListener("blur", () => tip.hidden = true);
+  });
+})();
+</script>

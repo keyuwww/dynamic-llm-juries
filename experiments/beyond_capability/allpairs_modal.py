@@ -165,6 +165,26 @@ def extra_v5(judge: str, bench: str, layer: int) -> str:
     return _extra(judge, bench, layer)
 
 
+def _extra_direct(judge, bench, layer):
+    """same-model test items: position along the direction at the layer, no edit (direct-readout baseline)."""
+    vol.reload()
+    out = f"{ROOT}/{judge}_{bench}"
+    sh(["--phase", "extra_direct", "--model", MODELS[judge], "--out", out, "--tag", bench, "--layer", str(layer),
+        "--n-layers", str(N_LAYERS[judge]), "--extra-items", f"{HERE}/inputs/sm_{bench}_items.jsonl.gz"]
+       + (["--no-cache"] if judge in NO_CACHE else []))
+    return f"extra_direct done: {judge} {bench} layer {layer}"
+
+
+@app.function(**GPU)
+def extra_direct(judge: str, bench: str, layer: int) -> str:
+    return _extra_direct(judge, bench, layer)
+
+
+@app.function(image=image_v5, **GPU)
+def extra_direct_v5(judge: str, bench: str, layer: int) -> str:
+    return _extra_direct(judge, bench, layer)
+
+
 def _sweep(judge, bench):
     vol.reload()
     out = f"{ROOT}/{judge}_{bench}"
@@ -228,7 +248,7 @@ def knows_splits(judge: str, bench: str, layer: int, n: int = 20) -> dict:
 def pull() -> dict:
     vol.reload()
     root = pathlib.Path(ROOT)
-    keep = ("choice_", "final_", "meta_", "diag_", "extra_", "sweep_")  # solve files are fetched by solve_vllm_modal.py
+    keep = ("choice_", "final_", "meta_", "diag_", "extra_", "sweep_", "xdirect_")  # solve files are fetched by solve_vllm_modal.py
     return {f"{p.parent.name}/{p.name}": p.read_bytes() for p in root.glob("*/*") if p.name.startswith(keep)} \
         if root.exists() else {}
 
@@ -275,6 +295,14 @@ def main(phase: str = "run", pairs: str = ""):
     if phase == "sweep":  # pairs given as judge:bench,...
         todo = [tuple(x.split(":")) for x in pairs.split(",")]
         calls = [(sweep_pair_v5 if j in NO_CACHE else sweep_pair).spawn(j, b) for j, b in todo]
+        for c in calls:
+            try:
+                print(c.get(), flush=True)
+            except Exception as e:
+                print(f"FAILED {type(e).__name__}: {str(e)[:300]}", flush=True)
+    if phase == "extra_direct":  # pairs given as judge:bench:layer,...
+        todo = [x.split(":") for x in pairs.split(",")]
+        calls = [(extra_direct_v5 if j in NO_CACHE else extra_direct).spawn(j, b, int(L)) for j, b, L in todo]
         for c in calls:
             try:
                 print(c.get(), flush=True)

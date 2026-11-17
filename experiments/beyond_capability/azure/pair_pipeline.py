@@ -369,6 +369,47 @@ def extra(a):
     print("done: extra", flush=True)
 
 
+def extra_direct(a):
+    """Position of each same-model answer (--extra-items) along the pair's correctness direction at --layer, no edit:
+    one forward pass per answer; direction learned on the half of the ORIGINAL questions that does not contain the
+    question (same split as extra()). -> xdirect_<tag>.jsonl (aid, qid, gold, src, proj, margin)"""
+    torch = __import__("torch")
+    out = Path(a.out)
+    H = np.load(out / f"hidden_{a.tag}.npy", mmap_mode="r")
+    meta = [json.loads(l) for l in open(out / f"meta_{a.tag}.jsonl")]
+    kept = sorted(set(range(0, a.n_layers + 1, 2)) | {a.n_layers})
+    y = np.array([m["gold"] for m in meta])
+    q = np.array([m["qid"] for m in meta])
+    uq = sorted(set(q))
+    h1q = set(np.random.default_rng(0).permutation(uq)[: len(uq) // 2])
+    h1 = np.array([x in h1q for x in q])
+    L = a.layer
+    X = np.asarray(H[:, kept.index(L)], np.float32)
+    Xc = X.copy()
+    for g in uq:
+        Xc[q == g] -= X[q == g].mean(0)
+    v = {}
+    for learn, mask in (("h1", h1), ("h2", ~h1)):
+        d = Xc[mask][y[mask] == 1].mean(0) - Xc[mask][y[mask] == 0].mean(0)
+        v["h2" if learn == "h1" else "h1"] = d / (np.linalg.norm(d) + 1e-9)  # keyed by the half it is applied to
+    J = Judge(a.model, use_cache=not a.no_cache)
+    rows = load_items(a.extra_items)
+    with open(out / f"xdirect_{a.tag}.jsonl", "w") as fh:
+        for i, r in enumerate(rows):
+            ids = build_ids(J.tok, r)
+            if len(ids) >= J.ctx - 8:
+                continue
+            cache = J.prepare(ids)
+            m, hs = J.read(ids, cache, hidden=True)
+            h = hs[L][0, -1].float().cpu().numpy().astype(np.float16).astype(np.float32)  # same precision as capture
+            half = "h1" if r["qid"] in h1q else "h2"
+            fh.write(json.dumps({k: r[k] for k in ("qid", "aid", "gold", "src")} | dict(proj=float(h @ v[half]), margin=m)) + "\n")
+            del cache, hs
+            if (i + 1) % 500 == 0:
+                print(f"  xdirect {a.tag}: {i + 1}/{len(rows)}", flush=True)
+    print("done: extra_direct", flush=True)
+
+
 def sweep(a):
     """Exploratory: every candidate layer, all answers: unedited, add -8 / +8 sd, x11 along the judge direction and a
     random direction (directions rebuilt from the pair's capture, each half from the other). -> sweep_<tag>.jsonl"""
@@ -471,7 +512,7 @@ def solve(a):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--phase", choices=["pair", "solve", "diagnose", "extra", "sweep"], required=True)
+    ap.add_argument("--phase", choices=["pair", "solve", "diagnose", "extra", "extra_direct", "sweep"], required=True)
     ap.add_argument("--model", required=True)
     ap.add_argument("--items", default="")
     ap.add_argument("--qfile", default="")
@@ -490,7 +531,7 @@ def main():
     ap.add_argument("--n-layers", type=int, default=32)
     a = ap.parse_args()
     a.commit = lambda: None
-    {"pair": run_pair, "solve": solve, "diagnose": diagnose, "extra": extra, "sweep": sweep}[a.phase](a)
+    {"pair": run_pair, "solve": solve, "diagnose": diagnose, "extra": extra, "extra_direct": extra_direct, "sweep": sweep}[a.phase](a)
 
 
 if __name__ == "__main__":

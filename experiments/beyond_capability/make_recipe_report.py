@@ -119,6 +119,33 @@ def fresh_table():
     return "\n".join(L)
 
 
+def direct_table():
+    """Section 8: reading the direction directly vs stretching (direct_vs_stretch.py)."""
+    import numpy as np
+    M = json.load(open(HERE / "out_allpairs" / "direct_vs_stretch.json"))
+    S = json.load(open(HERE / "out_allpairs" / "direct_vs_stretch_same_model.json"))
+
+    def pool(xs):
+        xs = [x for x in xs if x["hi"] > x["lo"]]
+        w = np.array([1 / ((x["hi"] - x["lo"]) / 3.92) ** 2 for x in xs])
+        m, se = (w * np.array([x["g"] for x in xs])).sum() / w.sum(), 1 / np.sqrt(w.sum())
+        return dict(g=m, lo=m - 1.96 * se, hi=m + 1.96 * se)
+    keys = ("stretch-says", "direct-says", "sum-says", "direct-stretch")
+    L = ["| Answers compared | Stretch ×11 − verdict | Direction − verdict | Sum − verdict | Direction − stretch |",
+         "|---|---|---|---|---|"]
+    for lab, g in (("All answers", "all"), ("Questions the judge can't solve", "not solved")):
+        P = [v[g] for v in M.values() if v.get(g)]
+        L.append(f"| {lab} ({len(P)} pairs) | " + " | ".join(f(pool([p[k] for p in P])) for k in keys) + " |")
+    for b in ("math", "bbeh", "mmlu"):
+        P = [v for k, v in S.items() if k.split("|")[1] == b and "9 of 9" not in k]
+        L.append(f"| Same model, judge can't solve: {BN[b]} ({len(P)} judges) | "
+                 + " | ".join(f(pool([p[k] for p in P])) for k in keys) + " |")
+    x = S["llama3.1-8b|math|failed 9 of 9 own tries"]
+    L.append("| Same model: Llama-3.1-8B, MATH questions it failed 9 of 9 times | " + " | ".join(f(x[k]) for k in keys) + " |")
+    return "\n".join(L) + ("\n\nGain ×100 [95% interval]; bold = above 0. Pooled rows weight pairs by precision; the first two "
+                           "include pairs where the stretch failed (sections 5, 7). Same answers, direction and layer as the stretch.")
+
+
 DIAG = """Three checks on each failing case: (i) the within-question correlation between the direction and the unedited verdict score; (ii) the same push applied at every token instead of only the last; (iii) how much of the direction's spread within a question is explained by which model wrote the answer.
 
 - **Layer too early** (Llama-3.1-8B on MATH, layers ≤ 14). The correlation is −0.5 to +0.3 at layers 2–14 and +0.67 to +0.90 from layer 16. At layers 10–14 a last-token push moves the accept rate by ≤ 2 points, but the same push at every token moves it by up to 16 (layer 14: 83% → 99%). The verdict rebuilds its decision from the answer tokens in later layers and overwrites a last-token edit. *Fix: the push test.*
@@ -141,6 +168,6 @@ if __name__ == "__main__":
         tmpl.write_text(p.read_text())
     s = tmpl.read_text()
     s = (s.replace("TABLE_MAIN", main_table()).replace("TABLE_SM", sm_table()).replace("DIAG", DIAG)
-         .replace("SENS", SENS_TXT.format(t=sens_table())).replace("FRESH_TABLE", fresh_table()))
+         .replace("SENS", SENS_TXT.format(t=sens_table())).replace("FRESH_TABLE", fresh_table()).replace("TABLE_DIRECT", direct_table()))
     p.write_text(s)
     print(p)
