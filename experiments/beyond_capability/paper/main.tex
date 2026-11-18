@@ -175,7 +175,7 @@ Small LLM judges know more than they say, but most of what they know beyond thei
 
 The main judges have at most 9B parameters and the scale check uses one larger judge (Llama-3.1-70B), whose gap is much smaller, so the readout results matter mainly for small judges; all judges run with thinking disabled, and a reasoning judge may check differently. The same-model sets use questions selected by one judge (Llama-3.1-8B) for MMLU-Redux and MATH, and answers from two answering models; the OLMo-2 MATH set is small (OLMo-2 solves few of these problems: 742 answers to 154 questions). BBEH uses four answering models, all of which also appear in the pool the direction is learned from. Solve labels come from one sample of the judge's own answer, which overstates how often a judge cannot solve a question, except in the strict nine-attempt MATH set. Pooled intervals treat judges as independent although they share questions and answers. The direction needs labelled answers and access to hidden states, which a deployed black-box judge does not offer. Ranking ignores the threshold a deployed judge needs, which stretching shifts. MATH answers are graded by an LLM against reference answers. The layer rule for stretching was revised once after a failure (Mistral-7B) and held in two of four pairs in a fresh test.
 
-\section*{Ethics Statement}
+\section*{Ethical Considerations}
 
 We study open models on public benchmarks and release no new model. Better-calibrated small judges could reduce evaluation costs; the authorship shortcut we document is a risk for any evaluation that relies on LLM judges, and we recommend same-model controls.
 
