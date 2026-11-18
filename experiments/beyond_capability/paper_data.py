@@ -20,7 +20,10 @@ SWEEP = {("llama3.1-8b", "math"): "out_math/layer_sweep", ("llama3.2-3b", "mmlu"
 
 
 def _cot(path):
-    return {r["aid"]: r["score"] for r in map(json.loads, open(path))} if path.exists() else {}
+    """reason-first scores; a file whose scores are all identical is a failed readout (Mistral-7B: every score 0.0,
+    a scoring bug) and counts as missing."""
+    d = {r["aid"]: r["score"] for r in map(json.loads, open(path))} if path.exists() else {}
+    return d if len(set(d.values())) > 1 else {}
 
 
 def _row(r, pc, cot):

@@ -23,6 +23,7 @@ NAME = dict(A.NAME)
 BN = {"mmlu": "MMLU-Redux", "math": "MATH", "bbeh": "BBEH"}
 WHO = {"qwen3.5-4b": "qwen", "olmo2-7b": "olmo", "qwen3.5-4b strict": "strict"}
 WHON = {"qwen3.5-4b": "Qwen3.5-4B", "olmo2-7b": "OLMo-2-7B"}
+WHOB = lambda b, who: "4 pool models" if b == "bbeh" else WHON[who]  # noqa: E731  (BBEH same-model sets)
 MS = ["cot", "x4", "x11", "direct", "sum", "cot_sum"]
 num = {}
 
@@ -83,10 +84,14 @@ def numbers():
     put("auth.ver.lo", f"{100 * min(v['verdict'] for v in au.values()):.0f}")
     put("auth.ver.hi", f"{100 * max(v['verdict'] for v in au.values()):.0f}")
     put("auth.dir.med", f"{100 * np.median([v['direct'] for v in au.values()]):.0f}")
-    resp = [k for k, o in AP.items() if not k.startswith("extra") and o.get("status") == "responds" and small(k)]
-    put("pairs.respond", str(len(resp)))
-    sig = [k for k in resp if (AP[k].get("all | x11") or {"lo": -1})["lo"] > 0]
-    put("pairs.respond.sig", str(len(sig)))
+    # responding = the revised rule (verdict-score sensitivity >= 0.05 at the stretched layer), for every pair
+    st = [k for k, o in AP.items() if not k.startswith(("extra", "sweep")) and "layer" in o and small(k)]
+    resp = [k for k in st if AP[k].get("sensitivity", 0) >= 0.05]
+    nores = [k for k in st if k not in resp]
+    sig = lambda ks: [k for k in ks if (AP[k].get("all | x11") or {"lo": -1})["lo"] > 0]  # noqa: E731
+    put("pairs.stretched", str(len(st)))
+    put("pairs.respond", str(len(resp))), put("pairs.respond.sig", str(len(sig(resp))))
+    put("pairs.norespond", str(len(nores))), put("pairs.norespond.sig", str(len(sig(nores))))
     toks = []
     for f in sorted(A.D.glob("*/cot_main.jsonl")):
         if f.parent.name.rsplit("_", 1)[0] not in BIG:
@@ -110,6 +115,93 @@ def solve_rate(j, b):
     lab = A.labels(j, b)
     v = [lab[q] for q in POOLQ[b] if q in lab]
     return 100 * np.mean(v) if v else None
+
+
+def chance_numbers():
+    """per same-model set: judges whose verdict ranking is significantly above / below chance (question resamples)."""
+    for k_b in ("math", "bbeh", "mmlu"):
+        for who in ("qwen3.5-4b", "olmo2-7b"):
+            xs = [v for k, v in R["sm"].items() if k.split("|")[1:] == [k_b, who] and k.split("|")[0] not in BIG]
+            if not xs:
+                continue
+            t = f"chance.{k_b}.{WHO[who]}"
+            put(f"{t}.n", str(len(xs)))
+            put(f"{t}.above", str(sum(x["verdict"]["rank_ci"]["lo"] > 50 for x in xs)))
+            put(f"{t}.below", str(sum(x["verdict"]["rank_ci"]["hi"] < 50 for x in xs)))
+
+
+def auth_numbers():
+    """where the direction's advantage comes from (paper_authorship.py) and the authorship directions
+    (authorship_dir_modal.py)."""
+    C = json.load(open(A.HERE / "out_paper" / "authorship_check.json"))
+    for name in ("same", "diff"):
+        x = C["pooled"][f"{name}_gap"]
+        put(f"auth.{name}.ci", g(x, ci=True)), put(f"auth.{name}", g(x)), put(f"auth.{name}.k", str(x["k"]))
+        gs = [v["split"][name] for v in C["pairs"].values() if name in v["split"]]
+        put(f"auth.{name}.lo", g(min((x["gap"] for x in gs), key=lambda z: z["g"])))
+        put(f"auth.{name}.hi", g(max((x["gap"] for x in gs), key=lambda z: z["g"])))
+        put(f"auth.{name}.sig", str(sum(x["gap"]["lo"] > 0 for x in gs)))
+        put(f"auth.{name}.verdict", f"{np.mean([x['verdict'] for x in gs]):.1f}")
+        put(f"auth.{name}.direct", f"{np.mean([x['direct'] for x in gs]):.1f}")
+    for key, tag in (("src_direct", "dir"), ("src_verdict", "ver")):
+        xs = [v[key] for v in C["pairs"].values() if key in v]
+        put(f"src.{tag}.n", str(len(xs)))
+        put(f"src.{tag}.lo", f"{min(x['g'] for x in xs):.0f}"), put(f"src.{tag}.hi", f"{max(x['g'] for x in xs):.0f}")
+        put(f"src.{tag}.above", str(sum(x["lo"] > 50 for x in xs))), put(f"src.{tag}.below", str(sum(x["hi"] < 50 for x in xs)))
+    x = C["pooled"]["diff_gap_matched"]
+    put("auth.diffm.ci", g(x, ci=True)), put("auth.diffm.k", str(x["k"]))
+    sh = [v["shares"] for v in C["pairs"].values() if "shares" in v]
+    for k in ("null", "gold", "verdict", "direct"):
+        put(f"share.{k}.lo", f"{100 * min(x[k] for x in sh):.0f}"), put(f"share.{k}.hi", f"{100 * max(x[k] for x in sh):.0f}")
+    D = json.load(open(A.HERE / "out_paper" / "authorship_dir.json"))
+    for b in ("mmlu", "math"):
+        xs = [r[b] for r in D.values() if b in r]
+        t = f"adir.{b}"
+        put(f"{t}.n", str(len(xs)))
+        for k, f in (("auth", lambda x: x["auth_auc"]), ("xfer", lambda x: x["pair_transfer"]),
+                     ("cos", lambda x: x["cos"]["c_atop"]), ("cosaa", lambda x: x["cos"]["atop_amid"])):
+            v = [f(x) for x in xs]
+            fmt = (lambda z: f"{z:+.2f}".replace("-", "$-$")) if k.startswith("cos") else (lambda z: f"{z:.0f}")
+            put(f"{t}.{k}.lo", fmt(min(v))), put(f"{t}.{k}.hi", fmt(max(v)))
+        rem = [(x["rank"]["c"]["all"] - x["rank"]["c_perp"]["all"]) / (x["rank"]["c"]["all"] - x["rank"]["verdict"]["all"])
+               for x in xs]
+        put(f"{t}.removed.lo", f"{100 * min(rem):.0f}"), put(f"{t}.removed.hi", f"{100 * max(rem):.0f}")
+        put(f"{t}.removed.mean", f"{100 * np.mean(rem):.0f}"), put(f"{t}.removed.half", str(sum(r > 0.5 for r in rem)))
+        ac = [abs(x["cos"]["c_atop"]) for x in xs]
+        put(f"{t}.abscos.hi", f"{max(ac):.2f}")
+        for m, mk in (("verdict", "verdict"), ("c", "dir"), ("c_perp", "perp")):
+            for part in ("all", "same", "diff"):
+                put(f"{t}.{mk}.{part}", f"{np.mean([x['rank'][m][part] for x in xs]):.1f}")
+    cr = [r["cross"] for r in D.values() if "cross" in r]
+    put("adir.cross.n", str(len(cr)))
+    for k, f in (("cos", lambda c: c["cos_a"]), ("m2t", lambda c: c["a_mmlu_on_math"]), ("t2m", lambda c: c["a_math_on_mmlu"])):
+        v = [f(c) for c in cr]
+        fmt = (lambda z: f"{z:.2f}") if k == "cos" else (lambda z: f"{z:.0f}")
+        put(f"adir.cross.{k}.lo", fmt(min(v))), put(f"adir.cross.{k}.hi", fmt(max(v)))
+
+
+def tab_auth():
+    """appendix: authorship directions per judge and benchmark."""
+    D = json.load(open(A.HERE / "out_paper" / "authorship_dir.json"))
+    rows = []
+    for b in ("mmlu", "math"):
+        for j in A.JUDGES:
+            x = D.get(j, {}).get(b)
+            if not x:
+                continue
+            rk = x["rank"]
+            cells = [f"{x['layer']}", f"{x['auth_auc']:.1f}", f"{x['pair_transfer']:.1f}", f"{x['cos']['c_atop']:+.2f}",
+                     f"{rk['verdict']['all']:.1f}", f"{rk['c']['all']:.1f}", f"{rk['c_perp']['all']:.1f}",
+                     f"{rk['c']['same']:.1f}", f"{rk['c_perp']['same']:.1f}"]
+            rows.append(f"{BN[b]} & {NAME[j]} & " + " & ".join(c.replace("-", "$-$") for c in cells) + " \\\\")
+        rows.append("\\midrule")
+    rows = rows[:-1]
+    t = ["\\begin{tabular}{ll r rr r rrr rr}", "\\toprule",
+         "& & & \\multicolumn{2}{c}{Authorship dir.} & & \\multicolumn{3}{c}{Ranking, all pairs} & \\multicolumn{2}{c}{Same-model pairs} \\\\",
+         "\\cmidrule(lr){4-5}\\cmidrule(lr){7-9}\\cmidrule(l){10-11}",
+         "Bench & Judge & Layer & Own pair & Other pair & cos & Verdict & Dir. & Dir.$\\perp$ & Dir. & Dir.$\\perp$ \\\\", "\\midrule"]
+    t += rows + ["\\bottomrule", "\\end{tabular}"]
+    (P / "tab_auth.tex").write_text("\n".join(t) + "\n")
 
 
 def big_numbers():
@@ -155,12 +247,14 @@ def tab_scale():
             o = AP.get(f"{j}|{b}", {})
             sr = solve_rate(j, b)
             cells += [f"{sr:.0f}" if sr is not None else "--"]
-            cells += [f"{100 * o['says']:.1f}", f"{o['gap']:+.1f}"] if "gap" in o else ["--", "--"]
+            pv = R["pool"].get(f"{j}|{b}")
+            says = pv["verdict"]["rank"] if pv else 100 * o["says"] if "gap" in o else None
+            cells += [f"{says:.1f}", f"{o['gap']:+.1f}"] if "gap" in o else ["--", "--"]
             sj = j.split("-")[1]  # 1b, 3b, 8b, 70b
             if sr is not None:
                 put(f"scale.{sj}.{b}.solved", f"{sr:.0f}")
             if "gap" in o:
-                put(f"scale.{sj}.{b}.says", f"{100 * o['says']:.1f}"), put(f"scale.{sj}.{b}.gap", f"{o['gap']:+.1f}")
+                put(f"scale.{sj}.{b}.says", f"{says:.1f}"), put(f"scale.{sj}.{b}.gap", f"{o['gap']:+.1f}")
         for b in ("math", "mmlu"):
             x = R["sm"].get(f"{j}|{b}|qwen3.5-4b")
             cells.append(f"{x['verdict']['rank']:.1f}" if x else "--")
@@ -186,7 +280,7 @@ def tab_sm():
                 continue
             cells = [bold(s[m]["rank"], g(s[m]["rank"])) if s.get(m) and s[m]["rank"] else "--"
                      for m in ("cot", "x11", "direct", "sum")]
-            rows.append(f"{BN[b]} & {WHON[who]} & {s['k']} & {s['verdict_rank_mean']:.1f} & " + " & ".join(cells) + " \\\\")
+            rows.append(f"{BN[b]} & {WHOB(b, who)} & {s['k']} & {s['verdict_rank_mean']:.1f} & " + " & ".join(cells) + " \\\\")
     x = R["sm"].get("llama3.1-8b|math|qwen3.5-4b strict")
     if x:
         cells = [bold(x[m]["d_rank"], g(x[m]["d_rank"])) if m in x else "--" for m in ("cot", "x11", "direct", "sum")]
@@ -236,7 +330,7 @@ def tab_pairs():
                 continue
             v = R["pool"][f"{j}|{b}"]
             au = AU.get(f"{j}|{b}", {}).get("direct")
-            st = "" if o["status"] == "responds" else "$^*$"
+            st = "" if o.get("sensitivity", 0) >= 0.05 else "$^*$"
             c = lambda m: f"{v[m]['rank']:.1f}" if m in v else "--"  # noqa: E731
             rows.append(f"{BN[b]} & {NAME[j]} & {o['gap']:+.1f} & {gm} & {o['layer']}{st} & {o.get('sensitivity', float('nan')):.2f} & "
                         f"{c('verdict')} & {c('cot')} & {c('x11')} & {c('direct')} \\\\")
@@ -251,7 +345,7 @@ def tab_sm_pairs():
     rows = []
     for k, v in sorted(R["sm"].items(), key=lambda kv: ({"math": 0, "bbeh": 1, "mmlu": 2}[kv[0].split("|")[1]], kv[0])):
         j, b, who = k.split("|")
-        lab = WHON.get(who, "Qwen3.5-4B, failed 9/9")
+        lab = "4 pool models" if b == "bbeh" else WHON.get(who, "Qwen3.5-4B, failed 9/9")
         c = lambda m: f"{v[m]['rank']:.1f}" if m in v else "--"  # noqa: E731
         rows.append(f"{BN[b]} & {NAME[j]} & {lab} & {v['nq']} & {c('verdict')} & {c('cot')} & {c('x4')} & {c('x11')} & {c('direct')} & {c('sum')} \\\\")
     t = ["\\begin{tabular}{lll r rrrrrr}", "\\toprule",
@@ -265,7 +359,7 @@ def tab_bon():
     order = [("pool|all", "All questions"), ("pool_unsolved|all", "Judge cannot solve")]
     for b in ("math", "bbeh", "mmlu"):
         for who in ("qwen3.5-4b", "olmo2-7b"):
-            order.append((f"sm|{b}|{who}", f"Same model, {BN[b]}, {WHON[who]}"))
+            order.append((f"sm|{b}|{who}", f"Same model, {BN[b]}, {WHOB(b, who)}"))
     rows = []
     for key, lab in order:
         s = S.get(key)
@@ -282,6 +376,9 @@ def tab_bon():
 if __name__ == "__main__":
     tab_bon()
     tab_scale()
+    auth_numbers()
+    chance_numbers()
+    tab_auth()
     numbers()
     tab_sm()
     tab_readout()

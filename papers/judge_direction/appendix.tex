@@ -42,9 +42,9 @@ For the forced verdict and all hidden-state measurements, the assistant turn sta
 
 \paragraph{Rule, fixed before the main run.} Gap check: stop if the gap is $\le 5$. Push test: on 400 random answers, the accept rate at $-8$ and $+8$ standard deviations along the direction at every second layer; a layer responds if the accept rate rises by at least 10 points. Layer: the best-ranking responding layer; if none responds, the best-ranking layer. Stretch: $\times$11 at that layer only, along the direction and along a random direction; $\times$4 and $\times$21 are recorded as secondary readouts.
 
-\paragraph{Revision after a failure.} Mistral-7B on MMLU-Redux accepts 99\% of answers, so no push changes its decision, although the verdict score follows the direction (within-question correlation $+0.54$ to $+0.85$ from layer 18). We therefore measure the response on the verdict score: sensitivity is the mean change in verdict score per standard deviation pushed, divided by the verdict score's within-question standard deviation, and a layer responds if its sensitivity is at least 0.05. This picks the same layer as the original rule wherever the original worked, and layer 16 for Mistral-7B on MMLU-Redux ($+2.3$ [$+0.5$, $+3.7$]).
+\paragraph{Revision after a failure.} Mistral-7B on MMLU-Redux accepts 99\% of answers, so no push changes its decision, although the verdict score follows the direction (within-question correlation $+0.54$ to $+0.85$ from layer 18). We therefore measure the response on the verdict score: sensitivity is the mean change in verdict score per standard deviation pushed, divided by the verdict score's within-question standard deviation, and a layer responds if its sensitivity is at least 0.05. In a full sweep this picks layer 16 for Mistral-7B on MMLU-Redux ($+2.3$ [$+0.5$, $+3.7$]). The seven original judges were stretched at the layer the original rule chose (for Mistral-7B on MMLU-Redux, layer 4: $-0.7$), and all pooled numbers use those layers; the revised rule chose the layers for Llama-3.2-1B, Qwen2.5-7B and Llama-3.1-70B. In the main text and Table~\ref{tab:pairs}, a pair counts as responding if the verdict's sensitivity at the stretched layer is at least 0.05.
 
-\paragraph{Fresh test.} Before running Llama-3.2-1B and Qwen2.5-7B, new to the study, we wrote down the revised rule and the prediction that every pair with a gap and a responding layer gains with $\times$11 (interval above 0) and that the random direction stays within $\pm1$. It held for Llama-3.2-1B on MMLU-Redux ($+5.4$) and MATH ($+7.9$), and the random direction stayed within $\pm1$ throughout. It failed on BBEH for both judges ($-1.5$ and $+1.0$). In both, the direction's ranking is flat across the responding layers to within split noise, and the rule took the layer where the verdict only begins to respond; a neighbouring layer with a stronger response gains $+6.4$ [$+3.3$, $+10.3$] (Llama-3.2-1B, layer 14) and $+4.6$ [$+1.2$, $+8.2$] (Qwen2.5-7B, layer 22). Qwen2.5-7B on MMLU-Redux has no responding layer (the backwards-reading failure of \S\ref{sec:readout}).
+\paragraph{Fresh test.} Before running Llama-3.2-1B and Qwen2.5-7B, new to the study, we wrote down the revised rule and the prediction that every pair with a gap and a responding layer gains with $\times$11 (interval above 0) and that the random direction stays within $\pm1$. It held for Llama-3.2-1B on MMLU-Redux ($+5.4$) and MATH ($+7.9$), and the random direction stayed within $\pm1$ throughout. It failed on BBEH for both judges ($-1.5$ and $+1.0$). In both, the direction's ranking is flat across the responding layers to within split noise, and the rule took the layer where the verdict only begins to respond; a neighbouring layer with a stronger response gains $+6.4$ [$+3.3$, $+10.3$] (Llama-3.2-1B, layer 14) and $+4.6$ [$+1.2$, $+8.2$] (Qwen2.5-7B, layer 22). Qwen2.5-7B on MMLU-Redux has no responding layer; stretching its best-ranking layer still gains $+2.5$ [$+1.1$, $+4.0$].
 
 \paragraph{Strength.} Judges whose verdict responds strongly (sensitivity $\ge 0.2$) do best at $\times$4--$\times$11; weakly responding ones (sensitivity $< 0.08$, mostly BBEH) at $\times$11--$\times$21. $\times$11 is within about two points of the best tested strength for most pairs.
 
@@ -55,7 +55,7 @@ For the forced verdict and all hidden-state measurements, the assistant turn sta
 \centering
 \small
 \input{tab_pairs.tex}
-\caption{Every judge--benchmark pair. Gap: best layer's direction ranking minus the verdict's, on the split used for the layer rule; 20 splits: mean $\pm$ standard deviation over 20 random half-splits of the questions (at the best layer). Layer: the layer the rule stretches ($^*$: no layer responds; best-ranking layer). Sens.: the verdict's sensitivity there. Llama-3.1-70B is the scale check of \S\ref{sec:scale}. Last four columns: ranking ($\times$100) of the forced verdict, the verdict after reasoning, the verdict after stretching $\times$11, and the direction, on the main answer pool.}
+\caption{Every judge--benchmark pair. Gap: best layer's direction ranking minus the verdict's, on the split used for the layer rule; 20 splits: mean $\pm$ standard deviation over 20 random half-splits of the questions (at the best layer). Layer: the stretched layer ($^*$: the verdict's sensitivity there is below 0.05). Sens.: the verdict's sensitivity there. Llama-3.1-70B is the scale check of \S\ref{sec:scale}. Last four columns: ranking ($\times$100) of the forced verdict, the verdict after reasoning, the verdict after stretching $\times$11, and the direction, on the main answer pool.}
 \label{tab:pairs}
 \end{table*}
 
@@ -65,6 +65,21 @@ For the forced verdict and all hidden-state measurements, the assistant turn sta
 \input{tab_sm_pairs.tex}
 \caption{Same-model pairs on questions the judge cannot solve, per judge: ranking ($\times$100) by each readout. Groups: questions with at least one right and one wrong answer from the same answering model.}
 \label{tab:smpairs}
+\end{table*}
+
+\section{Authorship Directions}
+\label{app:auth}
+
+Per judge and benchmark, at the best-ranking layer and with the same two question halves as the correctness direction, we take, within every question and correctness class that holds answers by both models, the difference between the two models' mean states, and average these paired differences: Qwen3.6-35B-A3B vs Qwen3.5-4B (``own pair'') and Nemotron-3-Super-120B vs Qwen3.5-4B. Table~\ref{tab:auth} reports, on held-out questions, how well the first direction separates answers by its own pair and by the other pair (within question and correctness class; 50 = none, below 50 = reversed), its cosine with the correctness direction, and the ranking of right above wrong answers by the verdict, by the correctness direction, and by the correctness direction with both authorship directions projected out ($\perp$). Llama-3.1-8B on MATH and Llama-3.2-3B on MMLU-Redux were run with a different storage layout and are missing. The Verdict column is recomputed on all answers with stored hidden states and can differ by a few tenths from Table~\ref{tab:pairs}, which uses only questions where every readout has a score.
+
+\paragraph{Why not a variance share.} A simpler measure of authorship is the share of a score's within-question variance that lies between answering models (\R{share.direct.lo}--\R{share.direct.hi}\% for the direction, \R{share.verdict.lo}--\R{share.verdict.hi}\% for the verdict). With one or two answers per model and question, a score shuffled within question already gets \R{share.null.lo}--\R{share.null.hi}\%, and the correctness label itself \R{share.gold.lo}--\R{share.gold.hi}\%, so this share says little about authorship. The pair split and the authorship directions of \S\ref{sec:what} replace it.
+
+\begin{table*}[h]
+\centering
+\small
+\input{tab_auth.tex}
+\caption{Authorship directions (held out). Own pair / other pair: AUROC of the Qwen3.6-vs-Qwen3.5-4B direction for Qwen3.6 vs Qwen3.5-4B answers and for Nemotron vs Qwen3.5-4B answers of equal correctness. cos: with the correctness direction. Ranking of right above wrong answers by the verdict, the correctness direction, and the correctness direction with both authorship directions removed ($\perp$), on all and on same-model pairs.}
+\label{tab:auth}
 \end{table*}
 
 \section{Best-of-$n$ Selection}

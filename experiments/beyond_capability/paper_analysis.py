@@ -63,6 +63,8 @@ def evaluate(rows, group, n=1000):
                 d = np.array([f(m, i) - f("verdict", i) for i in idx])
                 res[m][f"d_{met}"] = dict(g=res[m][met] - res["verdict"][met], lo=float(np.percentile(d, 2.5)),
                                           hi=float(np.percentile(d, 97.5)))
+    rv = np.array([rank("verdict", i) for i in idx])
+    res["verdict"]["rank_ci"] = dict(lo=float(np.percentile(rv, 2.5)), hi=float(np.percentile(rv, 97.5)))
     return res
 
 
