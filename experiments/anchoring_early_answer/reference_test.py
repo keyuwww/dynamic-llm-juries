@@ -292,5 +292,53 @@ def analyze_kimi():
     print("\n".join(L))
 
 
+def analyze_audited():
+    """Nov 18: the reference test on audited labels. Same BFF judgments under usual / commit first / expert reference /
+    Kimi-K3.1-Pro reference. Wrong answers kept only if GLM-5.3 audits them clearly wrong; 'actually correct' wrong-labelled
+    answers reported separately. -> out/reference_audited.md"""
+    import re
+    jobs, _, rows = load()
+    glm = {}
+    for line in open(HERE / "out" / "ask_glm5.3_labelaudit.jsonl"):
+        g = json.loads(line)
+        m = re.findall(r"AUDIT:\s*(LABEL_OK|LABEL_WRONG|CONTESTED)", g["text"])
+        glm[g["cache_key"].split("|", 2)[2]] = m[-1] if m else None
+    def verdicts(fname, prefix):
+        g = {r["cache_key"]: r for r in map(json.loads, open(HERE / "out" / fname))}
+        return {k: parse_verdict(v["text"]) for k, v in g.items() if k.startswith(prefix)}
+    cf, rf, kf = verdicts("gen_solvefirst.jsonl", "solvefirst|"), verdicts("gen_bffref.jsonl", "bffref|"), verdicts("gen_bffkimi.jsonl", "bffkimi|")
+    P = []  # (qid, usual, cf, expert, kimi, ok, judge, bin, audit)
+    for (judge, iid), r in rows.items():
+        k = f"{judge}|{iid}"
+        v = (r.get("spoken"), cf.get("solvefirst|" + k), rf.get("bffref|" + k), kf.get("bffkimi|" + k))
+        if any(x is None for x in v):
+            continue
+        P.append((jobs[(judge, iid)]["qid"], *[int(x) for x in v], int(r["target_ok"]), judge, binof(r["belief"]), glm.get(iid)))
+    names = ["usual judge prompt", "commit first", "+ expert reference", "+ Kimi-K3.1-Pro reference"]
+    S = [p for p in P if p[5] == 1 or p[8] == "LABEL_OK"]
+    def ba(s, i):
+        pos = [p[i] for p in s if p[5] == 1]; neg = [1 - p[i] for p in s if p[5] == 0]
+        return None if not pos or not neg else 100 * (np.mean(pos) + np.mean(neg)) / 2
+    L = ["# Reference test on audited labels (BFF, three Qwens, thinking off)\n",
+         f"{len(P)} judgments under all four prompts; {len(S)} after keeping only wrong answers audited as clearly wrong. "
+         "95% intervals resample questions.\n",
+         "| prompt | wrong, strong belief (4/7+) approved | wrong, 0/7 approved | right approved | balanced accuracy (vs usual) | "
+         "'actually correct' (audit) approved |", "|---|---|---|---|---|---|"]
+    for i, nm in enumerate(names, start=1):
+        st = [p[i] for p in S if p[5] == 0 and p[7] in ("4-6", "7/7")]
+        z = [p[i] for p in S if p[5] == 0 and p[7] == "0/7"]
+        rt = [p[i] for p in S if p[5] == 1]
+        ac = [p[i] for p in P if p[5] == 0 and p[8] == "LABEL_WRONG"]
+        if i == 1:
+            bc = f"{ba(S, 1):.1f}%"
+        else:
+            d = boot(S, lambda s, i=i: (ba(s, i) - ba(s, 1)) if ba(s, i) is not None and ba(s, 1) is not None else None)
+            bc = f"{ba(S, i):.1f}% ({d[0]:+.1f} [{d[1]:+.1f}, {d[2]:+.1f}])"
+        L.append(f"| {nm} | {100 * np.mean(st):.0f}% (n={len(st)}) | {100 * np.mean(z):.0f}% (n={len(z)}) | "
+                 f"{100 * np.mean(rt):.0f}% (n={len(rt)}) | {bc} | {100 * np.mean(ac):.0f}% (n={len(ac)}) |")
+    (HERE / "out" / "reference_audited.md").write_text("\n".join(L) + "\n")
+    print("\n".join(L))
+
+
 if __name__ == "__main__":
-    prep() if "--prep" in sys.argv else prep_both() if "--prep-both" in sys.argv else prep_kimi() if "--prep-kimi" in sys.argv else analyze_kimi() if "--kimi" in sys.argv else analyze_four() if "--four" in sys.argv else analyze()
+    analyze_audited() if "--audited" in sys.argv else prep() if "--prep" in sys.argv else prep_both() if "--prep-both" in sys.argv else prep_kimi() if "--prep-kimi" in sys.argv else analyze_kimi() if "--kimi" in sys.argv else analyze_four() if "--four" in sys.argv else analyze()

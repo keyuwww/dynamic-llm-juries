@@ -23,6 +23,7 @@ from common import parse_verdict  # noqa: E402
 QWENS = ["qwen3.5-4b", "qwen3.5-9b", "qwen3.6-35b-a3b"]
 BINS = ["0/7", "1-3", "4-6", "7/7"]
 rng = np.random.default_rng(0)
+AUDITED = "--audited" in sys.argv
 
 
 def binof(b):
@@ -55,7 +56,16 @@ def fmt(e, lo, hi, pct=True):
 
 def main():
     rows = {(r["judge"], r["item"]): r for r in json.load(open(HERE / "out" / "belief_rows_clean.json"))}
-    L = ["# Rigor checks (Nov 16)\n", "95% intervals resample whole questions (2,000 draws).\n"]
+    if AUDITED:  # Nov 18: drop BFF / JudgeBench wrong answers the GLM-5.3 audit does not call clearly wrong
+        import re
+        glm = {}
+        for line in [l for f in ("ask_glm5.3_labelaudit.jsonl", "ask_glm5.3_labelauditrb2.jsonl") for l in open(HERE / "out" / f)]:
+            g = json.loads(line)
+            m = re.findall(r"AUDIT:\s*(LABEL_OK|LABEL_WRONG|CONTESTED)", g["text"])
+            glm[g["cache_key"].split("|", 2)[2]] = m[-1] if m else None
+        rows = {k: r for k, r in rows.items() if not (int(r["target_ok"]) == 0 and glm.get(r["item"]) != "LABEL_OK")}
+    L = ["# Rigor checks (Nov 16)" + (", audited labels (Nov 18)" if AUDITED else "") + "\n",
+         "95% intervals resample whole questions (2,000 draws).\n"]
 
     # ---- 1. commit first, paired
     gen = {r["cache_key"]: r for r in map(json.loads, open(HERE / "out" / "gen_solvefirst.jsonl"))}
@@ -162,7 +172,7 @@ def main():
         rej_r = boot(hb, lambda V: np.mean([1 - x[3] for x in V]))
         L.append(f"| {j} | {len(R)} | {sum(v[4] for _, v in R)} | " + " | ".join(cells) +
                  f" | {fmt(*rej_q)} → {fmt(*rej_r)} (n={len(hb)}) |")
-    out = HERE / "out" / "rigor_checks.md"
+    out = HERE / "out" / ("rigor_checks_audited.md" if AUDITED else "rigor_checks.md")
     out.write_text("\n".join(L) + "\n")
     print("\n".join(L))
 

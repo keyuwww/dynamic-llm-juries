@@ -49,6 +49,9 @@ MATCHERS = {
     # full GLM-5.3 for the label audit (Nov 16): harder reading, longer reasoning budget
     "glm5.3": dict(spec=dict(key="glm5.3", model="zai-org/GLM-5.3:peft:262144", price_in=0.0, price_out=0.0),
                    renderer="glm5_3_high_reasoning", max_tokens=32768, file="matches_glm5.3.jsonl"),
+    # second, independent label auditor (Nov 17): another family than GLM and not one of the judges
+    "kimi3.1pro": dict(spec=dict(key="kimi3.1pro", model="moonshotai/Kimi-K3.1-Pro:peft:262144", price_in=0.0, price_out=0.0),
+                       renderer="kimi_k31_pro_high_reasoning", max_tokens=32768, file="matches_kimi3.1pro.jsonl"),
 }
 SOLVE_JOBS = HERE / "inputs" / "solve_jobs.jsonl"  # --set replaces these
 READOUT_JOBS = HERE / "inputs" / "readout_jobs.jsonl.gz"
@@ -229,10 +232,18 @@ def make_matcher(name):
     from tinker_cookbook import renderers
     from common import TinkerChat, load_env
     load_env()
-    chat = TinkerChat(m["spec"], tinker.ServiceClient())
-    tok = chat.client.get_tokenizer()
+    chat = TinkerChat(m["spec"], tinker.ServiceClient()) if "Kimi-K3" not in m["spec"]["model"] else None
+    if chat is None:  # TML-renderer model: TinkerChat's default renderer lookup does not apply; build it here
+        from tinker_cookbook import tokenizer_utils
+        chat = TinkerChat.__new__(TinkerChat)
+        chat.spec, chat._renderers = m["spec"], renderers
+        chat.client = tinker.ServiceClient().create_sampling_client(base_model=m["spec"]["model"])
+        tok = tokenizer_utils.get_tokenizer(m["spec"]["model"].split(":")[0])
+    else:
+        tok = chat.client.get_tokenizer()
     chat.renderer_name = m["renderer"]
-    chat.renderer = renderers.get_renderer(m["renderer"], tok, model_name=m["spec"]["model"])
+    mname = m["spec"]["model"].split(":")[0] if "Kimi-K3" in m["spec"]["model"] else m["spec"]["model"]
+    chat.renderer = renderers.get_renderer(m["renderer"], tok, model_name=mname)
     chat.stop = chat.renderer.get_stop_sequences()
     return chat
 
@@ -395,9 +406,11 @@ def main():
             ext.update({r["cache_key"]: r["text"] for r in map(json.loads, open(f))})
     readout = [j for j in load_gz(READOUT_JOBS)
                if j["judge"] in models and j["bench"] in benches]
-    if a.open:  # judge prompts/candidates are judge-independent: reuse qwen3.5-4b's, relabelled
-        readout = [dict(j, judge=a.open) for j in load_gz(READOUT_JOBS)
-                   if j["judge"] == "qwen3.5-4b" and j["bench"] in benches]
+    if a.open:  # judge prompts/candidates are judge-independent: the open judge's own jobs if the set has them
+        # (e.g. --set nano), else qwen3.5-4b's, relabelled
+        alljobs = load_gz(READOUT_JOBS)
+        src = a.open if any(j["judge"] == a.open for j in alljobs) else "qwen3.5-4b"
+        readout = [dict(j, judge=a.open) for j in alljobs if j["judge"] == src and j["bench"] in benches]
     if a.limit:
         seen, keep = {}, []
         for j in readout:

@@ -731,6 +731,104 @@ readout, which equals the spoken verdict in every judgment checked.
   context limit. Cost ≈ $80 at list prices (own answers ≈ $52 + their prompts, verdicts $13, readouts $7).
 - Four families, four different makers, same pattern.
 
+## Experiment 13 — Closing the review gaps (Nov 17)
+
+### 13a. Thinking-on staircase on audited labels (`validation/think_staircase.py` → `validation/think_staircase.md`)
+
+**What ran.** No new generation: Experiment 5's thinking-on judgments of the three Qwens (main set, every output
+allowed to fill the context; the ~630 cut-off outputs replaced by their from-scratch reruns). Verdict = the spoken
+verdict after `</think>` (JudgeBench: the A/B pick, mapped to "approves the target"). Belief = the usual thinking-off
+belief (7 own answers). Audited labels as in Experiment 11. All 2,065 audited wrong answers × judges have a parseable
+thinking-on verdict.
+
+| Wrong answers approved (3 Qwens pooled, audited) | 0/7 | 1–3 | 4–6 | 7/7 | gap |
+|---|---|---|---|---|---|
+| thinking off | 17% | 30% | 49% | 65% | +48 [+30, +63] |
+| thinking on | **3%** | 22% | 41% | 60% | **+57 [+38, +73]** |
+
+- **The staircase holds with thinking on**, in every Qwen (+48, +57, +65 per judge).
+- Thinking mostly makes judges stricter on answers they do *not* believe (17% → 3% at 0/7); at 7/7 it changes little.
+- The difference in gaps, +9 [−6, +24], is **not significant**. The Nov 9 reading "thinking widens the gap from +37
+  to +58" (Experiment 5, one-sample label, released labels) does not survive the audit; "thinking does not remove
+  it" does.
+- Right answers: thinking-on approves 22% / 76% / 90% / 96% by belief (thinking off 30 / 71 / 85 / 91).
+- **Superseded numbers (Nov 18):** with the full audit rule below (13c), thinking off 17 / 30 / 45 / 59%
+  (+43 [+20, +62]), thinking on 3 / 21 / 35 / 53% (+50 [+28, +71]); difference +8 [−9, +26].
+
+### 13b. Is belief just difficulty? (`validation/difficulty_check.py` → `validation/difficulty_check.md`)
+
+Belief belongs to a (judge, answer) pair; difficulty to a question. All four families pooled, full audit:
+- **Same judge, same question** (judge × question fixed effects; 100 groups with wrong answers at different belief):
+  the believed answer is approved more, **+47 [+26, +76]** points (0/7 → 7/7).
+- **Holding the judge's own accuracy on the question fixed:** belief +57 [+8, +81]; accuracy itself −2 [−10, +5].
+- Hardest questions only (judge never reaches the right answer): 15% (n=181) at 0/7 vs 100% (n=9) at 7/7.
+
+### 13c. Label audit, complete and with a second auditor (`validation/second_auditor.py` → `validation/second_auditor.md`)
+
+- **RB2 Math was never fully audited before** (only the value-match cleaning). GLM-5.3 and Kimi-K3.1-Pro now audited
+  all 453 RB2 Math wrong answers too (`inputs/ask_labelauditrb2.jsonl.gz`, a benchmark-correct response as the
+  reference): 435 / 440 clearly wrong.
+- **Kimi-K3.1-Pro re-audited all 913 wrong answers** (same prompts as GLM-5.3; Moonshot, not one of the judges).
+  Same clearly-wrong-or-not call as GLM-5.3 on 95% (κ = 0.75): RB2 Math 98%, BFF 96%, JudgeBench 91%.
+- **One rule everywhere from now on:** keep a wrong answer only if GLM-5.3 calls it clearly wrong, on all three
+  benchmarks. Main staircase (stated verdict, `validation/paper_numbers.md`): Qwens 17 / 30 / 45 / 59% (+43 [+20, +62]),
+  Nemotron 25 / 49 / 59 / 86% (+61), DeepSeek 13 / 37 / 38 / 47% (+34 [+9, +58]), Kimi-K2.6 1 / 14 / 33 / 58% (+57).
+  Under Kimi-K3.1-Pro's labels and under both, every family keeps a positive gap (Kimi-K2.6 under both: only 5 answers
+  at 7/7, interval includes 0).
+- **Human check:** blind review page with 60 stratified answers (https://claude.ai/artifact/YFfoNKmZmsEzgfUFdVqxYe;
+  answer key `validation/human_check_key.json`). Waiting for reviewers.
+
+### 13d. Single-source recompute (`validation/paper_numbers.py` → `validation/paper_numbers.md`)
+
+All behavioural paper numbers recomputed from raw rows with one convention (stated verdict, full audit, intervals
+resampling questions). Corrections to earlier drafts:
+- Table "audit by belief" had double-counted answers across bins; counted once at the highest Qwen belief:
+  0/7 169 / 1 / 4, 1–3 89 / 5 / 6, 4–6 41 / 10 / 14, 7/7 23 / 23 / 9 (clearly wrong / actually correct / contested).
+- **Same answer, different Qwen judges (the "not authorship" test): +17 [−2, +37]**, not +23 [+6, +38]. Suggestive only.
+- Belief vs one-sample label (Qwens): label +2 [−9, +12] with belief fixed, belief +43 [+26, +57] with label fixed.
+- Before reasoning (A) +22 [+7, +37] vs stated verdict +44 [+28, +56].
+- Commit first (`rigor_checks.py --audited`): 0/7 17% → 1%; 7/7 50% → 56% (n=16); balanced accuracy 82 → 86% (+5 [+3, +7]).
+- Reference test (`reference_test.py --audited` → `out/reference_audited.md`): strong-belief wrong 44% → 0% (expert),
+  13% (Kimi-K3.1-Pro); balanced accuracy 78.7 → 90.9% / 86.1%; actually-correct answers 73% → 21% with the expert.
+- Transcripts (`transcript_check.py --audited [--think]`): thinking on, approved wrong answers re-solve 99% and land on
+  the graded answer 93% (n=74); thinking off 28% / 25% (n=330), rejections re-solve 97%.
+
+### 13e. Inside the model, rechecked — the earlier strong claim does not hold
+
+New captures on Cannon (`cannon_nano/capture_last.py`): the judge's state at "VERDICT:" **after its written
+explanation** (JX) and **after its full thinking trace** (JT), BBEH, Qwen3.5-9B and Qwen3.6-35B.
+- **Cosine confound** (`beyond_capability/dir_belief_robust.py`): over 20 random splits the belief–correctness cosine
+  at the snap verdict is 0.80 (9B) and 0.48 (35B), but with belief labels **shuffled within question** it is 0.72 and
+  0.42. Most of the alignment reflects which questions believed answers come from, not belief. The single-split,
+  best-layer number for 35B moves between 0.41 and 0.80 with the split. **The paper's earlier Table 3 (0.70 / 0.80
+  judging vs 0.36 / 0.25 solving) is withdrawn.**
+- **Within-question test** (`beyond_capability/dir_belief_within.py`): believed vs never-reached wrong answers to the
+  same question, pairwise AUROC on the correctness direction. Snap verdict 0.64 [0.51, 0.76] / 0.58 [0.48, 0.75];
+  solving 0.60 / 0.54; after explanation **0.71 [0.59, 0.84] / 0.76 [0.65, 0.86]**, matching the verdict log-odds.
+  Only 37–39 questions have both kinds of wrong answer. JT: 3–5 pairs, too few.
+- Reading: a modest representation of belief at the snap verdict, no clear judging-vs-solving difference; after the
+  judge writes its reasoning the state at "VERDICT:" mostly encodes the decision.
+
+### 13f. Nemotron-3-Nano as a second family inside the model (running)
+
+Tinker no longer serves Nemotron-3-Nano, so its own answers (1 + 7 per main-set question, 5 per BBEH question) run on
+Cannon with vLLM (`cannon_nano/nano_gen.py`) and its hidden states with transformers (`cannon_nano/capture_last.py`,
+native Nemotron-H code). Pool verdicts from when Tinker served it are reused (`cannon_nano/ingest.py`).
+
+**Results (Nov 18, `out_nano/`, `validation/paper_numbers.md`).** 9,820 own answers (26 cut off); 1,735 verdicts.
+- **Behaviour: a lenient judge with a shallow staircase.** Audited wrong answers approved 37% / 45% / 46% / 55%
+  (0/7 … 7/7; gap +18 [−11, +43]). Belief slope +17 [+2, +31]; one-sample label −6 with belief fixed, belief
+  +21 [+4, +37] with label fixed. Within question +47 [+8, +85] (58 groups). Right answers 50 → 83%.
+- **Audit gap found and closed:** Nano's own answer matches the wrong JudgeBench response on 178 pairs no other judge
+  had as a wrong target, so they had never been audited; both auditors now cover them (1,091 unique answers in all;
+  GLM-5.3 vs Kimi-K3.1-Pro agreement 96%, κ 0.77).
+- **Inside (BBEH, 75 believed / 617 never-reached audited wrong answers; 46 new believed answers audited,
+  `inputs/ask_labelauditbbehnano.jsonl.gz`):** within-question snap verdict 0.56 [0.39, 0.68], verdict log-odds 0.47,
+  solving 0.59. Cosine 0.78 at the snap verdict vs shuffled control 0.61 (95th pct 0.94) — the same confound.
+- Like Llama-3.1-8B earlier, the weakest judge tracks belief least, in behaviour and inside.
+- With Nano, the pooled within-question effect is +47 [+27, +71] (158 groups); accuracy control: belief +48 [+15, +72],
+  accuracy +1 [−7, +8].
+
 ## Feasibility verdict on the two papers' ideas
 
 | Idea | Works here? | What we learned |

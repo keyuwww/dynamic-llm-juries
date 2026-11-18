@@ -1,0 +1,613 @@
+\documentclass[11pt]{article}
+
+% "review" for submission (anonymous, line numbers); "final" for camera-ready; "preprint" for arXiv.
+\usepackage[review]{acl}
+
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{pifont}
+
+% Drafting marks: remove before submission.
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+% One boxed takeaway per section, as in Wang et al. (2026).
+\newcounter{takeaway}
+\newtcolorbox{takeaway}{enhanced, breakable, colback=gray!5, colframe=gray!60, boxrule=0.5pt, arc=1.5pt,
+  left=5pt, right=5pt, top=3pt, bottom=3pt, fontupper=\small,
+  title={\stepcounter{takeaway}\textbf{Takeaway \thetakeaway}}, fonttitle=\small, coltitle=black,
+  colbacktitle=gray!15, attach title to upper={\ }}
+
+\title{Judges Approve What They Believe:\\An LLM Judge's Own Answers Predict Which Wrong Answers It Accepts}
+
+\author{Anonymous ACL submission}
+
+\begin{document}
+\maketitle
+
+% ---------------------------------------------------------------------------------------------------------------
+\begin{abstract}
+LLM judges often approve wrong answers. Self-preference is a common explanation; recent work suggests instead that
+what matters is whether the judge could answer the question itself. For each candidate answer,
+written by another model, we measure the judge's \emph{belief}: the share of seven independent solutions by the
+judge that reach the candidate's final answer. Across three benchmarks and seven judges from four families, on audited
+labels (checked by a second, independent auditor), approval of wrong answers rises with belief: from 1--25\% when the judge
+never reaches the answer to 47--86\% when it always does (pooled Qwens, Nemotron-3-Super, DeepSeek, Kimi); the
+weakest judge is lenient throughout and rises less. Belief absorbs the usual one-sample ``matches my answer''
+signal, predicts approval among wrong answers to the same question (pooled across judges), so difficulty does not explain
+it, and persists
+with thinking enabled, where 93\% of approved wrong answers come with the judge deriving that same answer. Inside
+three judges, the moment of the verdict shows at most a modest belief signal, and a direction-cosine analysis we
+first used is confounded by question composition. Label errors concentrate where judges believe: among BFF-Bench and
+JudgeBench ``wrong'' answers a Qwen judge always reaches, as many are audited actually correct as clearly wrong.
+\end{abstract}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Introduction}
+
+LLM-as-a-judge is now a standard way to score open-ended outputs, build preference data and run benchmarks
+\citep{zheng2023judging}. Its best-known failure is self-preference: judges rate their own generations higher
+\citep{panickssery2024llm}. Two recent results point to a different reading. Much of what looks like
+self-preference can be explained by the judge being wrong about the question \citep{roytburg2026narcissists}, and
+judges agree with human experts mainly on questions they can answer themselves \citep{krumdick2026nofreelabels}.
+Both suggest that what matters is the judge's own \emph{answer} to the question, not who wrote the text it grades.
+
+We test this directly and per answer (Figure~\ref{fig:overview}). Every judge grades answers written by other
+models, so authorship is removed by design. Separately, and without seeing any candidate, the judge solves the same
+question seven times. Its \emph{belief} in a candidate is the number of those solutions that reach the candidate's
+final answer, from 0/7 to 7/7. Our central questions are:
+\begin{enumerate}
+\item Does a judge approve wrong answers more often the more strongly it believes them, and is this belief rather
+than something correlated with it, such as question difficulty, a single matching sample, or label noise?
+\item How do judges arrive at these approvals?
+\item What can be read about belief inside the model at the moment of the verdict?
+\end{enumerate}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/overview.pdf}
+\caption{How belief is measured, on a real JudgeBench item. \ding{172}~Without seeing any candidate, the judge
+answers the question seven times; its belief in an answer is the share of these that reach it. \ding{173}~The judge
+then grades answers written by other models. Here Qwen3.5-9B reaches the wrong option~H in all seven tries and,
+shown two responses, picks the one that answers~H. Both label auditors (\S\ref{sec:setup}) agree that H is wrong.}
+\label{fig:overview}
+\end{figure*}
+
+We find that approval of wrong answers rises with belief in all four families and points the same way in each of
+the seven judges, though the two judges that approve the most wrong answers regardless (Qwen3.5-4B and Nemotron-3-Nano) rise less
+(\S\ref{sec:staircase}). The effect is not explained by the one-sample label used in prior
+work, holds among wrong answers to the same question when families are pooled, survives an audit of the benchmark
+labels by two independent auditors, and remains when the judge thinks before answering
+(\S\ref{sec:alternatives}). In transcripts of thinking judges, approving a wrong answer almost always comes with
+the judge deriving that same answer (\S\ref{sec:transcripts}). Inside the model, we find only modest evidence that believed wrong answers are
+represented like right ones at the moment of the verdict, and we report a confound that makes a simpler analysis
+look stronger than it is (\S\ref{sec:inside}). The pattern has practical consequences for judge juries and
+benchmark labels (\S\ref{sec:juries}).
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A per-answer measure of judge belief that separates the judge's own answer from authorship, and evidence from
+seven judges in four families that approval of wrong answers rises with it.
+\item Tests that argue against the main alternatives: a single matching sample, question difficulty, label noise
+(two independent auditors) and the absence of reasoning.
+\item A transcript analysis showing that, with reasoning visible, approving a wrong answer almost always comes
+with deriving that answer.
+\item A label audit showing that benchmark errors concentrate on the answers judges believe most, and a cautionary
+result on reading belief from hidden-state directions.
+\end{itemize}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Related Work}
+
+\paragraph{Judges and their own answers.}
+\citet{panickssery2024llm} show that judges recognise and prefer their own generations.
+\citet{roytburg2026narcissists} argue that much of this preference reflects the judge being wrong on the question;
+we measure that belief per answer and remove authorship entirely. \citet{krumdick2026nofreelabels} find that judges
+agree with experts mainly on questions they can answer, and that expert references help; we use their BFF-Bench data
+and grade the effect on a 0--7 scale. \citet{goel2025great} show that judges favour models that make the same
+mistakes; ours is a per-answer version of this model-level effect. \citet{lin-etal-2025-before} find that solving and
+judging ability are only weakly correlated, and that giving the judge its own answer as a reference strengthens the
+link; we test this by belief level (\S\ref{sec:juries}).
+
+\paragraph{Truth and belief inside models.}
+Linear directions separate true from false statements in hidden states \citep{marks2024geometry,burns2023discovering,
+azaria-mitchell-2023-internal}, and difference-of-means directions can steer behaviour
+\citep{rimsky-etal-2024-steering,arditi2024refusal,zou2023representation}. Whether such probes read truth or the
+model's belief is debated \citep{herrmann2025standards}: a ``correctness'' probe can behave like the model's belief
+\citep{yang2026admit}, output confidence tracks belief rather than truth \citep{cho2026confidence}, and for judges,
+correctness labels alone cannot separate truth from the judge's belief \citep{gulati2026auditing}.
+\citet{mukherjee2026opening} find that judges' activations often hold the right preference when the verdict is
+wrong. We compare believed and unbelieved wrong answers to the same question, which controls for what a question
+looks like to the model.
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Experimental Setup}
+\label{sec:setup}
+
+\paragraph{Benchmarks.}
+Every item is a question, a candidate answer written by another model, and a right/wrong label.
+\textbf{RewardBench~2 Math} \citep{malik2025rewardbench2}: 732 single answers to 183 questions with short final
+values. \textbf{JudgeBench} \citep{tan2025judgebench}: 547 response pairs for 459 multiple-choice questions (coding
+pairs dropped); the judge picks the better response, and ``approving'' the wrong response means picking it.
+\textbf{BFF-Bench} \citep{krumdick2026nofreelabels}: 459 answers to 298 finance questions with unanimous expert labels,
+single- and two-turn. \textbf{BBEH} \citep{kazemi-etal-2025-big}: about 2,000 answers to hard reasoning puzzles,
+used only for the inside-the-model analysis.
+
+\paragraph{Judges.}
+Qwen3.5-4B, Qwen3.5-9B and Qwen3.6-35B-A3B (Alibaba); Nemotron-3-Super-120B-A12B and Nemotron-3-Nano-30B-A3B
+(NVIDIA); DeepSeek-V4.1-Flash (DeepSeek); and Kimi-K2.6 (Moonshot). All verdicts were collected through a hosted API (Tinker). Nemotron-3-Nano's verdicts come from an earlier run;
+by the time we measured belief the API no longer served it, so all its own answers (the one-sample answer and the
+seven belief answers) were generated on our GPUs with vLLM, using the same prompts and sampling settings. Each writes a short justification and ends with a verdict line; reasoning
+(``thinking'') is off unless stated. No judge wrote any of the candidates it grades, although some candidates may
+come from other models of the same family. Approval is the verdict the
+judge states.\footnote{Reading the verdict instead from the probabilities of the two verdict words at the end of the
+judge's own transcript gives the same label on 97--100\% of judgments per family.}
+
+\paragraph{Belief.}
+For each question the judge answers seven more times at temperature 0.7, with only the question (and, for two-turn
+BFF-Bench items, the earlier turns) in context. Belief in a candidate is the number of these answers that reach the
+candidate's final answer, divided by seven. A separate, eighth answer defines the one-sample ``matches my answer''
+label used in prior work, so the two are independent measurements. JudgeBench letters are matched exactly. On
+RewardBench~2 Math and BFF-Bench, GLM-5.3-Flash decides whether two final answers are the same, ignoring wording and
+rounding (Appendix~\ref{app:matcher}); a second reader agreed with 42 of 47 of its decisions, and every disagreement
+was the matcher calling a near-match DIFFERENT, so belief is, if anything, understated.
+
+\paragraph{Label audit.}
+A ``wrong'' answer that a judge reaches in all seven tries is either a confident error or a label error, so we
+audited every wrong-labelled answer in our data for which the benchmark provides a reference (1,091 unique
+answers; 13 of over 6,000 wrong-answer judgments lack one). GLM-5.3 (high reasoning) read each one with
+the question, the benchmark's reference (BFF-Bench's expert answer, the gold JudgeBench option, or a correct
+RewardBench~2 response) and was told the reference may itself be wrong; it labelled the answer \emph{clearly
+wrong}, \emph{actually correct} or \emph{contested} (Appendix~\ref{app:audit}). A second auditor from another family,
+Kimi-K3.1-Pro, repeated the audit with the same prompts (it is from the same developer as the Kimi-K2.6 judge,
+but a different model). The two make the same clearly-wrong-or-not call on 96\% of
+answers (Cohen's $\kappa$ = 0.77; 98\% on RewardBench~2 Math, 96\% on BFF-Bench, 94\% on JudgeBench).
+\todo{human check of a 60-answer stratified sample (review page in progress); report agreement with both auditors.}
+Unless stated otherwise, every result keeps only wrong answers GLM-5.3 audits as clearly wrong; results under
+Kimi-K3.1-Pro's labels, and under both, are in Appendix~\ref{app:robust}.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrr}
+\toprule
+Highest & Clearly & Actually & Con- & Approved if \\
+belief & wrong & correct & tested & act.\ correct \\
+\midrule
+0/7 & 169 & 1 & 4 & 4/5 \\
+1--3 & 89 & 5 & 6 & 63\% (19) \\
+4--6 & 41 & 10 & 14 & 61\% (28) \\
+7/7 & 23 & 23 & 9 & 81\% (47) \\
+\bottomrule
+\end{tabular}
+\caption{GLM-5.3 audit of the wrong-labelled BFF-Bench and JudgeBench answers in the Qwen judges' data (unique
+answers, binned by the highest belief any Qwen judge has in them; 5 without an audit verdict). The last column is the share
+of judgments approving answers audited as actually correct (number of judgments).}
+\label{tab:audit}
+\end{table}
+
+\paragraph{Statistics.}
+Intervals are 95\% bootstrap intervals that resample whole questions (2,000 draws). Effects of belief are slopes
+from a linear probability model with judge fixed effects, reported as the change from belief 0/7 to 7/7 in
+percentage points.
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Approval Rises with Belief}
+\label{sec:staircase}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/staircase.pdf}
+\caption{Wrong answers approved, by the judge's belief in them (RewardBench~2 Math, JudgeBench and BFF-Bench;
+audited labels). (a) Seven judges from four families, thinking off. (b) The three Qwen judges on the same answers with thinking
+off and on. Whiskers: 95\% intervals resampling questions.}
+\label{fig:staircase}
+\end{figure*}
+
+\paragraph{Experimental setup.}
+We pool the three benchmarks and group each judge's wrong answers by belief: never reached (0/7), sometimes (1--3),
+mostly (4--6) and always (7/7). We report the share approved in each group and the gap between 7/7 and 0/7.
+
+\paragraph{Experimental results.}
+Figure~\ref{fig:staircase}a and Table~\ref{tab:families} show the main result. Wrong answers the judge never
+reaches itself are approved 1--25\% of the time by the pooled Qwens, Nemotron-3-Super, DeepSeek and Kimi; wrong
+answers it always reaches, 47--86\% of the time. For these four the gap's interval excludes zero. Nemotron-3-Nano,
+the weakest judge here, approves 37\% of wrong answers it never reaches and its curve is shallow (+18 [$-$11, +43]),
+although its linear belief slope is positive (+17 [+2, +31]). The rise is not perfectly even:
+DeepSeek-V4.1-Flash is flat between 1--3 and 4--6, and the 7/7 groups are small after the audit (10--15 judgments
+per judge, 32 for the pooled Qwens), so the top of each curve is imprecise. Individually, all three Qwens point the
+same way, but the smallest (Qwen3.5-4B, +24 [$-$10, +62]) has an interval that includes zero
+(Appendix~\ref{app:robust}).
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Judge & 0/7 & 1--3 & 4--6 & 7/7 & Gap \\
+\midrule
+3 Qwens (pooled) & 17 & 30 & 45 & 59 & +43 {\scriptsize[+20, +62]} \\
+Nemotron-3-Super & 25 & 49 & 59 & 86 & +61 {\scriptsize[+40, +77]} \\
+DeepSeek-V4.1-Flash & 13 & 37 & 38 & 47 & +34 {\scriptsize[+9, +58]} \\
+Kimi-K2.6 & 1 & 14 & 33 & 58 & +57 {\scriptsize[+23, +87]} \\
+Nemotron-3-Nano & 37 & 45 & 46 & 55 & +18 {\scriptsize[$-$11, +43]} \\
+\midrule
+\multicolumn{6}{l}{\emph{As released (no audit)}} \\
+3 Qwens (pooled) & 18 & 35 & 54 & 74 & +56 {\scriptsize[+44, +66]} \\
+\bottomrule
+\end{tabular}}
+\caption{Wrong answers approved (\%), by belief, audited labels. Gap: 7/7 minus 0/7 in points. Group sizes at 7/7:
+32, 14, 15, 12 and 11 judgments.}
+\label{tab:families}
+\end{table}
+
+\begin{takeaway}
+In each of four model families, a judge approves a wrong answer more often the more of its own independent
+answers reach it: from 1--25\% when it never reaches the answer to 47--86\% when it always does. The weakest judge
+is lenient throughout and its rise is small.
+\end{takeaway}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Is It Belief? Alternative Explanations}
+\label{sec:alternatives}
+
+\paragraph{A single matching sample.}
+Prior work compares a candidate with one answer from the judge. Fitting both measures together (judge fixed
+effects, audited wrong answers), the Qwens' approval rises by +43 points [+26, +57] with belief while the one-sample
+label is held fixed, and the one-sample label adds +2 [$-$9, +12] once belief is known. The other families agree
+(label vs belief: Nemotron-3-Super $-$5 vs +61, DeepSeek $-$15 vs +52, Kimi +3 vs +35, Nemotron-3-Nano $-$6 vs +21;
+Appendix~\ref{app:robust}). The
+one-sample label matters only as a noisy proxy for belief.
+
+\paragraph{Question difficulty.}
+On hard questions a judge's answers scatter onto wrong values, and judges might simply be more lenient on hard
+questions. But belief belongs to a (judge, answer) pair, while difficulty belongs to a question. Pooling all
+judges and comparing only wrong answers to the \emph{same} question graded by the \emph{same} judge
+(judge$\times$question fixed effects; 158 such groups have answers at different belief levels), the answer believed
+more is approved more: +47 points [+27, +71]. This pooled estimate is not uniform across judges: it is clear for
+the Qwens (+61 [+31, +108]), Nemotron-3-Super (+73 [+22, +175]) and Nemotron-3-Nano (+47 [+8, +85]), uncertain for
+DeepSeek (+45 [$-$9, +86]), and absent for Kimi-K2.6 ($-$13 [$-$69, +24]; only 11 groups).\footnote{Linear-probability slopes can exceed 100 points when only a
+few groups identify them.} Controlling instead for the judge's accuracy on the question (how often its seven answers
+reach the right one), the pooled belief effect is +48 [+15, +72], while accuracy itself adds +1 [$-$7, +8]; for individual judges
+accuracy can matter as well (Nemotron-3-Nano +15 [+0, +30], Kimi-K2.6 $-$13 [$-$23, $-$3]).
+
+\paragraph{Authorship and shared beliefs.}
+No judge wrote any candidate it grades, so preference for its own text cannot apply. A belief shared by every model could still be
+a property of the answer rather than of the judge. Among the 151 wrong answers the three Qwens believe to different
+degrees, with answer and judge fixed effects, the Qwen that believes an answer more approves it more, +17 points
+[$-$2, +37]. This points the same way but is not conclusive on its own; the within-question comparison above is the
+stronger test.
+
+\paragraph{Label errors.}
+Without the audit, the Qwens' gap is larger (+56 [+44, +66]), because many believed ``wrong'' answers are right
+(Table~\ref{tab:audit}): among wrong-labelled answers some Qwen reaches 7/7, 23 are audited as clearly wrong and 23
+as actually correct, against 169 and 1 at 0/7. Judges approve these actually-correct answers 61--81\% of the time.
+The gap remains under the second auditor's labels and under labels both auditors agree on
+(Appendix~\ref{app:robust}; e.g.\ Qwens +38 [+20, +56] and +35 [+13, +57]); the exceptions are Kimi-K2.6 under both
+auditors, where only 5 judgments remain at 7/7, and Nemotron-3-Nano, whose interval includes zero under every label
+set.
+
+\paragraph{Thinking.}
+The three Qwens also judged every answer with thinking enabled, each output allowed to fill the context window;
+belief is still measured with thinking off. On the same audited answers (Figure~\ref{fig:staircase}b), approval
+rises from 3\% at 0/7 to 53\% at 7/7 (gap +50 [+28, +71], against +43 with thinking off). Thinking makes judges
+stricter on answers they do not believe (17\% $\rightarrow$ 3\% at 0/7) but changes the gap by only +8 [$-$9, +26]
+points.
+
+\paragraph{When the effect appears.}
+Appending ``VERDICT:'' to the judge's prompt and comparing the probabilities of the two verdict words, before the
+judge writes anything, already shows a belief effect of +22 points [+7, +37] for the Qwens; the stated verdict after
+the written justification shows +44 [+28, +56].
+
+\begin{takeaway}
+The evidence points to the judge's belief: a single matching sample adds nothing once belief is known, belief
+predicts approval among wrong answers to the same question (pooled across families), the effect survives two
+independent label audits, and it remains when the judge thinks before answering.
+\end{takeaway}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{How Judges Approve: Transcripts}
+\label{sec:transcripts}
+
+\paragraph{Experimental setup.}
+GLM-5.3-Flash read the three Qwens' judging transcripts on RewardBench~2 Math and BFF-Bench, with the question and
+the graded answer, and answered: did the judge work out its own result (re-solve)? Did that result equal the graded
+answer? Or did it only walk through the given steps? We checked eight of these labels by hand, and all agreed; this is a thin check. We use audited
+wrong answers: 1,736 transcripts with thinking off and 1,733 with thinking on.
+
+\paragraph{Experimental results.}
+\begin{table}[t]
+\centering
+\small
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Thinking off} & \multicolumn{2}{c}{Thinking on} \\
+Wrong answers & approved & rejected & approved & rejected \\
+\midrule
+Judgments & 330 & 1,406 & 74 & 1,659 \\
+Re-solves the problem & 28\% & 97\% & 99\% & 100\% \\
+\quad and lands on the graded answer & 25\% & 1\% & 93\% & 1\% \\
+Only checks the given steps & 85\% & 20\% & 18\% & 3\% \\
+\bottomrule
+\end{tabular}}
+\caption{What the three Qwen judges write before their verdict on audited wrong answers (GLM-5.3-Flash labels; the
+last two rows can overlap).}
+\label{tab:transcripts}
+\end{table}
+With reasoning visible, approving a wrong answer almost always comes with re-solving the problem and arriving at
+that same answer (93\%), while rejections re-solve and land elsewhere (Table~\ref{tab:transcripts}). This holds
+even at belief 0/7: of the 74 thinking-on approvals, 33 concern answers the judge never reached on its own, and in
+94\% of them the written derivation still lands on the candidate's answer. So the derivation is not simply a replay
+of the judge's prior answer; seeing the candidate can pull it there. With thinking off, rejections still show a
+written re-solve, but most approvals only walk through the candidate's steps.
+
+\begin{takeaway}
+When judges reason visibly, approving a wrong answer almost always comes with deriving that same answer, including
+for answers the judge never reached on its own.
+\end{takeaway}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Inside the Model}
+\label{sec:inside}
+
+\paragraph{Experimental setup.}
+For Qwen3.5-9B, Qwen3.6-35B-A3B and Nemotron-3-Nano we place each BBEH answer in several roles and read the residual stream at the
+last token, every second layer. \emph{Snap verdict}: the grading prompt followed by ``VERDICT:'', with nothing
+generated. \emph{After explanation} (Qwens only): the judge's own written justification inserted before ``VERDICT:''.
+\emph{Solving}: the answer placed in the model's own turn, followed by a request to restate it and ``FINAL:''.
+Belief on BBEH comes from five own answers per question; ``believed'' means at least half reach the candidate's
+answer, and ``never reached'' means none do. Labels of believed wrong answers were audited as above.
+
+The test asks whether, among \emph{wrong answers to the same question}, the model's correctness direction scores the
+believed answer above the never-reached one. The correctness direction is the difference of means between right and
+wrong answers after removing each question's mean, learned on half of the questions and applied to the other half
+(averaged over 20 random splits). We report a pairwise AUROC within question: 0.5 means the direction ignores
+belief. Comparing answers to the same question removes question difficulty and topic by construction. As a
+behavioural counterpart we apply the same test to the model's own log-odds of CORRECT over INCORRECT.
+
+\paragraph{Experimental results.}
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+Role (where the state is read) & Qwen3.5-9B & Qwen3.6-35B & Nemotron-3-Nano \\
+\midrule
+Snap verdict, correctness direction & 0.64 {\scriptsize[0.51, 0.76]} & 0.58 {\scriptsize[0.48, 0.75]} & 0.56 {\scriptsize[0.39, 0.68]} \\
+Snap verdict, verdict log-odds & 0.69 {\scriptsize[0.57, 0.80]} & 0.58 {\scriptsize[0.45, 0.72]} & 0.47 {\scriptsize[0.27, 0.71]} \\
+Solving, correctness direction & 0.60 {\scriptsize[0.45, 0.71]} & 0.54 {\scriptsize[0.33, 0.63]} & 0.59 {\scriptsize[0.41, 0.82]} \\
+After explanation, correctness direction & 0.71 {\scriptsize[0.59, 0.84]} & 0.76 {\scriptsize[0.65, 0.86]} & -- \\
+After explanation, verdict log-odds & 0.70 {\scriptsize[0.59, 0.80]} & 0.77 {\scriptsize[0.66, 0.86]} & -- \\
+\midrule
+Questions (pairs) & 39 (135) & 37 (125) & 22 (67) \\
+\bottomrule
+\end{tabular}
+\caption{Believed vs never-reached wrong answers to the same BBEH question: share of pairs in which the believed
+answer scores higher (0.5 = no difference). Correctness direction at the layer where it best separates right from
+wrong answers. Intervals resample questions.}
+\label{tab:inside}
+\end{table*}
+Table~\ref{tab:inside} shows a modest effect at most. At the snap verdict, a believed wrong answer scores higher
+than an unbelieved one to the same question in 56--64\% of pairs, with intervals that reach or nearly reach 0.5;
+Nemotron-3-Nano, whose behaviour also tracks belief least, shows no detectable effect. The solving
+role shows a similar, weak tendency, so we cannot say that judging and solving differ here. After the judge has
+written its explanation, the preference is clearer (0.71--0.76) and matches the judge's own verdict log-odds
+(0.70--0.77). The data are thin: only 22--39 questions have both kinds of wrong answer.
+
+\paragraph{A confound in direction cosines.}
+A simpler analysis builds a \emph{belief} direction (believed minus never-reached wrong answers) and a
+\emph{correctness} direction and reports their cosine. At the snap verdict this gives 0.80 (Qwen3.5-9B) and 0.48
+(Qwen3.6-35B), averaged over splits, but the same cosine with belief labels shuffled among wrong answers to the same
+question is nearly as high (0.72 and 0.42; for Qwen3.5-9B the shuffled values reach 0.90 at the 95th percentile).
+Most of the alignment therefore reflects which questions believed answers come from, not belief. A single split with
+its best layer is also unstable: across 20 splits it ranges from 0.62 to 0.94 for Qwen3.5-9B and from 0.36 to 0.60
+for Qwen3.6-35B (Appendix~\ref{app:inside}). We report this because the confound is easy to miss.
+
+\paragraph{Steering.}
+Adding a correctness direction at the verdict shifts approval of right and wrong answers together, like a leniency
+setting, and adding a belief direction during the judge's reasoning lowers approval of right answers without
+selectively removing approvals of believed wrong answers (Appendix~\ref{app:steering}).
+
+\begin{takeaway}
+At the moment of the verdict, judges represent believed wrong answers at most modestly more like right answers
+than unbelieved wrong answers to the same question; the difference becomes clear only after the judge has
+written its reasoning. Cosines between belief and correctness directions can be confounded by question composition.
+\end{takeaway}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Implications for LLM Juries}
+\label{sec:juries}
+
+If judges approve what they would answer themselves, errors on answers they do not believe and errors on answers
+they do believe should respond to different fixes. We test three on the Qwen judges, thinking off, audited labels.
+
+\paragraph{Commit first.}
+Placing the judge's own earlier answer in the conversation before it grades, following \citet{lin-etal-2025-before},
+almost removes approvals of wrong answers it never reaches (0/7: 17\% $\rightarrow$ 1\%, $-$17 points [$-$20,
+$-$14]; RewardBench~2 Math and BFF-Bench) but shows no detectable change for those it always reaches (50\%
+$\rightarrow$ 56\%, +6 [$-$14, +25]; 16 judgments). Balanced accuracy rises from 82\% to 86\% (+5 [+3, +7]), at the cost of rejecting
+more right answers the judge cannot reach itself.
+
+\paragraph{A second judge family.}
+Handing the items a Qwen believes ($\geq$4/7) to Nemotron-3-Super lowers balanced accuracy for every Qwen (e.g.\
+89\% $\rightarrow$ 86\% for Qwen3.6-35B; verdicts read at the end of each transcript). Nemotron-3-Super also believes
+68--77\% of the clearly wrong answers a Qwen believes: confident errors are shared across these families.
+
+\paragraph{A reference answer.}
+On BFF-Bench, adding the expert reference answer to the prompt \citep{krumdick2026nofreelabels} lowers approval of
+clearly wrong answers the judge believes ($\geq$4/7) from 44\% to 0\% (52 judgments) and raises balanced accuracy
+from 78.7\% to 90.9\% (+12.3 [+9.4, +15.4]). A strong model's answer (Kimi-K3.1-Pro) as the reference gives about
+half the gain (13\%; 86.1\%). The judge follows the reference whether or not it is right: on answers audited as
+actually correct, approval falls from 73\% to 21\% with the expert reference.
+
+\begin{takeaway}
+Committing the judge to its own answer first removes errors on answers it does not believe but not detectably on
+answers it does, and a juror from another family shares those confident errors. Of the fixes we tested, only an
+outside reference removed them, at the cost of following the reference when the reference itself is wrong.
+\end{takeaway}
+
+% ---------------------------------------------------------------------------------------------------------------
+\section{Conclusion}
+
+LLM judges approve wrong answers more often the more strongly they believe them, in four model families and with
+authorship removed. Question difficulty, a single matching sample and label noise do not account for the pattern in
+our analyses, and it remains with thinking enabled, where approvals of wrong answers come with the judge deriving
+that same answer. Inside the model the signal at the moment of the verdict is modest. Two practical points
+follow. A jury of judges with similar knowledge will share its most confident errors, which an outside reference can
+catch. And benchmark labels are least reliable exactly where judges are most confident, so evaluations of judges
+should audit the answers judges strongly believe.
+
+% ---------------------------------------------------------------------------------------------------------------
+\section*{Limitations}
+
+The label audits were done by two LLMs (one from the same developer as one judge); a human check is in progress, and the BFF-Bench audit in particular would
+benefit from finance experts. After the audit, the 7/7 groups are small (10--15 judgments per judge), so the top
+of each curve has wide intervals, and the within-question test is clear for three of five judge groups, uncertain for DeepSeek and absent for
+Kimi-K2.6. The transcript
+labels come from an LLM with a small hand check. Belief is measured with seven samples at one temperature, and on two benchmarks it
+depends on an LLM matcher. Our evidence that the effect is belief rather than difficulty is observational (fixed
+effects within question), not an intervention on belief. Thinking-on results, the transcript analysis and the fixes in
+\S\ref{sec:juries} cover only Qwen judges; the inside-the-model analysis covers two Qwens and one Nemotron and rests on
+fewer than 40 questions per model. The reference experiments use one benchmark. Nemotron-3-Nano's verdicts and own answers come from different serving
+setups (an API and vLLM), which may weaken its measured link between belief and verdict.
+
+\section*{Ethical Considerations}
+
+We use public benchmarks and openly available models. The label audit identifies errors in public benchmark labels;
+we report them so they can be corrected and will release the audit verdicts. Judge and matcher calls ran through a
+hosted API (Tinker); hidden states were captured on university GPUs and a few hours of rented GPUs. Adding one judge
+family to the main analysis costs about \$30--80 in API fees at list prices; the whole project, including
+exploratory runs, cost on the order of \$1,500. We will release code, prompts, all judge outputs, belief samples
+and audit verdicts with the camera-ready version.
+
+\bibliography{refs}
+
+\appendix
+
+\section{Answer Matching}
+\label{app:matcher}
+
+GLM-5.3-Flash (high reasoning, temperature 0) receives the last 4,000 characters of the question and the last
+3,000 characters of each answer:
+
+\begin{quote}\small\ttfamily
+Two people answered the same question. Decide whether their FINAL answers are the same. Ignore the reasoning,
+wording, formatting and rounding differences; compare only the final answer(s). If a question has several parts,
+the answers are the same only if every part matches. [QUESTION] \ldots{} [ANSWER 1 (end)] \ldots{} [ANSWER 2 (end)]
+\ldots{} Reply with exactly one word: SAME or DIFFERENT. If either answer gives no final answer, reply NONE.
+\end{quote}
+
+NONE answers are dropped (5.3\% of the belief comparisons on RewardBench~2 Math, 4.9\% on BFF-Bench and 1.5\% on
+JudgeBench). On JudgeBench, where both
+answers state a letter, letters are compared exactly (99.2\% agreement with the matcher).
+
+\paragraph{Check.} A second reader (Claude) judged 50 decisions sampled across benchmark, matcher label and
+whether the answer was a wrong answer the judge believes, deciding before seeing the matcher's label. Agreement was
+42 of 47 (89\%) excluding three ambiguous cases: 19/20 on RewardBench~2 Math and 23/27 on BFF-Bench. The matcher
+never said SAME wrongly (24/24); all five disagreements are DIFFERENT on near-matches (for example, WACC 5.95\% vs
+5.93\%), so belief is, if anything, understated on BFF-Bench.
+
+\section{Label Audit Details}
+\label{app:audit}
+
+\paragraph{Prompts.} For BFF-Bench the auditor sees the full conversation, the candidate and the expert reference;
+for JudgeBench, both responses and which one the benchmark marks correct; for RewardBench~2 Math, the candidate and
+one response the benchmark marks correct. In every case it is told the reference may contain errors and must work
+the problem itself. Each prompt ends with one of \texttt{LABEL\_OK} (clearly wrong), \texttt{LABEL\_WRONG}
+(actually correct) or \texttt{CONTESTED}.
+
+\paragraph{Results.} Of 1,091 unique wrong-labelled answers, GLM-5.3 audits 978 as clearly wrong, 62 as actually
+correct and 48 as contested (3 without a verdict). On RewardBench~2 Math, which had already been cleaned of answers
+reaching the right value, 435 of 453 are clearly wrong. Kimi-K3.1-Pro agrees with GLM-5.3's clearly-wrong-or-not
+call on 96\% of the 1,085 answers both audited. A third reader (Claude) independently read the 55 BFF-Bench and
+JudgeBench answers some Qwen believes 7/7 and made the same call as GLM-5.3 on 87\% of them; most contested
+JudgeBench items have a second defensible option among the choices MMLU-Pro added. On BBEH, 365 believed wrong
+answers (the set used in \S\ref{sec:inside}) were audited by GLM-5.3: 191 clearly wrong, 84 actually correct (mostly
+auto-grader misses on equivalent answers) and 83 contested.
+
+\section{Robustness of the Main Result}
+\label{app:robust}
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llrrrrr}
+\toprule
+Judge & Labels & 0/7 & 1--3 & 4--6 & 7/7 & Gap \\
+\midrule
+3 Qwens & Kimi-K3.1-Pro & 17 & 31 & 48 & 56 & +38 {\scriptsize[+20, +56]} \\
+ & both auditors & 17 & 30 & 43 & 52 & +35 {\scriptsize[+13, +57]} \\
+Nemotron-3-Super & Kimi-K3.1-Pro & 25 & 49 & 61 & 80 & +55 {\scriptsize[+33, +75]} \\
+ & both auditors & 25 & 50 & 63 & 82 & +57 {\scriptsize[+30, +77]} \\
+DeepSeek & Kimi-K3.1-Pro & 13 & 41 & 33 & 50 & +37 {\scriptsize[+14, +60]} \\
+ & both auditors & 13 & 35 & 28 & 50 & +37 {\scriptsize[+9, +66]} \\
+Kimi-K2.6 & Kimi-K3.1-Pro & 1 & 25 & 37 & 33 & +32 {\scriptsize[+4, +61]} \\
+ & both auditors & 1 & 15 & 33 & 40 & +39 {\scriptsize[$-$2, +99]} \\
+\midrule
+Qwen3.5-4B & GLM-5.3 & 26 & 33 & 49 & 50 & +24 {\scriptsize[$-$10, +62]} \\
+Qwen3.5-9B & GLM-5.3 & 18 & 34 & 37 & 75 & +57 {\scriptsize[+27, +82]} \\
+Qwen3.6-35B & GLM-5.3 & 6 & 15 & 56 & 50 & +44 {\scriptsize[+10, +77]} \\
+Nemotron-3-Nano & Kimi-K3.1-Pro & 37 & 44 & 43 & 58 & +21 {\scriptsize[$-$7, +46]} \\
+ & both auditors & 37 & 45 & 45 & 55 & +18 {\scriptsize[$-$13, +42]} \\
+\bottomrule
+\end{tabular}}
+\caption{Wrong answers approved (\%) under the second auditor's labels, under labels both auditors agree on, and
+per Qwen judge. Under both auditors Kimi-K2.6 has only 5 judgments at 7/7.}
+\label{tab:robust}
+\end{table}
+
+\paragraph{Belief vs the one-sample label.} Audited wrong answers, judge fixed effects; effect of the one-sample
+label with belief held fixed, and of belief with the label held fixed: Qwens +2 [$-$9, +12] and +43 [+26, +57];
+Nemotron-3-Super $-$5 [$-$23, +13] and +61 [+38, +86]; DeepSeek $-$15 [$-$37, +7] and +52 [+20, +82]; Kimi-K2.6
++3 [$-$19, +24] and +35 [+5, +63]; Nemotron-3-Nano $-$6 [$-$17, +7] and +21 [+4, +37].
+
+\paragraph{Per benchmark.} Pooling all seven judges (audited labels), wrong answers approved at 0/7, 1--3, 4--6
+and 7/7: RewardBench~2 Math 18/50/49/75\% (only 12 judgments at 7/7; gap interval [$-$16, +81]); JudgeBench
+26/36/42/69\% (+43 [+21, +61]); BFF-Bench 17/33/47/50\% (+33 [+12, +53]); all three 18/38/45/61\% (+42 [+28, +56]).
+
+\paragraph{Right answers.} Right answers are approved more when believed too (Qwens 30\%, 71\%, 85\%, 91\% from
+0/7 to 7/7), so belief raises approval of whatever the judge would answer, right or wrong.
+
+\section{Inside-the-Model Details}
+\label{app:inside}
+
+\paragraph{Cosine robustness.} Averaged over 20 random splits of the questions and over the third of layers where
+the correctness direction is best read, the cosine between belief and correctness directions (built on disjoint
+halves of the questions) and its shuffled-label control are: Qwen3.5-9B snap verdict 0.80 (control 0.72), solving
+0.41 (0.44); Qwen3.6-35B snap verdict 0.48 (0.42), solving 0.55 (0.46); Nemotron-3-Nano snap verdict 0.78 (0.61), solving
+0.30 (0.19). After the judge's written explanation both
+models give 0.91--0.93 (control 0.81--0.87): once the judge has decided, the state at ``VERDICT:'' mostly encodes the
+decision, and both directions align with it. For thinking-on transcripts only 3--5 question pairs exist, too few to
+report. A self-check role (the answer in the model's own turn, then ``Is your final answer above correct?'' and
+``VERDICT:'') gives within-question AUROCs of 0.64 and 0.66.
+
+\section{Steering}
+\label{app:steering}
+
+These experiments predate the label audit and use released labels.
+
+\paragraph{At the verdict.} Adding the correctness direction at the point of the verdict moves approval from 0\%
+($-$8 standard deviations) to 84--98\% (+8) for Qwen3.5-4B and 9B, against $\leq$20 points for a random direction:
+it is causal, but it moves right and wrong answers together, like a leniency setting.
+
+\paragraph{During reasoning.} For Qwen3.5-9B on 418 RewardBench~2 Math and BFF-Bench items, we added the belief
+direction (fitted on held-out questions) at layers 14--26 for every token of the judgment. Pushing belief down
+lowered approval of right answers by 7--9 points and changed approval of believed wrong answers by $-$5 to +2 points
+(within noise). Pushing belief up raised approval of never-reached wrong answers by 8 points.
+
+\end{document}

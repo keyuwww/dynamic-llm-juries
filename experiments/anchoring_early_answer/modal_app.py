@@ -27,7 +27,7 @@ image = (
                    ignore=["**/*results*/**", "**/__pycache__/**"])
     .add_local_file(REPO / "experiments" / "jev_bff" / "run_jev_bff.py", "/root/repo/experiments/jev_bff/run_jev_bff.py")
     .add_local_dir(REPO / "experiments" / "anchoring_early_answer", HERE,
-                   ignore=["out/**", "out_pilot/**", "out_nemotron/**", "out_probe/**", "**/*.npy", "**/generations*.jsonl", "**/__pycache__/**"])
+                   ignore=["out/**", "out_pilot/**", "out_nemotron/**", "out_probe/**", "out_deepseek/**", "out_kimi/**", "out_nano/**", "out_llama/**", "**/*.npy", "**/generations*.jsonl", "**/__pycache__/**"])
 )
 app = modal.App("dynamic-llm-juries-anchoring", image=image)
 vol = modal.Volume.from_name("dynamic-llm-juries-results", create_if_missing=True)
@@ -104,7 +104,7 @@ def run(phase: str, limit: int = 0, models: str = "", benches: str = "", concurr
 
     threading.Thread(target=committer, daemon=True).start()
     try:
-        subprocess.run(cmd, check=True, cwd=HERE)
+        subprocess.run(cmd, check=True, cwd=HERE, input=b"y\n" * 50)  # "y": Kimi's custom tokenizer prompt
     finally:
         stop.set()
         vol.commit()

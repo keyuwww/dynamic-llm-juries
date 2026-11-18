@@ -14,6 +14,7 @@ MODELS = {
     "qwen3.5-9b": ("Qwen/Qwen3.5-9B", "qwen3_5_disable_thinking", 65536),
     "qwen3.6-35b-a3b": ("Qwen/Qwen3.6-35B-A3B", "qwen3_5_disable_thinking", 65536),
     "nemotron3-super-120b": ("nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16", "nemotron3_disable_thinking", 65536),
+    "nemotron3-nano-30b": ("nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16", "nemotron3_disable_thinking", 65536),  # Nov 17: 2nd-family directions
     "kimi-k3.1-pro": ("moonshotai/Kimi-K3.1-Pro:peft:262144", "kimi_k31_pro_high_reasoning", 262144),
     # thinking-ON solves (a second definition of "can solve": the model's best effort, not the judging mode)
     "nemotron3-super-120b@think": ("nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16:peft:262144", "nemotron3", 262144),

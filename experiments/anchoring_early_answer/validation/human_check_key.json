@@ -1,0 +1,362 @@
+[
+{
+"n": 1,
+"id": "judgebench-gpt-40c35c1b-4d3a-56ae-a7fa-22307efca211",
+"glm": "LABEL_OK",
+"belief": 5
+},
+{
+"n": 2,
+"id": "judgebench-gpt-d1dd83a6-7ccb-5f83-983e-f6fc38783836",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 3,
+"id": "judgebench-claude-8cbbf68f-d729-5a61-92e2-bb6f4480666f",
+"glm": "LABEL_OK",
+"belief": 6
+},
+{
+"n": 4,
+"id": "6a2988d1-t1",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 5,
+"id": "37d78983-t1",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 6,
+"id": "f3466f0e-t1",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 7,
+"id": "9a04371b-t1",
+"glm": "CONTESTED",
+"belief": 6
+},
+{
+"n": 8,
+"id": "040f5fc5-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 9,
+"id": "judgebench-claude-26cceffc-1fb6-5c3c-b257-84759fa87fa1",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 10,
+"id": "judgebench-gpt-c67cf264-33f9-5730-aeea-a7364756a96b",
+"glm": "LABEL_OK",
+"belief": 4
+},
+{
+"n": 11,
+"id": "55bb3129-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 12,
+"id": "judgebench-gpt-8b33bb85-b242-5845-83f0-5cb7e32be529",
+"glm": "CONTESTED",
+"belief": 5
+},
+{
+"n": 13,
+"id": "judgebench-gpt-2328c85f-6803-5f2c-9ccb-f429dea4428c",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 14,
+"id": "judgebench-gpt-138e503c-b09d-5d19-82ff-0b5ddc3e7bf6",
+"glm": "CONTESTED",
+"belief": 3
+},
+{
+"n": 15,
+"id": "judgebench-gpt-a4eff39a-4f2e-5cee-a6de-b8e74625269f",
+"glm": "LABEL_OK",
+"belief": 6
+},
+{
+"n": 16,
+"id": "judgebench-gpt-a5c0fd0a-7440-5461-9a32-c6c5ff574ae0",
+"glm": "CONTESTED",
+"belief": 6
+},
+{
+"n": 17,
+"id": "judgebench-gpt-d9cc990f-fb19-521e-a8fa-68f3325f8730",
+"glm": "LABEL_OK",
+"belief": 6
+},
+{
+"n": 18,
+"id": "judgebench-claude-ec0cbbbf-0551-5778-b946-943c3f24f0a1",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 19,
+"id": "96ec2b96-t2",
+"glm": "LABEL_WRONG",
+"belief": 6
+},
+{
+"n": 20,
+"id": "dd06c3be-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 21,
+"id": "e6afa0dd-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 22,
+"id": "judgebench-claude-be8116dc-c69d-51c5-9623-aa077c99d7b2",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 23,
+"id": "20c6d543-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 24,
+"id": "judgebench-claude-f474b24e-316a-572d-8772-189739800d5d",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 25,
+"id": "56de4220-t1",
+"glm": "LABEL_WRONG",
+"belief": 2
+},
+{
+"n": 26,
+"id": "21f8cab1-t2",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 27,
+"id": "judgebench-gpt-8de34479-e94c-5c30-9146-da3d92f7223c",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 28,
+"id": "judgebench-gpt-0a347026-2ec5-5879-9635-e6fc818d021b",
+"glm": "CONTESTED",
+"belief": 7
+},
+{
+"n": 29,
+"id": "judgebench-gpt-82f31019-2814-5ac8-a269-2c247e9a0833",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 30,
+"id": "judgebench-claude-10f5a8c0-027a-5e03-aa0f-4a2138cbf846",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 31,
+"id": "judgebench-gpt-bfaf6335-5640-599d-8e95-7789f7ec864a",
+"glm": "LABEL_WRONG",
+"belief": 3
+},
+{
+"n": 32,
+"id": "e8c203c1-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 33,
+"id": "judgebench-gpt-e3de7dfc-4b9e-5476-b7af-92d7d00bf2d3",
+"glm": "LABEL_OK",
+"belief": 4
+},
+{
+"n": 34,
+"id": "judgebench-gpt-6dcc9ad7-2f3b-5dae-be24-9080b9ad7973",
+"glm": "LABEL_WRONG",
+"belief": 3
+},
+{
+"n": 35,
+"id": "judgebench-gpt-ff5f3ce7-1423-5df5-922d-644070dfaea0",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 36,
+"id": "10e382d2-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 37,
+"id": "judgebench-gpt-2470ffa8-06f5-584d-90ed-6457745c4afc",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 38,
+"id": "judgebench-claude-7238d03a-3adc-5ad0-ae2f-9ce5f97ce216",
+"glm": "CONTESTED",
+"belief": 6
+},
+{
+"n": 39,
+"id": "judgebench-gpt-5c0d0e45-eb3f-5c6a-81ef-81fd39df82a9",
+"glm": "LABEL_WRONG",
+"belief": 6
+},
+{
+"n": 40,
+"id": "judgebench-claude-0f080546-ca02-545b-a1f0-c626bb610a2a",
+"glm": "CONTESTED",
+"belief": 6
+},
+{
+"n": 41,
+"id": "judgebench-gpt-16b5a08a-bfe0-56a6-93a4-cb8e00d61efb",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 42,
+"id": "305a5508-t2",
+"glm": "LABEL_WRONG",
+"belief": 6
+},
+{
+"n": 43,
+"id": "cacfb5ff-t1",
+"glm": "LABEL_OK",
+"belief": 6
+},
+{
+"n": 44,
+"id": "judgebench-gpt-5b13ebd9-3880-5331-bfcf-ac5ab4bed92a",
+"glm": "CONTESTED",
+"belief": 7
+},
+{
+"n": 45,
+"id": "0214a818-t1",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 46,
+"id": "judgebench-gpt-9536d58f-8a88-53be-b97e-45bb2d457c12",
+"glm": "CONTESTED",
+"belief": 5
+},
+{
+"n": 47,
+"id": "judgebench-claude-b15ac8fa-9ff6-5b4b-b0ed-b4975b712bb4",
+"glm": "LABEL_OK",
+"belief": 0
+},
+{
+"n": 48,
+"id": "judgebench-claude-eb39387a-e83c-5cc7-92f7-189a5e71bf26",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 49,
+"id": "judgebench-gpt-730909ae-6903-517a-ad99-9991d2cfc217",
+"glm": "LABEL_WRONG",
+"belief": 0
+},
+{
+"n": 50,
+"id": "judgebench-claude-b636803c-e54c-5c94-9b57-b44ae036e3f6",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 51,
+"id": "f12d7cf0-t2",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 52,
+"id": "judgebench-claude-1a5432b2-ca09-5833-8909-bf891a3c22e9",
+"glm": "LABEL_OK",
+"belief": 6
+},
+{
+"n": 53,
+"id": "judgebench-gpt-a243b087-e171-511c-8d4c-e1f1fadad9d1",
+"glm": "LABEL_WRONG",
+"belief": 5
+},
+{
+"n": 54,
+"id": "efe6dc0d-t2",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 55,
+"id": "judgebench-claude-84c8ebef-336e-50d8-9986-9db880d844f3",
+"glm": "LABEL_WRONG",
+"belief": 0
+},
+{
+"n": 56,
+"id": "6350daab-t1",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 57,
+"id": "judgebench-gpt-dcfbadd5-4b7c-5ffd-b66d-5cb0a380605d",
+"glm": "LABEL_OK",
+"belief": 7
+},
+{
+"n": 58,
+"id": "judgebench-gpt-c0fceb61-37b0-5049-84c3-9add01413cc8",
+"glm": "CONTESTED",
+"belief": 4
+},
+{
+"n": 59,
+"id": "f54bc9dc-t1",
+"glm": "LABEL_WRONG",
+"belief": 7
+},
+{
+"n": 60,
+"id": "c4cd0f3f-t1",
+"glm": "LABEL_WRONG",
+"belief": 7
+}
+]

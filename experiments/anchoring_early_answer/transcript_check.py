@@ -126,6 +126,13 @@ def parse(text):
 
 def analyze():
     X = items()
+    if "--audited" in sys.argv:  # Nov 18: BFF wrong answers kept only if GLM-5.3 audits them as clearly wrong
+        glm = {}
+        for line in [l for f in ("ask_glm5.3_labelaudit.jsonl", "ask_glm5.3_labelauditrb2.jsonl") for l in open(HERE / "out" / f)]:
+            g = json.loads(line)
+            m = re.findall(r"AUDIT:\s*(LABEL_OK|LABEL_WRONG|CONTESTED)", g["text"])
+            glm[g["cache_key"].split("|", 2)[2]] = m[-1] if m else None
+        X = {k: x for k, x in X.items() if x["gold"] or glm.get(k[1]) == "LABEL_OK"}
     lab = {}
     for r in map(json.loads, open(HERE / "out" / f"ask_glm5.3-flash_transcripts{TAGT}.jsonl")):
         _, judge, iid = r["cache_key"].split("|", 2)
@@ -157,9 +164,11 @@ def analyze():
           lambda k, x: None if x["gold"] else f"{fam(k)} · belief {binof(x['belief'])} · {'approved' if x['accepted'] else 'rejected'}")
     table("Correct answers, by belief and verdict (control)",
           lambda k, x: None if not x["gold"] else f"{fam(k)} · belief {binof(x['belief'])} · {'approved' if x['accepted'] else 'rejected'}")
+    table("Wrong answers, pooled over belief levels",
+          lambda k, x: None if x["gold"] else f"{fam(k)} · {'approved' if x['accepted'] else 'rejected'}")
     table("Wrong answers, by judge (all beliefs)",
           lambda k, x: None if x["gold"] else f"{k[0]} · {'approved' if x['accepted'] else 'rejected'}")
-    out = HERE / "out" / f"transcript_check{TAGT}.md"
+    out = HERE / "out" / f"transcript_check{TAGT}{'_audited' if '--audited' in sys.argv else ''}.md"
     out.write_text("\n".join(L) + "\n")
     print("\n".join(L))
 
