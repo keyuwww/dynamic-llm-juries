@@ -10,6 +10,16 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{xspace}
+% lineno 5.7 with LaTeX 2025+ records the column one column late, so review-mode line numbers land on the wrong
+% side; restore lineno's older column tracking.
+\makeatletter
+\IfPackageLoadedT{lineno}{%
+  \RemoveFromHook{build/column/before}[lineno]%
+  \AtBeginDocument{\def\@LN@makecol{\@LN@orig@makecol
+    \setbox\@outputbox\vbox{\boxmaxdepth\@maxdepth
+      \protected@write\@auxout{}{\string\def\string\@LN@column{\if@firstcolumn1\else2\fi}}%
+      \box\@outputbox}}}}
+\makeatother
 \input{numbers.tex}
 
 \title{Small LLM Judges Know More Than They Say,\\Mostly About Who Wrote the Answer}
