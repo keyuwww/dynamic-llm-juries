@@ -1,6 +1,6 @@
-# Paper: Small LLM Judges Know More Than They Say, Mostly About Who Wrote the Answer
+# Judge-direction paper: Small LLM Judges Know More Than They Say, Mostly About Who Wrote the Answer
 
-ACL long-paper draft (review mode). `sh build.sh` rebuilds every number, table and figure from stored results and compiles `main.pdf`.
+ACL long-paper draft (review mode). `sh papers/judge_direction/build.sh` rebuilds every number, table and figure from stored results and compiles `main.pdf`. Scripts and result paths below are relative to `experiments/beyond_capability/`. The belief paper ("Judges Approve What They Believe") is a separate paper.
 
 ## Where each result comes from
 
@@ -13,7 +13,7 @@ ACL long-paper draft (review mode). `sh build.sh` rebuilds every number, table a
 | Reason-first verdicts | `cot_modal.py` (vLLM) | `out_allpairs/*/cot_{main,sm,sm2}.jsonl` |
 | Gap over 20 splits | `allpairs_modal.py --phase splits` | `out_allpairs/knows_splits.json` |
 | All comparisons | `paper_data.py`, `paper_analysis.py` | `out_paper/results.json`, `results.md`, `authorship.json` |
-| Numbers, tables, figures | `paper_tables.py`, `paper_figures.py` | `paper/numbers.tex`, `tab_*.tex`, `fig_*.pdf` |
+| Numbers, tables, figures | `paper_tables.py`, `paper_figures.py` | `papers/judge_direction/numbers.tex`, `tab_*.tex`, `fig_*.pdf` |
 
 Every number in the text is a `\R{key}` lookup into `numbers.tex`; an unknown key prints **??**.
 

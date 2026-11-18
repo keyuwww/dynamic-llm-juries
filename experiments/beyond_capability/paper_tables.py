@@ -1,6 +1,6 @@
 """Every number the paper quotes, from out_paper/results.json, authorship.json and out_allpairs/*.json.
 
-  python3 experiments/beyond_capability/paper_tables.py -> paper/numbers.tex, paper/tab_*.tex
+  python3 experiments/beyond_capability/paper_tables.py -> papers/judge_direction/numbers.tex, tab_*.tex
 In the text: \\R{key}, e.g. \\R{sm.math.qwen.direct.rank} = pooled ranking gain of the direction over the verdict.
 """
 import json
@@ -11,7 +11,7 @@ import numpy as np
 import allpairs_analyze as A
 from paper_data import BIG
 
-P = A.HERE / "paper"
+P = A.HERE.parents[1] / "papers" / "judge_direction"
 R = json.load(open(A.HERE / "out_paper" / "results.json"))
 AU = json.load(open(A.HERE / "out_paper" / "authorship.json"))
 AP = json.load(open(A.D / "allpairs.json"))

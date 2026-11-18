@@ -1,6 +1,6 @@
 """Paper figures (PDF) from out_paper/results.json and the Llama-3.1-8B MATH layer sweep.
 
-  python3 experiments/beyond_capability/paper_figures.py -> paper/fig_gap.pdf, fig_sm.pdf, fig_layers.pdf
+  python3 experiments/beyond_capability/paper_figures.py -> papers/judge_direction/fig_gap.pdf, fig_sm.pdf, fig_layers.pdf
 """
 import json
 import re
@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import allpairs_analyze as A  # noqa: E402
 from paper_data import BIG  # noqa: E402
 
-OUTD = A.HERE / "paper"
+OUTD = A.HERE.parents[1] / "papers" / "judge_direction"
 R = json.load(open(A.HERE / "out_paper" / "results.json"))
 # Okabe-Ito (colorblind-safe), fixed order
 C = {"verdict": "#7f7f7f", "cot": "#E69F00", "x11": "#CC79A7", "direct": "#0072B2", "sum": "#009E73"}
