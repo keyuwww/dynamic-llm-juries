@@ -32,6 +32,7 @@ def g(x, sign=True, ci=False):
     if not x:
         return "--"
     s = f"{x['g']:+.1f}" if sign else f"{x['g']:.1f}"
+    s = "0.0" if s in ("+0.0", "-0.0") else s
     s = s.replace("-", "$-$") if s.startswith("-") else s
     if ci:
         s += f" [{x['lo']:+.1f}, {x['hi']:+.1f}]".replace("-", "$-$")
@@ -60,6 +61,16 @@ def numbers():
                 x = s.get(m, {}).get(met) if s.get(m) else None
                 put(f"{tag}.{m}.{met}", g(x))
                 put(f"{tag}.{m}.{met}.ci", g(x, ci=True))
+                if x:
+                    put(f"{tag}.{m}.{met}.k", str(x["k"]))
+                if met == "rank" and s.get(m) and s[m].get("rank_macro"):
+                    put(f"{tag}.{m}.rank_macro.ci", g(s[m]["rank_macro"], ci=True))
+                lx = (R["summary_legacy_invvar"].get(key, {}).get(m) or {}).get(met)
+                put(f"legacy.{tag}.{m}.{met}.ci", g(lx, ci=True))
+        if s.get("x11_over_direct"):
+            x = s["x11_over_direct"]
+            put(f"{tag}.recovered", f"{100 * x['g']:.0f}")
+            put(f"{tag}.recovered.ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]")
     x = R["sm"].get("llama3.1-8b|math|qwen3.5-4b strict")
     if x:
         put("strict.nq", str(x["nq"]))
@@ -98,6 +109,16 @@ def numbers():
             toks += [json.loads(l)["n_reason"] for l in open(f)]
     if toks:
         put("cot.tok.median", f"{np.median(toks):.0f}")
+        # pairs whose judge writes almost no reasoning (median at most 5 tokens before VERDICT:); repaired files first
+        med = {}
+        for f in sorted(A.D.glob("*/cot_main.jsonl")):
+            j, b = f.parent.name.rsplit("_", 1)
+            if j in BIG:
+                continue
+            ex = A.HERE / "out_cot_exact" / f.parent.name / "cot_main.jsonl"
+            med[(j, b)] = np.median([json.loads(l)["n_reason"] for l in open(ex if ex.exists() else f)])
+        short = [k for k, v in med.items() if v <= 5]
+        put("cot.npairs", str(len(med))), put("cot.short.n", str(len(short)))
         reached = [json.loads(l)["reached"] for f in A.D.glob("*/cot_*.jsonl") for l in open(f)
                    if f.parent.name.rsplit("_", 1)[0] not in BIG]
         put("cot.reached", f"{100 * np.mean(reached):.1f}")
@@ -178,6 +199,169 @@ def auth_numbers():
         v = [f(c) for c in cr]
         fmt = (lambda z: f"{z:.2f}") if k == "cos" else (lambda z: f"{z:.0f}")
         put(f"adir.cross.{k}.lo", fmt(min(v))), put(f"adir.cross.{k}.hi", fmt(max(v)))
+
+
+def control_numbers():
+    """authorship controls (authorship_controls_modal.py via paper_authorship.py) and surface controls (paper_surface.py)."""
+    C = json.load(open(A.HERE / "out_paper" / "authorship_check.json")).get("controls")
+    if C:
+        for b, e in C["pooled"].items():
+            t = f"ctl.{b}"
+            put(f"{t}.n", str(e["n_pairs"]))
+            for k, x in e.items():
+                if k == "n_pairs":
+                    continue
+                kk = k.replace("|", ".")
+                if k.startswith("removed"):
+                    put(f"{t}.{kk}", f"{100 * x['g']:.0f}")
+                    put(f"{t}.{kk}.ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]")
+                elif "level" in k:
+                    put(f"{t}.{kk}", f"{x['g']:.1f}")
+                else:
+                    put(f"{t}.{kk}", g(x)), put(f"{t}.{kk}.ci", g(x, ci=True))
+        pp = C["per_pair"]
+        for b in ("mmlu", "math"):
+            xs = [v for k, v in pp.items() if k.endswith(b)]
+            put(f"ctl.{b}.perm.sig", str(sum(v["perm_p"] <= 0.05 for v in xs)))
+            put(f"ctl.{b}.perm.n", str(len(xs)))
+            put(f"ctl.{b}.perm.maxmean", f"{max(v['perm_removed_mean'] for v in xs):.1f}")
+            put(f"ctl.{b}.iso.max", f"{max(v['iso_removed_max'] for v in xs):.1f}")
+        h = C["holdout"]["qwen3.5-4b"]
+        for k in ("c_ho|gain", "c_all|gain", "ho_minus_all"):
+            put(f"ctl.ho.{k.replace('|', '.')}.ci", g(h[k], ci=True)), put(f"ctl.ho.{k.replace('|', '.')}", g(h[k]))
+    F = A.HERE / "out_paper" / "surface_check.json"
+    if F.exists():
+        Sf = json.load(open(F))
+        for k, x in Sf["pooled"].items():
+            kk = k.replace("|", ".")
+            if k.startswith("resid_kept"):
+                put(f"surf.{kk}", f"{100 * x['g']:.0f}")
+                put(f"surf.{kk}.ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]")
+            elif "level" in k:
+                put(f"surf.{kk}", f"{x['g']:.1f}"), put(f"surf.{kk}.ci", f"{x['g']:.1f} [{x['lo']:.1f}, {x['hi']:.1f}]")
+            else:
+                put(f"surf.{kk}", g(x)), put(f"surf.{kk}.ci", g(x, ci=True))
+        for k, x in Sf["trimmed"]["trim"].items():
+            put(f"surf.trim.{k.replace('|', '.')}", g(x, ci=True) if "gain" in k else f"{x['g']:.1f}")
+        for k, x in Sf["trimmed"]["same_pairs_untrimmed"].items():
+            put(f"surf.untrim.{k.replace('|', '.')}", g(x, ci=True) if "gain" in k else f"{x['g']:.1f}")
+        for key, e in Sf.get("sm", {}).items():
+            b, who = key.split("|")
+            for m, x in e.items():
+                if m == "k":
+                    continue
+                t = f"surf.sm.{b}.{WHO[who]}.{m}"
+                put(t, f"{x['g']:.1f}") if m != "resid_minus_verdict" else put(t, g(x, ci=True))
+                if m != "resid_minus_verdict":
+                    put(t + ".ci", f"{x['g']:.1f} [{x['lo']:.1f}, {x['hi']:.1f}]")
+        for k, x in Sf.get("format", {}).items():
+            put(f"fmt.{k}", f"{100 * x:.0f}")
+        r2 = [v["r2_direct_on_surface"] for v in Sf["pairs"].values()]
+        put("surf.r2.lo", f"{100 * min(r2):.0f}"), put("surf.r2.hi", f"{100 * max(r2):.0f}")
+        sl = {b: [v["surface|all"] for k, v in Sf["pairs"].items() if k.endswith(b)] for b in ("mmlu", "math", "bbeh")}
+        for b, v in sl.items():
+            put(f"surf.level.{b}", f"{np.mean(v):.1f}")
+
+
+def match_numbers():
+    """identical candidates, shared failed questions, four Llamas (reviewer_scale.py)."""
+    F = A.HERE / "out_paper" / "reviewer_scale.json"
+    if not F.exists():
+        return
+    M = json.load(open(F))
+    short = {"llama3.1-70b": "70b", "llama3.1-8b": "8b", "llama3.2-3b": "3b", "llama3.2-1b": "1b"}
+    for b, e in M.items():
+        put(f"match.{b}.nq", str(e["n_questions"]))
+        for j, v in e["rank"].items():
+            put(f"match.{b}.{short[j]}", f"{v:.1f}")
+        for j, d in e["70b_minus_smaller"].items():
+            put(f"match.{b}.d{short[j]}", g(dict(g=d["difference"], lo=d["ci95"][0], hi=d["ci95"][1]), ci=True))
+
+
+def outer_numbers():
+    """outer held-out evaluation of the full recipe (outer_analyze.py)."""
+    F = A.HERE / "out_paper" / "outer.json"
+    if not F.exists():
+        return
+    O = json.load(open(F))
+    put("outer.npairs", str(O["n_pairs"]))
+    for k, x in O["pooled"].items():
+        kk = k.replace("|", ".")
+        if k == "rule_over_direct":
+            put("outer.recovered.ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]")
+        elif "level" in k:
+            put(f"outer.{kk}", f"{x['g']:.1f}")
+        else:
+            put(f"outer.{kk}", g(x)), put(f"outer.{kk}.ci", g(x, ci=True))
+    P = O["pairs"]
+    elig = [f["eligible"] for v in P.values() for f in v["folds"].values()]
+    put("outer.folds", str(len(elig))), put("outer.folds.eligible", str(sum(elig)))
+    same = [v["paper"]["layer"] in {f["stretch_layer"] for f in v["folds"].values()} for v in P.values() if v["paper"]]
+    put("outer.samelayer", str(sum(same))), put("outer.withpaper", str(len(same)))
+    opt = [v["posthoc_best_x11"] - v["rank"]["stretch"] for v in P.values()]
+    put("outer.optimism.mean", f"{np.mean(opt):.1f}")
+    dd = [v["rank"]["direct"] - v["paper"]["direct"] for v in P.values() if v["paper"]]
+    xx = [v["rank"]["stretch"] - v["paper"]["x11"] for v in P.values() if v["paper"]]
+    sg = lambda x: ("0.0" if abs(x) < 0.05 else f"{x:+.1f}").replace("-", "$-$")  # noqa: E731
+    if dd:
+        put("outer.vs_paper.direct", sg(np.mean(dd)))
+        put("outer.vs_paper.x11", sg(np.mean(xx)))
+        # equal-weight means over the pairs the paper also stretched: in-sample choice vs held out
+        ov = [v for v in P.values() if v["paper"]]
+        put("outer.ov.n", str(len(ov)))
+        put("outer.ov.paper.direct", sg(np.mean([v["paper"]["direct"] - v["paper"]["verdict"] for v in ov])))
+        put("outer.ov.paper.x11", sg(np.mean([v["paper"]["x11"] - v["paper"]["verdict"] for v in ov])))
+        for m in ("direct", "rule", "stretch"):
+            put(f"outer.ov.{m}", sg(np.mean([v["rank"][m] - v["rank"]["verdict"] for v in ov])))
+    for k, v in P.items():
+        j, b = k.split("|")
+        for m in ("direct", "rule", "stretch", "sum"):
+            put(f"outer.{j}.{b}.{m}", sg(v["rank"][m] - v["rank"]["verdict"]))
+        put(f"outer.{j}.{b}.eligible", str(sum(f["eligible"] for f in v["folds"].values())))
+    put("outer.notpaper", ", ".join(f"{NAME[k.split('|')[0]]} on {BN[k.split('|')[1]]}" for k, v in P.items() if not v["paper"]))
+
+
+def cotfix_numbers():
+    """Mistral-7B's repaired reasoning score (azure/cot_exact.py): its reasoning-first ranking next to its verdict."""
+    import json as _j
+    for b in ("mmlu", "math"):
+        v = R["pool"].get(f"mistral-7b|{b}")
+        if v:
+            put(f"cotfix.{b}.verdict", f"{v['verdict']['rank'] if isinstance(v['verdict'], dict) else v['verdict']:.1f}")
+            put(f"cotfix.{b}.cot", f"{v['cot']['rank'] if isinstance(v['cot'], dict) else v['cot']:.1f}")
+        f = A.HERE / "out_cot_exact" / f"mistral-7b_{b}" / "cot_main.jsonl"
+        if f.exists():
+            rows = [_j.loads(l) for l in open(f)]
+            put(f"cotfix.{b}.n", f"{len(rows):,}")
+            put(f"cotfix.{b}.distinct", f"{len({round(r['score'], 4) for r in rows}):,}")
+
+
+def tab_outer():
+    F = A.HERE / "out_paper" / "outer.json"
+    if not F.exists():
+        return
+    O = json.load(open(F))
+    rows = []
+    for b in ("mmlu", "math", "bbeh"):
+        for j in A.JUDGES:
+            v = O["pairs"].get(f"{j}|{b}")
+            if not v:
+                continue
+            r, p = v["rank"], v["paper"]
+            el = "/".join("y" if f["eligible"] else "n" for f in v["folds"].values())
+            ls = "/".join(str(f["stretch_layer"]) for f in v["folds"].values())
+            d = lambda x: "0.0" if abs(x) < 0.05 else f"{x:+.1f}"  # noqa: E731
+            cells = [el, ls, f"{r['verdict']:.1f}", d(r['direct'] - r['verdict']), d(r['rule'] - r['verdict']),
+                     d(r['random'] - r['verdict']),
+                     f"{p['direct'] - p['verdict']:+.1f}" if p else "--", f"{p['x11'] - p['verdict']:+.1f}" if p else "--"]
+            rows.append(f"{BN[b]} & {NAME[j]} & " + " & ".join(c.replace("-", "$-$") if c != "--" else c for c in cells) + " \\\\")
+        rows.append("\\midrule")
+    rows = rows[:-1]
+    t = ["\\begin{tabular}{ll cc r rrr rr}", "\\toprule",
+         "& & & & & \\multicolumn{3}{c}{Held out: gain over verdict} & \\multicolumn{2}{c}{Paper (in-sample choice)} \\\\",
+         "\\cmidrule(lr){6-8}\\cmidrule(l){9-10}",
+         "& Judge & Eligible & Layer & Verdict & Direction & Rule & Random & Direction & Stretch \\\\", "\\midrule"]
+    (P / "tab_outer.tex").write_text("\n".join(t + rows + ["\\bottomrule", "\\end{tabular}"]) + "\n")
 
 
 def tab_auth():
@@ -377,8 +561,13 @@ if __name__ == "__main__":
     tab_bon()
     tab_scale()
     auth_numbers()
+    control_numbers()
+    outer_numbers()
+    cotfix_numbers()
+    match_numbers()
     chance_numbers()
     tab_auth()
+    tab_outer()
     numbers()
     tab_sm()
     tab_readout()

@@ -1,0 +1,458 @@
+{
+ "pairs": {
+  "granite3.3-8b|bbeh": {
+   "nq": 229,
+   "folds": {
+    "h1": {
+     "eligible": false,
+     "inner_gap": -0.12578616352201255,
+     "direct_layer": 38,
+     "stretch_layer": 38,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 8.777239709443096,
+     "direct_layer": 24,
+     "stretch_layer": 24,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 58.82171499074645,
+    "direct": 62.060456508328194,
+    "sum": 61.62862430598396,
+    "rule": 60.117211597779146,
+    "stretch": 63.26341764342998,
+    "random": 58.01974090067859
+   },
+   "posthoc_best_layer": "L22",
+   "posthoc_best_x11": 65.45342381246144,
+   "paper": {
+    "verdict": 58.82171499074645,
+    "direct": 66.1937075879087,
+    "x11": 65.14497223935842,
+    "layer": 22
+   }
+  },
+  "granite3.3-8b|math": {
+   "nq": 602,
+   "folds": {
+    "h1": {
+     "eligible": false,
+     "inner_gap": 3.597122302158273,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": false,
+     "inner_gap": 4.761904761904767,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 62.49369005552751,
+    "direct": 66.48157496214033,
+    "sum": 65.92629984856133,
+    "rule": 62.49369005552751,
+    "stretch": 64.23523472993438,
+    "random": 62.61988894497728
+   },
+   "posthoc_best_layer": "L26",
+   "posthoc_best_x11": 64.76527006562343,
+   "paper": null
+  },
+  "granite3.3-8b|mmlu": {
+   "nq": 922,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 7.203092059030225,
+     "direct_layer": 18,
+     "stretch_layer": 20,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 6.069364161849711,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 55.37940862130388,
+    "direct": 61.91663697898112,
+    "sum": 59.63662272889206,
+    "rule": 57.03598147488422,
+    "stretch": 57.03598147488422,
+    "random": 55.48628428927681
+   },
+   "posthoc_best_layer": "L26",
+   "posthoc_best_x11": 57.623797648735305,
+   "paper": {
+    "verdict": 55.40299572039943,
+    "direct": 61.87589158345221,
+    "x11": 57.150499286733236,
+    "layer": 20
+   }
+  },
+  "llama3.1-8b|bbeh": {
+   "nq": 229,
+   "folds": {
+    "h1": {
+     "eligible": false,
+     "inner_gap": 4.465408805031446,
+     "direct_layer": 18,
+     "stretch_layer": 18,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 7.80871670702179,
+     "direct_layer": 16,
+     "stretch_layer": 16,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 55.089450956199876,
+    "direct": 62.80074028377545,
+    "sum": 58.79086983343615,
+    "rule": 58.63664404688464,
+    "stretch": 60.39481801357187,
+    "random": 54.84268969771746
+   },
+   "posthoc_best_layer": "L16",
+   "posthoc_best_x11": 62.584824182603334,
+   "paper": {
+    "verdict": 55.089450956199876,
+    "direct": 66.3170882171499,
+    "x11": 61.844540407156074,
+    "layer": 14
+   }
+  },
+  "llama3.1-8b|math": {
+   "nq": 602,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 15.621788283658788,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 11.855158730158733,
+     "direct_layer": 14,
+     "stretch_layer": 16,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 54.391721352852095,
+    "direct": 66.68349318525998,
+    "sum": 63.90711761736497,
+    "rule": 63.14992428066633,
+    "stretch": 63.14992428066633,
+    "random": 54.03836446239273
+   },
+   "posthoc_best_layer": "L18",
+   "posthoc_best_x11": 63.75567895002524,
+   "paper": {
+    "verdict": 54.255319148936174,
+    "direct": 66.41337386018238,
+    "x11": 62.462006079027354,
+    "layer": 16
+   }
+  },
+  "llama3.1-8b|mmlu": {
+   "nq": 922,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 13.070976809557266,
+     "direct_layer": 8,
+     "stretch_layer": 16,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 11.307803468208089,
+     "direct_layer": 16,
+     "stretch_layer": 16,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 51.10438190238689,
+    "direct": 63.199144994656216,
+    "sum": 59.35162094763092,
+    "rule": 58.104738154613464,
+    "stretch": 58.104738154613464,
+    "random": 51.30032062700392
+   },
+   "posthoc_best_layer": "L16",
+   "posthoc_best_x11": 58.104738154613464,
+   "paper": {
+    "verdict": 51.08773181169757,
+    "direct": 63.730385164051356,
+    "x11": 58.00641940085592,
+    "layer": 16
+   }
+  },
+  "phi4-mini|bbeh": {
+   "nq": 229,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 6.729559748427672,
+     "direct_layer": 10,
+     "stretch_layer": 10,
+     "rule": "no layer responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 7.869249394673128,
+     "direct_layer": 4,
+     "stretch_layer": 20,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 51.97409006785934,
+    "direct": 58.359037631091915,
+    "sum": 55.4595928439235,
+    "rule": 54.71930906847625,
+    "stretch": 54.71930906847625,
+    "random": 52.37507711289327
+   },
+   "posthoc_best_layer": "L30",
+   "posthoc_best_x11": 56.90931523750771,
+   "paper": {
+    "verdict": 51.97409006785934,
+    "direct": 62.73904996915484,
+    "x11": 56.014805675508946,
+    "layer": 20
+   }
+  },
+  "phi4-mini|math": {
+   "nq": 602,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 15.827338129496404,
+     "direct_layer": 14,
+     "stretch_layer": 14,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 6.944444444444442,
+     "direct_layer": 16,
+     "stretch_layer": 16,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 56.032306915699145,
+    "direct": 66.2291771832408,
+    "sum": 63.30136294800606,
+    "rule": 61.130742049469966,
+    "stretch": 61.130742049469966,
+    "random": 56.108026249369004
+   },
+   "posthoc_best_layer": "L14",
+   "posthoc_best_x11": 62.49369005552751,
+   "paper": {
+    "verdict": 55.88084232152029,
+    "direct": 68.7211093990755,
+    "x11": 62.09553158705701,
+    "layer": 14
+   }
+  },
+  "phi4-mini|mmlu": {
+   "nq": 922,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 7.378777231201683,
+     "direct_layer": 14,
+     "stretch_layer": 14,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 8.670520231213874,
+     "direct_layer": 14,
+     "stretch_layer": 18,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 55.005343783398644,
+    "direct": 62.16601353758461,
+    "sum": 60.63412896330602,
+    "rule": 58.76380477377984,
+    "stretch": 58.76380477377984,
+    "random": 54.89846811542572
+   },
+   "posthoc_best_layer": "L16",
+   "posthoc_best_x11": 59.08443177769861,
+   "paper": {
+    "verdict": 55.02853067047076,
+    "direct": 61.12696148359486,
+    "x11": 58.91583452211127,
+    "layer": 16
+   }
+  },
+  "qwen2.5-7b|bbeh": {
+   "nq": 229,
+   "folds": {
+    "h1": {
+     "eligible": false,
+     "inner_gap": 4.0880503144654075,
+     "direct_layer": 18,
+     "stretch_layer": 22,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 8.05084745762712,
+     "direct_layer": 22,
+     "stretch_layer": 22,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 53.23874151758174,
+    "direct": 61.81369524984577,
+    "sum": 58.359037631091915,
+    "rule": 55.798889574336826,
+    "stretch": 58.1122763726095,
+    "random": 53.979025293029
+   },
+   "posthoc_best_layer": "L22",
+   "posthoc_best_x11": 58.1122763726095,
+   "paper": {
+    "verdict": 53.23874151758174,
+    "direct": 63.35595311536089,
+    "x11": 54.22578655151141,
+    "layer": 20
+   }
+  },
+  "qwen2.5-7b|math": {
+   "nq": 601,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 5.675954592363263,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 8.184523809523814,
+     "direct_layer": 16,
+     "stretch_layer": 20,
+     "rule": "responds"
+    }
+   },
+   "rank": {
+    "verdict": 58.548305513404145,
+    "direct": 66.56550328780982,
+    "sum": 62.822458270106225,
+    "rule": 57.132018209408194,
+    "stretch": 57.132018209408194,
+    "random": 58.21952453211937
+   },
+   "posthoc_best_layer": "L18",
+   "posthoc_best_x11": 59.332321699544764,
+   "paper": null
+  },
+  "qwen2.5-7b|mmlu": {
+   "nq": 922,
+   "folds": {
+    "h1": {
+     "eligible": true,
+     "inner_gap": 10.505973295853831,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "responds"
+    },
+    "h2": {
+     "eligible": true,
+     "inner_gap": 11.199421965317914,
+     "direct_layer": 20,
+     "stretch_layer": 20,
+     "rule": "no layer responds"
+    }
+   },
+   "rank": {
+    "verdict": 51.78126113288208,
+    "direct": 62.094763092269325,
+    "sum": 58.67474171713573,
+    "rule": 54.257214107588176,
+    "stretch": 54.257214107588176,
+    "random": 51.76344852155326
+   },
+   "posthoc_best_layer": "L20",
+   "posthoc_best_x11": 54.257214107588176,
+   "paper": {
+    "verdict": 51.76533523537803,
+    "direct": 62.161198288159774,
+    "x11": 54.31526390870185,
+    "layer": 20
+   }
+  }
+ },
+ "pooled": {
+  "direct|gain": {
+   "g": 8.04248500709514,
+   "lo": 6.49148988622505,
+   "hi": 9.61777537967747,
+   "k": 12
+  },
+  "sum|gain": {
+   "g": 5.38600507046642,
+   "lo": 4.565146877489998,
+   "hi": 6.230235358156657,
+   "k": 12
+  },
+  "rule|gain": {
+   "g": 3.1233125486310613,
+   "lo": 2.233640550222848,
+   "hi": 4.028298639070392,
+   "k": 12
+  },
+  "stretch|gain": {
+   "g": 3.8699218390491956,
+   "lo": 2.8908077893888087,
+   "hi": 4.832548191810797,
+   "k": 12
+  },
+  "random|gain": {
+   "g": -0.01746317195044922,
+   "lo": -0.26985662465706006,
+   "hi": 0.2307425377567873,
+   "k": 12
+  },
+  "verdict|level": {
+   "g": 55.32170140082014,
+   "lo": 53.87950062735215,
+   "hi": 56.839185875444926,
+   "k": 12
+  },
+  "rule_over_direct": {
+   "g": 0.38835167810392585,
+   "lo": 0.3046312104239663,
+   "hi": 0.46914931005910404
+  }
+ },
+ "n_pairs": 12
+}

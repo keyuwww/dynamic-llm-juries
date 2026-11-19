@@ -53,21 +53,21 @@
 \expandafter\def\csname r@adir.mmlu.verdict.same\endcsname{53.6}
 \expandafter\def\csname r@adir.mmlu.xfer.hi\endcsname{33}
 \expandafter\def\csname r@adir.mmlu.xfer.lo\endcsname{27}
-\expandafter\def\csname r@auth.diff\endcsname{+11.6}
-\expandafter\def\csname r@auth.diff.ci\endcsname{+11.6 [+10.8, +12.5]}
+\expandafter\def\csname r@auth.diff\endcsname{+11.4}
+\expandafter\def\csname r@auth.diff.ci\endcsname{+11.4 [+9.8, +13.2]}
 \expandafter\def\csname r@auth.diff.direct\endcsname{64.2}
 \expandafter\def\csname r@auth.diff.hi\endcsname{+17.7}
 \expandafter\def\csname r@auth.diff.k\endcsname{19}
 \expandafter\def\csname r@auth.diff.lo\endcsname{+6.2}
 \expandafter\def\csname r@auth.diff.sig\endcsname{19}
 \expandafter\def\csname r@auth.diff.verdict\endcsname{52.7}
-\expandafter\def\csname r@auth.diffm.ci\endcsname{+12.1 [+11.2, +13.0]}
+\expandafter\def\csname r@auth.diffm.ci\endcsname{+12.6 [+10.9, +14.2]}
 \expandafter\def\csname r@auth.diffm.k\endcsname{12}
 \expandafter\def\csname r@auth.dir.hi\endcsname{85}
 \expandafter\def\csname r@auth.dir.lo\endcsname{66}
 \expandafter\def\csname r@auth.dir.med\endcsname{80}
-\expandafter\def\csname r@auth.same\endcsname{+1.9}
-\expandafter\def\csname r@auth.same.ci\endcsname{+1.9 [+0.5, +3.2]}
+\expandafter\def\csname r@auth.same\endcsname{+2.0}
+\expandafter\def\csname r@auth.same.ci\endcsname{+2.0 [$-$0.3, +4.3]}
 \expandafter\def\csname r@auth.same.direct\endcsname{57.8}
 \expandafter\def\csname r@auth.same.hi\endcsname{+7.5}
 \expandafter\def\csname r@auth.same.k\endcsname{12}
@@ -128,7 +128,7 @@
 \expandafter\def\csname r@big.math.sm.olmo.x11.rank.abs\endcsname{58.9}
 \expandafter\def\csname r@big.math.sm.olmo.x11.rank.ci\endcsname{$-$3.7 [$-$7.8, $-$0.1]}
 \expandafter\def\csname r@big.math.sm.olmo.x4.rank.abs\endcsname{62.6}
-\expandafter\def\csname r@big.math.sm.olmo.x4.rank.ci\endcsname{+0.0 [$-$2.0, +1.8]}
+\expandafter\def\csname r@big.math.sm.olmo.x4.rank.ci\endcsname{0.0 [$-$2.0, +1.8]}
 \expandafter\def\csname r@big.math.sm.qwen.cot.rank.abs\endcsname{63.3}
 \expandafter\def\csname r@big.math.sm.qwen.cot.rank.ci\endcsname{+0.4 [$-$1.8, +2.6]}
 \expandafter\def\csname r@big.math.sm.qwen.cot_sum.rank.abs\endcsname{63.8}
@@ -200,73 +200,449 @@
 \expandafter\def\csname r@chance.mmlu.qwen.above\endcsname{0}
 \expandafter\def\csname r@chance.mmlu.qwen.below\endcsname{2}
 \expandafter\def\csname r@chance.mmlu.qwen.n\endcsname{4}
+\expandafter\def\csname r@cot.npairs\endcsname{19}
 \expandafter\def\csname r@cot.reached\endcsname{99.0}
+\expandafter\def\csname r@cot.short.n\endcsname{6}
 \expandafter\def\csname r@cot.tok.median\endcsname{11}
+\expandafter\def\csname r@cotfix.math.cot\endcsname{53.1}
+\expandafter\def\csname r@cotfix.math.distinct\endcsname{317}
+\expandafter\def\csname r@cotfix.math.n\endcsname{2,382}
+\expandafter\def\csname r@cotfix.math.verdict\endcsname{53.4}
+\expandafter\def\csname r@cotfix.mmlu.cot\endcsname{51.3}
+\expandafter\def\csname r@cotfix.mmlu.distinct\endcsname{287}
+\expandafter\def\csname r@cotfix.mmlu.n\endcsname{3,496}
+\expandafter\def\csname r@cotfix.mmlu.verdict\endcsname{51.5}
+\expandafter\def\csname r@ctl.both.c.all\endcsname{+10.3}
+\expandafter\def\csname r@ctl.both.c.all.ci\endcsname{+10.3 [+8.7, +11.9]}
+\expandafter\def\csname r@ctl.both.c.diff\endcsname{+13.5}
+\expandafter\def\csname r@ctl.both.c.diff.ci\endcsname{+13.5 [+11.7, +15.3]}
+\expandafter\def\csname r@ctl.both.c.level.all\endcsname{63.3}
+\expandafter\def\csname r@ctl.both.c.level.diff\endcsname{65.5}
+\expandafter\def\csname r@ctl.both.c.level.same\endcsname{56.9}
+\expandafter\def\csname r@ctl.both.c.same\endcsname{+1.0}
+\expandafter\def\csname r@ctl.both.c.same.ci\endcsname{+1.0 [$-$1.4, +3.4]}
+\expandafter\def\csname r@ctl.both.c_gb.all\endcsname{+5.2}
+\expandafter\def\csname r@ctl.both.c_gb.all.ci\endcsname{+5.2 [+3.8, +6.4]}
+\expandafter\def\csname r@ctl.both.c_gb.diff\endcsname{+6.4}
+\expandafter\def\csname r@ctl.both.c_gb.diff.ci\endcsname{+6.4 [+5.0, +7.7]}
+\expandafter\def\csname r@ctl.both.c_gb.level.all\endcsname{58.1}
+\expandafter\def\csname r@ctl.both.c_gb.level.diff\endcsname{58.3}
+\expandafter\def\csname r@ctl.both.c_gb.level.same\endcsname{57.4}
+\expandafter\def\csname r@ctl.both.c_gb.same\endcsname{+1.5}
+\expandafter\def\csname r@ctl.both.c_gb.same.ci\endcsname{+1.5 [$-$0.7, +3.4]}
+\expandafter\def\csname r@ctl.both.c_perp.all\endcsname{+6.1}
+\expandafter\def\csname r@ctl.both.c_perp.all.ci\endcsname{+6.1 [+4.7, +7.4]}
+\expandafter\def\csname r@ctl.both.c_perp.diff\endcsname{+7.8}
+\expandafter\def\csname r@ctl.both.c_perp.diff.ci\endcsname{+7.8 [+6.4, +9.1]}
+\expandafter\def\csname r@ctl.both.c_perp.level.all\endcsname{59.1}
+\expandafter\def\csname r@ctl.both.c_perp.level.diff\endcsname{59.7}
+\expandafter\def\csname r@ctl.both.c_perp.level.same\endcsname{57.4}
+\expandafter\def\csname r@ctl.both.c_perp.same\endcsname{+1.5}
+\expandafter\def\csname r@ctl.both.c_perp.same.ci\endcsname{+1.5 [$-$0.8, +3.7]}
+\expandafter\def\csname r@ctl.both.n\endcsname{12}
+\expandafter\def\csname r@ctl.both.removed.all\endcsname{40}
+\expandafter\def\csname r@ctl.both.removed.all.ci\endcsname{40\% [32, 49]}
+\expandafter\def\csname r@ctl.both.removed.diff\endcsname{42}
+\expandafter\def\csname r@ctl.both.removed.diff.ci\endcsname{42\% [35, 50]}
+\expandafter\def\csname r@ctl.both.removed.same\endcsname{-46}
+\expandafter\def\csname r@ctl.both.removed.same.ci\endcsname{-46\% [-843, 771]}
+\expandafter\def\csname r@ctl.both.verdict.level.all\endcsname{53.0}
+\expandafter\def\csname r@ctl.both.verdict.level.diff\endcsname{52.0}
+\expandafter\def\csname r@ctl.both.verdict.level.same\endcsname{55.9}
+\expandafter\def\csname r@ctl.ho.c_all.gain\endcsname{+1.0}
+\expandafter\def\csname r@ctl.ho.c_all.gain.ci\endcsname{+1.0 [$-$1.3, +3.5]}
+\expandafter\def\csname r@ctl.ho.c_ho.gain\endcsname{$-$0.6}
+\expandafter\def\csname r@ctl.ho.c_ho.gain.ci\endcsname{$-$0.6 [$-$2.5, +1.4]}
+\expandafter\def\csname r@ctl.ho.ho_minus_all\endcsname{$-$1.6}
+\expandafter\def\csname r@ctl.ho.ho_minus_all.ci\endcsname{$-$1.6 [$-$4.5, +1.3]}
+\expandafter\def\csname r@ctl.math.c.all\endcsname{+11.3}
+\expandafter\def\csname r@ctl.math.c.all.ci\endcsname{+11.3 [+9.0, +13.5]}
+\expandafter\def\csname r@ctl.math.c.diff\endcsname{+15.6}
+\expandafter\def\csname r@ctl.math.c.diff.ci\endcsname{+15.6 [+13.1, +18.2]}
+\expandafter\def\csname r@ctl.math.c.level.all\endcsname{65.1}
+\expandafter\def\csname r@ctl.math.c.level.diff\endcsname{67.4}
+\expandafter\def\csname r@ctl.math.c.level.same\endcsname{58.8}
+\expandafter\def\csname r@ctl.math.c.same\endcsname{$-$0.6}
+\expandafter\def\csname r@ctl.math.c.same.ci\endcsname{$-$0.6 [$-$4.1, +2.9]}
+\expandafter\def\csname r@ctl.math.c_gb.all\endcsname{+4.3}
+\expandafter\def\csname r@ctl.math.c_gb.all.ci\endcsname{+4.3 [+2.3, +6.4]}
+\expandafter\def\csname r@ctl.math.c_gb.diff\endcsname{+5.6}
+\expandafter\def\csname r@ctl.math.c_gb.diff.ci\endcsname{+5.6 [+3.4, +7.9]}
+\expandafter\def\csname r@ctl.math.c_gb.level.all\endcsname{58.2}
+\expandafter\def\csname r@ctl.math.c_gb.level.diff\endcsname{57.4}
+\expandafter\def\csname r@ctl.math.c_gb.level.same\endcsname{60.4}
+\expandafter\def\csname r@ctl.math.c_gb.same\endcsname{+0.9}
+\expandafter\def\csname r@ctl.math.c_gb.same.ci\endcsname{+0.9 [$-$2.3, +4.1]}
+\expandafter\def\csname r@ctl.math.c_perp.all\endcsname{+10.0}
+\expandafter\def\csname r@ctl.math.c_perp.all.ci\endcsname{+10.0 [+7.9, +12.1]}
+\expandafter\def\csname r@ctl.math.c_perp.diff\endcsname{+13.1}
+\expandafter\def\csname r@ctl.math.c_perp.diff.ci\endcsname{+13.1 [+10.8, +15.4]}
+\expandafter\def\csname r@ctl.math.c_perp.level.all\endcsname{63.9}
+\expandafter\def\csname r@ctl.math.c_perp.level.diff\endcsname{65.0}
+\expandafter\def\csname r@ctl.math.c_perp.level.same\endcsname{60.9}
+\expandafter\def\csname r@ctl.math.c_perp.same\endcsname{+1.5}
+\expandafter\def\csname r@ctl.math.c_perp.same.ci\endcsname{+1.5 [$-$1.7, +4.8]}
+\expandafter\def\csname r@ctl.math.iso.max\endcsname{0.1}
+\expandafter\def\csname r@ctl.math.n\endcsname{5}
+\expandafter\def\csname r@ctl.math.perm.maxmean\endcsname{1.5}
+\expandafter\def\csname r@ctl.math.perm.n\endcsname{5}
+\expandafter\def\csname r@ctl.math.perm.sig\endcsname{1}
+\expandafter\def\csname r@ctl.math.removed.all\endcsname{11}
+\expandafter\def\csname r@ctl.math.removed.all.ci\endcsname{11\% [0, 21]}
+\expandafter\def\csname r@ctl.math.removed.diff\endcsname{16}
+\expandafter\def\csname r@ctl.math.removed.diff.ci\endcsname{16\% [6, 24]}
+\expandafter\def\csname r@ctl.math.removed.same\endcsname{329}
+\expandafter\def\csname r@ctl.math.removed.same.ci\endcsname{329\% [-1401, 2126]}
+\expandafter\def\csname r@ctl.math.verdict.level.all\endcsname{53.9}
+\expandafter\def\csname r@ctl.math.verdict.level.diff\endcsname{51.9}
+\expandafter\def\csname r@ctl.math.verdict.level.same\endcsname{59.4}
+\expandafter\def\csname r@ctl.mmlu.c.all\endcsname{+9.6}
+\expandafter\def\csname r@ctl.mmlu.c.all.ci\endcsname{+9.6 [+7.3, +11.9]}
+\expandafter\def\csname r@ctl.mmlu.c.diff\endcsname{+12.0}
+\expandafter\def\csname r@ctl.mmlu.c.diff.ci\endcsname{+12.0 [+9.3, +14.5]}
+\expandafter\def\csname r@ctl.mmlu.c.level.all\endcsname{62.0}
+\expandafter\def\csname r@ctl.mmlu.c.level.diff\endcsname{64.0}
+\expandafter\def\csname r@ctl.mmlu.c.level.same\endcsname{55.6}
+\expandafter\def\csname r@ctl.mmlu.c.same\endcsname{+2.2}
+\expandafter\def\csname r@ctl.mmlu.c.same.ci\endcsname{+2.2 [$-$1.1, +5.5]}
+\expandafter\def\csname r@ctl.mmlu.c_gb.all\endcsname{+5.7}
+\expandafter\def\csname r@ctl.mmlu.c_gb.all.ci\endcsname{+5.7 [+3.9, +7.5]}
+\expandafter\def\csname r@ctl.mmlu.c_gb.diff\endcsname{+7.0}
+\expandafter\def\csname r@ctl.mmlu.c_gb.diff.ci\endcsname{+7.0 [+5.1, +8.7]}
+\expandafter\def\csname r@ctl.mmlu.c_gb.level.all\endcsname{58.1}
+\expandafter\def\csname r@ctl.mmlu.c_gb.level.diff\endcsname{59.0}
+\expandafter\def\csname r@ctl.mmlu.c_gb.level.same\endcsname{55.2}
+\expandafter\def\csname r@ctl.mmlu.c_gb.same\endcsname{+1.9}
+\expandafter\def\csname r@ctl.mmlu.c_gb.same.ci\endcsname{+1.9 [$-$1.0, +4.6]}
+\expandafter\def\csname r@ctl.mmlu.c_perp.all\endcsname{+3.4}
+\expandafter\def\csname r@ctl.mmlu.c_perp.all.ci\endcsname{+3.4 [+1.4, +5.2]}
+\expandafter\def\csname r@ctl.mmlu.c_perp.diff\endcsname{+4.0}
+\expandafter\def\csname r@ctl.mmlu.c_perp.diff.ci\endcsname{+4.0 [+1.9, +5.9]}
+\expandafter\def\csname r@ctl.mmlu.c_perp.level.all\endcsname{55.7}
+\expandafter\def\csname r@ctl.mmlu.c_perp.level.diff\endcsname{56.0}
+\expandafter\def\csname r@ctl.mmlu.c_perp.level.same\endcsname{54.8}
+\expandafter\def\csname r@ctl.mmlu.c_perp.same\endcsname{+1.5}
+\expandafter\def\csname r@ctl.mmlu.c_perp.same.ci\endcsname{+1.5 [$-$1.7, +4.4]}
+\expandafter\def\csname r@ctl.mmlu.iso.max\endcsname{0.1}
+\expandafter\def\csname r@ctl.mmlu.n\endcsname{7}
+\expandafter\def\csname r@ctl.mmlu.perm.maxmean\endcsname{1.0}
+\expandafter\def\csname r@ctl.mmlu.perm.n\endcsname{7}
+\expandafter\def\csname r@ctl.mmlu.perm.sig\endcsname{7}
+\expandafter\def\csname r@ctl.mmlu.removed.all\endcsname{65}
+\expandafter\def\csname r@ctl.mmlu.removed.all.ci\endcsname{65\% [52, 83]}
+\expandafter\def\csname r@ctl.mmlu.removed.diff\endcsname{67}
+\expandafter\def\csname r@ctl.mmlu.removed.diff.ci\endcsname{67\% [55, 82]}
+\expandafter\def\csname r@ctl.mmlu.removed.same\endcsname{33}
+\expandafter\def\csname r@ctl.mmlu.removed.same.ci\endcsname{33\% [-225, 296]}
+\expandafter\def\csname r@ctl.mmlu.verdict.level.all\endcsname{52.3}
+\expandafter\def\csname r@ctl.mmlu.verdict.level.diff\endcsname{52.0}
+\expandafter\def\csname r@ctl.mmlu.verdict.level.same\endcsname{53.4}
+\expandafter\def\csname r@fmt.math.nemo.0.bare\endcsname{80}
+\expandafter\def\csname r@fmt.math.nemo.0.long\endcsname{0}
+\expandafter\def\csname r@fmt.math.nemo.1.bare\endcsname{42}
+\expandafter\def\csname r@fmt.math.nemo.1.long\endcsname{4}
+\expandafter\def\csname r@fmt.math.q36.0.bare\endcsname{0}
+\expandafter\def\csname r@fmt.math.q36.0.long\endcsname{56}
+\expandafter\def\csname r@fmt.math.q36.1.bare\endcsname{0}
+\expandafter\def\csname r@fmt.math.q36.1.long\endcsname{23}
+\expandafter\def\csname r@fmt.mmlu.nemo.0.bare\endcsname{31}
+\expandafter\def\csname r@fmt.mmlu.nemo.0.long\endcsname{2}
+\expandafter\def\csname r@fmt.mmlu.nemo.1.bare\endcsname{31}
+\expandafter\def\csname r@fmt.mmlu.nemo.1.long\endcsname{0}
+\expandafter\def\csname r@fmt.mmlu.q36.0.bare\endcsname{0}
+\expandafter\def\csname r@fmt.mmlu.q36.0.long\endcsname{19}
+\expandafter\def\csname r@fmt.mmlu.q36.1.bare\endcsname{0}
+\expandafter\def\csname r@fmt.mmlu.q36.1.long\endcsname{7}
 \expandafter\def\csname r@gap.hi\endcsname{13.0}
 \expandafter\def\csname r@gap.lo\endcsname{5.7}
+\expandafter\def\csname r@legacy.pool.cot.bon.ci\endcsname{$-$1.1 [$-$1.8, $-$0.3]}
+\expandafter\def\csname r@legacy.pool.cot.rank.ci\endcsname{$-$0.5 [$-$1.0, $-$0.1]}
+\expandafter\def\csname r@legacy.pool.cot_sum.bon.ci\endcsname{+4.8 [+3.9, +5.6]}
+\expandafter\def\csname r@legacy.pool.cot_sum.rank.ci\endcsname{+5.7 [+5.1, +6.4]}
+\expandafter\def\csname r@legacy.pool.direct.bon.ci\endcsname{+8.1 [+7.2, +9.1]}
+\expandafter\def\csname r@legacy.pool.direct.rank.ci\endcsname{+9.3 [+8.5, +10.1]}
+\expandafter\def\csname r@legacy.pool.sum.bon.ci\endcsname{+5.4 [+4.7, +6.1]}
+\expandafter\def\csname r@legacy.pool.sum.rank.ci\endcsname{+6.2 [+5.7, +6.7]}
+\expandafter\def\csname r@legacy.pool.x11.bon.ci\endcsname{+2.5 [+2.0, +3.1]}
+\expandafter\def\csname r@legacy.pool.x11.rank.ci\endcsname{+2.3 [+1.9, +2.7]}
+\expandafter\def\csname r@legacy.pool.x4.bon.ci\endcsname{+1.2 [+0.8, +1.6]}
+\expandafter\def\csname r@legacy.pool.x4.rank.ci\endcsname{+1.3 [+1.1, +1.6]}
+\expandafter\def\csname r@legacy.pool_unsolved.cot.bon.ci\endcsname{$-$0.9 [$-$1.7, +0.0]}
+\expandafter\def\csname r@legacy.pool_unsolved.cot.rank.ci\endcsname{$-$0.1 [$-$0.7, +0.4]}
+\expandafter\def\csname r@legacy.pool_unsolved.cot_sum.bon.ci\endcsname{+4.9 [+3.9, +5.9]}
+\expandafter\def\csname r@legacy.pool_unsolved.cot_sum.rank.ci\endcsname{+5.8 [+5.0, +6.5]}
+\expandafter\def\csname r@legacy.pool_unsolved.direct.bon.ci\endcsname{+9.0 [+7.8, +10.1]}
+\expandafter\def\csname r@legacy.pool_unsolved.direct.rank.ci\endcsname{+9.7 [+8.7, +10.6]}
+\expandafter\def\csname r@legacy.pool_unsolved.sum.bon.ci\endcsname{+5.7 [+4.9, +6.6]}
+\expandafter\def\csname r@legacy.pool_unsolved.sum.rank.ci\endcsname{+6.2 [+5.6, +6.8]}
+\expandafter\def\csname r@legacy.pool_unsolved.x11.bon.ci\endcsname{+2.4 [+1.7, +3.1]}
+\expandafter\def\csname r@legacy.pool_unsolved.x11.rank.ci\endcsname{+2.5 [+2.0, +3.1]}
+\expandafter\def\csname r@legacy.pool_unsolved.x4.bon.ci\endcsname{+1.1 [+0.5, +1.6]}
+\expandafter\def\csname r@legacy.pool_unsolved.x4.rank.ci\endcsname{+1.2 [+0.9, +1.6]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.cot.bon.ci\endcsname{$-$0.9 [$-$2.4, +0.7]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.cot.rank.ci\endcsname{$-$0.5 [$-$1.6, +0.7]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.cot_sum.bon.ci\endcsname{+0.9 [$-$0.7, +2.6]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.cot_sum.rank.ci\endcsname{+1.7 [+0.4, +2.9]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.direct.bon.ci\endcsname{+2.3 [+0.5, +4.0]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.direct.rank.ci\endcsname{+3.1 [+1.7, +4.6]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.sum.bon.ci\endcsname{+1.9 [+0.7, +3.2]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.sum.rank.ci\endcsname{+2.1 [+1.1, +3.0]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.x11.bon.ci\endcsname{+1.5 [+0.3, +2.7]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.x11.rank.ci\endcsname{+0.8 [$-$0.1, +1.7]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.x4.bon.ci\endcsname{+1.3 [+0.6, +2.0]}
+\expandafter\def\csname r@legacy.sm.bbeh.qwen.x4.rank.ci\endcsname{+0.9 [+0.4, +1.4]}
+\expandafter\def\csname r@legacy.sm.math.olmo.cot.bon.ci\endcsname{$-$1.1 [$-$4.2, +2.0]}
+\expandafter\def\csname r@legacy.sm.math.olmo.cot.rank.ci\endcsname{$-$1.1 [$-$2.5, +0.3]}
+\expandafter\def\csname r@legacy.sm.math.olmo.cot_sum.bon.ci\endcsname{$-$1.7 [$-$5.2, +1.9]}
+\expandafter\def\csname r@legacy.sm.math.olmo.cot_sum.rank.ci\endcsname{$-$0.2 [$-$2.1, +1.7]}
+\expandafter\def\csname r@legacy.sm.math.olmo.direct.bon.ci\endcsname{$-$3.6 [$-$7.6, +0.4]}
+\expandafter\def\csname r@legacy.sm.math.olmo.direct.rank.ci\endcsname{$-$2.3 [$-$4.3, $-$0.2]}
+\expandafter\def\csname r@legacy.sm.math.olmo.sum.bon.ci\endcsname{$-$2.8 [$-$5.2, $-$0.3]}
+\expandafter\def\csname r@legacy.sm.math.olmo.sum.rank.ci\endcsname{$-$0.7 [$-$2.0, +0.6]}
+\expandafter\def\csname r@legacy.sm.math.olmo.x11.bon.ci\endcsname{$-$1.5 [$-$4.1, +1.1]}
+\expandafter\def\csname r@legacy.sm.math.olmo.x11.rank.ci\endcsname{$-$1.0 [$-$2.3, +0.2]}
+\expandafter\def\csname r@legacy.sm.math.olmo.x4.bon.ci\endcsname{$-$1.3 [$-$2.8, +0.2]}
+\expandafter\def\csname r@legacy.sm.math.olmo.x4.rank.ci\endcsname{$-$0.4 [$-$1.2, +0.5]}
+\expandafter\def\csname r@legacy.sm.math.qwen.cot.bon.ci\endcsname{$-$2.2 [$-$4.0, $-$0.3]}
+\expandafter\def\csname r@legacy.sm.math.qwen.cot.rank.ci\endcsname{$-$0.6 [$-$1.4, +0.2]}
+\expandafter\def\csname r@legacy.sm.math.qwen.cot_sum.bon.ci\endcsname{+0.2 [$-$2.1, +2.4]}
+\expandafter\def\csname r@legacy.sm.math.qwen.cot_sum.rank.ci\endcsname{+1.3 [+0.1, +2.6]}
+\expandafter\def\csname r@legacy.sm.math.qwen.direct.bon.ci\endcsname{+0.6 [$-$2.0, +3.2]}
+\expandafter\def\csname r@legacy.sm.math.qwen.direct.rank.ci\endcsname{+2.6 [+1.1, +4.2]}
+\expandafter\def\csname r@legacy.sm.math.qwen.sum.bon.ci\endcsname{+1.1 [$-$0.9, +3.1]}
+\expandafter\def\csname r@legacy.sm.math.qwen.sum.rank.ci\endcsname{+2.6 [+1.7, +3.6]}
+\expandafter\def\csname r@legacy.sm.math.qwen.x11.bon.ci\endcsname{+0.9 [$-$1.3, +3.2]}
+\expandafter\def\csname r@legacy.sm.math.qwen.x11.rank.ci\endcsname{+1.4 [+0.3, +2.6]}
+\expandafter\def\csname r@legacy.sm.math.qwen.x4.bon.ci\endcsname{+0.6 [$-$0.7, +1.9]}
+\expandafter\def\csname r@legacy.sm.math.qwen.x4.rank.ci\endcsname{+1.6 [+1.0, +2.2]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.cot.bon.ci\endcsname{+2.3 [$-$0.5, +5.1]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.cot.rank.ci\endcsname{+2.1 [+0.4, +3.8]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.cot_sum.bon.ci\endcsname{+1.0 [$-$1.7, +3.8]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.cot_sum.rank.ci\endcsname{+1.5 [$-$0.0, +3.1]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.direct.bon.ci\endcsname{+1.4 [$-$1.4, +4.2]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.direct.rank.ci\endcsname{+1.0 [$-$0.9, +2.8]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.sum.bon.ci\endcsname{+0.7 [$-$1.4, +2.8]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.sum.rank.ci\endcsname{+0.9 [$-$0.2, +2.0]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.x11.bon.ci\endcsname{$-$0.5 [$-$2.3, +1.4]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.x11.rank.ci\endcsname{+0.5 [$-$0.4, +1.4]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.x4.bon.ci\endcsname{+0.6 [$-$0.6, +1.7]}
+\expandafter\def\csname r@legacy.sm.mmlu.olmo.x4.rank.ci\endcsname{+0.2 [$-$0.3, +0.7]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.cot.bon.ci\endcsname{+2.1 [$-$0.7, +4.9]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.cot.rank.ci\endcsname{+1.5 [$-$0.1, +3.1]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.cot_sum.bon.ci\endcsname{+0.1 [$-$2.7, +3.0]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.cot_sum.rank.ci\endcsname{+1.2 [$-$0.6, +2.9]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.direct.bon.ci\endcsname{+0.2 [$-$3.0, +3.3]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.direct.rank.ci\endcsname{+2.2 [+0.3, +4.1]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.sum.bon.ci\endcsname{$-$1.7 [$-$4.1, +0.7]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.sum.rank.ci\endcsname{+0.7 [$-$0.5, +1.9]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.x11.bon.ci\endcsname{$-$1.2 [$-$3.5, +1.2]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.x11.rank.ci\endcsname{+0.2 [$-$1.1, +1.5]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.x4.bon.ci\endcsname{$-$0.7 [$-$2.2, +0.9]}
+\expandafter\def\csname r@legacy.sm.mmlu.qwen.x4.rank.ci\endcsname{+0.4 [$-$0.3, +1.1]}
+\expandafter\def\csname r@match.math.1b\endcsname{56.5}
+\expandafter\def\csname r@match.math.3b\endcsname{62.5}
+\expandafter\def\csname r@match.math.70b\endcsname{62.8}
+\expandafter\def\csname r@match.math.8b\endcsname{58.0}
+\expandafter\def\csname r@match.math.d1b\endcsname{+6.4 [+2.2, +10.7]}
+\expandafter\def\csname r@match.math.d3b\endcsname{+0.3 [$-$3.6, +4.2]}
+\expandafter\def\csname r@match.math.d8b\endcsname{+4.8 [+0.5, +8.5]}
+\expandafter\def\csname r@match.math.nq\endcsname{270}
+\expandafter\def\csname r@match.mmlu.1b\endcsname{54.6}
+\expandafter\def\csname r@match.mmlu.70b\endcsname{50.3}
+\expandafter\def\csname r@match.mmlu.8b\endcsname{49.9}
+\expandafter\def\csname r@match.mmlu.d1b\endcsname{$-$4.4 [$-$11.5, +2.4]}
+\expandafter\def\csname r@match.mmlu.d8b\endcsname{+0.4 [$-$6.4, +6.9]}
+\expandafter\def\csname r@match.mmlu.nq\endcsname{142}
+\expandafter\def\csname r@outer.direct.gain\endcsname{+8.0}
+\expandafter\def\csname r@outer.direct.gain.ci\endcsname{+8.0 [+6.5, +9.6]}
+\expandafter\def\csname r@outer.folds\endcsname{24}
+\expandafter\def\csname r@outer.folds.eligible\endcsname{19}
+\expandafter\def\csname r@outer.granite3.3-8b.bbeh.direct\endcsname{+3.2}
+\expandafter\def\csname r@outer.granite3.3-8b.bbeh.eligible\endcsname{1}
+\expandafter\def\csname r@outer.granite3.3-8b.bbeh.rule\endcsname{+1.3}
+\expandafter\def\csname r@outer.granite3.3-8b.bbeh.stretch\endcsname{+4.4}
+\expandafter\def\csname r@outer.granite3.3-8b.bbeh.sum\endcsname{+2.8}
+\expandafter\def\csname r@outer.granite3.3-8b.math.direct\endcsname{+4.0}
+\expandafter\def\csname r@outer.granite3.3-8b.math.eligible\endcsname{0}
+\expandafter\def\csname r@outer.granite3.3-8b.math.rule\endcsname{0.0}
+\expandafter\def\csname r@outer.granite3.3-8b.math.stretch\endcsname{+1.7}
+\expandafter\def\csname r@outer.granite3.3-8b.math.sum\endcsname{+3.4}
+\expandafter\def\csname r@outer.granite3.3-8b.mmlu.direct\endcsname{+6.5}
+\expandafter\def\csname r@outer.granite3.3-8b.mmlu.eligible\endcsname{2}
+\expandafter\def\csname r@outer.granite3.3-8b.mmlu.rule\endcsname{+1.7}
+\expandafter\def\csname r@outer.granite3.3-8b.mmlu.stretch\endcsname{+1.7}
+\expandafter\def\csname r@outer.granite3.3-8b.mmlu.sum\endcsname{+4.3}
+\expandafter\def\csname r@outer.llama3.1-8b.bbeh.direct\endcsname{+7.7}
+\expandafter\def\csname r@outer.llama3.1-8b.bbeh.eligible\endcsname{1}
+\expandafter\def\csname r@outer.llama3.1-8b.bbeh.rule\endcsname{+3.5}
+\expandafter\def\csname r@outer.llama3.1-8b.bbeh.stretch\endcsname{+5.3}
+\expandafter\def\csname r@outer.llama3.1-8b.bbeh.sum\endcsname{+3.7}
+\expandafter\def\csname r@outer.llama3.1-8b.math.direct\endcsname{+12.3}
+\expandafter\def\csname r@outer.llama3.1-8b.math.eligible\endcsname{2}
+\expandafter\def\csname r@outer.llama3.1-8b.math.rule\endcsname{+8.8}
+\expandafter\def\csname r@outer.llama3.1-8b.math.stretch\endcsname{+8.8}
+\expandafter\def\csname r@outer.llama3.1-8b.math.sum\endcsname{+9.5}
+\expandafter\def\csname r@outer.llama3.1-8b.mmlu.direct\endcsname{+12.1}
+\expandafter\def\csname r@outer.llama3.1-8b.mmlu.eligible\endcsname{2}
+\expandafter\def\csname r@outer.llama3.1-8b.mmlu.rule\endcsname{+7.0}
+\expandafter\def\csname r@outer.llama3.1-8b.mmlu.stretch\endcsname{+7.0}
+\expandafter\def\csname r@outer.llama3.1-8b.mmlu.sum\endcsname{+8.2}
+\expandafter\def\csname r@outer.notpaper\endcsname{Granite-3.3-8B on MATH, Qwen2.5-7B on MATH}
+\expandafter\def\csname r@outer.npairs\endcsname{12}
+\expandafter\def\csname r@outer.optimism.mean\endcsname{1.0}
+\expandafter\def\csname r@outer.ov.direct\endcsname{+8.5}
+\expandafter\def\csname r@outer.ov.n\endcsname{10}
+\expandafter\def\csname r@outer.ov.paper.direct\endcsname{+10.0}
+\expandafter\def\csname r@outer.ov.paper.x11\endcsname{+4.8}
+\expandafter\def\csname r@outer.ov.rule\endcsname{+3.9}
+\expandafter\def\csname r@outer.ov.stretch\endcsname{+4.6}
+\expandafter\def\csname r@outer.phi4-mini.bbeh.direct\endcsname{+6.4}
+\expandafter\def\csname r@outer.phi4-mini.bbeh.eligible\endcsname{2}
+\expandafter\def\csname r@outer.phi4-mini.bbeh.rule\endcsname{+2.7}
+\expandafter\def\csname r@outer.phi4-mini.bbeh.stretch\endcsname{+2.7}
+\expandafter\def\csname r@outer.phi4-mini.bbeh.sum\endcsname{+3.5}
+\expandafter\def\csname r@outer.phi4-mini.math.direct\endcsname{+10.2}
+\expandafter\def\csname r@outer.phi4-mini.math.eligible\endcsname{2}
+\expandafter\def\csname r@outer.phi4-mini.math.rule\endcsname{+5.1}
+\expandafter\def\csname r@outer.phi4-mini.math.stretch\endcsname{+5.1}
+\expandafter\def\csname r@outer.phi4-mini.math.sum\endcsname{+7.3}
+\expandafter\def\csname r@outer.phi4-mini.mmlu.direct\endcsname{+7.2}
+\expandafter\def\csname r@outer.phi4-mini.mmlu.eligible\endcsname{2}
+\expandafter\def\csname r@outer.phi4-mini.mmlu.rule\endcsname{+3.8}
+\expandafter\def\csname r@outer.phi4-mini.mmlu.stretch\endcsname{+3.8}
+\expandafter\def\csname r@outer.phi4-mini.mmlu.sum\endcsname{+5.6}
+\expandafter\def\csname r@outer.qwen2.5-7b.bbeh.direct\endcsname{+8.6}
+\expandafter\def\csname r@outer.qwen2.5-7b.bbeh.eligible\endcsname{1}
+\expandafter\def\csname r@outer.qwen2.5-7b.bbeh.rule\endcsname{+2.6}
+\expandafter\def\csname r@outer.qwen2.5-7b.bbeh.stretch\endcsname{+4.9}
+\expandafter\def\csname r@outer.qwen2.5-7b.bbeh.sum\endcsname{+5.1}
+\expandafter\def\csname r@outer.qwen2.5-7b.math.direct\endcsname{+8.0}
+\expandafter\def\csname r@outer.qwen2.5-7b.math.eligible\endcsname{2}
+\expandafter\def\csname r@outer.qwen2.5-7b.math.rule\endcsname{$-$1.4}
+\expandafter\def\csname r@outer.qwen2.5-7b.math.stretch\endcsname{$-$1.4}
+\expandafter\def\csname r@outer.qwen2.5-7b.math.sum\endcsname{+4.3}
+\expandafter\def\csname r@outer.qwen2.5-7b.mmlu.direct\endcsname{+10.3}
+\expandafter\def\csname r@outer.qwen2.5-7b.mmlu.eligible\endcsname{2}
+\expandafter\def\csname r@outer.qwen2.5-7b.mmlu.rule\endcsname{+2.5}
+\expandafter\def\csname r@outer.qwen2.5-7b.mmlu.stretch\endcsname{+2.5}
+\expandafter\def\csname r@outer.qwen2.5-7b.mmlu.sum\endcsname{+6.9}
+\expandafter\def\csname r@outer.random.gain\endcsname{0.0}
+\expandafter\def\csname r@outer.random.gain.ci\endcsname{0.0 [$-$0.3, +0.2]}
+\expandafter\def\csname r@outer.recovered.ci\endcsname{39\% [30, 47]}
+\expandafter\def\csname r@outer.rule.gain\endcsname{+3.1}
+\expandafter\def\csname r@outer.rule.gain.ci\endcsname{+3.1 [+2.2, +4.0]}
+\expandafter\def\csname r@outer.samelayer\endcsname{6}
+\expandafter\def\csname r@outer.stretch.gain\endcsname{+3.9}
+\expandafter\def\csname r@outer.stretch.gain.ci\endcsname{+3.9 [+2.9, +4.8]}
+\expandafter\def\csname r@outer.sum.gain\endcsname{+5.4}
+\expandafter\def\csname r@outer.sum.gain.ci\endcsname{+5.4 [+4.6, +6.2]}
+\expandafter\def\csname r@outer.verdict.level\endcsname{55.3}
+\expandafter\def\csname r@outer.vs_paper.direct\endcsname{$-$1.5}
+\expandafter\def\csname r@outer.vs_paper.x11\endcsname{$-$0.1}
+\expandafter\def\csname r@outer.withpaper\endcsname{10}
 \expandafter\def\csname r@pairs.all\endcsname{27}
 \expandafter\def\csname r@pairs.norespond\endcsname{4}
 \expandafter\def\csname r@pairs.norespond.sig\endcsname{3}
 \expandafter\def\csname r@pairs.respond\endcsname{15}
 \expandafter\def\csname r@pairs.respond.sig\endcsname{12}
 \expandafter\def\csname r@pairs.stretched\endcsname{19}
-\expandafter\def\csname r@pool.cot.bon\endcsname{$-$1.7}
-\expandafter\def\csname r@pool.cot.bon.ci\endcsname{$-$1.7 [$-$2.6, $-$0.7]}
+\expandafter\def\csname r@pool.cot.bon\endcsname{$-$1.8}
+\expandafter\def\csname r@pool.cot.bon.ci\endcsname{$-$1.8 [$-$2.9, $-$0.7]}
+\expandafter\def\csname r@pool.cot.bon.k\endcsname{19}
 \expandafter\def\csname r@pool.cot.rank\endcsname{$-$0.9}
-\expandafter\def\csname r@pool.cot.rank.ci\endcsname{$-$0.9 [$-$1.5, $-$0.2]}
-\expandafter\def\csname r@pool.cot_sum.bon\endcsname{+4.9}
-\expandafter\def\csname r@pool.cot_sum.bon.ci\endcsname{+4.9 [+3.9, +5.8]}
-\expandafter\def\csname r@pool.cot_sum.rank\endcsname{+6.4}
-\expandafter\def\csname r@pool.cot_sum.rank.ci\endcsname{+6.4 [+5.7, +7.2]}
-\expandafter\def\csname r@pool.direct.bon\endcsname{+8.1}
-\expandafter\def\csname r@pool.direct.bon.ci\endcsname{+8.1 [+7.2, +9.1]}
-\expandafter\def\csname r@pool.direct.rank\endcsname{+9.3}
-\expandafter\def\csname r@pool.direct.rank.ci\endcsname{+9.3 [+8.5, +10.1]}
+\expandafter\def\csname r@pool.cot.rank.ci\endcsname{$-$0.9 [$-$1.8, $-$0.1]}
+\expandafter\def\csname r@pool.cot.rank.k\endcsname{19}
+\expandafter\def\csname r@pool.cot.rank_macro.ci\endcsname{$-$1.1 [$-$2.1, $-$0.2]}
+\expandafter\def\csname r@pool.cot_sum.bon\endcsname{+5.7}
+\expandafter\def\csname r@pool.cot_sum.bon.ci\endcsname{+5.7 [+4.2, +7.3]}
+\expandafter\def\csname r@pool.cot_sum.bon.k\endcsname{19}
+\expandafter\def\csname r@pool.cot_sum.rank\endcsname{+6.3}
+\expandafter\def\csname r@pool.cot_sum.rank.ci\endcsname{+6.3 [+5.1, +7.5]}
+\expandafter\def\csname r@pool.cot_sum.rank.k\endcsname{19}
+\expandafter\def\csname r@pool.cot_sum.rank_macro.ci\endcsname{+7.4 [+6.1, +8.8]}
+\expandafter\def\csname r@pool.direct.bon\endcsname{+8.9}
+\expandafter\def\csname r@pool.direct.bon.ci\endcsname{+8.9 [+7.1, +10.7]}
+\expandafter\def\csname r@pool.direct.bon.k\endcsname{19}
+\expandafter\def\csname r@pool.direct.rank\endcsname{+9.8}
+\expandafter\def\csname r@pool.direct.rank.ci\endcsname{+9.8 [+8.0, +11.5]}
+\expandafter\def\csname r@pool.direct.rank.k\endcsname{19}
+\expandafter\def\csname r@pool.direct.rank_macro.ci\endcsname{+11.1 [+9.4, +12.8]}
 \expandafter\def\csname r@pool.k\endcsname{19}
 \expandafter\def\csname r@pool.npairs\endcsname{19}
 \expandafter\def\csname r@pool.random.bon\endcsname{59.7}
-\expandafter\def\csname r@pool.sum.bon\endcsname{+5.4}
-\expandafter\def\csname r@pool.sum.bon.ci\endcsname{+5.4 [+4.7, +6.1]}
-\expandafter\def\csname r@pool.sum.rank\endcsname{+6.2}
-\expandafter\def\csname r@pool.sum.rank.ci\endcsname{+6.2 [+5.7, +6.7]}
+\expandafter\def\csname r@pool.recovered\endcsname{44}
+\expandafter\def\csname r@pool.recovered.ci\endcsname{44\% [38, 50]}
+\expandafter\def\csname r@pool.sum.bon\endcsname{+6.4}
+\expandafter\def\csname r@pool.sum.bon.ci\endcsname{+6.4 [+5.2, +7.8]}
+\expandafter\def\csname r@pool.sum.bon.k\endcsname{19}
+\expandafter\def\csname r@pool.sum.rank\endcsname{+6.5}
+\expandafter\def\csname r@pool.sum.rank.ci\endcsname{+6.5 [+5.5, +7.5]}
+\expandafter\def\csname r@pool.sum.rank.k\endcsname{19}
+\expandafter\def\csname r@pool.sum.rank_macro.ci\endcsname{+7.9 [+6.7, +9.0]}
 \expandafter\def\csname r@pool.verdict.bon\endcsname{61.6}
 \expandafter\def\csname r@pool.verdict.rank\endcsname{53.3}
-\expandafter\def\csname r@pool.x11.bon\endcsname{+2.5}
-\expandafter\def\csname r@pool.x11.bon.ci\endcsname{+2.5 [+2.0, +3.1]}
-\expandafter\def\csname r@pool.x11.rank\endcsname{+2.3}
-\expandafter\def\csname r@pool.x11.rank.ci\endcsname{+2.3 [+1.9, +2.7]}
-\expandafter\def\csname r@pool.x4.bon\endcsname{+1.2}
-\expandafter\def\csname r@pool.x4.bon.ci\endcsname{+1.2 [+0.8, +1.6]}
-\expandafter\def\csname r@pool.x4.rank\endcsname{+1.3}
-\expandafter\def\csname r@pool.x4.rank.ci\endcsname{+1.3 [+1.1, +1.6]}
-\expandafter\def\csname r@pool_unsolved.cot.bon\endcsname{$-$1.0}
-\expandafter\def\csname r@pool_unsolved.cot.bon.ci\endcsname{$-$1.0 [$-$2.2, +0.1]}
-\expandafter\def\csname r@pool_unsolved.cot.rank\endcsname{+0.2}
-\expandafter\def\csname r@pool_unsolved.cot.rank.ci\endcsname{+0.2 [$-$0.6, +1.0]}
-\expandafter\def\csname r@pool_unsolved.cot_sum.bon\endcsname{+5.1}
-\expandafter\def\csname r@pool_unsolved.cot_sum.bon.ci\endcsname{+5.1 [+3.9, +6.2]}
-\expandafter\def\csname r@pool_unsolved.cot_sum.rank\endcsname{+6.7}
-\expandafter\def\csname r@pool_unsolved.cot_sum.rank.ci\endcsname{+6.7 [+5.8, +7.6]}
-\expandafter\def\csname r@pool_unsolved.direct.bon\endcsname{+9.0}
-\expandafter\def\csname r@pool_unsolved.direct.bon.ci\endcsname{+9.0 [+7.8, +10.1]}
-\expandafter\def\csname r@pool_unsolved.direct.rank\endcsname{+9.7}
-\expandafter\def\csname r@pool_unsolved.direct.rank.ci\endcsname{+9.7 [+8.7, +10.6]}
+\expandafter\def\csname r@pool.x11.bon\endcsname{+4.2}
+\expandafter\def\csname r@pool.x11.bon.ci\endcsname{+4.2 [+3.1, +5.3]}
+\expandafter\def\csname r@pool.x11.bon.k\endcsname{19}
+\expandafter\def\csname r@pool.x11.rank\endcsname{+4.3}
+\expandafter\def\csname r@pool.x11.rank.ci\endcsname{+4.3 [+3.5, +5.0]}
+\expandafter\def\csname r@pool.x11.rank.k\endcsname{19}
+\expandafter\def\csname r@pool.x11.rank_macro.ci\endcsname{+5.1 [+4.3, +6.0]}
+\expandafter\def\csname r@pool.x4.bon\endcsname{+2.3}
+\expandafter\def\csname r@pool.x4.bon.ci\endcsname{+2.3 [+1.6, +3.0]}
+\expandafter\def\csname r@pool.x4.bon.k\endcsname{17}
+\expandafter\def\csname r@pool.x4.rank\endcsname{+2.2}
+\expandafter\def\csname r@pool.x4.rank.ci\endcsname{+2.2 [+1.8, +2.6]}
+\expandafter\def\csname r@pool.x4.rank.k\endcsname{17}
+\expandafter\def\csname r@pool.x4.rank_macro.ci\endcsname{+2.8 [+2.2, +3.4]}
+\expandafter\def\csname r@pool_unsolved.cot.bon\endcsname{$-$1.1}
+\expandafter\def\csname r@pool_unsolved.cot.bon.ci\endcsname{$-$1.1 [$-$2.4, +0.2]}
+\expandafter\def\csname r@pool_unsolved.cot.bon.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.cot.rank\endcsname{$-$0.2}
+\expandafter\def\csname r@pool_unsolved.cot.rank.ci\endcsname{$-$0.2 [$-$1.1, +0.8]}
+\expandafter\def\csname r@pool_unsolved.cot.rank.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.cot.rank_macro.ci\endcsname{$-$0.4 [$-$1.4, +0.7]}
+\expandafter\def\csname r@pool_unsolved.cot_sum.bon\endcsname{+6.0}
+\expandafter\def\csname r@pool_unsolved.cot_sum.bon.ci\endcsname{+6.0 [+4.3, +7.5]}
+\expandafter\def\csname r@pool_unsolved.cot_sum.bon.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.cot_sum.rank\endcsname{+6.6}
+\expandafter\def\csname r@pool_unsolved.cot_sum.rank.ci\endcsname{+6.6 [+5.2, +7.8]}
+\expandafter\def\csname r@pool_unsolved.cot_sum.rank.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.cot_sum.rank_macro.ci\endcsname{+7.6 [+6.2, +9.0]}
+\expandafter\def\csname r@pool_unsolved.direct.bon\endcsname{+9.6}
+\expandafter\def\csname r@pool_unsolved.direct.bon.ci\endcsname{+9.6 [+7.5, +11.5]}
+\expandafter\def\csname r@pool_unsolved.direct.bon.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.direct.rank\endcsname{+10.1}
+\expandafter\def\csname r@pool_unsolved.direct.rank.ci\endcsname{+10.1 [+8.3, +11.8]}
+\expandafter\def\csname r@pool_unsolved.direct.rank.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.direct.rank_macro.ci\endcsname{+11.5 [+9.8, +13.2]}
 \expandafter\def\csname r@pool_unsolved.k\endcsname{19}
 \expandafter\def\csname r@pool_unsolved.random.bon\endcsname{58.4}
-\expandafter\def\csname r@pool_unsolved.sum.bon\endcsname{+5.7}
-\expandafter\def\csname r@pool_unsolved.sum.bon.ci\endcsname{+5.7 [+4.9, +6.6]}
-\expandafter\def\csname r@pool_unsolved.sum.rank\endcsname{+6.2}
-\expandafter\def\csname r@pool_unsolved.sum.rank.ci\endcsname{+6.2 [+5.6, +6.8]}
+\expandafter\def\csname r@pool_unsolved.recovered\endcsname{41}
+\expandafter\def\csname r@pool_unsolved.recovered.ci\endcsname{41\% [35, 48]}
+\expandafter\def\csname r@pool_unsolved.sum.bon\endcsname{+6.6}
+\expandafter\def\csname r@pool_unsolved.sum.bon.ci\endcsname{+6.6 [+5.3, +7.9]}
+\expandafter\def\csname r@pool_unsolved.sum.bon.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.sum.rank\endcsname{+6.5}
+\expandafter\def\csname r@pool_unsolved.sum.rank.ci\endcsname{+6.5 [+5.5, +7.6]}
+\expandafter\def\csname r@pool_unsolved.sum.rank.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.sum.rank_macro.ci\endcsname{+7.8 [+6.6, +9.0]}
 \expandafter\def\csname r@pool_unsolved.verdict.bon\endcsname{58.3}
 \expandafter\def\csname r@pool_unsolved.verdict.rank\endcsname{50.8}
-\expandafter\def\csname r@pool_unsolved.x11.bon\endcsname{+2.4}
-\expandafter\def\csname r@pool_unsolved.x11.bon.ci\endcsname{+2.4 [+1.7, +3.1]}
-\expandafter\def\csname r@pool_unsolved.x11.rank\endcsname{+2.5}
-\expandafter\def\csname r@pool_unsolved.x11.rank.ci\endcsname{+2.5 [+2.0, +3.1]}
-\expandafter\def\csname r@pool_unsolved.x4.bon\endcsname{+1.1}
-\expandafter\def\csname r@pool_unsolved.x4.bon.ci\endcsname{+1.1 [+0.5, +1.6]}
-\expandafter\def\csname r@pool_unsolved.x4.rank\endcsname{+1.2}
-\expandafter\def\csname r@pool_unsolved.x4.rank.ci\endcsname{+1.2 [+0.9, +1.6]}
+\expandafter\def\csname r@pool_unsolved.x11.bon\endcsname{+4.2}
+\expandafter\def\csname r@pool_unsolved.x11.bon.ci\endcsname{+4.2 [+3.1, +5.3]}
+\expandafter\def\csname r@pool_unsolved.x11.bon.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.x11.rank\endcsname{+4.2}
+\expandafter\def\csname r@pool_unsolved.x11.rank.ci\endcsname{+4.2 [+3.4, +4.9]}
+\expandafter\def\csname r@pool_unsolved.x11.rank.k\endcsname{19}
+\expandafter\def\csname r@pool_unsolved.x11.rank_macro.ci\endcsname{+5.0 [+4.2, +5.9]}
+\expandafter\def\csname r@pool_unsolved.x4.bon\endcsname{+2.3}
+\expandafter\def\csname r@pool_unsolved.x4.bon.ci\endcsname{+2.3 [+1.5, +3.1]}
+\expandafter\def\csname r@pool_unsolved.x4.bon.k\endcsname{17}
+\expandafter\def\csname r@pool_unsolved.x4.rank\endcsname{+2.2}
+\expandafter\def\csname r@pool_unsolved.x4.rank.ci\endcsname{+2.2 [+1.7, +2.6]}
+\expandafter\def\csname r@pool_unsolved.x4.rank.k\endcsname{17}
+\expandafter\def\csname r@pool_unsolved.x4.rank_macro.ci\endcsname{+2.7 [+2.1, +3.3]}
 \expandafter\def\csname r@scale.1b.bbeh.gap\endcsname{+7.9}
 \expandafter\def\csname r@scale.1b.bbeh.says\endcsname{49.2}
 \expandafter\def\csname r@scale.1b.bbeh.solved\endcsname{5}
@@ -318,146 +694,246 @@
 \expandafter\def\csname r@share.null.lo\endcsname{69}
 \expandafter\def\csname r@share.verdict.hi\endcsname{86}
 \expandafter\def\csname r@share.verdict.lo\endcsname{75}
-\expandafter\def\csname r@sm.bbeh.qwen.cot.bon\endcsname{$-$0.9}
-\expandafter\def\csname r@sm.bbeh.qwen.cot.bon.ci\endcsname{$-$0.9 [$-$2.4, +0.7]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.bon\endcsname{$-$1.1}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.bon.ci\endcsname{$-$1.1 [$-$2.9, +0.6]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.bon.k\endcsname{6}
 \expandafter\def\csname r@sm.bbeh.qwen.cot.rank\endcsname{$-$0.5}
-\expandafter\def\csname r@sm.bbeh.qwen.cot.rank.ci\endcsname{$-$0.5 [$-$1.6, +0.7]}
-\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.bon\endcsname{+0.9}
-\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.bon.ci\endcsname{+0.9 [$-$0.7, +2.6]}
-\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank\endcsname{+1.7}
-\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank.ci\endcsname{+1.7 [+0.4, +2.9]}
-\expandafter\def\csname r@sm.bbeh.qwen.direct.bon\endcsname{+2.3}
-\expandafter\def\csname r@sm.bbeh.qwen.direct.bon.ci\endcsname{+2.3 [+0.5, +4.0]}
-\expandafter\def\csname r@sm.bbeh.qwen.direct.rank\endcsname{+3.1}
-\expandafter\def\csname r@sm.bbeh.qwen.direct.rank.ci\endcsname{+3.1 [+1.7, +4.6]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.rank.ci\endcsname{$-$0.5 [$-$1.8, +0.8]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.cot.rank_macro.ci\endcsname{+0.3 [$-$0.5, +1.1]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.bon\endcsname{+0.7}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.bon.ci\endcsname{+0.7 [$-$1.6, +2.9]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.bon.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank\endcsname{+1.6}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank.ci\endcsname{+1.6 [$-$0.2, +3.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.cot_sum.rank_macro.ci\endcsname{+1.4 [+0.4, +2.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.bon\endcsname{+1.9}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.bon.ci\endcsname{+1.9 [$-$0.7, +4.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.bon.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.rank\endcsname{+2.9}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.rank.ci\endcsname{+2.9 [+0.7, +5.2]}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.direct.rank_macro.ci\endcsname{+1.3 [+0.2, +2.5]}
 \expandafter\def\csname r@sm.bbeh.qwen.k\endcsname{6}
 \expandafter\def\csname r@sm.bbeh.qwen.random.bon\endcsname{47.5}
-\expandafter\def\csname r@sm.bbeh.qwen.sum.bon\endcsname{+1.9}
-\expandafter\def\csname r@sm.bbeh.qwen.sum.bon.ci\endcsname{+1.9 [+0.7, +3.2]}
-\expandafter\def\csname r@sm.bbeh.qwen.sum.rank\endcsname{+2.1}
-\expandafter\def\csname r@sm.bbeh.qwen.sum.rank.ci\endcsname{+2.1 [+1.1, +3.0]}
+\expandafter\def\csname r@sm.bbeh.qwen.recovered\endcsname{20}
+\expandafter\def\csname r@sm.bbeh.qwen.recovered.ci\endcsname{20\% [-43, 53]}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.bon\endcsname{+1.8}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.bon.ci\endcsname{+1.8 [+0.3, +3.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.bon.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.rank\endcsname{+2.0}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.rank.ci\endcsname{+2.0 [+0.6, +3.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.sum.rank_macro.ci\endcsname{+0.9 [+0.3, +1.6]}
 \expandafter\def\csname r@sm.bbeh.qwen.verdict.bon\endcsname{50.3}
 \expandafter\def\csname r@sm.bbeh.qwen.verdict.rank\endcsname{53.6}
-\expandafter\def\csname r@sm.bbeh.qwen.x11.bon\endcsname{+1.5}
-\expandafter\def\csname r@sm.bbeh.qwen.x11.bon.ci\endcsname{+1.5 [+0.3, +2.7]}
-\expandafter\def\csname r@sm.bbeh.qwen.x11.rank\endcsname{+0.8}
-\expandafter\def\csname r@sm.bbeh.qwen.x11.rank.ci\endcsname{+0.8 [$-$0.1, +1.7]}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.bon\endcsname{+1.4}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.bon.ci\endcsname{+1.4 [$-$0.1, +2.9]}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.bon.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.rank\endcsname{+0.6}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.rank.ci\endcsname{+0.6 [$-$0.5, +1.7]}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.x11.rank_macro.ci\endcsname{+0.3 [$-$0.3, +0.9]}
 \expandafter\def\csname r@sm.bbeh.qwen.x4.bon\endcsname{+1.3}
-\expandafter\def\csname r@sm.bbeh.qwen.x4.bon.ci\endcsname{+1.3 [+0.6, +2.0]}
-\expandafter\def\csname r@sm.bbeh.qwen.x4.rank\endcsname{+0.9}
-\expandafter\def\csname r@sm.bbeh.qwen.x4.rank.ci\endcsname{+0.9 [+0.4, +1.4]}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.bon.ci\endcsname{+1.3 [+0.5, +2.1]}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.bon.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.rank\endcsname{+1.1}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.rank.ci\endcsname{+1.1 [+0.5, +1.7]}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.rank.k\endcsname{6}
+\expandafter\def\csname r@sm.bbeh.qwen.x4.rank_macro.ci\endcsname{+0.4 [+0.1, +0.8]}
 \expandafter\def\csname r@sm.math.olmo.cot.bon\endcsname{$-$1.5}
-\expandafter\def\csname r@sm.math.olmo.cot.bon.ci\endcsname{$-$1.5 [$-$6.0, +3.0]}
-\expandafter\def\csname r@sm.math.olmo.cot.rank\endcsname{$-$0.8}
-\expandafter\def\csname r@sm.math.olmo.cot.rank.ci\endcsname{$-$0.8 [$-$3.3, +1.7]}
-\expandafter\def\csname r@sm.math.olmo.cot_sum.bon\endcsname{$-$1.4}
-\expandafter\def\csname r@sm.math.olmo.cot_sum.bon.ci\endcsname{$-$1.4 [$-$5.4, +2.6]}
-\expandafter\def\csname r@sm.math.olmo.cot_sum.rank\endcsname{+0.0}
-\expandafter\def\csname r@sm.math.olmo.cot_sum.rank.ci\endcsname{+0.0 [$-$2.2, +2.2]}
-\expandafter\def\csname r@sm.math.olmo.direct.bon\endcsname{$-$3.6}
-\expandafter\def\csname r@sm.math.olmo.direct.bon.ci\endcsname{$-$3.6 [$-$7.6, +0.4]}
-\expandafter\def\csname r@sm.math.olmo.direct.rank\endcsname{$-$2.3}
-\expandafter\def\csname r@sm.math.olmo.direct.rank.ci\endcsname{$-$2.3 [$-$4.3, $-$0.2]}
+\expandafter\def\csname r@sm.math.olmo.cot.bon.ci\endcsname{$-$1.5 [$-$5.7, +2.7]}
+\expandafter\def\csname r@sm.math.olmo.cot.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.cot.rank\endcsname{$-$1.5}
+\expandafter\def\csname r@sm.math.olmo.cot.rank.ci\endcsname{$-$1.5 [$-$4.1, +1.0]}
+\expandafter\def\csname r@sm.math.olmo.cot.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.cot.rank_macro.ci\endcsname{$-$1.9 [$-$4.4, +0.6]}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.bon\endcsname{$-$2.3}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.bon.ci\endcsname{$-$2.3 [$-$7.0, +2.4]}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.rank\endcsname{$-$1.6}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.rank.ci\endcsname{$-$1.6 [$-$3.9, +0.8]}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.cot_sum.rank_macro.ci\endcsname{$-$1.6 [$-$4.2, +0.9]}
+\expandafter\def\csname r@sm.math.olmo.direct.bon\endcsname{$-$4.5}
+\expandafter\def\csname r@sm.math.olmo.direct.bon.ci\endcsname{$-$4.5 [$-$9.9, +0.8]}
+\expandafter\def\csname r@sm.math.olmo.direct.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.direct.rank\endcsname{$-$4.1}
+\expandafter\def\csname r@sm.math.olmo.direct.rank.ci\endcsname{$-$4.1 [$-$7.4, $-$0.7]}
+\expandafter\def\csname r@sm.math.olmo.direct.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.direct.rank_macro.ci\endcsname{$-$3.9 [$-$7.3, $-$0.3]}
 \expandafter\def\csname r@sm.math.olmo.k\endcsname{5}
 \expandafter\def\csname r@sm.math.olmo.random.bon\endcsname{36.0}
-\expandafter\def\csname r@sm.math.olmo.sum.bon\endcsname{$-$2.8}
-\expandafter\def\csname r@sm.math.olmo.sum.bon.ci\endcsname{$-$2.8 [$-$5.2, $-$0.3]}
-\expandafter\def\csname r@sm.math.olmo.sum.rank\endcsname{$-$0.7}
-\expandafter\def\csname r@sm.math.olmo.sum.rank.ci\endcsname{$-$0.7 [$-$2.0, +0.6]}
+\expandafter\def\csname r@sm.math.olmo.recovered\endcsname{29}
+\expandafter\def\csname r@sm.math.olmo.recovered.ci\endcsname{29\% [-27, 78]}
+\expandafter\def\csname r@sm.math.olmo.sum.bon\endcsname{$-$2.9}
+\expandafter\def\csname r@sm.math.olmo.sum.bon.ci\endcsname{$-$2.9 [$-$6.2, +0.4]}
+\expandafter\def\csname r@sm.math.olmo.sum.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.sum.rank\endcsname{$-$1.4}
+\expandafter\def\csname r@sm.math.olmo.sum.rank.ci\endcsname{$-$1.4 [$-$3.5, +0.6]}
+\expandafter\def\csname r@sm.math.olmo.sum.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.sum.rank_macro.ci\endcsname{$-$1.5 [$-$3.7, +0.7]}
 \expandafter\def\csname r@sm.math.olmo.verdict.bon\endcsname{47.1}
 \expandafter\def\csname r@sm.math.olmo.verdict.rank\endcsname{59.9}
-\expandafter\def\csname r@sm.math.olmo.x11.bon\endcsname{$-$1.5}
-\expandafter\def\csname r@sm.math.olmo.x11.bon.ci\endcsname{$-$1.5 [$-$4.1, +1.1]}
-\expandafter\def\csname r@sm.math.olmo.x11.rank\endcsname{$-$1.0}
-\expandafter\def\csname r@sm.math.olmo.x11.rank.ci\endcsname{$-$1.0 [$-$2.3, +0.2]}
-\expandafter\def\csname r@sm.math.olmo.x4.bon\endcsname{$-$1.3}
-\expandafter\def\csname r@sm.math.olmo.x4.bon.ci\endcsname{$-$1.3 [$-$2.8, +0.2]}
-\expandafter\def\csname r@sm.math.olmo.x4.rank\endcsname{$-$0.4}
-\expandafter\def\csname r@sm.math.olmo.x4.rank.ci\endcsname{$-$0.4 [$-$1.2, +0.5]}
-\expandafter\def\csname r@sm.math.qwen.cot.bon\endcsname{$-$4.7}
-\expandafter\def\csname r@sm.math.qwen.cot.bon.ci\endcsname{$-$4.7 [$-$7.5, $-$1.9]}
-\expandafter\def\csname r@sm.math.qwen.cot.rank\endcsname{$-$1.7}
-\expandafter\def\csname r@sm.math.qwen.cot.rank.ci\endcsname{$-$1.7 [$-$3.2, $-$0.2]}
-\expandafter\def\csname r@sm.math.qwen.cot_sum.bon\endcsname{$-$0.2}
-\expandafter\def\csname r@sm.math.qwen.cot_sum.bon.ci\endcsname{$-$0.2 [$-$3.1, +2.7]}
-\expandafter\def\csname r@sm.math.qwen.cot_sum.rank\endcsname{+1.1}
-\expandafter\def\csname r@sm.math.qwen.cot_sum.rank.ci\endcsname{+1.1 [$-$0.5, +2.8]}
-\expandafter\def\csname r@sm.math.qwen.direct.bon\endcsname{+0.6}
-\expandafter\def\csname r@sm.math.qwen.direct.bon.ci\endcsname{+0.6 [$-$2.0, +3.2]}
-\expandafter\def\csname r@sm.math.qwen.direct.rank\endcsname{+2.6}
-\expandafter\def\csname r@sm.math.qwen.direct.rank.ci\endcsname{+2.6 [+1.1, +4.2]}
+\expandafter\def\csname r@sm.math.olmo.x11.bon\endcsname{$-$1.9}
+\expandafter\def\csname r@sm.math.olmo.x11.bon.ci\endcsname{$-$1.9 [$-$5.3, +1.6]}
+\expandafter\def\csname r@sm.math.olmo.x11.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.x11.rank\endcsname{$-$1.2}
+\expandafter\def\csname r@sm.math.olmo.x11.rank.ci\endcsname{$-$1.2 [$-$2.8, +0.5]}
+\expandafter\def\csname r@sm.math.olmo.x11.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.x11.rank_macro.ci\endcsname{$-$1.3 [$-$3.2, +0.7]}
+\expandafter\def\csname r@sm.math.olmo.x4.bon\endcsname{$-$1.2}
+\expandafter\def\csname r@sm.math.olmo.x4.bon.ci\endcsname{$-$1.2 [$-$3.0, +0.5]}
+\expandafter\def\csname r@sm.math.olmo.x4.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.x4.rank\endcsname{$-$0.3}
+\expandafter\def\csname r@sm.math.olmo.x4.rank.ci\endcsname{$-$0.3 [$-$1.2, +0.7]}
+\expandafter\def\csname r@sm.math.olmo.x4.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.olmo.x4.rank_macro.ci\endcsname{$-$0.3 [$-$1.3, +0.7]}
+\expandafter\def\csname r@sm.math.qwen.cot.bon\endcsname{$-$3.8}
+\expandafter\def\csname r@sm.math.qwen.cot.bon.ci\endcsname{$-$3.8 [$-$6.3, $-$1.2]}
+\expandafter\def\csname r@sm.math.qwen.cot.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.cot.rank\endcsname{$-$1.5}
+\expandafter\def\csname r@sm.math.qwen.cot.rank.ci\endcsname{$-$1.5 [$-$3.0, $-$0.0]}
+\expandafter\def\csname r@sm.math.qwen.cot.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.cot.rank_macro.ci\endcsname{$-$1.2 [$-$2.7, +0.4]}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.bon\endcsname{$-$0.6}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.bon.ci\endcsname{$-$0.6 [$-$3.6, +2.5]}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.rank\endcsname{+0.7}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.rank.ci\endcsname{+0.7 [$-$1.4, +2.9]}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.cot_sum.rank_macro.ci\endcsname{+0.8 [$-$1.3, +3.0]}
+\expandafter\def\csname r@sm.math.qwen.direct.bon\endcsname{+0.2}
+\expandafter\def\csname r@sm.math.qwen.direct.bon.ci\endcsname{+0.2 [$-$3.3, +3.7]}
+\expandafter\def\csname r@sm.math.qwen.direct.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.direct.rank\endcsname{+2.4}
+\expandafter\def\csname r@sm.math.qwen.direct.rank.ci\endcsname{+2.4 [$-$0.0, +4.8]}
+\expandafter\def\csname r@sm.math.qwen.direct.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.direct.rank_macro.ci\endcsname{+2.4 [+0.1, +4.8]}
 \expandafter\def\csname r@sm.math.qwen.k\endcsname{5}
 \expandafter\def\csname r@sm.math.qwen.random.bon\endcsname{56.3}
-\expandafter\def\csname r@sm.math.qwen.sum.bon\endcsname{+1.1}
-\expandafter\def\csname r@sm.math.qwen.sum.bon.ci\endcsname{+1.1 [$-$0.9, +3.1]}
+\expandafter\def\csname r@sm.math.qwen.recovered\endcsname{14}
+\expandafter\def\csname r@sm.math.qwen.recovered.ci\endcsname{14\% [-224, 81]}
+\expandafter\def\csname r@sm.math.qwen.sum.bon\endcsname{+0.8}
+\expandafter\def\csname r@sm.math.qwen.sum.bon.ci\endcsname{+0.8 [$-$1.4, +3.3]}
+\expandafter\def\csname r@sm.math.qwen.sum.bon.k\endcsname{5}
 \expandafter\def\csname r@sm.math.qwen.sum.rank\endcsname{+2.6}
-\expandafter\def\csname r@sm.math.qwen.sum.rank.ci\endcsname{+2.6 [+1.7, +3.6]}
+\expandafter\def\csname r@sm.math.qwen.sum.rank.ci\endcsname{+2.6 [+1.1, +4.0]}
+\expandafter\def\csname r@sm.math.qwen.sum.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.sum.rank_macro.ci\endcsname{+2.5 [+1.1, +4.0]}
 \expandafter\def\csname r@sm.math.qwen.verdict.bon\endcsname{63.6}
 \expandafter\def\csname r@sm.math.qwen.verdict.rank\endcsname{58.3}
-\expandafter\def\csname r@sm.math.qwen.x11.bon\endcsname{+0.9}
-\expandafter\def\csname r@sm.math.qwen.x11.bon.ci\endcsname{+0.9 [$-$1.3, +3.2]}
-\expandafter\def\csname r@sm.math.qwen.x11.rank\endcsname{+1.4}
-\expandafter\def\csname r@sm.math.qwen.x11.rank.ci\endcsname{+1.4 [+0.3, +2.6]}
-\expandafter\def\csname r@sm.math.qwen.x4.bon\endcsname{+0.6}
-\expandafter\def\csname r@sm.math.qwen.x4.bon.ci\endcsname{+0.6 [$-$0.7, +1.9]}
-\expandafter\def\csname r@sm.math.qwen.x4.rank\endcsname{+1.6}
-\expandafter\def\csname r@sm.math.qwen.x4.rank.ci\endcsname{+1.6 [+1.0, +2.2]}
-\expandafter\def\csname r@sm.mmlu.olmo.cot.bon\endcsname{+2.3}
-\expandafter\def\csname r@sm.mmlu.olmo.cot.bon.ci\endcsname{+2.3 [$-$0.5, +5.1]}
-\expandafter\def\csname r@sm.mmlu.olmo.cot.rank\endcsname{+2.1}
-\expandafter\def\csname r@sm.mmlu.olmo.cot.rank.ci\endcsname{+2.1 [+0.4, +3.8]}
-\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.bon\endcsname{+1.0}
-\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.bon.ci\endcsname{+1.0 [$-$1.7, +3.8]}
+\expandafter\def\csname r@sm.math.qwen.x11.bon\endcsname{+0.3}
+\expandafter\def\csname r@sm.math.qwen.x11.bon.ci\endcsname{+0.3 [$-$2.6, +3.0]}
+\expandafter\def\csname r@sm.math.qwen.x11.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.x11.rank\endcsname{+0.3}
+\expandafter\def\csname r@sm.math.qwen.x11.rank.ci\endcsname{+0.3 [$-$1.4, +2.2]}
+\expandafter\def\csname r@sm.math.qwen.x11.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.x11.rank_macro.ci\endcsname{+0.4 [$-$1.4, +2.2]}
+\expandafter\def\csname r@sm.math.qwen.x4.bon\endcsname{+1.0}
+\expandafter\def\csname r@sm.math.qwen.x4.bon.ci\endcsname{+1.0 [$-$0.7, +2.7]}
+\expandafter\def\csname r@sm.math.qwen.x4.bon.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.x4.rank\endcsname{+2.2}
+\expandafter\def\csname r@sm.math.qwen.x4.rank.ci\endcsname{+2.2 [+1.2, +3.2]}
+\expandafter\def\csname r@sm.math.qwen.x4.rank.k\endcsname{5}
+\expandafter\def\csname r@sm.math.qwen.x4.rank_macro.ci\endcsname{+2.1 [+1.2, +3.1]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.bon\endcsname{+3.1}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.bon.ci\endcsname{+3.1 [+0.1, +6.0]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.rank\endcsname{+1.9}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.rank.ci\endcsname{+1.9 [$-$0.0, +3.9]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.cot.rank_macro.ci\endcsname{+2.0 [+0.0, +4.0]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.bon\endcsname{+0.8}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.bon.ci\endcsname{+0.8 [$-$2.2, +4.0]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.bon.k\endcsname{4}
 \expandafter\def\csname r@sm.mmlu.olmo.cot_sum.rank\endcsname{+1.5}
-\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.rank.ci\endcsname{+1.5 [$-$0.0, +3.1]}
-\expandafter\def\csname r@sm.mmlu.olmo.direct.bon\endcsname{+1.4}
-\expandafter\def\csname r@sm.mmlu.olmo.direct.bon.ci\endcsname{+1.4 [$-$1.4, +4.2]}
-\expandafter\def\csname r@sm.mmlu.olmo.direct.rank\endcsname{+1.0}
-\expandafter\def\csname r@sm.mmlu.olmo.direct.rank.ci\endcsname{+1.0 [$-$0.9, +2.8]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.rank.ci\endcsname{+1.5 [$-$0.6, +3.7]}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.cot_sum.rank_macro.ci\endcsname{+1.4 [$-$0.5, +3.4]}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.bon\endcsname{+1.0}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.bon.ci\endcsname{+1.0 [$-$2.6, +4.7]}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.rank\endcsname{+0.5}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.rank.ci\endcsname{+0.5 [$-$2.2, +3.3]}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.direct.rank_macro.ci\endcsname{+0.8 [$-$1.8, +3.4]}
 \expandafter\def\csname r@sm.mmlu.olmo.k\endcsname{4}
 \expandafter\def\csname r@sm.mmlu.olmo.random.bon\endcsname{43.2}
-\expandafter\def\csname r@sm.mmlu.olmo.sum.bon\endcsname{+0.7}
-\expandafter\def\csname r@sm.mmlu.olmo.sum.bon.ci\endcsname{+0.7 [$-$1.4, +2.8]}
+\expandafter\def\csname r@sm.mmlu.olmo.recovered\endcsname{-13}
+\expandafter\def\csname r@sm.mmlu.olmo.recovered.ci\endcsname{-13\% [-371, 572]}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.bon\endcsname{+0.4}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.bon.ci\endcsname{+0.4 [$-$2.1, +3.1]}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.bon.k\endcsname{4}
 \expandafter\def\csname r@sm.mmlu.olmo.sum.rank\endcsname{+0.9}
-\expandafter\def\csname r@sm.mmlu.olmo.sum.rank.ci\endcsname{+0.9 [$-$0.2, +2.0]}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.rank.ci\endcsname{+0.9 [$-$0.7, +2.7]}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.sum.rank_macro.ci\endcsname{+1.0 [$-$0.6, +2.7]}
 \expandafter\def\csname r@sm.mmlu.olmo.verdict.bon\endcsname{41.7}
 \expandafter\def\csname r@sm.mmlu.olmo.verdict.rank\endcsname{50.8}
-\expandafter\def\csname r@sm.mmlu.olmo.x11.bon\endcsname{$-$0.5}
-\expandafter\def\csname r@sm.mmlu.olmo.x11.bon.ci\endcsname{$-$0.5 [$-$2.3, +1.4]}
-\expandafter\def\csname r@sm.mmlu.olmo.x11.rank\endcsname{+0.5}
-\expandafter\def\csname r@sm.mmlu.olmo.x11.rank.ci\endcsname{+0.5 [$-$0.4, +1.4]}
-\expandafter\def\csname r@sm.mmlu.olmo.x4.bon\endcsname{+0.6}
-\expandafter\def\csname r@sm.mmlu.olmo.x4.bon.ci\endcsname{+0.6 [$-$0.6, +1.7]}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.bon\endcsname{$-$1.2}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.bon.ci\endcsname{$-$1.2 [$-$3.5, +1.1]}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.rank\endcsname{$-$0.1}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.rank.ci\endcsname{$-$0.1 [$-$1.5, +1.3]}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.x11.rank_macro.ci\endcsname{+0.1 [$-$1.2, +1.4]}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.bon\endcsname{+0.8}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.bon.ci\endcsname{+0.8 [$-$0.5, +2.1]}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.bon.k\endcsname{4}
 \expandafter\def\csname r@sm.mmlu.olmo.x4.rank\endcsname{+0.2}
-\expandafter\def\csname r@sm.mmlu.olmo.x4.rank.ci\endcsname{+0.2 [$-$0.3, +0.7]}
-\expandafter\def\csname r@sm.mmlu.qwen.cot.bon\endcsname{+2.1}
-\expandafter\def\csname r@sm.mmlu.qwen.cot.bon.ci\endcsname{+2.1 [$-$0.7, +4.9]}
-\expandafter\def\csname r@sm.mmlu.qwen.cot.rank\endcsname{+1.5}
-\expandafter\def\csname r@sm.mmlu.qwen.cot.rank.ci\endcsname{+1.5 [$-$0.1, +3.1]}
-\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.bon\endcsname{+0.1}
-\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.bon.ci\endcsname{+0.1 [$-$2.7, +3.0]}
-\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank\endcsname{+1.2}
-\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank.ci\endcsname{+1.2 [$-$0.6, +2.9]}
-\expandafter\def\csname r@sm.mmlu.qwen.direct.bon\endcsname{+0.2}
-\expandafter\def\csname r@sm.mmlu.qwen.direct.bon.ci\endcsname{+0.2 [$-$3.0, +3.3]}
-\expandafter\def\csname r@sm.mmlu.qwen.direct.rank\endcsname{+2.2}
-\expandafter\def\csname r@sm.mmlu.qwen.direct.rank.ci\endcsname{+2.2 [+0.3, +4.1]}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.rank.ci\endcsname{+0.2 [$-$0.4, +0.9]}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.olmo.x4.rank_macro.ci\endcsname{+0.3 [$-$0.4, +1.1]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.bon\endcsname{+2.3}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.bon.ci\endcsname{+2.3 [$-$0.8, +5.5]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.rank\endcsname{+1.9}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.rank.ci\endcsname{+1.9 [+0.3, +3.5]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.cot.rank_macro.ci\endcsname{+2.2 [+0.6, +3.9]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.bon\endcsname{$-$0.8}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.bon.ci\endcsname{$-$0.8 [$-$4.0, +2.3]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank\endcsname{+1.1}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank.ci\endcsname{+1.1 [$-$1.2, +3.4]}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.cot_sum.rank_macro.ci\endcsname{+0.8 [$-$1.4, +3.2]}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.bon\endcsname{$-$0.2}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.bon.ci\endcsname{$-$0.2 [$-$4.3, +3.9]}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.rank\endcsname{+1.9}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.rank.ci\endcsname{+1.9 [$-$1.1, +5.1]}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.direct.rank_macro.ci\endcsname{+1.6 [$-$1.4, +4.8]}
 \expandafter\def\csname r@sm.mmlu.qwen.k\endcsname{4}
 \expandafter\def\csname r@sm.mmlu.qwen.random.bon\endcsname{48.2}
-\expandafter\def\csname r@sm.mmlu.qwen.sum.bon\endcsname{$-$1.7}
-\expandafter\def\csname r@sm.mmlu.qwen.sum.bon.ci\endcsname{$-$1.7 [$-$4.1, +0.7]}
-\expandafter\def\csname r@sm.mmlu.qwen.sum.rank\endcsname{+0.7}
-\expandafter\def\csname r@sm.mmlu.qwen.sum.rank.ci\endcsname{+0.7 [$-$0.5, +1.9]}
+\expandafter\def\csname r@sm.mmlu.qwen.recovered\endcsname{1}
+\expandafter\def\csname r@sm.mmlu.qwen.recovered.ci\endcsname{1\% [-407, 444]}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.bon\endcsname{$-$2.0}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.bon.ci\endcsname{$-$2.0 [$-$4.7, +0.7]}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.rank\endcsname{+0.4}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.rank.ci\endcsname{+0.4 [$-$1.5, +2.3]}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.sum.rank_macro.ci\endcsname{0.0 [$-$1.9, +1.8]}
 \expandafter\def\csname r@sm.mmlu.qwen.verdict.bon\endcsname{44.4}
 \expandafter\def\csname r@sm.mmlu.qwen.verdict.rank\endcsname{46.5}
-\expandafter\def\csname r@sm.mmlu.qwen.x11.bon\endcsname{$-$1.2}
-\expandafter\def\csname r@sm.mmlu.qwen.x11.bon.ci\endcsname{$-$1.2 [$-$3.5, +1.2]}
-\expandafter\def\csname r@sm.mmlu.qwen.x11.rank\endcsname{+0.2}
-\expandafter\def\csname r@sm.mmlu.qwen.x11.rank.ci\endcsname{+0.2 [$-$1.1, +1.5]}
-\expandafter\def\csname r@sm.mmlu.qwen.x4.bon\endcsname{$-$0.7}
-\expandafter\def\csname r@sm.mmlu.qwen.x4.bon.ci\endcsname{$-$0.7 [$-$2.2, +0.9]}
-\expandafter\def\csname r@sm.mmlu.qwen.x4.rank\endcsname{+0.4}
-\expandafter\def\csname r@sm.mmlu.qwen.x4.rank.ci\endcsname{+0.4 [$-$0.3, +1.1]}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.bon\endcsname{$-$1.3}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.bon.ci\endcsname{$-$1.3 [$-$4.0, +1.2]}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.rank\endcsname{0.0}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.rank.ci\endcsname{0.0 [$-$1.6, +1.6]}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.x11.rank_macro.ci\endcsname{$-$0.1 [$-$1.7, +1.6]}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.bon\endcsname{$-$1.0}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.bon.ci\endcsname{$-$1.0 [$-$2.7, +0.8]}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.bon.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.rank\endcsname{+0.3}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.rank.ci\endcsname{+0.3 [$-$0.5, +1.1]}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.rank.k\endcsname{4}
+\expandafter\def\csname r@sm.mmlu.qwen.x4.rank_macro.ci\endcsname{$-$0.1 [$-$0.9, +0.8]}
 \expandafter\def\csname r@split.sd.hi\endcsname{4.2}
 \expandafter\def\csname r@split.sd.lo\endcsname{0.3}
 \expandafter\def\csname r@src.dir.above\endcsname{11}
@@ -484,3 +960,103 @@
 \expandafter\def\csname r@strict.x11.rank.ci\endcsname{+5.0 [+1.7, +8.4]}
 \expandafter\def\csname r@strict.x4.rank\endcsname{+4.8}
 \expandafter\def\csname r@strict.x4.rank.ci\endcsname{+4.8 [+2.5, +7.4]}
+\expandafter\def\csname r@surf.dir_resid.gain.all\endcsname{+4.7}
+\expandafter\def\csname r@surf.dir_resid.gain.all.ci\endcsname{+4.7 [+2.9, +6.5]}
+\expandafter\def\csname r@surf.dir_resid.gain.diff\endcsname{+5.9}
+\expandafter\def\csname r@surf.dir_resid.gain.diff.ci\endcsname{+5.9 [+4.0, +7.7]}
+\expandafter\def\csname r@surf.dir_resid.gain.same\endcsname{$-$2.1}
+\expandafter\def\csname r@surf.dir_resid.gain.same.ci\endcsname{$-$2.1 [$-$4.3, +0.2]}
+\expandafter\def\csname r@surf.dir_resid.level.all\endcsname{58.1}
+\expandafter\def\csname r@surf.dir_resid.level.all.ci\endcsname{58.1 [56.4, 59.9]}
+\expandafter\def\csname r@surf.dir_resid.level.diff\endcsname{58.6}
+\expandafter\def\csname r@surf.dir_resid.level.diff.ci\endcsname{58.6 [56.9, 60.4]}
+\expandafter\def\csname r@surf.dir_resid.level.same\endcsname{53.7}
+\expandafter\def\csname r@surf.dir_resid.level.same.ci\endcsname{53.7 [51.7, 55.9]}
+\expandafter\def\csname r@surf.direct.gain.all\endcsname{+9.8}
+\expandafter\def\csname r@surf.direct.gain.all.ci\endcsname{+9.8 [+8.0, +11.5]}
+\expandafter\def\csname r@surf.direct.gain.diff\endcsname{+11.4}
+\expandafter\def\csname r@surf.direct.gain.diff.ci\endcsname{+11.4 [+9.7, +13.3]}
+\expandafter\def\csname r@surf.direct.gain.same\endcsname{+2.0}
+\expandafter\def\csname r@surf.direct.gain.same.ci\endcsname{+2.0 [$-$0.2, +4.4]}
+\expandafter\def\csname r@surf.direct.level.all\endcsname{63.1}
+\expandafter\def\csname r@surf.direct.level.all.ci\endcsname{63.1 [61.4, 64.8]}
+\expandafter\def\csname r@surf.direct.level.diff\endcsname{64.2}
+\expandafter\def\csname r@surf.direct.level.diff.ci\endcsname{64.2 [62.5, 65.9]}
+\expandafter\def\csname r@surf.direct.level.same\endcsname{57.8}
+\expandafter\def\csname r@surf.direct.level.same.ci\endcsname{57.8 [55.6, 60.2]}
+\expandafter\def\csname r@surf.level.bbeh\endcsname{54.1}
+\expandafter\def\csname r@surf.level.math\endcsname{70.1}
+\expandafter\def\csname r@surf.level.mmlu\endcsname{65.1}
+\expandafter\def\csname r@surf.r2.hi\endcsname{84}
+\expandafter\def\csname r@surf.r2.lo\endcsname{44}
+\expandafter\def\csname r@surf.resid_kept.all\endcsname{49}
+\expandafter\def\csname r@surf.resid_kept.all.ci\endcsname{49\% [34, 61]}
+\expandafter\def\csname r@surf.resid_kept.diff\endcsname{51}
+\expandafter\def\csname r@surf.resid_kept.diff.ci\endcsname{51\% [39, 62]}
+\expandafter\def\csname r@surf.resid_kept.same\endcsname{-101}
+\expandafter\def\csname r@surf.resid_kept.same.ci\endcsname{-101\% [-1369, 766]}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.resid_minus_verdict\endcsname{$-$0.6 [$-$1.4, +0.1]}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.surface\endcsname{53.2}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.surface.ci\endcsname{53.2 [51.0, 55.3]}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.verdict\endcsname{53.6}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.verdict.ci\endcsname{53.6 [51.7, 55.5]}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.verdict_resid\endcsname{53.0}
+\expandafter\def\csname r@surf.sm.bbeh.qwen.verdict_resid.ci\endcsname{53.0 [51.2, 54.9]}
+\expandafter\def\csname r@surf.sm.math.olmo.resid_minus_verdict\endcsname{$-$0.8 [$-$2.7, +1.2]}
+\expandafter\def\csname r@surf.sm.math.olmo.surface\endcsname{58.1}
+\expandafter\def\csname r@surf.sm.math.olmo.surface.ci\endcsname{58.1 [53.8, 62.3]}
+\expandafter\def\csname r@surf.sm.math.olmo.verdict\endcsname{59.9}
+\expandafter\def\csname r@surf.sm.math.olmo.verdict.ci\endcsname{59.9 [56.2, 63.3]}
+\expandafter\def\csname r@surf.sm.math.olmo.verdict_resid\endcsname{59.1}
+\expandafter\def\csname r@surf.sm.math.olmo.verdict_resid.ci\endcsname{59.1 [55.8, 62.6]}
+\expandafter\def\csname r@surf.sm.math.qwen.resid_minus_verdict\endcsname{$-$4.4 [$-$5.6, $-$3.1]}
+\expandafter\def\csname r@surf.sm.math.qwen.surface\endcsname{65.8}
+\expandafter\def\csname r@surf.sm.math.qwen.surface.ci\endcsname{65.8 [62.9, 68.8]}
+\expandafter\def\csname r@surf.sm.math.qwen.verdict\endcsname{58.5}
+\expandafter\def\csname r@surf.sm.math.qwen.verdict.ci\endcsname{58.5 [56.6, 60.4]}
+\expandafter\def\csname r@surf.sm.math.qwen.verdict_resid\endcsname{54.1}
+\expandafter\def\csname r@surf.sm.math.qwen.verdict_resid.ci\endcsname{54.1 [51.8, 56.1]}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.resid_minus_verdict\endcsname{+0.1 [$-$0.7, +0.9]}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.surface\endcsname{49.2}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.surface.ci\endcsname{49.2 [47.3, 51.3]}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.verdict\endcsname{50.8}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.verdict.ci\endcsname{50.8 [47.7, 53.8]}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.verdict_resid\endcsname{50.9}
+\expandafter\def\csname r@surf.sm.mmlu.olmo.verdict_resid.ci\endcsname{50.9 [47.8, 53.9]}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.resid_minus_verdict\endcsname{$-$0.6 [$-$1.4, +0.2]}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.surface\endcsname{55.2}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.surface.ci\endcsname{55.2 [52.7, 57.8]}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.verdict\endcsname{46.5}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.verdict.ci\endcsname{46.5 [44.2, 48.7]}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.verdict_resid\endcsname{45.9}
+\expandafter\def\csname r@surf.sm.mmlu.qwen.verdict_resid.ci\endcsname{45.9 [43.5, 48.1]}
+\expandafter\def\csname r@surf.surface.gain.all\endcsname{+9.0}
+\expandafter\def\csname r@surf.surface.gain.all.ci\endcsname{+9.0 [+6.8, +11.2]}
+\expandafter\def\csname r@surf.surface.gain.diff\endcsname{+11.2}
+\expandafter\def\csname r@surf.surface.gain.diff.ci\endcsname{+11.2 [+8.8, +13.5]}
+\expandafter\def\csname r@surf.surface.gain.same\endcsname{+3.7}
+\expandafter\def\csname r@surf.surface.gain.same.ci\endcsname{+3.7 [+0.7, +6.7]}
+\expandafter\def\csname r@surf.surface.level.all\endcsname{62.3}
+\expandafter\def\csname r@surf.surface.level.all.ci\endcsname{62.3 [60.5, 64.0]}
+\expandafter\def\csname r@surf.surface.level.diff\endcsname{63.9}
+\expandafter\def\csname r@surf.surface.level.diff.ci\endcsname{63.9 [62.1, 65.7]}
+\expandafter\def\csname r@surf.surface.level.same\endcsname{59.5}
+\expandafter\def\csname r@surf.surface.level.same.ci\endcsname{59.5 [56.6, 62.4]}
+\expandafter\def\csname r@surf.trim.direct.gain.all\endcsname{+7.1 [+5.4, +8.7]}
+\expandafter\def\csname r@surf.trim.direct.gain.diff\endcsname{+9.5 [+7.6, +11.3]}
+\expandafter\def\csname r@surf.trim.direct.gain.same\endcsname{+1.8 [$-$0.6, +4.4]}
+\expandafter\def\csname r@surf.trim.verdict.level.all\endcsname{54.1}
+\expandafter\def\csname r@surf.trim.verdict.level.diff\endcsname{53.7}
+\expandafter\def\csname r@surf.trim.verdict.level.same\endcsname{54.6}
+\expandafter\def\csname r@surf.untrim.direct.gain.all\endcsname{+9.9 [+8.4, +11.4]}
+\expandafter\def\csname r@surf.untrim.direct.gain.diff\endcsname{+12.6 [+10.9, +14.2]}
+\expandafter\def\csname r@surf.untrim.direct.gain.same\endcsname{+2.0 [$-$0.2, +4.2]}
+\expandafter\def\csname r@surf.untrim.verdict.level.all\endcsname{53.0}
+\expandafter\def\csname r@surf.untrim.verdict.level.diff\endcsname{51.9}
+\expandafter\def\csname r@surf.untrim.verdict.level.same\endcsname{55.8}
+\expandafter\def\csname r@surf.verdict.level.all\endcsname{53.4}
+\expandafter\def\csname r@surf.verdict.level.all.ci\endcsname{53.4 [52.1, 54.7]}
+\expandafter\def\csname r@surf.verdict.level.diff\endcsname{52.7}
+\expandafter\def\csname r@surf.verdict.level.diff.ci\endcsname{52.7 [51.4, 54.1]}
+\expandafter\def\csname r@surf.verdict.level.same\endcsname{55.8}
+\expandafter\def\csname r@surf.verdict.level.same.ci\endcsname{55.8 [54.1, 57.4]}

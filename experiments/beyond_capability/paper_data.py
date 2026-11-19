@@ -19,9 +19,15 @@ BIG = {"llama3.1-70b"}  # scale check: reported on its own, never pooled with th
 SWEEP = {("llama3.1-8b", "math"): "out_math/layer_sweep", ("llama3.2-3b", "mmlu"): "out_mmlu/layer_sweep_llama3.2-3b"}
 
 
+COT_EXACT = A.HERE / "out_cot_exact"  # repaired reasoning score (azure/cot_exact.py, Cannon); used when present
+
+
 def _cot(path):
-    """reason-first scores; a file whose scores are all identical is a failed readout (Mistral-7B: every score 0.0,
-    a scoring bug) and counts as missing."""
+    """reason-first scores. The repaired run (exact log-probabilities of the verdict tokens) replaces the original
+    top-20 approximation when it exists for the pair and set. A file whose scores are all identical is a failed
+    readout (the original Mistral-7B run: every score 0.0) and counts as missing."""
+    exact = COT_EXACT / path.parent.name / path.name
+    path = exact if exact.exists() else path
     d = {r["aid"]: r["score"] for r in map(json.loads, open(path))} if path.exists() else {}
     return d if len(set(d.values())) > 1 else {}
 
