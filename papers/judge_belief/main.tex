@@ -170,7 +170,12 @@ wrong}, \emph{actually correct} or \emph{contested} (Appendix~\ref{app:audit}). 
 Kimi-K3.1-Pro, repeated the audit with the same prompts (it is from the same developer as the Kimi-K2.6 judge,
 but a different model). The two make the same clearly-wrong-or-not call on 96\% of
 answers (Cohen's $\kappa$ = 0.77; 98\% on RewardBench~2 Math, 96\% on BFF-Bench, 94\% on JudgeBench).
-\todo{human check of a 60-answer stratified sample (review page in progress); report agreement with both auditors.}
+As a third check, Claude Opus 5.5, from a third developer, audited a blind sample of 60 answers (stratified on
+GLM-5.3's verdict) and all 43 answers on which the first two auditors disagree, with the same prompts and a Python
+calculator. Of the 25 sampled answers GLM-5.3 keeps as clearly wrong, Opus calls 22 clearly wrong, 3 contested and
+none actually correct. On the 60 it makes the same clearly-wrong-or-not call as GLM-5.3 on 53 ($\kappa$ = 0.76) and
+as Kimi-K3.1-Pro on 50 ($\kappa$ = 0.67); on the 43 disagreements it sides with each about equally often (22 vs 21)
+(Appendix~\ref{app:audit}).
 Unless stated otherwise, every result keeps only wrong answers GLM-5.3 audits as clearly wrong; results under
 Kimi-K3.1-Pro's labels, and under both, are in Appendix~\ref{app:robust}.
 
@@ -473,8 +478,9 @@ should audit the answers judges strongly believe.
 % ---------------------------------------------------------------------------------------------------------------
 \section*{Limitations}
 
-The label audits were done by two LLMs (one from the same developer as one judge); a human check is in progress, and the BFF-Bench audit in particular would
-benefit from finance experts. After the audit, the 7/7 groups are small (10--15 judgments per judge), so the top
+The label audits were done by LLMs, not people: two auditors on every answer and a third on 98 (one auditor is from
+the same developer as one judge, and some JudgeBench responses were written by Claude models). No human checked the
+labels, and the BFF-Bench audit in particular would benefit from finance experts. After the audit, the 7/7 groups are small (10--15 judgments per judge), so the top
 of each curve has wide intervals, and the within-question test is clear for three of five judge groups, uncertain for DeepSeek and absent for
 Kimi-K2.6. The transcript
 labels come from an LLM with a small hand check. Belief is measured with seven samples at one temperature, and on two benchmarks it
@@ -532,11 +538,23 @@ the problem itself. Each prompt ends with one of \texttt{LABEL\_OK} (clearly wro
 \paragraph{Results.} Of 1,091 unique wrong-labelled answers, GLM-5.3 audits 978 as clearly wrong, 62 as actually
 correct and 48 as contested (3 without a verdict). On RewardBench~2 Math, which had already been cleaned of answers
 reaching the right value, 435 of 453 are clearly wrong. Kimi-K3.1-Pro agrees with GLM-5.3's clearly-wrong-or-not
-call on 96\% of the 1,085 answers both audited. A third reader (Claude) independently read the 55 BFF-Bench and
+call on 96\% of the 1,085 answers both audited. In an earlier, separate pass, Claude read the 55 BFF-Bench and
 JudgeBench answers some Qwen believes 7/7 and made the same call as GLM-5.3 on 87\% of them; most contested
 JudgeBench items have a second defensible option among the choices MMLU-Pro added. On BBEH, 365 believed wrong
 answers (the set used in \S\ref{sec:inside}) were audited by GLM-5.3: 191 clearly wrong, 84 actually correct (mostly
 auto-grader misses on equivalent answers) and 83 contested.
+
+\paragraph{Third auditor.} Claude Opus 5.5 (run as an agent with a Python tool for arithmetic and no web access)
+audited 98 answers with the prompts above, blind to the other auditors' verdicts: a sample of 60 drawn as 25 answers
+GLM-5.3 calls clearly wrong, 25 actually correct and 10 contested, plus the 43 answers on which GLM-5.3 and
+Kimi-K3.1-Pro disagree (5 overlap). Its verdicts on the sample, by GLM-5.3's verdict:
+clearly wrong 22 / 0 / 3 (clearly wrong / actually correct / contested); actually correct 3 / 17 / 5; contested
+1 / 5 / 4. It agrees with GLM-5.3 on 19 of the 22 sampled BFF-Bench answers and with Kimi-K3.1-Pro on 16; on
+JudgeBench, 34 of 38 with each. Because the sample over-represents GLM-5.3's rare verdicts, 53/60 is not a
+population agreement rate; re-weighted to GLM-5.3's full mix it is 88\%. On the 43 disagreements Opus agrees with
+GLM-5.3 on 22 and Kimi-K3.1-Pro on 21, and calls 18 contested, so these are mostly hard cases rather than one
+auditor's mistakes. In two JudgeBench items Opus finds both the gold option and the candidate wrong (we checked both
+numerically); the prompt has no verdict for this case, and the candidate is wrong either way.
 
 \section{Robustness of the Main Result}
 \label{app:robust}

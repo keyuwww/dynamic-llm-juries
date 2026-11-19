@@ -775,8 +775,23 @@ Belief belongs to a (judge, answer) pair; difficulty to a question. All four fam
   Nemotron 25 / 49 / 59 / 86% (+61), DeepSeek 13 / 37 / 38 / 47% (+34 [+9, +58]), Kimi-K2.6 1 / 14 / 33 / 58% (+57).
   Under Kimi-K3.1-Pro's labels and under both, every family keeps a positive gap (Kimi-K2.6 under both: only 5 answers
   at 7/7, interval includes 0).
-- **Human check:** blind review page with 60 stratified answers (https://claude.ai/artifact/YFfoNKmZmsEzgfUFdVqxYe;
-  answer key `validation/human_check_key.json`). Waiting for reviewers.
+- **Human check: dropped (Nov 18).** The items were too hard to judge without domain background, so a third model
+  auditor replaced it (13g). No human has checked the labels; the paper says so.
+
+### 13g. Third auditor: Claude Opus 5.5 (`validation/build_claude_audit.py`, `validation/claude_audit.py` → `validation/claude_audit.md`)
+
+Seven Claude Opus subagents (Claude Code, Python for arithmetic, no web), blind to the other verdicts, audited 98
+answers with the exact GLM/Kimi prompts: the 60-answer blind sample (stratified 25 / 25 / 10 on GLM's verdict) and
+all 43 GLM–Kimi disagreements (5 overlap). Per-answer verdicts in `validation/claude_audit_results.jsonl`.
+- **Answers GLM keeps as clearly wrong (sample of 25): Opus 22 clearly wrong, 3 contested, 0 actually correct.**
+- GLM "actually correct" (25): Opus 17 actually correct, 3 clearly wrong, 5 contested. GLM contested (10): 1 / 5 / 4.
+- Same clearly-wrong-or-not call: with GLM 53/60 (κ 0.76), with Kimi 50/60 (κ 0.67); all three 49/60.
+  Re-weighted to GLM's full verdict mix: 88% with GLM. BFF: 19/22 with GLM, 16/22 with Kimi; JudgeBench 34/38 each.
+- GLM–Kimi disagreements (43): Opus sides with GLM 22, Kimi 21, and calls 18 contested — hard items, not one
+  auditor's systematic error.
+- Two JudgeBench items where Opus finds both the gold and the candidate wrong (hawk arc length 209.1 m; KL limit
+  1.92 nats; both spot-checked numerically here). The prompt has no verdict for that; the candidate is wrong.
+- Caveat: some JudgeBench responses were written by Claude models.
 
 ### 13d. Single-source recompute (`validation/paper_numbers.py` → `validation/paper_numbers.md`)
 
