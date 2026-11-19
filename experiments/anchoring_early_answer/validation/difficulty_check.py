@@ -95,7 +95,7 @@ def load(od, sfx, glm):
             continue
         if glm.get(r["item"]) != "LABEL_OK":
             continue
-        v = r["spoken"] if od == "out" else r["acc_C"]
+        v = r["spoken"]  # the stated verdict for every judge (Nov 18; was acc_C for non-Qwen families)
         if v in (None, "None"):
             continue
         j = jobs[(r["judge"], r["item"])]

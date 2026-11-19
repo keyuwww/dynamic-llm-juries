@@ -1,0 +1,7 @@
+# Large raw caches are committed gzipped; decompress with: gunzip -k *.jsonl.gz
+gen.jsonl
+judge.jsonl
+pairs.jsonl
+questions.jsonl
+resolve.jsonl
+solve.jsonl

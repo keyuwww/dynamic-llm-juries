@@ -1,0 +1,1470 @@
+{
+ "items": [
+  {
+   "n": 1,
+   "item": "4e2ab9df-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 2,
+   "item": "68b7b17a-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 3,
+   "item": "judgebench-claude-4f9f8288-4e9e-553d-b444-1b9441c537e1",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 4,
+   "item": "judgebench-gpt-df6e9ec0-0bd1-51ec-a81f-3a58cc415253",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 5,
+   "item": "judgebench-claude-0ad4b474-6f8f-50a8-9a63-6e621e202c72",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 6,
+   "item": "judgebench-gpt-3a1685e5-509e-503f-b0d3-a23f41c29d46",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 7,
+   "item": "judgebench-gpt-09e7761f-dc12-5dec-9ea1-d01ef98c48e9",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 8,
+   "item": "37d78983-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 9,
+   "item": "rb2math-739-rejected0",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 10,
+   "item": "f577e7fb-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 11,
+   "item": "rb2math-764-rejected2",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 12,
+   "item": "36a4a678-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 13,
+   "item": "judgebench-gpt-1c76021c-cb8e-5477-8f7e-88855d6dd547",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 14,
+   "item": "rb2math-786-rejected0",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 15,
+   "item": "21f8cab1-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 16,
+   "item": "f7071066-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 17,
+   "item": "08e00ce2-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 18,
+   "item": "rb2math-750-rejected1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 19,
+   "item": "judgebench-claude-ec0cbbbf-0551-5778-b946-943c3f24f0a1",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 20,
+   "item": "judgebench-gpt-7ad6fda6-f7dd-5c3a-9d8b-6b50cc35dedd",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 21,
+   "item": "judgebench-claude-f474b24e-316a-572d-8772-189739800d5d",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 22,
+   "item": "0214a818-t1",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 23,
+   "item": "rb2math-765-rejected0",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 24,
+   "item": "judgebench-gpt-943bf94c-9ba1-5b9b-9ec4-038c8f3e11d7",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 25,
+   "item": "8d941b75-t1",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 26,
+   "item": "rb2math-677-rejected0",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 27,
+   "item": "judgebench-gpt-d9cc990f-fb19-521e-a8fa-68f3325f8730",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 28,
+   "item": "judgebench-gpt-6ed13f8d-9733-5839-a628-22c6ec6c9f27",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 29,
+   "item": "rb2math-645-rejected0",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 30,
+   "item": "e8c203c1-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 31,
+   "item": "judgebench-gpt-a1b1ff8a-eae1-5c68-b5b1-4d50cb2afc17",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 32,
+   "item": "dd06c3be-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 33,
+   "item": "rb2math-10-rejected1",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 34,
+   "item": "rb2math-718-rejected0",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 35,
+   "item": "898bf424-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 36,
+   "item": "judgebench-claude-bd3f5285-a513-58b1-8bd5-66f3d65435e2",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 37,
+   "item": "10e382d2-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 38,
+   "item": "judgebench-claude-c2028682-fb48-55b9-a80b-75bdc961513b",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 39,
+   "item": "rb2math-698-rejected1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 40,
+   "item": "rb2math-777-rejected0",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 41,
+   "item": "6350daab-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 42,
+   "item": "judgebench-gpt-353ff46b-1b33-5152-ac0d-650b0f830fc3",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 43,
+   "item": "judgebench-gpt-b6ade862-109b-5788-8c0c-eabe1f7e205a",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 44,
+   "item": "42237b59-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 45,
+   "item": "rb2math-654-rejected1",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 46,
+   "item": "rb2math-674-rejected0",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 47,
+   "item": "efe6dc0d-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 48,
+   "item": "rb2math-801-rejected0",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 49,
+   "item": "bab23e40-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 50,
+   "item": "judgebench-gpt-a6f94de7-dee6-579b-852a-1be7ca389cd2",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 51,
+   "item": "20c6d543-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 52,
+   "item": "judgebench-gpt-0cdc4e4b-d2a3-5218-b01a-c60f2e407d5e",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 53,
+   "item": "judgebench-gpt-2d989dfb-7cf0-549e-945c-3dd060d1fad5",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 54,
+   "item": "631e1318-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 55,
+   "item": "rb2math-713-rejected2",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 56,
+   "item": "judgebench-gpt-db445e7f-6ad7-5e62-b182-67c5777f80e7",
+   "reason": "B",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 57,
+   "item": "judgebench-gpt-ebe368cb-5783-5f03-8471-e31295bc4438",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 58,
+   "item": "042e3663-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 59,
+   "item": "rb2math-793-rejected2",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 60,
+   "item": "rb2math-706-rejected0",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 61,
+   "item": "rb2math-725-rejected2",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 62,
+   "item": "8db2915a-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 63,
+   "item": "cbaa4b79-t1",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 64,
+   "item": "040f5fc5-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 65,
+   "item": "rb2math-655-rejected2",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 66,
+   "item": "judgebench-claude-74581892-e3c1-5ef1-8eca-46a1d4ed710a",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 67,
+   "item": "rb2math-797-rejected0",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 68,
+   "item": "judgebench-gpt-49c0f568-1ac2-53dc-be78-f3eea93820fd",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 69,
+   "item": "judgebench-claude-40a0f1d8-fbfe-53e3-947f-3ead7276284e",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 70,
+   "item": "judgebench-claude-182a216b-71f5-5d79-8947-fcbebab7e2c2",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 71,
+   "item": "judgebench-claude-88c03f19-2b85-5b04-b0f8-42e9a765098e",
+   "reason": "B",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 72,
+   "item": "805e7d58-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 73,
+   "item": "judgebench-gpt-3ca30a63-18e2-5f42-b7ec-433617b85cd6",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 74,
+   "item": "1805ebb2-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 75,
+   "item": "judgebench-claude-d956ee41-b3b1-52d5-ad3c-787d7d71a574",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 76,
+   "item": "c4cd0f3f-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 77,
+   "item": "rb2math-674-rejected2",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 78,
+   "item": "judgebench-gpt-6efc8c4d-df53-5758-b3b1-988604fa35af",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 79,
+   "item": "judgebench-gpt-138e503c-b09d-5d19-82ff-0b5ddc3e7bf6",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 80,
+   "item": "judgebench-gpt-6ab00107-92e5-526a-96fd-018e71261e9f",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 81,
+   "item": "2bd52493-t2",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 82,
+   "item": "rb2math-707-rejected1",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 83,
+   "item": "5350169f-t1",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 84,
+   "item": "judgebench-gpt-d71a5264-231b-5af8-829d-9ee50f0acf90",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 85,
+   "item": "rb2math-779-rejected2",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 86,
+   "item": "rb2math-785-rejected0",
+   "reason": "B",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 87,
+   "item": "rb2math-706-rejected2",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 88,
+   "item": "judgebench-claude-8e1df938-fb37-5c27-8a0d-aedee854251a",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 89,
+   "item": "judgebench-gpt-fdc57db0-8efc-5258-8a61-d514c7e73885",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 90,
+   "item": "c0318ccf-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 91,
+   "item": "judgebench-gpt-5b13ebd9-3880-5331-bfcf-ac5ab4bed92a",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 92,
+   "item": "judgebench-claude-7b9f3dbd-71e5-5ed0-be3f-893be2f81120",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 93,
+   "item": "rb2math-11-rejected0",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 94,
+   "item": "55bb3129-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 95,
+   "item": "rb2math-655-rejected0",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 96,
+   "item": "judgebench-gpt-bafda18b-4eaf-5e6a-a895-22ca57fedc2d",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 97,
+   "item": "judgebench-gpt-757ab337-289d-5f6b-a0ec-a437dd603566",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 98,
+   "item": "judgebench-claude-429ad667-0c08-5c77-9fc3-a264dfa770fe",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 99,
+   "item": "9a04371b-t1",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 100,
+   "item": "judgebench-claude-3be7f975-9f0b-51d0-a360-9dc7487e8f4f",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 101,
+   "item": "judgebench-claude-3fe93ac0-3593-5d41-a7aa-58cab2fefedd",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 102,
+   "item": "judgebench-claude-e82d2ea3-2496-5b19-a2e2-a15fe6d57534",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 103,
+   "item": "judgebench-gpt-07019bab-fc3e-5c91-ac9c-36869cfe79b0",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 104,
+   "item": "830605f2-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 105,
+   "item": "rb2math-11-rejected2",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 106,
+   "item": "judgebench-gpt-585e5a43-454b-56f7-aba3-fb4e22938020",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 107,
+   "item": "f54bc9dc-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 108,
+   "item": "rb2math-769-rejected0",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 109,
+   "item": "judgebench-claude-b636803c-e54c-5c94-9b57-b44ae036e3f6",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 110,
+   "item": "e6afa0dd-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 111,
+   "item": "judgebench-gpt-1cc11161-3a95-59a1-aa7b-1406ccf4b9a6",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 112,
+   "item": "35d94e47-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 113,
+   "item": "744b0410-t2",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 114,
+   "item": "judgebench-claude-6101a179-ce72-51da-a1b4-643c7ee99009",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 115,
+   "item": "judgebench-gpt-cc8d0d03-7d7e-5728-8bd6-fa03589c976d",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 116,
+   "item": "judgebench-gpt-0f999ea7-10a1-5b85-a175-b86d50338266",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 117,
+   "item": "judgebench-claude-b0446013-eece-5acc-bbfa-9145f5a61ed1",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 118,
+   "item": "6a7fbf2e-t1",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 119,
+   "item": "fff64c48-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 120,
+   "item": "rb2math-773-rejected1",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 121,
+   "item": "5269ea18-t2",
+   "reason": "C|bff|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 122,
+   "item": "rb2math-709-rejected1",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 123,
+   "item": "judgebench-claude-851b5544-7fc0-5faa-940e-53e0ff149516",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 124,
+   "item": "7be5dfcd-t1",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 125,
+   "item": "judgebench-gpt-ed01d44a-e1bc-5833-9a59-ea5f5a9ebd60",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 126,
+   "item": "judgebench-claude-26cceffc-1fb6-5c3c-b257-84759fa87fa1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 127,
+   "item": "judgebench-gpt-37577e35-cf0b-5880-97a1-857736d76651",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 128,
+   "item": "6a2988d1-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 129,
+   "item": "04fdb90a-t2",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 130,
+   "item": "rb2math-765-rejected2",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 131,
+   "item": "judgebench-claude-c1a433d6-bad7-5a75-bd5e-1e3748b57324",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 132,
+   "item": "judgebench-gpt-2862a52e-5004-549c-8cd9-d499f752d0e1",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 133,
+   "item": "e38c46dc-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 134,
+   "item": "judgebench-claude-47691eb8-6842-54b6-9bfa-638396a3757d",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 135,
+   "item": "rb2math-755-rejected0",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 136,
+   "item": "judgebench-gpt-4d8e7667-fd3a-5986-97c3-5387399bd870",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5
+  },
+  {
+   "n": 137,
+   "item": "rb2math-811-rejected1",
+   "reason": "C|rb2math|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 138,
+   "item": "judgebench-gpt-10c0a6e7-a697-5d79-ac6b-47ed30c4cba5",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 139,
+   "item": "rb2math-698-rejected0",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 140,
+   "item": "01a4f1db-t1",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 141,
+   "item": "judgebench-gpt-bd6f87f2-cb60-58b3-8b27-4eceab2bfc79",
+   "reason": "B",
+   "glm": "LABEL_OK",
+   "kimi": "CONTESTED",
+   "max_belief": 0.42857142857142855
+  },
+  {
+   "n": 142,
+   "item": "rb2math-740-rejected0",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 143,
+   "item": "rb2math-17-rejected0",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 144,
+   "item": "judgebench-claude-6eea64c3-0413-5fdf-b089-80dd2336a931",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 145,
+   "item": "judgebench-gpt-57500a89-7795-5299-b6a8-d0ab8da2687a",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 146,
+   "item": "rb2math-767-rejected1",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 147,
+   "item": "8f5f338a-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 148,
+   "item": "judgebench-claude-2417995a-5baa-5b49-a5d2-84ef4202600d",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 149,
+   "item": "b56b3349-t2",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 150,
+   "item": "rb2math-740-rejected1",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 151,
+   "item": "e27e6d11-t1",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 152,
+   "item": "judgebench-gpt-b958ea91-8f2a-55be-8c8b-d61cf90f5076",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 153,
+   "item": "rb2math-677-rejected2",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 154,
+   "item": "rb2math-739-rejected1",
+   "reason": "C|rb2math|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 155,
+   "item": "judgebench-claude-fab25c06-2b47-559b-8f61-2609d36fda93",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 156,
+   "item": "06ca656f-t1",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 157,
+   "item": "rb2math-706-rejected1",
+   "reason": "C|rb2math|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 158,
+   "item": "judgebench-gpt-5a224ae8-0f94-5589-a55c-b85457acdac8",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.14285714285714285
+  },
+  {
+   "n": 159,
+   "item": "judgebench-gpt-0a347026-2ec5-5879-9635-e6fc818d021b",
+   "reason": "A",
+   "glm": "CONTESTED",
+   "kimi": "CONTESTED",
+   "max_belief": 1.0
+  },
+  {
+   "n": 160,
+   "item": "d813b17a-t2",
+   "reason": "C|bff|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 161,
+   "item": "judgebench-claude-642827c3-fa04-5743-b9c6-f3eab81b793b",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 162,
+   "item": "judgebench-claude-bbdcd0e8-c9f8-5d3d-bf42-7bd74bd75273",
+   "reason": "C|judgebench|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.8571428571428571
+  },
+  {
+   "n": 163,
+   "item": "judgebench-gpt-4b324d8b-aac1-5d0a-af11-cebaa6759e67",
+   "reason": "C|judgebench|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 164,
+   "item": "judgebench-claude-ed4dfc69-b02a-5b22-b840-df8ef94ac863",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 165,
+   "item": "rb2math-779-rejected0",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.5714285714285714
+  },
+  {
+   "n": 166,
+   "item": "rb2math-11-rejected1",
+   "reason": "A",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 167,
+   "item": "rb2math-815-rejected0",
+   "reason": "C|rb2math|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 168,
+   "item": "d1c4bbe5-t1",
+   "reason": "C|bff|1-3",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 169,
+   "item": "b007c0c4-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 170,
+   "item": "c3796724-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  },
+  {
+   "n": 171,
+   "item": "30d09bef-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 172,
+   "item": "judgebench-gpt-c89566b4-5831-5242-8ae9-45c2f0ae955c",
+   "reason": "C|judgebench|0/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.0
+  },
+  {
+   "n": 173,
+   "item": "1bd216d5-t1",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 174,
+   "item": "rb2math-671-rejected1",
+   "reason": "B",
+   "glm": "CONTESTED",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.2857142857142857
+  },
+  {
+   "n": 175,
+   "item": "04d16032-t2",
+   "reason": "C|bff|4-6",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 0.7142857142857143
+  },
+  {
+   "n": 176,
+   "item": "c9062f23-t2",
+   "reason": "A",
+   "glm": "LABEL_WRONG",
+   "kimi": "LABEL_WRONG",
+   "max_belief": 1.0
+  },
+  {
+   "n": 177,
+   "item": "judgebench-gpt-97e2c15b-92c8-5934-bf37-c46fbf095930",
+   "reason": "C|judgebench|7/7",
+   "glm": "LABEL_OK",
+   "kimi": "LABEL_OK",
+   "max_belief": 1.0
+  }
+ ],
+ "strata": {
+  "bff|0/7": {
+   "population": 81,
+   "sampled": 8
+  },
+  "bff|1-3": {
+   "population": 36,
+   "sampled": 8
+  },
+  "bff|4-6": {
+   "population": 20,
+   "sampled": 8
+  },
+  "bff|7/7": {
+   "population": 17,
+   "sampled": 8
+  },
+  "judgebench|0/7": {
+   "population": 138,
+   "sampled": 8
+  },
+  "judgebench|1-3": {
+   "population": 160,
+   "sampled": 8
+  },
+  "judgebench|4-6": {
+   "population": 61,
+   "sampled": 8
+  },
+  "judgebench|7/7": {
+   "population": 17,
+   "sampled": 8
+  },
+  "rb2math|0/7": {
+   "population": 330,
+   "sampled": 8
+  },
+  "rb2math|1-3": {
+   "population": 71,
+   "sampled": 8
+  },
+  "rb2math|4-6": {
+   "population": 26,
+   "sampled": 8
+  },
+  "rb2math|7/7": {
+   "population": 6,
+   "sampled": 6
+  }
+ }
+}

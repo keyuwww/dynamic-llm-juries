@@ -934,3 +934,68 @@ native Nemotron-H code). Pool verdicts from when Tinker served it are reused (`c
     belief solves ~$80, GLM matching ~$70.
   - Probes and steering ran on Harvard Cannon GPUs (free).
 - Nothing is committed.
+
+## Experiment 14 — Reviewer revision (Nov 18; caps: Tinker $1,000, Modal $200, Cannon free)
+
+Handoff from an external reviewer (belief paper first). Everything below is reproducible from the named scripts.
+
+### 14a. Fixed-effect checks (`validation/fe_checks.py` → `validation/fe_checks.md`)
+- Stated verdict for every judge, 4,883 audited wrong-answer judgments, no duplicated (judge, candidate) rows; 767 of
+  978 candidates are judged by 2+ families; no question id spans benchmarks.
+- The paper's 60-sweep alternating projections equal an exact dummy-variable solve (to 1e-12) for judge, judge×question,
+  candidate+judge and candidate+judge×question FE; they converge in 2–29 sweeps.
+- Judge FE +37.6 [+26.8, +48.9]; judge×question +46.9 [+28.0, +70.2] (169 identifying groups, 88 questions; only 7% of
+  belief variance left); candidate+judge +20.0 [+9.4, +31.0]; candidate+judge×question +20.6 [−6.1, +47.1].
+- Leave-one-family-out: every J / JQ / CJ estimate stays positive with interval above zero. Per benchmark all positive;
+  BFF candidate+judge +20.7 [−0.3, +40.1] is borderline.
+- `difficulty_check.py` now uses the stated verdict for every judge (was the forced readout for non-Qwen families):
+  pooled within-question +47 [+27, +70] (was +47 [+27, +71]); accuracy-controlled belief +49 [+16, +72] (was +48).
+  Its "158" counts groups spanning belief BINS; 169 groups have different belief VALUES.
+
+### 14b. How many own answers belief needs (`validation/sample_budget.py` → `validation/sample_budget.md`)
+- Per-sample votes rebuilt exactly as belief.py (reproduces the paper's belief on every row). Held-out (5 folds
+  grouped by question) logistic prediction of approval, judge-by-benchmark intercepts, 100 subset draws per k.
+- Brier: intercepts 0.1595; separate 8th sample 0.1587 (n.s. vs intercepts); k=1 0.1572, 2 0.1561, 3 0.1556,
+  5 0.1551, 7 0.1549. Every step lowers log loss with a paired interval excluding zero; 7 vs 1 −0.0022
+  [−0.0037, −0.0010]; 7 vs 3 −0.0007 [−0.0012, −0.0003]. AUROC 0.70 → 0.73. Small absolute gains.
+- One random sample of the seven beats the separate 8th sample (−0.0015 [−0.0026, −0.0005]); the 8th was generated
+  earlier with a 4,096-token budget, so it is not exchangeable with the seven.
+- JudgeBench: adding competitor belief lowers held-out log loss at every k (0.0010 at k=1, 0.0037 at k=7).
+
+### 14c. Human-validation packages (prepared, NOT annotated): `validation/human_package/`
+- `items.jsonl` (177: 60 high-belief items an auditor did not call clearly wrong, 23 GLM/Kimi disagreements,
+  94 stratified retained answers with cell sizes for weighting) + `key.json`; `transcripts.jsonl` (76 thinking-on
+  transcripts, verdict lines removed) + `transcripts_key.json`. Needs two human readers (finance for BFF).
+
+### 14d. Paper wording
+- Binning rule and "operational measure at one sampling configuration" stated; "authorship removed" narrowed to
+  self-authorship excluded (family style can remain).
+
+### 14e. Belief re-measured from fresh samples (`replication/reliability.py` → `replication/reliability_results.json`)
+- Six original judges still on Tinker (three Qwens, Nemotron-3-Super, DeepSeek, Kimi-K2.6) answered all 459
+  JudgeBench questions 7 more times, original prompt and settings ($91.77). Exact letters, so only JudgeBench's
+  multiple-choice (MMLU-Pro) part counts: 237 audited wrong-answer judgments, 101 questions.
+- Old vs new belief: r = 0.87; same bin 69% (7/7 → 7/7 in 15 of 21; 0/7 → 0/7 in 80 of 92).
+- Approval (the ORIGINAL verdicts) on belief, judge FE: original +48 [+30, +65]; new +50 [+32, +66]; average of the
+  two (14 samples) +53 [+34, +70]. Staircase by new belief 18 / 31 / 49 / 72%.
+- Cap note: worst-case reservations stopped the first pass at $100 (actual $47.66); cap raised to $150 to finish.
+
+### 14f. Fresh-question replication (`replication/`: PROTOCOL.md, SIZE.md, mmlupro.py, analyze.py → results_80_6000*.md)
+- No unused questions remain in RB2 Math / JudgeBench / BFF, so JudgeBench's construction was rebuilt on MMLU-Pro
+  questions not in JudgeBench. Protocol, analyses and size rule written before data. Writer Nemotron-3.5-Super
+  (thinking off; GLM-5.3-Flash was dropped after a 5-question smoke test showed bare-letter answers); judges
+  Qwen3.6-35B-A3B, Qwen3.5-9B, DeepSeek-V4.1-Flash, Kimi-K2.6 (no NVIDIA judge). Pilot 80 questions (not analysed);
+  confirmatory questions 80..6079 → 1,336 pairs, 5,344 judgments.
+- Primary (MMLU-Pro key, strict 5x-letter parsing; 4,151 judgments): 19 / 40 / 51 / 63% by bin; gap +45 [+37, +52];
+  slope +47 [+41, +53]; per judge +61, +34, +50, +45 (all intervals above 0); same candidate across judges +19
+  [+11, +26]; target +21 / competitor −29 [−36, −22]; one-sample label +8 [+3, +14] vs belief +40 [+34, +48].
+- Kimi-K3.1-Pro audit of 361 wrong responses believed ≥ 4/7: 207 clearly wrong, 81 actually correct, 71 contested.
+  Audit-filtered gap +38 [+27, +49]; Kimi-K2.6's 7/7 bin falls to 39% (n=18).
+- Strict parsing dropped 1,175 judgments (Qwen3.6 593). POST-HOC lenient parser (spaced / repeated / bold / boxed /
+  "answer is (X)" / last-line letter): 5,306 judgments, gap +46 [+40, +53], audit-filtered +42 [+32, +51].
+- Cost $346 (writer $34, verdicts $19, own answers $229, audit $27, 13 timeouts counted at max $37).
+
+### 14g. Ledger (Tinker, this revision): replication $346 + re-measurement $92 = $438 of the $1,000 cap. Modal $0.
+Paper updated: new §6 "Replication on Fresh Questions" (+Takeaway 3), appendices "How Many Samples Belief Needs",
+"Fresh-Question Replication Details", fixed-effect table; Ethics now states these costs instead of the unconfirmed
+$1,500 project estimate.
