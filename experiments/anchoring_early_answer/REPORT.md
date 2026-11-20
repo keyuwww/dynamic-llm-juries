@@ -999,3 +999,41 @@ Handoff from an external reviewer (belief paper first). Everything below is repr
 Paper updated: new §6 "Replication on Fresh Questions" (+Takeaway 3), appendices "How Many Samples Belief Needs",
 "Fresh-Question Replication Details", fixed-effect table; Ethics now states these costs instead of the unconfirmed
 $1,500 project estimate.
+
+## Experiment 15 — Second review: parser, audit coverage, wording, restructure (Nov 20)
+
+Source: `Codex/.../outputs/future_paper_improvements.md`, Paper 1 items. Caps unchanged (Tinker $1,000, Modal $200).
+
+### 15a. Complete replication audit (`replication/audit_extra.py` → `data/audit_extra.jsonl`; POST HOC)
+- The pre-registered audit covered only the 361 wrong responses some judge believes ≥ 4/7 (strict parser). Kimi-K3.1-Pro
+  audited the other 975 (72 high only under the lenient parser, 903 others), same prompt/settings: 842 clearly wrong,
+  52 actually correct, 79 contested, 2 no verdict. All 1,336: 1,049 / 133 / 150 / 4.
+- Auditor disputes (actually correct or contested) by highest belief of any judge (lenient): 0/7 9%, 1–3 19%,
+  4–6 31%, 7/7 51%.
+- Cost $53.24.
+
+### 15b. Parser × label table (`replication/sensitivity.py` → `sensitivity.{json,md}`)
+- Pooled slopes: strict key +47 [+41, +53]; strict high-belief audit +41; strict complete audit +43 [+35, +50];
+  lenient key +48 [+43, +53]; lenient complete audit +45 [+38, +51]. Same candidate +19 to +21 throughout.
+- One-sample (8th answer) label: +8 [+3, +14] on key labels, but +5 to +7 under audited labels (strict intervals
+  include zero) → the paper now says the single-sample signal is reduced, not absorbed, and label-sensitive.
+- Kimi-K2.6 7/7 bin under the complete audit: 39% (18) strict, 40% (25) lenient.
+
+### 15c. Parser check (`replication/parser_check.py` → `parser_check/`)
+- 134 blinded own answers read by Claude Opus 5.5 subagents (models, not humans). Lenient letter matches the reader on
+  99/100 recovered answers. Of 34 answers neither parser reads, the reader finds a letter in 25 (mostly closing strings
+  mixing option and non-option letters, e.g. "JKKKK"); they stay excluded (20 judgments under the lenient parser).
+
+### 15d. Paper (`papers/judge_belief/main.tex`)
+- Restructured to 4 takeaways (was 6): §4 main result + alternatives merged; §5 replication with a main-text
+  parser × label table; §6 "Explanations and Hidden States" (transcripts + hidden states + verdict-before-justification,
+  tables moved to appendix); §7 juries. Every experiment paragraph now opens with its motivation (citation or the
+  observation that prompted it); added Simmons et al. 2011 and Verga et al. 2024.
+- Wording: "persists after controlling for question identity"; "auditor from another model family"; auditor
+  categories, not ground truth; transcript result described as a pattern in written explanations that cannot
+  separate derivation, anchoring and rationalisation.
+- Line numbers: lineno v5.7 (2026/02) misplaces right-column numbers in ACL review mode; preamble patch writes the
+  column tag from `build/column/after` (also affects the stock ACL template on this TeX install).
+
+### 15e. Ledger
+Tinker this revision: $438 (Exp. 14) + $53 (complete audit) = $491 of $1,000. Modal $0. Human annotation still not done.

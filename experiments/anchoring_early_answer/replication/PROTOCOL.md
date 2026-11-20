@@ -63,3 +63,19 @@ reliability check of the measurement (conditional resampling), not a new populat
 `data/{gen,judge,pairs,questions,resolve,solve}.jsonl` are committed gzipped (GitHub's file-size limit). Before rerunning
 `analyze.py` or `reliability.py analyze`, run `cd data && gunzip -k *.jsonl.gz`. `audit.jsonl`, `timeouts.jsonl` and
 `gen_glm_smoke.jsonl` are committed as is.
+
+## Post-hoc additions (Nov 20, after the confirmatory results were seen; reported as sensitivity analyses)
+
+Prompted by a second review. None of these changes the pre-registered primary analysis (`analyze.py`, strict parser,
+MMLU-Pro key), which is still reported first.
+
+1. **Complete label audit** (`audit_extra.py` → `data/audit_extra.jsonl`): the pre-registered audit covered only
+   wrong responses some judge believes >= 4/7 under the strict parser. The remaining 975 wrong responses (72 that
+   reach >= 4/7 only under the lenient parser, 903 others) were audited with the same auditor, prompt and settings,
+   so every one of the 1,336 wrong responses has an audit verdict. Labels are per candidate (a response dropped for
+   one judge is dropped for all).
+2. **Parser check** (`parser_check.py` → `parser_check/`): a blinded sample of 134 own answers (25 recovered by the
+   lenient parser and 10 unparsed by both, per judge; DeepSeek has only 4 unparsed) read by Claude Opus 5.5
+   subagents (models, not human annotators) who wrote the final committed letter, NONE or AMBIGUOUS.
+3. **Parser x label table** (`sensitivity.py` → `sensitivity.{json,md}`): strict / lenient parser crossed with key /
+   high-belief audit / complete audit.

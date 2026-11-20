@@ -1,0 +1,27 @@
+spent so far $346.45 of cap $460.0
+{'lenient_high': 72, 'low': 903}
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+  audit_extra: 50/975 (0 errors)
+  audit_extra: 100/975 (0 errors)
+  audit_extra: 150/975 (0 errors)
+  audit_extra: 200/975 (0 errors)
+  audit_extra: 250/975 (0 errors)
+  audit_extra: 300/975 (0 errors)
+  audit_extra: 350/975 (0 errors)
+  audit_extra: 400/975 (0 errors)
+  audit_extra: 450/975 (0 errors)
+  audit_extra: 500/975 (0 errors)
+  audit_extra: 550/975 (0 errors)
+  audit_extra: 600/975 (0 errors)
+  audit_extra: 650/975 (0 errors)
+  audit_extra: 700/975 (0 errors)
+  audit_extra: 750/975 (0 errors)
+  audit_extra: 800/975 (0 errors)
+  audit_extra: 850/975 (0 errors)
+  audit_extra: 900/975 (0 errors)
+  audit_extra: 950/975 (0 errors)
+  audit_extra: 975/975 (0 errors)
+total billed (replication caches + timeouts) 399.69
