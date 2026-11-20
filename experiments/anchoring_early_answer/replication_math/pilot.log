@@ -1,0 +1,101 @@
+spent so far $1.67 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+[transformers] You are using a model of type `deepseek_v41` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/transformers/configuration_utils.py:726: FutureWarning: `rope_scaling` is deprecated and will be removed in a future version. Set `rope_parameters` instead, with `rope_type` and `rope_theta` included.
+  warnings.warn(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 50/124 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 100/124 (0 errors)
+  judge: 124/124 (0 errors)
+spent so far $2.29 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+[transformers] You are using a model of type `deepseek_v41` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/transformers/configuration_utils.py:726: FutureWarning: `rope_scaling` is deprecated and will be removed in a future version. Set `rope_parameters` instead, with `rope_type` and `rope_theta` included.
+  warnings.warn(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 50/124 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 100/124 (0 errors)
+  solve: 124/124 (0 errors)
+gen {'nemotron3.5-super': 1.67} 1.67
+judge {'deepseek-v4.1-flash': 0.11, 'qwen3.5-9b': 0.06, 'kimi-k2.6': 0.34, 'qwen3.6-35b-a3b': 0.11} 0.62
+solve {'deepseek-v4.1-flash': 1.38, 'qwen3.5-9b': 0.68, 'kimi-k2.6': 2.39, 'qwen3.6-35b-a3b': 0.89} 5.34
+audit {} 0
+total billed (all cache lines + timeouts) 7.63

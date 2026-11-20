@@ -1,0 +1,2174 @@
+spent so far $7.63 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+  gen: 50/1800 (0 errors)
+  gen: 100/1800 (0 errors)
+  gen: 150/1800 (0 errors)
+  gen: 200/1800 (0 errors)
+  gen: 250/1800 (0 errors)
+  gen: 300/1800 (0 errors)
+  gen: 350/1800 (0 errors)
+  gen: 400/1800 (0 errors)
+  gen: 450/1800 (0 errors)
+  gen: 500/1800 (0 errors)
+  gen: 550/1800 (0 errors)
+  gen: 600/1800 (0 errors)
+  gen: 650/1800 (0 errors)
+  gen: 700/1800 (0 errors)
+  gen: 750/1800 (0 errors)
+  gen: 800/1800 (0 errors)
+  gen: 850/1800 (0 errors)
+  gen: 900/1800 (0 errors)
+  gen: 950/1800 (0 errors)
+  gen: 1000/1800 (0 errors)
+  gen: 1050/1800 (0 errors)
+  gen: 1100/1800 (0 errors)
+  gen: 1150/1800 (0 errors)
+  gen: 1200/1800 (0 errors)
+  gen: 1250/1800 (0 errors)
+  gen: 1300/1800 (0 errors)
+  gen: 1350/1800 (0 errors)
+  gen: 1400/1800 (0 errors)
+  gen: 1450/1800 (0 errors)
+  gen: 1500/1800 (0 errors)
+  gen: 1550/1800 (0 errors)
+  gen: 1600/1800 (0 errors)
+  gen: 1650/1800 (0 errors)
+  gen: 1700/1800 (0 errors)
+  gen: 1750/1800 (0 errors)
+  gen: 1800/1800 (0 errors)
+eligible pairs in this range: 819 of 1800 questions
+spent so far $45.49 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+[transformers] You are using a model of type `deepseek_v41` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/transformers/configuration_utils.py:726: FutureWarning: `rope_scaling` is deprecated and will be removed in a future version. Set `rope_parameters` instead, with `rope_type` and `rope_theta` included.
+  warnings.warn(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 50/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 1950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 2950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  judge: 3250/3276 (0 errors)
+  judge: 3276/3276 (0 errors)
+spent so far $64.52 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:112: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = tokenizer_utils.get_tokenizer(base) if "Kimi-K3" in base else chat.client.get_tokenizer()
+[transformers] You are using a model of type `deepseek_v41` to instantiate a model of type ``. This may be expected if you are loading a checkpoint that shares a subset of the architecture (e.g., loading a `sam2_video` checkpoint into `Sam2Model`), but is otherwise not supported and can yield errors. Please verify that the checkpoint is compatible with the model you are instantiating.
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/transformers/configuration_utils.py:726: FutureWarning: `rope_scaling` is deprecated and will be removed in a future version. Set `rope_parameters` instead, with `rope_type` and `rope_theta` included.
+  warnings.warn(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 50/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 1950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2250/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2300/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2350/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2400/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2450/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2500/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2550/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2600/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2650/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2700/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2750/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2800/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2850/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2900/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 2950/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3000/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3050/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3100/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3150/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3200/3276 (0 errors)
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+Calling super().encode with {'add_special_tokens': False}
+  solve: 3250/3276 (0 errors)
+  solve: 3276/3276 (0 errors)
+spent so far $237.94 of cap $300.0
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/anchoring_early_answer/replication/mmlupro.py:130: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await asyncio.wait_for(chat.client.sample_async(prompt=prompt, num_samples=n, sampling_params=types.SamplingParams(
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/a2478155-74d7-471a-848a-e37f1dec60cd/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+  audit: 50/819 (0 errors)
+  audit: 100/819 (0 errors)
+  audit: 150/819 (0 errors)
+  audit: 200/819 (0 errors)
+  audit: 250/819 (0 errors)
+  audit: 300/819 (0 errors)
+  audit: 350/819 (0 errors)
+  audit: 400/819 (0 errors)
+  audit: 450/819 (0 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 500/819 (32 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 550/819 (82 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 600/819 (132 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 650/819 (182 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 700/819 (232 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 750/819 (282 errors)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+[error] RuntimeError: budget cap $300.0 reached (spent $259.28, reserved $39.91)
+  audit: 800/819 (304 errors)
+  audit: 819/819 (304 errors)
+304 audit failed; rerun the same command to retry only those.
+gen {'nemotron3.5-super': 39.54} 39.54
+judge {'deepseek-v4.1-flash': 2.93, 'qwen3.5-9b': 1.96, 'kimi-k2.6': 11.48, 'qwen3.6-35b-a3b': 3.27} 19.64
+solve {'deepseek-v4.1-flash': 40.88, 'qwen3.5-9b': 22.62, 'kimi-k2.6': 86.12, 'qwen3.6-35b-a3b': 29.14} 178.76
+audit {'kimi3.1pro': 31.12} 31.12
+total billed (all cache lines + timeouts) 273.53

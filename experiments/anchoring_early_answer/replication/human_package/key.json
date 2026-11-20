@@ -1,0 +1,1067 @@
+{
+ "items": [
+  {
+   "n": 1,
+   "qid": "mmlupro-2018",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "psychology"
+  },
+  {
+   "n": 2,
+   "qid": "mmlupro-10555",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "computer science"
+  },
+  {
+   "n": 3,
+   "qid": "mmlupro-6000",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 4,
+   "qid": "mmlupro-6534",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 5,
+   "qid": "mmlupro-12063",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 6,
+   "qid": "mmlupro-4866",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "history"
+  },
+  {
+   "n": 7,
+   "qid": "mmlupro-5223",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 8,
+   "qid": "mmlupro-1571",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 9,
+   "qid": "mmlupro-6127",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 10,
+   "qid": "mmlupro-5717",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "other"
+  },
+  {
+   "n": 11,
+   "qid": "mmlupro-7308",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "economics"
+  },
+  {
+   "n": 12,
+   "qid": "mmlupro-941",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 13,
+   "qid": "mmlupro-4090",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "chemistry"
+  },
+  {
+   "n": 14,
+   "qid": "mmlupro-959",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 15,
+   "qid": "mmlupro-7422",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "economics"
+  },
+  {
+   "n": 16,
+   "qid": "mmlupro-3283",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "biology"
+  },
+  {
+   "n": 17,
+   "qid": "mmlupro-2649",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "psychology"
+  },
+  {
+   "n": 18,
+   "qid": "mmlupro-10932",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 19,
+   "qid": "mmlupro-4038",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "chemistry"
+  },
+  {
+   "n": 20,
+   "qid": "mmlupro-7515",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "economics"
+  },
+  {
+   "n": 21,
+   "qid": "mmlupro-5782",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 22,
+   "qid": "mmlupro-3938",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "chemistry"
+  },
+  {
+   "n": 23,
+   "qid": "mmlupro-5737",
+   "stratum": "4-6",
+   "auditor": "CONTESTED",
+   "category": "other"
+  },
+  {
+   "n": 24,
+   "qid": "mmlupro-4812",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "history"
+  },
+  {
+   "n": 25,
+   "qid": "mmlupro-6093",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 26,
+   "qid": "mmlupro-4918",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "history"
+  },
+  {
+   "n": 27,
+   "qid": "mmlupro-12202",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "engineering"
+  },
+  {
+   "n": 28,
+   "qid": "mmlupro-5858",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "other"
+  },
+  {
+   "n": 29,
+   "qid": "mmlupro-1940",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 30,
+   "qid": "mmlupro-5879",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 31,
+   "qid": "mmlupro-8933",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "math"
+  },
+  {
+   "n": 32,
+   "qid": "mmlupro-7365",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "economics"
+  },
+  {
+   "n": 33,
+   "qid": "mmlupro-1391",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 34,
+   "qid": "mmlupro-1300",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 35,
+   "qid": "mmlupro-11912",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 36,
+   "qid": "mmlupro-1382",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "law"
+  },
+  {
+   "n": 37,
+   "qid": "mmlupro-4719",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "history"
+  },
+  {
+   "n": 38,
+   "qid": "mmlupro-10457",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "computer science"
+  },
+  {
+   "n": 39,
+   "qid": "mmlupro-4859",
+   "stratum": "1-3",
+   "auditor": null,
+   "category": "history"
+  },
+  {
+   "n": 40,
+   "qid": "mmlupro-2179",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "psychology"
+  },
+  {
+   "n": 41,
+   "qid": "mmlupro-5214",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 42,
+   "qid": "mmlupro-5057",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "history"
+  },
+  {
+   "n": 43,
+   "qid": "mmlupro-11707",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 44,
+   "qid": "mmlupro-8344",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 45,
+   "qid": "mmlupro-10252",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "physics"
+  },
+  {
+   "n": 46,
+   "qid": "mmlupro-10614",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "computer science"
+  },
+  {
+   "n": 47,
+   "qid": "mmlupro-11408",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 48,
+   "qid": "mmlupro-11481",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 49,
+   "qid": "mmlupro-11411",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 50,
+   "qid": "mmlupro-11171",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 51,
+   "qid": "mmlupro-8022",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 52,
+   "qid": "mmlupro-7604",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "economics"
+  },
+  {
+   "n": 53,
+   "qid": "mmlupro-2735",
+   "stratum": "1-3",
+   "auditor": "LABEL_WRONG",
+   "category": "psychology"
+  },
+  {
+   "n": 54,
+   "qid": "mmlupro-11399",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 55,
+   "qid": "mmlupro-10461",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "computer science"
+  },
+  {
+   "n": 56,
+   "qid": "mmlupro-10922",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 57,
+   "qid": "mmlupro-8900",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 58,
+   "qid": "mmlupro-764",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "business"
+  },
+  {
+   "n": 59,
+   "qid": "mmlupro-5268",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 60,
+   "qid": "mmlupro-1946",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 61,
+   "qid": "mmlupro-850",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "business"
+  },
+  {
+   "n": 62,
+   "qid": "mmlupro-9205",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "physics"
+  },
+  {
+   "n": 63,
+   "qid": "mmlupro-12230",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 64,
+   "qid": "mmlupro-5817",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 65,
+   "qid": "mmlupro-10027",
+   "stratum": "4-6",
+   "auditor": "CONTESTED",
+   "category": "physics"
+  },
+  {
+   "n": 66,
+   "qid": "mmlupro-6567",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 67,
+   "qid": "mmlupro-5916",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 68,
+   "qid": "mmlupro-7891",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "math"
+  },
+  {
+   "n": 69,
+   "qid": "mmlupro-4346",
+   "stratum": "0/7",
+   "auditor": "LABEL_WRONG",
+   "category": "chemistry"
+  },
+  {
+   "n": 70,
+   "qid": "mmlupro-1627",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 71,
+   "qid": "mmlupro-5960",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 72,
+   "qid": "mmlupro-4691",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "history"
+  },
+  {
+   "n": 73,
+   "qid": "mmlupro-10895",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 74,
+   "qid": "mmlupro-10775",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 75,
+   "qid": "mmlupro-5488",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "other"
+  },
+  {
+   "n": 76,
+   "qid": "mmlupro-9774",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "physics"
+  },
+  {
+   "n": 77,
+   "qid": "mmlupro-10874",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 78,
+   "qid": "mmlupro-8665",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 79,
+   "qid": "mmlupro-5662",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 80,
+   "qid": "mmlupro-10150",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "physics"
+  },
+  {
+   "n": 81,
+   "qid": "mmlupro-1880",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 82,
+   "qid": "mmlupro-7879",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 83,
+   "qid": "mmlupro-589",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "business"
+  },
+  {
+   "n": 84,
+   "qid": "mmlupro-10385",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "computer science"
+  },
+  {
+   "n": 85,
+   "qid": "mmlupro-6475",
+   "stratum": "0/7",
+   "auditor": "LABEL_WRONG",
+   "category": "health"
+  },
+  {
+   "n": 86,
+   "qid": "mmlupro-3454",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "biology"
+  },
+  {
+   "n": 87,
+   "qid": "mmlupro-5313",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 88,
+   "qid": "mmlupro-5216",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "other"
+  },
+  {
+   "n": 89,
+   "qid": "mmlupro-5129",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 90,
+   "qid": "mmlupro-4562",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "chemistry"
+  },
+  {
+   "n": 91,
+   "qid": "mmlupro-1668",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 92,
+   "qid": "mmlupro-6012",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 93,
+   "qid": "mmlupro-10183",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "physics"
+  },
+  {
+   "n": 94,
+   "qid": "mmlupro-5074",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "other"
+  },
+  {
+   "n": 95,
+   "qid": "mmlupro-1741",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 96,
+   "qid": "mmlupro-11535",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 97,
+   "qid": "mmlupro-5085",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 98,
+   "qid": "mmlupro-9836",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "physics"
+  },
+  {
+   "n": 99,
+   "qid": "mmlupro-1119",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 100,
+   "qid": "mmlupro-6981",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "economics"
+  },
+  {
+   "n": 101,
+   "qid": "mmlupro-3575",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "chemistry"
+  },
+  {
+   "n": 102,
+   "qid": "mmlupro-10271",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "physics"
+  },
+  {
+   "n": 103,
+   "qid": "mmlupro-675",
+   "stratum": "4-6",
+   "auditor": "CONTESTED",
+   "category": "business"
+  },
+  {
+   "n": 104,
+   "qid": "mmlupro-8426",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "math"
+  },
+  {
+   "n": 105,
+   "qid": "mmlupro-2078",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "psychology"
+  },
+  {
+   "n": 106,
+   "qid": "mmlupro-1191",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 107,
+   "qid": "mmlupro-9646",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "physics"
+  },
+  {
+   "n": 108,
+   "qid": "mmlupro-1016",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 109,
+   "qid": "mmlupro-11819",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 110,
+   "qid": "mmlupro-5240",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "other"
+  },
+  {
+   "n": 111,
+   "qid": "mmlupro-1197",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 112,
+   "qid": "mmlupro-5650",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "other"
+  },
+  {
+   "n": 113,
+   "qid": "mmlupro-3745",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "chemistry"
+  },
+  {
+   "n": 114,
+   "qid": "mmlupro-1458",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 115,
+   "qid": "mmlupro-451",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "business"
+  },
+  {
+   "n": 116,
+   "qid": "mmlupro-11539",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 117,
+   "qid": "mmlupro-6465",
+   "stratum": "4-6",
+   "auditor": "CONTESTED",
+   "category": "health"
+  },
+  {
+   "n": 118,
+   "qid": "mmlupro-6397",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 119,
+   "qid": "mmlupro-1634",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 120,
+   "qid": "mmlupro-8931",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "math"
+  },
+  {
+   "n": 121,
+   "qid": "mmlupro-8779",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "math"
+  },
+  {
+   "n": 122,
+   "qid": "mmlupro-503",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "business"
+  },
+  {
+   "n": 123,
+   "qid": "mmlupro-10790",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 124,
+   "qid": "mmlupro-5443",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 125,
+   "qid": "mmlupro-3638",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "chemistry"
+  },
+  {
+   "n": 126,
+   "qid": "mmlupro-1725",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 127,
+   "qid": "mmlupro-1122",
+   "stratum": "4-6",
+   "auditor": "CONTESTED",
+   "category": "law"
+  },
+  {
+   "n": 128,
+   "qid": "mmlupro-129",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "business"
+  },
+  {
+   "n": 129,
+   "qid": "mmlupro-1450",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 130,
+   "qid": "mmlupro-11885",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 131,
+   "qid": "mmlupro-1987",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "psychology"
+  },
+  {
+   "n": 132,
+   "qid": "mmlupro-11359",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "engineering"
+  },
+  {
+   "n": 133,
+   "qid": "mmlupro-4767",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "history"
+  },
+  {
+   "n": 134,
+   "qid": "mmlupro-10827",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 135,
+   "qid": "mmlupro-2336",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK",
+   "category": "psychology"
+  },
+  {
+   "n": 136,
+   "qid": "mmlupro-2521",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "psychology"
+  },
+  {
+   "n": 137,
+   "qid": "mmlupro-6501",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "health"
+  },
+  {
+   "n": 138,
+   "qid": "mmlupro-11499",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "engineering"
+  },
+  {
+   "n": 139,
+   "qid": "mmlupro-1268",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "law"
+  },
+  {
+   "n": 140,
+   "qid": "mmlupro-10170",
+   "stratum": "1-3",
+   "auditor": "CONTESTED",
+   "category": "physics"
+  },
+  {
+   "n": 141,
+   "qid": "mmlupro-5957",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "other"
+  },
+  {
+   "n": 142,
+   "qid": "mmlupro-11066",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 143,
+   "qid": "mmlupro-3438",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "biology"
+  },
+  {
+   "n": 144,
+   "qid": "mmlupro-10802",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK",
+   "category": "philosophy"
+  },
+  {
+   "n": 145,
+   "qid": "mmlupro-3873",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG",
+   "category": "chemistry"
+  },
+  {
+   "n": 146,
+   "qid": "mmlupro-11751",
+   "stratum": "1-3",
+   "auditor": "CONTESTED",
+   "category": "engineering"
+  },
+  {
+   "n": 147,
+   "qid": "mmlupro-7267",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK",
+   "category": "economics"
+  },
+  {
+   "n": 148,
+   "qid": "mmlupro-1244",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG",
+   "category": "law"
+  },
+  {
+   "n": 149,
+   "qid": "mmlupro-3268",
+   "stratum": "7/7",
+   "auditor": "CONTESTED",
+   "category": "biology"
+  },
+  {
+   "n": 150,
+   "qid": "mmlupro-10704",
+   "stratum": "7/7",
+   "auditor": "LABEL_OK",
+   "category": "computer science"
+  }
+ ],
+ "population": {
+  "1-3": 383,
+  "4-6": 248,
+  "0/7": 529,
+  "7/7": 176
+ },
+ "sampled": {
+  "7/7": 50,
+  "4-6": 40,
+  "1-3": 30,
+  "0/7": 30
+ },
+ "no_judge_with_5_answers": 0
+}

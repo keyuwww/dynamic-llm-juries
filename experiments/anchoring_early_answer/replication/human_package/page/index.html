@@ -1,0 +1,235 @@
+<title>MMLU-Pro Key Check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one item per screen; question on top, the two responses side by side (stacked on phones), decision bar last. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1b2230; --muted: #5d6676; --line: #dde1e8;
+  --accent: #2f5bd3; --accent-ink: #ffffff;
+  --wrong: #b4232c; --wrong-bg: #fbecec; --right: #1d7a46; --right-bg: #e8f5ee; --amb: #8a5a00; --amb-bg: #fbf2df;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12151b; --panel: #1a1f27; --fg: #e4e8ef; --muted: #9aa3b2; --line: #2c3340;
+  --accent: #7f9cf0; --accent-ink: #0f1420;
+  --wrong: #f08a8f; --wrong-bg: #3a1e21; --right: #6fd29b; --right-bg: #18311f; --amb: #e8bf6a; --amb-bg: #342a14;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12151b; --panel: #1a1f27; --fg: #e4e8ef; --muted: #9aa3b2; --line: #2c3340;
+  --accent: #7f9cf0; --accent-ink: #0f1420;
+  --wrong: #f08a8f; --wrong-bg: #3a1e21; --right: #6fd29b; --right-bg: #18311f; --amb: #e8bf6a; --amb-bg: #342a14;
+  color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 16px }
+header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 14px 10px;
+  border-bottom: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+h1 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: .01em }
+.who { color: var(--muted); font-size: 13px }
+.progress { flex: 1 1 220px; display: flex; align-items: center; gap: 10px; min-width: 0 }
+.bar { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden }
+.bar > i { display: block; height: 100%; background: var(--accent); width: 0 }
+.count { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap }
+nav { display: flex; gap: 6px; align-items: center; flex-wrap: wrap }
+button, .btn { font: 500 14px var(--sans); border: 1px solid var(--line); background: var(--panel); color: var(--fg);
+  border-radius: 6px; padding: 7px 12px; cursor: pointer }
+button:hover { border-color: var(--muted) }
+button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+button[disabled] { opacity: .5; cursor: default }
+#jump { width: 64px; font: 500 14px var(--mono); padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); color: var(--fg) }
+details.help { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px }
+details.help summary { cursor: pointer; font-weight: 600 }
+details.help p, details.help li { max-width: 72ch; color: var(--muted) }
+.q { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; min-width: 0 }
+.label { font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px }
+.qtext { white-space: pre-wrap; overflow-wrap: anywhere }
+.keyline { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px }
+.chip { font: 500 13px var(--mono); padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line) }
+.chip.k { background: var(--right-bg); color: var(--right); border-color: transparent }
+.chip.w { background: var(--wrong-bg); color: var(--wrong); border-color: transparent }
+.resp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+@media (max-width: 820px) { .resp { grid-template-columns: 1fr } }
+.r { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; min-width: 0; display: flex; flex-direction: column }
+.r.is-wrong { border-color: var(--wrong) }
+.r h2 { margin: 0; padding: 10px 14px; font-size: 14px; font-weight: 600; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap }
+.r pre { margin: 0; padding: 12px 14px; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.55 var(--mono); max-height: 60vh; overflow: auto }
+.decide { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 18px; display: grid; gap: 12px }
+.decide .ask { font-weight: 600 }
+.choices { display: flex; flex-wrap: wrap; gap: 8px }
+.choice { display: flex; gap: 8px; align-items: center; padding: 9px 14px; border-radius: 6px; border: 1px solid var(--line); cursor: pointer; background: var(--panel) }
+.choice kbd { font: 500 12px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px }
+.choice[aria-pressed="true"][data-v="clearly_wrong"] { background: var(--wrong-bg); border-color: var(--wrong); color: var(--wrong) }
+.choice[aria-pressed="true"][data-v="actually_correct"] { background: var(--right-bg); border-color: var(--right); color: var(--right) }
+.choice[aria-pressed="true"][data-v="ambiguous"] { background: var(--amb-bg); border-color: var(--amb); color: var(--amb) }
+textarea { width: 100%; min-height: 64px; resize: vertical; font: 14px/1.5 var(--sans); padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg) }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between }
+.save { background: var(--accent); color: var(--accent-ink); border-color: var(--accent) }
+.status { font-size: 13px; color: var(--muted); min-height: 1.4em }
+.banner { background: var(--amb-bg); color: var(--amb); border-radius: 8px; padding: 10px 14px }
+@media (prefers-reduced-motion: no-preference) { .bar > i { transition: width .3s } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>MMLU-Pro key check</h1>
+    <span class="who" id="who">Connecting…</span>
+    <div class="progress"><div class="bar"><i id="barfill"></i></div><span class="count" id="count">0 / 150 labelled</span></div>
+    <nav>
+      <button id="prev" type="button" aria-label="Previous item">← Prev</button>
+      <input id="jump" type="number" min="1" max="150" aria-label="Go to item number">
+      <button id="next" type="button" aria-label="Next item">Next →</button>
+      <button id="todo" type="button">First unlabelled</button>
+    </nav>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <details class="help" id="help">
+    <summary>How to label (read once)</summary>
+    <p>Each item is a multiple-choice question from MMLU-Pro and two AI responses. The benchmark's answer key says one response is right and the other is wrong. Your job is to check the response the key marks <b>wrong</b>: is its final option really wrong?</p>
+    <ul>
+      <li><b>Clearly wrong</b> — its final option is wrong and the key's option is right.</li>
+      <li><b>Actually correct</b> — its final option is right: the key is wrong, or both options are defensible as right.</li>
+      <li><b>Ambiguous</b> — the question is unclear, or more than one option is defensible and you can't pick.</li>
+    </ul>
+    <p>Write a one-line reason. Look things up in textbooks or on the web if you need to, but do not ask an AI assistant: these labels are the paper's human check. Labels save automatically when you press Save; you can come back and change them. Keys: <b>1</b>/<b>2</b>/<b>3</b> pick a label, <b>Ctrl+Enter</b> saves and moves on.</p>
+  </details>
+
+  <section class="q" aria-labelledby="qlabel">
+    <div class="label" id="qlabel">Item <span id="num">–</span> · Question</div>
+    <div class="qtext" id="qtext">Loading items…</div>
+    <div class="keyline"><span class="chip k" id="keychip">Key: –</span><span class="chip w" id="wrongchip">Marked wrong: –</span></div>
+  </section>
+
+  <section class="resp">
+    <article class="r" id="ra"><h2><span>Response A</span><span class="chip" id="taga"></span></h2><pre id="texta"></pre></article>
+    <article class="r" id="rb"><h2><span>Response B</span><span class="chip" id="tagb"></span></h2><pre id="textb"></pre></article>
+  </section>
+
+  <section class="decide">
+    <div class="ask" id="ask">Is the final answer of the response marked wrong really wrong?</div>
+    <div class="choices" role="group" aria-label="Label">
+      <button class="choice" type="button" data-v="clearly_wrong" aria-pressed="false"><kbd>1</kbd>Clearly wrong</button>
+      <button class="choice" type="button" data-v="actually_correct" aria-pressed="false"><kbd>2</kbd>Actually correct</button>
+      <button class="choice" type="button" data-v="ambiguous" aria-pressed="false"><kbd>3</kbd>Ambiguous</button>
+    </div>
+    <label for="reason" class="label">Reason (one line)</label>
+    <textarea id="reason" placeholder="e.g. Option C is the textbook definition; the key's D describes something else."></textarea>
+    <div class="row">
+      <span class="status" id="status"></span>
+      <button class="save" id="save" type="button">Save &amp; next</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const N = 150;
+let items = [], cur = 0, labels = {}, db = null, uid = null, pick = null;
+
+function setStatus(t) { $("status").textContent = t; }
+
+function renderProgress() {
+  const done = Object.keys(labels).length;
+  $("count").textContent = `${done} / ${N} labelled`;
+  $("barfill").style.width = (100 * done / N) + "%";
+}
+
+function render() {
+  const it = items[cur];
+  if (!it) return;
+  $("num").textContent = it.n;
+  $("jump").value = it.n;
+  $("qtext").textContent = it.question;
+  $("keychip").textContent = `Key: ${it.key_answer} (Response ${it.key_response})`;
+  $("wrongchip").textContent = `Marked wrong: ${it.marked_wrong_answer} (Response ${it.marked_wrong_response})`;
+  $("texta").textContent = it.response_a;
+  $("textb").textContent = it.response_b;
+  for (const s of ["a", "b"]) {
+    const isWrong = it.marked_wrong_response === s.toUpperCase();
+    $("r" + s).classList.toggle("is-wrong", isWrong);
+    const tag = $("tag" + s);
+    tag.textContent = isWrong ? `Marked wrong · ${it.marked_wrong_answer}` : `Key's answer · ${it.key_answer}`;
+    tag.className = "chip " + (isWrong ? "w" : "k");
+  }
+  $("ask").textContent = `Is Response ${it.marked_wrong_response}'s final answer (${it.marked_wrong_answer}) really wrong?`;
+  const l = labels[it.n];
+  pick = l ? l.label : null;
+  $("reason").value = l ? (l.reason || "") : "";
+  document.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === pick)));
+  $("prev").disabled = cur === 0;
+  $("next").disabled = cur === items.length - 1;
+  setStatus(l ? "Saved earlier. Change it and press Save to update." : "");
+  window.scrollTo({ top: 0 });
+}
+
+function go(i) { cur = Math.max(0, Math.min(items.length - 1, i)); render(); }
+function firstTodo() { const i = items.findIndex(it => !labels[it.n]); go(i === -1 ? cur : i); }
+
+async function save() {
+  const it = items[cur];
+  if (!pick) { setStatus("Pick a label first (1, 2 or 3)."); return; }
+  if (!db || !uid) { setStatus("Can't save: the page isn't connected to storage. Reload, and make sure you're signed in."); return; }
+  const body = { n: it.n, label: pick, reason: $("reason").value.trim(), annotator: uid, saved_at: new Date().toISOString() };
+  $("save").disabled = true;
+  try {
+    await db.collection("labels").doc(`${uid}--${it.n}`).set(body);
+    labels[it.n] = body; renderProgress();
+    setStatus(`Saved item ${it.n}.`);
+    const nxt = items.findIndex((x, i) => i > cur && !labels[x.n]);
+    go(nxt === -1 ? Math.min(cur + 1, items.length - 1) : nxt);
+  } catch (e) {
+    setStatus(e && e.code === "quota_exceeded" ? "Storage is full; tell the study owner." : "Save failed. Check your connection and press Save again.");
+  } finally { $("save").disabled = false; }
+}
+
+document.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => {
+  pick = b.dataset.v;
+  document.querySelectorAll(".choice").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+}));
+$("save").addEventListener("click", save);
+$("prev").addEventListener("click", () => go(cur - 1));
+$("next").addEventListener("click", () => go(cur + 1));
+$("todo").addEventListener("click", firstTodo);
+$("jump").addEventListener("change", e => { const n = +e.target.value; const i = items.findIndex(x => x.n === n); if (i >= 0) go(i); });
+document.addEventListener("keydown", e => {
+  if (e.target === $("reason") || e.target === $("jump")) {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); save(); }
+    return;
+  }
+  const map = { "1": "clearly_wrong", "2": "actually_correct", "3": "ambiguous" };
+  if (map[e.key]) document.querySelector(`.choice[data-v="${map[e.key]}"]`).click();
+  else if (e.key === "ArrowRight") go(cur + 1);
+  else if (e.key === "ArrowLeft") go(cur - 1);
+  else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) save();
+});
+
+try { if (localStorage.getItem("helpSeen")) $("help").open = false; else { $("help").open = true; localStorage.setItem("helpSeen", "1"); } } catch (_) { $("help").open = true; }
+
+fetch("items.json").then(r => r.json()).then(d => { items = d; render(); if (Object.keys(labels).length) firstTodo(); })
+  .catch(() => { $("qtext").textContent = "Couldn't load the items. Reload the page."; });
+
+(async () => {
+  const [d, u] = await Promise.all([window.claude?.use?.("db") ?? null, window.claude?.use?.("user") ?? null]);
+  db = d;
+  uid = u ? await u.id() : null;
+  if (!db || !uid) {
+    $("who").textContent = "Not connected";
+    const b = $("banner"); b.hidden = false;
+    b.textContent = "Labels can't be saved in this view. Open the page on claude.ai while signed in to your organization's account.";
+    return;
+  }
+  const me = await u.me();
+  $("who").textContent = `Labelling as ${me.name || "you"}`;
+  db.collection("labels").where("annotator", "==", uid).onSnapshot(snap => {
+    labels = {};
+    snap.docs.forEach(doc => { const v = doc.data(); labels[v.n] = v; });
+    renderProgress();
+    if (items.length && !$("reason").value && !pick) render();
+  }, () => setStatus("Lost the connection to storage. Reload the page."));
+})();
+</script>

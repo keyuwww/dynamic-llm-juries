@@ -1037,3 +1037,49 @@ Source: `Codex/.../outputs/future_paper_improvements.md`, Paper 1 items. Caps un
 
 ### 15e. Ledger
 Tinker this revision: $438 (Exp. 14) + $53 (complete audit) = $491 of $1,000. Modal $0. Human annotation still not done.
+
+## Experiment 16 — Third review: self-preference contrast, math replication, human check package (Nov 20)
+
+Self-review scored the paper ARR 3.5/5 and proposed three fixes; all three are done or prepared.
+
+### 16a. Self-preference contrast (paper intro)
+New paragraph: self-preference is about who wrote the text (and tracks familiarity / low perplexity; Panickssery et
+al. 2024, Wataoka et al. 2024); belief is about what the answer concludes. Judges never grade their own text, and the
+association holds where authorship cannot vary with belief (same question, same judge; same candidate, different
+judges). Familiarity of a believed conclusion is counted as part of belief, not a rival explanation.
+
+### 16b. Second pre-registered replication: open-ended math (`replication_math/`)
+Why: the MMLU-Pro replication is multiple choice, and the main study's open-ended benchmarks need a model matcher.
+DAPO-Math-17k problems with integer answers match exactly. Protocol (`PROTOCOL.md`) and size (`SIZE.md`) were fixed
+before the confirmatory run; the parser was fixed on the pilot (questions 0-79). Confirmatory set: questions
+80-1879 -> 819 pairs, 3,228 judgments (29 verdicts unparsed, 19 with < 5 own answers).
+
+Plain-English result: judges solve 88-93% of these problems and pick the wrong response in only 4-8% of pairs, so
+95% of judgments are at 0/7. Still, under the answer key the more a judge believes a wrong answer, the more it picks
+it: 4% at 0/7, 19% at 1-3, 42% at 4-6, 92% at 7/7 (13 judgments). Pre-registered slope +71 [+54, +85]; every judge
+above zero. Competitor belief -17 [-29, -6]. One-sample label +10 [-7, +28] beside belief +62 [+40, +83].
+
+Differences from MMLU-Pro (reported as such):
+- Same candidate across judges: -3 [-20, +17], null. Judges' beliefs about the same candidate differ for only 95 of
+  819 candidates (12%; MMLU-Pro 683 of 1,333, 51%), so the test has little to work with.
+- Kimi-K3.1-Pro audited all 819 wrong responses: 782 clearly wrong, 21 actually correct, 9 contested, 7 no verdict.
+  Disputes by highest belief: 17/721 at 0/7, 4/66 at 1-3, 2/18 at 4-6, 7/7 at 7/7. The 7/7 disputes are specific
+  derivations (e.g. power tower needs 6 levels, key says 5; divisor sum 29016, key says 2976). Not human-checked.
+- Audit-filtered: no judgment left at 7/7; 3% / 14% / 22% over 0/7, 1-3, 4-6; slope +41 [+16, +70]. Qwen judges
+  above zero, DeepSeek includes zero, Kimi-K2.6 approves 0 of 13 believed audited wrong responses.
+
+Files: `math_rep.py`, `analyze_math.py`, `results_80_1800.{json,md}`, `pilot.log`, `confirm.log`, `audit2.log`. The
+first audit pass stopped at the $300 cap because in-flight requests reserve their maximum cost; the 319 remaining
+audits were rerun at concurrency 8. Paper: §5 "Open-ended answers", Appendix "Math Replication Details" (Table 7),
+abstract, contributions, takeaway 2, limitations, ethics.
+
+### 16c. Human label check package (MMLU-Pro replication; `replication/human_package.py`)
+150 wrong-labelled responses stratified by the highest belief of any judge (7/7 50, 4-6 40, 1-3 30, 0/7 30; seed
+20261120), NOT by audit verdict, so each stratum's human dispute rate compares directly with the auditor's
+(9% -> 51%). Blinded items in `human_package/items.jsonl`; key with strata and auditor verdicts in `key.json`.
+Annotation page: https://claude.ai/artifact/TBLySNG347bRqAbrHu1RmK (labels stored per reader). Not yet annotated;
+the user will annotate. No model output may be recorded as a human label.
+
+### 16d. Ledger
+Math replication $292.59 (pilot included; writing $39.54, verdicts $19.64, own answers $178.76, audit $48.45,
+timeouts $6.20). Tinker this revision total: $491 + $293 = $784 of $1,000. Modal $0.
