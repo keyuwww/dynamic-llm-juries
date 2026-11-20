@@ -129,10 +129,12 @@ def main():
             stats = {f"{m}|{met}": S.auc_gain(m, col=c) for m in METHODS if m != "verdict"
                      for met, c in (("rank", (0, 1)), ("bon", (2, 3)))}
             stats["verdict|rank_level"] = S.level("verdict")
+            stats |= {f"{m}|rank_level": S.level(m) for m in METHODS if m != "verdict"}  # levels (same-model figure)
             stats |= {f"{m}|rank_macro": S.auc_gain(m, col=(5, 3)) for m in METHODS if m != "verdict"}
             est, draws = S.boot(pairs, stats)
             summ[f"{name}|{g}"] = {m: {met: est[f"{m}|{met}"] for met in ("rank", "bon")} for m in METHODS if m != "verdict"}
             summ[f"{name}|{g}"]["verdict_rank_ci"] = est["verdict|rank_level"]
+            summ[f"{name}|{g}"]["rank_level"] = {m: est.get(f"{m}|rank_level") for m in METHODS}
             for m in METHODS[1:]:
                 if summ[f"{name}|{g}"].get(m):
                     summ[f"{name}|{g}"][m]["rank_macro"] = est.get(f"{m}|rank_macro")

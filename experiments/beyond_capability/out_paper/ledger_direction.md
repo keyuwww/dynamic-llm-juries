@@ -13,3 +13,4 @@
 | 2026-11-19 | Modal billing report | all of the above, actual: ingridchien $25.5 (outer + Mistral rerun app $24.2), keyuwww $2.2 | | **~$28** | **~$28 / $0** |
 
 Cannon was not used. Tinker was not used.
+| 2026-11-20 | Modal (ingridchien + keyuwww) | nested surface residualization, 19 pairs, CPU, run twice (second adds the scale-matched variant) | $5 | ~$0.06 (billing report) | ~$28 / $0 |

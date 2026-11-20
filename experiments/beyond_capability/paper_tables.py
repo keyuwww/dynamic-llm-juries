@@ -256,6 +256,21 @@ def control_numbers():
                     put(t + ".ci", f"{x['g']:.1f} [{x['lo']:.1f}, {x['hi']:.1f}]")
         for k, x in Sf.get("format", {}).items():
             put(f"fmt.{k}", f"{100 * x:.0f}")
+        NF = A.HERE / "out_paper" / "nested_surface_check.json"
+        if NF.exists():  # nested check: every fit of the composed procedure inside the outer training half
+            Ns = json.load(open(NF))
+            put("nsurf.n", str(Ns["n_pairs"]))
+            put("nsurf.r2.lo", f"{100 * Ns['r2_inner']['lo']:.0f}"), put("nsurf.r2.hi", f"{100 * Ns['r2_inner']['hi']:.0f}")
+            for k, x in Ns["pooled"].items():
+                kk = k.replace("|", ".")
+                if k == "resid_inner_kept|all":  # share of the advantage the features account for
+                    put("nsurf.removed.ci", f"{100 - 100 * x['g']:.0f}\\% [{100 - 100 * x['hi']:.0f}, {100 - 100 * x['lo']:.0f}]")
+                if "kept" in k:
+                    put(f"nsurf.{kk}.ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]")
+                elif "level" in k:
+                    put(f"nsurf.{kk}", f"{x['g']:.1f}"), put(f"nsurf.{kk}.ci", f"{x['g']:.1f} [{x['lo']:.1f}, {x['hi']:.1f}]")
+                else:
+                    put(f"nsurf.{kk}", g(x)), put(f"nsurf.{kk}.ci", g(x, ci=True))
         r2 = [v["r2_direct_on_surface"] for v in Sf["pairs"].values()]
         put("surf.r2.lo", f"{100 * min(r2):.0f}"), put("surf.r2.hi", f"{100 * max(r2):.0f}")
         sl = {b: [v["surface|all"] for k, v in Sf["pairs"].items() if k.endswith(b)] for b in ("mmlu", "math", "bbeh")}
@@ -284,7 +299,7 @@ def outer_numbers():
     if not F.exists():
         return
     O = json.load(open(F))
-    put("outer.npairs", str(O["n_pairs"]))
+    put("outer.npairs", str(O["n_pairs"])), put("outer.npairs.unsolved", str(O.get("n_pairs_unsolved", "")))
     for k, x in O["pooled"].items():
         kk = k.replace("|", ".")
         if k == "rule_over_direct":
@@ -454,7 +469,7 @@ def tab_scale():
 
 
 def tab_sm():
-    """main table: same-model pairs on questions the judge cannot solve."""
+    """main table: same-model pairs on questions the judge failed on a sampled attempt."""
     S = R["summary"]
     rows = []
     for b in ("math", "bbeh", "mmlu"):
@@ -480,7 +495,21 @@ def tab_readout():
     """full answer pool: ranking and best-of-n gains of every readout."""
     S = R["summary"]
     rows = []
-    for key, lab in (("pool|all", "All questions"), ("pool_unsolved|all", "Judge cannot solve")):
+    F = A.HERE / "out_paper" / "outer.json"
+    if F.exists():  # primary: every choice made on training questions (nested), 12 pairs
+        O = json.load(open(F))
+        rows.append(f"\\multicolumn{{10}}{{l}}{{\\emph{{Held out: every choice on training questions ({O['n_pairs']} pairs; stretch = rule)}}}} \\\\")
+        for key, lab in (("pooled", "\\quad All questions"), ("pooled_unsolved", "\\quad Judge failed$^\\ddagger$")):
+            e = O[key]
+            cells = ["--", "--"]
+            for m in ("rule", "direct", "sum"):
+                for met in ("gain", "bon"):
+                    x = e.get(f"{m}|{met}")
+                    cells.append(bold(x, g(x)))
+            rows.append(f"{lab} & {e['verdict|level']['g']:.1f} / {e['verdict|bon_level']['g']:.1f} & " + " & ".join(cells) + " \\\\")
+        rows.append("\\midrule")
+        rows.append(f"\\multicolumn{{10}}{{l}}{{\\emph{{Selected pairs: layer and gap check on the evaluated answers ({S['pool|all'].get('k', R and len(R['pool']))} pairs)}}}} \\\\")
+    for key, lab in (("pool|all", "\\quad All questions"), ("pool_unsolved|all", "\\quad Judge failed$^\\ddagger$")):
         s = S[key]
         cells = []
         for m in ("cot", "x11", "direct", "sum"):
@@ -540,7 +569,7 @@ def tab_sm_pairs():
 
 def tab_bon():
     S = R["summary"]
-    order = [("pool|all", "All questions"), ("pool_unsolved|all", "Judge cannot solve")]
+    order = [("pool|all", "All questions"), ("pool_unsolved|all", "Judge failed")]
     for b in ("math", "bbeh", "mmlu"):
         for who in ("qwen3.5-4b", "olmo2-7b"):
             order.append((f"sm|{b}|{who}", f"Same model, {BN[b]}, {WHOB(b, who)}"))

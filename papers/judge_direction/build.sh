@@ -9,6 +9,7 @@ python3 paper_analysis.py > /dev/null      # out_paper/results.json, results.md
 python3 -c "import json, paper_analysis as P, paper_data as D; json.dump(P.authorship(D.pool_sets()), open('out_paper/authorship.json', 'w'), indent=1)"
 python3 paper_authorship.py > /dev/null  # out_paper/authorship_check.json (authorship_dir.json, authorship_controls.json: Modal CPU jobs)
 python3 paper_surface.py > /dev/null     # out_paper/surface_check.json
+[ -f out_paper/nested_surface.json ] && python3 nested_surface_analyze.py > /dev/null  # out_paper/nested_surface_check.json (nested_surface_modal.py: Modal CPU)
 [ -d out_outer ] && python3 outer_analyze.py > /dev/null  # out_paper/outer.json (out_outer/ from the GPU runs)
 python3 paper_tables.py                    # papers/judge_direction/numbers.tex, tab_*.tex
 python3 paper_figures.py                   # papers/judge_direction/fig_*.pdf

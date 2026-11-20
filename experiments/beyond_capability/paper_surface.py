@@ -129,6 +129,8 @@ def main():
     for part, col in (("all", (0, 1)), ("same", (2, 3)), ("diff", (4, 5))):
         stats |= {f"{m}|gain|{part}": S.auc_gain(m, col=col) for m in METH[1:]}
         stats |= {f"{m}|level|{part}": S.level(m, col=col) for m in METH}
+        # paired comparison on identical questions and answers: surface model minus direction
+        stats[f"surface_minus_direct|{part}"] = S.auc_gain("surface", base="direct", col=col)
     est, draws = S.boot(pairs, stats)
     for part in ("all", "same", "diff"):
         est[f"resid_kept|{part}"] = S.ratio(draws, f"dir_resid|gain|{part}", f"direct|gain|{part}", est)

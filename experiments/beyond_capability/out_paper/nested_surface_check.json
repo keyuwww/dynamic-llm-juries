@@ -1,0 +1,883 @@
+{
+ "n_pairs": 19,
+ "pooled": {
+  "direct|gain|all": {
+   "g": 8.26517277656748,
+   "lo": 6.708012671638147,
+   "hi": 9.827493800340429,
+   "k": 19
+  },
+  "surface|gain|all": {
+   "g": 8.937303456471977,
+   "lo": 6.737972111281573,
+   "hi": 11.13577166864521,
+   "k": 19
+  },
+  "dir_resid|gain|all": {
+   "g": 6.235603181006668,
+   "lo": 4.864587319807065,
+   "hi": 7.662046158945593,
+   "k": 19
+  },
+  "direct_inner|gain|all": {
+   "g": 8.383967455671954,
+   "lo": 6.82250246807534,
+   "hi": 9.929357934273915,
+   "k": 19
+  },
+  "resid_inner|gain|all": {
+   "g": 5.777667532331249,
+   "lo": 4.437857678087708,
+   "hi": 7.159409744821252,
+   "k": 19
+  },
+  "verdict|level|all": {
+   "g": 53.39598075307573,
+   "lo": 52.12816810608116,
+   "hi": 54.70323210872063,
+   "k": 19
+  },
+  "direct|level|all": {
+   "g": 61.66115352964322,
+   "lo": 60.33494958076868,
+   "hi": 62.965914907999604,
+   "k": 19
+  },
+  "surface|level|all": {
+   "g": 62.3332842095477,
+   "lo": 60.52078666518123,
+   "hi": 64.03281425371662,
+   "k": 19
+  },
+  "dir_resid|level|all": {
+   "g": 59.63158393408239,
+   "lo": 58.26259667220268,
+   "hi": 60.97782446599863,
+   "k": 19
+  },
+  "direct_inner|level|all": {
+   "g": 61.77994820874769,
+   "lo": 60.44032988880071,
+   "hi": 63.08058506904918,
+   "k": 19
+  },
+  "resid_inner|level|all": {
+   "g": 59.17364828540698,
+   "lo": 57.82849580346636,
+   "hi": 60.50639275300618,
+   "k": 19
+  },
+  "surface_minus_direct|all": {
+   "g": 0.6721306799044943,
+   "lo": -1.0371574001951147,
+   "hi": 2.475226957055871,
+   "k": 19
+  },
+  "resid_minus_direct|all": {
+   "g": -2.029569595560814,
+   "lo": -3.073817901338508,
+   "hi": -0.9322060038631266,
+   "k": 19
+  },
+  "direct|gain|same": {
+   "g": 0.1858205660908668,
+   "lo": -2.186436535846235,
+   "hi": 2.6630496110066955,
+   "k": 12
+  },
+  "surface|gain|same": {
+   "g": 3.593995248403496,
+   "lo": 0.636675872691433,
+   "hi": 6.626946081270188,
+   "k": 12
+  },
+  "dir_resid|gain|same": {
+   "g": -2.90930137642394,
+   "lo": -5.225128949438919,
+   "hi": -0.5460606603595555,
+   "k": 12
+  },
+  "direct_inner|gain|same": {
+   "g": 0.11294792274344638,
+   "lo": -2.241081582887463,
+   "hi": 2.6099537303329168,
+   "k": 12
+  },
+  "resid_inner|gain|same": {
+   "g": -3.4544972775463236,
+   "lo": -5.778965378973006,
+   "hi": -1.084488201462766,
+   "k": 12
+  },
+  "verdict|level|same": {
+   "g": 55.88257973174274,
+   "lo": 54.23106698390548,
+   "hi": 57.495730629311616,
+   "k": 12
+  },
+  "direct|level|same": {
+   "g": 56.06840029783361,
+   "lo": 53.786177580366164,
+   "hi": 58.318266197174424,
+   "k": 12
+  },
+  "surface|level|same": {
+   "g": 59.47657498014624,
+   "lo": 56.554488832210424,
+   "hi": 62.41877077627018,
+   "k": 12
+  },
+  "dir_resid|level|same": {
+   "g": 52.97327835531879,
+   "lo": 50.982702996220915,
+   "hi": 54.99610489623056,
+   "k": 12
+  },
+  "direct_inner|level|same": {
+   "g": 55.99552765448618,
+   "lo": 53.74296269118542,
+   "hi": 58.23420781370776,
+   "k": 12
+  },
+  "resid_inner|level|same": {
+   "g": 52.428082454196414,
+   "lo": 50.44482874914272,
+   "hi": 54.48658935716657,
+   "k": 12
+  },
+  "surface_minus_direct|same": {
+   "g": 3.4081746823126298,
+   "lo": 0.4534311435966748,
+   "hi": 6.397024357381843,
+   "k": 12
+  },
+  "resid_minus_direct|same": {
+   "g": -3.095121942514807,
+   "lo": -5.031875474438676,
+   "hi": -1.2098808432991763,
+   "k": 12
+  },
+  "direct|gain|diff": {
+   "g": 10.25667082200132,
+   "lo": 8.681070650179786,
+   "hi": 11.883650884542703,
+   "k": 19
+  },
+  "surface|gain|diff": {
+   "g": 11.195219607171746,
+   "lo": 8.802445943233074,
+   "hi": 13.489681440227015,
+   "k": 19
+  },
+  "dir_resid|gain|diff": {
+   "g": 8.047976997632999,
+   "lo": 6.647228716136589,
+   "hi": 9.482348871714397,
+   "k": 19
+  },
+  "direct_inner|gain|diff": {
+   "g": 10.389369821805124,
+   "lo": 8.83478320500639,
+   "hi": 12.013601534718102,
+   "k": 19
+  },
+  "resid_inner|gain|diff": {
+   "g": 7.59736340701561,
+   "lo": 6.173461343719476,
+   "hi": 9.030632216064914,
+   "k": 19
+  },
+  "verdict|level|diff": {
+   "g": 52.74835736714563,
+   "lo": 51.44845881314836,
+   "hi": 54.111310260471114,
+   "k": 19
+  },
+  "direct|level|diff": {
+   "g": 63.00502818914695,
+   "lo": 61.64182171846603,
+   "hi": 64.39171272982371,
+   "k": 19
+  },
+  "surface|level|diff": {
+   "g": 63.94357697431738,
+   "lo": 62.09015816523318,
+   "hi": 65.72624439723924,
+   "k": 19
+  },
+  "dir_resid|level|diff": {
+   "g": 60.79633436477862,
+   "lo": 59.396994733398664,
+   "hi": 62.19295742264675,
+   "k": 19
+  },
+  "direct_inner|level|diff": {
+   "g": 63.13772718895076,
+   "lo": 61.76296345407213,
+   "hi": 64.53408529196044,
+   "k": 19
+  },
+  "resid_inner|level|diff": {
+   "g": 60.34572077416124,
+   "lo": 58.96013385793787,
+   "hi": 61.723109049326965,
+   "k": 19
+  },
+  "surface_minus_direct|diff": {
+   "g": 0.9385487851704241,
+   "lo": -0.8708391272446153,
+   "hi": 2.7157977256368744,
+   "k": 19
+  },
+  "resid_minus_direct|diff": {
+   "g": -2.208693824368322,
+   "lo": -3.282299615930592,
+   "hi": -1.1343254135031338,
+   "k": 19
+  },
+  "resid_kept|all": {
+   "g": 0.7544431737331823,
+   "lo": 0.644168057388588,
+   "hi": 0.8748285166119064
+  },
+  "resid_inner_kept|all": {
+   "g": 0.6891328673303139,
+   "lo": 0.5779634070759753,
+   "hi": 0.8088636159522217
+  },
+  "resid_kept|same": {
+   "g": -15.656509059397028,
+   "lo": -33.604541511472306,
+   "hi": 36.99814024172372
+  },
+  "resid_inner_kept|same": {
+   "g": -30.58486773052907,
+   "lo": -46.70891098278807,
+   "hi": 39.758911885871505
+  },
+  "resid_kept|diff": {
+   "g": 0.7846578229233496,
+   "lo": 0.6926351770218642,
+   "hi": 0.8814762860066022
+  },
+  "resid_inner_kept|diff": {
+   "g": 0.7312631600687008,
+   "lo": 0.640293320902445,
+   "hi": 0.8291517935933077
+  }
+ },
+ "pairs": {
+  "granite3.3-8b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 38,
+     "inner_knows": 0.5962264150943396,
+     "r2_inner": 0.2639402482878408
+    },
+    "h2": {
+     "layer": 24,
+     "inner_knows": 0.6670702179176755,
+     "r2_inner": 0.32539950892752556
+    }
+   },
+   "verdict|all": 58.82171499074645,
+   "verdict|same": null,
+   "verdict|diff": 58.82171499074645,
+   "direct|all": 62.060456508328194,
+   "direct|same": null,
+   "direct|diff": 62.060456508328194,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 62.30721776681061,
+   "dir_resid|same": null,
+   "dir_resid|diff": 62.30721776681061,
+   "direct_inner|all": 62.368908081431215,
+   "direct_inner|same": null,
+   "direct_inner|diff": 62.368908081431215,
+   "resid_inner|all": 62.1221468229488,
+   "resid_inner|same": null,
+   "resid_inner|diff": 62.1221468229488
+  },
+  "granite3.3-8b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 18,
+     "inner_knows": 0.6254392129304287,
+     "r2_inner": 0.8167878015687855
+    },
+    "h2": {
+     "layer": 20,
+     "inner_knows": 0.6148843930635838,
+     "r2_inner": 0.6670801638198653
+    }
+   },
+   "verdict|all": 55.37940862130388,
+   "verdict|same": 54.08011869436202,
+   "verdict|diff": 55.789967182372244,
+   "direct|all": 61.91663697898112,
+   "direct|same": 57.566765578635014,
+   "direct|diff": 63.29113924050633,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 59.6722479515497,
+   "dir_resid|same": 58.753709198813056,
+   "dir_resid|diff": 59.96249413970933,
+   "direct_inner|all": 62.05913786961168,
+   "direct_inner|same": 57.86350148367953,
+   "direct_inner|diff": 63.384903891233,
+   "resid_inner|all": 59.137869611685076,
+   "resid_inner|same": 57.71513353115727,
+   "resid_inner|diff": 59.58743553680262
+  },
+  "llama3.1-8b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 18,
+     "inner_knows": 0.5949685534591195,
+     "r2_inner": 0.4400361575804518
+    },
+    "h2": {
+     "layer": 16,
+     "inner_knows": 0.6295399515738499,
+     "r2_inner": 0.3092836046037053
+    }
+   },
+   "verdict|all": 55.089450956199876,
+   "verdict|same": null,
+   "verdict|diff": 55.089450956199876,
+   "direct|all": 62.80074028377545,
+   "direct|same": null,
+   "direct|diff": 62.80074028377545,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 62.61566933991363,
+   "dir_resid|same": null,
+   "dir_resid|diff": 62.61566933991363,
+   "direct_inner|all": 62.86243059839605,
+   "direct_inner|same": null,
+   "direct_inner|diff": 62.86243059839605,
+   "resid_inner|all": 62.060456508328194,
+   "resid_inner|same": null,
+   "resid_inner|diff": 62.060456508328194
+  },
+  "llama3.1-8b|math": {
+   "folds": {
+    "h1": {
+     "layer": 20,
+     "inner_knows": 0.6885919835560124,
+     "r2_inner": 0.5583419308550628
+    },
+    "h2": {
+     "layer": 14,
+     "inner_knows": 0.6736111111111112,
+     "r2_inner": 0.7184799461033616
+    }
+   },
+   "verdict|all": 54.391721352852095,
+   "verdict|same": 65.3409090909091,
+   "verdict|diff": 50.41293874741913,
+   "direct|all": 66.68349318525998,
+   "direct|same": 62.5,
+   "direct|diff": 68.20371644872677,
+   "surface|all": 70.06562342251388,
+   "surface|same": 63.82575757575758,
+   "surface|diff": 72.3331039229181,
+   "dir_resid|all": 62.847046945986875,
+   "dir_resid|same": 57.57575757575758,
+   "dir_resid|diff": 64.762560220234,
+   "direct_inner|all": 66.7844522968198,
+   "direct_inner|same": 62.5,
+   "direct_inner|diff": 68.34136269786649,
+   "resid_inner|all": 62.4432104997476,
+   "resid_inner|same": 57.38636363636363,
+   "resid_inner|diff": 64.28079834824501
+  },
+  "llama3.1-8b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 8,
+     "inner_knows": 0.6331693605059733,
+     "r2_inner": 0.7092385037492334
+    },
+    "h2": {
+     "layer": 16,
+     "inner_knows": 0.6329479768786127,
+     "r2_inner": 0.42315268420739716
+    }
+   },
+   "verdict|all": 51.10438190238689,
+   "verdict|same": 54.67359050445104,
+   "verdict|diff": 49.97655883731833,
+   "direct|all": 63.199144994656216,
+   "direct|same": 56.676557863501486,
+   "direct|diff": 65.26019690576652,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 60.598503740648376,
+   "dir_resid|same": 57.41839762611276,
+   "dir_resid|diff": 61.60337552742616,
+   "direct_inner|all": 63.2703954399715,
+   "direct_inner|same": 56.37982195845697,
+   "direct_inner|diff": 65.44772620721987,
+   "resid_inner|all": 60.13537584609904,
+   "resid_inner|same": 57.41839762611276,
+   "resid_inner|diff": 60.99390529770277
+  },
+  "llama3.2-1b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 14,
+     "inner_knows": 0.5484276729559748,
+     "r2_inner": 0.7214130323606363
+    },
+    "h2": {
+     "layer": 12,
+     "inner_knows": 0.5690072639225182,
+     "r2_inner": 0.4190446989559551
+    }
+   },
+   "verdict|all": 49.19802590993214,
+   "verdict|same": null,
+   "verdict|diff": 49.19802590993214,
+   "direct|all": 55.95311536088834,
+   "direct|same": null,
+   "direct|diff": 55.95311536088834,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 56.13818630475016,
+   "dir_resid|same": null,
+   "dir_resid|diff": 56.13818630475016,
+   "direct_inner|all": 55.52128315854411,
+   "direct_inner|same": null,
+   "direct_inner|diff": 55.52128315854411,
+   "resid_inner|all": 55.52128315854411,
+   "resid_inner|same": null,
+   "resid_inner|diff": 55.52128315854411
+  },
+  "llama3.2-1b|math": {
+   "folds": {
+    "h1": {
+     "layer": 14,
+     "inner_knows": 0.6217882836587872,
+     "r2_inner": 0.48349325833585977
+    },
+    "h2": {
+     "layer": 6,
+     "inner_knows": 0.6309523809523809,
+     "r2_inner": 0.6149498590637068
+    }
+   },
+   "verdict|all": 51.867743563856635,
+   "verdict|same": 56.628787878787875,
+   "verdict|diff": 50.13764624913971,
+   "direct|all": 63.50328117112569,
+   "direct|same": 57.196969696969695,
+   "direct|diff": 65.79490708878183,
+   "surface|all": 70.06562342251388,
+   "surface|same": 63.82575757575758,
+   "surface|diff": 72.3331039229181,
+   "dir_resid|all": 55.477031802120145,
+   "dir_resid|same": 49.43181818181818,
+   "dir_resid|diff": 57.67377838953888,
+   "direct_inner|all": 63.14992428066633,
+   "direct_inner|same": 57.00757575757576,
+   "direct_inner|diff": 65.3819683413627,
+   "resid_inner|all": 54.7198384654215,
+   "resid_inner|same": 48.484848484848484,
+   "resid_inner|diff": 56.98554714384033
+  },
+  "llama3.2-1b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 12,
+     "inner_knows": 0.6324666198172875,
+     "r2_inner": 0.3626579758298688
+    },
+    "h2": {
+     "layer": 14,
+     "inner_knows": 0.6127167630057804,
+     "r2_inner": 0.451338808137008
+    }
+   },
+   "verdict|all": 49.62593516209476,
+   "verdict|same": 52.81899109792285,
+   "verdict|diff": 48.61697140178153,
+   "direct|all": 57.142857142857146,
+   "direct|same": 52.967359050445104,
+   "direct|diff": 58.462259728082515,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 52.72532953330958,
+   "dir_resid|same": 51.18694362017804,
+   "dir_resid|diff": 53.21143928738866,
+   "direct_inner|all": 57.17848236551478,
+   "direct_inner|same": 52.07715133531157,
+   "direct_inner|diff": 58.79043600562588,
+   "resid_inner|all": 52.547203420021376,
+   "resid_inner|same": 51.18694362017804,
+   "resid_inner|diff": 52.97702766057196
+  },
+  "llama3.2-3b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 10,
+     "inner_knows": 0.5547169811320755,
+     "r2_inner": 0.8863128729815016
+    },
+    "h2": {
+     "layer": 10,
+     "inner_knows": 0.5823244552058111,
+     "r2_inner": 0.5692432768043458
+    }
+   },
+   "verdict|all": 50.92535471930907,
+   "verdict|same": null,
+   "verdict|diff": 50.92535471930907,
+   "direct|all": 55.76804441702653,
+   "direct|same": null,
+   "direct|diff": 55.76804441702653,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 62.060456508328194,
+   "dir_resid|same": null,
+   "dir_resid|diff": 62.060456508328194,
+   "direct_inner|all": 56.940160394818015,
+   "direct_inner|same": null,
+   "direct_inner|diff": 56.940160394818015,
+   "resid_inner|all": 62.492288710672426,
+   "resid_inner|same": null,
+   "resid_inner|diff": 62.492288710672426
+  },
+  "llama3.2-3b|math": {
+   "folds": {
+    "h1": {
+     "layer": 18,
+     "inner_knows": 0.6659815005138746,
+     "r2_inner": 0.6050419839879375
+    },
+    "h2": {
+     "layer": 8,
+     "inner_knows": 0.6369047619047619,
+     "r2_inner": 0.47689024763987986
+    }
+   },
+   "verdict|all": 53.68500757193337,
+   "verdict|same": 62.02651515151515,
+   "verdict|diff": 50.65381968341363,
+   "direct|all": 64.66431095406361,
+   "direct|same": 55.871212121212125,
+   "direct|diff": 67.8596008258775,
+   "surface|all": 70.06562342251388,
+   "surface|same": 63.82575757575758,
+   "surface|diff": 72.3331039229181,
+   "dir_resid|all": 57.64765270065623,
+   "dir_resid|same": 48.86363636363637,
+   "dir_resid|diff": 60.839642119752234,
+   "direct_inner|all": 64.56335184250379,
+   "direct_inner|same": 56.81818181818182,
+   "direct_inner|diff": 67.37783895388851,
+   "resid_inner|all": 56.68854114083796,
+   "resid_inner|same": 47.53787878787879,
+   "resid_inner|diff": 60.01376462491397
+  },
+  "llama3.2-3b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 12,
+     "inner_knows": 0.640899508081518,
+     "r2_inner": 0.49063760601520057
+    },
+    "h2": {
+     "layer": 10,
+     "inner_knows": 0.6315028901734104,
+     "r2_inner": 0.6680775110767643
+    }
+   },
+   "verdict|all": 52.066262914143216,
+   "verdict|same": 51.92878338278932,
+   "verdict|diff": 52.10970464135021,
+   "direct|all": 63.02101888136801,
+   "direct|same": 54.00593471810089,
+   "direct|diff": 65.86966713548992,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 58.995368721054504,
+   "dir_resid|same": 49.85163204747774,
+   "dir_resid|diff": 61.88466947960619,
+   "direct_inner|all": 63.02101888136801,
+   "direct_inner|same": 53.70919881305638,
+   "direct_inner|diff": 65.9634317862166,
+   "resid_inner|all": 58.88849305308158,
+   "resid_inner|same": 49.40652818991098,
+   "resid_inner|diff": 61.88466947960619
+  },
+  "mistral-7b|math": {
+   "folds": {
+    "h1": {
+     "layer": 2,
+     "inner_knows": 0.5882352941176471,
+     "r2_inner": 0.8016340640414688
+    },
+    "h2": {
+     "layer": 2,
+     "inner_knows": 0.6130952380952381,
+     "r2_inner": 0.39079516385117474
+    }
+   },
+   "verdict|all": 53.3889731917046,
+   "verdict|same": 55.40796963946869,
+   "verdict|diff": 52.6551724137931,
+   "direct|all": 59.12999494183106,
+   "direct|same": 48.197343453510435,
+   "direct|diff": 63.10344827586207,
+   "surface|all": 70.20738492665654,
+   "surface|same": 63.75711574952562,
+   "surface|diff": 72.55172413793103,
+   "dir_resid|all": 56.044511886697016,
+   "dir_resid|same": 46.110056925996204,
+   "dir_resid|diff": 59.6551724137931,
+   "direct_inner|all": 59.12999494183106,
+   "direct_inner|same": 48.197343453510435,
+   "direct_inner|diff": 63.10344827586207,
+   "resid_inner|all": 56.09509357612544,
+   "resid_inner|same": 45.16129032258065,
+   "resid_inner|diff": 60.06896551724138
+  },
+  "mistral-7b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 18,
+     "inner_knows": 0.6127898805340829,
+     "r2_inner": 0.5003591294682179
+    },
+    "h2": {
+     "layer": 2,
+     "inner_knows": 0.5953757225433526,
+     "r2_inner": 0.8672821786828957
+    }
+   },
+   "verdict|all": 51.47844674029213,
+   "verdict|same": 50.59347181008902,
+   "verdict|diff": 51.75808720112518,
+   "direct|all": 58.924118275739225,
+   "direct|same": 53.11572700296736,
+   "direct|diff": 60.75949367088607,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 56.822230138938366,
+   "dir_resid|same": 51.632047477744806,
+   "dir_resid|diff": 58.462259728082515,
+   "direct_inner|all": 58.74599216245102,
+   "direct_inner|same": 52.67062314540059,
+   "direct_inner|diff": 60.6657290201594,
+   "resid_inner|all": 56.109725685785534,
+   "resid_inner|same": 51.92878338278932,
+   "resid_inner|diff": 57.430848570089076
+  },
+  "phi4-mini|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 10,
+     "inner_knows": 0.5886792452830188,
+     "r2_inner": 0.7262979058474242
+    },
+    "h2": {
+     "layer": 4,
+     "inner_knows": 0.5968523002421308,
+     "r2_inner": 0.7625804418247201
+    }
+   },
+   "verdict|all": 51.97409006785934,
+   "verdict|same": null,
+   "verdict|diff": 51.97409006785934,
+   "direct|all": 58.359037631091915,
+   "direct|same": null,
+   "direct|diff": 58.359037631091915,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 57.125231338679825,
+   "dir_resid|same": null,
+   "dir_resid|diff": 57.125231338679825,
+   "direct_inner|all": 58.54410857495373,
+   "direct_inner|same": null,
+   "direct_inner|diff": 58.54410857495373,
+   "resid_inner|all": 56.69339913633559,
+   "resid_inner|same": null,
+   "resid_inner|diff": 56.69339913633559
+  },
+  "phi4-mini|math": {
+   "folds": {
+    "h1": {
+     "layer": 14,
+     "inner_knows": 0.6937307297019527,
+     "r2_inner": 0.5740771254457846
+    },
+    "h2": {
+     "layer": 16,
+     "inner_knows": 0.6537698412698413,
+     "r2_inner": 0.6524290966050104
+    }
+   },
+   "verdict|all": 56.032306915699145,
+   "verdict|same": 57.67045454545455,
+   "verdict|diff": 55.43702684101858,
+   "direct|all": 66.2291771832408,
+   "direct|same": 63.446969696969695,
+   "direct|diff": 67.2401927047488,
+   "surface|all": 70.06562342251388,
+   "surface|same": 63.82575757575758,
+   "surface|diff": 72.3331039229181,
+   "dir_resid|all": 60.625946491670874,
+   "dir_resid|same": 56.25,
+   "dir_resid|diff": 62.21610461114935,
+   "direct_inner|all": 66.43109540636043,
+   "direct_inner|same": 63.446969696969695,
+   "direct_inner|diff": 67.51548520302822,
+   "resid_inner|all": 60.2221100454316,
+   "resid_inner|same": 55.49242424242424,
+   "resid_inner|diff": 61.94081211286993
+  },
+  "phi4-mini|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 14,
+     "inner_knows": 0.6387912860154603,
+     "r2_inner": 0.5286578061448427
+    },
+    "h2": {
+     "layer": 14,
+     "inner_knows": 0.6213872832369942,
+     "r2_inner": 0.7894025299549916
+    }
+   },
+   "verdict|all": 55.005343783398644,
+   "verdict|same": 54.525222551928785,
+   "verdict|diff": 55.15705578996718,
+   "direct|all": 62.16601353758461,
+   "direct|same": 54.3026706231454,
+   "direct|diff": 64.65072667604313,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 60.099750623441395,
+   "dir_resid|same": 54.154302670623146,
+   "dir_resid|diff": 61.978434130332865,
+   "direct_inner|all": 62.34413965087282,
+   "direct_inner|same": 54.45103857566765,
+   "direct_inner|diff": 64.83825597749649,
+   "resid_inner|all": 58.85286783042394,
+   "resid_inner|same": 53.11572700296736,
+   "resid_inner|diff": 60.6657290201594
+  },
+  "qwen2.5-7b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 18,
+     "inner_knows": 0.569811320754717,
+     "r2_inner": 0.7269224209607728
+    },
+    "h2": {
+     "layer": 22,
+     "inner_knows": 0.6162227602905569,
+     "r2_inner": 0.37761406730656
+    }
+   },
+   "verdict|all": 53.23874151758174,
+   "verdict|same": null,
+   "verdict|diff": 53.23874151758174,
+   "direct|all": 61.81369524984577,
+   "direct|same": null,
+   "direct|diff": 61.81369524984577,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 64.8365206662554,
+   "dir_resid|same": null,
+   "dir_resid|diff": 64.8365206662554,
+   "direct_inner|all": 62.985811227637264,
+   "direct_inner|same": null,
+   "direct_inner|diff": 62.985811227637264,
+   "resid_inner|all": 64.9599012954966,
+   "resid_inner|same": null,
+   "resid_inner|diff": 64.9599012954966
+  },
+  "qwen2.5-7b|mmlu": {
+   "folds": {
+    "h1": {
+     "layer": 20,
+     "inner_knows": 0.6380885453267744,
+     "r2_inner": 0.4278585050131386
+    },
+    "h2": {
+     "layer": 20,
+     "inner_knows": 0.6141618497109826,
+     "r2_inner": 0.6775924648659138
+    }
+   },
+   "verdict|all": 51.78126113288208,
+   "verdict|same": 54.896142433234424,
+   "verdict|diff": 50.796999531176745,
+   "direct|all": 62.094763092269325,
+   "direct|same": 56.97329376854599,
+   "direct|diff": 63.71308016877637,
+   "surface|all": 65.05165657285357,
+   "surface|same": 56.37982195845697,
+   "surface|diff": 67.79184247538677,
+   "dir_resid|all": 58.995368721054504,
+   "dir_resid|same": 54.45103857566765,
+   "dir_resid|diff": 60.43131739334271,
+   "direct_inner|all": 62.094763092269325,
+   "direct_inner|same": 56.824925816023736,
+   "direct_inner|diff": 63.75996249413971,
+   "resid_inner|all": 58.35411471321696,
+   "resid_inner|same": 54.3026706231454,
+   "resid_inner|diff": 59.634317862165965
+  },
+  "qwen3.5-4b|bbeh": {
+   "folds": {
+    "h1": {
+     "layer": 28,
+     "inner_knows": 0.6540880503144654,
+     "r2_inner": 0.34589862854310227
+    },
+    "h2": {
+     "layer": 24,
+     "inner_knows": 0.6876513317191283,
+     "r2_inner": 0.35853377441170975
+    }
+   },
+   "verdict|all": 59.4694632942628,
+   "verdict|same": null,
+   "verdict|diff": 59.4694632942628,
+   "direct|all": 66.1320172732881,
+   "direct|same": null,
+   "direct|diff": 66.1320172732881,
+   "surface|all": 54.0715607649599,
+   "surface|same": null,
+   "surface|diff": 54.0715607649599,
+   "dir_resid|all": 67.36582356570018,
+   "dir_resid|same": null,
+   "dir_resid|diff": 67.36582356570018,
+   "direct_inner|all": 65.82356570018507,
+   "direct_inner|same": null,
+   "direct_inner|diff": 65.82356570018507,
+   "resid_inner|all": 66.2553979025293,
+   "resid_inner|same": null,
+   "resid_inner|diff": 66.2553979025293
+  }
+ },
+ "r2_inner": {
+  "lo": 0.2639402482878408,
+  "hi": 0.8863128729815016
+ }
+}

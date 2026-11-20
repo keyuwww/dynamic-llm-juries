@@ -56,7 +56,7 @@ def fig_gap():
 
 
 def fig_sm():
-    """same-model pairs on questions the judge cannot solve: absolute ranking per method, mean over judges."""
+    """same-model pairs on questions the judge failed on a sampled attempt: absolute ranking per method, mean over judges."""
     methods = [m for m in ("verdict", "cot", "x11", "direct", "sum")]
     sets = [("math", "qwen3.5-4b"), ("math", "olmo2-7b"), ("bbeh", "qwen3.5-4b"), ("mmlu", "qwen3.5-4b"), ("mmlu", "olmo2-7b")]
     sets = [s for s in sets if any(k.split("|")[1:] == list(s) for k in R["sm"])]
@@ -65,14 +65,15 @@ def fig_sm():
     for i, m in enumerate(methods):
         xs, ys, es = [], [], []
         for x, (b, who) in enumerate(sets):
-            vs = [v for k, v in R["sm"].items() if k.split("|")[1:] == [b, who] and m in v and k.split("|")[0] not in BIG]
-            if not vs:
+            # equal-weight mean over judges with its synchronised question-bootstrap 95% interval (paper_analysis.py)
+            e = R["summary"].get(f"sm|{b}|{who}", {}).get("rank_level", {}).get(m)
+            if not e:
                 continue
-            r = np.array([v[m]["rank"] for v in vs])
             xs.append(x + (i - (len(methods) - 1) / 2) * w)
-            ys.append(r.mean())
-            es.append(r.std(ddof=1) / np.sqrt(len(r)) if len(r) > 1 else 0)
-        ax.bar(xs, np.array(ys) - 50, w * 0.9, bottom=50, color=C[m], label=NAMES[m], yerr=es, error_kw=dict(lw=0.6, capsize=0))
+            ys.append(e["g"])
+            es.append([e["g"] - e["lo"], e["hi"] - e["g"]])
+        ax.bar(xs, np.array(ys) - 50, w * 0.9, bottom=50, color=C[m], label=NAMES[m], yerr=np.array(es).T,
+               error_kw=dict(lw=0.6, capsize=0))
     ax.axhline(50, color="#555555", lw=0.6)
     who = {"qwen3.5-4b": "Qwen", "olmo2-7b": "OLMo"}
     sb = {"mmlu": "MMLU", "math": "MATH", "bbeh": "BBEH"}

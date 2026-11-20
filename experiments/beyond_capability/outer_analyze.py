@@ -44,7 +44,7 @@ def load(d, b):
 
 
 def main():
-    pairs, per = {}, {}
+    pairs, per, unsolved = {}, {}, {}
     for d in sorted(D.glob("*_*")):
         j, b = d.name.rsplit("_", 1)
         if not (d / f"outer_{b}.jsonl").exists():
@@ -55,6 +55,12 @@ def main():
         CL = {L: per_group(rows, L, lambda r: r["qid"]) for L in Ls}
         qs = sorted(set.intersection(*[set(c) for c in C.values()]))
         pairs[(j, b)] = {m: (qs, np.array([C[m][x] for x in qs])) for m in C}
+        sol = A.labels(j, b)  # questions the judge failed on its own sampled attempt
+        un = [r for r in rows if sol.get(r["qid"]) == 0]
+        if un:
+            CU = {m: per_group(un, m, lambda r: r["qid"]) for m in METH}
+            qu = sorted(set.intersection(*[set(c) for c in CU.values()]))
+            unsolved[(j, b)] = {m: (qu, np.array([CU[m][x] for x in qu])) for m in CU}
         auc = lambda c: 100 * sum(c[x][0] for x in qs) / sum(c[x][1] for x in qs)  # noqa: E731
         layer_auc = {L: auc(CL[L]) for L in Ls}
         paper = R["pool"].get(f"{j}|{b}")
@@ -66,9 +72,12 @@ def main():
             paper=dict(verdict=paper["verdict"]["rank"], direct=paper["direct"]["rank"], x11=paper["x11"]["rank"],
                        layer=paper["layer"]) if paper else None)
     stats = {f"{m}|gain": S.auc_gain(m) for m in METH if m != "verdict"} | {"verdict|level": S.level("verdict")}
+    # best-of-n accuracy (per_group columns 2, 3: top-scored answer right, questions with a right and a wrong answer)
+    stats |= {f"{m}|bon": S.auc_gain(m, col=(2, 3)) for m in METH if m != "verdict"} | {"verdict|bon_level": S.level("verdict", col=(2, 3))}
     est, draws = S.boot(pairs, stats)
     est["rule_over_direct"] = S.ratio(draws, "rule|gain", "direct|gain", est)
-    out = dict(pairs=per, pooled=est, n_pairs=len(pairs))
+    est_un, _ = S.boot(unsolved, stats) if unsolved else ({}, None)
+    out = dict(pairs=per, pooled=est, pooled_unsolved=est_un, n_pairs=len(pairs), n_pairs_unsolved=len(unsolved))
     json.dump(out, open(A.HERE / "out_paper" / "outer.json", "w"), indent=1)
     for k, v in per.items():
         p = v["paper"]
