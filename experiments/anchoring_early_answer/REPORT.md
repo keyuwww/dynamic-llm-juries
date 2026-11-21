@@ -1094,3 +1094,63 @@ as weaker (top bin all disputed keys; Kimi-K2.6 audited slope -7 [-14, -4]), thi
 conclusion's jury claim narrowed to what was tested, reference gain "about 60%" not "half", re-measuring belief moved
 to Section 4, two-replication wording throughout, metric definitions (Brier, AUROC, balanced accuracy, kappa).
 Abstract 197 words; main text ends on page 8.
+
+## Experiment 17 — Strict re-review, belief items B1–B5 (Nov 21; CPU only, $0)
+
+Source: an outside strict review of both papers (Nov 21). This entry covers the belief paper only; the direction
+items (D1–D5) were handled by the session editing the direction paper. All analyses below are post hoc, use existing
+data, and made no model calls (Tinker total unchanged at about $784 of $1,000; Modal $0).
+
+### 17a. Own belief vs other judges' belief (B2; `validation/consensus_check.py` → `consensus_check.{json,md}`)
+Why: seven answers predicting approval would be unsurprising if they only marked wrong answers every model finds
+attractive (shared answer popularity; Goel et al.). Test: approval ~ own belief + leave-family-out consensus (mean
+belief of other-family judges in the same candidate), benchmark×judge FE, question bootstrap; plus held-out logistic
+prediction (10 folds by question, 5 partitions, paired question bootstrap of log loss).
+- Original (4,621 judgments): consensus alone +42 [+28, +56]; together consensus +23 [+9, +37], own +25 [+16, +35].
+  Held-out log loss with own added −0.0031 [−0.0058, −0.0006]; AUROC 0.722 → 0.728. corr(own, cons) 0.69;
+  identifying sample 368 judgments with |own − cons| ≥ 2/7. Consensus beyond own: −0.0021 [−0.0053, +0.0008].
+- MMLU-Pro (lenient, key / complete audit): own +34 [+29, +39] / +34 [+27, +41]; log loss −0.0149 / −0.0123, both
+  intervals below zero; AUROC 0.680 → 0.714.
+- Math (key / audited): own +28 / +27 in-sample, but held-out log loss −0.0008 [−0.0028, +0.0010] / −0.0011
+  [−0.0038, +0.0013]: not detectable, consistent with the null same-candidate test.
+- Pairwise (competing response's own and consensus belief added): own +18 [+3, +33] (original JudgeBench, 563),
+  +15 [+8, +22] (MMLU-Pro).
+- Leave-judge-out consensus gives the same picture. Reading: part shared agreement, part judge-specific; the paper
+  keeps the judge-belief framing but says so.
+
+### 17b. Majority-vote juries at a matched budget (B4; `validation/jury_vote.py` → `jury_vote.{json,md}`)
+All 1,441 original items with verdicts from all seven judges (747 right, 694 audited wrong; 81 items missing a
+verdict, 82 dropped by audit). Three votes, no ties. 3 Qwens 81.5% balanced accuracy; 17 three-family juries
+78.9–84.6% (mean 81.6%); Qwen3.6-35B alone 83.3%. On the 92 wrong answers the Qwens believe (mean ≥ 4/7): 3 Qwens
+approve 75%, cross-family juries 76/75/73% (paired −2.2 [−12.1, +8.6] for the no-Qwen jury); each non-Qwen judge
+alone approves 70%. No repeated verdicts from one model exist, so no self-consistency baseline.
+Paper: Section 7 renamed "Targeted Judging Interventions"; "only an outside reference removed them" replaced by the
+observed results; commit-first effect on believed answers called "undetermined" (16 judgments).
+
+### 17c. Math as a boundary result (B3; `replication_math/boundary.py` → `boundary.{json,md}`)
+Audited rates with counts: 0/7 3.0% (2,967 judgments, 780 candidates), 1–3 13.7% [5.9, 22.9] (102, 72), 4–6 22.2%
+[5.9, 38.9] (18, 16), none at 7/7. Any-match vs none (judge FE): audited +11.8 [+3.9, +20.6] (Qwens clear, DeepSeek
++11.1 [−0.9, +25.3], Kimi −2.3 [−3.5, −1.2], 0 of 13 picked); key +25.7 [+15.9, +35.9]. Paper now leads with these
+rates, calls the audited slope an extrapolation, states that judge-specific evidence does not replicate (same
+candidate −2 [−20, +17], below MMLU-Pro's +19) without attributing it to power, and retitles Section 5
+"A Replication and a Boundary Test".
+
+### 17d. Human check for math (B1; `replication_math/human_package.py` → `human_package/`)
+66 items stratified by highest belief (all 7 at 7/7, all 19 at 4–6, 20 each at 1–3 and 0/7; seed 20261121;
+population sizes in key.json). Annotation page: https://claude.ai/artifact/SoM5ySwngQSWFMGFecAG8x (labels collection,
+empty). The MMLU-Pro page (https://claude.ai/artifact/TBLySNG347bRqAbrHu1RmK) still has no labels. Paper: dispute rates
+called provisional until human-checked; reference-answer wording now "where the auditor disputes it"; the power-tower
+example is the only key error we verified by hand.
+
+### 17e. Mechanistic material cut back (B5)
+Section 6 shortened to three short paragraphs and a one-line takeaway; details stay in the appendices. Layer selection
+audited (`beyond_capability/dir_belief_within.py`): the best layer is chosen by cross-fitted right-vs-wrong AUROC on
+the same questions (does not use belief, but no inner split). Paper now says so and gives the top-third-of-layers
+average (0.60 / 0.57 / 0.59) and the number of roles tested, with no multiplicity correction.
+
+### 17f. Paper
+Abstract 200 words (adds the consensus result and the math boundary wording). New appendices: own vs consensus
+(Table `tab:consensus`), majority-vote juries (Table `tab:jury`), math observed rates. "Re-measuring belief" moved to
+the robustness appendix with a pointer. Main text ends on page 8; 17 pages total; no undefined references.
+Not changed: the title (the review's editorial item 1 suggests answer-agreement wording unless validated; the
+consensus result supports a judge-specific component, so this is left to the authors).

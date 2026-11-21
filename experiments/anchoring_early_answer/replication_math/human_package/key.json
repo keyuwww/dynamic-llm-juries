@@ -1,0 +1,413 @@
+{
+ "items": [
+  {
+   "n": 1,
+   "qid": "dapo-13313",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 2,
+   "qid": "dapo-12512",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 3,
+   "qid": "dapo-4761",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 4,
+   "qid": "dapo-9386",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 5,
+   "qid": "dapo-4733",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 6,
+   "qid": "dapo-11526",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 7,
+   "qid": "dapo-7296",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 8,
+   "qid": "dapo-4589",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 9,
+   "qid": "dapo-6107",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 10,
+   "qid": "dapo-12366",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 11,
+   "qid": "dapo-12403",
+   "stratum": "7/7",
+   "auditor": "CONTESTED"
+  },
+  {
+   "n": 12,
+   "qid": "dapo-10412",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 13,
+   "qid": "dapo-1673",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 14,
+   "qid": "dapo-8633",
+   "stratum": "1-3",
+   "auditor": null
+  },
+  {
+   "n": 15,
+   "qid": "dapo-6566",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 16,
+   "qid": "dapo-3400",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 17,
+   "qid": "dapo-12064",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 18,
+   "qid": "dapo-7217",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 19,
+   "qid": "dapo-1240",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 20,
+   "qid": "dapo-13036",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 21,
+   "qid": "dapo-2645",
+   "stratum": "4-6",
+   "auditor": null
+  },
+  {
+   "n": 22,
+   "qid": "dapo-11340",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 23,
+   "qid": "dapo-10535",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 24,
+   "qid": "dapo-4103",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 25,
+   "qid": "dapo-3188",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 26,
+   "qid": "dapo-3461",
+   "stratum": "7/7",
+   "auditor": "CONTESTED"
+  },
+  {
+   "n": 27,
+   "qid": "dapo-2570",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 28,
+   "qid": "dapo-11879",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 29,
+   "qid": "dapo-11102",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 30,
+   "qid": "dapo-11383",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 31,
+   "qid": "dapo-3790",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 32,
+   "qid": "dapo-13636",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 33,
+   "qid": "dapo-4088",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 34,
+   "qid": "dapo-2750",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 35,
+   "qid": "dapo-1574",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 36,
+   "qid": "dapo-3746",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 37,
+   "qid": "dapo-10177",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 38,
+   "qid": "dapo-11883",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 39,
+   "qid": "dapo-3259",
+   "stratum": "1-3",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 40,
+   "qid": "dapo-14109",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 41,
+   "qid": "dapo-12245",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 42,
+   "qid": "dapo-1849",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 43,
+   "qid": "dapo-5661",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 44,
+   "qid": "dapo-13972",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 45,
+   "qid": "dapo-7335",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 46,
+   "qid": "dapo-13782",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 47,
+   "qid": "dapo-12169",
+   "stratum": "7/7",
+   "auditor": "LABEL_WRONG"
+  },
+  {
+   "n": 48,
+   "qid": "dapo-10291",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 49,
+   "qid": "dapo-8654",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 50,
+   "qid": "dapo-1002",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 51,
+   "qid": "dapo-3828",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 52,
+   "qid": "dapo-13954",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 53,
+   "qid": "dapo-9450",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 54,
+   "qid": "dapo-13622",
+   "stratum": "1-3",
+   "auditor": "CONTESTED"
+  },
+  {
+   "n": 55,
+   "qid": "dapo-8154",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 56,
+   "qid": "dapo-13998",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 57,
+   "qid": "dapo-9360",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 58,
+   "qid": "dapo-7783",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 59,
+   "qid": "dapo-6523",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 60,
+   "qid": "dapo-12932",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 61,
+   "qid": "dapo-659",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 62,
+   "qid": "dapo-7081",
+   "stratum": "1-3",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 63,
+   "qid": "dapo-5037",
+   "stratum": "0/7",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 64,
+   "qid": "dapo-14017",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 65,
+   "qid": "dapo-7309",
+   "stratum": "4-6",
+   "auditor": "LABEL_OK"
+  },
+  {
+   "n": 66,
+   "qid": "dapo-8697",
+   "stratum": "4-6",
+   "auditor": "LABEL_WRONG"
+  }
+ ],
+ "population": {
+  "0/7": 724,
+  "4-6": 19,
+  "1-3": 69,
+  "7/7": 7
+ },
+ "sampled": {
+  "7/7": 7,
+  "4-6": 19,
+  "1-3": 20,
+  "0/7": 20
+ },
+ "no_judge_with_5_answers": 0
+}
