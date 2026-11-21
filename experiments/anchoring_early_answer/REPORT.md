@@ -1083,3 +1083,14 @@ the user will annotate. No model output may be recorded as a human label.
 ### 16d. Ledger
 Math replication $292.59 (pilot included; writing $39.54, verdicts $19.64, own answers $178.76, audit $48.45,
 timeouts $6.20). Tinker this revision total: $491 + $293 = $784 of $1,000. Modal $0.
+
+### 16e. Independent re-review fixes (Nov 20)
+A fresh reviewer checked every number against the result files (all match except three math roundings: same
+candidate -2 not -3; target upper +71 not +72). Fixed after verifying each claim against code: fixed effects are
+benchmark x judge (fe_checks.py, paper_numbers.py), JudgeBench falls back to the GLM matcher when an answer lacks a
+letter (belief.py), the two judges that rise less are named (Nemotron-3-Nano, Qwen3.5-4B), "pre-registered" ->
+"pre-specified" (protocols are written and released, not third-party registered), the math replication is described
+as weaker (top bin all disputed keys; Kimi-K2.6 audited slope -7 [-14, -4]), thinking claims limited to Qwens, the
+conclusion's jury claim narrowed to what was tested, reference gain "about 60%" not "half", re-measuring belief moved
+to Section 4, two-replication wording throughout, metric definitions (Brier, AUROC, balanced accuracy, kappa).
+Abstract 197 words; main text ends on page 8.

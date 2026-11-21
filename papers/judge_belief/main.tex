@@ -45,16 +45,16 @@
 % ---------------------------------------------------------------------------------------------------------------
 \begin{abstract}
 Recent work ties LLM judges' approval of wrong answers to whether the judge can answer the question itself. We test
-this per answer: for each candidate, written by another model, the judge's \emph{belief} is the share of its seven
+this per answer: the judge's \emph{belief} in a candidate written by another model is the share of its seven
 independent answers that reach the candidate's final answer. Across three benchmarks and seven judges from four
 families, approval of wrong answers rises with belief, from 1--25\% when the judge never reaches the answer to
-47--86\% when it always does (the two most lenient judges rise less). Pooled across judges, the association persists
-after controlling for question identity, under a second auditor's labels and with thinking, and seven samples predict
-approval better than one. Under protocols fixed before data collection, it replicates on 1,336 fresh multiple-choice pairs (19\% at 0/7 to 63\% at 7/7) and on 819 open-ended math pairs with
-exactly matched answers (4\% to 92\%), though on math few judgments reach 7/7 and the same-candidate test is null.
-Model auditors dispute benchmark labels more often for the answers judges reproduce most (multiple choice 9\% vs
-51\%; math 2\% vs all seven). With thinking on, explanations of approved wrong answers usually arrive at that
-same answer, and hidden states at the verdict carry at most a modest belief signal; neither identifies a mechanism.
+47--86\% when it always does (two judges rise less). Pooled across judges, the association persists after
+controlling for question identity and under a second auditor's labels, and seven samples predict approval better
+than one. Under protocols fixed before data collection, it replicates on 1,336 fresh multiple-choice pairs (19\% at
+0/7 to 63\% at 7/7) and, more weakly, on 819 open-ended math pairs with exact integer matching (4\% to 92\%, but all 13
+judgments at 7/7 are on disputed keys, and the same-candidate test is null). Model auditors dispute benchmark labels
+more often for the answers judges believe most (multiple choice 9\% vs 51\%; math 2\% vs 7 of 7). Explanations and
+hidden states are consistent with the result but do not identify a mechanism.
 \end{abstract}
 
 % ---------------------------------------------------------------------------------------------------------------
@@ -78,9 +78,10 @@ on questions we had not analysed.
 This is not self-preference under another name. Self-preference concerns who wrote the text: judges favour their own
 generations, and the bias tracks how familiar (low-perplexity) a text is to the judge
 \citep{panickssery2024llm,wataoka2024self}. Belief concerns what an answer concludes. Our judges never grade their
-own text, and the association holds in two comparisons where authorship cannot vary with belief: among wrong
-answers to the same question graded by the same judge, and for the same candidate graded by judges that believe it
-to different degrees (\S\ref{sec:staircase}). A believed conclusion may also read as more familiar to the judge;
+own text, and, pooled across judges, the association holds in two narrower comparisons: among wrong answers
+to the same question graded by the same judge (difficulty fixed), and for the same candidate graded by judges that
+believe it to different degrees (author fixed, though how close each judge's family is to the author's can still
+differ; \S\ref{sec:staircase}). A believed conclusion may also read as more familiar to the judge;
 we count that as part of what belief measures, not as a separate explanation.
 
 \begin{figure*}[t]
@@ -93,10 +94,9 @@ shown two responses, picks the one that answers~H. Both label auditors (\S\ref{s
 \label{fig:overview}
 \end{figure*}
 
-Approval of wrong answers rises with belief in all four families, though the two most lenient judges rise less
-(\S\ref{sec:staircase}). The association persists within question, under alternative labels and with thinking
-enabled, and seven samples predict approval better than one. It replicates on fresh multiple-choice and open-ended
-math questions under protocols fixed in advance, with sensitivity analyses for answer parsing and labels (\S\ref{sec:replication}). Written
+Approval of wrong answers rises with belief in all four families, though two judges (Nemotron-3-Nano and Qwen3.5-4B) rise less
+(\S\ref{sec:staircase}). The association persists within question, under alternative labels and, for the Qwen judges, with thinking enabled, and seven samples predict approval better than one. It replicates on fresh multiple-choice questions, and in weaker form on open-ended math
+questions, under protocols fixed in advance, with sensitivity analyses for answer parsing and labels (\S\ref{sec:replication}). Written
 explanations and hidden states are consistent with the behavioural result but do not identify a mechanism
 (\S\ref{sec:process}). Finally, we test three fixes suggested by the result (\S\ref{sec:juries}).
 
@@ -105,7 +105,7 @@ explanations and hidden states are consistent with the behavioural result but do
 \item A per-answer measure of judge belief, and evidence from seven judges in four families that approval of wrong
 answers rises with it, with controls for question identity, a single matching sample, label noise and reasoning.
 \item Two replications with protocols fixed before data collection, on 1,336 new multiple-choice pairs and on 819
-open-ended math pairs whose answers match exactly, each with a complete label audit.
+open-ended math pairs compared by exact integer match, each with a complete label audit.
 \item A label audit in which model auditors dispute benchmark labels most often for the answers judges believe
 most, and a cautionary result on reading belief from hidden-state directions.
 \end{itemize}
@@ -118,11 +118,10 @@ most, and a cautionary result on reading belief from hidden-state directions.
 \citet{roytburg2026narcissists} argue that much of this preference reflects the judge being wrong on the question;
 we measure that belief per answer and exclude self-authorship. \citet{krumdick2026nofreelabels} find that judges
 agree with experts mainly on questions they can answer, and that expert references help; we use their BFF-Bench data
-and grade the effect on a 0--7 scale. \citet{goel2025great} show that judges favour models that make the same
+and measure belief per answer on a 0--7 scale. \citet{goel2025great} show that judges favour models that make the same
 mistakes; ours is a per-answer version of this model-level effect. \citet{lin-etal-2025-before} find that solving and
 judging ability are only weakly correlated, and that giving the judge its own answer as a reference strengthens the
-link. \citet{verga2024replacing} propose juries of diverse models to reduce individual judges' biases. We test both
-remedies by belief level (\S\ref{sec:juries}).
+link. \citet{verga2024replacing} propose juries of diverse models to reduce individual judges' biases. We test these remedies and a reference answer by belief level (\S\ref{sec:juries}).
 
 \paragraph{Truth and belief inside models.}
 Linear directions separate true from false statements in hidden states \citep{marks2024geometry,burns2023discovering,
@@ -169,25 +168,25 @@ candidate's final answer, divided by the number of valid comparisons (at least f
 of zero or one. Bins are formed by rounding seven times belief (98\% of audited wrong-answer judgments have all seven
 comparisons). Belief is thus an operational answer-frequency measure at one sampling configuration (seven samples,
 temperature 0.7, thinking off). A separate, eighth answer defines the one-sample ``matches my answer'' label, the
-natural single-answer version of ``the judge can answer''. JudgeBench letters are matched exactly. On RewardBench~2
-Math and BFF-Bench, GLM-5.3-Flash decides whether two final answers are the same, ignoring wording and rounding
-(Appendix~\ref{app:matcher}); a second reader agreed with 42 of 47 of its decisions.
+natural single-answer version of ``the judge can answer''. JudgeBench letters are matched exactly when both answers state one.
+Otherwise, and on RewardBench~2 Math and BFF-Bench, GLM-5.3-Flash decides whether two final answers are the same, ignoring wording and rounding
+(Appendix~\ref{app:matcher}); a second model reader (Claude) agreed with 42 of 47 of its decisions.
 
 \paragraph{Label audit.}
 A ``wrong'' answer that a judge reaches in all seven tries is either a confident error or a label error, so before
-analysing approvals we audited every wrong-labelled answer for which the benchmark provides a reference (1,091
-unique answers; 13 of over 6,000 wrong-answer judgments lack one). GLM-5.3 (high reasoning) read each with the
+analysing approvals we audited every wrong-labelled answer for which the benchmark provides a reference (1,091 unique answers; 13 wrong-answer judgments lack one). GLM-5.3 (high reasoning) read each with the
 question and the benchmark's reference, was told the reference may itself be wrong, and labelled the answer
 \emph{clearly wrong}, \emph{actually correct} or \emph{contested} (Appendix~\ref{app:audit}). Kimi-K3.1-Pro, an
 auditor from another model family (and from the same developer as the Kimi-K2.6 judge), repeated the audit; the two
-make the same clearly-wrong-or-not call on 96\% of answers ($\kappa$ = 0.77). Claude Opus 5.5 audited 98 answers as a
+make the same clearly-wrong-or-not call on 96\% of answers (Cohen's $\kappa$, agreement beyond chance, 0.77). Claude Opus 5.5 audited 98 answers as a
 third check (Appendix~\ref{app:audit}). Audit verdicts are model classifications, not human-adjudicated ground
 truth, and auditors can share errors. Unless stated otherwise, results keep only wrong answers GLM-5.3 calls clearly
 wrong.
 
 \paragraph{Statistics.}
 Intervals are 95\% bootstrap intervals that resample whole questions (2,000 draws). Effects of belief are slopes
-from a linear probability model with judge fixed effects, reported as the change from belief 0/7 to 7/7 in
+from a linear probability model (a linear regression of the 0/1 verdict) with benchmark-by-judge fixed effects (a
+separate intercept for each judge on each benchmark), reported as the change from belief 0/7 to 7/7 in
 percentage points.
 
 % ---------------------------------------------------------------------------------------------------------------
@@ -242,15 +241,21 @@ Nemotron-3-Nano & 37 & 45 & 46 & 55 & +18 {\scriptsize[$-$11, +43]} \\
 \paragraph{One sample or seven?}
 Because a judge's answers vary across samples, a single sampled answer is a noisy estimate of what it would answer,
 so belief might simply be a less noisy version of the one-sample label. Fitting both together (judge fixed effects),
-the Qwens' approval rises by +43 points [+26, +57] with belief while the one-sample label adds +2 [$-$9, +12]; the
-other families agree (Appendix~\ref{app:robust}). Since seven samples cost seven times one, we also asked how much
-each sample buys, predicting approval on held-out questions with $k$ of the seven samples (Appendix~\ref{app:budget}).
-Held-out Brier score falls at each tested $k$: 0.1595 with judge-by-benchmark intercepts only, 0.1572 with one sample,
+the Qwens' approval rises by +43 points [+26, +57] with belief while the one-sample label adds +2 [$-$9, +12]; the other families agree (Appendix~\ref{app:robust}, Table~\ref{tab:robust}). Since seven samples cost seven times one, we also asked how much
+each sample buys, predicting approval on held-out questions with $k$ of the seven samples (Appendix~\ref{app:budget}, Table~\ref{tab:budget}).
+Held-out Brier score (mean squared error of the predicted approval probability) falls at each tested $k$: 0.1595 with judge-by-benchmark intercepts only, 0.1572 with one sample,
 0.1556 with three and 0.1549 with seven (seven vs one: $-$0.0022 [$-$0.0037, $-$0.0010]). The gains are small in
-absolute terms (AUROC 0.70 to 0.73): belief shifts approval rates substantially but leaves most individual verdicts
+absolute terms (AUROC, the chance that a random approval is scored above a random rejection, 0.70 to 0.73): belief shifts approval rates substantially but leaves most individual verdicts
 unpredictable. The separate eighth answer does not detectably improve on the intercepts here, but it was generated
-in an earlier run with a shorter token budget, so it is not exchangeable with the seven; in the replication, where
-it is, it keeps a small association that is sensitive to label filtering (\S\ref{sec:replication}).
+in an earlier run with a shorter token budget, so it is not exchangeable with the seven; in the MMLU-Pro replication, where it is, it keeps a small association that is sensitive to label filtering, and on
+math it is not detectable (\S\ref{sec:replication}).
+
+\paragraph{Re-measuring belief.}
+Belief is estimated from seven samples, so we tested its reliability: six of the original judges (Nemotron-3-Nano is
+no longer served) answered every original JudgeBench question seven more times. On the 237 audited wrong-answer
+judgments in which the candidate and at least five new answers state a letter, new and original belief correlate at 0.87 and agree on the bin 69\% of the
+time, and the original approvals rise with the new belief as much as with the original (+50 [+32, +66] vs +48 [+30,
++65]).
 
 \paragraph{Question difficulty.}
 On hard questions a judge's answers scatter onto wrong values, and judges might simply be more lenient on hard
@@ -311,19 +316,21 @@ not believe (17\% $\rightarrow$ 3\% at 0/7) with no detectable change in the gap
 \begin{takeaway}
 In each of four model families, a judge approves a wrong answer more often the more of its own independent answers
 reach it (1--25\% at 0/7 to 47--86\% at 7/7). Pooled across judges, the association persists after controlling for
-question identity (not for Kimi-K2.6), under a second auditor's labels and with thinking, and seven samples predict approval better than one; the most
+question identity (not for Kimi-K2.6), under a second auditor's labels and, for the Qwens, with thinking on, and seven samples predict approval better
+than one; the most
 restrictive same-candidate specification is inconclusive.
 \end{takeaway}
 
 % ---------------------------------------------------------------------------------------------------------------
-\section{Replication on Fresh Questions}
+\section{Two Replications on Fresh Questions}
 \label{sec:replication}
 
-\paragraph{Setup.}
+\paragraph{Multiple-choice setup.}
 The analyses above were developed on the same data they are reported on, and flexible analysis choices can produce
 spurious findings \citep{simmons2011false}. The benchmarks have no unused questions, so we rebuilt JudgeBench's
-construction on new ones and fixed the protocol, analyses and sample size before collecting data
-(Appendix~\ref{app:replication}). From MMLU-Pro questions JudgeBench does not contain, Nemotron-3.5-Super (NVIDIA)
+construction on new ones, twice: on multiple-choice questions and on open-ended math. For each, the protocol, analyses
+and sample size were fixed in writing before collecting data (Appendix~\ref{app:replication}); the protocols are
+released with the code but were not registered with a third party. From MMLU-Pro questions JudgeBench does not contain, Nemotron-3.5-Super (NVIDIA)
 wrote six answers each; the 1,336 of 6,000 questions with at least one right and one wrong answer became pairs (one
 right, one wrong response, random order). Four judges from three families other than the writer's (Qwen3.6-35B-A3B,
 Qwen3.5-9B, DeepSeek-V4.1-Flash, Kimi-K2.6) picked the better response and answered each question eight times with
@@ -358,28 +365,27 @@ All four & strict & key & 4,151 & 19 & 40 & 51 & 63 & +47 {\scriptsize[+41, +53]
 & lenient & complete audit & 4,165 & 16 & 35 & 46 & 59 & +45 {\scriptsize[+38, +51]} & +20 {\scriptsize[+12, +28]} & +7 {\scriptsize[+1, +13]} \\
 \bottomrule
 \end{tabular}}
-\caption{Fresh-question replication: wrong responses picked (\%), by belief. Slope: linear, judge fixed effects, 0/7
+\caption{MMLU-Pro replication: wrong responses picked (\%), by belief. Slope: linear, judge fixed effects, 0/7
 to 7/7 in points. Same candidate: candidate and judge fixed effects. One-sample label: its effect with belief held
-fixed. The strict parser and answer-key labels are pre-registered; the lenient parser and the complete audit were
+fixed. The strict parser and answer-key labels are pre-specified; the lenient parser and the complete audit were
 added after seeing the results. \emph{High-belief audit}: only responses some judge believes $\geq$4/7 under the
 strict parser were audited, and the rest keep key labels. \emph{Complete audit}: every wrong response audited; only
 those the auditor calls clearly wrong are kept, for every judge.}
 \label{tab:replication}
 \end{table*}
 
-\paragraph{Results.}
-Table~\ref{tab:replication} shows that the result replicates. Under the pre-registered analysis, the wrong response
-is picked 19\% of the time at 0/7 and 63\% at 7/7 (pre-registered primary slope +47 [+41, +53]; gap +45 [+37,
+\paragraph{Multiple-choice results.}
+Table~\ref{tab:replication} shows that the result replicates. Under the pre-specified analysis, the wrong response
+is picked 19\% of the time at 0/7 and 63\% at 7/7 (pre-specified primary slope +47 [+41, +53]; gap +45 [+37,
 +52]), and each judge's slope is positive with an
 interval above zero. The same wrong response is picked more by the judge that believes it more (+19 [+11, +26]),
-and belief in the competing right response lowers the chance of picking the wrong one ($-$29 [$-$36, $-$22]). Here
-the eighth answer, drawn in the same call as the seven and so exchangeable with them, adds +8 [+3, +14] alongside
-belief's +40 [+34, +48]: one more independent sample still carries information about the judge's answer
-distribution, so the single-sample signal is reduced, not absorbed. This association is smaller and less certain
+and, since a pairwise judge may also be swayed by the other response, we checked that belief in the competing right response lowers the chance of picking the wrong one ($-$29 [$-$36, $-$22]). Here the one-sample answer, drawn in the same call as the seven and so exchangeable with them, adds +8 [+3, +14]
+beside belief's +40 [+34, +48]; some added signal is expected, since seven samples are only a noisy estimate of
+what the judge would answer. This association is smaller and less certain
 under audited labels (+5 to +7; Table~\ref{tab:replication}).
 
 \paragraph{Answer parsing.}
-The pre-registered parser counted an own answer only if it wrote the letter five times, as the prompt asks. It
+The pre-specified parser counted an own answer only if it wrote the letter five times, as the prompt asks. It
 excluded 22\% of judgments, unequally across judges (Qwen3.6-35B-A3B 44\%, Qwen3.5-9B 28\%, Kimi-K2.6 13\%,
 DeepSeek 2\%), mostly because answers wrote the letter spaced (``D D D D D''), repeated a different number of times, or alone on
 the last line. Because unequal exclusions could
@@ -389,8 +395,8 @@ recovered answers. Under it each judge keeps 99--100\% of its judgments, and the
 move (pooled +48 [+43, +53]; Table~\ref{tab:replication}).
 
 \paragraph{Labels.}
-The pre-registered audit covered only the 361 wrong responses some judge believes $\geq$4/7, so its filtered result
-is selective. We therefore had Kimi-K3.1-Pro audit all 1,336 wrong responses with the same prompt. It calls 1,049 clearly wrong, 133 actually correct and 150 contested (4 without a verdict).
+The pre-specified audit covered only the 361 wrong responses some judge believes $\geq$4/7, so its filtered result
+is selective. We therefore had Kimi-K3.1-Pro audit the remaining 975 with the same prompt, so all 1,336 wrong responses are audited. It calls 1,049 clearly wrong, 133 actually correct and 150 contested (4 without a verdict).
 Keeping only those it calls clearly wrong, for every judge, the pooled slope is +43 [+35, +50] with the strict
 parser and +45 [+38, +51] with the lenient one, and every judge's slope stays above zero; Kimi-K2.6's top bin falls
 to 39--40\% (18--25 judgments). The auditor disputes the key more often the more the judges believe the response:
@@ -401,35 +407,29 @@ of those some judge reaches 7/7 (highest belief of any judge, lenient parser).
 MMLU-Pro is multiple choice, while the main study's two open-ended benchmarks need a model matcher to decide whether
 two final answers agree (\S\ref{sec:setup}). We therefore ran a second replication, again with protocol and size fixed
 in advance, on competition problems from DAPO-Math-17k \citep{yu2025dapo} whose answers are integers, so two answers
-match only if the integers are equal (Appendix~\ref{app:math}). Writer, judges, prompts and analyses are as above, and
+match only if the integers are equal (Appendix~\ref{app:math}). Writer, judges, judge prompt and analyses are as above, and
 the auditor checked every wrong response. Of 1,800 problems, 819 gave pairs (3,228 judgments). The judges solve
 88--93\% of their own attempts and pick the wrong response in 4--8\% of pairs, so 95\% of judgments are at 0/7.
 Under the answer key, approval still rises with belief: 4\% at 0/7, 19\% at 1--3, 42\% at 4--6 and 92\% at 7/7 (13
-judgments; pre-registered slope +71 [+54, +85], every judge's interval above zero). Belief in the right response
+judgments; pre-specified slope +71 [+54, +85], every judge's interval above zero). Belief in the right response
 lowers approval ($-$17 [$-$29, $-$6]), and the one-sample label adds +10 [$-$7, +28] beside belief's +62 [+40,
-+83]. Two results differ from MMLU-Pro. The same-candidate comparison finds no effect ($-$3 [$-$20, +17]); judges
++83]. Two results differ from MMLU-Pro. The same-candidate comparison finds no effect ($-$2 [$-$20, +17]); judges
 differ in belief about the same candidate for only 12\% of math candidates (51\% on MMLU-Pro), so this test has
 little to work with, but we cannot tell that apart from a true absence. And the auditor disputes the key for all seven
 wrong responses some judge reaches 7/7 (five actually correct, two contested), against 2\% of those no judge reaches
 (6\% at 1--3, 11\% at 4--6); for example, a tower of 2s must be six levels high, not the key's five, to exceed
 $3^{3^{3^3}}$. Keeping only responses it calls clearly wrong leaves no judgment at 7/7. Over the remaining bins
 approval still rises (3\%, 14\%, 22\%; slope +41 [+16, +70]): both Qwen judges' intervals stay above zero,
-DeepSeek's includes zero, and Kimi-K2.6 approves none of the 13 audited wrong responses it believes at all
-(Table~\ref{tab:math}).
-
-\paragraph{Re-measuring belief.}
-Belief is estimated from seven samples, so we tested its reliability: six of the original judges (Nemotron-3-Nano is
-no longer served) answered every original JudgeBench question seven more times. On the 237 audited wrong-answer
-judgments whose answers are letters, new and original belief correlate at 0.87 and agree on the bin 69\% of the
-time, and the original approvals rise with the new belief as much as with the original (+50 [+32, +66] vs +48 [+30,
-+65]).
+DeepSeek's includes zero, and Kimi-K2.6, which
+approves none of the 13 audited wrong responses it believes at all, has a negative slope ($-$7 [$-$14, $-$4];
+Table~\ref{tab:math}).
 
 \begin{takeaway}
 On 1,336 new multiple-choice pairs, with a writer from another family and a protocol fixed in advance, four judges
 from three families again pick wrong responses more the more they believe them (19\% at 0/7 to 63\% at 7/7), with a
-lenient parser and with every wrong response audited. On 819 open-ended math pairs the pre-registered test also
-holds (4\% to 92\%), but judges there rarely believe wrong answers, every response some judge reaches 7/7 has a
-disputed key, and the same-candidate test is null.
+lenient parser and with every wrong response audited. On 819 open-ended math pairs the pre-specified test also
+holds (4\% to 92\%), but judges there rarely believe wrong answers, every response some judge reaches 7/7 has a disputed key, under audited labels the slope rests on the lower bins
+(Kimi-K2.6's is negative), and the same-candidate test is null.
 \end{takeaway}
 
 % ---------------------------------------------------------------------------------------------------------------
@@ -467,9 +467,9 @@ each question's mean, fit on half of the questions) scores pairs of believed and
 same question; the within-question AUROC is 0.5 if it ignores belief. At this point it is 0.64 [0.51, 0.76], 0.58
 [0.48, 0.75] and 0.56 [0.39, 0.68] (22--39 questions per model), a modest effect at most; after the judge's written
 justification it is clearer (0.71--0.76) and matches the judge's own verdict log-odds (Appendix~\ref{app:inside}).
-A simpler analysis, the cosine between a ``belief'' and a correctness direction, looks stronger (0.80 for
+A simpler analysis we used first, the cosine between a ``belief'' and a correctness direction, looks stronger (0.80 for
 Qwen3.5-9B) but is nearly as high with belief labels shuffled within question (0.72): it mostly reflects which
-questions believed answers come from. Adding the correctness direction at the verdict shifts approval of right and
+questions believed answers come from. Steering along such directions \citep{rimsky-etal-2024-steering} checks whether they drive the verdict: adding the correctness direction at the verdict shifts approval of right and
 wrong answers together, and adding a belief direction during reasoning lowers approval of right answers without
 detectably changing approval of believed wrong answers (Appendix~\ref{app:steering}).
 
@@ -485,28 +485,27 @@ rationalisation.
 \label{sec:juries}
 
 If judges approve what they would answer themselves, errors on answers they do not believe and errors on answers
-they do believe should respond to different fixes. We test three suggested by prior work on the Qwen judges,
-thinking off, audited labels. These compare specific interventions and one alternative judge family; they do not
+they do believe should respond to different fixes. We test three fixes suggested by prior work, on the Qwen judges with thinking off and audited labels. These compare specific interventions and one alternative judge family; they do not
 establish that cross-family juries generally fail.
 
 \paragraph{Commit first.}
 \citet{lin-etal-2025-before} propose giving the judge its own answer as a reference to improve judging. Placing
 the judge's earlier answer in the conversation before it grades almost removes approvals of wrong answers it never
 reaches (0/7: 17\% $\rightarrow$ 1\%, $-$17 points [$-$20, $-$14]; RewardBench~2 Math and BFF-Bench) but shows no detectable change for those it always
-reaches (50\% $\rightarrow$ 56\%, +6 [$-$14, +25]; 16 judgments). Balanced accuracy rises from 82\% to 86\% (+5 [+3,
+reaches (50\% $\rightarrow$ 56\%, +6 [$-$14, +25]; 16 judgments). Balanced accuracy (the mean of accuracy on right and on wrong answers) rises from 82\% to 86\% (+5 [+3,
 +7]), at the cost of rejecting more right answers the judge cannot reach itself.
 
 \paragraph{A second judge family.}
 Juries of diverse models are proposed to reduce individual judges' biases \citep{verga2024replacing}. Handing the
 items a Qwen believes ($\geq$4/7) to Nemotron-3-Super lowers balanced accuracy for every Qwen (e.g.\ 89\%
-$\rightarrow$ 86\% for Qwen3.6-35B; verdicts read at the end of each transcript): Nemotron-3-Super itself believes 68--77\% of the clearly wrong answers a Qwen
+$\rightarrow$ 86\% for Qwen3.6-35B; verdicts read at the end of each transcript): Nemotron-3-Super itself believes ($\geq$4/7) 68--77\% of the clearly wrong answers a Qwen
 believes.
 
 \paragraph{A reference answer.}
 \citet{krumdick2026nofreelabels} find that expert references help judges. On BFF-Bench, adding the expert reference
 lowers approval of clearly wrong answers the judge believes ($\geq$4/7) from 44\% to 0\% (52 judgments) and raises
 balanced accuracy from 78.7\% to 90.9\% (+12.3 [+9.4, +15.4]); a strong model's answer (Kimi-K3.1-Pro) as the
-reference gives about half the gain. The judge follows the reference whether or not it is right: on answers the
+reference gives about 60\% of the gain. The judge follows the reference whether or not it is right: on answers the
 auditor calls actually correct, approval falls from 73\% to 21\%.
 
 \begin{takeaway}
@@ -520,10 +519,11 @@ outside reference removed them, at the cost of following the reference when it i
 
 LLM judges approve wrong answers more often the more often they reach those answers themselves, in four model
 families, with self-authorship excluded and after controlling for question identity. The association replicates on
-new multiple-choice and open-ended math questions under protocols fixed in advance, survives parser and label sensitivity analyses, and is better
+new multiple-choice questions, and in weaker form on open-ended math, under protocols fixed in advance, survives the
+multiple-choice replication's parser and label sensitivity analyses, and is better
 captured by repeated answer agreement than by a single sampled match. Written explanations and hidden states are
-consistent with it but do not identify a mechanism. Two practical points follow. A jury of judges with similar
-knowledge will share its most confident errors, which an outside reference can catch. And model auditors dispute
+consistent with it but do not identify a mechanism. Two practical points follow. In our tests, a juror from another family shared most of the
+Qwens' believed errors, and only an expert reference (on BFF-Bench) removed them. And model auditors dispute
 benchmark labels most often where judges are most confident, so evaluations of judges should audit the answers
 judges strongly believe.
 
@@ -539,9 +539,9 @@ yet annotated. After the audit the 7/7 groups are small (10--15 judgments per ju
 clear for three of five judge groups, and the most restrictive same-candidate specification is inconclusive. The
 replications use one answer writer and judges that overlap with the main study's; the multiple-choice replication's
 lenient parser and complete audit were added after seeing its results. On math the judges rarely believe wrong
-answers: only 13 judgments reach 7/7, all on responses whose key the auditor disputes, and the same-candidate test
-is null. Belief is measured at one sampling configuration and
-on two benchmarks depends on an LLM matcher. The evidence is observational, not an intervention on belief.
+answers: only 13 judgments reach 7/7, all on responses whose key the auditor disputes; under audited labels Kimi-K2.6's
+slope is negative; and the same-candidate test is null. Belief is measured at one sampling configuration and
+depends on an LLM matcher, wholly on two benchmarks and partly on JudgeBench. The evidence is observational, not an intervention on belief.
 Thinking-on results, transcripts and the fixes in \S\ref{sec:juries} cover only Qwen judges; the transcript labels
 come from an LLM with a small hand check; the hidden-state analysis rests on fewer than 40 questions per model.
 Nemotron-3-Nano's verdicts and own answers come from different serving setups.
@@ -599,7 +599,7 @@ call on 96\% of the 1,085 answers both audited. In an earlier, separate pass, Cl
 JudgeBench answers some Qwen believes 7/7 and made the same call as GLM-5.3 on 87\% of them; most contested
 JudgeBench items have a second defensible option among the choices MMLU-Pro added. On BBEH, 365 believed wrong
 answers (the set used in \S\ref{sec:process}) were audited by GLM-5.3: 191 clearly wrong, 84 actually correct (mostly
-auto-grader misses on equivalent answers) and 83 contested.
+auto-grader misses on equivalent answers) and 83 contested (7 without a verdict).
 
 \paragraph{Third auditor.} Claude Opus 5.5 (run as an agent with a Python tool for arithmetic and no web access)
 audited 98 answers with the prompts above, blind to the other auditors' verdicts: a sample of 60 drawn as 25 answers
@@ -607,7 +607,7 @@ GLM-5.3 calls clearly wrong, 25 actually correct and 10 contested, plus the 43 a
 Kimi-K3.1-Pro disagree (5 overlap). Its verdicts on the sample, by GLM-5.3's verdict:
 clearly wrong 22 / 0 / 3 (clearly wrong / actually correct / contested); actually correct 3 / 17 / 5; contested
 1 / 5 / 4. It agrees with GLM-5.3 on 19 of the 22 sampled BFF-Bench answers and with Kimi-K3.1-Pro on 16; on
-JudgeBench, 34 of 38 with each. Because the sample over-represents GLM-5.3's rare verdicts, 53/60 is not a
+JudgeBench, 34 of 38 with each. Because the sample over-represents GLM-5.3's rare verdicts, its 53/60 agreement on the clearly-wrong-or-not call (43/60 on all three categories) is not a
 population agreement rate; re-weighted to GLM-5.3's full mix it is 88\%. On the 43 disagreements Opus agrees with
 GLM-5.3 on 22 and Kimi-K3.1-Pro on 21, and calls 18 contested, so these are mostly hard cases rather than one
 auditor's mistakes. In two JudgeBench items Opus finds both the gold option and the candidate wrong (we checked both
@@ -693,9 +693,9 @@ within $10^{-12}$; the alternating projections converge to $10^{-10}$ within 2--
 \toprule
 Fixed effects & Ident.\ groups & Belief var.\ left & Slope & 95\% CI \\
 \midrule
-Judge & 21 & 0.83 & +37.6 & [+26.8, +48.9] \\
+Benchmark$\times$judge & 21 & 0.83 & +37.6 & [+26.8, +48.9] \\
 Judge$\times$question & 169 & 0.07 & +46.9 & [+28.0, +70.2] \\
-Candidate + judge & 313 & 0.29 & +20.0 & [+9.4, +31.0] \\
+Candidate + benchmark$\times$judge & 313 & 0.29 & +20.0 & [+9.4, +31.0] \\
 Cand.\ + judge$\times$question & 313 & 0.04 & +20.6 & [$-$6.1, +47.1] \\
 \midrule
 \multicolumn{5}{l}{\emph{Leaving out one family} (judge / judge$\times$question / candidate + judge)} \\
@@ -751,21 +751,20 @@ competitor comparisons), adding belief in the competing response (from the same 
 held-out log loss at every $k$, by 0.0009 at $k=1$ and 0.0037 at $k=7$, consistent with the competitor effect in
 the regression above.
 
-\section{Fresh-Question Replication Details}
+\section{MMLU-Pro Replication Details}
 \label{app:replication}
-\paragraph{Protocol.} Written before any data were collected: questions, writer, judges, settings, the five
-analyses and the rule for choosing the size from a pilot's cost and yield. MMLU-Pro's test set has 12,032 questions;
+\paragraph{Protocol.} Written before any data were collected: questions, writer, judges, settings, the five analyses (slope, same candidate, target and competitor belief, one-sample label, label sensitivity) and the rule for choosing the size from a pilot's cost and yield. MMLU-Pro's test set has 12,032 questions;
 277 whose text appears in JudgeBench were removed and the rest shuffled with a fixed seed. Questions use
 JudgeBench's MMLU-Pro instruction (``duplicate that letter five times''). The writer was first GLM-5.3-Flash; a
 five-question smoke test showed that its visible answers are mostly the bare letter (its reasoning is hidden), so
-before any judge was run the writer became Nemotron-3.5-Super with thinking off and the NVIDIA judge was replaced by
+before any judge was run the writer became Nemotron-3.5-Super with thinking off and the NVIDIA judge (Nemotron-3-Super) was replaced by
 Qwen3.5-9B. A pilot on 80 questions (14 pairs; not analysed) fixed the size at 6,000 questions. A question is
 eligible if the writer's six answers (temperature 1.0) include the right letter and a wrong one; the pair is the
 first of each. Judging used JudgeBench's pairwise prompt, thinking off, temperature 0.7, one verdict; own answers
 used the question alone, thinking off, temperature 0.7, eight samples (the first is the one-sample label, the other
 seven give belief, at least five needed). Kimi-K3.1-Pro (high reasoning) audited, with the main study's JudgeBench
 audit prompt, every wrong response that some judge believes at 4/7 or more: 207 clearly wrong, 81 actually correct,
-71 contested, 2 without a verdict. Answers below that belief were not audited in the pre-registered analysis
+71 contested, 2 without a verdict. Answers below that belief were not audited in the pre-specified analysis
 (see the complete audit below).
 
 \paragraph{Exclusions and the lenient parser.} Of 5,344 judgments, 18 have no parseable verdict and 1,175 fewer
@@ -851,8 +850,8 @@ Pooled & key & 3,228 & 4 & 19 & 42 & 92 {\scriptsize(13)} & +71 {\scriptsize[+54
 \bottomrule
 \end{tabular}}
 \caption{Math replication: wrong responses picked (\%), by belief. Slope: linear, judge fixed effects, 0/7 to 7/7
-in points (under the audit, extrapolated beyond 4--6). \emph{Audit}: only responses the auditor calls clearly
-wrong. Pooled, answer key / audit: same candidate $-$3 [$-$20, +17] / $-$4 [$-$20, +15]; target +53 [+30, +72] / +22
+in points (under the audit, extrapolated beyond 4--6); linear-probability slopes and their intervals can exceed 100. \emph{Audit}: only responses the auditor calls clearly
+wrong. Pooled, answer key / audit: same candidate $-$2 [$-$20, +17] / $-$4 [$-$20, +15]; target +53 [+30, +71] / +22
 [$-$6, +54] with competitor $-$17 [$-$29, $-$6] / $-$15 [$-$28, $-$4]; one-sample label +10 [$-$7, +28] / +3 [$-$13,
 +21] beside belief +62 [+40, +83] / +39 [+12, +68].}
 \label{tab:math}
