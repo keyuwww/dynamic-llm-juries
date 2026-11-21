@@ -95,15 +95,12 @@ shown two responses, picks the one that answers~H. Both label auditors (\S\ref{s
 \label{fig:overview}
 \end{figure*}
 
-Approval of wrong answers rises with belief in all four families, though two judges (Nemotron-3-Nano and Qwen3.5-4B) rise less
-(\S\ref{sec:staircase}). The association persists within question, under alternative labels and, for the Qwen
-judges, with thinking enabled; part of it is shared with other model families, but own belief predicts approval
-beyond their belief in the same answer; and seven samples predict approval better than one. Under protocols fixed in
-advance it replicates on fresh multiple-choice questions, with sensitivity analyses for answer parsing and labels.
-On open-ended math, where judges rarely believe wrong answers, the evidence is sparse and sensitive to disputed
-labels, and its judge-specific part does not replicate (\S\ref{sec:replication}). Written explanations and hidden
-states are consistent with the behavioural result but do not identify a mechanism (\S\ref{sec:process}). Finally,
-we test targeted interventions suggested by the result (\S\ref{sec:juries}).
+Approval of wrong answers rises with belief in all four families (\S\ref{sec:staircase}), within question, under
+alternative labels and beyond other families' belief in the same answer. It replicates on fresh multiple-choice
+questions under a protocol fixed in advance; on open-ended math, where judges rarely believe wrong answers, the
+evidence is sparse and its judge-specific part does not replicate (\S\ref{sec:replication}). Explanations and hidden
+states do not identify a mechanism (\S\ref{sec:process}). Of the interventions we test, only an expert reference (on
+BFF-Bench) removed approvals of believed wrong answers (\S\ref{sec:juries}).
 
 \paragraph{Contributions.}
 \begin{itemize}
@@ -257,7 +254,7 @@ absolute terms (AUROC, the chance that a random approval is scored above a rando
 unpredictable. The separate eighth answer does not detectably improve on the intercepts here, but it was generated
 in an earlier run with a shorter token budget, so it is not exchangeable with the seven; in the MMLU-Pro replication, where it is, it keeps a small association that is sensitive to label filtering, and on
 math it is not detectable (Appendix~\ref{app:math}). Belief re-measured from fresh JudgeBench samples correlates with the
-original at 0.87 and predicts approval as strongly (Appendix~\ref{app:robust}).
+original at 0.87 and predicts approval with a similar slope (+50 vs +48 points; Appendix~\ref{app:robust}).
 
 \paragraph{Question difficulty.}
 On hard questions a judge's answers scatter onto wrong values, and judges might simply be more lenient on hard
@@ -294,7 +291,7 @@ math it is not detectable on held-out questions (Appendix~\ref{app:consensus}).
 \paragraph{Alternative labels.}
 Because a believed wrong answer may be right, we compared released and audited labels. Without the audit the
 Qwens' gap is larger (+56 [+44, +66]; Table~\ref{tab:families}): among the BFF-Bench and JudgeBench answers some Qwen
-reaches 7/7, GLM-5.3 calls 23 clearly wrong and 23 actually correct, against 169 and 1 at 0/7 (Table~\ref{tab:audit}),
+reaches 7/7, GLM-5.3 calls 23 clearly wrong and 23 actually correct, against 155 and 1 at 0/7 (Table~\ref{tab:audit}),
 and judges approve the answers it calls actually correct 61--81\% of the time. The gap remains under the second
 auditor's labels and under labels both auditors agree on (Qwens +38 [+20, +56] and +35 [+13, +57];
 Appendix~\ref{app:robust}), except for Kimi-K2.6 under both auditors (5 judgments at 7/7) and Nemotron-3-Nano.
@@ -308,9 +305,9 @@ Appendix~\ref{app:robust}), except for Kimi-K2.6 under both auditors (5 judgment
 Highest & Clearly & Actually & Con- & Approved if \\
 belief & wrong & correct & tested & act.\ correct \\
 \midrule
-0/7 & 169 & 1 & 4 & 4/5 \\
-1--3 & 89 & 5 & 6 & 63\% (19) \\
-4--6 & 41 & 10 & 14 & 61\% (28) \\
+0/7 & 155 & 1 & 4 & 4/5 \\
+1--3 & 95 & 4 & 4 & 63\% (19) \\
+4--6 & 49 & 11 & 16 & 61\% (28) \\
 7/7 & 23 & 23 & 9 & 81\% (47) \\
 \bottomrule
 \end{tabular}
@@ -443,7 +440,8 @@ The multiple-choice association replicates strongly: on 1,336 new pairs, with a 
 protocol fixed in advance, four judges from three families pick wrong responses more the more they believe them
 (19\% at 0/7 to 63\% at 7/7), with a lenient parser and with every wrong response audited. In open-ended math the
 evidence is restricted to sparse nonzero-belief cases and is sensitive to disputed labels (audited: 3\% at 0/7, 14--22\%
-at 1--6/7, none at 7/7; Kimi-K2.6 reverses), and the judge-specific same-candidate evidence does not replicate.
+at 1--6/7, none at 7/7; Kimi-K2.6 picks none of the 13 it reaches), and the judge-specific same-candidate evidence
+does not replicate.
 \end{takeaway}
 
 % ---------------------------------------------------------------------------------------------------------------
@@ -469,9 +467,8 @@ made; a blinded human coding package is prepared but not yet annotated.
 \paragraph{Hidden states.}
 Judges' activations can hold the right preference when the verdict is wrong \citep{mukherjee2026opening}. For three
 judges on BBEH, a correctness direction read at ``VERDICT:'' (fit on held-out questions) ranks the believed of two
-wrong answers to the same question higher in 0.64, 0.58 and 0.56 of pairs (22--39 questions per model; two of three
-intervals include 0.5). The layer was chosen by right-vs-wrong separation on the same questions, without an inner
-split; averaging over the best third of layers gives 0.57--0.60. Steering along these directions
+wrong answers to the same question higher in 0.64, 0.60 and 0.56 of pairs (22--39 questions; two of three intervals include 0.5). That layer was chosen on the same questions; choosing it on training questions only gives 0.62,
+0.58 and 0.59, and a layer fixed in advance 0.58, 0.61 and 0.56, so the choice does not explain these small effects. Steering along these directions
 \citep{rimsky-etal-2024-steering} moved right and wrong answers together rather than believed wrong answers
 selectively (Appendix~\ref{app:steering}).
 
@@ -484,30 +481,34 @@ evidence about how the verdict forms.
 \section{Targeted Judging Interventions}
 \label{sec:juries}
 
-Errors on answers a judge does and does not believe may respond to different fixes. We test three interventions
-from prior work (Qwen judges, thinking off, audited labels) and a majority vote built from existing verdicts; these
-are specific interventions, not a general evaluation of juries.
+Errors on answers a judge does and does not believe may respond to different fixes. We test interventions from
+prior work (Qwen judges, thinking off, audited labels) and majority votes; these are specific tests, not a general
+evaluation of juries.
 
 \paragraph{Commit first.}
 \citet{lin-etal-2025-before} propose giving the judge its own answer as a reference to improve judging. Placing
 the judge's earlier answer in the conversation before it grades almost removes approvals of wrong answers it never
 reaches (0/7: 17\% $\rightarrow$ 1\%, $-$17 points [$-$20, $-$14]; RewardBench~2 Math and BFF-Bench). For those it
-always reaches the effect is undetermined (50\% $\rightarrow$ 56\%, +6 [$-$14, +25]; 16 judgments). Balanced
+believes the effect is undetermined (4--6: $-$2 [$-$20, +13]; 7/7: +6 [$-$14, +25], 16 judgments). Balanced
 accuracy (the mean of accuracy on right and on wrong answers) rises from 82\% to 86\% (+5 [+3, +7]), at the cost of
 rejecting more right answers the judge cannot reach itself.
 
 \paragraph{Routing to another family.}
 Juries of diverse models are proposed to reduce individual judges' biases \citep{verga2024replacing}. Handing the
 items a Qwen believes ($\geq$4/7) to Nemotron-3-Super lowers balanced accuracy for every Qwen (e.g.\ 89\%
-$\rightarrow$ 86\% for Qwen3.6-35B; verdicts read at the end of each transcript): Nemotron-3-Super itself believes
-($\geq$4/7) 68--77\% of the clearly wrong answers a Qwen believes.
+$\rightarrow$ 86\% for Qwen3.6-35B; verdicts read from the verdict-word probabilities): Nemotron-3-Super itself
+believes 68--77\% of these clearly wrong answers.
 
 \paragraph{Majority vote.}
-At a matched budget of three verdicts per item, on all 1,441 original items with a verdict from every judge (747
-right, 694 audited wrong), a majority of the three Qwens reaches 81.5\% balanced accuracy and the 17 majorities of
-three judges from three families 78.9--84.6\% (mean 81.6\%); the best single judge, Qwen3.6-35B, reaches 83.3\%. On
-the 92 wrong answers the Qwens believe (mean belief $\geq$4/7), a jury with no Qwen (Nemotron-3-Super, DeepSeek,
-Kimi-K2.6) approves about as many as the three Qwens (73\% vs 75\%; $-$2 [$-$12, +9]; Appendix~\ref{app:jury}).
+On the 1,369 original items with a verdict from every judge and an audited label (434 right, 935 wrong), we compare
+majorities of three verdicts from three families, from the three Qwens, and from one judge sampled three times. Three
+cross-family majorities without the weaker judges have higher balanced accuracy than the three Qwens (+2.0 to +2.7
+points, intervals above zero; mean over all 17 three-family majorities 85.8\% vs 85.2\%) but not detectably higher
+than Qwen3.6-35B voting with itself (86.9\%; +0.3 to +1.0), so the gain mainly reflects judge quality. On the 34
+wrong answers the Qwens believe (mean $\geq$4/7), these majorities approve 41--47\% against the Qwens' 53\% ($-$6
+to $-$12 points; two intervals end at zero). Resampling a judge mostly reproduces such errors: after it approves a
+wrong answer it believes ($\geq$4/7), its two repeats approve it again 81\% [74, 87] of the time, against 62\% [58,
+66] at 0/7 (Appendix~\ref{app:jury}).
 
 \paragraph{A reference answer.}
 \citet{krumdick2026nofreelabels} find that expert references help judges. On BFF-Bench, adding the expert reference
@@ -517,10 +518,11 @@ reference gives about 60\% of the gain. The judge also follows the reference whe
 answers the auditor calls actually correct, approval falls from 73\% to 21\%.
 
 \begin{takeaway}
-Committing the judge to its own answer first removes errors on answers it does not believe; on answers it does
-believe the effect is undetermined. Routing believed items to another family and a cross-family majority vote did
-not reduce approval of the Qwens' believed wrong answers. On BFF-Bench an expert reference did, and the judge also
-followed it where the auditor disputes the reference.
+Committing the judge to its own answer first almost removes errors on answers it does not believe; on answers it does
+believe the effect is undetermined. Routing believed items to another family lowered accuracy; cross-family majority
+votes were not detectably better than the strongest Qwen voting with itself, and a judge's approvals of wrong answers
+it believes mostly recur when it is resampled. On BFF-Bench an expert reference removed these errors, and the judge
+also followed it where the auditor disputes the reference.
 \end{takeaway}
 
 % ---------------------------------------------------------------------------------------------------------------
@@ -529,9 +531,8 @@ followed it where the auditor disputes the reference.
 LLM judges approve wrong answers more often the more often they reach those answers themselves, in four model
 families, with self-authorship excluded, within question, and beyond other families' belief in the same answer. The
 association replicates on new multiple-choice questions under a protocol fixed in advance; open-ended math, where
-judges rarely believe wrong answers, marks its boundary. Explanations and hidden states do not identify a mechanism.
-In our tests, routing to or voting with other families did not reduce the Qwens' believed errors, while an expert
-reference did. Model auditors dispute benchmark labels most where judges are most confident, so evaluations of
+judges rarely believe wrong answers, marks its boundary. Routing to another family lowered accuracy and cross-family votes did not detectably reduce
+believed errors, which recur when a judge is resampled; on BFF-Bench an expert reference removed them. Model auditors dispute benchmark labels most where judges are most confident, so evaluations of
 judges should have people check the answers judges strongly believe; until our human checks are done, these
 dispute rates are provisional.
 
@@ -548,11 +549,11 @@ clear for three of five judge groups, and the most restrictive same-candidate sp
 replications use one answer writer and judges that overlap with the main study's; the multiple-choice replication's
 lenient parser and complete audit were added after seeing its results. On math the judges rarely believe wrong
 answers: only 13 judgments reach 7/7, all on responses whose key the auditor disputes; under audited labels none is
-at 7/7 and Kimi-K2.6 reverses; and no judge-specific effect is detectable. The own-versus-consensus comparison is
+at 7/7 and Kimi-K2.6 picks none of the wrong responses it reaches; and no judge-specific effect is detectable. The own-versus-consensus comparison is
 predictive, not causal, and consensus is itself estimated from samples, so it may under-control shared agreement. Belief is measured at one sampling configuration and
 depends on an LLM matcher, wholly on two benchmarks and partly on JudgeBench. The evidence is observational, not an intervention on belief.
 Thinking-on results, transcripts and the interventions in \S\ref{sec:juries} other than the vote cover only Qwen
-judges, and the vote uses one verdict per judge; the transcript labels
+judges, and the vote's repeated verdicts omit Nemotron-3-Nano; the transcript labels
 come from an LLM with a small hand check; the hidden-state analysis rests on fewer than 40 questions per model.
 Nemotron-3-Nano's verdicts and own answers come from different serving setups.
 
@@ -562,7 +563,7 @@ We use public benchmarks and openly available models. The label audit identifies
 benchmark labels; we report them so they can be checked and will release the audit verdicts. Judge and matcher calls
 ran through a hosted API (Tinker); hidden states were captured on university GPUs and a few hours of rented GPUs.
 Adding one judge family to the main analysis costs about \$30--80 in API fees at list prices; the multiple-choice
-replication cost \$400 (including its complete audit), the math replication \$293 and the belief re-measurement \$92. We will release code, prompts, all judge outputs, belief
+replication cost \$400 (including its complete audit), the math replication \$293, the belief re-measurement \$92 and the repeated verdicts \$39. We will release code, prompts, all judge outputs, belief
 samples and audit verdicts.
 
 \bibliography{refs}
@@ -933,18 +934,26 @@ audit \$48, and \$6 for timed-out calls counted at their maximum possible cost.
 \section{Majority-Vote Juries}
 \label{app:jury}
 
-Items: every original item on which all seven judges gave a parseable verdict (1,523 of 1,604), dropping wrong
-answers GLM-5.3 does not audit as clearly wrong (82), leaving 747 right and 694 wrong answers from 815 questions.
-Each policy uses three verdicts, so there are no ties, and every policy is scored on the same items. We did not
-collect repeated verdicts from one model, so there is no self-consistency baseline.
-Table~\ref{tab:jury} gives false acceptance (wrong answers approved), false rejection (right answers rejected) and
-balanced accuracy. Paired differences resample questions (2,000 draws). Against the three Qwens, the jury of
-Qwen3.6-35B, Nemotron-3-Super and Kimi-K2.6 approves fewer wrong answers ($-$6.8 [$-$9.8, $-$3.7]; balanced accuracy
-+2.7 [+0.9, +4.6]), but no fixed cross-family jury has detectably different balanced accuracy from Qwen3.6-35B
-alone, and the three Qwens together are slightly worse than Qwen3.6-35B alone ($-$1.8 [$-$3.6, $-$0.1]). On the 92 wrong
-answers the Qwens believe (mean belief $\geq$4/7), the three fixed cross-family juries change false acceptance by
-+1.1 [$-$7.5, +10.8], +0.0 [$-$8.1, +8.4] and $-$2.2 [$-$12.1, +8.6] points relative to the three Qwens; alone,
-Nemotron-3-Super, DeepSeek and Kimi-K2.6 each approve 70\% of them.
+Units: every original item on which all seven judges gave a parseable verdict (1,523 of 1,604). On JudgeBench each
+judge's belief row targets the response that matches its own one-sample answer, so we put all judges in one frame:
+each pair is one unit whose candidate is its wrong response, a vote approves it if the judge picks it, and belief is
+each judge's belief in that response. Wrong answers are kept only if GLM-5.3 audits them clearly wrong (87 dropped, 3 for lack of a verdict);
+67 JudgeBench pairs whose wrong response matched no judge's own answer were never audited and are excluded. This
+leaves 434 right and 935 wrong answers from 755 questions. For self-consistency, each judge still served (all but
+Nemotron-3-Nano) graded every unit twice more with its original prompt and settings (temperature 0.7) and a
+32K-token budget; 14 of 18,276 draws gave no verdict (8 ran out of tokens) and were drawn again, as cut-off outputs
+were in the original run. On the 8,823 original transcripts in the job files that contain a verdict (the other 315
+were cut off and regenerated in the original run), the same parser reproduces the verdict the paper uses every time. Three votes cannot tie. Table~\ref{tab:jury} gives false acceptance (wrong answers approved), false rejection
+(right answers rejected) and balanced accuracy; paired differences resample questions (2,000 draws).
+
+Against the three Qwens, the three fixed cross-family juries change balanced accuracy by +2.0 [+0.3, +3.8], +2.7
+[+0.8, +4.5] and +2.1 [+0.1, +4.1] points; against Qwen3.6-35B voting with itself, by +0.3 [$-$1.4, +2.3], +1.0
+[$-$0.3, +2.5] and +0.4 [$-$1.7, +2.5]. Voting with itself changes a judge's balanced accuracy by $-$0.3 to +2.6
+points (largest for Qwen3.5-9B, +2.6 [+1.4, +3.9]). On the 34 wrong answers the Qwens believe, the fixed juries change
+false acceptance relative to the three Qwens by $-$5.9 [$-$24.2, +11.8], $-$11.8 [$-$26.5, 0.0] and $-$11.8
+[$-$32.4, +6.2] points. Pooled over the six judges with repeats, the two repeat verdicts approve again 61.7\% [57.7,
+65.7] of the wrong answers a judge approved at 0/7, 60.7\% [54.2, 67.0] at 1--3 and 81.2\% [73.7, 87.3] at 4--7
+(difference from 0/7 +19.5 [+11.5, +26.6]; 653, 149 and 128 approvals).
 
 \begin{table}[h]
 \centering
@@ -955,20 +964,23 @@ Nemotron-3-Super, DeepSeek and Kimi-K2.6 each approve 70\% of them.
 \toprule
 Policy (verdicts per item) & False acc. & False rej. & Bal.\ acc. \\
 \midrule
-Qwen3.6-35B alone (1) & 19.2 & 14.2 & 83.3 \\
-Best other single judge, Kimi-K2.6 (1) & 15.7 & 17.4 & 83.4 \\
-Three Qwens (3) & 25.5 & 11.5 & 81.5 \\
-Qwen3.6 + Nemotron-3-Super + DeepSeek (3) & 23.8 & 12.7 & 81.8 \\
-Qwen3.6 + Nemotron-3-Super + Kimi-K2.6 (3) & 18.7 & 12.9 & 84.2 \\
-Nemotron-3-Super + DeepSeek + Kimi-K2.6 (3) & 22.9 & 13.0 & 82.1 \\
-Mean of 17 three-family juries (3) & 23.3 & 13.4 & 81.6 \\
+Qwen3.6-35B alone (1) & 6.8 & 21.0 & 86.1 \\
+Kimi-K2.6 alone (1) & 4.7 & 24.2 & 85.6 \\
+Qwen3.6-35B, three samples (3) & 5.7 & 20.5 & 86.9 \\
+DeepSeek-V4.1-Flash, three samples (3) & 13.4 & 13.8 & 86.4 \\
+Kimi-K2.6, three samples (3) & 3.9 & 24.0 & 86.1 \\
+Three Qwens (3) & 14.8 & 14.7 & 85.2 \\
+Qwen3.6 + Nemotron-3-Super + DeepSeek (3) & 12.6 & 12.9 & 87.2 \\
+Qwen3.6 + Nemotron-3-Super + Kimi-K2.6 (3) & 6.6 & 17.5 & 87.9 \\
+Nemotron-3-Super + DeepSeek + Kimi-K2.6 (3) & 12.7 & 12.7 & 87.3 \\
+Mean of 17 three-family juries (3) & 13.4 & 15.0 & 85.8 \\
 \midrule
-\multicolumn{4}{l}{\emph{Wrong answers the Qwens believe ($\geq$4/7; 92): false acceptance}} \\
-\multicolumn{4}{l}{Three Qwens 75; the three fixed cross-family juries 76, 75 and 73} \\
+\multicolumn{4}{l}{\emph{Wrong answers the Qwens believe ($\geq$4/7; 34): false acceptance}} \\
+\multicolumn{4}{l}{Three Qwens 53; Qwen3.6-35B, three samples 41; fixed cross-family juries 47, 41, 41} \\
 \bottomrule
 \end{tabular}}
-\caption{Majority votes at a matched budget on 1,441 original items (\%). Range of balanced accuracy over the 17
-three-family juries: 78.9--84.6.}
+\caption{Majority votes at a matched budget on 1,369 original items (\%). Three samples: the judge's original verdict
+and two repeats. Range of balanced accuracy over the 17 three-family juries: 81.1--88.3.}
 \label{tab:jury}
 \end{table}
 
@@ -1015,9 +1027,13 @@ text). \emph{After explanation} (Qwens only): the judge's own written justificat
 \emph{Solving}: the answer placed in the model's own turn, followed by a request to restate it and ``FINAL:''. The
 correctness direction is learned on half of the questions and applied to the other half, averaged over 20 random
 splits, at the layer where it best separates right from wrong answers (by the cross-fitted right-vs-wrong AUROC on
-all questions, which does not use belief but is computed on the same questions as the reported statistic; there is
-no inner selection split). Averaging over the best third of layers instead gives 0.60, 0.57 and 0.59 at the snap
-verdict. We report five roles for two Qwens and four for Nemotron-3-Nano, with 22--39 questions each and no
+all questions, which does not use belief but is computed on the same questions as the reported statistic). Two checks
+remove this selection (Table~\ref{tab:inside}, last rows): a \emph{nested} choice, in which each training half picks
+its layer from an inner split of its own questions and the test half is scored at that layer, and the middle captured
+layer, fixed in advance. With directions held fixed and questions resampled, the nested snap-verdict intervals are
+[0.55, 0.69], [0.49, 0.67] and [0.53, 0.68]; the nested choice is unstable (Qwen3.5-9B picks 11 different layers across
+the 40 training halves), another sign of a weak signal. After the explanation the nested values are 0.70 and 0.77. Averaging over the best third of layers gives 0.60, 0.59 and 0.59 at the snap
+verdict. All values in Table~\ref{tab:inside} use the final BBEH audit. We report five roles for two Qwens and four for Nemotron-3-Nano, with 22--39 questions each and no
 correction for multiple comparisons. As a behavioural counterpart we apply the
 same test to the model's own log-odds of CORRECT over INCORRECT (Table~\ref{tab:inside}). Labels of believed wrong
 BBEH answers were audited by GLM-5.3. The solving role shows a similar, weak tendency to the snap verdict, so we
@@ -1031,24 +1047,30 @@ cannot say that judging and solving differ.
 \toprule
 Role (where the state is read) & Qwen3.5-9B & Qwen3.6-35B & Nemotron-3-Nano \\
 \midrule
-Snap verdict, correctness direction & 0.64 {\scriptsize[0.51, 0.76]} & 0.58 {\scriptsize[0.48, 0.75]} & 0.56 {\scriptsize[0.39, 0.68]} \\
-Snap verdict, verdict log-odds & 0.69 {\scriptsize[0.57, 0.80]} & 0.58 {\scriptsize[0.45, 0.72]} & 0.47 {\scriptsize[0.27, 0.71]} \\
-Solving, correctness direction & 0.60 {\scriptsize[0.45, 0.71]} & 0.54 {\scriptsize[0.33, 0.63]} & 0.59 {\scriptsize[0.41, 0.82]} \\
-After explanation, correctness direction & 0.71 {\scriptsize[0.59, 0.84]} & 0.76 {\scriptsize[0.65, 0.86]} & -- \\
-After explanation, verdict log-odds & 0.70 {\scriptsize[0.59, 0.80]} & 0.77 {\scriptsize[0.66, 0.86]} & -- \\
+Snap verdict, correctness direction & 0.64 {\scriptsize[0.52, 0.78]} & 0.60 {\scriptsize[0.46, 0.74]} & 0.56 {\scriptsize[0.39, 0.68]} \\
+Snap verdict, verdict log-odds & 0.69 {\scriptsize[0.57, 0.80]} & 0.60 {\scriptsize[0.47, 0.73]} & 0.47 {\scriptsize[0.27, 0.71]} \\
+Solving, correctness direction & 0.60 {\scriptsize[0.45, 0.71]} & 0.56 {\scriptsize[0.34, 0.66]} & 0.59 {\scriptsize[0.41, 0.82]} \\
+After explanation, correctness direction & 0.71 {\scriptsize[0.59, 0.84]} & 0.75 {\scriptsize[0.62, 0.86]} & -- \\
+After explanation, verdict log-odds & 0.70 {\scriptsize[0.59, 0.80]} & 0.78 {\scriptsize[0.66, 0.87]} & -- \\
 \midrule
-Questions (pairs) & 39 (135) & 37 (125) & 22 (67) \\
+Snap verdict, layer chosen on training questions & 0.62 & 0.58 & 0.59 \\
+Snap verdict, middle layer fixed in advance & 0.58 (16) & 0.61 (20) & 0.56 (26) \\
+Solving, layer chosen on training questions & 0.59 & 0.59 & 0.56 \\
+\midrule
+Questions (pairs) & 39 (135) & 37 (121) & 22 (67) \\
 \bottomrule
 \end{tabular}
 \caption{Believed vs never-reached wrong answers to the same BBEH question: share of pairs in which the believed
-answer scores higher (0.5 = no difference). Intervals resample questions.}
+answer scores higher (0.5 = no difference). Intervals resample questions. Rows above the second rule use the layer
+chosen on all questions; the three rows after it remove that choice (middle layer in parentheses).}
 \label{tab:inside}
 \end{table*}
 
 \paragraph{Cosine robustness.} Averaged over 20 random splits of the questions and over the third of layers where
 the correctness direction is best read, the cosine between belief and correctness directions (built on disjoint
 halves of the questions) and its shuffled-label control are: Qwen3.5-9B snap verdict 0.80 (control 0.72), solving
-0.41 (0.44); Qwen3.6-35B snap verdict 0.48 (0.42), solving 0.55 (0.46); Nemotron-3-Nano snap verdict 0.78 (0.61), solving
+0.41 (0.44); Qwen3.6-35B snap verdict 0.48 (0.42), solving 0.55 (0.46; both computed before the final audit removed 4 of its 125
+pairs); Nemotron-3-Nano snap verdict 0.78 (0.61), solving
 0.30 (0.19). For Qwen3.5-9B the shuffled values reach 0.90 at the 95th percentile. A single split with its best
 layer is also unstable: across 20 splits it ranges from 0.62 to 0.94 for Qwen3.5-9B and from 0.36 to 0.60 for
 Qwen3.6-35B. After the judge's written explanation both

@@ -1124,6 +1124,9 @@ verdict, 82 dropped by audit). Three votes, no ties. 3 Qwens 81.5% balanced accu
 78.9–84.6% (mean 81.6%); Qwen3.6-35B alone 83.3%. On the 92 wrong answers the Qwens believe (mean ≥ 4/7): 3 Qwens
 approve 75%, cross-family juries 76/75/73% (paired −2.2 [−12.1, +8.6] for the no-Qwen jury); each non-Qwen judge
 alone approves 70%. No repeated verdicts from one model exist, so no self-consistency baseline.
+**Superseded by 18a (Nov 21, later):** on JudgeBench these votes mixed frames — each judge's row targets the response
+that matches its own answer, so one judge's "approve" could mean "picked the right response" and another's "picked
+the wrong one" (391 of 475 pairs). The numbers above are wrong; see 18a.
 Paper: Section 7 renamed "Targeted Judging Interventions"; "only an outside reference removed them" replaced by the
 observed results; commit-first effect on believed answers called "undetermined" (16 judgments).
 
@@ -1154,3 +1157,76 @@ Abstract 200 words (adds the consensus result and the math boundary wording). Ne
 the robustness appendix with a pointer. Main text ends on page 8; 17 pages total; no undefined references.
 Not changed: the title (the review's editorial item 1 suggests answer-agreement wording unless validated; the
 consensus result supports a judge-specific component, so this is left to the authors).
+
+---
+
+## Experiment 18 — Strict re-review, second pass (Nov 21)
+
+### 18a. Majority votes, corrected, with a self-consistency baseline (B4; `validation/jury_vote.py`, `validation/jury_repeat.py`; Tinker \$38.88)
+**Correction.** On JudgeBench each judge's belief row targets the response matching ITS OWN one-sample answer, so the
+17b votes mixed "picked the right response" and "picked the wrong response" across judges (391 of 475 pairs). Now
+every pair is one unit whose candidate is the wrong response (vote = picks it; belief = each judge's belief in it,
+`belief_other` when its row targets the right one). Units: 1,523 with all seven verdicts; 87 not audited clearly wrong
+and 67 JudgeBench pairs never audited (no judge's own answer matched the wrong response) excluded → 434 right, 935
+wrong, 755 questions. (The routing analysis was not affected: it pairs Qwen and Nemotron rows only when their targets
+agree.)
+**Repeats.** Each judge still on Tinker (all but Nemotron-3-Nano) graded every unit twice more with the exact original
+messages (`inputs/readout_jobs*.jsonl.gz`), thinking off, T = 0.7, 32K-token budget; 18,276 draws; 14 gave no verdict
+(8 ran out of tokens in repetitive reasoning, 6 Nemotron-Super outputs ended after a few tokens) and were drawn again;
+every unit ends with two parsed repeats. On the 8,823 of 9,138 original transcripts in the job files that contain a
+verdict (315 were cut off and regenerated in the pool run), the parser reproduces the paper's verdict every time. Cost \$38.88 (Kimi \$18.31, Qwen3.5-9B \$5.70, Qwen3.6 \$4.66, DeepSeek \$4.60,
+Nemotron-Super \$3.08, Qwen3.5-4B \$2.51); the first sequential run was stopped and resumed in four parallel
+processes (at most ~\$0.20 of in-flight calls lost).
+**Results (balanced accuracy, %).** Singles: Qwen3.6 86.1, Kimi 85.6, DeepSeek 84.8, 9B 82.6, Nemotron-Super 81.7,
+4B 79.3, Nano 65.7. Same judge ×3: Qwen3.6 86.9, DeepSeek 86.4, Kimi 86.1, 9B 85.2, Nemotron-Super 81.4, 4B 80.3
+(change vs single −0.3 to +2.6; 9B +2.6 [+1.4, +3.9]). Three Qwens 85.2. Fixed cross-family juries 87.2 / 87.9 / 87.3
+(mean of 17: 85.8, range 81.1–88.3): vs three Qwens +2.0 [+0.3, +3.8] / +2.7 [+0.8, +4.5] / +2.1 [+0.1, +4.1]; vs
+Qwen3.6 ×3 +0.3 [−1.4, +2.3] / +1.0 [−0.3, +2.5] / +0.4 [−1.7, +2.5]. The three fixed juries leave out the weaker
+judges; averaged over all 17 cross-family triples the gain over the Qwens is only 85.8 vs 85.2. **The gain over the
+Qwens is mostly judge quality, not family diversity.** 34 wrong answers the Qwens believe (mean ≥ 4/7): false acceptance three Qwens 53%,
+Qwen3.6 ×3 41%, fixed juries 47 / 41 / 41% (vs Qwens −5.9 [−24.2, +11.8], −11.8 [−26.5, 0.0], −11.8 [−32.4, +6.2]).
+**Repeatability.** After a judge approves a wrong answer, its two repeats approve again 61.7% [57.7, 65.7] at own
+belief 0/7 (653 approvals), 60.7% [54.2, 67.0] at 1–3 (149), 81.2% [73.7, 87.3] at 4–7 (128); 4–7 minus 0/7 +19.5
+[+11.5, +26.6]. Approvals of believed wrong answers are reproducible decisions, not sampling noise.
+**Paper.** §7 "Majority vote" rewritten (cross-family vs Qwens vs self-consistency; repeatability), Takeaway 4 and
+Conclusion follow; Appendix "Majority-Vote Juries" rewritten with the new table; Limitations: repeats omit Nano.
+
+### 18b. Hidden states: layer chosen without the test questions (B5; `validation/hidden_nested.py` → `hidden_nested.{json,md}`)
+The paper's layer was the one whose correctness direction best separates right from wrong answers over ALL questions
+(no belief used, but the same questions as the reported statistic). Two checks remove that choice: a nested choice
+(each training half picks its layer from an inner split of its own questions; the test half is scored there; 20
+halvings) and the middle captured layer fixed in advance. Snap verdict (Qwen3.5-9B / Qwen3.6-35B / Nemotron-3-Nano):
+paper's selection 0.64 / 0.60 / 0.56; nested 0.62 / 0.58 / 0.59 (directions fixed, questions resampled: [0.55, 0.69],
+[0.49, 0.67], [0.53, 0.68]); middle layer 0.58 / 0.61 / 0.56. Solving nested 0.59 / 0.59 / 0.56; after the
+explanation 0.70 / 0.77. The nested choice is unstable (Qwen3.5-9B picks 11 different layers over 40 training
+halves). Reading: layer selection does not explain the small snap-verdict effects, and they stay small.
+The script also recomputes the paper's own table on the final BBEH audit (the Nano audit on Nov 18 removed 4 of the
+125 Qwen3.6-35B pairs after its table was made): Qwen3.6-35B snap 0.58 → 0.60 [0.46, 0.74], log-odds 0.58 → 0.60,
+solving 0.54 → 0.56, after explanation 0.76 → 0.75 (log-odds 0.77 → 0.78); Qwen3.5-9B and Nano unchanged except the
+9B snap interval [0.51, 0.76] → [0.52, 0.78]. The paper's table now comes from this one script.
+
+### 18c. Audit-by-belief table: JudgeBench belief made literal (`validation/paper_numbers.py`, T1)
+The table bins each unique wrong answer by "the highest belief any Qwen has in it", but on JudgeBench it counted only
+Qwen rows whose target was that wrong response; a Qwen whose row targets the right response still has a belief in the
+wrong one (`belief_other`). Counting it moves 24 of 399 answers up one bin (none into 7/7). New rows (clearly wrong /
+actually correct / contested): 0/7 155 / 1 / 4 (was 169 / 1 / 4), 1–3 95 / 4 / 4 (89 / 5 / 6), 4–6 49 / 11 / 16
+(41 / 10 / 14), 7/7 unchanged 23 / 23 / 9. Every other number in `paper_numbers.md` is unchanged (diffed).
+
+### 18d. Human-label analysis, ready before labels exist (B1; `validation/human_analysis.py`)
+No labels yet on either annotation page (checked Nov 21: both `labels` collections empty). The script reads labels
+from a page export or a JSONL file and reports reader agreement (κ), human × auditor tables per belief stratum, the
+human and auditor dispute rates weighted to stratum sizes with intervals (items resampled within strata), and, for the
+replications, the confirmatory slope with every sampled response relabelled by the human consensus. Plumbing tested
+on SYNTHETIC labels written to a scratch folder only (`--simulate --out <scratch>`): with readers that copy the
+auditor it reproduces the audited slopes (math +41 [+16, +70], MMLU-Pro +45 [+38, +51]). No synthetic output is in
+the repo, and no model output may be entered as a human label.
+
+### 18e. Paper and budget
+Main text still ends on page 8 (intro results paragraph, vote setup and conclusion compressed); 17 pages; no
+undefined references or overfull boxes. Wording: "predicts approval as strongly" → "with a similar slope (+50 vs +48)";
+"Kimi-K2.6 reverses" (math) → "picks none of the 13 it reaches". An independent fresh-agent check of the changed
+hidden-state, audit-table and wording numbers found no mismatches (one caption wording fixed); a second check of the
+vote section found every number right and led to wording fixes: the mean over all 17 triples now beside the three
+fixed juries, "two intervals end at zero", "almost removes", "on BFF-Bench" for the reference, 14 (not 8) redraws, and
+commit-first at 4–6 (−2 [−20, +13]) added. Belief-paper Tinker spend
+now about \$823 of the \$1,000 cap (this pass \$38.88); Modal \$0. Title still unchanged (authors' call).

@@ -115,6 +115,14 @@ def main():
     top = {}
     for r in W:
         top[r["item"]] = max(top.get(r["item"], 0), r["belief"])
+    # JudgeBench: a Qwen whose row targets the RIGHT response still has a belief in the wrong one (belief_other);
+    # count it too, so "highest belief any Qwen has" is literal (Nov 21: moves 24 of 399 answers up one bin, none to 7/7)
+    raw = {(r["judge"], r["item"]): r for r in json.load(open(HERE / "out" / "belief_rows_clean.json"))}
+    for r in data["3 Qwens"]:
+        if r["bench"] == "judgebench" and r["ok"] == 1 and r["item"] in top:
+            bo = raw[r["judge"], r["item"]].get("belief_other")
+            if bo is not None:
+                top[r["item"]] = max(top[r["item"]], float(bo))
     L += ["## T1. Label audit by belief (Qwen rows, unique BFF + JudgeBench wrong-labelled answers, highest Qwen belief)\n",
           "| belief | clearly wrong | actually correct | contested | no verdict | approval of 'actually correct' (judgments) |",
           "|---|---|---|---|---|---|"]

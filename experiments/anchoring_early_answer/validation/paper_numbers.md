@@ -15,9 +15,9 @@
 
 | belief | clearly wrong | actually correct | contested | no verdict | approval of 'actually correct' (judgments) |
 |---|---|---|---|---|---|
-| 0/7 | 169 | 1 | 4 | 2 | 80% (n=5) |
-| 1-3 | 89 | 5 | 6 | 3 | 63% (n=19) |
-| 4-6 | 41 | 10 | 14 | 0 | 61% (n=28) |
+| 0/7 | 155 | 1 | 4 | 2 | 80% (n=5) |
+| 1-3 | 95 | 4 | 4 | 3 | 63% (n=19) |
+| 4-6 | 49 | 11 | 16 | 0 | 61% (n=28) |
 | 7/7 | 23 | 23 | 9 | 0 | 81% (n=47) |
 
 ## T2. Wrong answers approved by belief (stated verdict)
