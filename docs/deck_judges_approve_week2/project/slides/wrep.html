@@ -1,0 +1,22 @@
+<section id="wrep" style="gap:30px;">
+<p class="secno">WEEK 2 · 6 / 11 · REPLICATION</p>
+<p class="tag">PLAN FIXED BEFORE DATA · THINKING OFF</p>
+<h2 class="htitle">New questions, plan written first: it replicates</h2>
+<div class="row" style="gap:48px; flex:1;">
+<div style="flex:1; display:flex; flex-direction:column; gap:22px; justify-content:flex-end;">
+<div class="vbars">
+<div class="vcol"><p class="vval">19%</p><div class="vbar" style="height:133px;"></div><p class="vlab">0/7<br>never</p></div>
+<div class="vcol"><p class="vval">40%</p><div class="vbar" style="height:280px;"></div><p class="vlab">1–3<br>sometimes</p></div>
+<div class="vcol"><p class="vval">51%</p><div class="vbar" style="height:357px;"></div><p class="vlab">4–6<br>mostly</p></div>
+<div class="vcol"><p class="vval">63%</p><div class="vbar" style="height:441px;"></div><p class="vlab">7/7<br>always</p></div>
+</div>
+<p class="note">Wrong response picked (%), by how often the judge reaches it on its own. Four judges pooled; the analysis fixed in advance (strict parser, answer-key labels); 4,151 judgments.</p>
+</div>
+<div class="side" style="width:560px;">
+<div class="card"><p class="label">SETUP</p><p>1,336 new MMLU-Pro pairs, one right and one wrong response. Answers by Nemotron-3.5-Super; four judges from three other families.</p></div>
+<div class="card peri"><p class="label">RESULT</p><p class="mid">+47 points</p><p class="small">slope 0/7 → 7/7 [+41, +53]; above zero for every judge</p></div>
+<div class="card butter"><p class="label">STILL HOLDS</p><p>Lenient answer parser: +48. Every wrong response audited: +43 to +45. Same candidate, different judges: +19.</p></div>
+</div>
+</div>
+<aside>About 1 minute. Everything so far was found and tested on the same data, and flexible analysis choices can produce false findings. The benchmarks have no unused questions, so I rebuilt JudgeBench’s recipe on new ones. From MMLU-Pro questions JudgeBench doesn’t contain, Nemotron-3.5-Super wrote six answers each; the 1,336 questions with at least one right and one wrong answer became pairs. Four judges from three other families (Qwen3.6-35B, Qwen3.5-9B, DeepSeek, Kimi) picked the better response and answered each question eight times on their own. The plan, analyses and sample size were written down before collecting data (not registered with a third party). Result: the wrong response is picked 19% of the time at 0/7 and 63% at 7/7; the pre-specified slope is +47 points, and every judge’s slope is above zero. Two things were added after seeing the results, and I label them so: a lenient answer parser (the strict one dropped 22% of judgments, unequally across judges) and an audit of every wrong response. Both leave the slope at +43 to +48. Same candidate, different judges: +19, so here the judge-specific part is clear.</aside>
+</section>

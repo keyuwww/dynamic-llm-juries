@@ -1,0 +1,58 @@
+{
+  "v": 5,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-11-23T08:03:15Z"
+  },
+  "lists": "css",
+  "format": {
+    "v": 1,
+    "shared": [
+      "project/deck.css"
+    ]
+  },
+  "title": "Judges approve what they believe · week 2",
+  "cover": "cover",
+  "order": [
+    "cover",
+    "wrecap",
+    "wfam",
+    "wctrl",
+    "wlabels",
+    "wrep",
+    "wmath",
+    "wjury",
+    "wfix",
+    "wcorr",
+    "wtake"
+  ],
+  "sections": {
+    "s1": {
+      "description": "Where last week left off, and the four questions checked this week",
+      "start": "cover"
+    },
+    "s2": {
+      "description": "Does the effect hold up: more judge families, other explanations, label errors",
+      "start": "wfam"
+    },
+    "s3": {
+      "description": "Fresh data: a replication on new multiple-choice questions and a math boundary test",
+      "start": "wrep"
+    },
+    "s4": {
+      "description": "Fixes, what changed since last week, and takeaways",
+      "start": "wjury"
+    }
+  },
+  "faces": {
+    "inter": {
+      "family": "Inter",
+      "href": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+    },
+    "plus-jakarta-sans": {
+      "family": "Plus Jakarta Sans",
+      "href": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&display=swap"
+    }
+  },
+  "designSystems": []
+}

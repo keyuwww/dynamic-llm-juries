@@ -1,0 +1,24 @@
+<section id="wlabels" style="gap:30px;">
+<p class="secno">WEEK 2 · 5 / 11 · LABEL ERRORS</p>
+<p class="tag">MODEL AUDITORS · HUMAN CHECK NOT YET DONE</p>
+<h2 class="htitle">Judges’ most confident “errors” are often disputed labels</h2>
+<div class="row" style="gap:48px; flex:1;">
+<div style="flex:1; display:flex; flex-direction:column; gap:22px;">
+<p style="font-size:28px; color:#1E2A3B;">Share of “wrong” answers the auditor disputes, by the highest belief any judge has in them (original: any Qwen judge)</p>
+<div class="key">
+<div style="display:flex; flex-direction:row; gap:12px; align-items:center;"><div class="sw" style="background:#4B44C2;"></div><p style="font-size:26px; color:#1E2A3B;">Original (BFF-Bench + JudgeBench)</p></div>
+<div style="display:flex; flex-direction:row; gap:12px; align-items:center;"><div class="sw" style="background:#E8832F;"></div><p style="font-size:26px; color:#1E2A3B;">New MMLU-Pro questions</p></div>
+</div>
+<div style="display:flex; flex-direction:row; align-items:center; gap:16px;"><p class="blab">0/7</p><div style="display:flex; flex-direction:column; gap:8px;"><div class="barrow"><div class="bar a" style="width:30px;"></div><p class="bval">3%</p></div><div class="barrow"><div class="bar b" style="width:90px;"></div><p class="bval">9%</p></div></div></div>
+<div style="display:flex; flex-direction:row; align-items:center; gap:16px;"><p class="blab">1–3</p><div style="display:flex; flex-direction:column; gap:8px;"><div class="barrow"><div class="bar a" style="width:80px;"></div><p class="bval">8%</p></div><div class="barrow"><div class="bar b" style="width:190px;"></div><p class="bval">19%</p></div></div></div>
+<div style="display:flex; flex-direction:row; align-items:center; gap:16px;"><p class="blab">4–6</p><div style="display:flex; flex-direction:column; gap:8px;"><div class="barrow"><div class="bar a" style="width:360px;"></div><p class="bval">36%</p></div><div class="barrow"><div class="bar b" style="width:310px;"></div><p class="bval">31%</p></div></div></div>
+<div style="display:flex; flex-direction:row; align-items:center; gap:16px;"><p class="blab">7/7</p><div style="display:flex; flex-direction:column; gap:8px;"><div class="barrow"><div class="bar a" style="width:580px;"></div><p class="bval">58%</p></div><div class="barrow"><div class="bar b" style="width:510px;"></div><p class="bval">51%</p></div></div></div>
+<p class="note">Disputed = the auditor calls it actually correct or contested. Original: GLM-5.3’s audit of the Qwen judges’ answers (394 with a verdict). New questions: Kimi-K3.1-Pro’s audit of every wrong response.</p>
+</div>
+<div class="side" style="width:560px;">
+<div class="card butter"><p class="label">WHERE THEY COME FROM</p><p><b>BFF-Bench:</b> slips in the expert’s reference answer, e.g. a $386,000 fair value typed as $368,000 (4 answers marked wrong).</p><p><b>JudgeBench:</b> MMLU-Pro keys where a second option is also defensible.</p></div>
+<div class="card peri"><p class="label">THE EFFECT SURVIVES</p><p>Qwens’ gap: +56 with labels as released → <b>+43</b> audited → +35 where both auditors agree.</p></div>
+</div>
+</div>
+<aside>About 1 minute 15. A wrong answer a judge reaches seven times out of seven is either a confident error or a wrong answer key. So every answer labelled wrong was re-checked: by GLM-5.3, told the key might be wrong and to work the problem itself; again by Kimi-K3.1-Pro from another family (96% agreement); and by Claude Opus 5.5 on a sample. The disputed share climbs with belief: 3% of the answers no Qwen reaches, 58% of those some Qwen reaches seven times out of seven. The new MMLU-Pro data shows the same climb, 9% to 51%, and on math every 7/7 response sat on a disputed key. Where they come from: on BFF-Bench, mistakes in the expert reference. For example, the question gives a fair value of $386,000, the reference uses $368,000, and four correct answers were marked wrong; I checked that one in the text myself. Three more disputed answers come from the same problem’s follow-up question, where the auditor finds other errors in the reference. On JudgeBench, the label is MMLU-Pro’s key, and the disputes are mostly questions where a second option is also defensible. The effect survives removing them: the Qwens’ gap is +56 as released, +43 audited, +35 where both auditors agree. Caveat: the auditors are models and could share the judges’ weakness; human-check packages are ready but nobody has read them yet. Practical point: when you score a judge against a benchmark, its most confident “errors” are where the key is most often disputed.</aside>
+</section>

@@ -1230,3 +1230,8 @@ vote section found every number right and led to wording fixes: the mean over al
 fixed juries, "two intervals end at zero", "almost removes", "on BFF-Bench" for the reference, 14 (not 8) redraws, and
 commit-first at 4–6 (−2 [−20, +13]) added. Belief-paper Tinker spend
 now about \$823 of the \$1,000 cap (this pass \$38.88); Modal \$0. Title still unchanged (authors' call).
+
+**Correction (Nov 23).** "two intervals end at zero" (§7, believed wrong answers under the fixed juries) was wrong:
+the three intervals are [−24.2, +11.8], [−26.5, 0.0] and [−32.4, +6.2] (`validation/jury_vote.md`), so only one ends at
+zero and all three include it. Paper now says "all three intervals include zero"; PDF rebuilt, main text still ends on
+page 8. Found by the fresh-agent number check of the week-2 talk deck (`docs/deck_judges_approve_week2/`).

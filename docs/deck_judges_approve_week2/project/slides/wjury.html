@@ -1,0 +1,24 @@
+<section id="wjury" style="gap:30px;">
+<p class="secno">WEEK 2 · 8 / 11 · MAJORITY VOTES</p>
+<p class="tag">NEW THIS WEEK · THINKING OFF</p>
+<h2 class="htitle">Majority votes: mixing families is not the fix</h2>
+<div class="row" style="gap:40px; flex:1;">
+<div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+<table style="font-size:28px;">
+<tr class="thead"><th style="width:56%;">Three verdicts per item from …</th><th class="n" style="width:22%;">Balanced accuracy</th><th class="n" style="width:22%;">Believed wrong approved</th></tr>
+<tr><td>Three Qwens</td><td class="n">85.2%</td><td class="n">53%</td></tr>
+<tr class="r1"><td>Qwen3.6-35B, three samples of itself</td><td class="n">86.9%</td><td class="n">41%</td></tr>
+<tr><td>Qwen3.6 + Nemotron-3-Super + DeepSeek</td><td class="n">87.2%</td><td class="n">47%</td></tr>
+<tr><td>Qwen3.6 + Nemotron-3-Super + Kimi</td><td class="n">87.9%</td><td class="n">41%</td></tr>
+<tr><td>Nemotron-3-Super + DeepSeek + Kimi</td><td class="n">87.3%</td><td class="n">41%</td></tr>
+<tr class="r3"><td>Average of all 17 three-family trios</td><td class="n">85.8%</td><td class="n">–</td></tr>
+</table>
+<p class="note">1,369 original items with a re-checked label and a verdict from all seven judges. Balanced accuracy = the average of accuracy on right answers and on wrong answers. Believed wrong = the 34 wrong answers the Qwens believe (≥ 4/7 on average). One Qwen3.6-35B verdict alone: 86.1%.</p>
+</div>
+<div class="side" style="width:500px;">
+<div class="card butter"><p class="label">MOSTLY JUDGE QUALITY</p><p>Trios of the stronger judges beat three Qwens by 2.0–2.7 points (the average trio doesn’t), but not Qwen3.6 voting with itself (+0.3 to +1.0, not clear).</p></div>
+<div class="card peri"><p class="label">BELIEVED ERRORS RECUR</p><p class="mid">81% vs 62%</p><p class="small">After a judge approves a wrong answer it believes, its two re-runs approve it again 81% [74, 87] of the time; 62% [58, 66] for answers it never reaches.</p></div>
+</div>
+</div>
+<aside>About 1 minute. New this week. Juries of diverse models are the standard proposal for reducing one judge’s biases, so I compared majorities of three verdicts at the same budget: three Qwens, one judge sampled three times, and trios from three different families. The items are the 1,369 original items with a re-checked label and a verdict from every judge. The three trios built from the stronger judges do beat three Qwens, by 2 to 2.7 points of balanced accuracy (the average of all 17 trios barely does), but they are not detectably better than the strongest Qwen voting with itself, 86.9%. So the gain mainly reflects using stronger judges, not mixing families. On the 34 wrong answers the Qwens believe, those trios approve 41–47% against 53% for three Qwens; all three intervals include zero, so this is suggestive at most. And re-running a judge does not wash these errors out: after a judge approves a wrong answer it believes, its two re-runs approve it again 81% of the time, against 62% for wrong answers it never reaches. Re-runs were at temperature 0.7 for six judges (Nemotron-3-Nano is no longer served) and cost $39.</aside>
+</section>

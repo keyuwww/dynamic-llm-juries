@@ -1,0 +1,19 @@
+<section id="wfix" style="gap:30px;">
+<p class="secno">WEEK 2 · 9 / 11 · FIXES, UPDATED</p>
+<p class="tag">THREE QWENS · THINKING OFF · AUDITED LABELS</p>
+<h2 class="htitle">Peers don’t fix believed errors; references do</h2>
+<table style="font-size:30px;">
+<tr class="thead"><th style="width:38%;">Fix</th><th style="width:32%;">Believed wrong answers approved</th><th style="width:30%;">Balanced accuracy</th></tr>
+<tr><td>Commit own answer first</td><td>no clear change</td><td>82 → 86%</td></tr>
+<tr><td>Route to another family</td><td>it believes 68–77% of them too</td><td>lower (Qwen3.6: 89 → 86%)</td></tr>
+<tr><td>Three-family majority vote</td><td>53 → 41–47%, not clear</td><td>≈ Qwen3.6 voting with itself</td></tr>
+<tr class="r2"><td>Expert reference (BFF-Bench)</td><td>44 → 0%</td><td>78.7 → 90.9%</td></tr>
+<tr class="rb"><td>Strong model as reference (BFF) · new</td><td>44 → 13%</td><td>86.1%, about 60% of the gain</td></tr>
+</table>
+<p class="note">Believed = the judge reaches the answer in at least 4 of 7 tries. Commit first does remove errors on answers the judge doesn’t believe (0/7: 17 → 1%). Strong model = Kimi-K3.1-Pro’s own answer, no expert involved.</p>
+<div class="row" style="gap:24px;">
+<div class="card butter"><p class="label">LAST WEEK’S OPEN QUESTION</p><p>Can a strong model’s answer replace the expert’s? Partly: about 60% of the gain, and the judge follows it where the model is wrong.</p></div>
+<div class="card"><p class="label">CAVEAT</p><p>The judge follows the reference even where the auditor disputes it: approval of “actually correct” answers falls 73 → 21%.</p></div>
+</div>
+<aside>About 1 minute. A scorecard of every fix so far, re-run on the re-checked labels: three Qwen judges, thinking off. Committing the judge to its own answer first still removes errors on answers it doesn’t believe (17 → 1% at 0/7; balanced accuracy 82 → 86%), but on answers it believes the change is not clear. Routing believed items to another family makes accuracy worse, because that family believes most of the same wrong answers. Majority votes: previous slide. References are what works. On BFF-Bench, the expert’s reference answer takes believed wrong answers from 44% approved to 0% (52 judgments) and balanced accuracy from 78.7 to 90.9%. That gain, +12.3, is smaller than last week’s +15, because some of last week’s gain was the judge rejecting answers that are actually right. Last week’s open question was whether a strong model’s answer could replace the expert. Using Kimi-K3.1-Pro’s own answer gets about 60% of the gain, 44 → 13%, and fails where Kimi is wrong itself. Caveat: the judge follows the reference wherever it points, including where the auditor thinks the reference is wrong (approval of answers the auditor calls actually correct falls from 73% to 21%).</aside>
+</section>

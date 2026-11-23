@@ -1,0 +1,25 @@
+<section id="wmath" style="gap:30px;">
+<p class="secno">WEEK 2 · 7 / 11 · BOUNDARY TEST</p>
+<p class="tag">819 MATH PAIRS · PLAN FIXED BEFORE DATA</p>
+<h2 class="htitle">Math: judges rarely believe a wrong answer</h2>
+<div class="row" style="gap:40px; flex:1;">
+<div class="stack" style="width:400px;">
+<div class="card cyan" style="justify-content:center;"><p class="big" style="font-size:64px;">88–93%</p><p>of their own attempts the judges solve</p></div>
+<div class="card cyan" style="justify-content:center;"><p class="big" style="font-size:64px;">95%</p><p>of judgments sit at 0/7: believed wrong answers are rare</p></div>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; gap:22px; justify-content:flex-end;">
+<div class="vbars">
+<div class="vcol" style="width:150px;"><p class="vval">3%</p><div class="vbar" style="height:42px; width:110px;"></div><p class="vlab">0/7<br>n = 2,967</p></div>
+<div class="vcol" style="width:150px;"><p class="vval">14%</p><div class="vbar" style="height:196px; width:110px;"></div><p class="vlab">1–3<br>n = 102</p></div>
+<div class="vcol" style="width:150px;"><p class="vval">22%</p><div class="vbar" style="height:308px; width:110px;"></div><p class="vlab">4–6<br>n = 18</p></div>
+<div class="vcol" style="width:150px;"><p class="vval">none</p><div class="vbar" style="height:3px; width:110px; background:#B8BFCC;"></div><p class="vlab">7/7<br>n = 0</p></div>
+</div>
+<p class="note">Wrong response picked (%), audited labels, four judges pooled; n = judgments.</p>
+</div>
+<div class="side" style="width:500px;">
+<div class="card butter"><p class="label">THE 7/7 MIRAGE</p><p>Under the answer key, 7/7 looked like 92% picked. All 13 of those judgments sit on 7 responses whose key the auditor disputes.</p></div>
+<div class="card"><p class="label">NOT REPLICATED</p><p>The judge-specific part: same candidate −2 [−20, +17], vs +19 on MMLU-Pro. Kimi-K2.6 picks none of the 13 wrong responses it reaches.</p></div>
+</div>
+</div>
+<aside>About 1 minute. The main study’s open-ended benchmarks need a model to decide whether two answers match. So the second replication used competition math with integer answers, where answers match only if the integers are equal, again with the plan fixed in advance: 819 pairs, same writer, judges and analyses. It turned out to be a boundary case. The judges solve 88–93% of their own attempts, and 95% of judgments are at 0/7: when you get an integer problem wrong, you rarely land on the same wrong integer as someone else. With audited labels the direction is the same, 3% at 0/7, 14% at 1–3, 22% at 4–6, but on small groups, and nothing is left at 7/7. Under the answer key it looked like 92% at 7/7, but all 13 of those judgments are on seven responses whose key the auditor disputes; I checked one by hand, a power-tower problem, and the key is wrong. The judge-specific part does not replicate: for the same candidate, the judge that believes it more doesn’t pick it more. Reading: where judges can solve the problem, they rarely believe a wrong answer, so there are few such errors to make. So I treat math as a boundary test: the direction matches, but there is too little high-belief data, and the judge-specific part does not replicate.</aside>
+</section>

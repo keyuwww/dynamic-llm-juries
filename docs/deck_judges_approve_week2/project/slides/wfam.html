@@ -1,0 +1,24 @@
+<section id="wfam" style="gap:30px;">
+<p class="secno">WEEK 2 · 3 / 11 · MORE FAMILIES</p>
+<p class="tag">THINKING OFF · AUDITED LABELS</p>
+<h2 class="htitle">Seven judges, four families: approval still rises with belief</h2>
+<div class="row" style="gap:40px; flex:1;">
+<div style="flex:1; display:flex; flex-direction:column; gap:20px;">
+<table style="font-size:30px;">
+<tr class="thead"><th style="width:46%;">Judge (developer)</th><th class="n">0/7</th><th class="n">1–3</th><th class="n">4–6</th><th class="n">7/7</th><th class="n">Gap</th></tr>
+<tr class="r1"><td>3 Qwens (Alibaba)</td><td class="n">17</td><td class="n">30</td><td class="n">45</td><td class="n">59</td><td class="n">+43</td></tr>
+<tr><td>Nemotron-3-Super (NVIDIA)</td><td class="n">25</td><td class="n">49</td><td class="n">59</td><td class="n">86</td><td class="n">+61</td></tr>
+<tr class="r1"><td>DeepSeek-V4.1-Flash (DeepSeek)</td><td class="n">13</td><td class="n">37</td><td class="n">38</td><td class="n">47</td><td class="n">+34</td></tr>
+<tr><td>Kimi-K2.6 (Moonshot)</td><td class="n">1</td><td class="n">14</td><td class="n">33</td><td class="n">58</td><td class="n">+57</td></tr>
+<tr class="r3"><td>Nemotron-3-Nano (NVIDIA)</td><td class="n">37</td><td class="n">45</td><td class="n">46</td><td class="n">55</td><td class="n">+18</td></tr>
+</table>
+<p class="note">Wrong answers approved (%), by how many of the judge’s 7 own answers reach the candidate. RewardBench 2 Math, JudgeBench and BFF-Bench pooled. Gap = 7/7 minus 0/7, in points; every gap’s 95% interval excludes zero except Nemotron-3-Nano’s [−11, +43].</p>
+</div>
+<div class="side" style="width:480px;">
+<div class="card butter"><p class="label">VS LAST WEEK</p><p>Qwens 18 → 74% with labels as released; <b>17 → 59%</b> after the re-check. Part of the top was label errors (slide 5).</p></div>
+<div class="card"><p class="label">EXCEPTION</p><p>Nemotron-3-Nano approves 37% even of answers it never reaches, and rises less.</p></div>
+<div class="card"><p class="label">SMALL TOP BINS</p><p>10–15 judgments per judge at 7/7, so the top of each row is imprecise.</p></div>
+</div>
+</div>
+<aside>About 1 minute. Same measurement as last week, now with seven judges from four developers: three Qwens (Alibaba), Nemotron-3-Super and Nemotron-3-Nano (NVIDIA), DeepSeek-V4.1-Flash, and Kimi-K2.6 (Moonshot). Pooled over the three benchmarks, keeping only wrong answers the auditor calls clearly wrong. In every family, approval of wrong answers rises with belief: 1–25% at 0/7 to 47–86% at 7/7. Nemotron-3-Nano is the exception: it approves 37% even of answers it never reaches and rises only 18 points, with an interval that includes zero. The top bins are small, 10 to 15 judgments per judge at 7/7. Versus last week: the Qwens’ 18 → 74% used labels as released; after the label re-check it is 17 → 59%. Slide 5 shows why.</aside>
+</section>
