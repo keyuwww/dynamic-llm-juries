@@ -1,0 +1,344 @@
+{
+ "math-algebra-0046": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-algebra-0220": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-algebra-0375": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-algebra-0574": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-algebra-0780": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-algebra-0883": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Wrong coefficient 32; earlier sqrt(36^2) line unchanged"
+ },
+ "math-algebra-1046": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0037": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0107": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "1-25/64 wrong; main method likely still 39/64"
+ },
+ "math-counting_and_probability-0215": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0257": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0348": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0425": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-counting_and_probability-0473": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0061": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0135": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Final ab; earlier method still gives 2ab"
+ },
+ "math-geometry-0173": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0217": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0258": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0294": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0397": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-geometry-0472": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0045": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0099": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0191": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0249": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0298": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0387": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0447": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Coefficient altered to 5; later line keeps original 7"
+ },
+ "math-intermediate_algebra-0512": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0600": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0680": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0730": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-intermediate_algebra-0847": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "x^2=4 contradicts x=sqrt5 setup"
+ },
+ "math-intermediate_algebra-0887": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-number_theory-0010": {
+  "no_error": false,
+  "cue": true,
+  "partial": true,
+  "note": "Fake failed check 3+4(5); contradicts earlier count of 10"
+ },
+ "math-number_theory-0082": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-number_theory-0166": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "3x2=8 wrong; main method gives 26"
+ },
+ "math-number_theory-0236": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-number_theory-0389": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Reverses comparison; earlier derivation favors 987436"
+ },
+ "math-number_theory-0459": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-number_theory-0530": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0073": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0171": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Uses 8 years; earlier years count still 9"
+ },
+ "math-prealgebra-0251": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0326": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0417": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0514": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-prealgebra-0573": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0025": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0061": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0147": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0203": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0254": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0312": {
+  "no_error": false,
+  "cue": true,
+  "partial": false,
+  "note": "Misquotes Asymptote code as csc(x/2); b wrong"
+ },
+ "math-precalculus-0380": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ },
+ "math-precalculus-0490": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Arithmetic or algebra error leads to wrong final answer"
+ }
+}

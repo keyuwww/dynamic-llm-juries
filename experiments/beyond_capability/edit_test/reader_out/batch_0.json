@@ -1,0 +1,344 @@
+{
+ "math-algebra-0007": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-algebra-0081": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-algebra-0359": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "alternative check changed; main method presumably still gives -114"
+ },
+ "math-algebra-0514": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-algebra-0723": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-algebra-0865": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-algebra-1011": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0017": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0069": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0200": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0243": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0302": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0400": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-counting_and_probability-0457": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0048": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0068": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0163": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0189": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0235": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0273": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0378": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-geometry-0458": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0040": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0078": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0166": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0226": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0266": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0353": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "earlier log line likely still has 1000"
+ },
+ "math-intermediate_algebra-0434": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0469": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "earlier derivation presumably still gives endpoint 36"
+ },
+ "math-intermediate_algebra-0572": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0633": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "unchanged (t-20)(t-30) and 400d lines contradict 525"
+ },
+ "math-intermediate_algebra-0726": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0815": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0876": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-intermediate_algebra-0902": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0074": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0158": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0199": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0277": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0424": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-number_theory-0521": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0027": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0139": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0209": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0300": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0385": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0457": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0546": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-prealgebra-0741": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0050": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0100": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0176": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0241": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0288": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0373": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ },
+ "math-precalculus-0468": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "wrong step propagated consistently; final answer wrong"
+ }
+}

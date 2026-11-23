@@ -37,25 +37,153 @@ Is the assistant's final answer correct? Only the final answer matters, not the 
 
 For the forced verdict and all hidden-state measurements, the assistant turn starts with \texttt{VERDICT:} and we read the next token. For the reasoning baseline, the judge generates freely (greedy, stopping at \texttt{VERDICT:}; at most 8,192 tokens in a 32K window for BBEH and for Llama-3.1-8B on MATH, 1,536 tokens in a 16K window otherwise) and we read the next token after appending \texttt{VERDICT:} to its reasoning. Runs that never write a verdict within the budget (mostly Qwen3.5-4B and Llama-3.1-8B on BBEH, 2--8\% of their answers) are repetitive loops; they are scored the same way. The verdict score uses the first tokens of `` CORRECT'' and `` INCORRECT''.
 
-\section{Layer Rule and Fresh Test}
-\label{app:rule}
+\paragraph{Reasoning length and a repaired score.} Over the \R{cot.npairs} exploratory pairs with a reasoning run, the median justification is \R{cot.tok.median} tokens, and in \R{cot.short.n} pairs (Llama-3.2-1B, Mistral-7B, and Qwen2.5-7B on MMLU-Redux) the median is at most 5 tokens. An earlier version of the reasoning score gave Mistral-7B a constant: in the inference engine's tokenizer, `` CORRECT'' and `` INCORRECT'' begin with the same token. With both tokens taken from the judge's own tokenizer and their log-probabilities read exactly (matching a Transformers forward pass to within bf16 rounding), Mistral-7B's reasoning-first score ranks at \R{cotfix.mmlu.cot} on MMLU-Redux and \R{cotfix.math.cot} on MATH, against \R{cotfix.mmlu.verdict} and \R{cotfix.math.verdict} for its verdict.
 
-\paragraph{Rule, fixed before the main run.} Gap check: stop if the gap is $\le 5$. Push test: on 400 random answers, the accept rate at $-8$ and $+8$ standard deviations along the direction at every second layer; a layer responds if the accept rate rises by at least 10 points. Layer: the best-ranking responding layer; if none responds, the best-ranking layer. Stretch: $\times$11 at that layer only, along the direction and along a random direction; $\times$4 and $\times$21 are recorded as secondary readouts.
+\section{Analysis Scope}
+\label{app:scope}
 
-\paragraph{Revision after a failure.} Mistral-7B on MMLU-Redux accepts 99\% of answers, so no push changes its decision, although the verdict score follows the direction (within-question correlation $+0.54$ to $+0.85$ from layer 18). We therefore measure the response on the verdict score: sensitivity is the mean change in verdict score per standard deviation pushed, divided by the verdict score's within-question standard deviation, and a layer responds if its sensitivity is at least 0.05. In a full sweep this picks layer 16 for Mistral-7B on MMLU-Redux ($+2.3$ [$+0.5$, $+3.7$]). The seven original judges were stretched at the layer the original rule chose (for Mistral-7B on MMLU-Redux, layer 4: $-0.7$), and all pooled numbers use those layers; the revised rule chose the layers for Llama-3.2-1B, Qwen2.5-7B and Llama-3.1-70B. In the main text and Table~\ref{tab:pairs}, a pair counts as responding if the verdict's sensitivity at the stretched layer is at least 0.05.
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{4.3cm} p{3.4cm} p{2.2cm} r p{2.6cm} p{2.4cm}}
+\toprule
+Analysis (where) & Judges & Benchmarks & Pairs & Pairs selected by & Layer chosen on \\
+\midrule
+\multicolumn{6}{l}{\emph{Primary: every fit on the training half of each fold}} \\
+Readouts and the rule (\S\ref{sec:close}) & Llama-3.1-8B, Qwen2.5-7B, Phi-4-mini, Granite-3.3-8B & MMLU-R., MATH, BBEH & \R{outer.npairs} & fixed in advance & inner split of training questions \\
+Reasoning first (\S\ref{sec:close}) & same, where a run exists & all three & \R{psc.n} & run available & -- \\
+Surface, residualization, incremental models (\S\ref{sec:what}) & same & all three & \R{ps.npairs} & fixed in advance & as primary \\
+Same- vs different-model split, authorship projection (\S\ref{sec:what}) & same & MMLU-R., MATH & \R{ps.npairs.mm} & fixed in advance & as primary \\
+Controlled edits (\S\ref{sec:what}) & same & MATH (\R{edit.n} edited pairs) & 4 & fixed in advance & frozen primary folds \\
+\midrule
+\multicolumn{6}{l}{\emph{Exploratory: descriptive (Appendix~\ref{app:explore})}} \\
+Gap survey (\S\ref{sec:gap}) & 9 small judges & all three & \R{pairs.all} & none & evaluated answers \\
+Selected pairs (Table~\ref{tab:readout} bottom; controls) & 8 small judges & all three & \R{pool.npairs} & in-sample gap $>5$ & evaluated answers \\
+Same-model, failed questions (\S\ref{sec:beyond}) & judges of selected pairs & all three & Table~\ref{tab:smpairs} & selected pairs & evaluated answers (main pool) \\
+Scale (\S\ref{sec:scale}) & Llama 1B--70B & all three & -- & none & evaluated answers \\
+\bottomrule
+\end{tabular}
+\caption{Which judges, benchmarks and judge--benchmark pairs each analysis uses, how its pairs were selected, and where its layer was chosen. Primary-pair questions with a right and a wrong answer: \R{ps.nq.mmlu} (MMLU-Redux), \R{ps.nq.math} (MATH) and \R{ps.nq.bbeh} (BBEH), each a test question in exactly one fold.}
+\label{tab:scope}
+\end{table*}
 
-\paragraph{Fresh test.} Before running Llama-3.2-1B and Qwen2.5-7B, new to the study, we wrote down the revised rule and the prediction that every pair with a gap and a responding layer gains with $\times$11 (interval above 0) and that the random direction stays within $\pm1$. It held for Llama-3.2-1B on MMLU-Redux ($+5.4$) and MATH ($+7.9$), and the random direction stayed within $\pm1$ throughout. It failed on BBEH for both judges ($-1.5$ and $+1.0$). In both, the direction's ranking is flat across the responding layers to within split noise, and the rule took the layer where the verdict only begins to respond; a neighbouring layer with a stronger response gains $+6.4$ [$+3.3$, $+10.3$] (Llama-3.2-1B, layer 14) and $+4.6$ [$+1.2$, $+8.2$] (Qwen2.5-7B, layer 22). Qwen2.5-7B on MMLU-Redux has no responding layer; stretching its best-ranking layer still gains $+2.5$ [$+1.1$, $+4.0$].
+Table~\ref{tab:scope} lists the population of every analysis. The primary evaluation and every explanatory analysis in \S\ref{sec:close}--\ref{sec:what} use the same \R{outer.npairs} pairs, the same two folds and the same readout layer per fold, chosen on the fold's training questions. The analyses on questions the judge failed and on scale use the earlier exploratory protocol.
 
-\paragraph{Strength.} Judges whose verdict responds strongly (sensitivity $\ge 0.2$) do best at $\times$4--$\times$11; weakly responding ones (sensitivity $< 0.08$, mostly BBEH) at $\times$11--$\times$21. $\times$11 is within about two points of the best tested strength for most pairs.
+\section{Held-Out Evaluation of the Recipe}
+\label{app:outer}
+
+The scope was fixed before running: Llama-3.1-8B, Qwen2.5-7B, Phi-4-mini and Granite-3.3-8B on MMLU-Redux, MATH and BBEH, \R{outer.npairs} pairs, including two that the exploratory selection leaves out because their in-sample gap is at most 5 points (\R{outer.notpaper}). The outer folds are the paper's two question halves; each is the test set once. On the training half only: (1)~the direction at every candidate layer (class-mean difference after centring by question); (2)~an inner split of the training questions gives each layer's cross-fitted ranking and the verdict's; the best layer is the readout layer, and the pair is eligible if it beats the verdict by more than 5 points; (3)~the push test ($\pm$8 standard deviations on 400 training answers, no labels) gives each layer's sensitivity, and the stretch layer is the best-ranking layer with sensitivity $\ge 0.05$, or the best-ranking layer if none responds; (4)~the within-question standard deviations of the verdict and direction scores on training answers, which scale verdict + direction. On the test half: the direction at the readout layer, the verdict stretched ($\times$11) along the training direction at every candidate layer, and a random direction stretched at the chosen layer. The rule takes the stretched verdict if the fold is eligible and the verdict otherwise. \R{outer.folds.eligible} of the \R{outer.folds} folds were eligible (Table~\ref{tab:outer}). Picking the stretch layer after seeing the test results would add \R{outer.optimism.mean} point on average. An earlier version scaled verdict + direction with the within-question standard deviations of the pooled test answers, an unlabelled use of the test distribution; it gave \R{outer.sum_testscale.gain.ci}, against \R{outer.sum.gain.ci} with training scales. Over \R{ps.splits.n} further random splits of the questions (seeds 11--15), with the readout layer again chosen on the training half, the direction's pooled gain is \R{ps.splits.lo} to \R{ps.splits.hi} (the stretch would need new GPU runs and was not repeated).
+
+\begin{table*}[t]
+\centering
+\small
+\input{tab_outer.tex}
+\caption{Held-out evaluation of the recipe. Eligible and Layer: whether the inner gap exceeded 5 points, and the chosen stretch layer, in each of the two folds. Verdict: ranking ($\times$100). Held out: gains over the verdict of the direction, the rule (stretch if eligible, else the verdict) and a random direction stretched at the chosen layer. Exploratory: gains with the layer chosen on the evaluated questions (--: not stretched there).}
+\label{tab:outer}
+\end{table*}
+
+\section{Explanatory Analyses on the Primary Pairs}
+\label{app:explain}
+
+All analyses in this section re-fit, from the stored hidden states, the primary evaluation's direction at its readout layer on each fold's training half; the recomputed test scores match the stored ones (largest difference $4\times10^{-2}$, on Llama-3.1-8B MATH, whose states were captured twice; its verdict scores differ by a tie on 6 of 602 questions).
+
+\paragraph{Surface model and residualization.} The nine features (Appendix~\ref{app:surface}) are centred within question and standardised with training-half scales; the surface model is a least-squares fit of within-question correctness on them, on training answers. For residualization, the training answers are scored by inner cross-fitted directions at the readout layer (two halves of the training questions, as in the inner layer choice), a least-squares residualizer predicts these scores from the features, and the test answers are scored by the mean of the two inner directions and residualized with the same weights (it explains \R{ps.r2.lo}--\R{ps.r2.hi}\% of the training scores' within-question variance). Scoring the test answers with the direction fitted on the whole training half instead, and residualizing it on its in-sample training scores, keeps \R{ps.resid_full_kept.all.ci}. Per benchmark, the residualized gain keeps \R{psb.mmlu.resid_inner_kept.all.ci} on MMLU-Redux, \R{psb.math.resid_inner_kept.all.ci} on MATH and \R{psb.bbeh.resid_inner_kept.all.ci} on BBEH.
+
+\paragraph{Incremental prediction.} For every within-question pair of a right and a wrong training answer we form the difference of the inputs (the nine features, the inner cross-fitted direction score, the verdict score, or combinations) and fit a logistic regression without intercept (L2 penalty $10^{-3}$ on standardised inputs) for the probability that the right answer scores higher. Test pairs are scored with the fitted weights; we report the within-question ranking of the resulting linear score and the mean log loss per test pair (0.693 is chance). Held-out log loss: surface \R{ps.ll.surface.ci}, direction \R{ps.ll.direct.ci}, surface + direction \R{ps.ll.surfacedirect.ci}, verdict \R{ps.ll.verdict.ci}, verdict + direction \R{ps.ll.verdictdirect.ci}, verdict + surface + direction \R{ps.ll.verdictsurfacedirect.ci}. Adding the direction to the verdict changes log loss by \R{ps.ll.vd_minus_v.ci} and raises ranking by \R{ps.pw_vd_minus_v.all.ci}; adding the features to verdict + direction changes it by \R{ps.ll.vsd_minus_vd.ci} and raises ranking by \R{ps.pw_vsd_minus_vd.all.ci} (same-model pairs: \R{ps.pw_vsd_minus_vd.same.ci}). The features and the direction scores are correlated, so these increments are specific to the pair of predictors, not shares of information.
+
+\paragraph{Overlap.} Over test pairs (equal-weight mean over the \R{ps.npairs} pairs), the surface model and the direction both rank \R{pso.surface.direct.all.both}\% correctly, only the surface model \R{pso.surface.direct.all.aonly}\%, only the direction \R{pso.surface.direct.all.bonly}\%, and neither \R{pso.surface.direct.all.neither}\% (correlation of the two correctness indicators \R{pso.surface.direct.all.corr}). For the verdict and the direction: \R{pso.verdict.direct.all.both}\%, \R{pso.verdict.direct.all.aonly}\%, \R{pso.verdict.direct.all.bonly}\% and \R{pso.verdict.direct.all.neither}\%.
+
+\paragraph{Fixed review budget.} Each score flags the lowest-scored $k$\% of a judge--benchmark pair's test answers, across questions (scores are not centred within question here, as in deployment); Table~\ref{tab:review} gives the share of wrong answers caught and the share of flagged answers that are wrong. The threshold is the pair's own $k$-th percentile, which uses no labels and is held fixed in the bootstrap.
+
+\begin{table}[h]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{l rrr r}
+\toprule
+& \multicolumn{3}{c}{Wrong answers caught (\%)} & Precision \\
+Review budget & 10\% & 20\% & 30\% & at 10\% \\
+\midrule
+Verdict & \R{psr.verdict.10.caught} & \R{psr.verdict.20.caught} & \R{psr.verdict.30.caught} & \R{psr.verdict.10.precision} \\
+Rule (stretch) & \R{psr.rule.10.caught} & \R{psr.rule.20.caught} & \R{psr.rule.30.caught} & \R{psr.rule.10.precision} \\
+Direction & \R{psr.direct.10.caught} & \R{psr.direct.20.caught} & \R{psr.direct.30.caught} & \R{psr.direct.10.precision} \\
+Verdict + dir. & \R{psr.sum_train.10.caught} & \R{psr.sum_train.20.caught} & \R{psr.sum_train.30.caught} & \R{psr.sum_train.10.precision} \\
+\midrule
+\multicolumn{5}{l}{Gain over the verdict, wrong answers caught (points)} \\
+Rule & \R{psr.rule.10.caught_gain} & \R{psr.rule.20.caught_gain} & \R{psr.rule.30.caught_gain} & \\
+Direction & \R{psr.direct.10.caught_gain} & \R{psr.direct.20.caught_gain} & \R{psr.direct.30.caught_gain} & \\
+\bottomrule
+\end{tabular}
+\caption{Fixed-budget error review on the \R{outer.npairs} primary pairs (held out; equal-weight means over pairs). A random choice catches $k$\% of wrong answers at a $k$\% budget. All gains have 95\% intervals above zero (main text and \texttt{primary\_scope\_check.json}).}
+\label{tab:review}
+\end{table}
+
+\section{Controlled Edits}
+\label{app:edit}
+
+\paragraph{Protocol.} Written before any edited answer was scored (\texttt{edit\_test/PROTOCOL.md}). Source: the right Qwen3.5-4B answers in the MATH main pool of at most 8,000 characters, one per problem (388 problems), shuffled with a fixed seed. The first 40 formed a design set used only to adjust the editing prompt and filters; it found one cue, trailing spaces added by the editor, after which every edited line takes its original line's trailing whitespace. The other \R{edit.problems} are the test set. Kimi-K3.1-Pro (high reasoning) was asked for exactly one wrong intermediate calculation or algebraic step, carried consistently to a different final answer, with every other word, symbol, line break and markup unchanged and no words hinting at the error; up to two attempts per problem, and an editor or grader call that had not returned within 10 minutes counted as a failed attempt (two grading calls). A pair is kept if its final answer is wrong (not equal to the reference, and GLM-5.3-Flash, the paper's MATH grader, calls it different), it has the same number of lines and the same counts of bold markers, \texttt{\$}, ``step'', hedge, confidence and self-correction words and final-answer line, its length is within 5\% of the original (observed ratio \R{edit.len.lo}--\R{edit.len.hi}), and its character similarity is at least 0.85. \R{edit.n} of \R{edit.problems} pairs pass; 2 fail the wrongness check and 4 the surface check.
+
+\paragraph{Scoring.} For each of the four primary judges and each problem, the readouts are those of the primary evaluation's fold in which the problem is a test question: the direction fitted on the other half of the questions at the fold's readout layer, and the stretch at the fold's stretch layer (rule: stretch if the fold is eligible, else the verdict). Re-scored originals reproduce the stored primary scores to within \R{edit.repro.verdict} in verdict log-odds and \R{edit.repro.direct} in direction score (bf16 differences between runs). The surface model is the primary analysis's, fitted on the fold's training half of the MATH main pool; because the filters fix every feature except length, it ranks a pair by length alone.
+
+\paragraph{Reader check.} Six Claude subagents (models, not human annotators) read each pair as a line diff with the problem, the reference and the editor's description, blind to all scores. They judged no edit to leave the answer right, \R{editr.count.cue} to add a visible cue beyond the error (a spurious failed check; a misquoted figure code), and \R{editr.count.partial} to leave some unchanged line that still uses the original value, so the text contradicts itself; partial propagation is a content error and these pairs are kept. Without the \R{editr.count.cue} flagged pairs (\R{editr.n} pairs): verdict \R{editr.verdict.level.ci}, direction \R{editr.direct.level.ci}, rule \R{editr.rule.level.ci}.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Judge & Verdict & Direction & Rule & Surface \\
+\midrule
+Llama-3.1-8B & \R{edit.llama3.1-8b.verdict} & \R{edit.llama3.1-8b.direct} & \R{edit.llama3.1-8b.rule} & \R{edit.llama3.1-8b.surface} \\
+Qwen2.5-7B & \R{edit.qwen2.5-7b.verdict} & \R{edit.qwen2.5-7b.direct} & \R{edit.qwen2.5-7b.rule} & \R{edit.qwen2.5-7b.surface} \\
+Phi-4-mini & \R{edit.phi4-mini.verdict} & \R{edit.phi4-mini.direct} & \R{edit.phi4-mini.rule} & \R{edit.phi4-mini.surface} \\
+Granite-3.3-8B & \R{edit.granite3.3-8b.verdict} & \R{edit.granite3.3-8b.direct} & \R{edit.granite3.3-8b.rule} & \R{edit.granite3.3-8b.surface} \\
+\midrule
+Mean & \R{edit.verdict.level} & \R{edit.direct.level} & \R{edit.rule.level} & \R{edit.surface.level} \\
+\bottomrule
+\end{tabular}
+\caption{Controlled edits: share of the \R{edit.n} pairs in which the original answer scores above its edited, wrong version (\%; 50 = chance). Granite-3.3-8B's MATH folds are not eligible, so its rule is its verdict.}
+\label{tab:edit}
+\end{table}
+
+
+\section{Exploratory Protocol and Selected Pairs}
+\label{app:explore}
+
+Before the primary evaluation, the study used an exploratory protocol on all \R{pairs.all} small-judge pairs. The direction was learned on one random half of the questions and applied to the other half, and vice versa, so no evaluated question was used to fit its own direction; but the readout layer, the gap check (gap $>5$) and the stretch layer were chosen with the evaluated answers' labels. The \R{pool.npairs} pairs that passed the gap check are the \emph{selected pairs}. They are a conditional, descriptive population: on the \R{outer.ov.n} pairs in both evaluations, choosing on training questions lowers the direction's gain from \R{outer.ov.paper.direct} to \R{outer.ov.direct} and stretching's from \R{outer.ov.paper.x11} to \R{outer.ov.rule}.
+
+\paragraph{Results on the selected pairs.} The direction gains \R{pool.direct.rank.ci}, verdict + direction \R{pool.sum.rank.ci}, stretching \R{pool.x11.rank.ci} (\R{pool.recovered.ci} of the direction's gain) and reasoning first \R{pool.cot.rank.ci}. Averaged over 20 random splits, the gap stays positive for every selected pair (standard deviation \R{split.sd.lo}--\R{split.sd.hi} points; Table~\ref{tab:pairs}). On the MMLU-Redux and MATH selected pairs, the direction gains \R{auth.diffm.ci} on different-model and \R{auth.same.ci} on same-model pairs. A nested surface check on these pairs (layer, direction, feature scaling, surface model and residualizer fitted on training questions, but the pairs themselves selected in sample) finds the surface model minus the direction at \R{nsurf.surface_minus_direct.all.ci} and residualization keeping \R{nsurf.resid_inner_kept.all.ci} of the gain; an earlier, composed version whose residualizer was trained on direction scores fitted with the evaluated questions' labels kept \R{surf.resid_kept.all.ci}. Projecting the authorship directions out removes \R{ctl.mmlu.removed.all.ci} of the gain on MMLU-Redux and \R{ctl.math.removed.all.ci} on MATH.
+
+\paragraph{Layer rule, fixed before the main exploratory run.} Gap check: stop if the gap is $\le 5$. Push test: on 400 random answers, the accept rate at $-8$ and $+8$ standard deviations along the direction at every second layer; a layer responds if the accept rate rises by at least 10 points. Layer: the best-ranking responding layer; if none responds, the best-ranking layer. Stretch: $\times$11 at that layer only, along the direction and along a random direction; $\times$4 and $\times$21 are recorded as secondary readouts.
+
+\paragraph{Revision after a failure.} Mistral-7B on MMLU-Redux accepts 99\% of answers, so no push changes its decision, although the verdict score follows the direction (within-question correlation $+0.54$ to $+0.85$ from layer 18). We therefore measure the response on the verdict score: sensitivity is the mean change in verdict score per standard deviation pushed, divided by the verdict score's within-question standard deviation, and a layer responds if its sensitivity is at least 0.05; this is the rule of the primary evaluation. In a full sweep it picks layer 16 for Mistral-7B on MMLU-Redux ($+2.3$ [$+0.5$, $+3.7$]). The seven original judges were stretched at the layer the original rule chose (for Mistral-7B on MMLU-Redux, layer 4: $-0.7$), and the selected-pair numbers use those layers; the revised rule chose the layers for Llama-3.2-1B, Qwen2.5-7B and Llama-3.1-70B.
+
+\paragraph{The layer matters.} Stretching where the direction ranks best can fail (Figure~\ref{fig:layers}). For Llama-3.1-8B on MATH the best-ranking layer (14) barely moves the verdict when pushed (sensitivity $-0.02$) and stretching there gains $+1.5$; at layer 16 the verdict responds ($+0.26$) and the gain is $+8.2$. Over the \R{pairs.stretched} stretched pairs, the gain is significantly positive in \R{pairs.respond.sig} of the \R{pairs.respond} where a layer responds, and a random direction stays within $\pm1$; \R{pairs.norespond.sig} of the \R{pairs.norespond} pairs without a responding layer also gain, so the push test is not a sharp predictor.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_layers.pdf}
+\caption{Llama-3.1-8B on MATH (exploratory protocol). Left: ranking by the direction learned at each layer, and by the verdict. Right: ranking gain from stretching ($\times$11) at each layer; numbers are the verdict's sensitivity to a push along the direction; grey bars mark layers below the 0.05 threshold.}
+\label{fig:layers}
+\end{figure*}
+
+\paragraph{Fresh test of the revised rule.} Before running Llama-3.2-1B and Qwen2.5-7B, new to the study, we wrote down the revised rule and the prediction that every pair with a gap and a responding layer gains with $\times$11 (interval above 0) and that the random direction stays within $\pm1$. It held for Llama-3.2-1B on MMLU-Redux ($+5.4$) and MATH ($+7.9$), and the random direction stayed within $\pm1$ throughout. It failed on BBEH for both judges ($-1.5$ and $+1.0$). In both, the direction's ranking is flat across the responding layers to within split noise, and the rule took the layer where the verdict only begins to respond; a neighbouring layer with a stronger response gains $+6.4$ [$+3.3$, $+10.3$] (Llama-3.2-1B, layer 14) and $+4.6$ [$+1.2$, $+8.2$] (Qwen2.5-7B, layer 22). Qwen2.5-7B on MMLU-Redux has no responding layer; stretching its best-ranking layer still gains $+2.5$ [$+1.1$, $+4.0$]. Judges whose verdict responds strongly (sensitivity $\ge 0.2$) do best at $\times$4--$\times$11; weakly responding ones (sensitivity $< 0.08$, mostly BBEH) at $\times$11--$\times$21.
+
+\paragraph{Pooling.}
+\label{app:pool}
+An earlier version weighted pairs by the inverse variance of their own intervals and treated judges as independent; that weighting favours pairs with tight intervals, which are often those with small gains, and its intervals are too narrow because judges grade the same answers. On the selected pairs it gives \R{legacy.pool.direct.rank.ci} for the direction, \R{legacy.pool.sum.rank.ci} for verdict + direction, \R{legacy.pool.x11.rank.ci} for stretching and \R{legacy.pool.cot.rank.ci} for reasoning first. Weighting every question equally (the mean of per-question AUROCs) instead of every right--wrong pair gives \R{pool.direct.rank_macro.ci}, \R{pool.sum.rank_macro.ci}, \R{pool.x11.rank_macro.ci} and \R{pool.cot.rank_macro.ci}.
 
 \section{Every Judge and Benchmark}
 \label{app:pairs}
+
+Table~\ref{tab:pairs} gives every judge--benchmark pair of the exploratory survey and Table~\ref{tab:smpairs} every same-model, failed-question set.
 
 \begin{table*}[h]
 \centering
 \small
 \input{tab_pairs.tex}
-\caption{Every judge--benchmark pair. Gap: best layer's direction ranking minus the verdict's, on the split used for the layer rule; 20 splits: mean $\pm$ standard deviation over 20 random half-splits of the questions (at the best layer). Layer: the stretched layer ($^*$: the verdict's sensitivity there is below 0.05). Sens.: the verdict's sensitivity there. Llama-3.1-70B is the scale check of \S\ref{sec:scale}. Last four columns: ranking ($\times$100) of the forced verdict, the verdict after reasoning, the verdict after stretching $\times$11, and the direction, on the main answer pool.}
+\caption{Every judge--benchmark pair (exploratory protocol). Gap: best layer's direction ranking minus the verdict's, on the split used for the layer rule; 20 splits: mean $\pm$ standard deviation over 20 random half-splits of the questions (at the best layer). Layer: the stretched layer ($^*$: the verdict's sensitivity there is below 0.05). Sens.: the verdict's sensitivity there. Llama-3.1-70B is the scale check of \S\ref{sec:scale}. Last four columns: ranking ($\times$100) of the forced verdict, the verdict after reasoning, the verdict after stretching $\times$11, and the direction, on the main answer pool.}
 \label{tab:pairs}
 \end{table*}
 
@@ -70,19 +198,26 @@ For the forced verdict and all hidden-state measurements, the assistant turn sta
 \section{Authorship Directions and Controls}
 \label{app:auth}
 
-Per judge and benchmark, at the best-ranking layer and with the same two question halves as the correctness direction, we take, within every question and correctness class that holds answers by both models, the difference between the two models' mean states, and average these paired differences: Qwen3.6-35B-A3B vs Qwen3.5-4B (``own pair'') and Nemotron-3-Super-120B vs Qwen3.5-4B. Table~\ref{tab:auth} reports, on held-out questions, how well the first direction separates answers by its own pair and by the other pair (within question and correctness class; 50 = none, below 50 = reversed), its cosine with the correctness direction, and the ranking of right above wrong answers by the verdict, by the correctness direction, and by the correctness direction with both authorship directions projected out ($\perp$). Llama-3.1-8B on MATH and Llama-3.2-3B on MMLU-Redux were run with a different storage layout and are not in this table; the controls below include them. The Verdict column is recomputed on all answers with stored hidden states and can differ by a few tenths from Table~\ref{tab:pairs}, which uses only questions where every readout has a score.
+On the primary pairs, per fold and at the fold's readout layer, we take, within every training question and correctness class that holds answers by both models, the difference between the two models' mean states, and average these paired differences: Qwen3.6-35B-A3B vs Qwen3.5-4B and Nemotron-3-Super-120B vs Qwen3.5-4B. Their span is projected out of the correctness direction and the test answers are scored on the result: the gain over the verdict falls from \R{psb.mmlu.direct.gain.all.ci} to \R{psb.mmlu.c_perp.gain.all.ci} on MMLU-Redux and from \R{psb.math.direct.gain.all.ci} to \R{psb.math.c_perp.gain.all.ci} on MATH.
 
-\paragraph{Controls.} All fits use the training half of the questions; numbers in \S\ref{sec:what} are pooled over the \R{ctl.both.n} main-pool pairs on MMLU-Redux and MATH (\R{ctl.mmlu.n} and \R{ctl.math.n}). \emph{Label shuffles}: within every question and correctness class of the training half, the answering-model labels are permuted, the two paired directions are fitted as before, and their span is projected out of the correctness direction; 100 shuffles per judge. The mean removal over shuffles is at most \R{ctl.mmlu.perm.maxmean} points per judge on MMLU-Redux and \R{ctl.math.perm.maxmean} on MATH (it is often negative: removing two high-variance directions can sharpen the ranking). \emph{Random subspaces}: 100 isotropic random 2-D subspaces per judge, drawn without labels, remove at most \R{ctl.mmlu.iso.max} points. \emph{Within-model fit}: the correctness direction is fitted after centring each question's answers separately for each answering model, so only right-vs-wrong contrasts between answers by the same model enter. \emph{Held-out answering model}: the direction is fitted without one model's answers and scored on that model's same-model pairs; only Qwen3.5-4B has several answers per question, so only it can be held out this way (fitted without it: \R{ctl.ho.c_ho.gain.ci} over the verdict; with it: \R{ctl.ho.c_all.gain.ci}). OLMo-2 in \S\ref{sec:beyond} is a fully held-out answering model.
+The remaining analyses in this section use the exploratory selected pairs, at each pair's best-ranking layer and with the same two question halves as the correctness direction. Table~\ref{tab:auth} reports, on held-out questions, how well the first direction separates answers by its own pair and by the other pair (within question and correctness class; 50 = none, below 50 = reversed), its cosine with the correctness direction, and the ranking of right above wrong answers by the verdict, by the correctness direction, and by the correctness direction with both authorship directions projected out ($\perp$). On held-out questions the Qwen3.6-vs-Qwen3.5-4B direction separates the two models' equally correct answers at \R{adir.mmlu.auth.lo}--\R{adir.mmlu.auth.hi} on MMLU-Redux and \R{adir.math.auth.lo}--\R{adir.math.auth.hi} on MATH. It does not measure strength: on MMLU-Redux it ranks Nemotron's answers \emph{below} Qwen3.5-4B's (\R{adir.mmlu.xfer.lo}--\R{adir.mmlu.xfer.hi}) although Nemotron is the more accurate of the two \citep[answering models are identifiable from their text;][]{sun2025idiosyncrasies}. Llama-3.1-8B on MATH and Llama-3.2-3B on MMLU-Redux were run with a different storage layout and are not in this table; the controls below include them.
 
-\paragraph{Why not a variance share.} A simpler measure of authorship is the share of a score's within-question variance that lies between answering models (\R{share.direct.lo}--\R{share.direct.hi}\% for the direction, \R{share.verdict.lo}--\R{share.verdict.hi}\% for the verdict). With one or two answers per model and question, a score shuffled within question already gets \R{share.null.lo}--\R{share.null.hi}\%, and the correctness label itself \R{share.gold.lo}--\R{share.gold.hi}\%, so this share says little about authorship. The pair split and the authorship directions of \S\ref{sec:what} replace it.
+\paragraph{Controls.} All fits use the training half of the questions; numbers are pooled over the \R{ctl.both.n} selected pairs on MMLU-Redux and MATH (\R{ctl.mmlu.n} and \R{ctl.math.n}). \emph{Label shuffles}: within every question and correctness class of the training half, the answering-model labels are permuted, the two paired directions are fitted as before, and their span is projected out of the correctness direction; 100 shuffles per judge. The observed removal exceeds every shuffle for \R{ctl.mmlu.perm.sig} of \R{ctl.mmlu.perm.n} judges on MMLU-Redux and \R{ctl.math.perm.sig} of \R{ctl.math.perm.n} on MATH; the mean removal over shuffles is at most \R{ctl.mmlu.perm.maxmean} points per judge on MMLU-Redux and \R{ctl.math.perm.maxmean} on MATH. \emph{Random subspaces}: 100 isotropic random 2-D subspaces per judge remove at most \R{ctl.mmlu.iso.max} points. \emph{Within-model fit}: a direction fitted only on right-vs-wrong contrasts within each answering model gains \R{ctl.math.c_gb.all.ci} on MATH, against \R{ctl.math.c.all.ci} for the usual direction (MMLU-Redux: \R{ctl.mmlu.c_gb.all.ci}); neither variant beats the verdict on same-model pairs (\R{ctl.both.c.same.ci} and \R{ctl.both.c_gb.same.ci}). \emph{Held-out answering model}: fitted without Qwen3.5-4B's answers, the direction gains \R{ctl.ho.c_ho.gain.ci} over the verdict on Qwen3.5-4B's same-model pairs, against \R{ctl.ho.c_all.gain.ci} with them. OLMo-2 in \S\ref{sec:beyond} is a fully held-out answering model.
+
+\paragraph{Why not a variance share.} A simpler measure of authorship is the share of a score's within-question variance that lies between answering models (\R{share.direct.lo}--\R{share.direct.hi}\% for the direction, \R{share.verdict.lo}--\R{share.verdict.hi}\% for the verdict). With one or two answers per model and question, a score shuffled within question already gets \R{share.null.lo}--\R{share.null.hi}\%, and the correctness label itself \R{share.gold.lo}--\R{share.gold.hi}\%, so this share says little about authorship.
 
 \begin{table*}[h]
 \centering
 \small
 \input{tab_auth.tex}
-\caption{Authorship directions (held out). Own pair / other pair: AUROC of the Qwen3.6-vs-Qwen3.5-4B direction for Qwen3.6 vs Qwen3.5-4B answers and for Nemotron vs Qwen3.5-4B answers of equal correctness. cos: with the correctness direction. Ranking of right above wrong answers by the verdict, the correctness direction, and the correctness direction with both authorship directions removed ($\perp$), on all and on same-model pairs.}
+\caption{Authorship directions on the exploratory selected pairs (held out). Own pair / other pair: AUROC of the Qwen3.6-vs-Qwen3.5-4B direction for Qwen3.6 vs Qwen3.5-4B answers and for Nemotron vs Qwen3.5-4B answers of equal correctness. cos: with the correctness direction. Ranking of right above wrong answers by the verdict, the correctness direction, and the correctness direction with both authorship directions removed ($\perp$), on all and on same-model pairs.}
 \label{tab:auth}
 \end{table*}
+
+\section{Surface Features}
+\label{app:surface}
+
+Features of the answer text (the block the judge grades): log characters, log lines, count of bold markers, count of \texttt{\$}, count of the word ``step'', counts of hedge words (maybe, might, perhaps, possibly, probably, likely, approximately, I think, I believe, not sure, unclear, assume), confident words (clearly, definitely, certainly, obviously, indeed, undoubtedly, must be) and self-correction words (wait, actually, however, recheck, double-check, let me re-, mistake, correction), and whether the text contains ``the answer is''. On MATH, \R{fmt.math.q36.0.long}\% of Qwen3.6's wrong answers but \R{fmt.math.q36.1.long}\% of its right ones exceed 8,000 characters; on MMLU-Redux the cue is length rather than bare lines: \R{fmt.mmlu.nemo.0.bare}\% of Nemotron's wrong and \R{fmt.mmlu.nemo.1.bare}\% of its right answers are bare final lines, but \R{fmt.mmlu.q36.0.long}\% of Qwen3.6's wrong and \R{fmt.mmlu.q36.1.long}\% of its right answers exceed 8,000 characters. In format-trimmed exploratory pools (answers of 100--8,000 characters) the direction gains \R{surf.trim.direct.gain.same} on same-model and \R{surf.trim.direct.gain.diff} on different-model pairs.
 
 \section{Best-of-$n$ Selection}
 \label{app:bon}
@@ -91,33 +226,10 @@ Per judge and benchmark, at the best-ranking layer and with the same two questio
 \centering
 \small
 \input{tab_bon.tex}
-\caption{Best-of-$n$ accuracy: the share of groups (questions; question $\times$ answering model for same-model sets; only groups with at least one right and one wrong answer) in which the top-scored answer is right, for random choice and the forced verdict, and the gain of each readout over the verdict (mean over judges; bold: 95\% interval above 0).}
+\caption{Best-of-$n$ accuracy (exploratory protocol): the share of groups (questions; question $\times$ answering model for same-model sets; only groups with at least one right and one wrong answer) in which the top-scored answer is right, for random choice and the forced verdict, and the gain of each readout over the verdict (mean over judges; bold: 95\% interval above 0).}
 \label{tab:bon}
-\end{table*}
-
-\section{Pooling}
-\label{app:pool}
-
-The primary estimate is the equal-weight mean over judge--benchmark pairs, with questions resampled within benchmark (2,000 draws) and the same draws for every judge and readout. An earlier version weighted pairs by the inverse variance of their own intervals and treated judges as independent; that weighting favours pairs with tight intervals, which are often those with small gains, and its intervals are too narrow because judges grade the same answers. On the main pools it gives \R{legacy.pool.direct.rank.ci} for the direction, \R{legacy.pool.sum.rank.ci} for verdict + direction, \R{legacy.pool.x11.rank.ci} for stretching and \R{legacy.pool.cot.rank.ci} for reasoning first, against \R{pool.direct.rank.ci}, \R{pool.sum.rank.ci}, \R{pool.x11.rank.ci} and \R{pool.cot.rank.ci} here. Weighting every question equally (the mean of per-question AUROCs) instead of every right--wrong pair gives \R{pool.direct.rank_macro.ci}, \R{pool.sum.rank_macro.ci}, \R{pool.x11.rank_macro.ci} and \R{pool.cot.rank_macro.ci}. All of these are conditional on the judges and benchmarks studied; they do not generalise to a population of judges.
-
-\section{Surface Features}
-\label{app:surface}
-
-Features of the answer text (the block the judge grades): log characters, log lines, count of bold markers, count of \texttt{\$}, count of the word ``step'', counts of hedge words (maybe, might, perhaps, possibly, probably, likely, approximately, I think, I believe, not sure, unclear, assume), confident words (clearly, definitely, certainly, obviously, indeed, undoubtedly, must be) and self-correction words (wait, actually, however, recheck, double-check, let me re-, mistake, correction), and whether the text contains ``the answer is''. Features, labels and scores are centred within question and the features standardised; a least-squares fit on one half of the questions predicts the other half. \emph{Surface}: correctness predicted from the features. \emph{Direction without surface}: the direction score minus its prediction from the features. \emph{Nested version (main text).} Outer folds are the two question halves. On the training half only: the layer is chosen by an inner split of the training questions, the direction is fitted at that layer, the features are standardised with training-half scales, the surface model is fitted to training labels, and the residualizer is fitted to the inner cross-fitted direction scores of the training answers (it explains \R{nsurf.r2.lo}--\R{nsurf.r2.hi}\% of their within-question variance). Test answers are scored by the same two inner directions (the mean of the two projections), so the residualizer's targets and the scores it is applied to come from the same directions; scoring the test answers with the direction fitted on the whole training half instead keeps \R{nsurf.resid_kept.all.ci} of the gain. In the earlier, composed version, the direction scores were cross-fitted over the two halves and the residualizer was then cross-fitted over the same halves, so the residualizer trained on one half used scores fitted with the other half's labels and was applied to that other half. The surface model alone uses no direction scores and is unaffected. On same-model pairs the surface model ranks at \R{surf.surface.level.same} (verdict \R{surf.verdict.level.same}, direction \R{surf.direct.level.same}). On MMLU-Redux the cue is length rather than bare lines: \R{fmt.mmlu.nemo.0.bare}\% of Nemotron's wrong and \R{fmt.mmlu.nemo.1.bare}\% of its right answers are bare final lines, but \R{fmt.mmlu.q36.0.long}\% of Qwen3.6's wrong and \R{fmt.mmlu.q36.1.long}\% of its right answers exceed 8,000 characters. In the format-trimmed pools (answers of 100--8,000 characters) the direction gains \R{surf.trim.direct.gain.same} on same-model and \R{surf.trim.direct.gain.diff} on different-model pairs.
-
-\section{Held-Out Evaluation of the Recipe}
-\label{app:outer}
-
-The scope was fixed before running: Llama-3.1-8B, Qwen2.5-7B, Phi-4-mini and Granite-3.3-8B on MMLU-Redux, MATH and BBEH, \R{outer.npairs} pairs, including two that the main pool leaves out because their in-sample gap is at most 5 points (\R{outer.notpaper}). The outer folds are the paper's two question halves; each is the test set once. On the training half only: (1)~the direction at every candidate layer (class-mean difference after centring by question); (2)~an inner split of the training questions gives each layer's cross-fitted ranking and the verdict's; the best layer is the readout layer, and the pair is eligible if it beats the verdict by more than 5 points; (3)~the push test ($\pm$8 standard deviations on 400 training answers, no labels) gives each layer's sensitivity, and the stretch layer is the best-ranking layer with sensitivity $\ge 0.05$, or the best-ranking layer if none responds. On the test half: the direction at the readout layer, the verdict stretched ($\times$11) along the training direction at every candidate layer, and a random direction stretched at the chosen layer. The rule takes the stretched verdict if the fold is eligible and the verdict otherwise. \R{outer.folds.eligible} of the \R{outer.folds} folds were eligible (Table~\ref{tab:outer}). Picking the stretch layer after seeing the test results would add \R{outer.optimism.mean} point on average.
-
-\begin{table*}[t]
-\centering
-\small
-\input{tab_outer.tex}
-\caption{Held-out evaluation of the recipe. Eligible and Layer: whether the inner gap exceeded 5 points, and the chosen stretch layer, in each of the two folds. Verdict: ranking ($\times$100). Held out: gains over the verdict of the direction, the rule (stretch if eligible, else the verdict) and a random direction stretched at the chosen layer. Paper: gains with the layer chosen on the evaluated questions (--: not stretched in the main pool).}
-\label{tab:outer}
 \end{table*}
 
 \section{Compute}
 
-Hidden-state capture, push tests and stretching ran on single H100 GPUs with Hugging Face Transformers (one forward pass per answer, plus a few edited re-reads of the last token, which can reuse the key-value cache); about one GPU-hour per judge--benchmark pair. Llama-3.1-70B ran on two H200 GPUs on a university cluster (2--3 hours per benchmark for capture, push test and stretching; about 4 hours of vLLM for its own answers and the reasoning baseline). Reasoning judgments and OLMo-2 answers used vLLM. Directions and readouts are computed on CPU from stored hidden states.
+Hidden-state capture, push tests and stretching ran on single H100 GPUs with Hugging Face Transformers (one forward pass per answer, plus a few edited re-reads of the last token, which can reuse the key-value cache); about one GPU-hour per judge--benchmark pair. Llama-3.1-70B ran on two H200 GPUs on a university cluster (2--3 hours per benchmark for capture, push test and stretching; about 4 hours of vLLM for its own answers and the reasoning baseline). Reasoning judgments and OLMo-2 answers used vLLM. Directions, readouts and the explanatory analyses are computed on CPU from stored hidden states.

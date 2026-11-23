@@ -1,0 +1,719 @@
+{
+ "summary": {
+  "set": "design",
+  "problems": 40,
+  "passed": 39,
+  "fails_by_last_attempt": {
+   "unparsed": 0,
+   "no_final": 0,
+   "not_wrong": 0,
+   "surface": 1
+  },
+  "tokens": {
+   "kimi_in": 74825,
+   "kimi_out": 149767,
+   "glm_in": 9891,
+   "glm_out": 5125
+  },
+  "feature_mismatch": [
+   "dollars"
+  ]
+ },
+ "log": {
+  "math-number_theory-0001": {
+   "qid": "math-number_theory-0001",
+   "aid": "math-number_theory-0001|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In Step 3, I changed the result of $72 \\times 3$ from 216 to 213 and carried the resulting values through the remaining calculations.",
+     "final": "496",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9934533551554828,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0449": {
+   "qid": "math-prealgebra-0449",
+   "aid": "math-prealgebra-0449|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the remainder in $49 - 36$ from 13 to 9 and propagated the resulting two-term conclusion through the final answer.",
+     "final": "2",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9952504317789291,
+     "sim": 0.9932914953473274,
+     "ok": true
+    }
+   ]
+  },
+  "math-counting_and_probability-0328": {
+   "qid": "math-counting_and_probability-0328",
+   "aid": "math-counting_and_probability-0328|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Step 3's evaluation of $2^8$ was changed from 256 to 128, with the subsequent probability, recap, and final answer updated consistently.",
+     "final": "35/64",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9994437233450769,
+     "sim": 0.9971251043308912,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0117": {
+   "qid": "math-intermediate_algebra-0117",
+   "aid": "math-intermediate_algebra-0117|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final simplification of $\\frac{10}{2}$ from $5$ to $4$ and propagated $4$ to both answer lines.",
+     "final": "4",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9996049512773242,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0642": {
+   "qid": "math-algebra-0642",
+   "aid": "math-algebra-0642|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the product $27 \\cdot 3$ from $81$ to $54$ and propagated $54$ through every later step and the final answer.",
+     "final": "54",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9915254237288136,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0136": {
+   "qid": "math-intermediate_algebra-0136",
+   "aid": "math-intermediate_algebra-0136|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In the final combination step, the union was changed to omit the included endpoint $0$, and the two later answer statements were updated to match.",
+     "final": "[-1, -1] \\cup (0, 7)",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.99952,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0808": {
+   "qid": "math-intermediate_algebra-0808",
+   "aid": "math-intermediate_algebra-0808|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In Case 1, I changed the simplification of $\\sqrt{12}$ from $2\\sqrt{3}$ to $2\\sqrt{2}$ and propagated the resulting value through the later steps and final answer.",
+     "final": "2 \\pm \\sqrt{2}, 1 \\pm \\sqrt{2}",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9968173138128581,
+     "ok": true
+    }
+   ]
+  },
+  "math-counting_and_probability-0424": {
+   "qid": "math-counting_and_probability-0424",
+   "aid": "math-counting_and_probability-0424|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the evaluation of $7!$ from $5040$ to $5028$ and propagated that value through the later calculations, yielding $419$.",
+     "final": "419",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9962629522677086,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0052": {
+   "qid": "math-intermediate_algebra-0052",
+   "aid": "math-intermediate_algebra-0052|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the constant term in the root product from $-5$ to $-4$ and propagated that value through the remaining calculations and final answer.",
+     "final": "-4 - 3\\sqrt{5}",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9974478945129732,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0231": {
+   "qid": "math-prealgebra-0231",
+   "aid": "math-prealgebra-0231|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final addition in the summation from $18 + 1 = 19$ to $18 + 1 = 20$ and propagated the total of 20 through the remaining steps and final answer.",
+     "final": "20",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9986728599867286,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0029": {
+   "qid": "math-intermediate_algebra-0029",
+   "aid": "math-intermediate_algebra-0029|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the result of $400 - 256$ from $144$ to $288$ and carried $288$ consistently through the remaining steps.",
+     "final": "\\frac{x^2}{32} - \\frac{y^2}{18} = 1",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.00109409190372,
+     "sim": 0.9863313285948606,
+     "ok": true
+    }
+   ]
+  },
+  "math-number_theory-0307": {
+   "qid": "math-number_theory-0307",
+   "aid": "math-number_theory-0307|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the division of 100 by 6 to give remainder 2 instead of 4 and propagated that value through the modular congruence, cycle position, and final answer.",
+     "final": "1",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9951757408683667,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0117": {
+   "qid": "math-prealgebra-0117",
+   "aid": "math-prealgebra-0117|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final multiplication so that $7 \\times 3$ is evaluated as 24, and carried 24 through the concluding statements.",
+     "final": "24",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9991044776119403,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0820": {
+   "qid": "math-prealgebra-0820",
+   "aid": "math-prealgebra-0820|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the total area sum from 480 to 490 and carried the incorrect value through all subsequent area results and the final answer.",
+     "final": "490",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9990869962175558,
+     "ok": true
+    }
+   ]
+  },
+  "math-counting_and_probability-0371": {
+   "qid": "math-counting_and_probability-0371",
+   "aid": "math-counting_and_probability-0371|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In Step 4, I changed the result of $24 - 6$ from 18 to 16 and carried that value consistently through the remaining calculations.",
+     "final": "2/3",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9947061937533086,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0315": {
+   "qid": "math-intermediate_algebra-0315",
+   "aid": "math-intermediate_algebra-0315|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the solution of $a - 1 = 0$ from $a = 1$ to $a = 0$ and propagated that value through the remaining calculations.",
+     "final": "2",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9894412670479542,
+     "sim": 0.9880583812472358,
+     "ok": true
+    }
+   ]
+  },
+  "math-number_theory-0149": {
+   "qid": "math-number_theory-0149",
+   "aid": "math-number_theory-0149|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In step 1, changed the product $9.2 \\times 8$ from $73.6$ to $70.6$ and propagated that value through the remaining calculations.",
+     "final": "8",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9992492492492493,
+     "sim": 0.981599699586932,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0827": {
+   "qid": "math-algebra-0827",
+   "aid": "math-algebra-0827|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In step 3, changed the sum $9 + (-8)$ from $1$ to $0$ and carried the wrong value through to the final answer.",
+     "final": "0",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9977064220183486,
+     "ok": true
+    }
+   ]
+  },
+  "math-geometry-0190": {
+   "qid": "math-geometry-0190",
+   "aid": "math-geometry-0190|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "I changed the reflection of $(3,1)$ from $(1,3)$ to $(3,0)$ and propagated the resulting three-square count through the rest of the solution.",
+     "final": "3",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9975234388820096,
+     "sim": 0.9945093871767623,
+     "ok": true
+    }
+   ]
+  },
+  "math-geometry-0391": {
+   "qid": "math-geometry-0391",
+   "aid": "math-geometry-0391|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In step 5, changed the final fraction sum from $\\frac{44}{3}$ to $\\frac{45}{3}$ and carried it through to the final answer of 15.",
+     "final": "15",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9991789819376026,
+     "sim": 0.9983572895277207,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0874": {
+   "qid": "math-intermediate_algebra-0874",
+   "aid": "math-intermediate_algebra-0874|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the expansion of $-3(x^2 + x - 2)$ to end in $+5$ instead of $+6$, and carried that value into the final answer.",
+     "final": "-3x^2 - 3x + 5",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9993122420907841,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0474": {
+   "qid": "math-prealgebra-0474",
+   "aid": "math-prealgebra-0474|qwen3.5-4b|2",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final sum from $20 + 5 + 4 = 29$ to $20 + 5 + 4 = 30$ and propagated 30 to the final answer.",
+     "final": "30",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.999479843953186,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0060": {
+   "qid": "math-prealgebra-0060",
+   "aid": "math-prealgebra-0060|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In step 4, the distance-traveled product was changed from $\\frac{3}{4}\\times100=75$ to $\\frac{3}{4}\\times100=70$, and all subsequent values were propagated accordingly.",
+     "final": "130",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0017251293847038,
+     "sim": 0.9893708704395289,
+     "ok": true
+    }
+   ]
+  },
+  "math-precalculus-0195": {
+   "qid": "math-precalculus-0195",
+   "aid": "math-precalculus-0195|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "I changed the final sum from $2 + 2 = 4$ to $2 + 2 = 3$ and carried the incorrect total into the final answer.",
+     "final": "3",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9995634141017246,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0581": {
+   "qid": "math-intermediate_algebra-0581",
+   "aid": "math-intermediate_algebra-0581|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the division \\(2/4\\) to produce \\(1/4\\) and propagated the resulting value \\(0.25\\) through the final answer.",
+     "final": "0.25",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0004995004995005,
+     "sim": 0.9995006242197253,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0015": {
+   "qid": "math-prealgebra-0015",
+   "aid": "math-prealgebra-0015|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In step 3, the sum $12 + 9 + 6 + 3$ was incorrectly calculated as 29 instead of 30, and this value was carried through the remaining steps.",
+     "final": "7",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9946865037194474,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0587": {
+   "qid": "math-intermediate_algebra-0587",
+   "aid": "math-intermediate_algebra-0587|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the imaginary-part sum $461 + 43$ from $504$ to $498$ and carried that value through the remaining calculations.",
+     "final": "161",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.998513674197384,
+     "sim": 0.9858694035400862,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0031": {
+   "qid": "math-intermediate_algebra-0031",
+   "aid": "math-intermediate_algebra-0031|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the reciprocal calculation for \\(E_{\\min}\\) to give \\(4\\sqrt{2}\\) instead of \\(2\\sqrt{2}\\), and propagated that value through the final answer.",
+     "final": "4\\sqrt{2}",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9982916601956826,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0406": {
+   "qid": "math-algebra-0406",
+   "aid": "math-algebra-0406|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In Step 4, I changed the subtraction result from $117.74$ to $217.74$ and propagated the resulting rounded difference of $218$ through all later steps.",
+     "final": "218",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9988358556461001,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0073": {
+   "qid": "math-algebra-0073",
+   "aid": "math-algebra-0073|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the initial substitution of the given root from $\\sqrt{131}$ to $\\sqrt{129}$ and carried that wrong value through all subsequent calculations.",
+     "final": "5",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9853200234879624,
+     "sim": 0.9423247559893523,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0833": {
+   "qid": "math-intermediate_algebra-0833",
+   "aid": "math-intermediate_algebra-0833|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final count to the incorrect sum $1 + 1 + 1 = 4$ and carried the resulting value into the final answer.",
+     "final": "4",
+     "wrong": true,
+     "feature_mismatch": [
+      "dollars"
+     ],
+     "len_ratio": 1.0026480045394364,
+     "sim": 0.9982999622213827,
+     "ok": false
+    },
+    {
+     "k": 1,
+     "parsed": true,
+     "changed": "I changed the evaluation of $f(-1)$ from $-1 \\neq 0$ to $0$ and propagated the resulting extra triplet through the summary and final count.",
+     "final": "4",
+     "wrong": true,
+     "feature_mismatch": [
+      "dollars"
+     ],
+     "len_ratio": 1.0122943067902401,
+     "sim": 0.9859949243349939,
+     "ok": false
+    }
+   ]
+  },
+  "math-counting_and_probability-0065": {
+   "qid": "math-counting_and_probability-0065",
+   "aid": "math-counting_and_probability-0065|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In the final total-diagonals calculation, I changed the result of $10 \\times 6 / 2$ from 30 to 25 and propagated 25 to the concluding statements.",
+     "final": "25",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.998677831643896,
+     "ok": true
+    }
+   ]
+  },
+  "math-precalculus-0208": {
+   "qid": "math-precalculus-0208",
+   "aid": "math-precalculus-0208|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "In Step 3, changed $3t = 6$ to $3t = 9$ and propagated $t = 3$ through the intersection coordinates.",
+     "final": "(-4, -3, 11)",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.967741935483871,
+     "sim": 0.9621069604944907,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0499": {
+   "qid": "math-intermediate_algebra-0499",
+   "aid": "math-intermediate_algebra-0499|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the intersection setup from $f(x) = 8$ to $f(x) = 6$ and propagated that incorrect top boundary through all subsequent calculations.",
+     "final": "16",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 0.9987756351392715,
+     "sim": 0.9690658499234304,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0574": {
+   "qid": "math-intermediate_algebra-0574",
+   "aid": "math-intermediate_algebra-0574|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final product $2 \\times 5.5$ from 11 to 12 and updated the final answer accordingly.",
+     "final": "12",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9992208804051422,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0832": {
+   "qid": "math-algebra-0832",
+   "aid": "math-algebra-0832|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final division $\\frac{14}{4}$ from $3.5$ to $3.4$ and carried $3.4$ through the remaining steps.",
+     "final": "3.4",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9973718791064389,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0919": {
+   "qid": "math-algebra-0919",
+   "aid": "math-algebra-0919|qwen3.5-4b|1",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed Step 4\u2019s subtraction of 6 to produce $-7$ instead of $-5$, and propagated that value through the remaining calculations.",
+     "final": "-14/3",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9932859399684044,
+     "ok": true
+    }
+   ]
+  },
+  "math-intermediate_algebra-0714": {
+   "qid": "math-intermediate_algebra-0714",
+   "aid": "math-intermediate_algebra-0714|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the simplification of $\\frac{n}{n!}$ to $\\frac{1}{(n-2)!}$ and propagated the resulting value through the final substitution and answer.",
+     "final": "\\frac{1}{2003!}",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9985721085197525,
+     "ok": true
+    }
+   ]
+  },
+  "math-algebra-0469": {
+   "qid": "math-algebra-0469",
+   "aid": "math-algebra-0469|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final evaluation of $a+b+c=x|_{y=1}$ from $-3$ to $-5$ and carried $-5$ into the final answer.",
+     "final": "-5",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.9997121473805411,
+     "ok": true
+    }
+   ]
+  },
+  "math-prealgebra-0559": {
+   "qid": "math-prealgebra-0559",
+   "aid": "math-prealgebra-0559|qwen3.5-4b|0",
+   "attempts": [
+    {
+     "k": 0,
+     "parsed": true,
+     "changed": "Changed the final sum $16 + 30$ from $46$ to $56$ and carried $56$ through the concluding area statement and final answer.",
+     "final": "56",
+     "wrong": true,
+     "feature_mismatch": [],
+     "len_ratio": 1.0,
+     "sim": 0.999347400478573,
+     "ok": true
+    }
+   ]
+  }
+ }
+}

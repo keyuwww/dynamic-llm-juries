@@ -336,6 +336,81 @@ def outer_numbers():
     put("outer.notpaper", ", ".join(f"{NAME[k.split('|')[0]]} on {BN[k.split('|')[1]]}" for k, v in P.items() if not v["paper"]))
 
 
+def _ps_put(prefix, e):
+    for k, x in e.items():
+        if not x:
+            continue
+        kk = prefix + "." + k.replace("|", ".").replace(":", "").replace("+", "")
+        if "kept" in k or k.startswith("rule_over"):
+            put(kk + ".ci", f"{100 * x['g']:.0f}\\% [{100 * x['lo']:.0f}, {100 * x['hi']:.0f}]"), put(kk, f"{100 * x['g']:.0f}\\%")
+            if "kept" in k:  # the share removed
+                rk = kk.replace("kept", "removed")
+                put(rk + ".ci", f"{100 - 100 * x['g']:.0f}\\% [{100 - 100 * x['hi']:.0f}, {100 - 100 * x['lo']:.0f}]")
+                put(rk, f"{100 - 100 * x['g']:.0f}\\%")
+        elif k.startswith("ll|"):
+            sgn = "minus" in k
+            f = (lambda v: f"{v:+.3f}".replace("-", "$-$")) if sgn else (lambda v: f"{v:.3f}")
+            put(kk, f(x["g"])), put(kk + ".ci", f"{f(x['g'])} [{f(x['lo'])}, {f(x['hi'])}]")
+        elif "level" in k or "|caught" == k[-7:] or k.endswith("precision"):
+            put(kk, f"{x['g']:.1f}"), put(kk + ".ci", f"{x['g']:.1f} [{x['lo']:.1f}, {x['hi']:.1f}]")
+        else:
+            put(kk, g(x)), put(kk + ".ci", g(x, ci=True))
+
+
+def primary_scope_numbers():
+    """explanatory analyses on the 12 primary pairs (primary_scope_analyze.py)."""
+    F = A.HERE / "out_paper" / "primary_scope_check.json"
+    if not F.exists():
+        return
+    O = json.load(open(F))
+    put("ps.npairs", str(O["n_pairs"])), put("ps.npairs.mm", str(O["n_pairs_mm"]))
+    _ps_put("ps", O["pooled"])
+    _ps_put("psm", O["pooled_mm"])
+    put("psc.n", str(O["cot"]["n_pairs"]))
+    _ps_put("psc", {k: v for k, v in O["cot"].items() if k != "n_pairs"})
+    for b, e in O["per_bench"].items():
+        _ps_put(f"psb.{b}", e)
+    _ps_put("psr", {k.replace("@", "."): v for k, v in O["review"].items()})
+    for k, x in O["overlap"].items():
+        a, b, part = k.split("|")
+        for c in ("both", "a_only", "b_only", "neither"):
+            put(f"pso.{a}.{b}.{part}.{c.replace('_', '')}", f"{100 * x[c]:.0f}")
+        put(f"pso.{a}.{b}.{part}.corr", f"{x['corr']:.2f}")
+    put("ps.splits.lo", f"{O['splits']['lo']:+.1f}"), put("ps.splits.hi", f"{O['splits']['hi']:+.1f}")
+    put("ps.splits.n", str(len(O["splits"]["per_seed"])))
+    put("ps.r2.lo", f"{100 * O['r2_inner']['lo']:.0f}"), put("ps.r2.hi", f"{100 * O['r2_inner']['hi']:.0f}")
+    nq = O["n_questions"]
+    for b in ("mmlu", "math", "bbeh"):
+        put(f"ps.nq.{b}", str(max(v for k, v in nq.items() if k.endswith(b))))
+
+
+def edit_numbers():
+    """controlled-edit test (edit_test/edit_analyze.py)."""
+    F = A.HERE / "edit_test" / "results_test.json"
+    if not F.exists():
+        return
+    O = json.load(open(F))
+    put("edit.n", str(O["n_pairs"]))
+    b = O["build"]
+    put("edit.problems", str(b["problems"])), put("edit.passed", str(b["passed"]))
+    put("edit.sim", f"{O['sim_median']:.3f}")
+    put("edit.len.lo", f"{O['len_ratio']['min']:.2f}"), put("edit.len.hi", f"{O['len_ratio']['max']:.2f}")
+    _ps_put("edit", O["pooled"])
+    if "pooled_reader_pass" in O:
+        _ps_put("editr", O["pooled_reader_pass"])
+        put("editr.n", str(O["n_reader_pass"]))
+        for k, v in O["reader_counts"].items():
+            put(f"editr.count.{k}", str(v))
+    for j, e in O["per_judge"].items():
+        for m, v in e.items():
+            put(f"edit.{j}.{m}", f"{v:.1f}")
+    rp = O["reproduce"]
+    put("edit.repro.verdict", f"{max(v['verdict_max'] for v in rp.values()):.2f}")
+    put("edit.repro.direct", f"{max(v['direct_max'] for v in rp.values()):.3f}")
+    put("edit.repro.stretch", f"{max(v['stretch_max'] for v in rp.values()):.2f}")
+    put("edit.repro.stretch_exact", f"{100 * min(v['stretch_share_exact'] for v in rp.values()):.0f}")
+
+
 def cotfix_numbers():
     """Mistral-7B's repaired reasoning score (azure/cot_exact.py): its reasoning-first ranking next to its verdict."""
     import json as _j
@@ -373,7 +448,7 @@ def tab_outer():
         rows.append("\\midrule")
     rows = rows[:-1]
     t = ["\\begin{tabular}{ll cc r rrr rr}", "\\toprule",
-         "& & & & & \\multicolumn{3}{c}{Held out: gain over verdict} & \\multicolumn{2}{c}{Paper (in-sample choice)} \\\\",
+         "& & & & & \\multicolumn{3}{c}{Held out: gain over verdict} & \\multicolumn{2}{c}{Exploratory (in-sample choice)} \\\\",
          "\\cmidrule(lr){6-8}\\cmidrule(l){9-10}",
          "& Judge & Eligible & Layer & Verdict & Direction & Rule & Random & Direction & Stretch \\\\", "\\midrule"]
     (P / "tab_outer.tex").write_text("\n".join(t + rows + ["\\bottomrule", "\\end{tabular}"]) + "\n")
@@ -499,9 +574,11 @@ def tab_readout():
     if F.exists():  # primary: every choice made on training questions (nested), 12 pairs
         O = json.load(open(F))
         rows.append(f"\\multicolumn{{10}}{{l}}{{\\emph{{Held out: every choice on training questions ({O['n_pairs']} pairs; stretch = rule)}}}} \\\\")
+        PSF = A.HERE / "out_paper" / "primary_scope_check.json"
+        cotg = json.load(open(PSF))["cot"]["cot|gain|all"] if PSF.exists() else None
         for key, lab in (("pooled", "\\quad All questions"), ("pooled_unsolved", "\\quad Judge failed$^\\ddagger$")):
             e = O[key]
-            cells = ["--", "--"]
+            cells = [bold(cotg, g(cotg)) if (key == "pooled" and cotg) else "--", "--"]
             for m in ("rule", "direct", "sum"):
                 for met in ("gain", "bon"):
                     x = e.get(f"{m}|{met}")
@@ -592,6 +669,8 @@ if __name__ == "__main__":
     auth_numbers()
     control_numbers()
     outer_numbers()
+    primary_scope_numbers()
+    edit_numbers()
     cotfix_numbers()
     match_numbers()
     chance_numbers()

@@ -15,7 +15,9 @@ from paper_analysis import per_group
 
 D = A.HERE / "out_outer"
 R = json.load(open(A.HERE / "out_paper" / "results.json"))
-METH = ["verdict", "direct", "sum", "rule", "stretch", "random"]
+# per-fold within-question SDs of the verdict and direction scores on TRAINING answers (primary_scope_modal.py)
+SC = {k: v["folds"] for k, v in json.load(open(A.HERE / "out_paper" / "primary_scope.json")).items()}
+METH = ["verdict", "direct", "sum", "rule", "stretch", "random", "sum_testscale"]
 
 
 def wsd(rows, key):
@@ -26,7 +28,10 @@ def wsd(rows, key):
 
 
 def load(d, b):
+    """verdict + direction ("sum") divides each score by its within-question SD on the fold's training answers, so no
+    statistic of the test answers enters. sum_testscale is the earlier version, scaled with the pooled test answers."""
     info = json.load(open(d / f"outer_{b}.json"))
+    sc = SC["|".join(d.name.rsplit("_", 1))]
     rows = []
     for l in open(d / f"outer_{b}.jsonl"):
         r = json.loads(l)
@@ -38,8 +43,11 @@ def load(d, b):
                          rule=m[Ls] if f["eligible"] else m["none"],
                          **{f"L{L}": m[f"J:x11:{L}"] for L in info["candidate_layers"]}))
     sv, sd = wsd(rows, "verdict"), wsd(rows, "direct")
+    fold = {r["aid"]: json.loads(l)["fold"] for r, l in zip(rows, open(d / f"outer_{b}.jsonl"))}
     for r in rows:
-        r["sum"] = r["verdict"] / sv + r["direct"] / sd
+        f = sc[fold[r["aid"]]]
+        r["sum"] = r["verdict"] / f["scale_verdict_train"] + r["direct"] / f["scale_direct_train"]
+        r["sum_testscale"] = r["verdict"] / sv + r["direct"] / sd
     return info, rows
 
 

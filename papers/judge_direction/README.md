@@ -1,4 +1,4 @@
-# Judge-direction paper: Small LLM Judges Know More Than They Say, Mostly About Who Wrote the Answer
+# Judge-direction paper: The Readout–Verdict Gap of Small LLM Judges (Most of the Gain Is on Answers by Different Models)
 
 ACL long-paper draft (review mode). `sh papers/judge_direction/build.sh` rebuilds every number, table and figure from stored results and compiles `main.pdf`. Scripts and result paths below are relative to `experiments/beyond_capability/`. The belief paper ("Judges Approve What They Believe") is a separate paper.
 
@@ -13,6 +13,8 @@ ACL long-paper draft (review mode). `sh papers/judge_direction/build.sh` rebuild
 | Reason-first verdicts | `cot_modal.py` (vLLM) | `out_allpairs/*/cot_{main,sm,sm2}.jsonl` |
 | Gap over 20 splits | `allpairs_modal.py --phase splits` | `out_allpairs/knows_splits.json` |
 | All comparisons | `paper_data.py`, `paper_analysis.py` | `out_paper/results.json`, `results.md`, `authorship.json` |
+| Primary-scope explanatory analyses (surface, residualization, incremental models, authorship projection, review budget, split stability) | `primary_scope_modal.py` (Modal CPU, from stored hidden states), `primary_scope_analyze.py` | `out_paper/primary_scope.json`, `primary_scope_check.json` |
+| Controlled-edit test | `edit_test/edit_build.py` (Tinker: Kimi-K3.1-Pro edits, GLM-5.3-Flash grading), `edit_test/edit_modal.py` (Modal H100), `edit_test/edit_analyze.py`; protocol `edit_test/PROTOCOL.md` | `edit_test/pairs_test.jsonl`, `scores_test.json`, `results_test.json` |
 | Numbers, tables, figures | `paper_tables.py`, `paper_figures.py` | `papers/judge_direction/numbers.tex`, `tab_*.tex`, `fig_*.pdf` |
 
 Every number in the text is a `\R{key}` lookup into `numbers.tex`; an unknown key prints **??**.

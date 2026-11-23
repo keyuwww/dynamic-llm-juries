@@ -1,0 +1,32 @@
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/beyond_capability/bc_jobs.py:41: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  tok = self.client.get_tokenizer()
+Synchronous method 'BackcompatSamplingClientFuture.result()' called from async context. It blocks the event loop until the result arrives; await the future instead (`await future`, or `await future.result_async()`).
+===== Stack for calling sync from async ===== 
+['  File "/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/beyond_capability/edit_test/edit_build.py", line 168, in <module>\n    asyncio.run(main())\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/runners.py", line 190, in run\n    return runner.run(main)\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/runners.py", line 118, in run\n    return self._loop.run_until_complete(task)\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/base_events.py", line 641, in run_until_complete\n    self.run_forever()\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/base_events.py", line 608, in run_forever\n    self._run_once()\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/base_events.py", line 1936, in _run_once\n    handle._run()\n', '  File "/Users/keyuwang/.local/share/uv/python/cpython-3.11.13-macos-aarch64-none/lib/python3.11/asyncio/events.py", line 84, in _run\n    self._context.run(self._callback, *self._args)\n', '  File "/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/beyond_capability/edit_test/edit_build.py", line 91, in main\n    kimi, glm = B.Chat("kimi-k3.1-pro", service), B.Chat("glm", service)\n', '  File "/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/beyond_capability/bc_jobs.py", line 41, in __init__\n    tok = self.client.get_tokenizer()\n', '  File "/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/typing_extensions.py", line 3140, in wrapper\n    return arg(*args, **kwargs)\n', '  File "/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/sdk_method.py", line 132, in wrapper\n    return func(*args, **kwargs)\n', '  File "/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py", line 94, in get_tokenizer\n    return self._awaited_client().get_tokenizer(*args, **kwargs)\n', '  File "/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_client_future.py", line 72, in _awaited_client\n    return self.result()\n', '  File "/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/sync_only.py", line 91, in wrapper\n    f"===== Stack for calling sync from async ===== \\n{traceback.format_stack()}\\n ==========="\n']
+ ===========
+/Users/keyuwang/Documents/GitHub/dynamic-llm-juries/experiments/beyond_capability/bc_jobs.py:56: FutureWarning: Using the future as the SamplingClient is deprecated; call .result() on it, or await it, to get the SamplingClient first
+  res = await self.client.sample_async(prompt=prompt, num_samples=k, sampling_params=params)
+/private/tmp/claude-501/-Users-keyuwang-Documents-GitHub-dynamic-llm-juries/f314d876-8635-4a8f-9206-27016fdf4f11/scratchpad/tvenv/lib/python3.11/site-packages/tinker/lib/public_interfaces/backcompat_sampling_client_future.py:70: FutureWarning: DEPRECATED: SamplingClient.sample_async() is deprecated and will be removed in a future tinker SDK version. Use `await SamplingClient.sample(...)` instead; sample() returns an APIFuture that can be awaited.
+  return await (await self._awaited_client_async()).sample_async(*args, **kwargs)
+  edit design: 25/40 (0 errors, 66s)
+  edit design: 40/40 (0 errors, 249s)
+{
+ "set": "design",
+ "problems": 40,
+ "passed": 39,
+ "fails_by_last_attempt": {
+  "unparsed": 0,
+  "no_final": 0,
+  "not_wrong": 0,
+  "surface": 1
+ },
+ "tokens": {
+  "kimi_in": 74825,
+  "kimi_out": 149767,
+  "glm_in": 9891,
+  "glm_out": 5125
+ },
+ "feature_mismatch": [
+  "dollars"
+ ]
+}

@@ -1,0 +1,344 @@
+{
+ "math-algebra-0021": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2.50x6 wrongly 18, so 43"
+ },
+ "math-algebra-0135": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "-3 became -21, wrong K"
+ },
+ "math-algebra-0361": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "food for 24 people, contradicts problem's 18"
+ },
+ "math-algebra-0537": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "product 64/64 given as 2, wrong k"
+ },
+ "math-algebra-0738": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4x15 given as 65, wrong difference"
+ },
+ "math-algebra-0866": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1/(4*4) wrong; sqrt(16) claimed 2sqrt2"
+ },
+ "math-algebra-1023": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "sqrt(25) replaced by sqrt(36), wrong distance"
+ },
+ "math-counting_and_probability-0028": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "7! stated as 2520, wrong count"
+ },
+ "math-counting_and_probability-0083": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3x3 stated as 6, wrong total"
+ },
+ "math-counting_and_probability-0210": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3x10x10 stated as 30, wrong"
+ },
+ "math-counting_and_probability-0247": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+...+9 stated 44, wrong"
+ },
+ "math-counting_and_probability-0309": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "C(8,3)=54 wrong, propagated to 1840/6561"
+ },
+ "math-counting_and_probability-0418": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1/12*1/6 as 1/36, wrong sum"
+ },
+ "math-counting_and_probability-0463": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "10-7 stated 4, wrong"
+ },
+ "math-geometry-0056": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "sector area 8pi instead of 6pi, wrong"
+ },
+ "math-geometry-0069": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "32x120=3820 wrong, consistently propagated"
+ },
+ "math-geometry-0164": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3x=12 became 15, wrong x"
+ },
+ "math-geometry-0214": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3x4sqrt2 stated 8sqrt2, wrong area"
+ },
+ "math-geometry-0253": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "850pi wrong; earlier derivation gives 900pi"
+ },
+ "math-geometry-0276": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "r^2=4 gives r=4 wrong, propagated"
+ },
+ "math-geometry-0394": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2x7 stated 16, wrong"
+ },
+ "math-geometry-0463": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "midpoint divided by 4, wrong distance 1.1"
+ },
+ "math-intermediate_algebra-0043": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "35+54 stated 90, wrong"
+ },
+ "math-intermediate_algebra-0084": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "modulus of z1 changed to 6, wrong answer 36"
+ },
+ "math-intermediate_algebra-0168": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3^4 stated 82, propagated wrongly"
+ },
+ "math-intermediate_algebra-0235": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1002+50 stated 1062, wrong"
+ },
+ "math-intermediate_algebra-0275": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2c stated 9sqrt55, wrong"
+ },
+ "math-intermediate_algebra-0361": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "10/sqrt2 stated 10, wrong maximum"
+ },
+ "math-intermediate_algebra-0442": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "17x2 stated 35, wrong"
+ },
+ "math-intermediate_algebra-0481": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "10x1/2 stated 4, wrong maximum"
+ },
+ "math-intermediate_algebra-0577": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "700+43 stated 742, wrong"
+ },
+ "math-intermediate_algebra-0673": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "C(4,2) stated 4, wrong total"
+ },
+ "math-intermediate_algebra-0727": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "40x31 stated 1200, wrong coefficient"
+ },
+ "math-intermediate_algebra-0821": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "c=-9 instead of -7, wrong a-b"
+ },
+ "math-intermediate_algebra-0880": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "9+2 became 9+1, wrong sum"
+ },
+ "math-number_theory-0007": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "36+93 stated 139, wrong"
+ },
+ "math-number_theory-0077": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "S=24(k+3) false; sums doubled, answer 24"
+ },
+ "math-number_theory-0161": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "26x5 stated 135, wrong initial count"
+ },
+ "math-number_theory-0207": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "25+2+25 stated 62, wrong digits"
+ },
+ "math-number_theory-0333": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "9x10 stated 100, wrong probability"
+ },
+ "math-number_theory-0454": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "5-6 stated -4 mod 9, wrong digits"
+ },
+ "math-number_theory-0525": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "384 mod 10 stated 9, wrong"
+ },
+ "math-prealgebra-0049": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "8x0.5 stated 6, wrong x"
+ },
+ "math-prealgebra-0154": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "96+12 stated 110, wrong"
+ },
+ "math-prealgebra-0247": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "240-220 stated 30, wrong"
+ },
+ "math-prealgebra-0324": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2^3 stated 4, wrong gcd"
+ },
+ "math-prealgebra-0410": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "21.95+2.55 stated 24.00, wrong cost"
+ },
+ "math-prealgebra-0477": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2x6 stated 14, wrong"
+ },
+ "math-prealgebra-0551": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "0.5x0.5 stated 0.5; later overlap line still 9"
+ },
+ "math-prealgebra-0805": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4*2 replaced by 2*2, wrong x^2"
+ },
+ "math-precalculus-0056": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3-10/8 stated 12/8, wrong y-coordinate"
+ },
+ "math-precalculus-0109": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "9+4+3+33 stated 50, wrong"
+ },
+ "math-precalculus-0183": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "-4/5+10/5 stated 4/5, wrong"
+ },
+ "math-precalculus-0251": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1200/268 simplified to 300/68, wrong"
+ },
+ "math-precalculus-0300": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "300/15 stated 24, wrong solution"
+ },
+ "math-precalculus-0379": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1/cosD=3 changed to 2, wrong"
+ },
+ "math-precalculus-0474": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "full-period product 2^-8, wrong answer"
+ }
+}

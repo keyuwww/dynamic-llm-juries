@@ -1,0 +1,344 @@
+{
+ "math-algebra-0061": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "(x^{3/2})^{1/3} gives x^{1/2}, not x^{1/6}"
+ },
+ "math-algebra-0342": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "0+0+2 is 2, not 4"
+ },
+ "math-algebra-0437": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "143*4 is 572, not 568"
+ },
+ "math-algebra-0638": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "160-4 is 156, not 158"
+ },
+ "math-algebra-0843": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Constant -1 wrongly flipped to +1; sum is -1"
+ },
+ "math-algebra-0955": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "13+15 is 28, not 30"
+ },
+ "math-algebra-1144": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "a^2-a-2 factors as (a-2)(a+1), not (a-4)(a+3)"
+ },
+ "math-counting_and_probability-0066": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "406*9139 is 3,710,434, not 3,710,334"
+ },
+ "math-counting_and_probability-0152": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "9 mod 5 is 4, not 3; probability should be 1/2"
+ },
+ "math-counting_and_probability-0231": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Listed primes 11,13,17 count 3, not 4"
+ },
+ "math-counting_and_probability-0275": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "332640*5 is 1,663,200, not 1,660,800"
+ },
+ "math-counting_and_probability-0392": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "6! is 720, not 600"
+ },
+ "math-counting_and_probability-0442": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "21600+8100 is 29700, not 30700"
+ },
+ "math-geometry-0034": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "GF length 20, not 18"
+ },
+ "math-geometry-0065": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Circle area is 12.5 pi, not 25 pi"
+ },
+ "math-geometry-0142": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "6/10 is 0.6, not 0.3"
+ },
+ "math-geometry-0180": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "180-40 is 140, so x=70, not 65"
+ },
+ "math-geometry-0229": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "r/3=1 gives r=3, not r=4"
+ },
+ "math-geometry-0261": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "21sqrt15/21 is sqrt15, not sqrt5"
+ },
+ "math-geometry-0320": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Sine 1/2 means 30 degrees, not 45"
+ },
+ "math-geometry-0410": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "0.2*360 is 72, not 70"
+ },
+ "math-intermediate_algebra-0023": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "(40+88)/2 is 64, not 81; check shows 3465 not 1680"
+ },
+ "math-intermediate_algebra-0061": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "343 is 7^3 not 2^3; modulus 7 gives (7,49)"
+ },
+ "math-intermediate_algebra-0144": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "-4y^2+8y^2 is 4y^2, giving ellipse not hyperbola"
+ },
+ "math-intermediate_algebra-0213": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "16*sqrt3/9 is not 8*sqrt3/9"
+ },
+ "math-intermediate_algebra-0262": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "r1r2+16=-4 gives r1r2=-20, not -24"
+ },
+ "math-intermediate_algebra-0307": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "(1-sqrt5)/2 is not (1-sqrt5)/4"
+ },
+ "math-intermediate_algebra-0395": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2*3*4*5*6 is 720, not 600"
+ },
+ "math-intermediate_algebra-0465": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Discriminant 36-8=28, roots 3+-sqrt7, not sqrt6"
+ },
+ "math-intermediate_algebra-0549": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "12+10 is 22, not 24"
+ },
+ "math-intermediate_algebra-0615": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Q1 constant is 13, not 12; verification actually fails"
+ },
+ "math-intermediate_algebra-0722": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Period sum is 9, not 10"
+ },
+ "math-intermediate_algebra-0753": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2+4 is 6, not 8"
+ },
+ "math-intermediate_algebra-0870": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Semicircle area is 8 pi, not 4 pi"
+ },
+ "math-intermediate_algebra-0890": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "c=-9/4 changed to -2.5; likely contradicts earlier derivation"
+ },
+ "math-number_theory-0037": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+201 is 202, not 203"
+ },
+ "math-number_theory-0101": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1144/14 is not an integer; 14 does not divide 1144"
+ },
+ "math-number_theory-0175": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "139-132 is 7, not 6"
+ },
+ "math-number_theory-0264": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2+8 is 10, not 12"
+ },
+ "math-number_theory-0412": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "9*25 is 225, not 175"
+ },
+ "math-number_theory-0491": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "6+7+8+9 is 30, not 31"
+ },
+ "math-prealgebra-0016": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3-6 is -3, not -2"
+ },
+ "math-prealgebra-0114": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "33+24 is 57, not 58"
+ },
+ "math-prealgebra-0187": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "LCM(12,16) is 48, not 64"
+ },
+ "math-prealgebra-0273": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2*3 is 6, not 8"
+ },
+ "math-prealgebra-0353": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Number copied as 158AB instead of 149AB; wrong problem"
+ },
+ "math-prealgebra-0445": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Problem premise changed from 12 hours to 18 hours"
+ },
+ "math-prealgebra-0541": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "333*2 is 666, not 667"
+ },
+ "math-prealgebra-0640": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2*12 is 24, not 26"
+ },
+ "math-precalculus-0048": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4(2-sqrt2) expands to 8-4sqrt2, not 8-2sqrt2"
+ },
+ "math-precalculus-0081": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "sqrt(49*89) is 7 sqrt89, not 8 sqrt89"
+ },
+ "math-precalculus-0164": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "7*3 is 21, not 25"
+ },
+ "math-precalculus-0215": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "a^2 i + 2i a^2 is 3i a^2, not 4i a^2"
+ },
+ "math-precalculus-0273": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2/sqrt2 + 1 is sqrt2+1, not sqrt2"
+ },
+ "math-precalculus-0322": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2(pi^2/4) is pi^2/2, so max is 5pi^2/4"
+ },
+ "math-precalculus-0442": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Constant term is 1, not 2; roots are 3+-2sqrt2"
+ },
+ "math-precalculus-0498": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "sqrt9 is 3, not 4"
+ }
+}

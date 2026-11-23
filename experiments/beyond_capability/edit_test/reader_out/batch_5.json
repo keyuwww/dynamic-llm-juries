@@ -1,0 +1,344 @@
+{
+ "math-algebra-0074": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Sign error in expansion gives x=-5, wrong final answer"
+ },
+ "math-algebra-0355": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3*2x changed to 8x; final -2 wrong"
+ },
+ "math-algebra-0465": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "a3-a2 sign flipped; first term -4 wrong"
+ },
+ "math-algebra-0709": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "12/4 given as 2; lower bound 2/5 wrong"
+ },
+ "math-algebra-0844": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "11^2 changed to 11^4; answer 14641/25 wrong"
+ },
+ "math-algebra-0978": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Sum 169 changed to 121; answer 11/6 wrong"
+ },
+ "math-algebra-1153": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Total 4+4=8 wrong; earlier enumeration likely still shows 4 triangles"
+ },
+ "math-counting_and_probability-0068": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "30*4 stated as 110; wrong"
+ },
+ "math-counting_and_probability-0187": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "35*0.0016 given as 0.0056; wrong"
+ },
+ "math-counting_and_probability-0235": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "100-27 given as 71; wrong"
+ },
+ "math-counting_and_probability-0279": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+12=14; probability 1/14 wrong"
+ },
+ "math-counting_and_probability-0397": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Total minutes 170 instead of 180; wrong"
+ },
+ "math-counting_and_probability-0449": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "13*2*11 given as 276; wrong"
+ },
+ "math-geometry-0047": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Dot product 1 instead of 2; tan sqrt35 wrong"
+ },
+ "math-geometry-0067": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "R=2+1 stated as 4; radius 1.9 wrong"
+ },
+ "math-geometry-0144": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2^3 given as 4; answer 4 wrong"
+ },
+ "math-geometry-0183": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Half-area 4.5 instead of 3.75; point wrong"
+ },
+ "math-geometry-0230": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "34*60 stated as 2000; wrong"
+ },
+ "math-geometry-0270": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "-2(-2) given as -4; area 21 wrong"
+ },
+ "math-geometry-0345": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "8sqrt3/4 given as 4sqrt3; wrong"
+ },
+ "math-geometry-0411": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "26-20 stated as 8; wrong"
+ },
+ "math-intermediate_algebra-0030": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "2i*137 given as 268i; earlier derivation likely still 274i"
+ },
+ "math-intermediate_algebra-0071": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "6+0 stated as 5; wrong"
+ },
+ "math-intermediate_algebra-0150": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "84/6 given as 15; wrong"
+ },
+ "math-intermediate_algebra-0221": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Constant -19 swapped to -20; answer 19 wrong"
+ },
+ "math-intermediate_algebra-0264": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "-1+0+13 stated as 11; wrong"
+ },
+ "math-intermediate_algebra-0332": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1/2 converted to 10136/20200; wrong sum"
+ },
+ "math-intermediate_algebra-0423": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Discriminant sign error; interval 0<k<=4 wrong"
+ },
+ "math-intermediate_algebra-0466": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "sqrt12 given as 2sqrt2; sum wrong"
+ },
+ "math-intermediate_algebra-0571": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1248/32 given as 24; root 12 wrong"
+ },
+ "math-intermediate_algebra-0630": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2(4)-3 given as 6; k=2 wrong"
+ },
+ "math-intermediate_algebra-0723": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "10*170 given as 1600; answer 800 wrong"
+ },
+ "math-intermediate_algebra-0756": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "64y=1152 changed to 1024; roots wrong"
+ },
+ "math-intermediate_algebra-0872": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "sqrt729 given 25; 27^2 line still contradicts"
+ },
+ "math-intermediate_algebra-0893": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2x^2=-8 wrong; roots +-2i wrong"
+ },
+ "math-number_theory-0044": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Direction flipped to Sunday; 'one day after' line still stands"
+ },
+ "math-number_theory-0128": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4037-4032 given as 3; digit 8 wrong"
+ },
+ "math-number_theory-0178": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "8*81 given as 638; wrong"
+ },
+ "math-number_theory-0272": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "5+6+1 given as 13; wrong"
+ },
+ "math-number_theory-0418": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "352 residue falsely changed, excluding true minimum; 712 wrong"
+ },
+ "math-number_theory-0515": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "7+2 given as 10; wrong"
+ },
+ "math-prealgebra-0022": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "10+3+3 given as 19; wrong"
+ },
+ "math-prealgebra-0137": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "200-192 given as 7; wrong term"
+ },
+ "math-prealgebra-0193": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "5x=40 instead of 45; x=8 wrong"
+ },
+ "math-prealgebra-0281": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "44 replaced by 41; answer 13 wrong"
+ },
+ "math-prealgebra-0369": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Ratio 5 changed to 2; angle 120 wrong"
+ },
+ "math-prealgebra-0452": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Count of ten squares stated as 9; wrong"
+ },
+ "math-prealgebra-0545": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "13+15 given as 29; wrong"
+ },
+ "math-prealgebra-0662": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "LCM 5*2 given as 20; 72 wrong"
+ },
+ "math-precalculus-0049": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Sum simplified to 2sqrt2+2sqrt6; wrong"
+ },
+ "math-precalculus-0095": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "5+4+2 given as 12; wrong"
+ },
+ "math-precalculus-0170": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+9 given as 12; projection wrong"
+ },
+ "math-precalculus-0227": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "25*(1/5) given as 23; answer 1/3 wrong"
+ },
+ "math-precalculus-0285": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "d^2 stated 4+sqrt6; wrong"
+ },
+ "math-precalculus-0336": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3(1/9) sign error; z=1/3 wrong"
+ },
+ "math-precalculus-0464": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1/88 converted to 11/440; weights wrong"
+ },
+ "math-precalculus-0529": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "21+4 given as 36; sin L=2/6 wrong"
+ }
+}

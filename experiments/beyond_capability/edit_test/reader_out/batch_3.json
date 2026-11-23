@@ -1,0 +1,344 @@
+{
+ "math-algebra-0050": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "h(8)=8-4 wrongly given as 6; final 6 not 4"
+ },
+ "math-algebra-0251": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "6a+2 wrong expansion; 'subtract 4' text now inconsistent"
+ },
+ "math-algebra-0427": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2r^2=98 changed to 128; r=8 wrong, sum 22"
+ },
+ "math-algebra-0626": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "256/2 given as 127; final 127/75 wrong"
+ },
+ "math-algebra-0789": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Figure 1 endpoints 3 changed to 4; answer 64 wrong"
+ },
+ "math-algebra-0903": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1000*1.16023436 given as 1060.23; answer 1060 wrong"
+ },
+ "math-algebra-1136": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "25+9 summed as 35; c=34 wrong"
+ },
+ "math-counting_and_probability-0058": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Union size 41 changed to 42; answer 1042 wrong"
+ },
+ "math-counting_and_probability-0111": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "66*165 given as 11,880; probability 0.083 wrong"
+ },
+ "math-counting_and_probability-0222": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Middle term 12xy changed to 18xy; coefficient 18 wrong"
+ },
+ "math-counting_and_probability-0263": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Minimum claimed 2 instead of 1 (n=1 appears once)"
+ },
+ "math-counting_and_probability-0383": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "5525/13 given as 415; answer 72/415 wrong"
+ },
+ "math-counting_and_probability-0426": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4/32+5/32 given as 11/32; wrong"
+ },
+ "math-geometry-0030": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "12*10 given as 140; answer 140+96pi wrong"
+ },
+ "math-geometry-0063": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Large semicircle area 2pi changed to 4pi; answer wrong"
+ },
+ "math-geometry-0136": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "O counted as 2 symmetric letters; total 4 wrong"
+ },
+ "math-geometry-0178": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "tan X stated 7/25 instead of 7/24"
+ },
+ "math-geometry-0220": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "12*6sqrt3 given as 36 pi sqrt3; wrong"
+ },
+ "math-geometry-0260": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4-3.14159 given as 0.95841; 96 wrong"
+ },
+ "math-geometry-0301": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+2+4 given as 8; answer 8 wrong"
+ },
+ "math-geometry-0406": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Triangle area 2sqrt3 changed to 4sqrt3; volume wrong"
+ },
+ "math-intermediate_algebra-0004": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Modulus sqrt3 changed to sqrt12; answer -20736 wrong"
+ },
+ "math-intermediate_algebra-0060": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "2*4*6*8 given as 386; wrong"
+ },
+ "math-intermediate_algebra-0114": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "36k^2=24k changed to 48k; k=4/3 wrong"
+ },
+ "math-intermediate_algebra-0193": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "334*(-2i) given as -670i; wrong"
+ },
+ "math-intermediate_algebra-0254": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "D changed from 0 to 1 at conclusion"
+ },
+ "math-intermediate_algebra-0305": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1-1/4 given as 1/2; x2 wrong"
+ },
+ "math-intermediate_algebra-0393": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "1+1+2 given as 5; wrong"
+ },
+ "math-intermediate_algebra-0455": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Root -4 changed to 4; contradicts factor x+4 and exclusions"
+ },
+ "math-intermediate_algebra-0542": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Degree of nonzero constant stated 1; should be 0"
+ },
+ "math-intermediate_algebra-0604": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "7+(-5) given as 3; wrong"
+ },
+ "math-intermediate_algebra-0719": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "166*2 given as 334; answer 2001, contradicts 167*12=2004"
+ },
+ "math-intermediate_algebra-0731": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Count changed to 3 despite listing k=1,-1 only"
+ },
+ "math-intermediate_algebra-0854": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "211+420 given as 621; sum 888 wrong"
+ },
+ "math-intermediate_algebra-0889": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "u=2 changed to 4; x=1 solution lost"
+ },
+ "math-number_theory-0017": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Last term 11 replaced with 12; remainder 7 wrong"
+ },
+ "math-number_theory-0086": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Falsely claims 500 does not divide 1000; count 5 wrong"
+ },
+ "math-number_theory-0169": {
+  "no_error": false,
+  "cue": false,
+  "partial": true,
+  "note": "Older's share changed to 12 against problem's 10; r=4 wrong"
+ },
+ "math-number_theory-0250": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "98+21+5 given as 125; total 339 wrong"
+ },
+ "math-number_theory-0408": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "6*49 given as 290; 315 wrong"
+ },
+ "math-number_theory-0485": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Remainder changed to 10, contradicting P=16k+6"
+ },
+ "math-number_theory-0536": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4+3+2+1 given as 11; total 16 wrong"
+ },
+ "math-prealgebra-0075": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "32*2 given as 48; answer 48 wrong"
+ },
+ "math-prealgebra-0173": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "42+28 given as 69; wrong"
+ },
+ "math-prealgebra-0271": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "360-90 given as 280; y=280 wrong"
+ },
+ "math-prealgebra-0327": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "95*5 given as 480; score 83 wrong"
+ },
+ "math-prealgebra-0421": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "3+4+5+5 given as 18; wrong"
+ },
+ "math-prealgebra-0518": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "(-3+7)t given as 3t; wrong"
+ },
+ "math-prealgebra-0628": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Digit sum of 110 given as 3; total 958 wrong"
+ },
+ "math-precalculus-0041": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "4*12 given as 36; wrong"
+ },
+ "math-precalculus-0080": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "50t=-200 changed to -100; reflection wrong"
+ },
+ "math-precalculus-0150": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "cos^2 of pi/12 mislabeled pi/8; solutions wrong"
+ },
+ "math-precalculus-0211": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "First component -7/3+12/3 given 7/3; wrong"
+ },
+ "math-precalculus-0271": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Ratio 5/9 inverted to 9/5; wrong"
+ },
+ "math-precalculus-0314": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "242/22 given as 10; area 100 wrong"
+ },
+ "math-precalculus-0421": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "7^2 given as 14; -14 wrong"
+ },
+ "math-precalculus-0494": {
+  "no_error": false,
+  "cue": false,
+  "partial": false,
+  "note": "Minimum of S+4/S+4 stated 4 instead of 8"
+ }
+}
